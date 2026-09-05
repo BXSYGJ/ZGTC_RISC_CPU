@@ -1,0 +1,64 @@
+# PDS project databases and generated implementation directories
+*.pds
+compile/
+synthesize/
+device_map/
+place_route/
+report_timing/
+generate_bitstream/
+constraint_check/
+log/
+logbackup/
+ipcore/
+impl.tcl
+multiseed_summary.csv
+
+# FPGA programming and implementation artifacts
+*.sbit
+*.smsk
+*.bgr
+*.adf
+*.db
+*.cmr
+*.snr
+*.dmr
+*.prr
+*.rtr
+*.prt
+*.netlist
+*.vm
+*.pcf
+
+# Simulation outputs and waveforms
+sim_out/
+*.vvp
+*.vcd
+*.fst
+*.wlf
+work/
+transcript
+
+# Logs and temporary files
+*.log
+*.jou
+*.tmp
+*.bak
+*.swp
+*.local.tcl
+*~
+
+# Local licenses, credentials, and keys
+*.lic
+*.pem
+*.key
+.env
+.env.*
+!.env.example
+
+# IDE and operating-system files
+.vscode/
+.idea/
+.vs/
+.DS_Store
+Thumbs.db
+Desktop.ini
