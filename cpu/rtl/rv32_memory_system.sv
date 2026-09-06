@@ -1,10 +1,15 @@
 `timescale 1ns/1ps
 module rv32_memory_system #(
     parameter integer MEMORY_ADDRESS_BITS=12,
+    parameter integer ICACHE_SET_BITS=0,
     parameter integer CACHE_SET_BITS=4,
     parameter integer CACHE_WORD_BITS=2,
     parameter integer ENABLE_CACHE=1,
     parameter integer FAST_ICACHE_HIT=0,
+    parameter integer FAST_DCACHE_READ=0,
+    parameter integer FAST_DCACHE_WRITE=0,
+    parameter integer FETCH_OVERLAP=0,
+    parameter integer DATA_OVERLAP=0,
     parameter INIT_FILE=""
 ) (
     input wire clk,
@@ -48,8 +53,11 @@ module rv32_memory_system #(
     localparam [1:0] NORMAL=0,CLEAN_DATA=1,INVALIDATE_INSTRUCTIONS=2,MAINTENANCE_DONE=3;
     reg [1:0] maintenance_state;
     reg data_active,data_mmio;
+    reg mmio_request_pending,mmio_request_write;
+    reg [31:0] mmio_request_address,mmio_request_data;
+    reg [3:0] mmio_request_strobe;
     wire request_mmio=|d_req_address[31:28];
-    wire data_issue=!data_active && maintenance_state==NORMAL && !maintenance_valid;
+    wire data_issue=(!data_active || (DATA_OVERLAP!=0 && d_rsp_valid && d_rsp_ready)) && maintenance_state==NORMAL && !maintenance_valid;
     wire [1:0] cache_req_valid,cache_req_ready,cache_req_write,cache_rsp_valid,cache_rsp_ready,cache_rsp_error;
     wire [31:0] cache_req_address[0:1],cache_req_data[0:1],cache_rsp_data[0:1];
     wire [3:0] cache_req_strobe[0:1];
@@ -78,16 +86,16 @@ module rv32_memory_system #(
     assign cache_req_write[1]=d_req_write;
     assign cache_req_data[1]=d_req_data;
     assign cache_req_strobe[1]=d_req_strobe;
-    assign d_req_ready=data_issue && (request_mmio ? mmio_req_ready : cache_req_ready[1]);
+    assign d_req_ready=data_issue && (request_mmio ? !mmio_request_pending : cache_req_ready[1]);
     assign d_rsp_valid=data_active && (data_mmio ? mmio_rsp_valid : cache_rsp_valid[1]);
     assign d_rsp_data=data_mmio ? mmio_rsp_data : cache_rsp_data[1];
     assign d_rsp_error=data_mmio ? mmio_rsp_error : cache_rsp_error[1];
     assign cache_rsp_ready[1]=data_active && !data_mmio && d_rsp_ready;
-    assign mmio_req_valid=d_req_valid && data_issue && request_mmio;
-    assign mmio_req_address=d_req_address;
-    assign mmio_req_write=d_req_write;
-    assign mmio_req_data=d_req_data;
-    assign mmio_req_strobe=d_req_strobe;
+    assign mmio_req_valid=mmio_request_pending;
+    assign mmio_req_address=mmio_request_address;
+    assign mmio_req_write=mmio_request_write;
+    assign mmio_req_data=mmio_request_data;
+    assign mmio_req_strobe=mmio_request_strobe;
     assign mmio_rsp_ready=data_active && data_mmio && d_rsp_ready;
     assign cache_flush_valid[0]=maintenance_state==INVALIDATE_INSTRUCTIONS;
     assign cache_flush_valid[1]=maintenance_state==CLEAN_DATA;
@@ -99,7 +107,7 @@ module rv32_memory_system #(
     assign d_writeback_count=cache_writebacks[1];
     for(genvar cache_index=0;cache_index<2;cache_index=cache_index+1) begin : caches
         if(ENABLE_CACHE!=0) begin : enabled
-        rv32_cache #(.SET_BITS(CACHE_SET_BITS),.WORD_BITS(CACHE_WORD_BITS),.READ_ONLY(cache_index==0 ? 1 : 0),.FAST_READ_HIT(cache_index==0 ? FAST_ICACHE_HIT : 0)) cache(
+        rv32_cache #(.ADDRESS_BITS(MEMORY_ADDRESS_BITS+2),.SET_BITS(cache_index==0 && ICACHE_SET_BITS!=0 ? ICACHE_SET_BITS : CACHE_SET_BITS),.WORD_BITS(CACHE_WORD_BITS),.READ_ONLY(cache_index==0 ? 1 : 0),.READ_OVERLAP(cache_index==0 ? FETCH_OVERLAP : DATA_OVERLAP),.FAST_WRITE_HIT(cache_index==0 ? 0 : FAST_DCACHE_WRITE),.FAST_READ_HIT(cache_index==0 ? FAST_ICACHE_HIT : FAST_DCACHE_READ)) cache(
             .clk(clk),.rst_n(rst_n),.req_valid(cache_req_valid[cache_index]),.req_ready(cache_req_ready[cache_index]),
             .req_address(cache_req_address[cache_index]),.req_write(cache_req_write[cache_index]),
             .req_data(cache_req_data[cache_index]),.req_strobe(cache_req_strobe[cache_index]),
@@ -153,10 +161,23 @@ module rv32_memory_system #(
         .b_valid(b_valid),.b_ready(b_ready),.b_error(b_error),.r_valid(r_valid),.r_ready(r_ready),.r_data(r_data),.r_last(r_last),.r_error(r_error)
     );
     always @(posedge clk or negedge rst_n) begin
+        if(!rst_n) begin
+            mmio_request_pending<=0; mmio_request_write<=0; mmio_request_address<=0; mmio_request_data<=0; mmio_request_strobe<=0;
+        end else begin
+            if(mmio_req_valid && mmio_req_ready) mmio_request_pending<=0;
+            if(d_req_valid && d_req_ready && request_mmio) begin
+                mmio_request_pending<=1; mmio_request_address<=d_req_address; mmio_request_write<=d_req_write;
+                mmio_request_data<=d_req_data; mmio_request_strobe<=d_req_strobe;
+            end
+        end
+    end
+    always @(posedge clk or negedge rst_n) begin
         if(!rst_n) begin data_active<=0; data_mmio<=0; maintenance_state<=NORMAL; maintenance_error<=0; end
         else begin
-            if(d_req_valid && d_req_ready) begin data_active<=1; data_mmio<=request_mmio; end
+
             if(d_rsp_valid && d_rsp_ready) data_active<=0;
+            if(d_req_valid && d_req_ready) begin data_active<=1; data_mmio<=request_mmio; end
+
             case(maintenance_state)
                 NORMAL: if(maintenance_valid && !data_active) begin maintenance_state<=CLEAN_DATA; maintenance_error<=0; end
                 CLEAN_DATA: if(cache_flush_ready[1]) begin

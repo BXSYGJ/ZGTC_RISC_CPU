@@ -1,5 +1,6 @@
 `timescale 1ns/1ps
 module machine_tb;
+    parameter integer ENABLE_M=0;
     reg clk=0;
     always #5 clk=~clk;
     reg rst_n=0,retire=0,irq_external=0,irq_software=0,irq_timer=0;
@@ -11,7 +12,7 @@ module machine_tb;
     wire read_illegal,interrupt_pending;
     wire [63:0] cycle_count,retired_count;
     integer checks=0;
-    rv32_machine machine(.*);
+    rv32_machine #(.ENABLE_M(ENABLE_M)) machine(.*);
     task check(input bit condition,input string label_text);
         begin
             checks=checks+1;
@@ -35,7 +36,9 @@ module machine_tb;
         #1; rst_n=1; #1; rst_n=0;
         @(negedge clk); rst_n=1;
         read_csr(12'h300,32'h1800);
-        read_csr(12'h301,32'h40000100);
+        read_csr(12'h301,ENABLE_M!=0 ? 32'h40001100 : 32'h40000100);
+        write_csr(12'h301,0);
+        read_csr(12'h301,ENABLE_M!=0 ? 32'h40001100 : 32'h40000100);
         read_csr(12'hc01,32'h9abcdef0);
         read_csr(12'hc81,32'h12345678);
         read_address=12'hc00; read_write_intent=1; #1; check(read_illegal,"read-only cycle write");
@@ -75,7 +78,8 @@ module machine_tb;
         @(negedge clk); retire=0; write_valid=0;
         read_csr(12'hc02,7); read_csr(12'hc82,2);
         check(cycle_count>0,"cycle counter advances");
-        $display("PASS machine checks=%0d",checks);
+        if(ENABLE_M!=0) $display("PASS machine_m checks=%0d",checks);
+        else $display("PASS machine checks=%0d",checks);
         $finish;
     end
     initial begin #20000; $fatal(1,"Machine watchdog timeout"); end

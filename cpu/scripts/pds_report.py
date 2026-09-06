@@ -50,6 +50,11 @@ def parse_reports(timing, log, clock_hz):
         resources[label] = float(match.group(1))
     if resources["GPLL"] != (0 if clock_hz == 27000000 else 1):
         raise ValueError("GPLL resource count does not match clock source")
+    apm = re.findall(r"\| Use of APM\s+\|\s*(\d+)\s*\|", physical)
+    if len(apm) > 1:
+        raise ValueError("Duplicate physical APM resource count")
+    if apm and int(apm[0]) > 0:
+        resources["APM"] = int(apm[0])
     return {"device": "PG2L200H-6FBB676", "clock_hz": clock_hz,
             "constraints_met": summary == "All Constraints Met.", "timing_summary": summary,
             "cpu_period_ns": period, "clock_loads": loads,

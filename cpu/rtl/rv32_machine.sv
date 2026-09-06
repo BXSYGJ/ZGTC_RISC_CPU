@@ -1,5 +1,7 @@
 `timescale 1ns/1ps
-module rv32_machine (
+module rv32_machine #(
+    parameter integer ENABLE_M=0
+) (
     input wire clk,
     input wire rst_n,
     input wire retire,
@@ -43,7 +45,7 @@ module rv32_machine (
         read_illegal=0;
         case(read_address)
             12'h300: read_data=mstatus;
-            12'h301: read_data=32'h40000100;
+            12'h301: read_data=ENABLE_M!=0 ? 32'h40001100 : 32'h40000100;
             12'h304: read_data=mie;
             12'h305: read_data=mtvec;
             12'h306: read_data=mcounteren;

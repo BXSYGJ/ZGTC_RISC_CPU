@@ -1,7 +1,11 @@
 `timescale 1ns/1ps
 module cache_tb;
+    parameter integer ADDRESS_BITS=32;
+    parameter TEST_NAME="";
     parameter integer READONLY=0;
     parameter integer FAST_READ_HIT=0;
+    parameter integer FAST_WRITE_HIT=0;
+    parameter integer READ_OVERLAP=0;
     reg clk=0;
     always #5 clk=~clk;
     reg rst_n=0,req_valid=0,req_write=0,rsp_ready=0,flush_valid=0;
@@ -24,15 +28,15 @@ module cache_tb;
     reg active=0,active_write=0,active_error=0;
     reg [31:0] active_address=0;
     integer active_beat=0,active_final=3,command_count=0,checks=0,cycles=0,word_index;
-    integer snapshot_commands;
+    integer snapshot_commands,baseline_writebacks;
     reg [31:0] random_state=32'h98765432;
     reg inject_read_error=0,inject_write_error=0,inject_early_last=0,inject_late_last=0;
     reg cmd_held=0,w_held=0;
     reg [31:0] held_address,held_data;
     reg held_write,held_last;
     reg [7:0] held_length;
-    rv32_cache #(.SET_BITS(1),.WORD_BITS(2),.READ_ONLY(READONLY),.FAST_READ_HIT(FAST_READ_HIT)) cache(.*);
-    task check(input bit condition,input string label_text);
+    rv32_cache #(.ADDRESS_BITS(ADDRESS_BITS),.SET_BITS(1),.WORD_BITS(2),.READ_ONLY(READONLY),.FAST_WRITE_HIT(FAST_WRITE_HIT),.FAST_READ_HIT(FAST_READ_HIT),.READ_OVERLAP(READ_OVERLAP)) cache(.*);
+    task automatic check(input bit condition,input string label_text);
         begin
             checks=checks+1;
             if(!condition) $fatal(1,"FAIL cache %s cycle=%0d addr=%08x response=%08x error=%b",label_text,cycles,req_address,rsp_data,rsp_error);
@@ -47,6 +51,7 @@ module cache_tb;
             @(negedge clk); req_valid=0;
             @(posedge clk); while(!rsp_valid) @(posedge clk);
             check(rsp_error===expected_error,"response error");
+            if(expected_error) check(rsp_data==0,"cache errors return zero data");
             if(!writing && !expected_error) check(rsp_data===expected,"read data");
             held_response=rsp_data; held_error=rsp_error;
             repeat(3) begin
@@ -63,6 +68,135 @@ module cache_tb;
             @(posedge clk); while(!flush_ready) @(posedge clk);
             check(flush_error===expected_error,"flush result");
             @(negedge clk); flush_valid=0;
+        end
+    endtask
+    task overlap_pair(input bit first_write,input [31:0] first_data,input [3:0] first_strobe,
+                      input bit second_write,input [31:0] second_data,input [3:0] second_strobe,
+                      input [31:0] first_expected,input [31:0] second_expected);
+        begin
+            @(negedge clk); req_valid=1; req_address=0; req_write=first_write; req_data=first_data; req_strobe=first_strobe; rsp_ready=1;
+            @(posedge clk); check(req_ready,"RW pair starts idle");
+            @(negedge clk); req_write=second_write; req_data=second_data; req_strobe=second_strobe;
+            @(posedge clk); while(!rsp_valid) @(posedge clk);
+            check(req_ready && !rsp_error,"RW response accepts successor");
+            if(!first_write) check(rsp_data===first_expected,"read before overlapped write sees old value");
+            @(negedge clk); req_valid=0;
+            @(posedge clk); while(!rsp_valid) @(posedge clk);
+            check(!rsp_error,"RW successor succeeds");
+            if(!second_write) check(rsp_data===second_expected,"read after overlapped write sees new value");
+            @(negedge clk); rsp_ready=0;
+            check(!rsp_valid && req_ready,"RW pair consumes each response once");
+        end
+    endtask
+    task overlap_read_write;
+        reg [31:0] previous_hits;
+        begin
+            previous_hits=hit_count;
+            overlap_pair(0,0,0,1,32'habcdef12,4'b0101,32'h10000000,0);
+            overlap_pair(1,32'h76543210,4'b1010,0,0,0,0,32'h76cd3212);
+            overlap_pair(1,32'h00000034,4'b0001,1,32'h00560000,4'b0100,0,0);
+            transact(0,0,0,0,32'h76563234,0);
+            check(hit_count==previous_hits+7,"RW overlap counts seven requests exactly once");
+            flush_cache(0);
+            check(memory[0]==32'h76563234,"RW overlapped writes survive dirty flush");
+            transact(0,1,32'h10000000,15,0,0);
+            flush_cache(0);
+            transact(0,0,0,0,32'h10000000,0);
+            snapshot_commands=command_count;
+        end
+    endtask
+    task fast_write_checks;
+        reg [31:0] expected_word,write_value,strobe_mask,saved_hits,stream_base;
+        integer saved_commands;
+        begin
+            expected_word=memory[0];
+            transact(0,0,0,0,expected_word,0);
+            saved_commands=command_count;
+            for(integer strobe_index=0;strobe_index<16;strobe_index=strobe_index+1) begin
+                saved_hits=hit_count;
+                write_value=32'ha5963cc3 ^ (32'(strobe_index)*32'h01020304);
+                strobe_mask={{8{strobe_index[3]}},{8{strobe_index[2]}},{8{strobe_index[1]}},{8{strobe_index[0]}}};
+                @(negedge clk); req_valid=1; req_write=1; req_address=0; req_data=write_value; req_strobe=4'(strobe_index); rsp_ready=0;
+                @(posedge clk); check(req_ready,"hot write accepts request");
+                @(negedge clk); req_valid=0; req_address=4; req_write=0; req_data=~write_value; req_strobe=0;
+                @(posedge clk);
+                check(rsp_valid && !rsp_error,"hot write responds on lookup cycle");
+                check(rsp_data===expected_word,"hot write response contains previous word");
+                repeat(3) begin
+                    @(posedge clk);
+                    check(rsp_valid && !rsp_error && rsp_data===expected_word && !req_ready,"hot write holds previous word under backpressure");
+                end
+                check(hit_count==saved_hits+1 && command_count==saved_commands,"blocked write counted once without backend command");
+                if(strobe_index==0) check(!cache.dirty[cache.hit_line],"zero-strobe fast write keeps clean line clean");
+                @(negedge clk); rsp_ready=1;
+                @(posedge clk); check(rsp_valid && rsp_data===expected_word,"write response consumed once");
+                @(negedge clk); rsp_ready=0;
+                expected_word=(expected_word & ~strobe_mask) | (write_value & strobe_mask);
+                transact(0,0,0,0,expected_word,0);
+            end
+            if(READ_OVERLAP!=0) begin
+                saved_hits=hit_count; stream_base=expected_word;
+                @(negedge clk); req_valid=1; req_write=1; req_address=0; req_data=stream_base+1; req_strobe=15; rsp_ready=1;
+                @(posedge clk); check(req_ready,"write stream accepts first request");
+                for(integer stream_index=0;stream_index<64;stream_index=stream_index+1) begin
+                    @(negedge clk); req_valid=stream_index!=63; req_data=stream_base+32'(stream_index)+2;
+                    @(posedge clk);
+                    check(rsp_valid && req_ready && !rsp_error,"one ordered write response per cycle");
+                    check(rsp_data===stream_base+32'(stream_index),"write stream returns sequential previous values");
+                end
+                @(negedge clk); rsp_ready=0;
+                check(!rsp_valid && req_ready && hit_count==saved_hits+64 && command_count==saved_commands,"write stream drains and counts exactly once");
+                expected_word=stream_base+64;
+                transact(0,0,0,0,expected_word,0);
+            end
+            flush_cache(0);
+            check(memory[0]===expected_word,"fast writes survive dirty flush");
+            transact(0,0,0,0,expected_word,0);
+            @(negedge clk); req_valid=1; req_address=0; req_write=1; req_data=~expected_word; req_strobe=15; rsp_ready=1;
+            @(posedge clk); check(req_ready,"reset probe accepts write request");
+            @(negedge clk); req_valid=0; rst_n=0;
+            #1; check(!rsp_valid,"reset cancels write before lookup commit edge");
+            @(negedge clk); rst_n=1; rsp_ready=0;
+            repeat(3) begin @(posedge clk); check(!rsp_valid,"reset write does not leak a response"); end
+            transact(0,0,0,0,expected_word,0);
+            flush_cache(0);
+            check(memory[0]===expected_word,"reset-canceled write has no stored side effect");
+        end
+    endtask
+    task overlap_stream;
+        reg [31:0] previous_hits;
+        begin
+            previous_hits=hit_count;
+            @(negedge clk); req_valid=1; req_address=0; req_write=0; rsp_ready=1;
+            @(posedge clk); check(req_ready,"stream first request");
+            for(integer stream_index=0;stream_index<64;stream_index=stream_index+1) begin
+                @(negedge clk); req_valid=stream_index!=63; req_address=32'((stream_index+1)%4)*4;
+                @(posedge clk);
+                check(rsp_valid && !rsp_error && rsp_data==32'h10000000+32'(stream_index%4),"one ordered hot response per cycle");
+                check(req_ready,"response accepts next request without idle bubble");
+            end
+            @(negedge clk); rsp_ready=0;
+            check(!rsp_valid && hit_count==previous_hits+64 && command_count==snapshot_commands,"stream drains and counts exactly once");
+            req_valid=1; req_address=0;
+            @(posedge clk); check(req_ready,"backpressure first request");
+            @(negedge clk); req_address=4;
+            repeat(4) begin
+                @(posedge clk); check(rsp_valid && !rsp_error && rsp_data==32'h10000000 && !req_ready,"blocked response blocks next request");
+            end
+            @(negedge clk); rsp_ready=1;
+            @(posedge clk); check(req_ready && rsp_valid,"release consumes and replaces");
+            @(negedge clk); req_address=2;
+            @(posedge clk); check(req_ready && rsp_valid && !rsp_error && rsp_data==32'h10000001,"valid to misaligned overlap");
+            @(negedge clk); req_address=0;
+            @(posedge clk); check(req_ready && rsp_valid && rsp_error,"error response accepts recovery request");
+            @(negedge clk); req_address=8; flush_valid=1;
+            @(posedge clk); check(rsp_valid && !rsp_error && rsp_data==32'h10000000 && !req_ready,"flush blocks replacement request");
+            @(negedge clk); req_valid=0; rsp_ready=0;
+            @(posedge clk); while(!flush_ready) @(posedge clk);
+            check(!flush_error,"overlap flush completes");
+            @(negedge clk); flush_valid=0;
+            transact(0,0,0,0,32'h10000000,0);
+            snapshot_commands=command_count;
         end
     endtask
     always @(negedge clk) begin
@@ -121,7 +255,7 @@ module cache_tb;
         snapshot_commands=command_count;
         transact(4,0,0,0,32'h10000001,0);
         check(command_count==snapshot_commands && miss_count==1 && hit_count==1,"line hit avoids backend");
-        if(FAST_READ_HIT!=0 && READONLY!=0) begin
+        if(FAST_READ_HIT!=0) begin
             @(negedge clk); req_valid=1; req_address=4; req_write=0; rsp_ready=1;
             @(posedge clk); while(!req_ready) @(posedge clk);
             @(negedge clk); req_valid=0;
@@ -132,7 +266,23 @@ module cache_tb;
             check(hit_count==2 && miss_count==1 && command_count==snapshot_commands,"early hit counts once without backend");
             rsp_ready=0;
         end
+        if(READ_OVERLAP!=0) overlap_stream();
+        if(READ_OVERLAP!=0 && READONLY==0) overlap_read_write();
+        baseline_writebacks=int'(writeback_count);
         if(READONLY==0) begin
+            if(FAST_READ_HIT!=0) begin
+                @(negedge clk); req_valid=1; req_address=0; req_write=1; req_data=32'h10000000; req_strobe=15; rsp_ready=0;
+                @(posedge clk); check(req_ready,"store request accepted");
+                @(negedge clk); req_valid=0;
+                @(posedge clk); check(rsp_valid==(FAST_WRITE_HIT!=0),"store uses only explicit write-hit mode");
+                @(negedge clk);
+                check(rsp_valid && !rsp_error && cache.dirty[0],"store completes through registered response");
+                repeat(3) begin @(posedge clk); check(rsp_valid && !rsp_error,"store response survives backpressure"); end
+                @(negedge clk); rsp_ready=1;
+                @(posedge clk);
+                @(negedge clk); rsp_ready=0;
+                check(!rsp_valid,"store response consumed once");
+            end
             transact(0,1,32'haabbccdd,4'b0101,0,0);
             transact(0,0,0,0,32'h10bb00dd,0);
             check(memory[0]==32'h10000000,"write-back defers memory update");
@@ -146,7 +296,7 @@ module cache_tb;
         check(command_count==snapshot_commands,"both ways coexist");
         transact(32'h40,0,0,0,32'h10000010,0);
         transact(32'h20,0,0,0,32'h10000008,0);
-        check(writeback_count==(READONLY==0 ? 1 : 0),"LRU dirty replacement");
+        check(writeback_count==32'(baseline_writebacks)+(READONLY==0 ? 1 : 0),"LRU dirty replacement");
         if(READONLY==0) check(memory[0]==32'h10bb00dd,"dirty line writeback data");
         flush_cache(0);
         snapshot_commands=command_count;
@@ -172,6 +322,8 @@ module cache_tb;
             inject_write_error=1;
             transact(32'h40,0,0,0,0,1);
             check(memory[0]==32'h10bb00dd,"failed writeback has no memory side effects");
+            transact(32'h40,1,32'hbad0bad0,15,0,1);
+            check(memory[16]==32'h10000010,"failed eviction cannot commit younger write");
             transact(0,0,0,0,32'h01234567,0);
             flush_cache(1);
             transact(0,0,0,0,32'h01234567,0);
@@ -182,6 +334,7 @@ module cache_tb;
             flush_cache(0);
             check(memory[0]==32'h01234567,"zero byte enable has no effect");
         end
+        if(FAST_WRITE_HIT!=0 && READONLY==0) fast_write_checks();
         for(integer golden_index=0;golden_index<256;golden_index=golden_index+1) golden[golden_index]=memory[golden_index];
         for(integer transaction_index=0;transaction_index<512;transaction_index=transaction_index+1) begin
             transaction_state=transaction_state^(transaction_state<<13);
@@ -197,7 +350,11 @@ module cache_tb;
         flush_cache(0);
         for(integer golden_index=0;golden_index<256;golden_index=golden_index+1)
             check(memory[golden_index]===golden[golden_index],"random stream final memory comparison");
-        if(READONLY==0) $display("PASS cache checks=%0d commands=%0d hits=%0d misses=%0d writebacks=%0d",checks,command_count,hit_count,miss_count,writeback_count);
+        if(TEST_NAME!="") $display("PASS %s checks=%0d commands=%0d",TEST_NAME,checks,command_count);
+        else if(READONLY==0 && READ_OVERLAP!=0) $display("PASS cache_rw_overlap checks=%0d commands=%0d",checks,command_count);
+        else if(READONLY==0 && FAST_READ_HIT!=0) $display("PASS cache_rw_fast checks=%0d commands=%0d",checks,command_count);
+        else if(READONLY==0) $display("PASS cache checks=%0d commands=%0d hits=%0d misses=%0d writebacks=%0d",checks,command_count,hit_count,miss_count,writeback_count);
+        else if(READ_OVERLAP!=0) $display("PASS cache_ro_overlap checks=%0d commands=%0d",checks,command_count);
         else if(FAST_READ_HIT!=0) $display("PASS cache_ro_fast checks=%0d commands=%0d",checks,command_count);
         else $display("PASS cache_ro checks=%0d commands=%0d",checks,command_count);
         $finish;

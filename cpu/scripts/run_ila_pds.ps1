@@ -11,6 +11,14 @@ try {
     $pds = (Resolve-Path -LiteralPath $PdsRoot).Path
     $manifestPath = [System.IO.Path]::Combine($source, 'manifest.json')
     $original = Get-Content -LiteralPath $manifestPath -Raw | ConvertFrom-Json
+    if ($original.PSObject.Properties.Name -contains 'EnableM' -and $original.EnableM -eq 1) { throw 'The existing ILA net map has not been validated for the M extension.' }
+    if ($original.PSObject.Properties.Name -contains 'FetchOverlap' -and $original.FetchOverlap -eq 1) { throw 'The existing ILA net map has not been validated for overlapping fetch.' }
+    if ($original.PSObject.Properties.Name -contains 'FastDCacheRead' -and $original.FastDCacheRead -eq 1) { throw 'The existing ILA net map has not been validated for early D-cache reads.' }
+    if ($original.PSObject.Properties.Name -contains 'ICacheSetBits' -and $original.ICacheSetBits -ne $original.CacheSetBits) { throw 'The existing ILA net map has not been validated for asymmetric cache geometry.' }
+    if ($original.PSObject.Properties.Name -contains 'FastDCacheWrite' -and $original.FastDCacheWrite -eq 1) { throw 'The existing ILA net map has not been validated for early D-cache writes.' }
+    if ($original.PSObject.Properties.Name -contains 'EarlyDRequest' -and $original.EarlyDRequest -eq 1) { throw 'The existing ILA net map has not been validated for EX-stage memory requests.' }
+    if ($original.PSObject.Properties.Name -contains 'BtbIndexBits' -and $original.BtbIndexBits -ne 4) { throw 'The existing ILA net map has not been validated for this BTB capacity.' }
+    if ($original.PSObject.Properties.Name -contains 'DataOverlap' -and $original.DataOverlap -eq 1) { throw 'The existing ILA net map has not been validated for data request overlap.' }
     if ($original.PSObject.Properties.Name -contains 'FastICacheHit' -and $original.FastICacheHit -ne 0) {
         throw 'ILA net map has not been validated for early I-cache response.'
     }
@@ -76,10 +84,13 @@ try {
         $pattern = '(?m)^Trigger Channel ' + $channel + ':\s*' + [regex]::Escape($netName) + '\s*$'
         if ($verifyLog -notmatch $pattern) { throw "Inserter did not confirm channel $channel." }
     }
+    $constraintRoot = if ($original.PSObject.Properties.Name -contains 'SourceSnapshot') {
+        [System.IO.Path]::Combine($source, 'source', 'constraints')
+    } else { [System.IO.Path]::Combine($project, 'constraints') }
     $boardConstraint = [System.IO.Path]::Combine($build, 'board.fdc')
     $uartConstraint = [System.IO.Path]::Combine($build, 'uart_remotelab.fdc')
-    Copy-Item -LiteralPath ([System.IO.Path]::Combine($project, 'constraints', 'board.fdc')) -Destination $boardConstraint
-    Copy-Item -LiteralPath ([System.IO.Path]::Combine($project, 'constraints', 'uart_remotelab.fdc')) -Destination $uartConstraint
+    Copy-Item -LiteralPath ([System.IO.Path]::Combine($constraintRoot, 'board.fdc')) -Destination $boardConstraint
+    Copy-Item -LiteralPath ([System.IO.Path]::Combine($constraintRoot, 'uart_remotelab.fdc')) -Destination $uartConstraint
     $commands = @(
         "add_design {$netlist}", "add_constraint {$boardConstraint}", "add_constraint {$uartConstraint}", "add_fic {$fic}",
         'set_arch -family Logos2 -device PG2L200H -speedgrade -6 -package FBB676',

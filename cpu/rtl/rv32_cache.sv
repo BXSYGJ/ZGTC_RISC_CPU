@@ -1,9 +1,12 @@
 `timescale 1ns/1ps
 module rv32_cache #(
+    parameter integer ADDRESS_BITS=32,
     parameter integer SET_BITS=4,
     parameter integer WORD_BITS=2,
     parameter integer READ_ONLY=0,
-    parameter integer FAST_READ_HIT=0
+    parameter integer FAST_READ_HIT=0,
+    parameter integer FAST_WRITE_HIT=0,
+    parameter integer READ_OVERLAP=0
 ) (
     input wire clk,
     input wire rst_n,
@@ -44,7 +47,7 @@ module rv32_cache #(
     localparam integer SETS=1<<SET_BITS;
     localparam integer WORDS=1<<WORD_BITS;
     localparam integer LINES=2*SETS;
-    localparam integer TAG_BITS=30-SET_BITS-WORD_BITS;
+    localparam integer TAG_BITS=ADDRESS_BITS-2-SET_BITS-WORD_BITS;
     localparam [31:0] LINE_LENGTH=WORDS-1;
     localparam [3:0] IDLE=0,LOOKUP=1,WB_CMD=2,WB_DATA=3,WB_ACK=4,
         FILL_CMD=5,FILL_DATA=6,RESPONSE=7,FLUSH_SCAN=8,FLUSH_DONE=9;
@@ -61,7 +64,7 @@ module rv32_cache #(
     reg [WORD_BITS-1:0] beat;
     wire [SET_BITS-1:0] request_set=request_address[WORD_BITS+SET_BITS+1:WORD_BITS+2];
     wire [WORD_BITS-1:0] request_word=request_address[WORD_BITS+1:2];
-    wire [TAG_BITS-1:0] request_tag=request_address[31:WORD_BITS+SET_BITS+2];
+    wire [TAG_BITS-1:0] request_tag=request_address[ADDRESS_BITS-1:WORD_BITS+SET_BITS+2];
     wire [SET_BITS:0] way0={1'b0,request_set},way1={1'b1,request_set};
     wire hit0=valid[way0] && tags[way0]==request_tag;
     wire hit1=valid[way1] && tags[way1]==request_tag;
@@ -71,10 +74,10 @@ module rv32_cache #(
     wire [31:0] byte_mask={{8{request_strobe[3]}},{8{request_strobe[2]}},{8{request_strobe[1]}},{8{request_strobe[0]}}};
     wire last_beat=&beat;
     wire [1:0] unused_request_alignment=request_address[1:0];
-    assign req_ready=state==IDLE && !flush_valid;
-    wire fast_hit=FAST_READ_HIT!=0 && READ_ONLY!=0 && state==LOOKUP && (hit0 || hit1);
+    assign req_ready=(state==IDLE || (READ_OVERLAP!=0 && rsp_valid && rsp_ready)) && !flush_valid;
+    wire fast_hit=((FAST_READ_HIT!=0 && !request_write) || (FAST_WRITE_HIT!=0 && request_write && READ_ONLY==0)) && state==LOOKUP && (hit0 || hit1);
     assign rsp_valid=state==RESPONSE || fast_hit;
-    assign rsp_data=fast_hit ? current_word : response_data;
+    assign rsp_data=rsp_error ? 32'b0 : fast_hit ? current_word : response_data;
     assign flush_ready=state==FLUSH_DONE;
     assign cmd_valid=state==WB_CMD || state==FILL_CMD;
     assign cmd_write=state==WB_CMD;
@@ -98,13 +101,6 @@ module rv32_cache #(
                 IDLE: begin
                     if(flush_valid) begin
                         flushing<=1; scan_line<=0; flush_error<=0; state<=FLUSH_SCAN;
-                    end else if(req_valid) begin
-                        request_address<=req_address; request_data<=req_data;
-                        request_strobe<=req_strobe; request_write<=req_write;
-                        request_missed<=0; flushing<=0; rsp_error<=0; response_data<=0;
-                        if(req_address[1:0]!=0 || (READ_ONLY!=0 && req_write)) begin
-                            rsp_error<=1; state<=RESPONSE;
-                        end else state<=LOOKUP;
                     end
                 end
                 LOOKUP: begin
@@ -120,7 +116,7 @@ module rv32_cache #(
                     end else begin
                         request_missed<=1; miss_count<=miss_count+1;
                         victim<=replacement;
-                        victim_base<={tags[replacement],request_set,{(WORD_BITS+2){1'b0}}};
+                        victim_base<={{(32-ADDRESS_BITS){1'b0}},tags[replacement],request_set,{(WORD_BITS+2){1'b0}}};
                         beat<=0;
                         state<=(valid[replacement] && dirty[replacement]) ? WB_CMD : FILL_CMD;
                     end
@@ -162,7 +158,7 @@ module rv32_cache #(
                 FLUSH_SCAN: begin
                     if(valid[scan_line] && dirty[scan_line]) begin
                         victim<=scan_line;
-                        victim_base<={tags[scan_line],scan_line[SET_BITS-1:0],{(WORD_BITS+2){1'b0}}};
+                        victim_base<={{(32-ADDRESS_BITS){1'b0}},tags[scan_line],scan_line[SET_BITS-1:0],{(WORD_BITS+2){1'b0}}};
                         state<=WB_CMD;
                     end else begin
                         valid[scan_line]<=0; dirty[scan_line]<=0;
@@ -173,6 +169,14 @@ module rv32_cache #(
                 FLUSH_DONE: if(flush_valid) state<=IDLE;
                 default: state<=IDLE;
             endcase
+            if(req_valid && req_ready) begin
+                request_address<={{(32-ADDRESS_BITS){1'b0}},req_address[ADDRESS_BITS-1:0]}; request_data<=req_data;
+                request_strobe<=req_strobe; request_write<=req_write;
+                request_missed<=0; flushing<=0; rsp_error<=0;
+                if((req_address >> ADDRESS_BITS)!=0 || req_address[1:0]!=0 || (READ_ONLY!=0 && req_write)) begin
+                    rsp_error<=1; state<=RESPONSE;
+                end else state<=LOOKUP;
+            end
         end
     end
 endmodule

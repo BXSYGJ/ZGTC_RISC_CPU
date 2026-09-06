@@ -1,8 +1,9 @@
-﻿param([ValidateRange(0,1)][int]$FastICacheHit = 0, [ValidateRange(0,1)][int]$LoadUseBubble = 0)
+﻿param([ValidateRange(0,8)][int]$ICacheSetBits = 0, [ValidateRange(0,1)][int]$DataOverlap = 0, [ValidateRange(1,8)][int]$BtbIndexBits = 4, [ValidateRange(0,1)][int]$EarlyDRequest = 0, [ValidateRange(0,1)][int]$FastDCacheWrite = 0, [ValidateRange(0,1)][int]$FastDCacheRead = 0, [ValidateRange(0,1)][int]$FetchOverlap = 0, [ValidateSet('rv32ui','rv32um')][string]$Suite = 'rv32ui', [ValidateRange(0,1)][int]$EnableM = 0, [ValidateRange(0,1)][int]$FastICacheHit = 0, [ValidateRange(0,1)][int]$LoadUseBubble = 0)
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 $ErrorActionPreference='Stop'
 $ProgressPreference='SilentlyContinue'
 try {
+    if ($Suite -eq 'rv32um' -and -not $EnableM) { throw 'RV32UM tests require the explicit EnableM option.' }
     . ([System.IO.Path]::Combine($PSScriptRoot,'riscv_toolchain.ps1'))
     $toolchain=Get-RiscvToolchain
     $project=[System.IO.Path]::GetFullPath([System.IO.Path]::Combine($PSScriptRoot,'..'))
@@ -30,10 +31,19 @@ try {
     $manifest=[ordered]@{Revision=$revision;ArchiveSha256=$expectedHash;SourceUrl=$url;Build=$build;Toolchain=$toolchain;StartedUtc=[datetime]::UtcNow.ToString('o')}
     $manifest['LoadUseBubble'] = $LoadUseBubble
     $manifest['FastICacheHit'] = $FastICacheHit
+    $manifest['FetchOverlap'] = $FetchOverlap
+    $manifest['FastDCacheRead'] = $FastDCacheRead
+    $manifest['FastDCacheWrite'] = $FastDCacheWrite
+    $manifest['EarlyDRequest'] = $EarlyDRequest
+    $manifest['DataOverlap'] = $DataOverlap
+    $manifest['BtbIndexBits'] = $BtbIndexBits
+    $manifest['ICacheSetBits'] = $ICacheSetBits
+    $manifest['EnableM'] = $EnableM
+    $manifest['Suite'] = $Suite
     $manifest | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath ([System.IO.Path]::Combine($build,'run.json')) -Encoding utf8BOM
     $linuxRunner=[System.IO.Path]::Combine($linuxProject,'scripts','run_isa.py').Replace([System.IO.Path]::DirectorySeparatorChar,'/')
     $runLog=[System.IO.Path]::Combine($build,'run.log')
-    & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/python3 $linuxRunner --project $linuxProject --source $linuxSource --build $linuxBuild --tool-prefix $toolchain.Prefix --load-use-bubble $LoadUseBubble --fast-icache-hit $FastICacheHit 2>&1 | ForEach-Object {
+    & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/python3 $linuxRunner --suite $Suite --enable-m $EnableM --project $linuxProject --source $linuxSource --build $linuxBuild --tool-prefix $toolchain.Prefix --load-use-bubble $LoadUseBubble --fast-icache-hit $FastICacheHit --fetch-overlap $FetchOverlap --fast-dcache-write $FastDCacheWrite --fast-dcache-read $FastDCacheRead --data-overlap $DataOverlap --btb-index-bits $BtbIndexBits --icache-set-bits $ICacheSetBits --early-d-request $EarlyDRequest 2>&1 | ForEach-Object {
         $_ | Out-File -LiteralPath $runLog -Append -Encoding utf8BOM
         Write-Output $_
     }

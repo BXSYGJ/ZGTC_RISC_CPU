@@ -1,8 +1,16 @@
 `timescale 1ns/1ps
 module isa_tb;
+    parameter integer ENABLE_M=0;
     parameter integer PREDICTOR=1;
     parameter integer LOAD_USE_BUBBLE=0;
     parameter integer FAST_ICACHE_HIT=0;
+    parameter integer FAST_DCACHE_READ=0;
+    parameter integer FAST_DCACHE_WRITE=0;
+    parameter integer FETCH_OVERLAP=0;
+    parameter integer DATA_OVERLAP=0;
+    parameter integer EARLY_D_REQUEST=0;
+    parameter integer BTB_INDEX_BITS=4;
+    parameter integer ICACHE_SET_BITS=0;
     parameter integer CACHE_SETS=4;
     parameter integer ENABLE_CACHE=1;
     reg clk=0;
@@ -31,8 +39,8 @@ module isa_tb;
     string firmware,trace_path,memory_path,test_name;
     assign maintenance_ready=memory_maintenance_ready && !final_flush;
     assign mmio_req_ready=!mmio_rsp_valid;
-    rv32_core #(.ENABLE_PREDICTOR(PREDICTOR),.LOAD_USE_BUBBLE(LOAD_USE_BUBBLE)) core(.*);
-    rv32_memory_system #(.MEMORY_ADDRESS_BITS(14),.CACHE_SET_BITS(CACHE_SETS),.ENABLE_CACHE(ENABLE_CACHE),.FAST_ICACHE_HIT(FAST_ICACHE_HIT)) memory_system(
+    rv32_core #(.BTB_ADDRESS_BITS(16),.BTB_INDEX_BITS(BTB_INDEX_BITS),.EARLY_D_REQUEST(EARLY_D_REQUEST),.FETCH_OVERLAP(FETCH_OVERLAP),.ENABLE_M(ENABLE_M),.ENABLE_PREDICTOR(PREDICTOR),.LOAD_USE_BUBBLE(LOAD_USE_BUBBLE)) core(.*);
+    rv32_memory_system #(.DATA_OVERLAP(DATA_OVERLAP),.MEMORY_ADDRESS_BITS(14),.ICACHE_SET_BITS(ICACHE_SET_BITS),.CACHE_SET_BITS(CACHE_SETS),.ENABLE_CACHE(ENABLE_CACHE),.FETCH_OVERLAP(FETCH_OVERLAP),.FAST_DCACHE_WRITE(FAST_DCACHE_WRITE),.FAST_DCACHE_READ(FAST_DCACHE_READ),.FAST_ICACHE_HIT(FAST_ICACHE_HIT)) memory_system(
         .clk(clk),.rst_n(rst_n),
         .i_req_valid(i_req_valid),.i_req_ready(i_req_ready),.i_req_address(i_req_address),
         .i_rsp_valid(i_rsp_valid),.i_rsp_ready(i_rsp_ready),.i_rsp_data(i_rsp_data),.i_rsp_error(i_rsp_error),
@@ -82,12 +90,18 @@ module isa_tb;
                 if(success_wait==16) final_flush<=1;
             end
             if(final_flush && memory_maintenance_ready) begin
-                $display("PASS ISA name=%s cycles=%0d retired=%0d predictor=%0d cache=%0d sets=%0d loadbubble=%0d fastihit=%0d",test_name,cycle_count,retired_count,PREDICTOR,ENABLE_CACHE,CACHE_SETS,LOAD_USE_BUBBLE,FAST_ICACHE_HIT);
+                $display("PASS ISA name=%s cycles=%0d retired=%0d predictor=%0d cache=%0d sets=%0d loadbubble=%0d fastihit=%0d m=%0d overlap=%0d fastdread=%0d earlyd=%0d btb=%0d dataoverlap=%0d fastdwrite=%0d isets=%0d",test_name,cycle_count,retired_count,PREDICTOR,ENABLE_CACHE,CACHE_SETS,LOAD_USE_BUBBLE,FAST_ICACHE_HIT,ENABLE_M,FETCH_OVERLAP,FAST_DCACHE_READ,EARLY_D_REQUEST,BTB_INDEX_BITS,DATA_OVERLAP,FAST_DCACHE_WRITE,ICACHE_SET_BITS!=0 ? ICACHE_SET_BITS : CACHE_SETS);
                 $fclose(trace_file);
                 $writememh(memory_path,memory_system.ram.memory);
                 $finish;
             end
             if(cycles>200000) $fatal(1,"ISA watchdog expired pc=%08x",trace_pc);
         end
+    end
+    always @(posedge clk) if(rst_n && core.ex_valid) begin
+        if(core.ex_muldiv && core.execute_common_exception!==core.execute_exception)
+            $fatal(1,"M exception qualification differs from canonical exception");
+        if((core.ex_decode.is_load || core.ex_decode.is_store) && core.execute_data_exception!==core.execute_exception)
+            $fatal(1,"Data exception qualification differs from canonical exception");
     end
 endmodule

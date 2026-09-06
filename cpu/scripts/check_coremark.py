@@ -28,7 +28,7 @@ def parse_result(text, allow_short=False, lut_count=None, expected_config=None, 
     frequency = field(r"^ZGTC cycles_hex=[0-9a-f]{16} retired_hex=[0-9a-f]{16} clock_hz=(\d+)$")
     ticks = field(r"^Total ticks\s+: (\d+)$")
     seconds_integer = field(r"^Total time \(secs\): (\d+)$")
-    if frequency != expected_clock_hz or frequency not in (27000000, 54000000, 60000000, 67500000, 72000000, 75600000, 81000000, 90000000, 99000000, 102600000, 108000000, 135000000, 162000000, 180000000, 194400000, 216000000, 270000000) or cycles <= 0 or retired <= 0:
+    if frequency != expected_clock_hz or frequency not in (27000000, 54000000, 60000000, 67500000, 72000000, 75600000, 81000000, 90000000, 99000000, 102600000, 108000000, 120000000, 135000000, 162000000, 180000000, 194400000, 216000000, 270000000) or cycles <= 0 or retired <= 0:
         raise ValueError("Unsupported frequency or nonpositive counters")
     if ticks != cycles // (frequency // 1000) or seconds_integer != ticks // 1000:
         raise ValueError("Counter and timer report disagree")
@@ -62,11 +62,33 @@ def parse_result(text, allow_short=False, lut_count=None, expected_config=None, 
         if configuration & 2 and any(counters):
             raise ValueError("Disabled caches must report zero cache counters")
         profile = dict(zip(("i_hits", "i_misses", "d_hits", "d_misses", "writebacks"), counters))
+        data_sets = (configuration >> 8) & 15
+        instruction_encoding = (configuration >> 12) & 15
+        if not 1 <= data_sets <= 8 or instruction_encoding > 8:
+            raise ValueError("Invalid cache geometry encoding")
+        profile["dcache_set_bits"] = data_sets
+        profile["icache_set_bits"] = instruction_encoding or data_sets
         profile["configuration_hex"] = f"{configuration:08x}"
         profile["cache_enabled"] = not bool(configuration & 2)
         profile["predictor_enabled"] = bool(configuration & 1)
         profile["load_use_bubble"] = bool(configuration & 4)
         profile["fast_icache_hit"] = bool(configuration & 8)
+        profile["m_extension"] = bool(configuration & 16)
+        profile["fetch_overlap"] = bool(configuration & 32)
+        profile["fast_dcache_read"] = bool(configuration & 64)
+        profile["early_d_request"] = bool(configuration & 128)
+        btb_encoding = (configuration >> 20) & 15
+        if btb_encoding > 8:
+            raise ValueError("Invalid BTB index width encoding")
+        profile["btb_index_bits"] = btb_encoding or 4
+        profile["data_overlap"] = bool(configuration & (1 << 18))
+        profile["fast_dcache_write"] = bool(configuration & (1 << 19))
+        if configuration & (1 << 19) and configuration & 2:
+            raise ValueError("Early D-cache writes require enabled caches")
+        if configuration & 64 and configuration & 2:
+            raise ValueError("Early D-cache reads cannot be active with caches disabled")
+        if "-march=rv32im" in text and not profile["m_extension"]:
+            raise ValueError("RV32IM firmware cannot run on an RV32I-only configuration")
         if configuration & 8 and configuration & 2:
             raise ValueError("Early I-cache response cannot be active with caches disabled")
         profile["interval_includes_counter_read_overhead"] = True

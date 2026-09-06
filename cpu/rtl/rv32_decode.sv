@@ -1,5 +1,7 @@
 `timescale 1ns/1ps
-module rv32_decode (
+module rv32_decode #(
+    parameter integer ENABLE_M=0
+) (
     input  wire [31:0] instruction,
     output wire [4:0] rs1,
     output wire [4:0] rs2,
@@ -87,7 +89,7 @@ module rv32_decode (
                     7: alu_op=ALU_AND;
                 endcase
                 if (opcode==7'h33)
-                    illegal=!(funct7==0 || (funct7==7'h20 && (funct3==0 || funct3==5)));
+                    illegal=!(funct7==0 || (ENABLE_M!=0 && funct7==1) || (funct7==7'h20 && (funct3==0 || funct3==5)));
                 else if (funct3==1) illegal=(funct7!=0);
                 else if (funct3==5) illegal=!(funct7==0 || funct7==7'h20);
             end

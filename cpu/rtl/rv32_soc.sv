@@ -1,11 +1,19 @@
 `timescale 1ns/1ps
 module rv32_soc #(
+    parameter integer ENABLE_M=0,
     parameter integer CLOCK_HZ=27000000,
     parameter integer BAUD=115200,
     parameter integer MEMORY_ADDRESS_BITS=14,
     parameter integer ENABLE_PREDICTOR=1,
     parameter integer LOAD_USE_BUBBLE=0,
     parameter integer FAST_ICACHE_HIT=0,
+    parameter integer FAST_DCACHE_READ=0,
+    parameter integer FAST_DCACHE_WRITE=0,
+    parameter integer FETCH_OVERLAP=0,
+    parameter integer DATA_OVERLAP=0,
+    parameter integer EARLY_D_REQUEST=0,
+    parameter integer BTB_INDEX_BITS=4,
+    parameter integer ICACHE_SET_BITS=0,
     parameter integer CACHE_SET_BITS=4,
     parameter integer ENABLE_CACHE=1,
     parameter INIT_FILE=""
@@ -41,9 +49,9 @@ module rv32_soc #(
     wire [31:0] unused_trace_data,unused_trap_pc,unused_trap_value;
     wire [31:0] i_hits,i_misses,d_hits,d_misses,writebacks;
     wire [287:0] performance_values={writebacks,d_misses,d_hits,i_misses,i_hits,retired_count,cycle_count};
-    localparam [31:0] PERFORMANCE_CONFIG=(MEMORY_ADDRESS_BITS<<24) | (2<<16) | (CACHE_SET_BITS<<8) | (ENABLE_PREDICTOR!=0 ? 1 : 0) | (ENABLE_CACHE==0 ? 2 : 0) | (LOAD_USE_BUBBLE!=0 ? 4 : 0) | (FAST_ICACHE_HIT!=0 && ENABLE_CACHE!=0 ? 8 : 0);
+    localparam [31:0] PERFORMANCE_CONFIG=((ICACHE_SET_BITS!=0 && ICACHE_SET_BITS!=CACHE_SET_BITS ? ICACHE_SET_BITS : 0)<<12) | (FAST_DCACHE_WRITE!=0 && ENABLE_CACHE!=0 ? (1<<19) : 0) | (DATA_OVERLAP!=0 ? (1<<18) : 0) | ((BTB_INDEX_BITS==4 ? 0 : BTB_INDEX_BITS)<<20) | (MEMORY_ADDRESS_BITS<<24) | (2<<16) | (CACHE_SET_BITS<<8) | (ENABLE_PREDICTOR!=0 ? 1 : 0) | (ENABLE_CACHE==0 ? 2 : 0) | (LOAD_USE_BUBBLE!=0 ? 4 : 0) | (FAST_ICACHE_HIT!=0 && ENABLE_CACHE!=0 ? 8 : 0) | (ENABLE_M!=0 ? 16 : 0) | (FETCH_OVERLAP!=0 ? 32 : 0) | (FAST_DCACHE_READ!=0 && ENABLE_CACHE!=0 ? 64 : 0) | (EARLY_D_REQUEST!=0 ? 128 : 0);
     assign maintenance_ready=memory_ready && !memory_error && !maintenance_fault;
-    rv32_core #(.ENABLE_PREDICTOR(ENABLE_PREDICTOR),.LOAD_USE_BUBBLE(LOAD_USE_BUBBLE)) core(
+    rv32_core #(.BTB_ADDRESS_BITS(MEMORY_ADDRESS_BITS+2),.BTB_INDEX_BITS(BTB_INDEX_BITS),.EARLY_D_REQUEST(EARLY_D_REQUEST),.FETCH_OVERLAP(FETCH_OVERLAP),.ENABLE_M(ENABLE_M),.ENABLE_PREDICTOR(ENABLE_PREDICTOR),.LOAD_USE_BUBBLE(LOAD_USE_BUBBLE)) core(
         .clk(clk),.rst_n(rst_n),
         .i_req_valid(i_req_valid),.i_req_ready(i_req_ready),.i_req_address(i_req_address),.i_rsp_valid(i_rsp_valid),.i_rsp_ready(i_rsp_ready),.i_rsp_data(i_rsp_data),.i_rsp_error(i_rsp_error),
         .d_req_valid(d_req_valid),.d_req_ready(d_req_ready),.d_req_address(d_req_address),.d_req_data(d_req_data),.d_req_strobe(d_req_strobe),.d_req_write(d_req_write),
@@ -52,7 +60,7 @@ module rv32_soc #(
         .trace_valid(trace_valid),.trace_pc(trace_pc),.trace_instruction(trace_instruction),.trace_write(unused_trace_write),.trace_rd(unused_trace_rd),.trace_data(unused_trace_data),
         .trap_valid(trap_valid),.trap_pc(unused_trap_pc),.trap_cause(trap_cause),.trap_value(unused_trap_value),.pipeline_valid(unused_pipeline_valid),.cycle_count(cycle_count),.retired_count(retired_count)
     );
-    rv32_memory_system #(.MEMORY_ADDRESS_BITS(MEMORY_ADDRESS_BITS),.CACHE_SET_BITS(CACHE_SET_BITS),.ENABLE_CACHE(ENABLE_CACHE),.FAST_ICACHE_HIT(FAST_ICACHE_HIT),.INIT_FILE(INIT_FILE)) memory_system(
+    rv32_memory_system #(.DATA_OVERLAP(DATA_OVERLAP),.MEMORY_ADDRESS_BITS(MEMORY_ADDRESS_BITS),.ICACHE_SET_BITS(ICACHE_SET_BITS),.CACHE_SET_BITS(CACHE_SET_BITS),.ENABLE_CACHE(ENABLE_CACHE),.FETCH_OVERLAP(FETCH_OVERLAP),.FAST_DCACHE_WRITE(FAST_DCACHE_WRITE),.FAST_DCACHE_READ(FAST_DCACHE_READ),.FAST_ICACHE_HIT(FAST_ICACHE_HIT),.INIT_FILE(INIT_FILE)) memory_system(
         .clk(clk),.rst_n(rst_n),
         .i_req_valid(i_req_valid),.i_req_ready(i_req_ready),.i_req_address(i_req_address),.i_rsp_valid(i_rsp_valid),.i_rsp_ready(i_rsp_ready),.i_rsp_data(i_rsp_data),.i_rsp_error(i_rsp_error),
         .d_req_valid(d_req_valid),.d_req_ready(d_req_ready),.d_req_address(d_req_address),.d_req_write(d_req_write),.d_req_data(d_req_data),.d_req_strobe(d_req_strobe),

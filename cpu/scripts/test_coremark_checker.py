@@ -24,8 +24,35 @@ def fixture(cycles=324000000, clock_hz=27000000):
 
 
 class CoreMarkCheckerTests(unittest.TestCase):
+    def test_asymmetric_cache_geometry(self):
+        suffix = "\nZGTC config={config} ihit=1 imiss=2 dhit=3 dmiss=4 writebacks=5\n"
+        for config, instruction, data in (("0e020401", 4, 4), ("0e8e86f9", 8, 6), ("0e8e87f9", 8, 7), ("0e8e08f9", 8, 8), ("0e021301", 1, 3)):
+            result = parse_result(fixture() + suffix.format(config=config))
+            self.assertEqual(result["profile"]["icache_set_bits"], instruction)
+            self.assertEqual(result["profile"]["dcache_set_bits"], data)
+        for config in ("0e02f401", "0e020f01", "0e020001"):
+            with self.assertRaisesRegex(ValueError, "cache geometry"):
+                parse_result(fixture() + suffix.format(config=config))
+        with self.assertRaisesRegex(ValueError, "configuration differs"):
+            parse_result(fixture() + suffix.format(config="0e8e86f9"), expected_config=0x0e8e06f9)
+
+    def test_data_overlap_profile_encoding(self):
+        suffix = "\nZGTC config={config} ihit=1 imiss=2 dhit=3 dmiss=4 writebacks=5\n"
+        for config, enabled, width in (("0e020401", False, 4), ("0e060401", True, 4), ("0e620401", False, 6), ("0e660401", True, 6)):
+            result = parse_result(fixture() + suffix.format(config=config))
+            self.assertEqual(result["profile"]["data_overlap"], enabled)
+            self.assertEqual(result["profile"]["btb_index_bits"], width)
+
+    def test_btb_profile_encoding(self):
+        suffix = "\nZGTC config={config} ihit=1 imiss=2 dhit=3 dmiss=4 writebacks=5\n"
+        for config, width in (("0e020401", 4), ("0e120401", 1), ("0e620401", 6), ("0e820401", 8)):
+            result = parse_result(fixture() + suffix.format(config=config))
+            self.assertEqual(result["profile"]["btb_index_bits"], width)
+        with self.assertRaisesRegex(ValueError, "BTB index width encoding"):
+            parse_result(fixture() + suffix.format(config="0ef20401"))
+
     def test_supported_clock_scores(self):
-        for clock_hz in (27000000, 54000000, 60000000, 67500000, 72000000, 75600000, 81000000, 90000000, 99000000, 102600000, 108000000, 135000000, 162000000, 180000000, 194400000, 216000000, 270000000):
+        for clock_hz in (27000000, 54000000, 60000000, 67500000, 72000000, 75600000, 81000000, 90000000, 99000000, 102600000, 108000000, 120000000, 135000000, 162000000, 180000000, 194400000, 216000000, 270000000):
             with self.subTest(clock_hz=clock_hz):
                 text = fixture(clock_hz * 12, clock_hz)
                 result = parse_result(text, expected_clock_hz=clock_hz)
@@ -118,6 +145,43 @@ class CoreMarkCheckerTests(unittest.TestCase):
             parse_result(fixture(), expected_config=0x0E020401)
         with self.assertRaises(ValueError):
             parse_result(text.replace("ihit=100", "ihit=4294967296"))
+
+
+    def test_early_dcache_write_identity(self):
+        text = fixture() + "\nZGTC config=0e0a0479 ihit=100 imiss=2 dhit=200 dmiss=4 writebacks=3\n"
+        self.assertTrue(parse_result(text, expected_config=0x0E0A0479)["profile"]["fast_dcache_write"])
+        self.assertFalse(parse_result(text.replace("0e0a0479", "0e020479"))["profile"]["fast_dcache_write"])
+        with self.assertRaises(ValueError):
+            parse_result(text, expected_config=0x0E020479)
+        bypass = fixture() + "\nZGTC config=0e0a0402 ihit=0 imiss=0 dhit=0 dmiss=0 writebacks=0\n"
+        with self.assertRaisesRegex(ValueError, "Early D-cache writes"):
+            parse_result(bypass)
+
+    def test_early_dcache_read_identity(self):
+        text = fixture() + "\nZGTC config=0e020479 ihit=100 imiss=2 dhit=200 dmiss=4 writebacks=3\n"
+        self.assertTrue(parse_result(text, expected_config=0x0E020479)["profile"]["fast_dcache_read"])
+        with self.assertRaises(ValueError):
+            parse_result(text, expected_config=0x0E020439)
+        self.assertFalse(parse_result(text.replace("0e020479", "0e020439"))["profile"]["fast_dcache_read"])
+        bypass = fixture() + "\nZGTC config=0e020442 ihit=0 imiss=0 dhit=0 dmiss=0 writebacks=0\n"
+        with self.assertRaisesRegex(ValueError, "Early D-cache reads"):
+            parse_result(bypass)
+
+    def test_fetch_overlap_identity(self):
+        text = fixture() + "\nZGTC config=0e020439 ihit=100 imiss=2 dhit=200 dmiss=4 writebacks=3\n"
+        self.assertTrue(parse_result(text, expected_config=0x0E020439)["profile"]["fetch_overlap"])
+        with self.assertRaises(ValueError):
+            parse_result(text, expected_config=0x0E020419)
+        baseline = text.replace("0e020439", "0e020419")
+        self.assertFalse(parse_result(baseline)["profile"]["fetch_overlap"])
+
+    def test_m_extension_identity(self):
+        text = fixture() + "\nZGTC config=0e020419 ihit=100 imiss=2 dhit=200 dmiss=4 writebacks=3\n"
+        self.assertTrue(parse_result(text)["profile"]["m_extension"])
+        text = text.replace("-DTOTAL_DATA_SIZE=2000", "-march=rv32im -DTOTAL_DATA_SIZE=2000")
+        self.assertTrue(parse_result(text, expected_config=0x0E020419)["profile"]["m_extension"])
+        with self.assertRaises(ValueError):
+            parse_result(text.replace("0e020419", "0e020409"))
 
 
 if __name__ == "__main__":

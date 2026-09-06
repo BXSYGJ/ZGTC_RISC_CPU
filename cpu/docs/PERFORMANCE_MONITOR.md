@@ -16,11 +16,13 @@
 | 1000042C | D-cache miss_count |
 | 10000430 | D-cache writeback_count |
 
-在命令被接受的同一时钟沿采集 288 位；数据读取只读快照，不会重新取活计数器。复位清零，快照序号每次命令加 1，按 32 位回绕。计数器自身不会被快照清零。只读地址写入、未知地址、未对齐访问报错且不改变快照；写控制寄存器的其他字节、写 bit0=0 均不触发。
+在外设端命令valid/ready握手的同一时钟沿采集 288 位；数据读取只读快照，不会重新取活计数器。复位清零，快照序号每次命令加 1，按 32 位回绕。计数器自身不会被快照清零。只读地址写入、未知地址、未对齐访问报错且不改变快照；写控制寄存器的其他字节、写 bit0=0 均不触发。 当前MMIO请求缓冲使CPU入口接受可能早于这个时钟沿；采样点仍在外设实际接受处，详见CACHE_ADDRESS_BOUNDS.md。
 
-配置字 bit0 表示分支预测器启用，bit1 表示两路 Cache 被旁路（1=无Cache），bit2表示load寄存前递实验启用，bit3表示I-cache命中提前响应实际启用，bits15:8 是 CACHE_SET_BITS，bits23:16 是 CACHE_WORD_BITS（当前固定 2），bits31:24 是片上 RAM 的字地址位数（当前 14，即 64 KiB）。其余低字节位为 0。默认配置 0e020401；只关闭预测器为 0e020400；只关闭 Cache 为 0e020403；两者都关闭为 0e020402；仅开启load前递实验为0e020405；仅开启I-cache提前响应为0e020409，两种实验同时开启为0e02040d。旁路模式强制bit3=0，Cache几何字段只是参数保留值，不能据此报告仍有Cache容量。两种实验均默认关闭，见LOAD_FORWARD_EXPERIMENT.md与FAST_ICACHE_HIT.md。
+当前配置字定义（2026-09-06）：bit0 为分支预测开启；bit1 为 Cache 旁路；bit2 为 LOAD_USE_BUBBLE；bit3 为 I-cache 提前响应实际开启；bit4 为 ENABLE_M；bit5 为 FETCH_OVERLAP；bit6 为 D-cache 提前读响应实际开启；bit7 为 EARLY_D_REQUEST；[11:8] 为数据Cache的 CACHE_SET_BITS；[15:12] 为独立指令Cache索引位数，0表示继承数据Cache的位数，非零合法值为1–8；[17:16] 为固定 CACHE_WORD_BITS=2，即每行 4 个字；bit18 为 DATA_OVERLAP；bit19 为 D-cache 提前写响应（Cache 旁路时强制为 0）；[23:20] 为 BTB 索引位数，0 兼容历史默认 4，非零合法值为 1–8；[31:24] 为后端 RAM 字地址位数。Cache 的两路结构不是用固定数值 2 这一字段编码。
 
-Cache 的 hit/miss 按进入 lookup 的访问分类计数，缺失后重做 lookup 不再记成 hit；I-cache 包含随后被流水线丢弃的推测取指，不能把 I 访问数直接当作退休指令数。writeback_count 统计成功完成的脏行写回，包含维护触发写回。计数器为 32 位，区间差以模 2^32 计算；过长区间发生多次回绕不能恢复，当前短时和约 20 秒基准均需检查数值合理性。
+默认配置仍为 0e020401，历史实验低位定义不变。新 64 项 BTB、大缓存组合开启 DATA_OVERLAP 后为 0e6606fd，关闭为 0e6206fd；128 项开启后为 0e7606fd。旁路模式强制 bit3 和 bit6 为 0，其余相关开关表示参数设置，不保证对应路径在工作负载中触发；Cache 几何字段保留不表示仍有 Cache。DATA_OVERLAP 默认关闭，细节见 DATA_OVERLAP.md。FAST_DCACHE_WRITE也默认关闭；64项BTB、B0、提前读写均开启时配置字为0e6e06f9，128项为0e7e06f9，语义及证据见FAST_DCACHE_WRITE.md。 ICACHE_SET_BITS默认0继承CACHE_SET_BITS；两侧相等时高半字节编码0以保持历史配置字不变。256项BTB、B0、全部快速选项开启时，I=8 KiB/D=2 KiB为0e8e86f9，I=8 KiB/D=4 KiB为0e8e87f9，两侧8 KiB仍为0e8e08f9。命令行及验收边界见ASYMMETRIC_CACHE.md。
+
+Cache 的 hit/miss 按进入 lookup 的访问分类计数，缺失后重做 lookup 不再记成 hit；I-cache 包含随后被流水线丢弃的推测取指，不能把 I 访问数直接当作退休指令数。writeback_count 统计成功完成的脏行写回，包含维护触发写回。计数器为 32 位，区间差以模 2^32 计算；过长区间发生多次回绕不能恢复，当前短时和约 20 秒基准均需检查数值合理性。 有界标签修订在lookup之前拒绝物理高地址、未对齐及只读写入请求，这些失败访问不增加hit/miss，也不逐出脏行；不能直接与历史先miss后后端报错的计数比较。
 
 ## 计分区与统计区
 

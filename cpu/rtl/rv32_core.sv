@@ -2,6 +2,11 @@
 module rv32_core #(
     parameter [31:0] RESET_VECTOR=32'h00000000,
     parameter integer ENABLE_PREDICTOR=1,
+    parameter integer ENABLE_M=0,
+    parameter integer FETCH_OVERLAP=0,
+    parameter integer EARLY_D_REQUEST=0,
+    parameter integer BTB_INDEX_BITS=4,
+    parameter integer BTB_ADDRESS_BITS=32,
     parameter integer LOAD_USE_BUBBLE=0
 ) (
     input wire clk,
@@ -68,7 +73,7 @@ module rv32_core #(
     reg mem_valid,mem_sent,mem_load,mem_store,mem_writes,mem_exception;
     reg mem_csr,mem_csr_write,mem_mret,mem_fence_i,mem_branch,mem_conditional,mem_taken;
     reg [31:0] mem_pc,mem_instruction,mem_prediction,mem_next_pc;
-    reg [31:0] mem_result,mem_address,mem_store_data,mem_cause,mem_tval,mem_csr_data,mem_target;
+    reg [31:0] mem_result,mem_address,mem_store_data,mem_cause,mem_csr_data,mem_target;
     reg [4:0] mem_rd;
     reg [3:0] mem_strobe;
     reg [2:0] mem_funct3;
@@ -90,7 +95,12 @@ module rv32_core #(
     wire ex_serial=ex_decode.is_csr || ex_decode.is_mret || interrupt_pending;
     wire load_use_wait=LOAD_USE_BUBBLE!=0 && mem_valid && mem_load && mem_writes && mem_rd!=0 &&
         ((ex_decode.uses_rs1 && ex_rs1==mem_rd) || (ex_decode.uses_rs2 && ex_rs2==mem_rd));
-    wire ex_fire=ex_valid && mem_ready && !mem_flush && !load_use_wait && !(ex_serial && (mem_valid || wb_valid));
+    wire ex_can_fire=ex_valid && mem_ready && !mem_flush && !load_use_wait && !(ex_serial && (mem_valid || wb_valid));
+    wire ex_muldiv=ENABLE_M!=0 && ex_instruction[6:0]==7'h33 && ex_instruction[31:25]==1;
+    wire muldiv_valid,muldiv_ready;
+    wire [31:0] muldiv_result;
+    reg muldiv_started;
+    wire ex_fire=ex_can_fire && (!ex_muldiv || execute_common_exception || muldiv_valid);
     wire ex_ready=!ex_valid || ex_fire;
     wire id_fire=id_valid && ex_ready && !mem_flush && !frontend_barrier;
     wire id_ready=!id_valid || id_fire;
@@ -109,19 +119,24 @@ module rv32_core #(
     reg branch_taken;
     reg [31:0] branch_target,actual_next,execute_result;
     reg execute_exception;
-    reg [31:0] execute_cause,execute_tval;
+    reg [31:0] execute_cause,mem_tval;
     reg [3:0] execute_strobe;
     wire [31:0] effective_address=forwarded_a+ex_decode.immediate;
     wire data_misaligned=(ex_instruction[13:12]==1 && effective_address[0]) ||
         (ex_instruction[13:12]==2 && effective_address[1:0]!=0);
-    assign i_req_valid=fetch_active && !fetch_sent;
-    assign i_req_address=fetch_address;
+    wire execute_common_exception=interrupt_pending || ex_pc[1:0]!=0 || ex_error || ex_decode.illegal;
+    wire execute_data_exception=execute_common_exception || data_misaligned;
+    wire fetch_overlap=FETCH_OVERLAP!=0 && fetch_complete && !mem_flush && !frontend_barrier;
+    assign i_req_valid=fetch_active && (!fetch_sent || fetch_overlap);
+    assign i_req_address=fetch_overlap ? next_pc : fetch_address;
     assign i_rsp_ready=fetch_active && fetch_sent && (!if_valid || if_fire || fetch_discard || mem_flush || frontend_barrier);
-    assign d_req_valid=mem_valid && mem_access && !mem_sent;
-    assign d_req_address={mem_address[31:2],2'b0};
-    assign d_req_data=mem_store_data;
-    assign d_req_strobe=mem_strobe;
-    assign d_req_write=mem_store;
+    wire early_data_request=EARLY_D_REQUEST!=0 && ex_fire && (ex_decode.is_load || ex_decode.is_store) && !execute_data_exception;
+    wire select_ex_data=EARLY_D_REQUEST!=0 && !(mem_valid && mem_access && !mem_sent);
+    assign d_req_valid=(mem_valid && mem_access && !mem_sent) || early_data_request;
+    assign d_req_address=select_ex_data ? {effective_address[31:2],2'b0} : {mem_address[31:2],2'b0};
+    assign d_req_data=select_ex_data ? (forwarded_b << {effective_address[1:0],3'b0}) : mem_store_data;
+    assign d_req_strobe=select_ex_data ? execute_strobe : mem_strobe;
+    assign d_req_write=select_ex_data ? ex_decode.is_store : mem_store;
     assign d_rsp_ready=mem_valid && mem_access && mem_sent;
     assign maintenance_valid=mem_valid && mem_fence_i && !mem_exception;
     assign trace_valid=wb_valid;
@@ -134,8 +149,17 @@ module rv32_core #(
     assign trap_pc=mem_pc;
     assign trap_cause=mem_exception ? mem_cause : (mem_store ? 32'd7 : 32'd5);
     assign trap_value=mem_exception ? mem_tval : mem_address;
+    always @* begin
+        case(mem_cause)
+            0: mem_tval=mem_pc[1:0]!=0 ? mem_pc : mem_target;
+            1,3: mem_tval=mem_pc;
+            2: mem_tval=mem_instruction;
+            4,6: mem_tval=mem_address;
+            default: mem_tval=0;
+        endcase
+    end
     assign pipeline_valid={wb_valid,mem_valid,ex_valid,id_valid,if_valid};
-    rv32_decode decoder (
+    rv32_decode #(.ENABLE_M(ENABLE_M)) decoder (
         .instruction(id_instruction),.rs1(id_rs1),.rs2(id_rs2),.rd(id_rd),
         .uses_rs1(id_decode.uses_rs1),.uses_rs2(id_decode.uses_rs2),.writes_rd(id_decode.writes_rd),
         .immediate(id_decode.immediate),.alu_op(id_decode.alu_op),.alu_immediate(id_decode.alu_immediate),
@@ -146,13 +170,25 @@ module rv32_core #(
         .is_wfi(id_decode.is_wfi),.illegal(id_decode.illegal)
     );
     rv32_alu alu(.operand_a(alu_a),.operand_b(alu_b),.operation(ex_decode.alu_op),.result(alu_result));
-    rv32_btb predictor (
+    generate if(ENABLE_M!=0) begin : multiply_divide
+        rv32_muldiv unit(
+            .clk(clk),.rst_n(rst_n),.cancel(mem_flush || (ex_valid && ex_muldiv && execute_common_exception)),
+            .req_valid(ex_can_fire && ex_muldiv && !execute_common_exception && !muldiv_started),.req_ready(muldiv_ready),
+            .req_operation(ex_instruction[14:12]),.req_operand_a(forwarded_a),.req_operand_b(forwarded_b),
+            .rsp_valid(muldiv_valid),.rsp_ready(ex_can_fire && ex_muldiv && !execute_common_exception),.rsp_data(muldiv_result)
+        );
+    end else begin : no_multiply_divide
+        assign muldiv_ready=0;
+        assign muldiv_valid=0;
+        assign muldiv_result=0;
+    end endgenerate
+    rv32_btb #(.INDEX_BITS(BTB_INDEX_BITS),.ADDRESS_BITS(BTB_ADDRESS_BITS)) predictor (
         .clk(clk),.rst_n(rst_n),.invalidate(mem_fire && mem_fence_i && !mem_fault),.fetch_pc(next_pc),
         .predicted_taken(predicted_taken),.predicted_target(predicted_target),.prediction_hit(prediction_hit),
         .update_valid(mem_fire && mem_branch && !mem_fault),.update_pc(mem_pc),.update_target(mem_target),
         .update_taken(mem_taken),.update_conditional(mem_conditional)
     );
-    rv32_machine machine (
+    rv32_machine #(.ENABLE_M(ENABLE_M)) machine (
         .clk(clk),.rst_n(rst_n),.retire(wb_valid && !wb_counter_write),.timer_value(timer_value),
         .irq_external(irq_external),.irq_software(irq_software),.irq_timer(irq_timer),
         .read_address(ex_instruction[31:20]),.read_write_intent(csr_write_intent),
@@ -184,7 +220,7 @@ module rv32_core #(
             if(ex_rs1==wb_rd) forwarded_a=wb_data;
             if(ex_rs2==wb_rd) forwarded_b=wb_data;
         end
-        if(mem_valid && mem_writes && mem_rd!=0 && !mem_fault && (!mem_load || (LOAD_USE_BUBBLE==0 && mem_fire))) begin
+        if(mem_valid && mem_writes && mem_rd!=0 && !mem_exception && (!mem_load || (LOAD_USE_BUBBLE==0 && mem_fire && !d_rsp_error))) begin
             if(ex_rs1==mem_rd) forwarded_a=LOAD_USE_BUBBLE!=0 ? mem_result : mem_value;
             if(ex_rs2==mem_rd) forwarded_b=LOAD_USE_BUBBLE!=0 ? mem_result : mem_value;
         end
@@ -214,6 +250,7 @@ module rv32_core #(
         actual_next=branch_taken ? branch_target : ex_pc+32'd4;
         if(ex_decode.is_mret) actual_next=return_pc;
         execute_result=alu_result;
+        if(ex_muldiv) execute_result=muldiv_result;
         if(ex_decode.is_fence || ex_decode.is_wfi) execute_result=0;
         if(ex_decode.is_lui) execute_result=ex_decode.immediate;
         if(ex_decode.is_jal || ex_decode.is_jalr) execute_result=ex_pc+32'd4;
@@ -223,21 +260,22 @@ module rv32_core #(
             1: execute_strobe=4'b0011 << effective_address[1:0];
             default: execute_strobe=4'b1111;
         endcase
-        execute_exception=1; execute_cause=0; execute_tval=0;
+        execute_exception=1; execute_cause=0;
         if(interrupt_pending) begin execute_cause=interrupt_cause; end
-        else if(ex_pc[1:0]!=0) begin execute_cause=0; execute_tval=ex_pc; end
-        else if(ex_error) begin execute_cause=1; execute_tval=ex_pc; end
-        else if(ex_decode.illegal || (ex_decode.is_csr && csr_illegal)) begin execute_cause=2; execute_tval=ex_instruction; end
-        else if(ex_decode.is_ebreak) begin execute_cause=3; execute_tval=ex_pc; end
-        else if(branch_taken && branch_target[1:0]!=0) begin execute_cause=0; execute_tval=branch_target; end
+        else if(ex_pc[1:0]!=0) begin execute_cause=0; end
+        else if(ex_error) begin execute_cause=1; end
+        else if(ex_decode.illegal || (ex_decode.is_csr && csr_illegal)) begin execute_cause=2; end
+        else if(ex_decode.is_ebreak) begin execute_cause=3; end
+        else if(branch_taken && branch_target[1:0]!=0) begin execute_cause=0; end
         else if((ex_decode.is_load || ex_decode.is_store) && data_misaligned) begin
-            execute_cause=ex_decode.is_store ? 32'd6 : 32'd4; execute_tval=effective_address;
+            execute_cause=ex_decode.is_store ? 32'd6 : 32'd4;
         end
         else if(ex_decode.is_ecall) begin execute_cause=11; end
         else execute_exception=0;
     end
     always @(posedge clk or negedge rst_n) begin
         if(!rst_n) begin
+            muldiv_started<=0;
             next_pc<=RESET_VECTOR; fetch_address<=RESET_VECTOR; fetch_prediction<=RESET_VECTOR;
             fetch_active<=0; fetch_sent<=0; fetch_discard<=0;
             if_valid<=0; id_valid<=0; ex_valid<=0; mem_valid<=0; wb_valid<=0; mem_sent<=0;
@@ -250,10 +288,12 @@ module rv32_core #(
             mem_csr<=0; mem_csr_write<=0; mem_mret<=0; mem_fence_i<=0;
             mem_branch<=0; mem_conditional<=0; mem_taken<=0; mem_pc<=0; mem_instruction<=0;
             mem_prediction<=0; mem_next_pc<=0; mem_result<=0; mem_address<=0; mem_store_data<=0;
-            mem_cause<=0; mem_tval<=0; mem_csr_data<=0; mem_target<=0; mem_rd<=0; mem_strobe<=0; mem_funct3<=0;
+            mem_cause<=0; mem_csr_data<=0; mem_target<=0; mem_rd<=0; mem_strobe<=0; mem_funct3<=0;
             wb_writes<=0; wb_pc<=0; wb_instruction<=0; wb_data<=0; wb_rd<=0;
             for(reset_index=0;reset_index<32;reset_index=reset_index+1) registers[reset_index]<=0;
         end else begin
+            if(ex_can_fire && ex_muldiv && !execute_common_exception && !muldiv_started && muldiv_ready) muldiv_started<=1;
+            if(ex_fire || mem_flush) muldiv_started<=0;
             if(trace_write) registers[wb_rd]<=wb_data;
             wb_valid<=mem_fire && !mem_fault;
             if(mem_fire && !mem_fault) begin
@@ -263,13 +303,13 @@ module rv32_core #(
             if(mem_fire) begin mem_valid<=0; mem_sent<=0; end
             if(ex_valid) begin ex_operand_a<=forwarded_a; ex_operand_b<=forwarded_b; end
             if(ex_fire) begin
-                ex_valid<=0; mem_valid<=1; mem_sent<=0;
+                ex_valid<=0; mem_valid<=1; mem_sent<=early_data_request && d_req_ready;
                 mem_pc<=ex_pc; mem_instruction<=ex_instruction; mem_prediction<=ex_prediction; mem_next_pc<=actual_next;
                 mem_result<=execute_result; mem_rd<=ex_rd; mem_writes<=ex_decode.writes_rd;
                 mem_address<=effective_address; mem_store_data<=forwarded_b << {effective_address[1:0],3'b0};
                 mem_strobe<=execute_strobe; mem_funct3<=ex_instruction[14:12];
                 mem_load<=ex_decode.is_load; mem_store<=ex_decode.is_store;
-                mem_exception<=execute_exception; mem_cause<=execute_cause; mem_tval<=execute_tval;
+                mem_exception<=execute_exception; mem_cause<=execute_cause;
                 mem_csr<=ex_decode.is_csr; mem_csr_write<=csr_write_intent; mem_csr_data<=csr_new_data;
                 mem_mret<=ex_decode.is_mret; mem_fence_i<=ex_decode.is_fence_i;
                 mem_branch<=ex_decode.is_branch || ex_decode.is_jal || ex_decode.is_jalr;
@@ -292,7 +332,7 @@ module rv32_core #(
                 end
             end
             if((!fetch_active || fetch_complete) && !mem_flush && !frontend_barrier) begin
-                fetch_active<=1; fetch_sent<=0; fetch_discard<=0; fetch_address<=next_pc;
+                fetch_active<=1; fetch_sent<=fetch_overlap && i_req_ready; fetch_discard<=0; fetch_address<=next_pc;
                 fetch_prediction<=(ENABLE_PREDICTOR!=0 && prediction_hit && predicted_taken) ? predicted_target : next_pc+32'd4;
                 next_pc<=(ENABLE_PREDICTOR!=0 && prediction_hit && predicted_taken) ? predicted_target : next_pc+32'd4;
             end

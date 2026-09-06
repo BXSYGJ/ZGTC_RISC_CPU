@@ -66,5 +66,15 @@ class PdsReportTests(unittest.TestCase):
                 parse_reports(timing, log, 108000000)
 
 
+    def test_nonzero_apm_is_not_hidden_in_lut_metric(self):
+        report = parse_reports(TIMING, LOG + "| Use of APM | 4 | 740 |\n", 108000000)
+        self.assertEqual(report["resources"]["APM"], 4)
+        self.assertEqual(report["resources"]["post_route_luts"], 4551)
+        old = parse_reports(TIMING, LOG + "| Use of APM | 0 | 740 |\n", 108000000)
+        self.assertEqual(old, parse_reports(TIMING, LOG, 108000000))
+        with self.assertRaises(ValueError):
+            parse_reports(TIMING, LOG + "| Use of APM | 4 | 740 |\n" * 2, 108000000)
+
+
 if __name__ == "__main__":
     unittest.main()

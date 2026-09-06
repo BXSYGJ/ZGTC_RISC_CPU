@@ -1,10 +1,17 @@
 `timescale 1ns/1ps
 module cached_core_tb;
     parameter integer PREDICTOR=1;
+    parameter integer ICACHE_SET_BITS=0;
     parameter integer CACHE_SETS=1;
     parameter integer ENABLE_CACHE=1;
     parameter integer LOAD_USE_BUBBLE=0;
     parameter integer FAST_ICACHE_HIT=0;
+    parameter integer FAST_DCACHE_READ=0;
+    parameter integer FAST_DCACHE_WRITE=0;
+    parameter integer FETCH_OVERLAP=0;
+    parameter integer DATA_OVERLAP=0;
+    parameter integer EARLY_D_REQUEST=0;
+    parameter integer BTB_INDEX_BITS=4;
     reg clk=0;
     always #5 clk=~clk;
     reg rst_n=0;
@@ -37,10 +44,11 @@ module cached_core_tb;
     integer delay_cycles=0,checks=0,cycles=0,trap_count=0,success_wait=0,trace_file;
     integer memory_forward_count=0,load_forward_count=0;
     integer load_wait_count=0,wb_load_forward_count=0;
+    integer fetch_outstanding=0,overlap_count=0;
     string firmware,trace_path,memory_path;
     assign maintenance_ready=memory_maintenance_ready && !final_flush;
-    rv32_core #(.ENABLE_PREDICTOR(PREDICTOR),.LOAD_USE_BUBBLE(LOAD_USE_BUBBLE)) core(.*);
-    rv32_memory_system #(.CACHE_SET_BITS(CACHE_SETS),.ENABLE_CACHE(ENABLE_CACHE),.FAST_ICACHE_HIT(FAST_ICACHE_HIT)) memory_system(
+    rv32_core #(.BTB_ADDRESS_BITS(14),.BTB_INDEX_BITS(BTB_INDEX_BITS),.EARLY_D_REQUEST(EARLY_D_REQUEST),.FETCH_OVERLAP(FETCH_OVERLAP),.ENABLE_PREDICTOR(PREDICTOR),.LOAD_USE_BUBBLE(LOAD_USE_BUBBLE)) core(.*);
+    rv32_memory_system #(.DATA_OVERLAP(DATA_OVERLAP),.ICACHE_SET_BITS(ICACHE_SET_BITS),.CACHE_SET_BITS(CACHE_SETS),.ENABLE_CACHE(ENABLE_CACHE),.FETCH_OVERLAP(FETCH_OVERLAP),.FAST_DCACHE_WRITE(FAST_DCACHE_WRITE),.FAST_DCACHE_READ(FAST_DCACHE_READ),.FAST_ICACHE_HIT(FAST_ICACHE_HIT)) memory_system(
         .clk(clk),.rst_n(rst_n),
         .i_req_valid(i_req_valid),.i_req_ready(i_req_ready),.i_req_address(i_req_address),
         .i_rsp_valid(i_rsp_valid),.i_rsp_ready(i_rsp_ready),.i_rsp_data(i_rsp_data),.i_rsp_error(i_rsp_error),
@@ -80,6 +88,13 @@ module cached_core_tb;
     always @(posedge clk) begin
         if(rst_n) begin
             cycles=cycles+1; timer_value<=timer_value+1;
+            if(i_rsp_valid && i_rsp_ready) begin
+                check(fetch_outstanding==1,"fetch response has exactly one outstanding request");
+                fetch_outstanding=fetch_outstanding-1;
+            end
+            if(i_req_valid && i_req_ready) fetch_outstanding=fetch_outstanding+1;
+            check(fetch_outstanding>=0 && fetch_outstanding<=1,"single outstanding fetch invariant");
+            if(i_req_valid && i_req_ready && i_rsp_valid && i_rsp_ready) overlap_count=overlap_count+1;
             if(i_held) check(i_req_valid && i_req_address===held_i_address,"held fetch request");
             if(d_held) check(d_req_valid && d_req_address===held_d_address && d_req_data===held_d_data && d_req_strobe===held_d_strobe && d_req_write===held_d_write,"held data request");
             i_held=i_req_valid && !i_req_ready; held_i_address=i_req_address;
@@ -126,6 +141,7 @@ module cached_core_tb;
                 if(success_wait==12) final_flush<=1;
             end
             if(final_flush && memory_maintenance_ready) begin
+                if(FETCH_OVERLAP!=0 && ENABLE_CACHE!=0) check(overlap_count>0,"overlapping request and response exercised");
                 check(trap_count==13 && !irq_timer,"all traps handled and interrupt acknowledged");
                 check(memory_system.ram.memory[2048]==32'hbeefaaff,"dirty data reaches RAM");
                 if(ENABLE_CACHE!=0) check(i_hit_count>0 && i_miss_count>0 && d_hit_count>0 && d_miss_count>0 && d_writeback_count>0,"I/D cache paths exercised");
@@ -138,5 +154,11 @@ module cached_core_tb;
             end
             if(cycles>100000) $fatal(1,"Cached core watchdog expired PC=%08x",trace_pc);
         end
+    end
+    always @(posedge clk) if(rst_n && core.ex_valid) begin
+        if(core.ex_muldiv && core.execute_common_exception!==core.execute_exception)
+            $fatal(1,"M exception qualification differs from canonical exception");
+        if((core.ex_decode.is_load || core.ex_decode.is_store) && core.execute_data_exception!==core.execute_exception)
+            $fatal(1,"Data exception qualification differs from canonical exception");
     end
 endmodule

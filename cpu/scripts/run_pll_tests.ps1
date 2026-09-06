@@ -11,7 +11,7 @@ try {
     if ($LASTEXITCODE) { throw 'Vendor model path conversion failed.' }
     [void](New-Item -ItemType Directory -Path ([System.IO.Path]::Combine($project,'build')) -Force)
     $report = @()
-    foreach ($frequency in @(54000000,60000000,67500000,72000000,75600000,81000000,90000000,99000000,102600000,108000000,135000000,162000000,180000000,194400000,216000000,270000000)) {
+    foreach ($frequency in @(54000000,60000000,67500000,72000000,75600000,81000000,90000000,99000000,102600000,108000000,120000000,135000000,162000000,180000000,194400000,216000000,270000000)) {
         $image = "$linuxProject/build/pll_$frequency.vvp"
         & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/iverilog -g2012 -s pll_tb "-Ppll_tb.CLOCK_HZ=$frequency" -o $image "$linuxProject/fpga/rv32_pll.sv" "$linuxProject/sim/pll_tb.sv" $linuxModel
         if ($LASTEXITCODE) { throw "PLL compile failed: $frequency" }

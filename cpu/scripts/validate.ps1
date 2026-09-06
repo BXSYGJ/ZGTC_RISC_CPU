@@ -1,7 +1,7 @@
 ﻿[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 $ErrorActionPreference = 'Stop'
 try {
-    foreach ($entry in @('run_tests.ps1', 'run_core_tests.ps1', 'run_cached_tests.ps1', 'run_soc_tests.ps1')) {
+    foreach ($entry in @('run_tests.ps1', 'run_muldiv_core_tests.ps1', 'run_core_tests.ps1', 'run_cached_tests.ps1', 'run_soc_tests.ps1')) {
         & pwsh -NoProfile -File ([System.IO.Path]::Combine($PSScriptRoot, $entry))
         if ($LASTEXITCODE -ne 0) { throw "Validation phase failed: $entry" }
     }
@@ -31,11 +31,95 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Early I-cache GPIO IRQ SoC validation failed.' }
     & pwsh -NoProfile -File ([System.IO.Path]::Combine($PSScriptRoot, 'run_cached_tests.ps1')) -FastICacheHit -Uncached
     if ($LASTEXITCODE -ne 0) { throw 'Early I-cache bypass differential validation failed.' }
+    & pwsh -NoProfile -File ([System.IO.Path]::Combine($PSScriptRoot, 'run_muldiv_core_tests.ps1')) -FetchOverlap 1
+    if ($LASTEXITCODE) { throw 'Overlapping fetch M interrupt validation failed.' }
+    foreach ($fast in @(0, 1)) {
+        foreach ($bubble in @(0, 1)) {
+            & pwsh -NoProfile -File ([System.IO.Path]::Combine($PSScriptRoot, 'run_cached_tests.ps1')) -FetchOverlap -FastICacheHit:([bool]$fast) -LoadUseBubble:([bool]$bubble)
+            if ($LASTEXITCODE) { throw 'Overlapping fetch differential validation failed.' }
+        }
+    }
+    & pwsh -NoProfile -File ([System.IO.Path]::Combine($PSScriptRoot, 'run_cached_tests.ps1')) -FetchOverlap -FastICacheHit -Uncached
+    if ($LASTEXITCODE) { throw 'Overlapping fetch uncached validation failed.' }
+    foreach ($bubble in @(0, 1)) {
+        & pwsh -NoProfile -File ([System.IO.Path]::Combine($PSScriptRoot, 'run_soc_tests.ps1')) -FetchOverlap 1 -FastICacheHit 1 -LoadUseBubble $bubble -ExternalUart
+        if ($LASTEXITCODE) { throw 'Overlapping fetch UART IRQ validation failed.' }
+    }
+    & pwsh -NoProfile -File ([System.IO.Path]::Combine($PSScriptRoot, 'run_soc_tests.ps1')) -FetchOverlap 1 -FastICacheHit 1
+    if ($LASTEXITCODE) { throw 'Overlapping fetch GPIO IRQ validation failed.' }
+    foreach ($fast in @(0, 1)) {
+        foreach ($bubble in @(0, 1)) {
+            & pwsh -NoProfile -File ([System.IO.Path]::Combine($PSScriptRoot, 'run_cached_tests.ps1')) -FastDCacheRead -FetchOverlap -FastICacheHit:([bool]$fast) -LoadUseBubble:([bool]$bubble)
+            if ($LASTEXITCODE) { throw 'Early D-cache differential validation failed.' }
+        }
+    }
+    & pwsh -NoProfile -File ([System.IO.Path]::Combine($PSScriptRoot, 'run_cached_tests.ps1')) -FastDCacheRead -FastICacheHit -FetchOverlap -Uncached
+    if ($LASTEXITCODE) { throw 'Early D-cache bypass validation failed.' }
+    foreach ($bubble in @(0, 1)) {
+        & pwsh -NoProfile -File ([System.IO.Path]::Combine($PSScriptRoot, 'run_soc_tests.ps1')) -FastDCacheRead 1 -FetchOverlap 1 -FastICacheHit 1 -LoadUseBubble $bubble -ExternalUart
+        if ($LASTEXITCODE) { throw 'Early D-cache UART IRQ validation failed.' }
+    }
+    & pwsh -NoProfile -File ([System.IO.Path]::Combine($PSScriptRoot, 'run_soc_tests.ps1')) -FastDCacheRead 1 -FetchOverlap 1 -FastICacheHit 1
+    if ($LASTEXITCODE) { throw 'Early D-cache GPIO IRQ validation failed.' }
+    & pwsh -NoProfile -File ([System.IO.Path]::Combine($PSScriptRoot, 'run_core_tests.ps1')) -EarlyDRequest
+    if ($LASTEXITCODE) { throw 'Early request randomized differential validation failed.' }
+    & pwsh -NoProfile -File ([System.IO.Path]::Combine($PSScriptRoot, 'run_muldiv_core_tests.ps1')) -EarlyDRequest 1 -FetchOverlap 1
+    if ($LASTEXITCODE) { throw 'Early request M interrupt validation failed.' }
+    foreach ($fastData in @(0, 1)) {
+        foreach ($bubble in @(0, 1)) {
+            & pwsh -NoProfile -File ([System.IO.Path]::Combine($PSScriptRoot, 'run_cached_tests.ps1')) -EarlyDRequest -FastDCacheRead:([bool]$fastData) -FastICacheHit -FetchOverlap -LoadUseBubble:([bool]$bubble)
+            if ($LASTEXITCODE) { throw 'Early request cached differential validation failed.' }
+        }
+    }
+    & pwsh -NoProfile -File ([System.IO.Path]::Combine($PSScriptRoot, 'run_cached_tests.ps1')) -EarlyDRequest -Uncached
+    if ($LASTEXITCODE) { throw 'Early request uncached differential validation failed.' }
+    foreach ($bubble in @(0, 1)) {
+        & pwsh -NoProfile -File ([System.IO.Path]::Combine($PSScriptRoot, 'run_soc_tests.ps1')) -EarlyDRequest 1 -FastDCacheRead 1 -FastICacheHit 1 -FetchOverlap 1 -LoadUseBubble $bubble -ExternalUart
+        if ($LASTEXITCODE) { throw 'Early request UART IRQ validation failed.' }
+    }
+    & pwsh -NoProfile -File ([System.IO.Path]::Combine($PSScriptRoot, 'run_soc_tests.ps1')) -EarlyDRequest 1 -FastDCacheRead 1 -FastICacheHit 1 -FetchOverlap 1
+    if ($LASTEXITCODE) { throw 'Early request GPIO IRQ validation failed.' }
+    foreach ($btbBits in @(6, 7)) {
+        & pwsh -NoProfile -File ([System.IO.Path]::Combine($PSScriptRoot, 'run_core_tests.ps1')) -BtbIndexBits $btbBits -EarlyDRequest
+        if ($LASTEXITCODE) { throw 'BTB capacity randomized differential validation failed.' }
+        & pwsh -NoProfile -File ([System.IO.Path]::Combine($PSScriptRoot, 'run_cached_tests.ps1')) -BtbIndexBits $btbBits -CacheSetBits 6 -EarlyDRequest -FastDCacheRead -FastICacheHit -FetchOverlap -LoadUseBubble
+        if ($LASTEXITCODE) { throw 'BTB capacity cached differential validation failed.' }
+        & pwsh -NoProfile -File ([System.IO.Path]::Combine($PSScriptRoot, 'run_muldiv_core_tests.ps1')) -BtbIndexBits $btbBits -EarlyDRequest 1 -FetchOverlap 1
+        if ($LASTEXITCODE) { throw 'BTB capacity precise interrupt validation failed.' }
+        & pwsh -NoProfile -File ([System.IO.Path]::Combine($PSScriptRoot, 'run_soc_tests.ps1')) -BtbIndexBits $btbBits -EarlyDRequest 1 -FastDCacheRead 1 -FastICacheHit 1 -FetchOverlap 1 -LoadUseBubble 1 -ExternalUart
+        if ($LASTEXITCODE) { throw 'BTB capacity UART IRQ validation failed.' }
+        & pwsh -NoProfile -File ([System.IO.Path]::Combine($PSScriptRoot, 'run_soc_tests.ps1')) -BtbIndexBits $btbBits -EarlyDRequest 1 -FastDCacheRead 1 -FastICacheHit 1 -FetchOverlap 1 -LoadUseBubble 1
+        if ($LASTEXITCODE) { throw 'BTB capacity GPIO IRQ validation failed.' }
+    }
+    foreach ($earlyData in @(0, 1)) {
+        foreach ($fastData in @(0, 1)) {
+            foreach ($bubble in @(0, 1)) {
+                & pwsh -NoProfile -File ([System.IO.Path]::Combine($PSScriptRoot, 'run_cached_tests.ps1')) -DataOverlap -BtbIndexBits 6 -EarlyDRequest:([bool]$earlyData) -FastDCacheRead:([bool]$fastData) -FastICacheHit -FetchOverlap -LoadUseBubble:([bool]$bubble)
+                if ($LASTEXITCODE) { throw 'Data-overlap cached differential validation failed.' }
+            }
+        }
+    }
+    & pwsh -NoProfile -File ([System.IO.Path]::Combine($PSScriptRoot, 'run_cached_tests.ps1')) -DataOverlap -BtbIndexBits 7 -CacheSetBits 6 -EarlyDRequest -FastDCacheRead -FastICacheHit -FetchOverlap -LoadUseBubble
+    if ($LASTEXITCODE) { throw 'Data-overlap large cache differential validation failed.' }
+    & pwsh -NoProfile -File ([System.IO.Path]::Combine($PSScriptRoot, 'run_cached_tests.ps1')) -DataOverlap -BtbIndexBits 6 -EarlyDRequest -FastICacheHit -FetchOverlap -Uncached
+    if ($LASTEXITCODE) { throw 'Data-overlap uncached differential validation failed.' }
+    foreach ($bubble in @(0, 1)) {
+        & pwsh -NoProfile -File ([System.IO.Path]::Combine($PSScriptRoot, 'run_soc_tests.ps1')) -DataOverlap 1 -BtbIndexBits 6 -EarlyDRequest 1 -FastDCacheRead 1 -FastICacheHit 1 -FetchOverlap 1 -LoadUseBubble $bubble -ExternalUart
+        if ($LASTEXITCODE) { throw 'Data-overlap UART IRQ validation failed.' }
+    }
+    & pwsh -NoProfile -File ([System.IO.Path]::Combine($PSScriptRoot, 'run_soc_tests.ps1')) -DataOverlap 1 -BtbIndexBits 6 -EarlyDRequest 1 -FastDCacheRead 1 -FastICacheHit 1 -FetchOverlap 1 -LoadUseBubble 1
+    if ($LASTEXITCODE) { throw 'Data-overlap GPIO IRQ validation failed.' }
     $checkerProject = [System.IO.Path]::GetFullPath([System.IO.Path]::Combine($PSScriptRoot,'..'))
     $checkerLinux = (& wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/wslpath -a $checkerProject).Trim()
     if ($LASTEXITCODE -ne 0) { throw 'WSL checker path conversion failed.' }
     & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/python3 "$checkerLinux/scripts/test_coremark_checker.py"
     if ($LASTEXITCODE -ne 0) { throw 'CoreMark checker mutation tests failed.' }
+    & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/python3 "$checkerLinux/scripts/test_compare_coremark.py"
+    if ($LASTEXITCODE -ne 0) { throw 'Paired CoreMark comparison mutation tests failed.' }
+    & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/python3 "$checkerLinux/scripts/test_performance_target.py"
+    if ($LASTEXITCODE -ne 0) { throw 'Performance target gate mutation tests failed.' }
+    & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/python3 "$checkerLinux/scripts/test_profile_coremark.py"
+    if ($LASTEXITCODE -ne 0) { throw 'Retirement profile mutation tests failed.' }
     & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/python3 "$checkerLinux/scripts/test_scope_decode.py"
     if ($LASTEXITCODE -ne 0) { throw 'Scope decoder mutation tests failed.' }
     & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/python3 "$checkerLinux/scripts/test_ila_analyze.py"
@@ -49,7 +133,7 @@ try {
     $project = [System.IO.Path]::GetFullPath([System.IO.Path]::Combine($PSScriptRoot, '..'))
     $linuxProject = (& wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/wslpath -a $project).Trim()
     if ($LASTEXITCODE -ne 0) { throw 'WSL path conversion failed.' }
-    $sources = @('rv32_core', 'rv32_machine', 'rv32_decode', 'rv32_alu', 'rv32_btb') | ForEach-Object { "$linuxProject/rtl/$_.sv" }
+    $sources = @('rv32_core', 'rv32_machine', 'rv32_decode', 'rv32_alu', 'rv32_btb', 'rv32_muldiv') | ForEach-Object { "$linuxProject/rtl/$_.sv" }
     & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/verilator --lint-only --Wall --top-module rv32_core @sources
     if ($LASTEXITCODE -ne 0) { throw 'Verilator RTL lint failed.' }
     & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/verilator --lint-only --Wall --top-module rv32_core -GLOAD_USE_BUBBLE=1 @sources
@@ -68,10 +152,64 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Verilator early I-cache board-level lint failed.' }
     & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/verilator --lint-only --Wall --top-module rv32_board_top -GFAST_ICACHE_HIT=1 -GLOAD_USE_BUBBLE=1 @socSources
     if ($LASTEXITCODE -ne 0) { throw 'Verilator early I-cache registered-load board lint failed.' }
+    foreach ($bubble in @(0, 1)) {
+        & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/verilator --lint-only --Wall --top-module rv32_board_top -GENABLE_M=1 -GFAST_ICACHE_HIT=1 "-GLOAD_USE_BUBBLE=$bubble" @socSources
+        if ($LASTEXITCODE -ne 0) { throw 'Verilator M-extension board lint failed.' }
+        & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/verilator --lint-only --Wall --top-module rv32_board_top -GFETCH_OVERLAP=1 -GENABLE_M=1 -GFAST_ICACHE_HIT=1 "-GLOAD_USE_BUBBLE=$bubble" @socSources
+        if ($LASTEXITCODE) { throw 'Verilator overlapping fetch M board lint failed.' }
+        & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/verilator --lint-only --Wall --top-module rv32_board_top -GFAST_DCACHE_READ=1 -GFETCH_OVERLAP=1 -GENABLE_M=1 -GFAST_ICACHE_HIT=1 "-GLOAD_USE_BUBBLE=$bubble" @socSources
+        if ($LASTEXITCODE) { throw 'Verilator early D-cache M board lint failed.' }
+        & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/verilator --lint-only --Wall --top-module rv32_board_top -GEARLY_D_REQUEST=1 -GFAST_DCACHE_READ=1 -GFETCH_OVERLAP=1 -GENABLE_M=1 -GFAST_ICACHE_HIT=1 "-GLOAD_USE_BUBBLE=$bubble" @socSources
+        if ($LASTEXITCODE) { throw 'Verilator EX-stage data request M board lint failed.' }
+    }
     & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/verilator --lint-only --Wall --top-module rv32_board_top -GENABLE_CACHE=0 @socSources
     if ($LASTEXITCODE -ne 0) { throw 'Verilator uncached board-level lint failed.' }
+    foreach ($btbBits in @(1, 6, 7, 8)) {
+        & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/verilator --lint-only --Wall --top-module rv32_board_top "-GBTB_INDEX_BITS=$btbBits" -GCACHE_SET_BITS=6 -GEARLY_D_REQUEST=1 -GFAST_DCACHE_READ=1 -GFETCH_OVERLAP=1 -GENABLE_M=1 -GFAST_ICACHE_HIT=1 -GLOAD_USE_BUBBLE=1 @socSources
+        if ($LASTEXITCODE) { throw 'Verilator BTB capacity board lint failed.' }
+        & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/verilator --lint-only --Wall --top-module rv32_board_top -GDATA_OVERLAP=1 "-GBTB_INDEX_BITS=$btbBits" -GCACHE_SET_BITS=6 -GEARLY_D_REQUEST=1 -GFAST_DCACHE_READ=1 -GFETCH_OVERLAP=1 -GENABLE_M=1 -GFAST_ICACHE_HIT=1 -GLOAD_USE_BUBBLE=1 @socSources
+        if ($LASTEXITCODE) { throw 'Verilator data-overlap board lint failed.' }
+    }
     & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/python3 "$linuxProject/scripts/test_trace_checker.py" "$linuxProject/build/core_selftest.bin" "$linuxProject/build/core_p1_12345678.trace"
     if ($LASTEXITCODE -ne 0) { throw 'Reference checker mutation tests failed.' }
+    & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/python3 "$linuxProject/scripts/test_memory_overlap_controls.py"
+    if ($LASTEXITCODE) { throw 'Memory response-owner mutation tests failed.' }
+    & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/python3 "$linuxProject/scripts/test_mul_request_capture.py"
+    if ($LASTEXITCODE) { throw 'Multiply request-capture mutation tests failed.' }
+    & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/python3 "$linuxProject/scripts/test_cache_address_bounds.py"
+    if ($LASTEXITCODE) { throw 'Cache address-bound mutation tests failed.' }
+    & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/python3 "$linuxProject/scripts/test_btb_address_bounds.py"
+    if ($LASTEXITCODE) { throw 'BTB address-bound mutation tests failed.' }
+    & ([System.IO.Path]::Combine($PSScriptRoot, 'run_cached_tests.ps1')) -FastDCacheWrite -FastDCacheRead -FastICacheHit -FetchOverlap -EarlyDRequest -DataOverlap -BtbIndexBits 6 -CacheSetBits 1,6
+    if ($LASTEXITCODE) { throw 'Fast-write cached CPU differential tests failed.' }
+    & ([System.IO.Path]::Combine($PSScriptRoot, 'run_cached_tests.ps1')) -FastDCacheWrite -FastICacheHit -FetchOverlap -EarlyDRequest -DataOverlap -BtbIndexBits 6 -CacheSetBits 6
+    if ($LASTEXITCODE) { throw 'Write-only early-response CPU tests failed.' }
+    & ([System.IO.Path]::Combine($PSScriptRoot, 'run_soc_tests.ps1')) -FastDCacheWrite 1 -FastDCacheRead 1 -FastICacheHit 1 -FetchOverlap 1 -EarlyDRequest 1 -DataOverlap 1 -BtbIndexBits 6 -CacheSetBits 6 -ExternalUart
+    if ($LASTEXITCODE) { throw 'Fast-write SoC tests failed.' }
+    & ([System.IO.Path]::Combine($PSScriptRoot, 'run_soc_tests.ps1')) -FastDCacheWrite 1 -FastDCacheRead 1 -FastICacheHit 1 -FetchOverlap 1 -EarlyDRequest 1 -DataOverlap 1 -BtbIndexBits 6 -CacheSetBits 6 -CacheEnabled 0
+    if ($LASTEXITCODE) { throw 'Fast-write option bypass tests failed.' }
+    foreach ($readMode in @(0,1)) {
+        foreach ($bubble in @(0,1)) {
+            & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/verilator --lint-only --Wall --top-module rv32_board_top -GFAST_DCACHE_WRITE=1 "-GFAST_DCACHE_READ=$readMode" "-GLOAD_USE_BUBBLE=$bubble" -GDATA_OVERLAP=1 -GBTB_INDEX_BITS=6 -GCACHE_SET_BITS=6 -GEARLY_D_REQUEST=1 -GFETCH_OVERLAP=1 -GENABLE_M=1 -GFAST_ICACHE_HIT=1 @socSources
+            if ($LASTEXITCODE) { throw 'Fast-write board lint failed.' }
+        }
+    }
+    & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/python3 "$linuxProject/scripts/test_trap_value_controls.py"
+    if ($LASTEXITCODE) { throw 'Trap-value source negative controls failed.' }
+    & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/python3 "$linuxProject/scripts/test_fast_write_controls.py"
+    if ($LASTEXITCODE) { throw 'Fast-write mutation controls failed.' }
+    & ([System.IO.Path]::Combine($PSScriptRoot, 'test_cached_run_contract.ps1'))
+    if ($LASTEXITCODE) { throw 'Cached runner argument contract failed.' }
+    & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/python3 "$linuxProject/scripts/test_cache_geometry_controls.py"
+    if ($LASTEXITCODE) { throw 'Asymmetric geometry negative controls failed.' }
+    & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/python3 "$linuxProject/scripts/test_coremark_compiled_harness.py"
+    if ($LASTEXITCODE) { throw 'Compiled driver negative controls failed.' }
+    & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/python3 "$linuxProject/scripts/test_coremark_compiled.py"
+    if ($LASTEXITCODE) { throw 'Compiled simulation evidence guards failed.' }
+    & ([System.IO.Path]::Combine($PSScriptRoot, 'test_coremark_run_contract.ps1'))
+    if ($LASTEXITCODE) { throw 'CoreMark runner contract tests failed.' }
+    & ([System.IO.Path]::Combine($PSScriptRoot, 'run_asymmetric_tests.ps1'))
+    if ($LASTEXITCODE) { throw 'Asymmetric cache integration regression failed.' }
     Write-Output 'PASS validation: units, CPU, reference, memory comparison, lint, checker mutation tests.'
 } catch {
     Write-Error $_

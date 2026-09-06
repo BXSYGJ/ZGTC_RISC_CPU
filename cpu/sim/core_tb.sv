@@ -1,6 +1,8 @@
 `timescale 1ns/1ps
 module core_tb;
     parameter integer PREDICTOR=1;
+    parameter integer EARLY_D_REQUEST=0;
+    parameter integer BTB_INDEX_BITS=4;
     reg clk=0;
     always #5 clk=~clk;
     reg rst_n=0;
@@ -23,6 +25,7 @@ module core_tb;
     reg d_write=0;
     integer i_delay=0,d_delay=0,checks=0,trap_count=0,cycles=0,byte_index,trace_file;
     integer success_wait=0;
+    integer early_accepted=0,early_fallback=0;
     reg passed=0;
     reg [31:0] random_state=32'h12345678;
     reg i_held=0,d_held=0;
@@ -30,7 +33,7 @@ module core_tb;
     reg [3:0] held_d_strobe;
     reg held_d_write;
     string firmware,trace_path,memory_path;
-    rv32_core #(.ENABLE_PREDICTOR(PREDICTOR)) core(.*);
+    rv32_core #(.BTB_INDEX_BITS(BTB_INDEX_BITS),.EARLY_D_REQUEST(EARLY_D_REQUEST),.ENABLE_PREDICTOR(PREDICTOR)) core(.*);
     task check(input bit condition,input string label_text);
         begin
             checks=checks+1;
@@ -63,6 +66,13 @@ module core_tb;
         if(rst_n) begin
             cycles=cycles+1;
             timer_value<=timer_value+1;
+            if(core.mem_valid && core.mem_writes) check(!core.mem_store,"store never qualifies for register forwarding");
+            if(core.early_data_request) begin
+                check(core.ex_fire && !core.execute_exception && !core.mem_flush,"early request is committed to MEM without exception or flush");
+                check(!(core.mem_valid && core.mem_access && !core.mem_sent),"early request does not displace an older request");
+                if(d_req_ready) early_accepted=early_accepted+1;
+                else early_fallback=early_fallback+1;
+            end
             if(i_held) check(i_req_valid && i_req_address===held_i_address,"instruction request stability");
             if(d_held) check(d_req_valid && d_req_address===held_d_address && d_req_data===held_d_data &&
                 d_req_strobe===held_d_strobe && d_req_write===held_d_write,"data request stability");
@@ -119,6 +129,11 @@ module core_tb;
                     check(trap_count==13,"all exceptions and timer interrupt observed");
                     check(memory[2048]==32'hbeefaaff,"byte strobes and fault suppression");
                     check(!irq_timer,"interrupt acknowledged");
+                    if(EARLY_D_REQUEST!=0) begin
+                        check(early_accepted>0,"early request accepted coverage");
+                        check(early_fallback>0,"early request fallback coverage");
+                        $display("EARLY_DATA accepted=%0d fallback=%0d",early_accepted,early_fallback);
+                    end
                     $display("PASS core checks=%0d traps=%0d cycles=%0d retired=%0d predictor=%0d",checks,trap_count,cycle_count,retired_count,PREDICTOR);
                     $fclose(trace_file);
                     $writememh(memory_path,memory);
