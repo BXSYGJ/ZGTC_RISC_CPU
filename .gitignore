@@ -30,6 +30,9 @@ multiseed_summary.csv
 *.pcf
 
 # Simulation outputs and waveforms
+cpu/build/
+__pycache__/
+*.pyc
 sim_out/
 *.vvp
 *.vcd
@@ -45,6 +48,7 @@ transcript
 *.bak
 *.swp
 *.local.tcl
+/temp_20*
 *~
 
 # Local licenses, credentials, and keys
