@@ -22,6 +22,10 @@ module rv32_soc #(
     input wire rst_n,
     input wire serial_rx,
     output wire serial_tx,
+    input wire spi_miso,
+    output wire spi_cs,
+    output wire spi_sck,
+    output wire spi_mosi,
     input wire [7:0] gpio_input,
     output wire [7:0] gpio_output,
     output wire [31:0] status_code,
@@ -74,7 +78,7 @@ module rv32_soc #(
         .performance_values(performance_values),.performance_config(PERFORMANCE_CONFIG),
         .clk(clk),.rst_n(rst_n),.req_valid(mmio_req_valid),.req_ready(mmio_req_ready),.req_address(mmio_req_address),.req_write(mmio_req_write),.req_data(mmio_req_data),.req_strobe(mmio_req_strobe),
         .rsp_valid(mmio_rsp_valid),.rsp_ready(mmio_rsp_ready),.rsp_data(mmio_rsp_data),.rsp_error(mmio_rsp_error),
-        .serial_rx(serial_rx),.serial_tx(serial_tx),.gpio_input(gpio_input),.gpio_output(gpio_output),.irq_external(irq_external),.irq_software(irq_software),.irq_timer(irq_timer),.timer_value(timer_value),.status_code(status_code)
+        .serial_rx(serial_rx),.serial_tx(serial_tx),.spi_miso(spi_miso),.spi_cs(spi_cs),.spi_sck(spi_sck),.spi_mosi(spi_mosi),.gpio_input(gpio_input),.gpio_output(gpio_output),.irq_external(irq_external),.irq_software(irq_software),.irq_timer(irq_timer),.timer_value(timer_value),.status_code(status_code)
     );
     always @(posedge clk or negedge rst_n) begin
         if(!rst_n) maintenance_fault<=0;

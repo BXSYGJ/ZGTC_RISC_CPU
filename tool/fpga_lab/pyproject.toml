@@ -1,0 +1,15 @@
+[project]
+name = "fpga-lab-bridge"
+version = "0.1.0"
+description = "Local bridge that turns FPGA LAB remote debugging into a scriptable REST+WS+CLI API (PG2L200H)"
+requires-python = ">=3.10"
+
+[project.scripts]
+remote-lab = "fpga_lab_server.cli:cli"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["fpga_lab_server"]

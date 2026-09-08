@@ -25,12 +25,17 @@ module rv32_peripherals #(
     output reg irq_software,
     output wire irq_timer,
     output reg [63:0] timer_value,
-    output reg [31:0] status_code
+    output reg [31:0] status_code,
+    output wire spi_cs,
+    output wire spi_sck,
+    output wire spi_mosi,
+    input wire spi_miso
 );
     localparam [31:0] STATUS=32'h10000000,VERSION=32'h10000004,
         UART_DATA=32'h10000100,UART_STATUS=32'h10000104,UART_CONTROL=32'h10000108,UART_ERRORS=32'h1000010c,
         GPIO_OUTPUT=32'h10000200,GPIO_INPUT=32'h10000204,GPIO_ENABLE=32'h10000208,GPIO_PENDING=32'h1000020c,
-        TIME_LOW=32'h10000300,TIME_HIGH=32'h10000304,COMPARE_LOW=32'h10000308,COMPARE_HIGH=32'h1000030c,SOFTWARE_IRQ=32'h10000310;
+        TIME_LOW=32'h10000300,TIME_HIGH=32'h10000304,COMPARE_LOW=32'h10000308,COMPARE_HIGH=32'h1000030c,SOFTWARE_IRQ=32'h10000310,
+        SPI_CTRL=32'h10000500,SPI_TX=32'h10000504,SPI_RX=32'h10000508,SPI_STAT=32'h1000050c;
     reg [7:0] gpio_meta,gpio_sync,gpio_previous,gpio_enable,gpio_pending;
     reg [1:0] uart_control,uart_errors;
     reg [63:0] timer_compare;
@@ -46,7 +51,15 @@ module rv32_peripherals #(
     wire [7:0] pending_clear=(request_fire && req_write && req_address==GPIO_PENDING) ? req_data[7:0] & write_mask[7:0] : 8'b0;
     wire [1:0] errors_clear=(request_fire && req_write && req_address==UART_ERRORS) ? req_data[1:0] & write_mask[1:0] : 2'b0;
     wire uart_idle=tx_count==0 && !uart_tx_busy;
-    assign req_ready=!rsp_valid && (!uart_write || tx_fifo_ready);
+    reg spi_cs_sel;
+    wire [7:0] spi_rx;
+    wire spi_busy;
+    reg spi_tx_pending;
+    reg [1:0] spi_wait_count;
+    wire spi_tx_fire=request_fire && req_write && req_address==SPI_TX;
+    wire spi_start=spi_tx_fire;
+    wire [7:0] spi_tx_data=spi_tx_fire ? req_data[7:0] : 8'h00;
+    assign req_ready=!rsp_valid && !spi_tx_pending && (!uart_write || tx_fifo_ready);
     assign rx_fifo_pop=request_fire && !req_write && req_address==UART_DATA && rx_fifo_valid;
     assign irq_external=(|(gpio_pending & gpio_enable)) || (uart_control[0] && rx_fifo_valid) || (uart_control[1] && uart_idle);
     assign irq_timer=timer_value>=timer_compare;
@@ -57,10 +70,17 @@ module rv32_peripherals #(
     rv32_uart #(.CLOCK_HZ(CLOCK_HZ),.BAUD(BAUD)) uart(.clk(clk),.rst_n(rst_n),.serial_rx(serial_rx),.serial_tx(serial_tx),
         .tx_valid(uart_tx_valid),.tx_ready(uart_tx_ready),.tx_data(uart_tx_data),.tx_busy(uart_tx_busy),
         .rx_valid(uart_rx_valid),.rx_ready(uart_rx_ready),.rx_data(uart_rx_data),.framing_error(framing_error),.overrun_error(overrun_error));
+    rv32_spi_flash #(.CLK_DIV(4)) spi_controller(
+        .clk(clk),.rst_n(rst_n),
+        .cfg_cs(spi_cs_sel),.start(spi_start),.tx_data(spi_tx_data),
+        .rx_data(spi_rx),.busy(spi_busy),
+        .spi_cs(spi_cs),.spi_sck(spi_sck),.spi_mosi(spi_mosi),.spi_miso(spi_miso)
+    );
     always @(posedge clk or negedge rst_n) begin
         if(!rst_n) begin
             rsp_valid<=0; rsp_data<=0; rsp_error<=0; gpio_output<=0; status_code<=0;
             gpio_meta<=0; gpio_sync<=0; gpio_previous<=0; gpio_enable<=0; gpio_pending<=0;
+            spi_cs_sel<=0; spi_tx_pending<=0; spi_wait_count<=0;
             performance_snapshot<=0; snapshot_sequence<=0;
             uart_control<=0; uart_errors<=0; timer_value<=0; timer_compare<=64'hffffffffffffffff; irq_software<=0;
         end else begin
@@ -69,7 +89,18 @@ module rv32_peripherals #(
             uart_errors<=(uart_errors & ~errors_clear) | {overrun_error,framing_error};
             timer_value<=timer_value+1'b1;
             if(rsp_valid && rsp_ready) rsp_valid<=0;
-            if(request_fire) begin
+            // An SPI_TX write blocks its MMIO response until the byte has been
+            // shifted out, so firmware can just write SPI_TX and read SPI_RX.
+            if(spi_tx_pending) begin
+                if(spi_wait_count!=0) spi_wait_count<=spi_wait_count-1'b1;
+                else if(!spi_busy) begin
+                    spi_tx_pending<=0; rsp_valid<=1; rsp_error<=0; rsp_data<=0;
+                end
+            end
+            if(request_fire && req_write && req_address==SPI_TX) begin
+                spi_tx_pending<=1; spi_wait_count<=2'd2;
+            end
+            if(request_fire && !(req_write && req_address==SPI_TX)) begin
                 rsp_valid<=1; rsp_error<=0; rsp_data<=0;
                 if(req_address[1:0]!=0) rsp_error<=1;
                 else if(req_write) begin
@@ -85,6 +116,8 @@ module rv32_peripherals #(
                         COMPARE_LOW: timer_compare[31:0]<=(timer_compare[31:0] & ~write_mask) | (req_data & write_mask);
                         COMPARE_HIGH: timer_compare[63:32]<=(timer_compare[63:32] & ~write_mask) | (req_data & write_mask);
                         SOFTWARE_IRQ: if(req_strobe[0]) irq_software<=req_data[0];
+                        SPI_CTRL: spi_cs_sel<=(spi_cs_sel & ~write_mask[0]) | (req_data[0] & write_mask[0]);
+                        SPI_TX: begin end
                         32'h10000400: if(req_strobe[0] && req_data[0]) begin
                             performance_snapshot<=performance_values;
                             snapshot_sequence<=snapshot_sequence+1'b1;
@@ -108,6 +141,9 @@ module rv32_peripherals #(
                         COMPARE_LOW: rsp_data<=timer_compare[31:0];
                         COMPARE_HIGH: rsp_data<=timer_compare[63:32];
                         SOFTWARE_IRQ: rsp_data<={31'b0,irq_software};
+                        SPI_CTRL: rsp_data<={31'b0,spi_cs_sel};
+                        SPI_RX: rsp_data<={24'b0,spi_rx};
+                        SPI_STAT: rsp_data<={31'b0,spi_busy};
                         32'h10000400: rsp_data<=snapshot_sequence;
                         32'h10000404: rsp_data<=performance_config;
                         32'h10000410: rsp_data<=performance_snapshot[31:0];

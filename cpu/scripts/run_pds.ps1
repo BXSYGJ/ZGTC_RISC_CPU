@@ -1,9 +1,16 @@
-﻿param([ValidateRange(0,8)][int]$ICacheSetBits = 0, [ValidateRange(0,1)][int]$DataOverlap = 0, [ValidateRange(1,8)][int]$BtbIndexBits = 4, [ValidateRange(0,1)][int]$EarlyDRequest = 0, [ValidateRange(0,1)][int]$FastDCacheWrite = 0, [ValidateRange(0,1)][int]$FastDCacheRead = 0, [ValidateRange(0,1)][int]$FetchOverlap = 0, [ValidateRange(0,1)][int]$EnableM = 0, [ValidateRange(0,1)][int]$FastICacheHit = 0, [ValidateRange(0,1)][int]$LoadUseBubble = 0, [ValidateSet('Board', 'RemoteLab')][string]$UartProfile = 'Board', [string]$FirmwareHex = '', [ValidateRange(0,1)][int]$Predictor = 1, [ValidateRange(1,8)][int]$CacheSetBits = 4, [ValidateRange(0,1)][int]$CacheEnabled = 1, [ValidateSet(9600,19200,38400,57600,115200)][int]$UartBaud = 115200, [ValidateSet(27000000,54000000,60000000,67500000,72000000,75600000,81000000,90000000,99000000,102600000,108000000,120000000,135000000,162000000,180000000,194400000,216000000,270000000)][int]$ClockHz = 27000000)
+﻿param([ValidateRange(0,8)][int]$ICacheSetBits = 0, [ValidateRange(0,1)][int]$DataOverlap = 0, [ValidateRange(1,8)][int]$BtbIndexBits = 4, [ValidateRange(0,1)][int]$EarlyDRequest = 0, [ValidateRange(0,1)][int]$FastDCacheWrite = 0, [ValidateRange(0,1)][int]$FastDCacheRead = 0, [ValidateRange(0,1)][int]$FetchOverlap = 0, [ValidateRange(0,1)][int]$EnableM = 0, [ValidateRange(0,1)][int]$FastICacheHit = 0, [ValidateRange(0,1)][int]$LoadUseBubble = 0, [ValidateSet('Board', 'RemoteLab')][string]$UartProfile = 'Board', [string]$FirmwareHex = '', [ValidateRange(0,1)][int]$Predictor = 1, [ValidateRange(1,8)][int]$CacheSetBits = 4, [ValidateRange(0,1)][int]$CacheEnabled = 1, [ValidateSet(9600,19200,38400,57600,115200)][int]$UartBaud = 115200, [ValidateSet(27000000,54000000,60000000,67500000,72000000,75600000,81000000,90000000,99000000,102600000,108000000,120000000,135000000,162000000,180000000,194400000,216000000,270000000)][int]$ClockHz = 27000000, [switch]$FlashBoot)
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 $ErrorActionPreference = 'Stop'
 try {
     $project = [System.IO.Path]::GetFullPath([System.IO.Path]::Combine($PSScriptRoot, '..'))
-    if ([string]::IsNullOrWhiteSpace($FirmwareHex)) {
+    if ($FlashBoot) {
+        # Flash-boot build: BRAM holds only the bootloader. The application is
+        # loaded at runtime from the SPI flash / UART, so changing it never
+        # requires re-synthesis.
+        & ([System.IO.Path]::Combine($PSScriptRoot, 'build_boot.ps1')) -Out ([System.IO.Path]::Combine($project, 'build', 'bootloader.hex'))
+        if ($LASTEXITCODE -ne 0) { throw 'Bootloader build failed.' }
+        $firmwareSource = [System.IO.Path]::Combine($project, 'build', 'bootloader.hex')
+    } elseif ([string]::IsNullOrWhiteSpace($FirmwareHex)) {
         & ([System.IO.Path]::Combine($PSScriptRoot, 'build_soc.ps1')) -ExternalUart:($UartProfile -eq 'RemoteLab')
         if ($LASTEXITCODE -ne 0) { throw 'Firmware build failed.' }
         $firmwareSource = [System.IO.Path]::Combine($project, 'build', 'soc_selftest.hex')
@@ -61,7 +68,9 @@ try {
     $clockDesign = if ($ClockHz -eq 27000000) { '' } else { 'add_design "' + $projectTcl + '/fpga/rv32_pll.sv"' }
     $template = $template.Replace('__CLOCK_DESIGN__', $clockDesign)
     $uartConstraint = if ($UartProfile -eq 'RemoteLab') { 'uart_remotelab.fdc' } else { 'uart_board.fdc' }
-    [System.IO.File]::WriteAllText($scriptPath, $template.Replace('__PROJECT_ROOT__', $projectTcl).Replace('__BUILD_ROOT__', $buildTcl).Replace('__UART_CONSTRAINT__', $uartConstraint), [System.Text.UTF8Encoding]::new($false))
+    # The SPI flash controller is always instantiated, so always place its pins.
+    $flashConstraintLine = 'add_constraint "' + $projectTcl + '/constraints/flash.fdc"'
+    [System.IO.File]::WriteAllText($scriptPath, $template.Replace('__PROJECT_ROOT__', $projectTcl).Replace('__BUILD_ROOT__', $buildTcl).Replace('__UART_CONSTRAINT__', $uartConstraint).Replace('__FLASH_CONSTRAINT_LINE__', $flashConstraintLine), [System.Text.UTF8Encoding]::new($false))
     $top = [System.IO.File]::ReadAllText([System.IO.Path]::Combine($PSScriptRoot, 'pds_soc_top.v.in'))
     $top = $top.Replace('__ICACHE_SET_BITS__', [string]$ICacheSetBits)
     $top = $top.Replace('__CLOCK_HZ__', [string]$ClockHz)
@@ -95,12 +104,8 @@ try {
     $timingText = [System.IO.File]::ReadAllText($timingPath)
     $reportParser=[System.IO.Path]::Combine($PSScriptRoot,'pds_report.py')
     $resourceSummaryPath=[System.IO.Path]::Combine($buildRoot,'resource-summary.json')
-    $linuxPaths=@(foreach($path in @($reportParser,$timingPath,$stdout,$resourceSummaryPath)) {
-        $converted=(& wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/wslpath -a $path).Trim()
-        if($LASTEXITCODE) { throw 'PDS report path conversion failed.' }
-        $converted
-    })
-    & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/python3 $linuxPaths[0] --timing $linuxPaths[1] --log $linuxPaths[2] --clock-hz $ClockHz --json $linuxPaths[3]
+    # Native Windows Python runs the pure-Python audit directly on the build paths.
+    & python $reportParser --timing $timingPath --log $stdout --clock-hz $ClockHz --json $resourceSummaryPath
     if($LASTEXITCODE) { throw 'PDS timing/resource audit rejected this implementation.' }
     $resourceSummary=Get-Content -LiteralPath $resourceSummaryPath -Raw | ConvertFrom-Json
     if ($timingText -notmatch 'Design Summary\s*:\s*All Constraints Met\.') { throw 'Post-route timing constraints were not met.' }
@@ -130,6 +135,8 @@ try {
     $manifest['ICacheSetBits'] = if ($ICacheSetBits) { $ICacheSetBits } else { $CacheSetBits }
     $manifest['CacheEnabled'] = $CacheEnabled
     $manifest['UartBaud'] = $UartBaud
+    $manifest['FlashBoot'] = [bool]$FlashBoot
+    $manifest['AppBase'] = if ($FlashBoot) { 4096 } else { 0 }
     $manifest['FirmwareSource'] = $firmwareSource
     $manifest['SelftestExternalInterrupt'] = if ($FirmwareHex) { $null } elseif ($UartProfile -eq 'RemoteLab') { 'UART_RX' } else { 'GPIO_KEY1' }
     $manifest['TimingReport'] = $timingPath

@@ -22,6 +22,10 @@ module rv32_board_top #(
     input wire key,
     input wire uart_rx,
     output wire uart_tx,
+    input wire spi_miso,
+    output wire spi_cs,
+    output wire spi_sck,
+    output wire spi_mosi,
     output wire [7:0] led
 );
     reg [1:0] reset_pipe;
@@ -36,7 +40,7 @@ module rv32_board_top #(
     end
     assign led=maintenance_fault ? 8'he1 : gpio_output;
     rv32_soc #(.DATA_OVERLAP(DATA_OVERLAP),.BTB_INDEX_BITS(BTB_INDEX_BITS),.EARLY_D_REQUEST(EARLY_D_REQUEST),.ENABLE_M(ENABLE_M),.CLOCK_HZ(CLOCK_HZ),.INIT_FILE(INIT_FILE),.ENABLE_PREDICTOR(ENABLE_PREDICTOR),.LOAD_USE_BUBBLE(LOAD_USE_BUBBLE),.FETCH_OVERLAP(FETCH_OVERLAP),.FAST_DCACHE_WRITE(FAST_DCACHE_WRITE),.FAST_DCACHE_READ(FAST_DCACHE_READ),.FAST_ICACHE_HIT(FAST_ICACHE_HIT),.ICACHE_SET_BITS(ICACHE_SET_BITS),.CACHE_SET_BITS(CACHE_SET_BITS),.ENABLE_CACHE(ENABLE_CACHE),.BAUD(UART_BAUD)) soc(
-        .clk(clk),.rst_n(reset_pipe[1]),.serial_rx(uart_rx),.serial_tx(uart_tx),.gpio_input({6'b0,uart_rx,~key}),.gpio_output(gpio_output),
+        .clk(clk),.rst_n(reset_pipe[1]),.serial_rx(uart_rx),.serial_tx(uart_tx),.spi_miso(spi_miso),.spi_cs(spi_cs),.spi_sck(spi_sck),.spi_mosi(spi_mosi),.gpio_input({6'b0,uart_rx,~key}),.gpio_output(gpio_output),
         .status_code(unused_status),.maintenance_fault(maintenance_fault),.trace_valid(unused_trace_valid),.trace_pc(unused_pc),.trace_instruction(unused_instruction),
         .trap_valid(unused_trap_valid),.trap_cause(unused_cause),.cycle_count(unused_cycles),.retired_count(unused_retired)
     );

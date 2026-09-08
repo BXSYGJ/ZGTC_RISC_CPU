@@ -31,6 +31,8 @@ multiseed_summary.csv
 
 # Simulation outputs and waveforms
 cpu/build/
+/build/
+.arts/
 __pycache__/
 *.pyc
 sim_out/
@@ -58,6 +60,8 @@ transcript
 .env
 .env.*
 !.env.example
+account.txt
+account*.txt
 
 # IDE and operating-system files
 .vscode/

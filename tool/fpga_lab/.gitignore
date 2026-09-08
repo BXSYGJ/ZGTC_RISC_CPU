@@ -1,0 +1,11 @@
+# --- credentials & runtime artifacts (NEVER commit) ---
+account*.txt
+config.local.yaml
+sessions/
+*.log
+out/
+captures/*/
+*.sbit
+__pycache__/
+*.pyc
+.venv/

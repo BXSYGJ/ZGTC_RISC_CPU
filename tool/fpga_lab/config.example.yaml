@@ -1,0 +1,17 @@
+# fpga_lab bridge server config (local). Copy to config.local.yaml and edit.
+server:
+  host: 127.0.0.1
+  port: 8600
+
+platform:
+  base_url: "http://www.logicmatrixsemi.com:5174"
+  account_file: "D:/0000/111/001/Pango/tool/account.txt"   # email+password lines, never committed
+  card_type: "with_camera"        # which experiment boxes to auto-reserve
+  default_minutes: 10             # reservation length (UI: 10/20/30)
+  poll_interval_s: 0.7            # serial read poll interval
+  read_chunk: 64                  # serial read chunk length
+  firmware_progress_poll_s: 1.0
+
+session:
+  store_file: "D:/0000/111/001/Pango/tool/fpga_lab/sessions/platform_session.json"
+  heartbeat_s: 60
