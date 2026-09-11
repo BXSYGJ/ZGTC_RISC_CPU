@@ -1,6 +1,8 @@
 ﻿param(
     [Parameter(Mandatory)][ValidateNotNullOrEmpty()][string]$SourceBuild,
-    [ValidateNotNullOrEmpty()][string]$PdsRoot = 'D:/PDS_2022.2-SP6.4'
+    [ValidateSet('Legacy27', 'Target120', 'Target132Carry', 'Target132Kept')][string]$Profile = 'Legacy27',
+    [ValidateNotNullOrEmpty()][string]$PdsRoot = 'D:/PDS_2022.2-SP6.4',
+    [ValidateRange(0,2147483647)][int]$PlacementSeed = 0
 )
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 $ErrorActionPreference = 'Stop'
@@ -11,6 +13,7 @@ try {
     $pds = (Resolve-Path -LiteralPath $PdsRoot).Path
     $manifestPath = [System.IO.Path]::Combine($source, 'manifest.json')
     $original = Get-Content -LiteralPath $manifestPath -Raw | ConvertFrom-Json
+    if ($Profile -eq 'Legacy27') {
     if ($original.PSObject.Properties.Name -contains 'EnableM' -and $original.EnableM -eq 1) { throw 'The existing ILA net map has not been validated for the M extension.' }
     if ($original.PSObject.Properties.Name -contains 'FetchOverlap' -and $original.FetchOverlap -eq 1) { throw 'The existing ILA net map has not been validated for overlapping fetch.' }
     if ($original.PSObject.Properties.Name -contains 'FastDCacheRead' -and $original.FastDCacheRead -eq 1) { throw 'The existing ILA net map has not been validated for early D-cache reads.' }
@@ -27,6 +30,33 @@ try {
     }
     if ($original.Device -ne 'PG2L200H-6FBB676' -or $original.ClockHz -ne 27000000 -or $original.CacheEnabled -ne 1 -or $original.Predictor -ne 1 -or $original.UartProfile -ne 'RemoteLab' -or -not $original.TimingConstraintsMet) {
         throw 'ILA net map requires the verified 27 MHz cached/predictor-on RemoteLab design.'
+    }
+    } else {
+        $profileClockHz = if ($Profile -in @('Target132Carry', 'Target132Kept')) { 132000000 } else { 120000000 }
+        $required = [ordered]@{ Device='PG2L200H-6FBB676'; ClockHz=$profileClockHz; CacheEnabled=1; Predictor=1; UartProfile='RemoteLab'; UartBaud=115200; EnableM=1; FetchOverlap=1; FastDCacheRead=1; FastDCacheWrite=1; ICacheSetBits=8; CacheSetBits=6; EarlyDRequest=1; BtbIndexBits=8; DataOverlap=1; FastICacheHit=1; LoadUseBubble=0; TimingConstraintsMet=$true }
+        foreach ($name in $required.Keys) {
+            if ($original.PSObject.Properties.Name -notcontains $name -or $original.$name -ne $required[$name]) { throw "$Profile ILA configuration mismatch: $name" }
+        }
+        if ($original.PSObject.Properties.Name -notcontains 'SourceSnapshot') { throw "$Profile requires source snapshots." }
+        $sourceLockName = switch ($Profile) {
+            'Target132Carry' { 'ila_target132_carry_sources.json' }
+            'Target132Kept' { 'ila_target132_kept_sources.json' }
+            default { 'ila_target120_sources.json' }
+        }
+        $sourceLockPath = [System.IO.Path]::Combine($PSScriptRoot, $sourceLockName)
+        $sourceLock = Get-Content -LiteralPath $sourceLockPath -Raw | ConvertFrom-Json
+        $expectedNames = @($sourceLock.PSObject.Properties | ForEach-Object { $_.Name } | Sort-Object)
+        $actualNames = @($original.SourceSnapshot.Files.PSObject.Properties | ForEach-Object { $_.Name } | Sort-Object)
+        if ($expectedNames.Count -ne 20 -or ($actualNames -join '|') -cne ($expectedNames -join '|')) { throw "$Profile source map is incomplete or unsupported." }
+        foreach ($name in $expectedNames) {
+            if ($original.SourceSnapshot.Files.$name -cne $sourceLock.$name) { throw "$Profile source revision requires ILA remapping: $name" }
+        }
+        $snapshotRoot = [System.IO.Path]::GetFullPath([System.IO.Path]::Combine($source, 'source'))
+        foreach ($entry in $original.SourceSnapshot.Files.PSObject.Properties) {
+            $inputPath = [System.IO.Path]::GetFullPath([System.IO.Path]::Combine($snapshotRoot, $entry.Name))
+            if (-not $inputPath.StartsWith($snapshotRoot + [System.IO.Path]::DirectorySeparatorChar, [System.StringComparison]::OrdinalIgnoreCase)) { throw 'Source snapshot path escapes build.' }
+            if ((Get-FileHash -LiteralPath $inputPath -Algorithm SHA256).Hash -ne $entry.Value) { throw "Source snapshot mismatch: $($entry.Name)" }
+        }
     }
     $sourceAdf = [System.IO.Path]::Combine($source, 'synthesize', 'pds_soc_top_syn.adf')
     $sourceNetlist = [System.IO.Path]::Combine($source, 'synthesize', 'pds_soc_top_syn.vm')
@@ -54,7 +84,13 @@ try {
     Copy-Item -LiteralPath $sourceFirmware -Destination ([System.IO.Path]::Combine($build, 'firmware.hex'))
     Copy-Item -LiteralPath $manifestPath -Destination ([System.IO.Path]::Combine($build, 'source-manifest.json'))
     $fic = [System.IO.Path]::Combine($build, 'cpu.fic')
-    $ficTemplate = [System.IO.File]::ReadAllText([System.IO.Path]::Combine($PSScriptRoot, 'cpu_ila.fic.in'))
+    $templateName = switch ($Profile) {
+        'Target132Carry' { 'cpu_ila_target132_carry.fic.in' }
+        'Target132Kept' { 'cpu_ila_target132_kept.fic.in' }
+        'Target120' { 'cpu_ila_target120.fic.in' }
+        default { 'cpu_ila.fic.in' }
+    }
+    $ficTemplate = [System.IO.File]::ReadAllText([System.IO.Path]::Combine($PSScriptRoot, $templateName))
     $ficText = $ficTemplate.Replace('__SOURCE_ADF__', $adf.Replace([System.IO.Path]::DirectorySeparatorChar, '/'))
     [System.IO.File]::WriteAllText($fic, $ficText, $utf8)
     $verify = [System.IO.Path]::Combine($build, 'verify_fic.tcl')
@@ -91,10 +127,16 @@ try {
     $uartConstraint = [System.IO.Path]::Combine($build, 'uart_remotelab.fdc')
     Copy-Item -LiteralPath ([System.IO.Path]::Combine($constraintRoot, 'board.fdc')) -Destination $boardConstraint
     Copy-Item -LiteralPath ([System.IO.Path]::Combine($constraintRoot, 'uart_remotelab.fdc')) -Destination $uartConstraint
+    $placement = [ordered]@{ Schema = 1; Seed = $null; Command = 'pnr' }
+    if ($PSBoundParameters.ContainsKey('PlacementSeed')) {
+        $placement['Seed'] = $PlacementSeed
+        $placement['Command'] = 'pnr -gplace_seed ' + $PlacementSeed.ToString([System.Globalization.CultureInfo]::InvariantCulture)
+    }
+    $placement | ConvertTo-Json | Set-Content -LiteralPath ([System.IO.Path]::Combine($build, 'placement.json')) -Encoding utf8BOM
     $commands = @(
         "add_design {$netlist}", "add_constraint {$boardConstraint}", "add_constraint {$uartConstraint}", "add_fic {$fic}",
         'set_arch -family Logos2 -device PG2L200H -speedgrade -6 -package FBB676',
-        'compile -system_verilog -top_module pds_soc_top', "dev_map -input_db_file {$adf}", 'pnr', 'report_timing', 'gen_bit_stream'
+        'compile -system_verilog -top_module pds_soc_top', "dev_map -input_db_file {$adf}", $placement.Command, 'report_timing', 'gen_bit_stream'
     ) | ForEach-Object { $_.Replace([System.IO.Path]::DirectorySeparatorChar, '/') }
     $script = [System.IO.Path]::Combine($build, 'build.tcl')
     [System.IO.File]::WriteAllLines($script, $commands, $utf8)
@@ -117,7 +159,18 @@ try {
     $timingPath = [System.IO.Path]::Combine($build, 'report_timing', 'pds_soc_top.rtr')
     $timing = [System.IO.File]::ReadAllText($timingPath)
     if ($timing -notmatch 'Design Summary\s*:\s*All Constraints Met\.') { throw 'ILA timing constraints failed.' }
+    if ($Profile -ne 'Legacy27') {
+        $clockMatches = [regex]::Matches($timing, '(?m)^\s*clk\|multiplied_clock\.clock_source/pll/CLKOUT0_Inferred\s+([0-9.]+)\s+\{[^}]+\}\s+Generated \(clk\)\s+(\d+)')
+        if ($clockMatches.Count -ne 1) { throw 'ILA CPU generated clock missing or ambiguous.' }
+        $period = [double]::Parse($clockMatches[0].Groups[1].Value, [System.Globalization.CultureInfo]::InvariantCulture)
+        if ([math]::Abs($period - 1e9 / $original.ClockHz) -gt 0.005 -or [int]$clockMatches[0].Groups[2].Value -lt 1) { throw 'ILA CPU clock period or loads mismatch.' }
+    }
     $result = [ordered]@{
+        Placement = $placement
+        Profile = $Profile; SourceManifestSha256 = (Get-FileHash -LiteralPath $manifestPath -Algorithm SHA256).Hash
+        SampleClockNet = if ($Profile -ne 'Legacy27') { 'cpu_clk' } else { 'nt_clk' }
+        Channel106Meaning = if ($Profile -ne 'Legacy27') { 'fetch_complete' } else { 'i_response_valid' }
+        Channel107Meaning = if ($Profile -in @('Target132Carry', 'Target132Kept')) { 'mem_fire' } else { 'd_response_valid' }
         BuildDirectory = $build; SourceBuild = $source; Device = $original.Device; ClockHz = $original.ClockHz
         SourceAdfSha256 = (Get-FileHash -LiteralPath $adf -Algorithm SHA256).Hash
         SourceNetlistSha256 = (Get-FileHash -LiteralPath $netlist -Algorithm SHA256).Hash
@@ -129,6 +182,7 @@ try {
     }
     $result | ConvertTo-Json | Set-Content -LiteralPath ([System.IO.Path]::Combine($build, 'manifest.json')) -Encoding utf8BOM
     Write-Output ($result | ConvertTo-Json)
+    exit 0
 } catch {
     Write-Error $_
     exit 1

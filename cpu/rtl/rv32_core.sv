@@ -220,7 +220,7 @@ module rv32_core #(
             if(ex_rs1==wb_rd) forwarded_a=wb_data;
             if(ex_rs2==wb_rd) forwarded_b=wb_data;
         end
-        if(mem_valid && mem_writes && mem_rd!=0 && !mem_exception && (!mem_load || (LOAD_USE_BUBBLE==0 && mem_fire && !d_rsp_error))) begin
+        if(mem_valid && mem_writes && mem_rd!=0 && !mem_exception && (!mem_load || LOAD_USE_BUBBLE==0)) begin
             if(ex_rs1==mem_rd) forwarded_a=LOAD_USE_BUBBLE!=0 ? mem_result : mem_value;
             if(ex_rs2==mem_rd) forwarded_b=LOAD_USE_BUBBLE!=0 ? mem_result : mem_value;
         end

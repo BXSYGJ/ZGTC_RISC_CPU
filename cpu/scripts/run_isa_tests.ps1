@@ -1,4 +1,4 @@
-﻿param([ValidateRange(0,8)][int]$ICacheSetBits = 0, [ValidateRange(0,1)][int]$DataOverlap = 0, [ValidateRange(1,8)][int]$BtbIndexBits = 4, [ValidateRange(0,1)][int]$EarlyDRequest = 0, [ValidateRange(0,1)][int]$FastDCacheWrite = 0, [ValidateRange(0,1)][int]$FastDCacheRead = 0, [ValidateRange(0,1)][int]$FetchOverlap = 0, [ValidateSet('rv32ui','rv32um')][string]$Suite = 'rv32ui', [ValidateRange(0,1)][int]$EnableM = 0, [ValidateRange(0,1)][int]$FastICacheHit = 0, [ValidateRange(0,1)][int]$LoadUseBubble = 0)
+﻿param([ValidateRange(0,10)][int]$ICacheSetBits = 0, [ValidateRange(0,1)][int]$DataOverlap = 0, [ValidateRange(1,8)][int]$BtbIndexBits = 4, [ValidateRange(0,1)][int]$EarlyDRequest = 0, [ValidateRange(0,1)][int]$FastDCacheWrite = 0, [ValidateRange(0,1)][int]$FastDCacheRead = 0, [ValidateRange(0,1)][int]$FetchOverlap = 0, [ValidateSet('rv32ui','rv32um')][string]$Suite = 'rv32ui', [ValidateRange(0,1)][int]$EnableM = 0, [ValidateRange(0,1)][int]$FastICacheHit = 0, [ValidateRange(0,1)][int]$LoadUseBubble = 0)
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 $ErrorActionPreference='Stop'
 $ProgressPreference='SilentlyContinue'

@@ -3,6 +3,8 @@ module core_tb;
     parameter integer PREDICTOR=1;
     parameter integer EARLY_D_REQUEST=0;
     parameter integer BTB_INDEX_BITS=4;
+    parameter integer LOAD_USE_BUBBLE=0;
+    parameter integer POISON_INVALID_DATA=0;
     reg clk=0;
     always #5 clk=~clk;
     reg rst_n=0;
@@ -26,6 +28,7 @@ module core_tb;
     integer i_delay=0,d_delay=0,checks=0,trap_count=0,cycles=0,byte_index,trace_file;
     integer success_wait=0;
     integer early_accepted=0,early_fallback=0;
+    integer poisoned_load_waits=0,poisoned_load_faults=0;
     reg passed=0;
     reg [31:0] random_state=32'h12345678;
     reg i_held=0,d_held=0;
@@ -33,7 +36,7 @@ module core_tb;
     reg [3:0] held_d_strobe;
     reg held_d_write;
     string firmware,trace_path,memory_path;
-    rv32_core #(.BTB_INDEX_BITS(BTB_INDEX_BITS),.EARLY_D_REQUEST(EARLY_D_REQUEST),.ENABLE_PREDICTOR(PREDICTOR)) core(.*);
+    rv32_core #(.LOAD_USE_BUBBLE(LOAD_USE_BUBBLE),.BTB_INDEX_BITS(BTB_INDEX_BITS),.EARLY_D_REQUEST(EARLY_D_REQUEST),.ENABLE_PREDICTOR(PREDICTOR)) core(.*);
     task check(input bit condition,input string label_text);
         begin
             checks=checks+1;
@@ -60,6 +63,10 @@ module core_tb;
             i_req_ready=!i_pending && !i_rsp_valid && random_state[0];
             d_req_ready=!d_pending && !d_rsp_valid && random_state[1];
             maintenance_ready=random_state[2];
+            if(POISON_INVALID_DATA!=0 && !d_rsp_valid) begin
+                d_rsp_data=random_state;
+                d_rsp_error=random_state[3];
+            end
         end
     end
     always @(posedge clk) begin
@@ -67,6 +74,24 @@ module core_tb;
             cycles=cycles+1;
             timer_value<=timer_value+1;
             if(core.mem_valid && core.mem_writes) check(!core.mem_store,"store never qualifies for register forwarding");
+            if(POISON_INVALID_DATA!=0 && core.mem_valid && core.mem_load && !core.mem_exception && core.ex_valid) begin
+                if(!d_rsp_valid) begin
+                    check(!core.ex_fire && !core.early_data_request,"invalid load response cannot execute or issue a younger request");
+                    if(core.mem_rd!=0 && core.mem_writes && LOAD_USE_BUBBLE==0) begin
+                        if(core.ex_decode.uses_rs1 && core.ex_rs1==core.mem_rd) begin
+                            check(core.forwarded_a===core.mem_value,"load operand A selection independent of response qualification");
+                            poisoned_load_waits=poisoned_load_waits+1;
+                        end
+                        if(core.ex_decode.uses_rs2 && core.ex_rs2==core.mem_rd) begin
+                            check(core.forwarded_b===core.mem_value,"load operand B selection independent of response qualification");
+                            poisoned_load_waits=poisoned_load_waits+1;
+                        end
+                    end
+                end else if(d_rsp_error) begin
+                    check(!core.ex_fire && !core.early_data_request,"faulted load cannot execute a younger instruction");
+                    poisoned_load_faults=poisoned_load_faults+1;
+                end
+            end
             if(core.early_data_request) begin
                 check(core.ex_fire && !core.execute_exception && !core.mem_flush,"early request is committed to MEM without exception or flush");
                 check(!(core.mem_valid && core.mem_access && !core.mem_sent),"early request does not displace an older request");
@@ -94,7 +119,8 @@ module core_tb;
             if(d_req_valid && d_req_ready) begin
                 check(!d_pending,"one outstanding data request");
                 d_pending<=1; d_address<=d_req_address; d_data<=d_req_data;
-                d_strobe<=d_req_strobe; d_write<=d_req_write; d_delay<=int'(random_state[8:6]);
+                d_strobe<=d_req_strobe; d_write<=d_req_write;
+                d_delay<=(POISON_INVALID_DATA!=0 && !d_req_write ? 24 : 0)+int'(random_state[8:6]);
             end
             if(d_pending && !d_rsp_valid) begin
                 if(d_delay==0) begin
@@ -129,6 +155,11 @@ module core_tb;
                     check(trap_count==13,"all exceptions and timer interrupt observed");
                     check(memory[2048]==32'hbeefaaff,"byte strobes and fault suppression");
                     check(!irq_timer,"interrupt acknowledged");
+                    if(POISON_INVALID_DATA!=0 && LOAD_USE_BUBBLE==0) begin
+                        check(poisoned_load_waits>0,"poisoned dependent load coverage");
+                        check(poisoned_load_faults>0,"poisoned pending load fault coverage");
+                        $display("POISONED_LOAD_WAITS=%0d FAULTS=%0d",poisoned_load_waits,poisoned_load_faults);
+                    end
                     if(EARLY_D_REQUEST!=0) begin
                         check(early_accepted>0,"early request accepted coverage");
                         check(early_fallback>0,"early request fallback coverage");

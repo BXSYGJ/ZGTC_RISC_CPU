@@ -8,8 +8,11 @@ PROJECT = Path(__file__).resolve().parents[1]
 
 
 class MultiplyRequestControls(unittest.TestCase):
+    def candidate_path(self):
+        return PROJECT / "rtl" / "rv32_muldiv.sv"
+
     def simulate(self, variant):
-        source = (PROJECT / "rtl" / "rv32_muldiv.sv").read_text(encoding="utf-8")
+        source = self.candidate_path().read_text(encoding="utf-8")
         if variant == "unheld":
             anchor = "end else if(state==IDLE) begin"
             self.assertEqual(source.count(anchor), 1)

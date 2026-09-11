@@ -2,8 +2,12 @@
 module btb_bounds_tb;
     parameter integer ADDRESS_BITS=16;
     parameter integer INDEX_BITS=6;
+    parameter integer HASH_INDEX=1;
+    parameter integer HASH_ROTATE=4;
     parameter TEST_NAME="btb_bounds";
     localparam [31:0] LIMIT=32'd1<<ADDRESS_BITS;
+    localparam [31:0] ALIAS_PC=(32'd1 << (INDEX_BITS+2)) |
+        (HASH_INDEX!=0 ? (32'd4 << (HASH_ROTATE%INDEX_BITS)) : 32'd0);
     reg clk=0;
     always #5 clk=~clk;
     reg rst_n=0,invalidate=0,update_valid=0,update_taken=1,update_conditional=0;
@@ -11,7 +15,7 @@ module btb_bounds_tb;
     wire predicted_taken,prediction_hit;
     wire [31:0] predicted_target;
     integer checks=0;
-    rv32_btb #(.INDEX_BITS(INDEX_BITS),.ADDRESS_BITS(ADDRESS_BITS)) predictor(.*);
+    rv32_btb #(.INDEX_BITS(INDEX_BITS),.ADDRESS_BITS(ADDRESS_BITS),.HASH_INDEX(HASH_INDEX),.HASH_ROTATE(HASH_ROTATE)) predictor(.*);
     task automatic check(input bit condition,input string label_text);
         begin
             checks=checks+1;
@@ -43,15 +47,18 @@ module btb_bounds_tb;
         check($bits(predictor.tags[0])==ADDRESS_BITS-INDEX_BITS-2,"bounded PC tag width");
         check($bits(predictor.targets[0])==ADDRESS_BITS-2,"aligned target storage width");
         expect_miss(0,"cold miss");
-        train(0,4); train(LIMIT-4,LIMIT-8);
+        train(0,4);
         expect_hit(0,4,"first PC retained");
+        train(LIMIT-4,LIMIT-8);
         expect_hit(LIMIT-4,LIMIT-8,"last aligned target reconstructed");
         for(integer bit_index=ADDRESS_BITS;bit_index<32;bit_index=bit_index+1) begin
+            train(0,4);
             expect_miss(32'd1<<bit_index,"high fetch PC does not alias");
             train(32'd1<<bit_index,128);
             expect_hit(0,4,"high update PC does not replace entry");
             train(0,(32'd1<<bit_index)|32'd8);
             expect_hit(0,4,"high update target does not replace entry");
+            train(LIMIT-4,LIMIT-8);
             train((32'd1<<bit_index)|(LIMIT-4),LIMIT-16);
             expect_hit(LIMIT-4,LIMIT-8,"high update PC preserves boundary entry");
         end
@@ -78,11 +85,11 @@ module btb_bounds_tb;
             train(32'(entry_index)<<2,LIMIT-4-(32'(entry_index)<<2));
         for(integer entry_index=0;entry_index<(1<<INDEX_BITS);entry_index=entry_index+1)
             expect_hit(32'(entry_index)<<2,LIMIT-4-(32'(entry_index)<<2),"all bounded entries retained");
-        train(32'd1<<(INDEX_BITS+2),64);
+        train(ALIAS_PC,64);
         expect_miss(0,"in-range tag alias replaces old PC");
-        expect_hit(32'd1<<(INDEX_BITS+2),64,"in-range tag alias stores new PC");
+        expect_hit(ALIAS_PC,64,"in-range tag alias stores new PC");
         @(negedge clk); rst_n=0;
-        #1; expect_miss(32'd1<<(INDEX_BITS+2),"reset clears retained entry");
+        #1; expect_miss(ALIAS_PC,"reset clears retained entry");
         $display("PASS %s checks=%0d address_bits=%0d index_bits=%0d",TEST_NAME,checks,ADDRESS_BITS,INDEX_BITS);
         $finish;
     end

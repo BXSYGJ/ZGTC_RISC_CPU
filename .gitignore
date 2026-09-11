@@ -33,6 +33,7 @@ multiseed_summary.csv
 cpu/build/
 /build/
 .arts/
+cpu/experiments/*/build/
 __pycache__/
 *.pyc
 sim_out/

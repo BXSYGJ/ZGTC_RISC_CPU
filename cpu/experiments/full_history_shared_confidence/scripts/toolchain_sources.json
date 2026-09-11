@@ -1,0 +1,16 @@
+{
+  "gcc": {
+    "version": "10.2.0",
+    "filename": "gcc-10.2.0.tar.xz",
+    "url": "https://gcc.gnu.org/pub/gcc/releases/gcc-10.2.0/gcc-10.2.0.tar.xz",
+    "sha512": "42AE38928BD2E8183AF445DA34220964EB690B675B1892BBEB7CD5BB62BE499011EC9A93397DBA5E2FB681AFADFC6F2767D03B9035B44BA9BE807187AE6DC65E",
+    "verification": "GNU release sha512.sum over HTTPS"
+  },
+  "binutils": {
+    "version": "2.35",
+    "filename": "binutils-2.35.tar.xz",
+    "url": "https://ftp.gnu.org/gnu/binutils/binutils-2.35.tar.xz",
+    "sha512": "9F222E4AB6720036402D03904FB11B73AB87714B85CD84997F7D357F405C7E10581D70202F9165A1EE0C70538632DB27ECC9DFE627DDDB1E6BC7EDB1537CF786",
+    "verification": "gpgv with GNU keyring; signer 3A24BC1E8FB409FA9F14371813FCEF89DD9E3C4F"
+  }
+}

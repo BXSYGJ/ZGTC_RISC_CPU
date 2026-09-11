@@ -1,5 +1,40 @@
 # ZGTC_RISC_CPU
 
+## September 11, 2026 — provisional validation complete
+
+The complete `cpu/experiments/full_fetch_commit_factored` version passes local 42-data/33-trigger ILA validation and remote hardware CoreMark V0/V1 bring-up at **153 MHz, 511.317879224 CoreMark, 3.341946923 CoreMark/MHz and 0.053811605896 CoreMark/LUT** (9502 complete LUT / 5079 FF, +0.021 ns setup WNS). The user explicitly accepts local ILA checking; remote ILA is not a gate. Further optimization is paused, AI acceleration remains deferred, and electrical/stability caveats remain documented.
+
+Human guide: `cpu/docs/PROJECT_HANDOVER_153MHZ.md`. AI handoff: `cpu/docs/AI_HANDOFF_153MHZ.md`. Portable archive check from repository root: `python cpu/scripts/verify_153mhz_handoff.py`. The top-level RTL and older clock experiments are not the selected 153 MHz source.
+
+All earlier entries below are historical; their running-state and no-upload statements do not override this handover.
+
+
+2026-09-07 WB匹配预译码实验已完成：8方法、1048576组状态转换、12组随机等待及24份逐字节相同的轨迹/内存、196次ISA逐案同周期核验通过；但144 MHz种子1为8658 LUT、5139 FF、WNS -0.046 ns，物理失败。新状态位移走原WB比较慢路径并不代表最终频率提高，当前保留完整配对的全偏移加载旁路基线。详见 `cpu/docs/WB_MATCH_PREDECODE.md`；生产RTL及GitHub不变。
+
+2026-09-07操作数选择器对照已完成：优先选择/独热选择保持原双短测与196次ISA逐案结果；144 MHz种子1分别为8738 LUT、WNS +0.011 ns及8704 LUT、WNS -0.021 ns。前者仅多6 ps裕量但增加112 LUT，后者时序失败，不替换已完整配对的全偏移加载旁路版。定向矩阵、故障拒绝、CPU/SoC及严格lint证据与结构检查修正见 `cpu/docs/LOAD_OPERAND_SELECT.md`。生产RTL及GitHub不变。
+
+2026-09-07全偏移加载旁路完整配对已完成：144 MHz、8626 LUT、WNS +0.005 ns；自身6000轮性能/验证为1918110244/1921816141周期，双CRC和真实PDS绑定审计通过。本地RTL投影3.1280788050 CoreMark/MHz、450.4433479268 CoreMark、0.05221926129 CoreMark/LUT。相对零偏移CSA，同频执行效率提高0.914650%、资源效率提高2.072841%，但时序裕量下降；不是实板成绩。详见 `cpu/docs/LOAD_USE_ADDRESS_BYPASS.md`。后续优先选择/独热选择实验独立验证，本轮不上传GitHub。
+
+2026-09-07全偏移加载旁路实验：普通加法版本144 MHz通过（8626 LUT、5123 FF、WNS +0.005 ns），相对零偏移CSA双种子十轮实际减少29238/30018周期；196次ISA及边界/错误响应检查通过，已启动独立完整配对，尚无本候选实板成绩。12位预计算版本功能正确但WNS -0.730 ns，保留为物理失败对照。见 `cpu/docs/LOAD_USE_ADDRESS_BYPASS.md`。本轮不上传GitHub。
+
+2026-09-07零偏移CSA完整配对已完成：自身6000轮性能/验证分别1935654242/1939828139周期，双CRC及真实PDS绑定审计通过。144 MHz、8725 LUT的本地RTL投影为3.0997271464 CoreMark/MHz、0.05115882053 CoreMark/LUT；相对相等分支144 MHz版执行效率提高0.874123%，资源效率下降0.177974%，不是全面替代。见 `cpu/docs/LOAD_USE_ZERO_OFFSET.md`；不替代既有实板记录。
+
+历史本地合格候选（同步Cache阶段）：同步I-cache、Cache扇出32及保留ALU高段预计算版（680F03DF / 47E2A544），132 MHz/种子7为8090 LUT、5021 FF、WNS +0.102 ns；135 MHz/种子1为8222 LUT、4989 FF、WNS +0.003 ns。各自性能与验证6000轮固件的位流均已本地通过，20份输入和原始报告重新核验；18 DRM、4 APM。全回归和196次外部ISA通过，两种短测周期不变。135 MHz仅3 ps裕量，不等于长期稳定性；尚未板测，不更新正式CoreMark/LUT。旧同步Cache时序失败和D66、AC24结果保留为历史记录。后续只在用户明确要求时上传GitHub。详见 `cpu/docs/ALU_KEPT_PRECOMPUTE.md`。
+
+只读Cache裁剪候选的132 MHz/种子1性能与验证位流均已本地通过：9236 LUT、5064 FF、WNS +0.082 ns；相对同条件C3少1041 LUT（约10.13%），多28 FF，裕量增加0.051 ns。完整回归、32种对照、13个运行控制及196次外部ISA通过，短测周期不变；三组135 MHz仍失败。全部本地任务终态，尚未上板，不更新正式CoreMark/LUT。本轮不上传GitHub。见 `cpu/docs/CACHE_READONLY_WRITEBACK.md`。
+
+本地已测更新：折叠BTB与分段ALU版在132 MHz完成两次性能6000轮及一次验证6000轮，两次性能UART逐字节一致。执行效率3.0297205298 CoreMark/MHz（较上一132 MHz +0.5559642%），吞吐399.9231099346 CoreMark；资源效率0.03862871727 CoreMark/LUT（-0.0170873%，仍高于0.031）。10353 LUT、5023 FF、WNS +0.103 ns；主频不变，不能称三指标全部改善。完整回归和外部ISA测试集合通过，135 MHz仍未过时序。设备已释放，本轮不上传GitHub；证据见 `cpu/docs/HARDWARE_132MHZ_CARRY_SELECT.md`。以下按阶段保留历史记录，不替代本次绑定源码的结果。
+
+当前源ILA：独立Target132Kept配置已原生确认109路、1024深度，132 MHz/种子7性能与验证插核均通过（9084 LUT、6876 FF、WNS +0.095 ns）。Windows/WSL各32项分析测试、67项PowerShell契约通过；两份位流均已终态并通过成对审计，尚无本版实板波形。见 `cpu/docs/ILA_TARGET132_KEPT.md`。
+
+历史Target132Carry源ILA进度：Target132Carry的109路映射、专用分析语义和拒绝测试完成；默认/种子1/种子7的132 MHz插核实现均失败，最好WNS -0.082 ns，均未烧录，不影响已测非插核成绩。43项PowerShell契约、21项ILA分析、8项报告及6项频率门槛测试通过；下一步考察独立地址生成路径。见 `cpu/docs/ILA_TARGET132_CARRY.md`。
+
+132 MHz实板更新：实验箱2完成两次性能6000轮及一次验证6000轮，执行效率3.0129694974 CoreMark/MHz、吞吐397.7119736614 CoreMark、资源效率0.03863531899 CoreMark/LUT。10294 LUT、5041 FF、4 APM，WNS +0.001 ns；相对已测126 MHz，频率/吞吐提高4.7619%、资源效率提高3.8867%，执行效率不变，增加86 LUT和234 FF。极小正时序裕量不等于长期稳定性或物理极限。设备已释放，未追加上传GitHub。详见 `cpu/docs/HARDWARE_132MHZ.md` 和 `cpu/docs/CACHE_ADDRESS_FANOUT.md`。
+
+历史筛选：MMIO载荷、除法余数清零实验均未取得联合优势，已隔离；上一轮结束时曾恢复全部20份126 MHz生产输入。本轮在此基础上继续修改M单元与PLL，不能沿用“当前全部恢复”的说法。
+
+126 MHz 实板更新：同一实验箱2完成两次性能6000轮和一次验证6000轮，3.0129694974 CoreMark/MHz、379.6341566767 CoreMark、0.03718986645 CoreMark/LUT；10208 LUT、4807 FF、4 APM，WNS +0.128 ns。相对上一实板120 MHz前递版，主频提高5%、资源效率提高约4.60%，增加39 LUT；执行效率微差不算结构收益。原120 MHz达标记录保留，物理极限和全项目验收仍未完成。 详见 `cpu/docs/HARDWARE_126MHZ.md`；本轮不上传GitHub，以下按阶段保留历史记录。
+
 面向全国大学生 FPGA 创新设计竞赛紫光同创赛道选题一的 RISC-V CPU 项目。
 
 2026-09-06实板更新：实验箱2的120 MHz RV32IM候选达到3.0129645923 CoreMark/MHz、361.5557510765 CoreMark、0.03515369481 CoreMark/LUT；10285 LUT、4808 FF、WNS +0.117 ns。两次重新烧录后的4000轮性能运行结果完全一致，另一次4000轮验证种子CRC通过，计分区均超过11秒。该数值硬指标已满足；全项目验收、长期稳定性和三项物理极限仍未完成。 原始采集、复测与资源折衷见 `cpu/docs/HARDWARE_120MHZ_TARGET.md`。以下较早阶段数据保留为历史记录，不替代此最新结果。

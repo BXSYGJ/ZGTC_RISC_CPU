@@ -1,0 +1,113 @@
+{
+  "schema": 1,
+  "scope": "Unmasked speculative multiplier inputs gated by initialized operand availability; not physical qualification",
+  "parent": "full_return_stack1",
+  "parent_core_sha256": "C8D8002ADA85F260814640F94419FD1FAAF5450B4A38D2481B2EE560DA605D30",
+  "core_sha256": "0F9EFD4A6C17C6C7A6933AD0615CEC1089CEB79B916C6029AC1E253C10363001",
+  "btb_sha256": "74DFB242332EF849015DF301B2BE01A87D32EC7F1811A658F85EA82CBE79305E",
+  "substitutions": [
+    [
+      "        mul_prefetch_operands && muldiv_ready &&",
+      "        mul_prefetch_operands && muldiv_ready && mul_id_a_available && mul_id_b_available &&"
+    ],
+    [
+      "    (* syn_maxfan=16 *) wire id_register_b_valid=register_valid[id_rs2];",
+      "    (* syn_maxfan=16 *) wire id_register_b_valid=register_valid[id_rs2];\n    wire mul_id_a_available=id_rs1!=0 && (id_register_a_valid || (trace_write && wb_rd==id_rs1));\n    wire mul_id_b_available=id_rs2!=0 && (id_register_b_valid || (trace_write && wb_rd==id_rs2));\n    wire [31:0] mul_id_operand_a=(trace_write && wb_rd==id_rs1) ? wb_data : registers[id_rs1];\n    wire [31:0] mul_id_operand_b=(trace_write && wb_rd==id_rs2) ? wb_data : registers[id_rs2];"
+    ],
+    [
+      ".req_operand_a(mul_prefetch_operands ? id_operand_a : forwarded_a)",
+      ".req_operand_a(mul_prefetch_operands ? mul_id_operand_a : forwarded_a)"
+    ],
+    [
+      ".req_operand_b(mul_prefetch_operands ? id_operand_b : forwarded_b)",
+      ".req_operand_b(mul_prefetch_operands ? mul_id_operand_b : forwarded_b)"
+    ]
+  ],
+  "qualified_parent": "full_redirect_clock151200",
+  "files": {
+    "rv32_core.sv": {
+      "parent_sha256": "81671AD0A87EBD75F68D6351A85DAA21899CA42D27472B4C5B325F59EA8ABDEE",
+      "candidate_sha256": "0F9EFD4A6C17C6C7A6933AD0615CEC1089CEB79B916C6029AC1E253C10363001",
+      "substitutions": [
+        [
+          "    rv32_btb #(.INDEX_BITS(BTB_INDEX_BITS),.ADDRESS_BITS(BTB_ADDRESS_BITS)) predictor (",
+          "    wire stack_destination_link=mem_instruction[11:7]==5'd1 || mem_instruction[11:7]==5'd5;\n    wire stack_source_link=mem_instruction[19:15]==5'd1 || mem_instruction[19:15]==5'd5;\n    wire stack_jal=mem_instruction[6:0]==7'h6f;\n    wire stack_jalr=mem_instruction[6:0]==7'h67 && mem_instruction[14:12]==0;\n    wire stack_return_hint=stack_jalr && stack_source_link &&\n        (!stack_destination_link || mem_instruction[11:7]!=mem_instruction[19:15]);\n    wire stack_call_hint=(stack_jal || stack_jalr) && stack_destination_link;\n    wire stack_commit=mem_fire && !mem_fault && mem_branch;\n    rv32_btb #(.INDEX_BITS(BTB_INDEX_BITS),.ADDRESS_BITS(BTB_ADDRESS_BITS),.RETURN_STACK_DEPTH(2)) predictor ("
+        ],
+        [
+          "        .update_taken(mem_taken),.update_conditional(mem_conditional)\n",
+          "        .update_taken(mem_taken),.update_conditional(mem_conditional),\n        .update_return(stack_return_hint),.stack_push(stack_commit && stack_call_hint),\n        .stack_pop(stack_commit && stack_return_hint)\n"
+        ],
+        [
+          "        .stack_pop(stack_commit && stack_return_hint)\n",
+          "        .stack_pop(stack_commit && stack_return_hint),.stack_push_address(mem_result)\n"
+        ],
+        [
+          "            if(ex_valid) begin ex_operand_a<=forwarded_a; ex_operand_b<=forwarded_b; raw_pair_relation<=operand_relation(forwarded_a,forwarded_b); end",
+          "            raw_pair_relation<=operand_relation(forwarded_a,forwarded_b);\n            if(ex_valid) begin ex_operand_a<=forwarded_a; ex_operand_b<=forwarded_b; end"
+        ],
+        [
+          ".RETURN_STACK_DEPTH(2)",
+          ".RETURN_STACK_DEPTH(1)"
+        ],
+        [
+          "        mul_prefetch_operands && muldiv_ready &&",
+          "        mul_prefetch_operands && muldiv_ready && mul_id_a_available && mul_id_b_available &&"
+        ],
+        [
+          "    (* syn_maxfan=16 *) wire id_register_b_valid=register_valid[id_rs2];",
+          "    (* syn_maxfan=16 *) wire id_register_b_valid=register_valid[id_rs2];\n    wire mul_id_a_available=id_rs1!=0 && (id_register_a_valid || (trace_write && wb_rd==id_rs1));\n    wire mul_id_b_available=id_rs2!=0 && (id_register_b_valid || (trace_write && wb_rd==id_rs2));\n    wire [31:0] mul_id_operand_a=(trace_write && wb_rd==id_rs1) ? wb_data : registers[id_rs1];\n    wire [31:0] mul_id_operand_b=(trace_write && wb_rd==id_rs2) ? wb_data : registers[id_rs2];"
+        ],
+        [
+          ".req_operand_a(mul_prefetch_operands ? id_operand_a : forwarded_a)",
+          ".req_operand_a(mul_prefetch_operands ? mul_id_operand_a : forwarded_a)"
+        ],
+        [
+          ".req_operand_b(mul_prefetch_operands ? id_operand_b : forwarded_b)",
+          ".req_operand_b(mul_prefetch_operands ? mul_id_operand_b : forwarded_b)"
+        ]
+      ]
+    },
+    "rv32_btb.sv": {
+      "parent_sha256": "BBB08D9A074D31CF846B26B1BCF4456C991AFA03068A09EF4B96BEC46823F2DB",
+      "candidate_sha256": "74DFB242332EF849015DF301B2BE01A87D32EC7F1811A658F85EA82CBE79305E",
+      "substitutions": [
+        [
+          "    parameter integer COUNTER_BITS=2",
+          "    parameter integer COUNTER_BITS=2,\n    parameter integer RETURN_STACK_DEPTH=0"
+        ],
+        [
+          "    input wire update_conditional\n",
+          "    input wire update_conditional,\n    input wire update_return,\n    input wire stack_push,\n    input wire stack_pop\n"
+        ],
+        [
+          "    reg conditional [0:ENTRIES-1];",
+          "    reg conditional [0:ENTRIES-1];\n    reg return_entry [0:ENTRIES-1];\n    wire stack_available;\n    wire [31:0] stack_target;"
+        ],
+        [
+          "    assign predicted_target=prediction_hit ? {{(32-ADDRESS_BITS){1'b0}},targets[fetch_index],2'b00} : fetch_pc+32'd4;",
+          "    assign predicted_target=prediction_hit ?\n        ((stack_available && return_entry[fetch_index] && !conditional[fetch_index]) ? stack_target :\n        {{(32-ADDRESS_BITS){1'b0}},targets[fetch_index],2'b00}) : fetch_pc+32'd4;"
+        ],
+        [
+          "            conditional[update_index]<=update_conditional;",
+          "            conditional[update_index]<=update_conditional;\n            return_entry[update_index]<=update_return;"
+        ],
+        [
+          "    genvar pattern;",
+          "    generate if (RETURN_STACK_DEPTH>0) begin: return_stack\n        localparam integer COUNT_BITS=$clog2(RETURN_STACK_DEPTH+1);\n        localparam [COUNT_BITS-1:0] CAPACITY=COUNT_BITS'(RETURN_STACK_DEPTH);\n        reg [COUNT_BITS-1:0] count;\n        reg [31:0] addresses [0:RETURN_STACK_DEPTH-1];\n        integer stack_index;\n        assign stack_available=count!=0;\n        assign stack_target=addresses[0];\n        always @(posedge clk or negedge rst_n) begin\n            if (!rst_n) begin\n                count<=0;\n            end else if (invalidate) begin\n                count<=0;\n            end else if (stack_push) begin\n                addresses[0]<=update_pc+32'd4;\n                if (!stack_pop || count==0) begin\n                    if (count<CAPACITY) count<=count+1'b1;\n                    for (stack_index=1;stack_index<RETURN_STACK_DEPTH;stack_index=stack_index+1)\n                        addresses[stack_index]<=addresses[stack_index-1];\n                end\n            end else if (stack_pop && count!=0) begin\n                count<=count-1'b1;\n                for (stack_index=0;stack_index<RETURN_STACK_DEPTH-1;stack_index=stack_index+1)\n                    addresses[stack_index]<=addresses[stack_index+1];\n            end\n        end\n    end else begin: no_return_stack\n        assign stack_available=1'b0;\n        assign stack_target=32'd0;\n    end endgenerate\n    genvar pattern;"
+        ],
+        [
+          "localparam [COUNT_BITS-1:0] CAPACITY=COUNT_BITS'(RETURN_STACK_DEPTH);",
+          "localparam [COUNT_BITS-1:0] CAPACITY=RETURN_STACK_DEPTH[COUNT_BITS-1:0];"
+        ],
+        [
+          "    input wire stack_pop\n",
+          "    input wire stack_pop,\n    input wire [31:0] stack_push_address\n"
+        ],
+        [
+          "addresses[0]<=update_pc+32'd4;",
+          "addresses[0]<=stack_push_address;"
+        ]
+      ]
+    }
+  }
+}

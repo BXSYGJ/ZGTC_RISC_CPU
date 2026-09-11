@@ -53,7 +53,7 @@ def main():
     parser.add_argument("--early-d-request", type=int, choices=(0, 1), default=0)
     parser.add_argument("--data-overlap", type=int, choices=(0, 1), default=0)
     parser.add_argument("--btb-index-bits", type=int, choices=range(1, 9), default=4)
-    parser.add_argument("--icache-set-bits", type=int, choices=range(0, 9), default=0)
+    parser.add_argument("--icache-set-bits", type=int, choices=range(0, 11), default=0)
     parser.add_argument("--fast-dcache-write", type=int, choices=(0, 1), default=0)
     parser.add_argument("--fast-dcache-read", type=int, choices=(0, 1), default=0)
     parser.add_argument("--fetch-overlap", type=int, choices=(0, 1), default=0)

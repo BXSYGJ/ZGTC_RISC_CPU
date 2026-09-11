@@ -1,7 +1,9 @@
 `timescale 1ns/1ps
 module rv32_btb #(
     parameter integer INDEX_BITS=4,
-    parameter integer ADDRESS_BITS=32
+    parameter integer ADDRESS_BITS=32,
+    parameter integer HASH_INDEX=1,
+    parameter integer HASH_ROTATE=4
 ) (
     input wire clk,
     input wire rst_n,
@@ -23,8 +25,15 @@ module rv32_btb #(
     reg [ADDRESS_BITS-3:0] targets [0:ENTRIES-1];
     reg [1:0] counters [0:ENTRIES-1];
     reg conditional [0:ENTRIES-1];
-    wire [INDEX_BITS-1:0] fetch_index=fetch_pc[INDEX_BITS+1:2];
-    wire [INDEX_BITS-1:0] update_index=update_pc[INDEX_BITS+1:2];
+    localparam integer ROTATE=HASH_ROTATE%INDEX_BITS;
+    wire [INDEX_BITS-1:0] fetch_hash=fetch_pc[2*INDEX_BITS+1:INDEX_BITS+2];
+    wire [INDEX_BITS-1:0] update_hash=update_pc[2*INDEX_BITS+1:INDEX_BITS+2];
+    wire [INDEX_BITS-1:0] fetch_fold=(fetch_hash << ROTATE) | (fetch_hash >> (INDEX_BITS-ROTATE));
+    wire [INDEX_BITS-1:0] update_fold=(update_hash << ROTATE) | (update_hash >> (INDEX_BITS-ROTATE));
+    wire [INDEX_BITS-1:0] fetch_index=fetch_pc[INDEX_BITS+1:2] ^
+        (HASH_INDEX!=0 ? fetch_fold : {INDEX_BITS{1'b0}});
+    wire [INDEX_BITS-1:0] update_index=update_pc[INDEX_BITS+1:2] ^
+        (HASH_INDEX!=0 ? update_fold : {INDEX_BITS{1'b0}});
     wire [TAG_BITS-1:0] fetch_tag=fetch_pc[ADDRESS_BITS-1:INDEX_BITS+2];
     wire [TAG_BITS-1:0] update_tag=update_pc[ADDRESS_BITS-1:INDEX_BITS+2];
     assign prediction_hit=(fetch_pc >> ADDRESS_BITS)==0 && valid[fetch_index] && tags[fetch_index]==fetch_tag && fetch_pc[1:0]==0;

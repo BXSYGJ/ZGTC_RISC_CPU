@@ -28,7 +28,7 @@ def parse_result(text, allow_short=False, lut_count=None, expected_config=None, 
     frequency = field(r"^ZGTC cycles_hex=[0-9a-f]{16} retired_hex=[0-9a-f]{16} clock_hz=(\d+)$")
     ticks = field(r"^Total ticks\s+: (\d+)$")
     seconds_integer = field(r"^Total time \(secs\): (\d+)$")
-    if frequency != expected_clock_hz or frequency not in (27000000, 54000000, 60000000, 67500000, 72000000, 75600000, 81000000, 90000000, 99000000, 102600000, 108000000, 120000000, 135000000, 162000000, 180000000, 194400000, 216000000, 270000000) or cycles <= 0 or retired <= 0:
+    if frequency != expected_clock_hz or frequency not in (27000000, 54000000, 60000000, 67500000, 72000000, 75600000, 81000000, 90000000, 99000000, 102600000, 108000000, 120000000, 126000000, 132000000, 135000000, 141750000, 144000000, 162000000, 180000000, 194400000, 216000000, 270000000) or cycles <= 0 or retired <= 0:
         raise ValueError("Unsupported frequency or nonpositive counters")
     if ticks != cycles // (frequency // 1000) or seconds_integer != ticks // 1000:
         raise ValueError("Counter and timer report disagree")
@@ -64,7 +64,7 @@ def parse_result(text, allow_short=False, lut_count=None, expected_config=None, 
         profile = dict(zip(("i_hits", "i_misses", "d_hits", "d_misses", "writebacks"), counters))
         data_sets = (configuration >> 8) & 15
         instruction_encoding = (configuration >> 12) & 15
-        if not 1 <= data_sets <= 8 or instruction_encoding > 8:
+        if not 1 <= data_sets <= 8 or instruction_encoding > 10:
             raise ValueError("Invalid cache geometry encoding")
         profile["dcache_set_bits"] = data_sets
         profile["icache_set_bits"] = instruction_encoding or data_sets

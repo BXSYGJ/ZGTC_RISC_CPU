@@ -1,5 +1,10 @@
 #include "platform.h"
 #define SAMPLE_COUNT 256u
+#ifndef APP_CLOCK_HZ
+#define APP_CLOCK_HZ 27000000u
+#endif
+typedef unsigned long long scope_ticks;
+_Static_assert(sizeof(scope_ticks) == 8, "Scope timeout requires 64-bit ticks");
 typedef struct { u32 cycle; u32 pins; } sample_record;
 static sample_record samples[SAMPLE_COUNT];
 static u32 valid_capture, late_samples, trigger_mask;
@@ -7,6 +12,15 @@ static u32 cycles_now(void) {
     u32 value;
     __asm__ volatile ("csrr %0, mcycle" : "=r"(value));
     return value;
+}
+static scope_ticks timeout_now(void) {
+    u32 high_before, low, high_after;
+    do {
+        __asm__ volatile ("csrr %0, mcycleh" : "=r"(high_before));
+        __asm__ volatile ("csrr %0, mcycle" : "=r"(low));
+        __asm__ volatile ("csrr %0, mcycleh" : "=r"(high_after));
+    } while (high_before != high_after);
+    return ((scope_ticks)high_after << 32) | low;
 }
 static void output_char(unsigned char value) {
     uart_putc(value);
@@ -33,13 +47,13 @@ static void capture(u32 mask, u32 rising) {
     GPIO_OUTPUT = 2;
     uart_puts("ARMED\n");
     u32 previous = GPIO_INPUT & mask;
-    u32 armed_at = cycles_now();
+    scope_ticks armed_at = timeout_now();
     STATUS_CODE = 0xa1100001u;
     for (;;) {
         u32 current = GPIO_INPUT & mask;
         if (rising ? (!previous && current) : (previous && !current)) break;
         previous = current;
-        if ((u32)(cycles_now() - armed_at) >= APP_TIMEOUT_CYCLES) {
+        if ((scope_ticks)(timeout_now() - armed_at) >= APP_TIMEOUT_CYCLES) {
             output_text("TIMEOUT\n");
             STATUS_CODE = 0xa1100000u;
             GPIO_OUTPUT = 1;
@@ -74,7 +88,9 @@ static void dump_capture(void) {
     GPIO_OUTPUT = 16;
     output_text("SCOPE1 count=00000100 period=");
     output_hex(APP_SAMPLE_CYCLES, 8);
-    output_text(" clock=019bfcc0 trigger=");
+    output_text(" clock=");
+    output_hex(APP_CLOCK_HZ, 8);
+    output_text(" trigger=");
     output_hex(trigger_mask, 2);
     output_char('\n');
     u32 checksum = 2166136261u;

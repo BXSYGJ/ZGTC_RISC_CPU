@@ -26,11 +26,11 @@ def fixture(cycles=324000000, clock_hz=27000000):
 class CoreMarkCheckerTests(unittest.TestCase):
     def test_asymmetric_cache_geometry(self):
         suffix = "\nZGTC config={config} ihit=1 imiss=2 dhit=3 dmiss=4 writebacks=5\n"
-        for config, instruction, data in (("0e020401", 4, 4), ("0e8e86f9", 8, 6), ("0e8e87f9", 8, 7), ("0e8e08f9", 8, 8), ("0e021301", 1, 3)):
+        for config, instruction, data in (("0e020401", 4, 4), ("0e8e86f9", 8, 6), ("0e8e87f9", 8, 7), ("0e8e08f9", 8, 8), ("0e021301", 1, 3), ("0e8e96f9", 9, 6), ("0e8ea6f9", 10, 6)):
             result = parse_result(fixture() + suffix.format(config=config))
             self.assertEqual(result["profile"]["icache_set_bits"], instruction)
             self.assertEqual(result["profile"]["dcache_set_bits"], data)
-        for config in ("0e02f401", "0e020f01", "0e020001"):
+        for config in ("0e02f401", "0e02b401", "0e020f01", "0e020901", "0e020001"):
             with self.assertRaisesRegex(ValueError, "cache geometry"):
                 parse_result(fixture() + suffix.format(config=config))
         with self.assertRaisesRegex(ValueError, "configuration differs"):
@@ -52,7 +52,7 @@ class CoreMarkCheckerTests(unittest.TestCase):
             parse_result(fixture() + suffix.format(config="0ef20401"))
 
     def test_supported_clock_scores(self):
-        for clock_hz in (27000000, 54000000, 60000000, 67500000, 72000000, 75600000, 81000000, 90000000, 99000000, 102600000, 108000000, 120000000, 135000000, 162000000, 180000000, 194400000, 216000000, 270000000):
+        for clock_hz in (27000000, 54000000, 60000000, 67500000, 72000000, 75600000, 81000000, 90000000, 99000000, 102600000, 108000000, 120000000, 126000000, 132000000, 135000000, 141750000, 144000000, 162000000, 180000000, 194400000, 216000000, 270000000):
             with self.subTest(clock_hz=clock_hz):
                 text = fixture(clock_hz * 12, clock_hz)
                 result = parse_result(text, expected_clock_hz=clock_hz)
@@ -65,6 +65,13 @@ class CoreMarkCheckerTests(unittest.TestCase):
             parse_result(fixture(360000000, 30000000), expected_clock_hz=30000000)
 
     def test_explicit_frequency_required(self):
+        for clock_hz in (141750000, 144000000):
+            with self.subTest(clock_hz=clock_hz):
+                with self.assertRaisesRegex(ValueError, "Unsupported frequency"):
+                    parse_result(fixture((clock_hz + 1) * 12, clock_hz + 1), expected_clock_hz=clock_hz + 1)
+                short = parse_result(fixture(clock_hz, clock_hz), expected_clock_hz=clock_hz, allow_short=True)
+                self.assertFalse(short["reportable_duration"])
+                self.assertNotIn("iterations_per_second", short)
         text = fixture(648000000).replace("clock_hz=27000000", "clock_hz=54000000").replace("Total ticks      : 24000", "Total ticks      : 12000").replace("Total time (secs): 24", "Total time (secs): 12")
         with self.assertRaises(ValueError):
             parse_result(text)

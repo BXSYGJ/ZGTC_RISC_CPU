@@ -1,0 +1,30 @@
+{
+  "core_tb.sv": {
+    "parent_sha256": "DEFB41E24B9CA0C9EAA815573FAD341299A89CB988FE1BBE83D00E093E4C871F",
+    "observer_sha256": "676FA747E11859111441EAB09A81EB0461D47D025CD1723BF765F1B47991C5AC",
+    "substitutions": [
+      [
+        "endmodule",
+        "    integer link_push_observations=0;\n    always @(posedge clk) begin\n        if (rst_n && core.stack_commit && core.stack_call_hint) begin\n            link_push_observations=link_push_observations+1;\n            if (core.mem_result!==(core.mem_pc+32'd4))\n                $fatal(1,\"FAIL return_stack_link committed link differs from PC+4\");\n        end\n    end\nendmodule"
+      ],
+      [
+        "$display(\"PASS core checks=",
+        "check(link_push_observations>0,\"return-stack link pushes exercised\");\n                $display(\"LINK pushes=%0d\",link_push_observations);\n                $display(\"PASS core checks="
+      ]
+    ]
+  },
+  "cached_core_tb.sv": {
+    "parent_sha256": "067671740DF447C3EF6B6FB5ABCFBCF824F534494EFB50BA0334B9F4D8BA7057",
+    "observer_sha256": "60B8A46EB17495361CA4B8E56EFC871395534708625EDDEA56F1CFE9CC9DF0AD",
+    "substitutions": [
+      [
+        "endmodule",
+        "    integer link_push_observations=0;\n    always @(posedge clk) begin\n        if (rst_n && core.stack_commit && core.stack_call_hint) begin\n            link_push_observations=link_push_observations+1;\n            if (core.mem_result!==(core.mem_pc+32'd4))\n                $fatal(1,\"FAIL return_stack_link committed link differs from PC+4\");\n        end\n    end\nendmodule"
+      ],
+      [
+        "$display(\"PASS cached_core checks=",
+        "check(link_push_observations>0,\"return-stack link pushes exercised\");\n                $display(\"LINK pushes=%0d\",link_push_observations);\n                $display(\"PASS cached_core checks="
+      ]
+    ]
+  }
+}

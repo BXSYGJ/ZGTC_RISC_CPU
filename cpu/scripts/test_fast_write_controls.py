@@ -12,7 +12,7 @@ class FastWriteControls(unittest.TestCase):
         source = (PROJECT / "rtl" / "rv32_cache.sv").read_text(encoding="utf-8")
         mutations = {
             "late": ("(FAST_WRITE_HIT!=0 && request_write && READ_ONLY==0)", "1'b0"),
-            "new_value": ("fast_hit ? current_word : response_data", "fast_hit ? (request_write ? request_data : current_word) : response_data"),
+            "new_value": ("fast_lookup ? current_word : response_data", "fast_lookup ? (request_write ? request_data : current_word) : response_data"),
         }
         if variant != "positive":
             old, new = mutations[variant]

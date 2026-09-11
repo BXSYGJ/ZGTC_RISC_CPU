@@ -1,4 +1,4 @@
-﻿param([ValidateRange(0,8)][int]$ICacheSetBits = 0, [switch]$DataOverlap, [ValidateRange(1,8)][int]$BtbIndexBits = 4, [ValidateRange(1,8)][int[]]$CacheSetBits = @(1,4), [switch]$EarlyDRequest, [switch]$FastDCacheWrite, [switch]$FastDCacheRead, [switch]$FetchOverlap, [switch]$FastICacheHit, [switch]$Uncached, [switch]$LoadUseBubble)
+﻿param([ValidateRange(0,10)][int]$ICacheSetBits = 0, [switch]$DataOverlap, [ValidateRange(1,8)][int]$BtbIndexBits = 4, [ValidateRange(1,8)][int[]]$CacheSetBits = @(1,4), [switch]$EarlyDRequest, [switch]$FastDCacheWrite, [switch]$FastDCacheRead, [switch]$FetchOverlap, [switch]$FastICacheHit, [switch]$Uncached, [switch]$LoadUseBubble)
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 $ErrorActionPreference = 'Stop'
 try {
@@ -51,7 +51,8 @@ try {
             $testOutput | ForEach-Object { $allOutput.Add("${runName}: $_"); Write-Output $_ }
             $allOutput | Set-Content -LiteralPath ([System.IO.Path]::Combine($project, 'build', $logName)) -Encoding utf8BOM
             if ($testExitCode -ne 0 -or -not ($testOutput -match '^PASS cached_core checks=')) { throw "Cached CPU test failed: $runName" }
-            $referenceOutput = & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/python3 "$linuxProject/scripts/check_trace.py" "$linuxProject/build/core_selftest.bin" "$linuxProject/build/$runName.trace" --memory "$linuxProject/build/$runName.memory"
+            $referenceBytes = if ($ICacheSetBits -eq 10) { 32768 } else { 16384 }
+            $referenceOutput = & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/python3 "$linuxProject/scripts/check_trace.py" "$linuxProject/build/core_selftest.bin" "$linuxProject/build/$runName.trace" --memory "$linuxProject/build/$runName.memory" --memory-bytes $referenceBytes
             if ($LASTEXITCODE -ne 0) { throw "Cached CPU reference comparison failed: $runName" }
             $referenceOutput | ForEach-Object { $allOutput.Add([string]$_); Write-Output $_ }
             $allOutput | Set-Content -LiteralPath ([System.IO.Path]::Combine($project, 'build', $logName)) -Encoding utf8BOM

@@ -1,0 +1,17 @@
+{
+  "baseline_core_sha256": "dc90363d426754f032ec04db6f4be76da439cca149e372853ee2d64536d20fce",
+  "edits": [
+    [
+      "            if(ex_valid) begin ex_operand_a<=forwarded_a; ex_operand_b<=forwarded_b; raw_pair_relation<=operand_relation(forwarded_a,forwarded_b); end",
+      "            if(ex_valid) begin ex_operand_a<=forwarded_a; ex_operand_b<=forwarded_b; end"
+    ],
+    [
+      "                raw_pair_relation<=operand_relation(id_operand_a,id_operand_b);\n",
+      ""
+    ],
+    [
+      "            if(if_fire) begin",
+      "            if(ex_valid || id_fire) raw_pair_relation<=operand_relation(compare_next_a,compare_next_b);\n            if(if_fire) begin"
+    ]
+  ]
+}

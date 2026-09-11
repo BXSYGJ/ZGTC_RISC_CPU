@@ -57,20 +57,22 @@ module rv32_muldiv (
         end else if(cancel) begin
             state<=IDLE;
         end else begin
+            if(state==IDLE) begin
+                operation<=req_operation;
+                divisor<=negative_b ? -req_operand_b : req_operand_b;
+                quotient<=negative_a ? -req_operand_a : req_operand_a;
+                remainder<=0; division_step<=0;
+                quotient_negative<=negative_a ^ negative_b;
+                remainder_negative<=negative_a;
+                response_data<=req_operation[1] ? req_operand_a : 32'hffffffff;
+            end
             case(state)
                 IDLE: if(req_valid) begin
-                    operation<=req_operation;
                     if(!req_operation[2]) begin
                         state<=PRODUCT;
                     end else if(req_operand_b==0) begin
-                        response_data<=req_operation[1] ? req_operand_a : 32'hffffffff;
                         state<=RESPONSE;
                     end else begin
-                        divisor<=negative_b ? -req_operand_b : req_operand_b;
-                        quotient<=negative_a ? -req_operand_a : req_operand_a;
-                        remainder<=0; division_step<=0;
-                        quotient_negative<=negative_a ^ negative_b;
-                        remainder_negative<=negative_a;
                         state<=DIVIDE;
                     end
                 end

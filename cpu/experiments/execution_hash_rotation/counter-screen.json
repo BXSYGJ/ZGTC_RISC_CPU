@@ -1,0 +1,55 @@
+{
+  "schema": 1,
+  "scope": "historical resolution-order proxy, not RTL cycles or score",
+  "records": 648458,
+  "trace_sha256": "5B716144F4496B1101026DDC0D4E671C4B9D81056C5C58C236800A237EE5533F",
+  "script_sha256": "CFD5219E65DFDE8261A0860B96307AC253E7F58DBEA836A8D34034739A5EF429",
+  "baseline_mode": "saturating",
+  "history_bits": 3,
+  "counter_banks": 8,
+  "candidates": {
+    "saturating": {
+      "resolutions": 524172,
+      "redirects": 53871,
+      "improved": 0,
+      "regressed": 0,
+      "redirects_reduced": 0
+    },
+    "hysteresis": {
+      "resolutions": 524172,
+      "redirects": 55235,
+      "improved": 2176,
+      "regressed": 3540,
+      "redirects_reduced": -1364
+    },
+    "fast": {
+      "resolutions": 524172,
+      "redirects": 67142,
+      "improved": 6644,
+      "regressed": 19915,
+      "redirects_reduced": -13271
+    },
+    "saturating_strong": {
+      "resolutions": 524172,
+      "redirects": 54291,
+      "improved": 2473,
+      "regressed": 2893,
+      "redirects_reduced": -420
+    },
+    "hysteresis_strong": {
+      "resolutions": 524172,
+      "redirects": 55573,
+      "improved": 3547,
+      "regressed": 5249,
+      "redirects_reduced": -1702
+    },
+    "fast_strong": {
+      "resolutions": 524172,
+      "redirects": 67142,
+      "improved": 6644,
+      "regressed": 19915,
+      "redirects_reduced": -13271
+    }
+  },
+  "hardware_validated": false
+}

@@ -40,7 +40,8 @@ def hardware_parameters(configuration):
                              ("ICacheSetBits", "ICACHE_SET_BITS"),
                              ("BtbIndexBits", "BTB_INDEX_BITS")):
         value = configuration.get(field, configuration["CacheSetBits"]) if field == "ICacheSetBits" else configuration[field]
-        if type(value) is not int or not 1 <= value <= 8:
+        maximum = 10 if field == "ICacheSetBits" else 8
+        if type(value) is not int or not 1 <= value <= maximum:
             raise ValueError(f"Invalid width hardware parameter: {field}")
         parameters[parameter] = value
     return parameters

@@ -12,7 +12,7 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Scope simulation compilation failed.' }
     & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/vvp "$linux/build/scope.vvp" "+firmware=$linux/build/$($manifest.RunName).hex" "+uart=$linux/build/scope.uart"
     if ($LASTEXITCODE -ne 0) { throw 'Scope simulation failed.' }
-    & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/python3 "$linux/scripts/scope_decode.py" "$linux/build/scope.uart" --output "$linux/build/scope-simulation" --expect-uart 55 --verify-key
+    & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/python3 "$linux/scripts/scope_decode.py" "$linux/build/scope.uart" --output "$linux/build/scope-simulation" --expect-uart 55 --verify-key --expected-clock 27000000
     if ($LASTEXITCODE -ne 0) { throw 'Scope checksum or waveform verification failed.' }
     & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/python3 "$linux/scripts/test_scope_decode.py"
     if ($LASTEXITCODE -ne 0) { throw 'Scope decoder mutation tests failed.' }

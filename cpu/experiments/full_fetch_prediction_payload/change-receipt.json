@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "scope": "Fetch prediction payload-only capture change; not physical qualification",
+  "parent_core_sha256": "81671AD0A87EBD75F68D6351A85DAA21899CA42D27472B4C5B325F59EA8ABDEE",
+  "candidate_core_sha256": "10E46E6286F17F8DC25C619298EB5AA0F032939299CB7562A7EB818B5CE28A81",
+  "substitutions": [
+    [
+      "    wire redirect_prediction_commit=fetch_redirect_pending && i_req_valid && i_req_ready && !frontend_flush && !frontend_barrier;",
+      "    wire redirect_prediction_commit=fetch_redirect_pending && i_req_valid && i_req_ready && !frontend_flush && !frontend_barrier;\n    wire fetch_prediction_load=!fetch_active || (i_rsp_valid && fetch_sent && fetch_accept_space) ||\n        (fetch_redirect_pending && !fetch_sent && i_req_ready);"
+    ],
+    [
+      "            if(redirect_prediction_commit) begin\n                fetch_prediction<=(ENABLE_PREDICTOR!=0 && prediction_hit && predicted_taken) ? predicted_target : next_pc+32'd4;\n                fetch_redirect_pending<=0;\n            end",
+      "            if(fetch_prediction_load)\n                fetch_prediction<=(ENABLE_PREDICTOR!=0 && prediction_hit && predicted_taken) ? predicted_target : next_pc+32'd4;\n            if(redirect_prediction_commit) begin\n                fetch_redirect_pending<=0;\n            end"
+    ],
+    [
+      "                fetch_active<=1; fetch_sent<=fetch_overlap && i_req_ready; fetch_discard<=0; fetch_address<=next_pc;\n                fetch_prediction<=(ENABLE_PREDICTOR!=0 && prediction_hit && predicted_taken) ? predicted_target : next_pc+32'd4;",
+      "                fetch_active<=1; fetch_sent<=fetch_overlap && i_req_ready; fetch_discard<=0; fetch_address<=next_pc;"
+    ]
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "core_tb.sv": {
+    "parent": "full_raw_relation_payload/sim/core_tb.sv",
+    "parent_sha256": "901DE045ABC429DEF0E366EEF53BD4E69289E17A71950BAFD21718C9159FB30B",
+    "observer_sha256": "AD936D732E387A4784CF8E63F373087D63F442D0905F6050B32759A90B9BCE19",
+    "substitutions": [
+      [
+        "endmodule",
+        "    integer relation_reuse_checks=0,relation_mem_cases=0,relation_wb_cases=0;\n    integer relation_stall_cases=0,relation_load_cases=0;\n    always @(posedge clk) begin\n        if(rst_n && core.ex_valid) begin\n            if(LOAD_USE_BUBBLE!=0) begin\n                if(core.early_result!==core.operand_relation(core.forwarded_a,core.forwarded_b))\n                    $fatal(1,\"FAIL reused relation differs from forwarded operands\");\n                relation_reuse_checks=relation_reuse_checks+1;\n            end\n            if(core.early_source_a[2] || core.early_source_b[2]) relation_mem_cases=relation_mem_cases+1;\n            if(core.early_source_a[3] || core.early_source_b[3]) relation_wb_cases=relation_wb_cases+1;\n            if(!core.ex_fire) relation_stall_cases=relation_stall_cases+1;\n            if(core.mem_valid && core.mem_load) relation_load_cases=relation_load_cases+1;\n        end\n    end\n    task report_relation_reuse;\n        begin\n            if(LOAD_USE_BUBBLE!=0 && relation_reuse_checks==0) $fatal(1,\"FAIL no live relation reuse checks\");\n            if(relation_load_cases==0 || relation_stall_cases==0 || relation_wb_cases==0 || relation_mem_cases==0)\n                $fatal(1,\"FAIL incomplete relation forwarding coverage\");\n            $display(\"PASS relation reuse=%0d mem=%0d wb=%0d stalls=%0d load=%0d bubble=%0d\",relation_reuse_checks,\n                relation_mem_cases,relation_wb_cases,relation_stall_cases,relation_load_cases,LOAD_USE_BUBBLE);\n        end\n    endtask\nendmodule"
+      ],
+      [
+        "                $display(\"PASS core checks=%0d traps=%0d cycles=%0d retired=%0d predictor=%0d\",checks,trap_count,cycle_count,retired_count,PREDICTOR);",
+        "                report_relation_reuse();\n                $display(\"PASS core checks=%0d traps=%0d cycles=%0d retired=%0d predictor=%0d\",checks,trap_count,cycle_count,retired_count,PREDICTOR);"
+      ],
+      [
+        "            if(relation_load_cases==0 || relation_stall_cases==0 || relation_wb_cases==0 || relation_mem_cases==0)\n                $fatal(1,\"FAIL incomplete relation forwarding coverage\");",
+        "            if(relation_load_cases==0 || relation_stall_cases==0)\n                $fatal(1,\"FAIL incomplete relation load or stall coverage\");"
+      ]
+    ]
+  },
+  "cached_core_tb.sv": {
+    "parent": "full_raw_relation_payload/sim/cached_core_tb.sv",
+    "parent_sha256": "79437A5358A0F17BA9F28688733E665D853018F703FB2BF9FE7D86C9CB3AA436",
+    "observer_sha256": "6BE025B6214CEAE84043369B82ECDB1B0866A001D8D15AF143D2798E8FA59F5E",
+    "substitutions": [
+      [
+        "endmodule",
+        "    integer relation_reuse_checks=0,relation_mem_cases=0,relation_wb_cases=0;\n    integer relation_stall_cases=0,relation_load_cases=0;\n    always @(posedge clk) begin\n        if(rst_n && core.ex_valid) begin\n            if(LOAD_USE_BUBBLE!=0) begin\n                if(core.early_result!==core.operand_relation(core.forwarded_a,core.forwarded_b))\n                    $fatal(1,\"FAIL reused relation differs from forwarded operands\");\n                relation_reuse_checks=relation_reuse_checks+1;\n            end\n            if(core.early_source_a[2] || core.early_source_b[2]) relation_mem_cases=relation_mem_cases+1;\n            if(core.early_source_a[3] || core.early_source_b[3]) relation_wb_cases=relation_wb_cases+1;\n            if(!core.ex_fire) relation_stall_cases=relation_stall_cases+1;\n            if(core.mem_valid && core.mem_load) relation_load_cases=relation_load_cases+1;\n        end\n    end\n    task report_relation_reuse;\n        begin\n            if(LOAD_USE_BUBBLE!=0 && relation_reuse_checks==0) $fatal(1,\"FAIL no live relation reuse checks\");\n            if(relation_load_cases==0 || relation_stall_cases==0 || relation_wb_cases==0 || relation_mem_cases==0)\n                $fatal(1,\"FAIL incomplete relation forwarding coverage\");\n            $display(\"PASS relation reuse=%0d mem=%0d wb=%0d stalls=%0d load=%0d bubble=%0d\",relation_reuse_checks,\n                relation_mem_cases,relation_wb_cases,relation_stall_cases,relation_load_cases,LOAD_USE_BUBBLE);\n        end\n    endtask\nendmodule"
+      ],
+      [
+        "                $display(\"PASS cached_core checks=%0d cycles=%0d traps=%0d I=%0d/%0d D=%0d/%0d WB=%0d forwarding=%0d load_forwarding=%0d zero_load=%0d positive_load=%0d negative_load=%0d sets_bits=%0d predictor=%0d\",checks,cycle_count,trap_count,i_hit_count,i_miss_count,d_hit_count,d_miss_count,d_writeback_count,memory_forward_count,load_forward_count,zero_offset_forward_count,positive_load_forward_count,negative_load_forward_count,CACHE_SETS,PREDICTOR);",
+        "                report_relation_reuse();\n                $display(\"PASS cached_core checks=%0d cycles=%0d traps=%0d I=%0d/%0d D=%0d/%0d WB=%0d forwarding=%0d load_forwarding=%0d zero_load=%0d positive_load=%0d negative_load=%0d sets_bits=%0d predictor=%0d\",checks,cycle_count,trap_count,i_hit_count,i_miss_count,d_hit_count,d_miss_count,d_writeback_count,memory_forward_count,load_forward_count,zero_offset_forward_count,positive_load_forward_count,negative_load_forward_count,CACHE_SETS,PREDICTOR);"
+      ],
+      [
+        "    integer memory_forward_count=0,load_forward_count=0;",
+        "    integer memory_forward_count=0,load_forward_count=0,direct_load_forward_count=0;"
+      ],
+      [
+        "                    check((core.ex_decode.is_branch && core.ex_instruction[14:13]==0) || core.ex_decode.is_load,\"only BEQ/BNE or load address may bypass a MEM load\");",
+        "                    if(LOAD_USE_BUBBLE!=0)\n                    check((core.ex_decode.is_branch && core.ex_instruction[14:13]==0) || core.ex_decode.is_load,\"only BEQ/BNE or load address may bypass a MEM load\");\n                    else begin\n                        if(core.ex_decode.uses_rs1 && core.ex_rs1==core.mem_rd)\n                            check(core.forwarded_a===core.mem_value,\"direct load operand A forwarding\");\n                        if(core.ex_decode.uses_rs2 && core.ex_rs2==core.mem_rd)\n                            check(core.forwarded_b===core.mem_value,\"direct load operand B forwarding\");\n                        if(!core.ex_decode.is_branch && !core.ex_decode.is_load) direct_load_forward_count=direct_load_forward_count+1;\n                    end"
+      ],
+      [
+        "                check(LOAD_USE_BUBBLE!=0 && load_wait_count>0 && wb_load_forward_count>0 && load_forward_count>0 && zero_offset_forward_count>0 && positive_load_forward_count>0 && negative_load_forward_count>0,\"zero positive and negative load-address bypass coverage\");",
+        "                if(LOAD_USE_BUBBLE!=0)\n                check(LOAD_USE_BUBBLE!=0 && load_wait_count>0 && wb_load_forward_count>0 && load_forward_count>0 && zero_offset_forward_count>0 && positive_load_forward_count>0 && negative_load_forward_count>0,\"zero positive and negative load-address bypass coverage\");\n                else check(load_wait_count==0 && load_forward_count>0 && direct_load_forward_count>0,\"direct load forwarding without bubble restriction\");"
+      ],
+      [
+        "            if(relation_load_cases==0 || relation_stall_cases==0 || relation_wb_cases==0 || relation_mem_cases==0)\n                $fatal(1,\"FAIL incomplete relation forwarding coverage\");",
+        "            if(relation_load_cases==0 || relation_stall_cases==0)\n                $fatal(1,\"FAIL incomplete relation load or stall coverage\");"
+      ]
+    ]
+  }
+}

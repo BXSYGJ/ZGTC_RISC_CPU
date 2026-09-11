@@ -22,7 +22,7 @@ try {
         $checks=0
         foreach ($FastDCacheRead in @($false,$true)) {
             foreach ($FastDCacheWrite in @($false,$true)) {
-                foreach ($ICacheSetBits in @(0,8)) {
+                foreach ($ICacheSetBits in @(0,8,9,10)) {
                     foreach ($assignment in $assignments) { . ([scriptblock]::Create($assignment.Extent.Text)) }
                     $script:CapturedCachedArguments=@()
                     & ([scriptblock]::Create($commands[0].Extent.Text))

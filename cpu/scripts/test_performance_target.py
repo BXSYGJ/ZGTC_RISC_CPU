@@ -28,6 +28,28 @@ class PerformanceTargetTests(unittest.TestCase):
         case["result"]["cycles"] += 1
         self.assertEqual(assess(case)["status"], "target_not_met")
 
+    def test_resource_threshold_exact_and_one_lut_over(self):
+        case = fixture()
+        case["result"]["iterations"] = 3720
+        case["report"]["resources"]["post_route_luts"] = 12000
+        report = assess(case)
+        self.assertEqual(report["status"], "numeric_target_pass")
+        self.assertEqual(report["target"]["coremark_per_lut"], 0.031)
+        self.assertEqual(report["measured"]["coremark_per_lut"], 0.031)
+        case["report"]["resources"]["post_route_luts"] += 1
+        report = assess(case)
+        self.assertTrue(report["gates"]["execution_at_least_3_coremark_per_mhz"])
+        self.assertFalse(report["gates"]["resource_at_least_0_031_coremark_per_lut"])
+        self.assertEqual(report["status"], "target_not_met")
+
+    def test_invalid_physical_lut_counts(self):
+        for value in (0, -1, True, 12000.0):
+            with self.subTest(value=value):
+                case = fixture()
+                case["report"]["resources"]["post_route_luts"] = value
+                with self.assertRaises(ValueError):
+                    assess(case)
+
     def test_higher_clock_not_substituted(self):
         case = fixture()
         case["result"]["clock_hz"] = case["manifest"]["ClockHz"] = case["report"]["clock_hz"] = 162000000
