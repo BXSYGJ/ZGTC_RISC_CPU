@@ -224,3 +224,48 @@ python tool/fpga_lab/ram_load.py cpu/build/app_huge.bin             # R 命令�
 - `cpu/docs/FLASH_BOOT.md` — Flash 启动权威说明（内存布局、命令、U9 引脚、寄存器）。
 - `tool/fpga_lab/ram_load.py` — 当前推荐的大文件加载命令（流控发送，R 命令载 RAM）。
 - 本机 CodeBuddy 记忆（`~/.codebuddy/projects/.../memory`）：含 Pango PG2L200H 工具链、避免 WSL、flash 启动参考、U9 引脚（SCK=P18 为占位，真实 CLK=H13）。
+
+---
+
+## 11. 分支融合记录（2026-09-11）
+
+本节记录 2026-09-11 完成的 XSY × DYH 分支融合，详细冲突解决方案与功能清单见 `docs/MERGE_LOG.md`。
+
+### 11.1 合并概述
+
+| 项 | 值 |
+|----|----|
+| 合并日期 | 2026-09-11 |
+| 合并提交 | `8e92e9e` |
+| 分叉基线 | `efdbae2`（120 MHz CoreMark 达标） |
+| XSY 末梢 | `08dbfa1`（串口烧录、桥接服务、bootloader、Flash 启动） |
+| DYH 末梢 | `ddab723`（153 MHz 性能优化、148 个实验目录） |
+| 冲突文件 | `.gitignore`（自动）、`build_pds.tcl`（自动）、`run_pds.ps1`（手动） |
+
+### 11.2 新增性能优化功能（来自 DYH）
+
+- **CPU 性能优化至 153 MHz**：全系统验证通过，证据见 `cpu/docs/evidence/153mhz-20260911/`。
+- **148 个实验目录**：`cpu/experiments/` 下涵盖 ALU、BTB、Cache、时钟、前递、取指等多类 RTL 变体与测试脚本。
+- **扩展时钟选项**：`run_pds.ps1 -ClockHz` 新增 126 MHz、132 MHz 两个选项。
+- **扩展 I-Cache 配置**：`run_pds.ps1 -ICacheSetBits` 范围从 0–8 扩展到 0–10。
+- **布局种子支持**：`run_pds.ps1 -PlacementSeed <n>` 支持 `pnr -gplace_seed` 布局复现。
+- **性能验证脚本**：`check_frequency_candidate.py`、`check_performance_target.py`、`check_coremark.py` 等。
+
+### 11.3 保留的烧录/启动功能（来自 XSY）
+
+- **串口烧录**：`burn.py` 生成/发送 bootloader 控制台字节流（W/R 命令）。
+- **桥接服务**：`tool/fpga_lab/` 的 HTTP 设备预约/位流烧录 + WebSocket 串口。
+- **bootloader**：固化进 BRAM 前 4KB，上电读 U9 Flash 启动应用。
+- **FlashBoot 构建开关**：`run_pds.ps1 -FlashBoot` 生成仅含 bootloader 的位流。
+- **流控大文件下发**：`ram_load.py` 逐块发 256B + 等 K 回执，13KB/33KB 实测成功。
+- **Flash 启动流程文档**：`cpu/docs/FLASH_BOOT.md` 权威说明保留。
+
+### 11.4 文档保护说明
+
+DYH 分支提交 `ddab723` 删除了 44 个 `cpu/docs/` 文档文件（含 153 MHz 验证证据）。合并时**恢复了全部被删除文档**，理由：
+
+1. 这些文档是项目重要技术积累（微体系结构、频率验证、Cache 消融、ILA 分析等）。
+2. `FINAL_REPORT.md`、`HARDWARE_FREQUENCY.md` 等记录已完成的硬件验证证据，删除将导致历史不可追溯。
+3. DYH 自身的 153 MHz 验证证据也在删除范围内，恢复后可供后续核查。
+
+恢复后 `cpu/docs/` 共 46 个文件，与基线 `efdbae2` 一致。完整合并记录见 `docs/MERGE_LOG.md`。
