@@ -1,4 +1,4 @@
-﻿param([ValidateRange(0,8)][int]$ICacheSetBits = 0, [ValidateRange(0,1)][int]$DataOverlap = 0, [ValidateRange(1,8)][int]$BtbIndexBits = 4, [ValidateRange(0,1)][int]$EarlyDRequest = 0, [ValidateRange(0,1)][int]$FastDCacheWrite = 0, [ValidateRange(0,1)][int]$FastDCacheRead = 0, [ValidateRange(0,1)][int]$FetchOverlap = 0, [ValidateRange(0,1)][int]$EnableM = 0, [ValidateRange(0,1)][int]$FastICacheHit = 0, [ValidateRange(0,1)][int]$LoadUseBubble = 0, [ValidateSet('Board', 'RemoteLab')][string]$UartProfile = 'Board', [string]$FirmwareHex = '', [ValidateRange(0,1)][int]$Predictor = 1, [ValidateRange(1,8)][int]$CacheSetBits = 4, [ValidateRange(0,1)][int]$CacheEnabled = 1, [ValidateSet(9600,19200,38400,57600,115200)][int]$UartBaud = 115200, [ValidateSet(27000000,54000000,60000000,67500000,72000000,75600000,81000000,90000000,99000000,102600000,108000000,120000000,135000000,162000000,180000000,194400000,216000000,270000000)][int]$ClockHz = 27000000)
+﻿param([ValidateRange(0,10)][int]$ICacheSetBits = 0, [ValidateRange(0,1)][int]$DataOverlap = 0, [ValidateRange(1,8)][int]$BtbIndexBits = 4, [ValidateRange(0,1)][int]$EarlyDRequest = 0, [ValidateRange(0,1)][int]$FastDCacheWrite = 0, [ValidateRange(0,1)][int]$FastDCacheRead = 0, [ValidateRange(0,1)][int]$FetchOverlap = 0, [ValidateRange(0,1)][int]$EnableM = 0, [ValidateRange(0,1)][int]$FastICacheHit = 0, [ValidateRange(0,1)][int]$LoadUseBubble = 0, [ValidateSet('Board', 'RemoteLab')][string]$UartProfile = 'Board', [string]$FirmwareHex = '', [ValidateRange(0,1)][int]$Predictor = 1, [ValidateRange(1,8)][int]$CacheSetBits = 4, [ValidateRange(0,1)][int]$CacheEnabled = 1, [ValidateSet(9600,19200,38400,57600,115200)][int]$UartBaud = 115200, [ValidateSet(27000000,54000000,60000000,67500000,72000000,75600000,81000000,90000000,99000000,102600000,108000000,120000000,126000000,132000000,135000000,162000000,180000000,194400000,216000000,270000000)][int]$ClockHz = 27000000, [ValidateRange(0,2147483647)][int]$PlacementSeed = 0)
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 $ErrorActionPreference = 'Stop'
 try {
@@ -60,6 +60,14 @@ try {
     $scriptPath = [System.IO.Path]::Combine($buildRoot, 'build.tcl')
     $clockDesign = if ($ClockHz -eq 27000000) { '' } else { 'add_design "' + $projectTcl + '/fpga/rv32_pll.sv"' }
     $template = $template.Replace('__CLOCK_DESIGN__', $clockDesign)
+    $placement = [ordered]@{ Schema = 1; Seed = $null; Command = 'pnr' }
+    if ($PSBoundParameters.ContainsKey('PlacementSeed')) {
+        $placement['Seed'] = $PlacementSeed
+        $placement['Command'] = 'pnr -gplace_seed ' + $PlacementSeed.ToString([System.Globalization.CultureInfo]::InvariantCulture)
+    }
+    if ([regex]::Matches($template, '__PNR_COMMAND__').Count -ne 1) { throw 'Expected one PDS placement command placeholder.' }
+    $template = $template.Replace('__PNR_COMMAND__', $placement.Command)
+    $placement | ConvertTo-Json | Set-Content -LiteralPath ([System.IO.Path]::Combine($buildRoot, 'placement-config.json')) -Encoding utf8BOM
     $uartConstraint = if ($UartProfile -eq 'RemoteLab') { 'uart_remotelab.fdc' } else { 'uart_board.fdc' }
     [System.IO.File]::WriteAllText($scriptPath, $template.Replace('__PROJECT_ROOT__', $projectTcl).Replace('__BUILD_ROOT__', $buildTcl).Replace('__UART_CONSTRAINT__', $uartConstraint), [System.Text.UTF8Encoding]::new($false))
     $top = [System.IO.File]::ReadAllText([System.IO.Path]::Combine($PSScriptRoot, 'pds_soc_top.v.in'))
@@ -136,6 +144,7 @@ try {
     $manifest['TimingConstraintsMet'] = $true
     $manifest['ResourceSummary'] = $resourceSummary
     $manifest['SourceSnapshot'] = $sourceSnapshot
+    $manifest['Placement'] = $placement
     $manifest | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath ([System.IO.Path]::Combine($buildRoot, 'manifest.json')) -Encoding utf8BOM
     $manifest | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath ([System.IO.Path]::Combine($project, 'build', 'pds-latest.json')) -Encoding utf8BOM
     Write-Output "Bitstream: $bitstream"

@@ -2,14 +2,14 @@ import unittest
 from scope_decode import checksum, decode_triggered_uart, parse_captures, waveform_svg
 
 
-def fixture():
+def fixture(clock_hz=27000000):
     records = []
     for index in range(256):
-        timestamp = 100 + 216 * index
-        bit_index = timestamp // 2813
+        timestamp = 100 + (clock_hz // 125000) * index
+        bit_index = timestamp // ((clock_hz + 4800) // 9600)
         level = 0 if bit_index == 0 else ((0x55 >> (bit_index-1)) & 1 if bit_index <= 8 else 1)
         records.append((timestamp, level * 2))
-    lines = ["SCOPE1 count=00000100 period=000000d8 clock=019bfcc0 trigger=02"]
+    lines = [f"SCOPE1 count=00000100 period={clock_hz // 125000:08x} clock={clock_hz:08x} trigger=02"]
     lines.extend(f"{timestamp:08x}:{pins:02x}" for timestamp, pins in records)
     lines.append(f"END checksum={checksum(records):08x} late=00000000")
     return "\n".join(lines)
@@ -20,6 +20,17 @@ class ScopeDecoderTests(unittest.TestCase):
         capture = parse_captures(fixture())[0]
         self.assertEqual(decode_triggered_uart(capture, 9600), 0x55)
         self.assertIn("polyline", waveform_svg(capture))
+
+    def test_current_clock_and_time_axis(self):
+        capture = parse_captures(fixture(157500000), expected_clock_hz=157500000)[0]
+        self.assertEqual(capture["period_cycles"], 1260)
+        self.assertEqual(decode_triggered_uart(capture, 9600), 0x55)
+        self.assertIn("2040.0 us", waveform_svg(capture))
+        for actual, expected in ((157500000, 27000000), (27000000, 157500000)):
+            with self.assertRaisesRegex(ValueError, "expected firmware clock"):
+                parse_captures(fixture(actual), expected_clock_hz=expected)
+        with self.assertRaises(ValueError):
+            parse_captures(fixture(157500000).replace("clock=09634260", "clock=00000000"))
 
     def test_corruption_rejected(self):
         for changed in (fixture().replace("00000064:00", "00000064:01"),

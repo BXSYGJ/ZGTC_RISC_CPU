@@ -13,7 +13,7 @@ def checksum(records):
     return value
 
 
-def parse_captures(text):
+def parse_captures(text, expected_clock_hz=None):
     captures = []
     lines = text.replace("\r\n", "\n").splitlines()
     position = 0
@@ -26,8 +26,10 @@ def parse_captures(text):
         if not header:
             raise ValueError("Malformed capture header")
         count, period, clock, trigger = [int(value, 16) for value in header.groups()]
-        if count != 256 or not 200 <= period <= 100000 or clock != 27000000 or trigger not in (1, 2):
+        if count != 256 or not 200 <= period <= 100000 or clock not in (27000000, 157500000) or trigger not in (1, 2):
             raise ValueError("Unsupported capture metadata")
+        if expected_clock_hz is not None and clock != expected_clock_hz:
+            raise ValueError("Capture clock differs from expected firmware clock")
         records = []
         for offset in range(1, count + 1):
             if position + offset >= len(lines):
@@ -120,8 +122,9 @@ def main():
     parser.add_argument("--expect-uart", type=lambda value: int(value, 16))
     parser.add_argument("--baud", default=9600, type=int)
     parser.add_argument("--verify-key", action="store_true")
+    parser.add_argument("--expected-clock", type=int, choices=(27000000, 157500000))
     args = parser.parse_args()
-    captures = parse_captures(args.uart_log.read_text(encoding="utf-8-sig"))
+    captures = parse_captures(args.uart_log.read_text(encoding="utf-8-sig"), args.expected_clock)
     if args.expect_uart is not None:
         uart_captures = [capture for capture in captures if capture["trigger_mask"] == 2]
         if not uart_captures or any(decode_triggered_uart(capture, args.baud) != args.expect_uart for capture in uart_captures):

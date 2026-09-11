@@ -1,5 +1,5 @@
 import unittest
-from pds_report import parse_reports
+from pds_report import parse_ila_reports, parse_reports
 
 
 TIMING = """| Device : PG2L200H
@@ -26,6 +26,47 @@ SCBV has not been set
 
 
 class PdsReportTests(unittest.TestCase):
+    def test_mapping_table_is_not_post_route_evidence(self):
+        mapping = "Device Utilization Summary:\n| FF | 4965 | 319600 |\n| LUT | 8907 | 159800 |\n"
+        with self.assertRaisesRegex(ValueError, "Missing post-route resource table"):
+            parse_ila_reports(TIMING, mapping, 108000000)
+        malformed = mapping.replace("Summary:", "Summary :")
+        with self.assertRaises(ValueError):
+            parse_ila_reports(TIMING, malformed, 108000000)
+
+    def test_mapping_summary_cannot_override_routed_resources(self):
+        mapping = "Device Utilization Summary:\n| FF | 4965 | 319600 |\n| LUT | 8907 | 159800 |\n"
+        implementation = LOG.split("\n", 1)[1]
+        for combined in (mapping + implementation, implementation + mapping):
+            with self.subTest(combined=combined):
+                result = parse_ila_reports(TIMING, combined, 108000000)
+                self.assertEqual(result["resources"]["post_route_luts"], 4551)
+                self.assertEqual(result["resources"]["post_route_ffs"], 3497)
+
+    def test_explicit_ila_implementation_stage(self):
+        implementation = LOG.split("\n", 1)[1]
+        result = parse_ila_reports(TIMING, implementation, 108000000)
+        self.assertIsNone(result["resources"]["synthesis_luts"])
+        self.assertEqual(result["resources"]["post_route_luts"], 4551)
+        self.assertEqual(result["resources"]["post_route_ffs"], 3497)
+        with self.assertRaises(ValueError):
+            parse_reports(TIMING, implementation, 108000000)
+        with self.assertRaisesRegex(ValueError, "another synthesis stage"):
+            parse_ila_reports(TIMING, LOG, 108000000)
+
+    def test_ila_does_not_relax_timing_or_resources(self):
+        implementation = LOG.split("\n", 1)[1]
+        for timing, log, clock in (
+                (TIMING.replace("0.821", "-0.821"), implementation, 108000000),
+                (TIMING, implementation, 120000000),
+                (TIMING, implementation.replace("|   LUT      | 1114 | 39500 |", ""), 108000000),
+                (TIMING, implementation.replace("|   FF       | 2764 | 240600 |", ""), 108000000)):
+            with self.subTest(clock=clock), self.assertRaises(ValueError):
+                parse_ila_reports(timing, log, clock)
+        failed = parse_ila_reports(TIMING.replace("All Constraints Met.", "Some Constraints Violated.").replace("0.821", "-0.821"), implementation, 108000000)
+        self.assertFalse(failed["constraints_met"])
+        self.assertEqual(failed["setup_wns_ns"], -0.821)
+
     def test_distinct_resource_stages(self):
         result = parse_reports(TIMING, LOG, 108000000)
         self.assertTrue(result["constraints_met"])

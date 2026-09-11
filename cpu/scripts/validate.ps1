@@ -176,6 +176,9 @@ try {
     if ($LASTEXITCODE) { throw 'Memory response-owner mutation tests failed.' }
     & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/python3 "$linuxProject/scripts/test_mul_request_capture.py"
     if ($LASTEXITCODE) { throw 'Multiply request-capture mutation tests failed.' }
+    $carrySaveTest = [System.IO.Path]::Combine($linuxProject, 'scripts', 'test_mul_carry_save.py').Replace([System.IO.Path]::DirectorySeparatorChar, [char]47)
+    & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/python3 $carrySaveTest
+    if ($LASTEXITCODE) { throw 'Carry-save multiply arithmetic and protocol controls failed.' }
     & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/python3 "$linuxProject/scripts/test_cache_address_bounds.py"
     if ($LASTEXITCODE) { throw 'Cache address-bound mutation tests failed.' }
     & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/python3 "$linuxProject/scripts/test_btb_address_bounds.py"
@@ -208,8 +211,90 @@ try {
     if ($LASTEXITCODE) { throw 'Compiled simulation evidence guards failed.' }
     & ([System.IO.Path]::Combine($PSScriptRoot, 'test_coremark_run_contract.ps1'))
     if ($LASTEXITCODE) { throw 'CoreMark runner contract tests failed.' }
+    & ([System.IO.Path]::Combine($PSScriptRoot, 'test_instruction_cache_contract.ps1'))
+    if ($LASTEXITCODE -ne 0) { throw 'Instruction cache parameter contract failed.' }
     & ([System.IO.Path]::Combine($PSScriptRoot, 'run_asymmetric_tests.ps1'))
     if ($LASTEXITCODE) { throw 'Asymmetric cache integration regression failed.' }
+    & ([System.IO.Path]::Combine($PSScriptRoot, 'run_gpio_tests.ps1'))
+    if ($LASTEXITCODE) { throw 'GPIO diagnostic integration failed.' }
+    & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/python3 "$linuxProject/scripts/test_gpio_diagnostic.py"
+    if ($LASTEXITCODE) { throw 'GPIO diagnostic negative controls failed.' }
+    & ([System.IO.Path]::Combine($PSScriptRoot, 'test_ila_run_contract.ps1'))
+    if ($LASTEXITCODE) { throw 'ILA target preflight tests failed.' }
+    & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/python3 "$linuxProject/scripts/test_ila_target120.py"
+    if ($LASTEXITCODE) { throw 'ILA target analysis tests failed.' }
+    & ([System.IO.Path]::Combine($PSScriptRoot, 'test_ila_run_contract.ps1')) -Profile Target132Carry
+    if ($LASTEXITCODE) { throw 'ILA132 carry preflight tests failed.' }
+    & ([System.IO.Path]::Combine($PSScriptRoot, 'test_ila_placement_contract.ps1'))
+    if ($LASTEXITCODE) { throw 'ILA placement argument tests failed.' }
+    & ([System.IO.Path]::Combine($PSScriptRoot, 'test_ila_exit_contract.ps1'))
+    if ($LASTEXITCODE) { throw 'ILA successful exit contract failed.' }
+    & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/python3 "$linuxProject/scripts/test_ila_target132_carry.py"
+    if ($LASTEXITCODE) { throw 'ILA132 carry analysis tests failed.' }
+    & ([System.IO.Path]::Combine($PSScriptRoot, 'test_ila_run_contract.ps1')) -Profile Target132Kept
+    if ($LASTEXITCODE) { throw 'ILA132 kept preflight tests failed.' }
+    $keptIlaTest = [System.IO.Path]::Combine($linuxProject, 'scripts', 'test_ila_target132_kept.py').Replace([System.IO.Path]::DirectorySeparatorChar, [char]47)
+    & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/python3 $keptIlaTest
+    if ($LASTEXITCODE) { throw 'ILA132 kept analysis tests failed.' }
+    & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/python3 "$linuxProject/scripts/test_fast_low_mul.py"
+    if ($LASTEXITCODE) { throw 'Fast low multiply handshake controls failed.' }
+    & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/python3 "$linuxProject/scripts/test_forward_data_controls.py"
+    if ($LASTEXITCODE) { throw 'Forward data qualification controls failed.' }
+    & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/python3 "$linuxProject/scripts/test_cache_lookup_data.py"
+    if ($LASTEXITCODE) { throw 'Cache lookup data controls failed.' }
+    & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/python3 "$linuxProject/scripts/test_frequency_candidate.py"
+    if ($LASTEXITCODE) { throw 'Explicit frequency candidate gates failed.' }
+    & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/python3 "$linuxProject/scripts/test_mmio_payload.py"
+    if ($LASTEXITCODE) { throw 'MMIO payload qualification controls failed.' }
+    & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/python3 "$linuxProject/scripts/test_divider_idle_clear.py"
+    if ($LASTEXITCODE) { throw 'Divider idle remainder controls failed.' }
+    & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/python3 "$linuxProject/scripts/test_divider_operand_capture.py"
+    if ($LASTEXITCODE) { throw 'Divider operand capture controls failed.' }
+    & ([System.IO.Path]::Combine($PSScriptRoot, 'test_pds_placement_contract.ps1'))
+    if ($LASTEXITCODE) { throw 'PDS placement configuration tests failed.' }
+    & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/python3 "$linuxProject/scripts/test_cache_address_fanout.py"
+    if ($LASTEXITCODE) { throw 'Native cache address fanout audit tests failed.' }
+    & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/python3 "$linuxProject/scripts/test_cache_request_capture.py"
+    if ($LASTEXITCODE) { throw 'Cache split request capture tests failed.' }
+    & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/python3 "$linuxProject/scripts/test_btb_folded_index.py"
+    if ($LASTEXITCODE) { throw 'Folded BTB index controls failed.' }
+    & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/python3 "$linuxProject/scripts/test_divider_zero_payload.py"
+    if ($LASTEXITCODE) { throw 'Divider exceptional response payload controls failed.' }
+    & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/python3 "$linuxProject/scripts/test_alu_carry_select.py"
+    if ($LASTEXITCODE) { throw 'Carry-select ALU boundary and mutation tests failed.' }
+    $onehotAluTest = [System.IO.Path]::Combine($linuxProject, 'scripts', 'test_alu_onehot_output.py').Replace([System.IO.Path]::DirectorySeparatorChar, [char]47)
+    & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/python3 $onehotAluTest
+    if ($LASTEXITCODE) { throw 'Isolated onehot ALU selection and rejected-variant controls failed.' }
+    & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/python3 "$linuxProject/scripts/test_address_carry_select.py"
+    if ($LASTEXITCODE) { throw 'Address carry-select arithmetic and alignment controls failed.' }
+    & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/python3 "$linuxProject/scripts/test_cache_ready_payload.py"
+    if ($LASTEXITCODE) { throw 'Cache ready payload equivalence and qualification controls failed.' }
+    $syncReadTest = [System.IO.Path]::Combine($linuxProject, 'scripts', 'test_cache_synchronous_read.py').Replace([System.IO.Path]::DirectorySeparatorChar, [char]47)
+    & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/python3 $syncReadTest
+    if ($LASTEXITCODE) { throw 'Synchronous read-only cache equivalence and forwarding controls failed.' }
+    foreach ($testName in @('test_branch_history.py', 'test_branch_profile_harness.py', 'test_btb_local_history.py', 'test_btb_history_width.py', 'test_cache_tag_pipeline.py', 'test_cache_synchronous_writable.py', 'test_address_partition.py', 'test_instruction_cache_capacity.py', 'test_instruction_cache_parameters.py')) {
+        $historyTest = [System.IO.Path]::Combine($linuxProject, 'scripts', $testName).Replace([System.IO.Path]::DirectorySeparatorChar, [char]47)
+        & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/python3 $historyTest
+        if ($LASTEXITCODE) { throw "Branch profile or isolated local-history BTB controls failed: $testName" }
+    }
+    $mmioPayloadTest = [System.IO.Path]::Combine($linuxProject, 'scripts', 'test_mmio_ready_payload.py').Replace([System.IO.Path]::DirectorySeparatorChar, [char]47)
+    & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/python3 $mmioPayloadTest
+    if ($LASTEXITCODE) { throw 'MMIO payload cycle-equivalence and mutation controls failed.' }
+    $fetchPcTest = [System.IO.Path]::Combine($linuxProject, 'scripts', 'test_fetch_pc_precompute.py').Replace([System.IO.Path]::DirectorySeparatorChar, [char]47)
+    & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/python3 $fetchPcTest
+    if ($LASTEXITCODE) { throw 'Fetch PC precompute boundary, priority and mutation controls failed.' }
+    $lruStorageTest = [System.IO.Path]::Combine($linuxProject, 'scripts', 'test_cache_lru_storage.py').Replace([System.IO.Path]::DirectorySeparatorChar, [char]47)
+    & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/python3 $lruStorageTest
+    if ($LASTEXITCODE) { throw 'Reset-free LRU semantics, reset and mutation controls failed.' }
+    $collisionForwardTest = [System.IO.Path]::Combine($linuxProject, 'scripts', 'test_cache_collision_forward.py').Replace([System.IO.Path]::DirectorySeparatorChar, [char]47)
+    & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/python3 $collisionForwardTest
+    if ($LASTEXITCODE) { throw 'Cache collision equivalence, forwarding/writeback coverage and mutation controls failed.' }
+    $forwardParallelTest = [System.IO.Path]::Combine($linuxProject, 'scripts', 'test_forward_parallel.py').Replace([System.IO.Path]::DirectorySeparatorChar, [char]47)
+    & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/python3 $forwardParallelTest
+    if ($LASTEXITCODE) { throw 'Parallel forwarding priority, load-format and poisoned-response controls failed.' }
+    $loadUseProfileTest = [System.IO.Path]::Combine($linuxProject, 'scripts', 'test_load_use_profile.py').Replace([System.IO.Path]::DirectorySeparatorChar, [char]47)
+    & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/python3 $loadUseProfileTest
+    if ($LASTEXITCODE) { throw 'Retirement trace parsing and dependency accounting controls failed.' }
     Write-Output 'PASS validation: units, CPU, reference, memory comparison, lint, checker mutation tests.'
 } catch {
     Write-Error $_

@@ -1,0 +1,30 @@
+{
+  "schema": 1,
+  "parent": "../full_mul_precompute/fpga/rv32_pll.sv",
+  "edits": [
+    [
+      "INPUT_DIVIDE=(CLOCK_HZ==146250000)",
+      "INPUT_DIVIDE=(CLOCK_HZ==155250000 || CLOCK_HZ==146250000)"
+    ],
+    [
+      "MULTIPLIER_DIVIDE=(CLOCK_HZ==157500000",
+      "MULTIPLIER_DIVIDE=(CLOCK_HZ==153000000 || CLOCK_HZ==155250000 || CLOCK_HZ==157500000"
+    ],
+    [
+      "FEEDBACK_DIVIDE=(CLOCK_HZ==157500000)",
+      "FEEDBACK_DIVIDE=(CLOCK_HZ==153000000) ? 34 : (CLOCK_HZ==155250000) ? 69 : (CLOCK_HZ==157500000)"
+    ],
+    [
+      "OUTPUT_DIVIDE=(CLOCK_HZ==270000000)",
+      "OUTPUT_DIVIDE=(CLOCK_HZ==154285714) ? 7 : (CLOCK_HZ==270000000)"
+    ],
+    [
+      "(CLOCK_HZ==157500000 || CLOCK_HZ==144000000",
+      "(CLOCK_HZ==153000000 || CLOCK_HZ==155250000 || CLOCK_HZ==157500000 || CLOCK_HZ==144000000"
+    ],
+    [
+      "endmodule\n",
+      "endmodule\n\n"
+    ]
+  ]
+}

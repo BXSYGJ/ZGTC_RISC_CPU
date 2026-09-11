@@ -11,7 +11,7 @@ def unique_match(pattern, text, label, flags=0):
     return matches[0]
 
 
-def parse_reports(timing, log, clock_hz):
+def _parse_reports(timing, log, clock_hz, require_synthesis):
     if clock_hz <= 0:
         raise ValueError("Clock frequency must be positive")
     for label, value in (("Device", "PG2L200H"), ("Speed Grade", "-6"), ("Package", "FBB676")):
@@ -32,7 +32,11 @@ def parse_reports(timing, log, clock_hz):
         raise ValueError("Requested MHz and period disagree")
     if summary == "All Constraints Met." and float(performance.group(5)) < 0:
         raise ValueError("Negative setup slack contradicts passing timing summary")
-    synthesis = int(unique_match(r"Total LUTs:\s+(\d+) of", log, "synthesis LUT count").group(1))
+    synthesis = None
+    if require_synthesis:
+        synthesis = int(unique_match(r"Total LUTs:\s+(\d+) of", log, "synthesis LUT count").group(1))
+    elif "Total LUTs:" in log:
+        raise ValueError("ILA implementation-only log must not include another synthesis stage")
     if "Device Utilization Summary :" not in log:
         raise ValueError("Missing post-route resource table")
     physical = log.rsplit("Device Utilization Summary :", 1)[1]
@@ -43,7 +47,7 @@ def parse_reports(timing, log, clock_hz):
     resources["synthesis_luts"] = synthesis
     resources["post_route_luts"] = resources["CLMA"]["lut"] + resources["CLMS"]["lut"]
     resources["post_route_ffs"] = resources["CLMA"]["ff"] + resources["CLMS"]["ff"]
-    if synthesis < 1 or resources["post_route_luts"] < 1 or resources["post_route_ffs"] < 1:
+    if (synthesis is not None and synthesis < 1) or resources["post_route_luts"] < 1 or resources["post_route_ffs"] < 1:
         raise ValueError("Invalid CPU resource count")
     for label in ("DRM", "GPLL"):
         match = unique_match(r"\| Use of " + label + r"\s+\|\s*([0-9.]+)\s*\|", physical, label + " resources")
@@ -62,6 +66,14 @@ def parse_reports(timing, log, clock_hz):
             "setup_wns_ns": float(performance.group(5)), "resources": resources,
             "scbv_unset_warning": "SCBV has not been set" in log,
             "lut_metric": "post-route CLMA LUT plus CLMS LUT; do not add Distributed RAM again"}
+
+
+def parse_reports(timing, log, clock_hz):
+    return _parse_reports(timing, log, clock_hz, require_synthesis=True)
+
+
+def parse_ila_reports(timing, log, clock_hz):
+    return _parse_reports(timing, log, clock_hz, require_synthesis=False)
 
 
 def main():

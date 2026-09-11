@@ -8,9 +8,10 @@ from check_trace import Reference
 class TraceCheckerTests(unittest.TestCase):
     image = b""
     lines = []
+    memory_bytes = 16384
 
     def replay(self, lines):
-        reference = Reference(self.image)
+        reference = Reference(self.image, memory_bytes=self.memory_bytes)
         for line in lines:
             event, *fields = line.split()
             if event == "R":
@@ -70,7 +71,9 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("image", type=Path)
     parser.add_argument("trace", type=Path)
+    parser.add_argument("--memory-bytes", type=int, choices=(16384, 32768), default=16384)
     args = parser.parse_args()
     TraceCheckerTests.image = args.image.read_bytes()
+    TraceCheckerTests.memory_bytes = args.memory_bytes
     TraceCheckerTests.lines = args.trace.read_text(encoding="ascii").splitlines()
     unittest.main(argv=["test_trace_checker.py"])

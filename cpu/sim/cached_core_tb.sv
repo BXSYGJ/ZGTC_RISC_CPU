@@ -12,6 +12,7 @@ module cached_core_tb;
     parameter integer DATA_OVERLAP=0;
     parameter integer EARLY_D_REQUEST=0;
     parameter integer BTB_INDEX_BITS=4;
+    localparam integer MEMORY_ADDRESS_BITS=ICACHE_SET_BITS==10 ? 13 : 12;
     reg clk=0;
     always #5 clk=~clk;
     reg rst_n=0;
@@ -47,8 +48,8 @@ module cached_core_tb;
     integer fetch_outstanding=0,overlap_count=0;
     string firmware,trace_path,memory_path;
     assign maintenance_ready=memory_maintenance_ready && !final_flush;
-    rv32_core #(.BTB_ADDRESS_BITS(14),.BTB_INDEX_BITS(BTB_INDEX_BITS),.EARLY_D_REQUEST(EARLY_D_REQUEST),.FETCH_OVERLAP(FETCH_OVERLAP),.ENABLE_PREDICTOR(PREDICTOR),.LOAD_USE_BUBBLE(LOAD_USE_BUBBLE)) core(.*);
-    rv32_memory_system #(.DATA_OVERLAP(DATA_OVERLAP),.ICACHE_SET_BITS(ICACHE_SET_BITS),.CACHE_SET_BITS(CACHE_SETS),.ENABLE_CACHE(ENABLE_CACHE),.FETCH_OVERLAP(FETCH_OVERLAP),.FAST_DCACHE_WRITE(FAST_DCACHE_WRITE),.FAST_DCACHE_READ(FAST_DCACHE_READ),.FAST_ICACHE_HIT(FAST_ICACHE_HIT)) memory_system(
+    rv32_core #(.BTB_ADDRESS_BITS(MEMORY_ADDRESS_BITS+2),.BTB_INDEX_BITS(BTB_INDEX_BITS),.EARLY_D_REQUEST(EARLY_D_REQUEST),.FETCH_OVERLAP(FETCH_OVERLAP),.ENABLE_PREDICTOR(PREDICTOR),.LOAD_USE_BUBBLE(LOAD_USE_BUBBLE)) core(.*);
+    rv32_memory_system #(.MEMORY_ADDRESS_BITS(MEMORY_ADDRESS_BITS),.DATA_OVERLAP(DATA_OVERLAP),.ICACHE_SET_BITS(ICACHE_SET_BITS),.CACHE_SET_BITS(CACHE_SETS),.ENABLE_CACHE(ENABLE_CACHE),.FETCH_OVERLAP(FETCH_OVERLAP),.FAST_DCACHE_WRITE(FAST_DCACHE_WRITE),.FAST_DCACHE_READ(FAST_DCACHE_READ),.FAST_ICACHE_HIT(FAST_ICACHE_HIT)) memory_system(
         .clk(clk),.rst_n(rst_n),
         .i_req_valid(i_req_valid),.i_req_ready(i_req_ready),.i_req_address(i_req_address),
         .i_rsp_valid(i_rsp_valid),.i_rsp_ready(i_rsp_ready),.i_rsp_data(i_rsp_data),.i_rsp_error(i_rsp_error),
@@ -73,7 +74,7 @@ module cached_core_tb;
         trace_file=$fopen(trace_path,"w");
         if(!trace_file) $fatal(1,"Cannot open trace output");
         #1; rst_n=1;
-        $readmemh(firmware,memory_system.ram.memory);
+        $readmemh(firmware,memory_system.ram.memory,0,4095);
         #1; rst_n=0;
         repeat(4) @(negedge clk); rst_n=1;
     end

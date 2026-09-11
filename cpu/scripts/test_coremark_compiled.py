@@ -26,7 +26,8 @@ class CompiledSimulationTests(unittest.TestCase):
                 with self.subTest(field=field, invalid=invalid), self.assertRaisesRegex(ValueError, "binary hardware"):
                     hardware_parameters(changed)
         for field in ("CacheSetBits", "ICacheSetBits", "BtbIndexBits"):
-            for invalid in (0, 9, True, "8"):
+            maximum = 10 if field == "ICacheSetBits" else 8
+            for invalid in (0, maximum + 1, 16, True, "8"):
                 with self.subTest(field=field, invalid=invalid), self.assertRaisesRegex(ValueError, "width hardware"):
                     hardware_parameters({**valid, field: invalid})
 

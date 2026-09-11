@@ -5,7 +5,9 @@ from pathlib import Path
 from compare_coremark import read_case
 
 
-def assess(case):
+def assess(case, *, expected_clock_hz=120000000):
+    if type(expected_clock_hz) is not int or expected_clock_hz < 120000000:
+        raise ValueError("Requested candidate frequency must be an integer at least 120 MHz")
     result = case["result"]
     iterations = result["iterations"]
     cycles = result["cycles"]
@@ -18,8 +20,9 @@ def assess(case):
     if frequency != case["manifest"]["ClockHz"] or frequency != case["report"]["clock_hz"]:
         raise ValueError("Firmware, manifest and timing report clocks must agree")
     gates = {
-        "clock_exactly_120mhz": frequency == 120000000,
+        ("clock_exactly_120mhz" if expected_clock_hz == 120000000 else f"clock_exactly_{expected_clock_hz}hz"): frequency == expected_clock_hz,
         "execution_at_least_3_coremark_per_mhz": iterations * 1000000 >= 3 * cycles,
+        "resource_at_least_0_031_coremark_per_lut": iterations * frequency * 1000 >= 31 * cycles * luts,
         "duration_at_least_ten_seconds": cycles >= 10 * frequency and result["reportable_duration"] is True,
         "performance_seeds": result["validation_run"] is False and result["seed_crc"] == "e9f5",
         "crc_valid": result["crc_valid"] is True,
@@ -30,7 +33,8 @@ def assess(case):
     return {
         "status": "numeric_target_pass" if all(gates.values()) else "target_not_met",
         "gates": gates,
-        "target": {"clock_hz": 120000000, "coremark_per_mhz": 3, "coremark": 360},
+        "target": {"clock_hz": expected_clock_hz, "coremark_per_mhz": 3, "coremark": 3 * expected_clock_hz / 1000000,
+                   "coremark_per_lut": 0.031},
         "measured": {"clock_hz": frequency, "coremark_per_mhz": efficiency,
                      "hardware_isa": "rv32im" if case["manifest"].get("EnableM", 0) else "rv32i",
                      "nonzero_apm_reported": case["report"]["resources"].get("APM"),
@@ -53,7 +57,7 @@ def assess(case):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Enforce the 120 MHz, 3.0 CoreMark/MHz numeric acceptance target")
+    parser = argparse.ArgumentParser(description="Enforce 120 MHz, 3.0 CoreMark/MHz and 0.031 CoreMark/LUT acceptance targets")
     parser.add_argument("--build", required=True, type=Path)
     parser.add_argument("--uart", required=True, type=Path)
     parser.add_argument("--json", type=Path)

@@ -9,6 +9,6 @@ set_arch -family Logos2 -device PG2L200H -speedgrade -6 -package FBB676
 compile -system_verilog -top_module pds_soc_top
 synthesize -ads -selected_syn_tool_opt 2
 dev_map
-pnr
+__PNR_COMMAND__
 report_timing
 gen_bit_stream

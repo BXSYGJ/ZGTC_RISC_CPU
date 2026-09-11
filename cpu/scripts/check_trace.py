@@ -16,8 +16,10 @@ class Trap(Exception):
 
 
 class Reference:
-    def __init__(self, image):
-        self.memory = bytearray(image) + bytearray(16384 - len(image))
+    def __init__(self, image, memory_bytes=16384):
+        if type(memory_bytes) is not int or memory_bytes not in (16384, 32768) or len(image) > memory_bytes:
+            raise ValueError("Invalid reference memory geometry or oversized image")
+        self.memory = bytearray(image) + bytearray(memory_bytes - len(image))
         self.registers = [0] * 32
         self.pc = 0
         self.csrs = {0x300: 0x1800, 0x301: 0x40000100, 0x304: 0, 0x305: 0,
@@ -224,8 +226,9 @@ def main():
     parser.add_argument("image", type=Path)
     parser.add_argument("trace", type=Path)
     parser.add_argument("--memory", type=Path, required=True)
+    parser.add_argument("--memory-bytes", type=int, choices=(16384, 32768), default=16384)
     args = parser.parse_args()
-    reference = Reference(args.image.read_bytes())
+    reference = Reference(args.image.read_bytes(), memory_bytes=args.memory_bytes)
     for line_number, line in enumerate(args.trace.read_text(encoding="ascii").splitlines(), 1):
         fields = line.split()
         try:

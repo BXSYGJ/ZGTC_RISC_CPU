@@ -2,8 +2,11 @@
 module btb_tb;
     parameter integer INDEX_BITS=2;
     parameter integer ADDRESS_BITS=32;
+    parameter integer HASH_INDEX=1;
+    parameter integer HASH_ROTATE=4;
     parameter TEST_NAME="btb";
-    localparam [31:0] ALIAS_PC=32'd1 << (INDEX_BITS+2);
+    localparam [31:0] ALIAS_PC=(32'd1 << (INDEX_BITS+2)) |
+        (HASH_INDEX!=0 ? (32'd4 << (HASH_ROTATE%INDEX_BITS)) : 32'd0);
     reg clk=0;
     always #5 clk=~clk;
     reg rst_n=0,invalidate=0,update_valid=0,update_taken=0,update_conditional=1;
@@ -11,7 +14,7 @@ module btb_tb;
     wire predicted_taken,prediction_hit;
     wire [31:0] predicted_target;
     integer checks=0;
-    rv32_btb #(.INDEX_BITS(INDEX_BITS),.ADDRESS_BITS(ADDRESS_BITS)) predictor(.*);
+    rv32_btb #(.INDEX_BITS(INDEX_BITS),.ADDRESS_BITS(ADDRESS_BITS),.HASH_INDEX(HASH_INDEX),.HASH_ROTATE(HASH_ROTATE)) predictor(.*);
     task check(input bit condition,input string label_text);
         begin
             checks=checks+1;

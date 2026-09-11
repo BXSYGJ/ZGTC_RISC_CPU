@@ -1,4 +1,4 @@
-﻿param([switch]$LinkerRelaxation, [switch]$LinkTimeOptimization, [switch]$UnrollLoops, [ValidateRange(0,1)][int]$EnableM = 0, [ValidateSet('O2','O3','Os')][string]$Optimization = 'O2', [ValidateRange(1,10000000)][int]$Iterations = 1000, [switch]$ValidationRun, [ValidateRange(0,3000000)][int]$ConsoleDelayCycles = 0, [ValidateSet(27000000,54000000,60000000,67500000,72000000,75600000,81000000,90000000,99000000,102600000,108000000,120000000,135000000,162000000,180000000,194400000,216000000,270000000)][int]$ClockHz = 27000000)
+﻿param([switch]$LinkerRelaxation, [switch]$LinkTimeOptimization, [switch]$UnrollLoops, [ValidateRange(0,1)][int]$EnableM = 0, [ValidateSet('O2','O3','Os')][string]$Optimization = 'O2', [ValidateRange(1,10000000)][int]$Iterations = 1000, [switch]$ValidationRun, [ValidateRange(0,3000000)][int]$ConsoleDelayCycles = 0, [ValidateSet(27000000,54000000,60000000,67500000,72000000,75600000,81000000,90000000,99000000,102600000,108000000,120000000,126000000,132000000,135000000,162000000,180000000,194400000,216000000,270000000)][int]$ClockHz = 27000000)
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 $ErrorActionPreference = 'Stop'
 try {
