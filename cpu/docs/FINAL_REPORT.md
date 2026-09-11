@@ -1,5 +1,9 @@
 # 紫光同创选题一：RV32I处理器设计与性能分析
 
+## Current-version report notice
+
+The sections below describe the historical September 6 implementation, not the current optimized CPU. Current full-system local results, paired artifacts, waveform analysis, application qualification and remaining acceptance limits are documented in ../experiments/full_redirect_clock151200/PERFORMANCE_REPORT.md. That version is configured at 151.2 MHz with 3.337708280819477 CoreMark/MHz, 0.053859284104579 CoreMark/LUT and 504.6614920599049 modeled CoreMark using 9370 full-system LUT. GPIO, UART and the complete 42-data / 33-trigger / 1024-sample ILA are retained. These are not new board scores; DC90363D remains the hardware baseline.
+
 版本日期：2026-09-06。本文是当前工程的汇总分析报告，不是“全部比赛验收完成”的声明。依据原赛题PDF第10–11页（印刷页8–9）；仅高阶任务3的AI加速按用户要求暂缓。工程源码与历史已测位流分别标识，不宣称当前源码重建会与历史位流逐字节相同。
 
 ## 1. 设计目标与平台

@@ -14,6 +14,8 @@
 
 在PowerShell 7调用cpu/scripts/run_coremark_compiled.ps1，显式传入-ConfigurationManifest与-FirmwareManifest；后者必须为实际.hex旁的.build.json。-MaxCycles是整个模拟过程的周期上限，包含启动、串口逐字符延迟与输出，不仅是计分区。短跑必须显式-AllowShort；默认不足10秒拒绝。路径由PowerShell原生转换后作为独立参数交给WSL Python，不使用Bash拼接命令。
 
+2026-09-07补充：6000轮、ConsoleDelayCycles=2700000固件的已完成H3性能/验证仿真总周期分别为4828688439/4830754080，而计分区仅约19亿周期。此类完整运行沿用已验证的-MaxCycles 10000000000；不要把约23亿的计分区余量误当成整个UART报告过程的预算。MMIO候选最初两次在23亿上限处未输出完报告而失败，原始记录保留，修正预算后使用相同固件/源码/参数重新独立测量，未移除串口延迟或降低成功门槛。
+
 ## 交叉验证
 
 I8 KiB/D2 KiB、256项BTB、RV32IM、O3-unroll-relax配置，用与Icarus相同的固件逐字段核对周期、退休数、CRC、配置和全部缓存统计；四项均完全一致。

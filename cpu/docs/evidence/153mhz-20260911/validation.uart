@@ -1,0 +1,19 @@
+ZGTC COREMARK START iterations=6000 validation=1
+2K validation run parameters for coremark.
+CoreMark Size    : 666
+Total ticks      : 11737
+Total time (secs): 11
+Iterations/Sec   : 545
+Iterations       : 6000
+Compiler version : GCC 10.2.0
+Compiler flags   : -march=rv32im -mabi=ilp32 -msmall-data-limit=0 -std=c11 -O3 -ffreestanding -fno-builtin -Wall -Wextra -nostdlib -nostartfiles -DITERATIONS=6000 -DVALIDATION_RUN=1 -DPERFORMANCE_RUN=0 -DTOTAL_DATA_SIZE=2000 -funroll-loops -DCONSOLE_DELAY_CYCLES=2700000 -DCPU_CLOCK_HZ=153000000u -Wl,--relax
+Memory location  : 64KiB on-chip RAM; cache mode/geometry in ZGTC config
+seedcrc          : 0x18f2
+[0]crclist       : 0xe3c1
+[0]crcmatrix     : 0x0747
+[0]crcstate      : 0x8d84
+[0]crcfinal      : 0x18e1
+Correct operation validated. See README.md for run and reporting rules.
+ZGTC cycles_hex=000000006b0b01f0 retired_hex=00000000625593a3 clock_hz=153000000
+ZGTC config=0e8e96fd ihit=1752529227 imiss=468340 dhit=412334558 dmiss=54027 writebacks=24009
+ZGTC COREMARK FINISHED
