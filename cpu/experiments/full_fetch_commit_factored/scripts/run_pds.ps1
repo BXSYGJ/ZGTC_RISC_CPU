@@ -103,12 +103,8 @@ try {
     $timingText = [System.IO.File]::ReadAllText($timingPath)
     $reportParser=[System.IO.Path]::Combine($PSScriptRoot,'pds_report.py')
     $resourceSummaryPath=[System.IO.Path]::Combine($buildRoot,'resource-summary.json')
-    $linuxPaths=@(foreach($path in @($reportParser,$timingPath,$stdout,$resourceSummaryPath)) {
-        $converted=(& wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/wslpath -a $path).Trim()
-        if($LASTEXITCODE) { throw 'PDS report path conversion failed.' }
-        $converted
-    })
-    & wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/python3 $linuxPaths[0] --timing $linuxPaths[1] --log $linuxPaths[2] --clock-hz $ClockHz --json $linuxPaths[3]
+    # Native Windows Python runs the pure-Python audit directly on the build paths (no WSL).
+    & python $reportParser --timing $timingPath --log $stdout --clock-hz $ClockHz --json $resourceSummaryPath
     if($LASTEXITCODE) { throw 'PDS timing/resource audit rejected this implementation.' }
     $resourceSummary=Get-Content -LiteralPath $resourceSummaryPath -Raw | ConvertFrom-Json
     if ($timingText -notmatch 'Design Summary\s*:\s*All Constraints Met\.') { throw 'Post-route timing constraints were not met.' }

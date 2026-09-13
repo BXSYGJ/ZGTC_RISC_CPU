@@ -49,7 +49,7 @@ BEACON = os.path.join(_HERE, "test_designs", "uart_beacon", "generate_bitstream"
 FIRMWARE = os.path.join(_PROJECT, "cpu", "build", "pds", "20260907-195930-0a2aa5d6", "generate_bitstream", "pds_soc_top.sbit")
 APP = os.path.join(_PROJECT, "cpu", "build", "app_big.bin")
 BLK = 256
-READ_TAIL = 25.0  # 发完后继续监听输出的时长（Flash 擦写 + 启动需数秒）
+READ_TAIL = 90.0  # 发完后继续监听输出的时长（CoreMark 1000 迭代需较长时间）
 
 
 def bridge(method, path, **kw):
