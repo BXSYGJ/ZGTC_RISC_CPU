@@ -98,14 +98,24 @@ pwsh -NoProfile -File cpu/experiments/full_fetch_commit_factored/scripts/run_pds
 python -m uvicorn fpga_lab_server.app:create_app --factory --host 127.0.0.1 --port 8600
 ```
 
-流程（参考 `tool/fpga_lab/ram_load.py`，CoreMark 需自定义脚本）：
+CoreMark 一键验证脚本已固化为 `tool/fpga_lab/coremark_verify.py`，直接运行：
+
+```powershell
+python tool/fpga_lab/coremark_verify.py
+```
+
+脚本自动完成：「找健康箱 → 烧 153MHz 融合位流 → R 命令流控发 CoreMark → 检测 READY 发 G 启动 → 解析 cycles/retired/clock → 计算精确分数 + 校验 CRC」。
+
+流程要点（脚本内部实现）：
 
 1. 预约健康实验箱（beacon 门，自动避开坏箱）
 2. HTTP API 烧 153MHz 位流
 3. 串口连接，bootloader 打印 `ZBOOT` / `>` 提示
 4. **R 命令流控**发 CoreMark `.bin`：`R` + 4 字节小端长度 + 数据，每 256 字节等 `K` 回执
-5. 应用载入 0x1000 后直接运行（`RUN` → CoreMark 输出）
+5. CoreMark 打印 `READY send G` 后发 `G`(0x47) 启动（注意：READY 可能在流控阶段就已到达，发 G 检查须独立于「收到新 rx」）
 6. 解析 `cycles_hex` / `retired_hex` / `clock_hz`，分数 = `iterations × clock_hz / cycles`
+
+> 通用 RAM 载入（非 CoreMark）仍用 `tool/fpga_lab/ram_load.py`。
 
 账号凭据：`D:\0000\111\001\Pango\tool\account.txt`（**勿写入脚本或提交**）。
 
