@@ -7,11 +7,12 @@
 
 ## 0. 一句话现状
 
-RV32I SoC 已在 **Pango PG2L200H (MES2L676-200HP)** 上验证跑通（27 MHz，CoreMark 通过）。
-程序可通过**板载 QSPI Flash (U9) 启动**（应用区 60KB），但当前 U9 写路径受硬件限制不可行。
-**大文件下发已通过流控方案解决**（逐块发 256B + 等 K 回执，13KB/33KB 均实测成功）。
-**当前交付路径**：HTTP 烧位流 + `R` 命令载 RAM 运行（断电丢失，但换程序快速、无需重综合）。
-**下一个人第一个要做的实验**：用 `ram_load.py` 交付大文件加载即可。
+**RV32IM SoC 已在 Pango PG2L200H (MES2L676-200HP) 上验证跑通（153 MHz，CoreMark 511 分，CRC 校验通过）。**
+已融合 DYH 高性能 CPU（`full_fetch_commit_factored`，RV32IM/153MHz/16KB I-Cache/分支预测）与 XSY 串口烧录（简化 bootloader 固化前 4KB，`R` 命令流控载应用）。
+**当前推荐交付**：`tool/fpga_lab/coremark_verify.py` 一键烧录验证（找箱 → 烧 153MHz 位流 → R 命令载 CoreMark → 算分）。
+**换其他程序**：`tool/fpga_lab/ram_load.py` 载 RAM 运行（断电丢失，换程序快速、无需重综合）。
+
+> 注：2026-09-12 完成最终功能融合，本快照此前的 27 MHz RV32I 描述为历史基线；当前主交付目标是 153 MHz / RV32IM / 511 分。
 
 ---
 
@@ -269,3 +270,67 @@ DYH 分支提交 `ddab723` 删除了 44 个 `cpu/docs/` 文档文件（含 153 M
 3. DYH 自身的 153 MHz 验证证据也在删除范围内，恢复后可供后续核查。
 
 恢复后 `cpu/docs/` 共 46 个文件，与基线 `efdbae2` 一致。完整合并记录见 `docs/MERGE_LOG.md`。
+
+> 补充：后续（提交 `3f10dfd`）又恢复 DYH 分支 85328e4 新增的 93 个优化文档，`cpu/docs/` 现共 **175 个 .md 文档**。
+
+---
+
+## 12. 511 分功能融合成果（2026-09-12）
+
+本节记录**真正的功能融合**（非 git merge）：DYH 高性能 CPU 与 XSY 串口烧录合而为一。完整验证见 `docs/COREMARK_TEST_REPORT.md`，无 WSL 运行方式见 `docs/NO_WSL_TOOLCHAIN.md`。
+
+### 12.1 融合架构
+
+```
+511 分高性能 CPU（DYH full_fetch_commit_factored：RV32IM/153MHz/16KB I-Cache/分支预测/全加速开关）
+  + 简化 bootloader（XSY，去掉 SPI Flash，只保留 R 命令，固化 BRAM 前 4KB）
+  + 应用 R 命令流控载入 0x1000 运行
+```
+
+- **关键取舍**：用户已放弃 Flash 持久化，故去掉 SPI Flash，保留 R 命令串口烧录，从而既跑 511 分又支持串口烧录。
+- **复位/地址**：CPU 复位 PC=0，BRAM 基址 0，bootloader 链 ORIGIN=0（前 4KB），应用链 ORIGIN=0x1000（60KB）。
+
+### 12.2 153MHz 融合位流
+
+| 项 | 值 |
+|----|----|
+| 位流路径 | `cpu/experiments/full_fetch_commit_factored/build/pds/20260912-214944-e6a316a5/generate_bitstream/pds_soc_top.sbit` |
+| SHA256 | `6870A02B989CCFBD55FBF643964FA9A4D22BA3B45C31F92DBF16950F71F07419` |
+| 时序 | All Constraints Met，WNS +0.018ns（估算 153.44MHz） |
+| 布局种子 | seed=1（默认 seed 时序 WNS -0.008ns 临界违例，换 seed 收敛） |
+| 资源 | LUT 9075，FF 4321，DRM 21，GPLL 1，APM 4 |
+| 时钟源 | GTP_GPLL（27MHz × 34/6 = 153MHz） |
+| RTL 配置 | ENABLE_M=1、ICACHE_SET_BITS=9（16KB）、CACHE_SET_BITS=6、BTB_INDEX_BITS=8、全加速=1 |
+
+### 12.3 CoreMark 验证结果
+
+| 项 | 值 |
+|----|----|
+| **CoreMark 分数** | **511.355 Iterations/Sec**（精确公式 `6000 × 153000000 / cycles`） |
+| CoreMark/MHz | 3.342（旧 RV32I 主目录仅 0.366，提升 9.1 倍） |
+| cycles_hex | `0x6b010a86`（1,795,230,342 周期） |
+| retired_hex | `0x6461c936`（1,684,130,102 指令） |
+| 校验 | Correct operation validated（CRC 通过） |
+| 迭代 | 6000，运行 11.733 秒 |
+
+### 12.4 固件/应用编译（无 WSL）
+
+| 组件 | 配置 | 产物 |
+|------|------|------|
+| bootloader | rv32i_zifencei，简化（去 SPI），668B（<4KB） | `cpu/build/bootloader.hex`（64KB 固化镜像） |
+| CoreMark 应用 | rv32im_zicsr_zifencei、O3、unroll、relax、6000 迭代、153MHz | `cpu/build/coremark_app_i6000_rv32im.bin`（28184B） |
+
+工具链：Windows xPack GCC 15.2.0（`H:\ST\RV32I`），**无 WSL / Icarus**。编译用 `@响应文件` 规避 pwsh 对 `-Wl,--relax` 与字符串宏的引号问题。
+
+### 12.5 一键验证脚本
+
+- `tool/fpga_lab/coremark_verify.py` — 一键完成：找健康箱 → 烧 153MHz 位流 → R 命令流控发 CoreMark → 检测 READY 发 G 启动 → 解析 cycles/retired/clock → 算分 + 校验 CRC。
+
+### 12.6 完整提交链
+
+| 提交 | 内容 |
+|------|------|
+| `8e92e9e` | XSY×DYH 分支合并 |
+| `3f10dfd` | 恢复 DYH 93 个性能优化文档 |
+| `16abc74` | 融合 511 分 CPU + 串口烧录 + 去 WSL |
+| `4525e27` | 固化 CoreMark 511 分一键验证脚本 |
