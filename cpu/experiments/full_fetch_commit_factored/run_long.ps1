@@ -10,12 +10,12 @@ try {
     & python ([IO.Path]::Combine($PSScriptRoot, 'audit_fetch_shorts.py'))
     if ($LASTEXITCODE -ne 0) { throw 'Source, firmware or short prerequisites failed.' }
     $linuxRoot = '/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu/experiments/full_fetch_commit_factored'
-    $parentRoot = '/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu/experiments/full_timer_clock153000'
+    $firmwareRoot = [IO.Path]::Combine($linuxRoot, 'firmware').Replace([IO.Path]::DirectorySeparatorChar, '/')
     $runner = [IO.Path]::Combine($linuxRoot, 'scripts', 'run_coremark_compiled.py').Replace([IO.Path]::DirectorySeparatorChar, '/')
     $configuration = [IO.Path]::Combine($linuxRoot, 'configuration.json').Replace([IO.Path]::DirectorySeparatorChar, '/')
     foreach ($validation in $ValidationRuns) {
         $name = 'coremark_v' + $validation + '_i6000_p2700000_f153000000_rv32gcc_rv32im_O3_unroll_relax.build.json'
-        $firmware = [IO.Path]::Combine($parentRoot, 'build', $name).Replace([IO.Path]::DirectorySeparatorChar, '/')
+        $firmware = [IO.Path]::Combine($firmwareRoot, $name).Replace([IO.Path]::DirectorySeparatorChar, '/')
         $log = [IO.Path]::Combine($PSScriptRoot, 'build', ('long-v' + $validation + '-complete.log'))
         if (Test-Path -LiteralPath $log) { throw 'Completion attempt already exists; inspect its exact handle and evidence.' }
         & wsl.exe --exec python3 $runner --configuration $configuration --firmware-manifest $firmware --max-cycles 6000000000 2>&1 | Tee-Object -FilePath $log

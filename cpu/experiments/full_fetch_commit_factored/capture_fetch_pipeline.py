@@ -46,7 +46,7 @@ def main():
     shutil.copytree(SHORT / 'source', source)
     shutil.copyfile(SHORT / 'firmware.hex', OUTPUT / 'firmware.hex')
     prefix = manifest['FirmwareBuild']['Toolchain']['Prefix']
-    elf = ROOT.parent / 'full_timer_clock153000/build/coremark_v0_i10_f153000000_rv32gcc_rv32im_O3_unroll_relax.elf'
+    elf = ROOT / 'firmware/coremark_v0_i10_f153000000_rv32gcc_rv32im_O3_unroll_relax.elf'
     run([prefix + 'objcopy', '-O', 'binary', elf, OUTPUT / 'firmware.bin'], OUTPUT / 'objcopy.log')
     binary = (OUTPUT / 'firmware.bin').read_bytes()
     require(len(binary) <= 65536, 'ELF image exceeds memory')

@@ -9,7 +9,7 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Fetch functional or core prerequisite failed.' }
     & python ([IO.Path]::Combine($PSScriptRoot, 'audit_fetch_shorts.py'))
     if ($LASTEXITCODE -ne 0) { throw 'Clock source, firmware or short-run prerequisite failed.' }
-    $firmware = [IO.Path]::Combine([IO.Directory]::GetParent($PSScriptRoot).FullName, 'full_timer_clock153000', 'build', 'coremark_v0_i6000_p2700000_f153000000_rv32gcc_rv32im_O3_unroll_relax.hex')
+    $firmware = [IO.Path]::Combine($PSScriptRoot, 'firmware', 'coremark_v0_i6000_p2700000_f153000000_rv32gcc_rv32im_O3_unroll_relax.hex')
     if ((Get-FileHash -LiteralPath $firmware -Algorithm SHA256).Hash -ne '6DAAE1B97ED63CBD65BFF5A8F6BD15FC4E67378BA3316D790911EF5CF5D545CD') { throw 'Physical firmware changed.' }
     $configuration = Get-Content -LiteralPath ([IO.Path]::Combine($PSScriptRoot, 'configuration.json')) -Raw -Encoding utf8 | ConvertFrom-Json
     $parameters = @{ FirmwareHex = $firmware; UartProfile = 'RemoteLab'; UartBaud = 115200; PlacementSeed = $PlacementSeed }

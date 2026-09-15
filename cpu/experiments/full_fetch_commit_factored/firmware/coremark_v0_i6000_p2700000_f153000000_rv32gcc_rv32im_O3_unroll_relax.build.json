@@ -1,0 +1,42 @@
+{
+  "UpstreamRevision": "1f483d5b8316753a742cbf5590caf5bd0a4e4777",
+  "Iterations": 6000,
+  "ValidationRun": false,
+  "Flags": [
+    "-march=rv32im",
+    "-mabi=ilp32",
+    "-msmall-data-limit=0",
+    "-std=c11",
+    "-O3",
+    "-ffreestanding",
+    "-fno-builtin",
+    "-Wall",
+    "-Wextra",
+    "-nostdlib",
+    "-nostartfiles",
+    "-DITERATIONS=6000",
+    "-DVALIDATION_RUN=0",
+    "-DPERFORMANCE_RUN=1",
+    "-DTOTAL_DATA_SIZE=2000",
+    "-funroll-loops",
+    "-DCONSOLE_DELAY_CYCLES=2700000",
+    "-DCPU_CLOCK_HZ=153000000u"
+  ],
+  "ExtraLinkFlags": "-Wl,--relax",
+  "ClockHz": 153000000,
+  "Hex": "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu/experiments/full_timer_clock153000/build/coremark_v0_i6000_p2700000_f153000000_rv32gcc_rv32im_O3_unroll_relax.hex",
+  "RunName": "coremark_v0_i6000_p2700000_f153000000_rv32gcc_rv32im_O3_unroll_relax",
+  "HexSha256": "6DAAE1B97ED63CBD65BFF5A8F6BD15FC4E67378BA3316D790911EF5CF5D545CD",
+  "Toolchain": {
+    "Target": "riscv32-unknown-elf",
+    "Version": "10.2.0",
+    "Prefix": "/home/bx/.local/zgtc-riscv32-10.2.0/bin/riscv32-unknown-elf-"
+  },
+  "Optimization": "O3",
+  "UnrollLoops": true,
+  "LinkTimeOptimization": false,
+  "LinkerRelaxation": true,
+  "ConsoleDelayCycles": 2700000,
+  "Isa": "rv32im",
+  "EnableM": 1
+}

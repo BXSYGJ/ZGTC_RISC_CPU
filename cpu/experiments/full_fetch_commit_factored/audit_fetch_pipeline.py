@@ -49,7 +49,7 @@ def main():
     require((OUTPUT / 'source/rtl/rv32_soc.sv').read_text() == expected_soc.replace('endmodule', assignment + 'endmodule'), 'Observation changed SoC logic')
     require(inputs['compile_command'] == [argument.replace(portable(SHORT), portable(OUTPUT)) for argument in manifest['CompileCommand']], 'Actual build parameters changed')
     require(inputs['firmware_sha256'] == file_hash(OUTPUT / 'firmware.hex') == manifest['FirmwareSha256'], 'Diagnostic firmware changed')
-    elf = ROOT.parent / 'full_timer_clock153000/build/coremark_v0_i10_f153000000_rv32gcc_rv32im_O3_unroll_relax.elf'
+    elf = ROOT / 'firmware/coremark_v0_i10_f153000000_rv32gcc_rv32im_O3_unroll_relax.elf'
     require(file_hash(elf) == inputs['elf_sha256'], 'Algorithm ELF changed')
     symbols_path = OUTPUT / 'symbols.txt'
     require(file_hash(symbols_path) == inputs['symbols_sha256'], 'ELF-bound symbols changed')
