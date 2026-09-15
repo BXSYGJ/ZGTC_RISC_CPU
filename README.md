@@ -13,7 +13,7 @@ The repository contains the complete `cpu/experiments/full_fetch_commit_factored
 
 The release was validated with local ILA captures and remote FPGA hardware V0/V1 bring-up. Remote ILA acquisition is not required by the accepted workflow. Electrical and long-term stability caveats remain documented.
 
-Read the [human handover](cpu/docs/PROJECT_HANDOVER_153MHZ.md), [AI handover](cpu/docs/AI_HANDOFF_153MHZ.md), and [acceptance record](cpu/docs/ACCEPTANCE.md). The [evolution record](cpu/docs/EVOLUTION_120MHZ_TO_FINAL.md) is retained as project history.
+Read the [final experiment README](cpu/experiments/full_fetch_commit_factored/README.md) for the implementation and acceptance context.
 
 Run the portable archive check from the repository root with:
 

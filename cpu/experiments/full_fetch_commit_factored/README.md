@@ -4,7 +4,7 @@
 
 This experiment is now the provisionally accepted complete version: **153 MHz, 511.317879224 hardware CoreMark, 3.341946923 CoreMark/MHz, 0.053811605896 CoreMark/LUT**, 9502 LUT / 5079 FF and +0.021 ns setup WNS. Both 6000-iteration hardware seeds exactly match their local timed cycles, retired counts, CRCs and cache profiles. All three 1024-sample local ILA windows and four capture tests pass. The user explicitly accepts local ILA checking; no remote ILA acquisition is required or claimed.
 
-The full scope image passes hardware EMPTY/ARMED/real-time TIMEOUT smoke checks; complete waveform/checksum tests remain local evidence. The device is released. Further optimization is paused. Hardware qualification is `../../build/hardware/fetch-commit153000-20260911-box1/hardware-qualification.json`. Read `../../docs/PROJECT_HANDOVER_153MHZ.md` and `../../docs/AI_HANDOFF_153MHZ.md`. SCBV, electrical and long-term stability caveats remain explicit. The older local receipts are intentionally unchanged. All older running-state entries below are historical.
+The full scope image passes hardware EMPTY/ARMED/real-time TIMEOUT smoke checks; complete waveform/checksum tests remain local evidence. The device is released. Further optimization is paused. The source-bound configuration is recorded in `configuration.json` and `change-receipt.json`. SCBV, electrical and long-term stability caveats remain explicit. The older local receipts are intentionally unchanged. All older running-state entries below are historical.
 
 
 ## September 11: own long pair and complete application locally qualified
