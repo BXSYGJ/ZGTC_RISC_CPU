@@ -20,6 +20,6 @@ All three pass checks of UART rx_meta -> rx_sync, GPIO gpio_meta[0] -> gpio_sync
 
 This check examines the synthesized input to ILA implementation, not post-route synchronizer placement, whole-design CDC, metastability MTBF or complete reset recovery/removal safety. The broader raw-input consumer/hierarchy audit from the older 151.2 MHz version is not silently inherited by this candidate.
 
-The actual PDS results still report unset SCBV. Board revision, configuration mode, VCCIOCFG, VCCIOL4/VCCIOL5 and the physical SCBV connection must be established from the applicable board evidence before electrical signoff. See ../../docs/CONFIGURATION_ASSURANCE.md for the existing requirement boundary. No voltage, strap or timing exception is guessed.
+The actual PDS results still report unset SCBV. Board revision, configuration mode, VCCIOCFG, VCCIOL4/VCCIOL5 and the physical SCBV connection must be established from the applicable board evidence before electrical signoff. No voltage, strap or timing exception is guessed.
 
 The source-bound scope runtime and full-ILA application qualification pass in build/local-application-qualification.json; the bounded timeout test uses explicit 64-bit counter jumps, not thirty continuously simulated seconds. No new board validation is claimed. The user's remote-board gate and the accepted DC90363D board baseline remain unchanged.

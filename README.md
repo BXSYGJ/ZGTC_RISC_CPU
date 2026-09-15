@@ -15,10 +15,4 @@ The release was validated with local ILA captures and remote FPGA hardware V0/V1
 
 Read the [final experiment README](cpu/experiments/full_fetch_commit_factored/README.md) for the implementation and acceptance context.
 
-Run the portable archive check from the repository root with:
-
-```text
-python cpu/scripts/verify_153mhz_handoff.py
-```
-
 All older processor experiments, temporary board projects, and unrelated development artifacts have been removed from the release tree.
