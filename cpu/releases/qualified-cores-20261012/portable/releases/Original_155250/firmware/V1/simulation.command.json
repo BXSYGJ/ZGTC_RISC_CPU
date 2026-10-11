@@ -1,0 +1,21 @@
+{
+  "argv": [
+    "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\ccfa-workfiles\\reviewer3-current-report\\experiments\\r15525\\simulation\\simulator\\objects\\Vrv32_observed_soc",
+    "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\ccfa-workfiles\\reviewer3-current-report\\experiments\\r15525\\simulation\\firmware\\V1\\uart.log",
+    "2400000000"
+  ],
+  "actual_argv": [
+    "wsl",
+    "--cd",
+    "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/ccfa-workfiles/reviewer3-current-report/experiments/r15525/simulation/firmware/V1",
+    "--exec",
+    "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/ccfa-workfiles/reviewer3-current-report/experiments/r15525/simulation/simulator/objects/Vrv32_observed_soc",
+    "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/ccfa-workfiles/reviewer3-current-report/experiments/r15525/simulation/firmware/V1/uart.log",
+    "2400000000"
+  ],
+  "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\ccfa-workfiles\\reviewer3-current-report\\experiments\\r15525\\simulation\\firmware\\V1",
+  "started_utc": "2026-10-08T14:39:49.408991+00:00",
+  "shell": false,
+  "returncode": 0,
+  "finished_utc": "2026-10-08T14:57:38.999625+00:00"
+}

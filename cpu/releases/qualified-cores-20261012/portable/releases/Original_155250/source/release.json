@@ -1,0 +1,190 @@
+{
+  "schema": 1,
+  "status": "board_and_rtl_verified",
+  "qualified_date_local": "2026-10-01",
+  "timezone": "Asia/Shanghai",
+  "path_base": "cpu_paper",
+  "variant": "variants/rvc-153-valid-ram-v1/rv32imc_153",
+  "device": "PG2L200H-6FBB676",
+  "isa": "RV32IMC",
+  "configured_clock_hz": 153000000,
+  "measured_clock_hz": null,
+  "instrumentation_profile": "none",
+  "functional_system": [
+    "UART",
+    "GPIO",
+    "machine traps and interrupts",
+    "cycle and retirement counters",
+    "instruction and data caches",
+    "integer multiply and divide"
+  ],
+  "implementation": {
+    "tool": "Native Windows PDS 2022.2-SP6.4",
+    "profile": "packing3_compact0",
+    "placement_seed": 2,
+    "setup_uncertainty_ns": 0.15,
+    "constraints": "Accepted internal clock constraints unchanged"
+  },
+  "selected_uart_baud": 9600,
+  "working_wrapper_default_uart_baud": 115200,
+  "performance": {
+    "benchmark": "CoreMark",
+    "iterations": 6000,
+    "total_data_size": 2000,
+    "compiler": "GCC 10.2.0",
+    "CoreMark": 514.9580680611878,
+    "CoreMark_per_MHz": 3.365739006935868,
+    "CoreMark_per_LUT": 0.07755392591282949,
+    "V0_cycles": 1782669419,
+    "V0_retired": 1649428429,
+    "V1_cycles": 1784414808,
+    "V1_retired": 1649775527,
+    "score_gain_percent": 0.6323706953095032,
+    "resource_efficiency_gain_percent": 3.830176450838163
+  },
+  "baseline": {
+    "variant": "variants/accepted-153-valid-ram-v31-r1/accepted_valid_ram",
+    "CoreMark": 511.72208753817034,
+    "post_route_luts": 6851,
+    "CoreMark_per_LUT": 0.07469305029020148
+  },
+  "images": [
+    {
+      "configuration": "V0",
+      "uart_baud": 9600,
+      "hardware_validated": true,
+      "physical_run": "results/rvc-physical-20260930T154321Z-f13639d6",
+      "bitstream": "results/rvc-physical-20260930T154321Z-f13639d6/implementation/generate_bitstream/pds_soc_top.sbit",
+      "bitstream_sha256": "75c30c266cad7fa32dfdb7b6067efc28a0ae49d7f5890edfa451accf3f3854c3",
+      "firmware_sha256": "5f17d307987705185f2747a9204faa26b1aba1fefe4cc8e5d263762256ff97b7",
+      "firmware": "results/rvc-coremark-20260930T153155Z-ec52846a/firmware/V0/firmware.hex",
+      "setup_wns_ns": 0.09,
+      "minimum_hold_slack_ns": 0.1,
+      "post_route_luts": 6640,
+      "post_route_ffs": 3015,
+      "DRM": 21,
+      "APM": 4
+    },
+    {
+      "configuration": "V1",
+      "uart_baud": 9600,
+      "hardware_validated": true,
+      "physical_run": "results/rvc-physical-20260930T155103Z-954b3c4f",
+      "bitstream": "results/rvc-physical-20260930T155103Z-954b3c4f/implementation/generate_bitstream/pds_soc_top.sbit",
+      "bitstream_sha256": "055df8b582617e8876dae3f471bd043f98ade18c815b9f7d1929675b0ca1b202",
+      "firmware_sha256": "8fdacd539ea494c561b9cc1f8fbe87d74d6292c1416071dcbbe2af06cd128194",
+      "firmware": "results/rvc-coremark-20260930T153155Z-eb6ed028/firmware/V1/firmware.hex",
+      "setup_wns_ns": 0.09,
+      "minimum_hold_slack_ns": 0.1,
+      "post_route_luts": 6640,
+      "post_route_ffs": 3015,
+      "DRM": 21,
+      "APM": 4
+    },
+    {
+      "configuration": "V0",
+      "uart_baud": 115200,
+      "hardware_validated": false,
+      "physical_run": "results/rvc-physical-20260930T152846Z-610b3076",
+      "bitstream": "results/rvc-physical-20260930T152846Z-610b3076/implementation/generate_bitstream/pds_soc_top.sbit",
+      "bitstream_sha256": "f2495cf8a55cd37cf3873af312d101116fc430f038ebae2d6de986961155bdd9",
+      "firmware_sha256": "5f17d307987705185f2747a9204faa26b1aba1fefe4cc8e5d263762256ff97b7",
+      "firmware": "results/rvc-coremark-20260930T153155Z-ec52846a/firmware/V0/firmware.hex",
+      "setup_wns_ns": 0.158,
+      "minimum_hold_slack_ns": 0.1,
+      "post_route_luts": 6638,
+      "post_route_ffs": 3007,
+      "DRM": 21,
+      "APM": 4
+    },
+    {
+      "configuration": "V1",
+      "uart_baud": 115200,
+      "hardware_validated": false,
+      "physical_run": "results/rvc-physical-20260930T153432Z-c09535cd",
+      "bitstream": "results/rvc-physical-20260930T153432Z-c09535cd/implementation/generate_bitstream/pds_soc_top.sbit",
+      "bitstream_sha256": "e4545303223c6518d462a7a3e34f0a5d8c0c2d77ce685556ad3bd70b56ead148",
+      "firmware_sha256": "8fdacd539ea494c561b9cc1f8fbe87d74d6292c1416071dcbbe2af06cd128194",
+      "firmware": "results/rvc-coremark-20260930T153155Z-eb6ed028/firmware/V1/firmware.hex",
+      "setup_wns_ns": 0.158,
+      "minimum_hold_slack_ns": 0.1,
+      "post_route_luts": 6638,
+      "post_route_ffs": 3007,
+      "DRM": 21,
+      "APM": 4
+    }
+  ],
+  "hardware_capture": {
+    "V0": {
+      "run": "results/rvc-board-20260930T160047Z-100525f0",
+      "cold_programmed_repetitions": 3,
+      "read_length": 512,
+      "poll_delay_ms": 100
+    },
+    "V1": {
+      "run": "results/rvc-board-20260930T160619Z-4d26cac3",
+      "cold_programmed_repetitions": 3,
+      "read_length": 512,
+      "poll_delay_ms": 200
+    },
+    "full_frames_match_RTL_byte_for_byte": true,
+    "reservations_released": true
+  },
+  "evidence": [
+    {
+      "path": "results/rvc-assessment-20260930T160940Z-b1cec92d.json",
+      "sha256": "00024b87728b7bb11f8ca930735448149d69cc5e465b4b2ec5d56fb0b58cf164"
+    },
+    {
+      "path": "results/rvc-regression-audit-20260930T155220Z-473c400a.json",
+      "sha256": "077685d43d655cc72239570ee64a49ecfe24e90592cafc73d5e45472c3291880"
+    },
+    {
+      "path": "results/rvc-assessment-20260930T155912Z-6fb98aed.json",
+      "sha256": "a51a3c8a3d887adcf0c7540fe0448d3ce747dc9d7467d6ba58b521e4f61f7119"
+    },
+    {
+      "path": "results/rvc-physical-20260930T154321Z-f13639d6/manifest.json",
+      "sha256": "75b60b8ac6d32c550288377fa49512954fd455a502e56a72266c0d8b6679d30a"
+    },
+    {
+      "path": "results/rvc-physical-20260930T155103Z-954b3c4f/manifest.json",
+      "sha256": "b14deb0c5093aa6efcbb1dc33c20146b26d52e0ee68208afa6a720d2ac0a4187"
+    },
+    {
+      "path": "results/rvc-physical-20260930T152846Z-610b3076/manifest.json",
+      "sha256": "92adb81f23cd5804128bb3a5c48404d4a4542db82aca06fd8e31eb0ed167026b"
+    },
+    {
+      "path": "results/rvc-physical-20260930T153432Z-c09535cd/manifest.json",
+      "sha256": "6b248fe713617600e70dff80e7fde5fcbdbbd14f486b4ec18978c9afb3b883e6"
+    },
+    {
+      "path": "results/rvc-coremark-20260930T153155Z-ec52846a/manifest.json",
+      "sha256": "b6b76874dbf68a178f290c6243da88b4ad7ed66992744cf0762ab4e8938713b9"
+    },
+    {
+      "path": "results/rvc-coremark-20260930T153155Z-eb6ed028/manifest.json",
+      "sha256": "322c362f2948ee4d96a7fd024d3e2401ac48743b2c091311f719defda5ff84d5"
+    },
+    {
+      "path": "results/rvc-board-20260930T160047Z-100525f0/manifest.json",
+      "sha256": "c6d4c15d8539e8b2c462f414e32407a7d73766f1f66879daeb1aa110fd2a4b3b"
+    },
+    {
+      "path": "results/rvc-board-20260930T160619Z-4d26cac3/manifest.json",
+      "sha256": "1340ffcb34c9512ef1d070899cbe919229d6935f87868fcbef98b60af0d4125d"
+    }
+  ],
+  "interpretation": [
+    "The complete new implementation improves throughput and CoreMark/LUT over the accepted historical reference.",
+    "Historical reference firmware uses a relocated loader image; this compressed standalone firmware links at zero. Predictor history and supporting control structures also differ.",
+    "Short same-layout RV32IM/RV32IMC controls do not establish a C-only speedup. Do not attribute the overall gain exclusively to compression.",
+    "153 MHz is the configured and timing-qualified clock, not an independently measured maximum frequency.",
+    "The 115200-baud images pass local timing and benchmark gates. Complete accepted hardware evidence uses the separately implemented 9600-baud images.",
+    "The immutable per-capture manifests retain their pending-crosscheck status; the final assessment records the completed crosscheck.",
+    "Failed transport captures remain preserved and excluded. No corrupted frame is repaired or accepted.",
+    "No power or energy efficiency measurement is included."
+  ],
+  "qualification_document": "variants/rvc-153-valid-ram-v1/rv32imc_153/QUALIFICATION.md"
+}

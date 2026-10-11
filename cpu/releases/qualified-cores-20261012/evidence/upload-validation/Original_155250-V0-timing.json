@@ -1,0 +1,57 @@
+﻿{
+  "Checks": {
+    "Setup_Slow": {
+      "MinimumSlackNs": 0.005,
+      "ClockRows": 1,
+      "FailingEndpoints": 0.0
+    },
+    "Hold_Slow": {
+      "MinimumSlackNs": 0.149,
+      "ClockRows": 1,
+      "FailingEndpoints": 0.0
+    },
+    "Recovery_Slow": {
+      "MinimumSlackNs": 2.47,
+      "ClockRows": 1,
+      "FailingEndpoints": 0.0
+    },
+    "Removal_Slow": {
+      "MinimumSlackNs": 0.367,
+      "ClockRows": 1,
+      "FailingEndpoints": 0.0
+    },
+    "Minimum Pulse Width_Slow": {
+      "MinimumSlackNs": 1.875,
+      "ClockRows": 1,
+      "FailingEndpoints": 0.0
+    },
+    "Setup_Fast": {
+      "MinimumSlackNs": 2.465,
+      "ClockRows": 1,
+      "FailingEndpoints": 0.0
+    },
+    "Hold_Fast": {
+      "MinimumSlackNs": 0.101,
+      "ClockRows": 1,
+      "FailingEndpoints": 0.0
+    },
+    "Recovery_Fast": {
+      "MinimumSlackNs": 3.954,
+      "ClockRows": 1,
+      "FailingEndpoints": 0.0
+    },
+    "Removal_Fast": {
+      "MinimumSlackNs": 0.248,
+      "ClockRows": 1,
+      "FailingEndpoints": 0.0
+    },
+    "Minimum Pulse Width_Fast": {
+      "MinimumSlackNs": 2.422,
+      "ClockRows": 1,
+      "FailingEndpoints": 0.0
+    }
+  },
+  "Scope": "All reported internal/generated clocks; external GPIO/UART timing is not specified",
+  "Passed": true,
+  "ReportSHA256": "36CA9D4C8F957406D0CA21F24F08988C6A86FC0D875E8ADB1843859A3EFA07C9"
+}

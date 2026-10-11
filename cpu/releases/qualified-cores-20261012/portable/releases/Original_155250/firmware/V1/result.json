@@ -1,0 +1,73 @@
+{
+  "configuration": "V1",
+  "result": {
+    "validation_run": true,
+    "iterations": 6000,
+    "cycles": 1784414808,
+    "retired": 1649775527,
+    "clock_hz": 155250000,
+    "seconds": 11.493815188405797,
+    "seed_crc": "18f2",
+    "final_crc": "18e1",
+    "crc_valid": true,
+    "reportable_duration": true,
+    "profile": {
+      "i_hits": 1008470382,
+      "i_misses": 512,
+      "d_hits": 412010560,
+      "d_misses": 378023,
+      "writebacks": 210025,
+      "dcache_set_bits": 6,
+      "icache_set_bits": 9,
+      "configuration_hex": "1e8e96fd",
+      "cache_enabled": true,
+      "predictor_enabled": true,
+      "load_use_bubble": true,
+      "fast_icache_hit": true,
+      "m_extension": true,
+      "fetch_overlap": true,
+      "fast_dcache_read": true,
+      "early_d_request": true,
+      "btb_index_bits": 8,
+      "data_overlap": true,
+      "fast_dcache_write": true,
+      "interval_includes_counter_read_overhead": true
+    },
+    "iterations_per_second": 522.0198777906577,
+    "iterations_per_second_per_mhz": 3.3624468778786327
+  },
+  "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\ccfa-workfiles\\reviewer3-current-report\\experiments\\r15525\\simulation\\firmware\\V1",
+  "firmware_sha256": "e06f6b8d61f8c048c9a08f42e40cb6768424e4855a111375228ffe6811ff7640",
+  "uart_sha256": "44b884dbc9e314b95bf48fe12acc4e3f3b29ee88a9e9b091ca43805015dd041c",
+  "simulation_sha256": "4930959a11d5f4be54bcd0efe8b6eba78d5f2cbc101512b9b7c6627f2d65b60c",
+  "raw_simulator_observer_matches": true,
+  "independent_observer": {
+    "cycles": 1784414808,
+    "retired": 1649775527,
+    "minimum_sp": 65152
+  },
+  "firmware": {
+    "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\ccfa-workfiles\\reviewer3-current-report\\experiments\\r15525\\simulation\\firmware\\V1\\firmware.hex",
+    "sha256": "e06f6b8d61f8c048c9a08f42e40cb6768424e4855a111375228ffe6811ff7640"
+  },
+  "ELF": {
+    "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\ccfa-workfiles\\reviewer3-current-report\\experiments\\r15525\\simulation\\firmware\\V1\\firmware.elf",
+    "sha256": "fc88fdc4cedfa8f70bae04ba6a148e311548436a1fee24bbe8241e5f39190d1e"
+  },
+  "build_manifest": {
+    "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\ccfa-workfiles\\reviewer3-current-report\\experiments\\r15525\\simulation\\firmware\\V1\\build-manifest.json",
+    "sha256": "cee25a27e21c13527b7b4d541e72379a5afb07df0e21904532f48f897ef4ff3c"
+  },
+  "uart": {
+    "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\ccfa-workfiles\\reviewer3-current-report\\experiments\\r15525\\simulation\\firmware\\V1\\uart.log",
+    "sha256": "44b884dbc9e314b95bf48fe12acc4e3f3b29ee88a9e9b091ca43805015dd041c"
+  },
+  "simulation_log": {
+    "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\ccfa-workfiles\\reviewer3-current-report\\experiments\\r15525\\simulation\\firmware\\V1\\simulation.log",
+    "sha256": "4930959a11d5f4be54bcd0efe8b6eba78d5f2cbc101512b9b7c6627f2d65b60c"
+  },
+  "simulation_command": {
+    "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\ccfa-workfiles\\reviewer3-current-report\\experiments\\r15525\\simulation\\firmware\\V1\\simulation.command.json",
+    "sha256": "11e865916e500248a451a21dd9808985b431c41bb24772077af3a3e7fba9aa72"
+  }
+}

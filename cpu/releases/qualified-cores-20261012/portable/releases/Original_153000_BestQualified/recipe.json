@@ -1,0 +1,323 @@
+{
+  "schema": "portable-qualified-core/v1",
+  "release": "Original_153000_BestQualified",
+  "clock_hz": 153000000,
+  "iterations": 6000,
+  "uart_baud": 9600,
+  "clock_uncertainty_ns": 0.15,
+  "device": "PG2L200H",
+  "speedgrade": "-6",
+  "package": "FBB676",
+  "source_original": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\variants\\dual-release-area-optimization\\rvc153-alu-unified32",
+  "roles": {
+    "V0": {
+      "physical_original": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\results\\rvc-physical-20261006T175317Z-556de250",
+      "physical_manifest_sha256": "19c2876822aeaf3fcc29dccd6462e852c893d4b91254a1a725bfb163c445bd5d",
+      "physical_inputs": "physical/V0/inputs",
+      "pnr_options": "-plc_decongestion 0 -gplace_seed 2 -logic_optimize_lut6d_combing_strategy 3",
+      "firmware_argv": [
+        "-march=rv32imc",
+        "-mabi=ilp32",
+        "-mcmodel=medany",
+        "-msmall-data-limit=0",
+        "-std=c11",
+        "-O3",
+        "-funroll-loops",
+        "-ffreestanding",
+        "-fno-builtin",
+        "-ffunction-sections",
+        "-fdata-sections",
+        "-Wall",
+        "-Wextra",
+        "-DTOTAL_DATA_SIZE=2000",
+        "-DITERATIONS=6000",
+        "-DVALIDATION_RUN=0",
+        "-DPERFORMANCE_RUN=1",
+        "-DCPU_CLOCK_HZ=153000000u",
+        "-DCONSOLE_DELAY_CYCLES=0",
+        "-DFLAGS_STR=\"-march=rv32imc -mabi=ilp32 -mcmodel=medany -msmall-data-limit=0 -std=c11 -O3 -funroll-loops -ffreestanding -fno-builtin -ffunction-sections -fdata-sections -Wall -Wextra -DTOTAL_DATA_SIZE=2000 -DITERATIONS=6000 -DVALIDATION_RUN=0 -DPERFORMANCE_RUN=1 -DCPU_CLOCK_HZ=153000000u -DCONSOLE_DELAY_CYCLES=0\"",
+        "-I",
+        "{RELEASE}/firmware/V0/inputs/port",
+        "-I",
+        "{RELEASE}/firmware/V0/inputs/coremark",
+        "-nostdlib",
+        "-nostartfiles",
+        "-Wl,--relax",
+        "-Wl,--gc-sections",
+        "-Wl,-Map=firmware.map",
+        "-T",
+        "{RELEASE}/firmware/V0/inputs/startup/link_soc.ld",
+        "-o",
+        "{OUTPUT}/firmware.elf",
+        "{RELEASE}/firmware/V0/inputs/coremark/core_main.c",
+        "{RELEASE}/firmware/V0/inputs/coremark/core_list_join.c",
+        "{RELEASE}/firmware/V0/inputs/coremark/core_matrix.c",
+        "{RELEASE}/firmware/V0/inputs/coremark/core_state.c",
+        "{RELEASE}/firmware/V0/inputs/coremark/core_util.c",
+        "{RELEASE}/firmware/V0/inputs/port/core_portme.c",
+        "{RELEASE}/firmware/V0/inputs/port/ee_printf.c",
+        "{RELEASE}/firmware/V0/inputs/startup/start.S",
+        "-lgcc"
+      ],
+      "compiler_original": "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/tools/xpack-riscv-none-embed-gcc-10.2.0-1.2/bin/riscv-none-embed-gcc",
+      "firmware_hex": "firmware/V0/firmware.hex",
+      "firmware_sha256": "5f17d307987705185f2747a9204faa26b1aba1fefe4cc8e5d263762256ff97b7",
+      "reference_uart": "firmware/V0/uart.log",
+      "reference_uart_sha256": "83e2f5ec1acc3e1a6fd3e1258b7375d2cf0a59e9d8b234bebcd25d5867afc993",
+      "bitstream": "bitstreams/V0.sbit",
+      "bitstream_sha256": "091e2cbcbc339a8a8cf1432a006c33bf1302055339982267b4dd383ac71f991b",
+      "board_originals": [
+        {
+          "original": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\results\\rvc-board-20261006T182029Z-9a451446\\V0-r1-serial.bin",
+          "sha256": "9b39319e74da76bacabde334a92a2bd8c48f65f0a3c8da4b5f68bde8afb5ec1d",
+          "portable": "board-references/V0/cold-1.bin"
+        },
+        {
+          "original": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\results\\rvc-board-20261006T182029Z-9a451446\\V0-r2-serial.bin",
+          "sha256": "9b39319e74da76bacabde334a92a2bd8c48f65f0a3c8da4b5f68bde8afb5ec1d",
+          "portable": "board-references/V0/cold-2.bin"
+        },
+        {
+          "original": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\results\\rvc-board-20261006T182029Z-9a451446\\V0-r3-serial.bin",
+          "sha256": "9b39319e74da76bacabde334a92a2bd8c48f65f0a3c8da4b5f68bde8afb5ec1d",
+          "portable": "board-references/V0/cold-3.bin"
+        }
+      ]
+    },
+    "V1": {
+      "physical_original": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\results\\rvc-physical-20261006T180100Z-ea194c84",
+      "physical_manifest_sha256": "3c8d56231272cb3afa5ff9963a187d8addd5723915517b964be6795aceac9fbc",
+      "physical_inputs": "physical/V1/inputs",
+      "pnr_options": "-plc_decongestion 0 -gplace_seed 2 -logic_optimize_lut6d_combing_strategy 3",
+      "firmware_argv": [
+        "-march=rv32imc",
+        "-mabi=ilp32",
+        "-mcmodel=medany",
+        "-msmall-data-limit=0",
+        "-std=c11",
+        "-O3",
+        "-funroll-loops",
+        "-ffreestanding",
+        "-fno-builtin",
+        "-ffunction-sections",
+        "-fdata-sections",
+        "-Wall",
+        "-Wextra",
+        "-DTOTAL_DATA_SIZE=2000",
+        "-DITERATIONS=6000",
+        "-DVALIDATION_RUN=1",
+        "-DPERFORMANCE_RUN=0",
+        "-DCPU_CLOCK_HZ=153000000u",
+        "-DCONSOLE_DELAY_CYCLES=0",
+        "-DFLAGS_STR=\"-march=rv32imc -mabi=ilp32 -mcmodel=medany -msmall-data-limit=0 -std=c11 -O3 -funroll-loops -ffreestanding -fno-builtin -ffunction-sections -fdata-sections -Wall -Wextra -DTOTAL_DATA_SIZE=2000 -DITERATIONS=6000 -DVALIDATION_RUN=1 -DPERFORMANCE_RUN=0 -DCPU_CLOCK_HZ=153000000u -DCONSOLE_DELAY_CYCLES=0\"",
+        "-I",
+        "{RELEASE}/firmware/V1/inputs/port",
+        "-I",
+        "{RELEASE}/firmware/V1/inputs/coremark",
+        "-nostdlib",
+        "-nostartfiles",
+        "-Wl,--relax",
+        "-Wl,--gc-sections",
+        "-Wl,-Map=firmware.map",
+        "-T",
+        "{RELEASE}/firmware/V1/inputs/startup/link_soc.ld",
+        "-o",
+        "{OUTPUT}/firmware.elf",
+        "{RELEASE}/firmware/V1/inputs/coremark/core_main.c",
+        "{RELEASE}/firmware/V1/inputs/coremark/core_list_join.c",
+        "{RELEASE}/firmware/V1/inputs/coremark/core_matrix.c",
+        "{RELEASE}/firmware/V1/inputs/coremark/core_state.c",
+        "{RELEASE}/firmware/V1/inputs/coremark/core_util.c",
+        "{RELEASE}/firmware/V1/inputs/port/core_portme.c",
+        "{RELEASE}/firmware/V1/inputs/port/ee_printf.c",
+        "{RELEASE}/firmware/V1/inputs/startup/start.S",
+        "-lgcc"
+      ],
+      "compiler_original": "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/tools/xpack-riscv-none-embed-gcc-10.2.0-1.2/bin/riscv-none-embed-gcc",
+      "firmware_hex": "firmware/V1/firmware.hex",
+      "firmware_sha256": "8fdacd539ea494c561b9cc1f8fbe87d74d6292c1416071dcbbe2af06cd128194",
+      "reference_uart": "firmware/V1/uart.log",
+      "reference_uart_sha256": "daf013ae950a52c838369c3f77854c3517a2d7416df9fb88d7e27f5134de69c0",
+      "bitstream": "bitstreams/V1.sbit",
+      "bitstream_sha256": "edcc474a1220533d9364de32cf125d8c280a9728d4bb99bdc5a684c62b67946d",
+      "board_originals": [
+        {
+          "original": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\results\\rvc-board-20261006T183131Z-2285de0a\\V1-r1-serial.bin",
+          "sha256": "2aba333de62e274f3868ba01dec17a358f0b0cce90d22dd361c83daf8fa0459d",
+          "portable": "board-references/V1/cold-1.bin"
+        },
+        {
+          "original": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\results\\rvc-board-20261006T183131Z-2285de0a\\V1-r2-serial.bin",
+          "sha256": "2aba333de62e274f3868ba01dec17a358f0b0cce90d22dd361c83daf8fa0459d",
+          "portable": "board-references/V1/cold-2.bin"
+        },
+        {
+          "original": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\results\\rvc-board-20261006T183131Z-2285de0a\\V1-r3-serial.bin",
+          "sha256": "2aba333de62e274f3868ba01dec17a358f0b0cce90d22dd361c83daf8fa0459d",
+          "portable": "board-references/V1/cold-3.bin"
+        }
+      ]
+    }
+  },
+  "source_copies": [],
+  "simulation": {
+    "argv": [
+      "--cc",
+      "--exe",
+      "--build",
+      "--Wall",
+      "-Wno-fatal",
+      "-j",
+      "4",
+      "-MAKEFLAGS",
+      "OPT_FAST=-O3",
+      "--top-module",
+      "rv32_observed_soc",
+      "--Mdir",
+      "{OUTPUT}/objects",
+      "-CFLAGS",
+      "-O3 -std=c++14",
+      "-GCLOCK_HZ=3200",
+      "-GBAUD=100",
+      "-GINIT_FILE=\"firmware.hex\"",
+      "-GENABLE_M=1",
+      "-GENABLE_C=1",
+      "-GENABLE_PREDICTOR=1",
+      "-GLOAD_USE_BUBBLE=1",
+      "-GFAST_ICACHE_HIT=1",
+      "-GFAST_DCACHE_READ=1",
+      "-GFAST_DCACHE_WRITE=1",
+      "-GFETCH_OVERLAP=1",
+      "-GDATA_OVERLAP=1",
+      "-GEARLY_D_REQUEST=1",
+      "-GBTB_INDEX_BITS=8",
+      "-GICACHE_SET_BITS=9",
+      "-GCACHE_SET_BITS=6",
+      "-GENABLE_CACHE=1",
+      "-GMEMORY_ADDRESS_BITS=14",
+      "{RELEASE}/simulation/inputs/rtl/rv32_alu.sv",
+      "{RELEASE}/simulation/inputs/rtl/rv32_btb.sv",
+      "{RELEASE}/simulation/inputs/rtl/rv32_burst_arbiter.sv",
+      "{RELEASE}/simulation/inputs/rtl/rv32_burst_ram.sv",
+      "{RELEASE}/simulation/inputs/rtl/rv32_cache.sv",
+      "{RELEASE}/simulation/inputs/rtl/rv32_core.sv",
+      "{RELEASE}/simulation/inputs/rtl/rv32_decode.sv",
+      "{RELEASE}/simulation/inputs/rtl/rv32_fifo.sv",
+      "{RELEASE}/simulation/inputs/rtl/rv32_machine.sv",
+      "{RELEASE}/simulation/inputs/rtl/rv32_memory_system.sv",
+      "{RELEASE}/simulation/inputs/rtl/rv32_muldiv.sv",
+      "{RELEASE}/simulation/inputs/rtl/rv32_peripherals.sv",
+      "{RELEASE}/simulation/inputs/rtl/rv32_rvc_expand.sv",
+      "{RELEASE}/simulation/inputs/rtl/rv32_rvc_frontend.sv",
+      "{RELEASE}/simulation/inputs/rtl/rv32_soc.sv",
+      "{RELEASE}/simulation/inputs/rtl/rv32_uart.sv",
+      "{RELEASE}/simulation/inputs/rtl/rv32_uncached.sv",
+      "{RELEASE}/simulation/inputs/sim/rv32_observed_soc.sv",
+      "{RELEASE}/simulation/inputs/sim/driver.cpp"
+    ],
+    "tool_original": "/usr/bin/verilator",
+    "sources": [
+      {
+        "original": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\results\\rvc153-efficiency-full-20261006T175512Z-c62e55df\\inputs\\rtl\\rv32_alu.sv",
+        "portable": "simulation/inputs/rtl/rv32_alu.sv",
+        "sha256": "125647d90b98f294743127637406d19479eebda82dccfaaba7acaf59d5ae38b1"
+      },
+      {
+        "original": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\results\\rvc153-efficiency-full-20261006T175512Z-c62e55df\\inputs\\rtl\\rv32_btb.sv",
+        "portable": "simulation/inputs/rtl/rv32_btb.sv",
+        "sha256": "4e7c61716c3e3f3156e8a1006824354b3428bbbc98a37369e43bae12f0170a3c"
+      },
+      {
+        "original": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\results\\rvc153-efficiency-full-20261006T175512Z-c62e55df\\inputs\\rtl\\rv32_burst_arbiter.sv",
+        "portable": "simulation/inputs/rtl/rv32_burst_arbiter.sv",
+        "sha256": "82104b39f85d2942e3d0a6780f79099062cc5a4f71fdf87491191de2f632c8af"
+      },
+      {
+        "original": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\results\\rvc153-efficiency-full-20261006T175512Z-c62e55df\\inputs\\rtl\\rv32_burst_ram.sv",
+        "portable": "simulation/inputs/rtl/rv32_burst_ram.sv",
+        "sha256": "089b3788fa87d3176a4e0b09e40382e1349cc33e8f9d2227d567ad0788672417"
+      },
+      {
+        "original": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\results\\rvc153-efficiency-full-20261006T175512Z-c62e55df\\inputs\\rtl\\rv32_cache.sv",
+        "portable": "simulation/inputs/rtl/rv32_cache.sv",
+        "sha256": "02ab7f9c8f104bcabe9438bce6751d698d678916eae48431dcc5a6a46db21725"
+      },
+      {
+        "original": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\results\\rvc153-efficiency-full-20261006T175512Z-c62e55df\\inputs\\rtl\\rv32_core.sv",
+        "portable": "simulation/inputs/rtl/rv32_core.sv",
+        "sha256": "11c2d7175afbc0753178c6d992f4d7497ab197a7ac1b3f1cba8a2952935a056a"
+      },
+      {
+        "original": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\results\\rvc153-efficiency-full-20261006T175512Z-c62e55df\\inputs\\rtl\\rv32_decode.sv",
+        "portable": "simulation/inputs/rtl/rv32_decode.sv",
+        "sha256": "9cb2b57b46ed775d85b6e70a3eebe92c2d5e49e9a6483993109e2c096d9a3ff3"
+      },
+      {
+        "original": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\results\\rvc153-efficiency-full-20261006T175512Z-c62e55df\\inputs\\rtl\\rv32_fifo.sv",
+        "portable": "simulation/inputs/rtl/rv32_fifo.sv",
+        "sha256": "20bb573cdbae386a8b44df780eefc11b85323cf2bbaa4fb2073a5e87e626b2eb"
+      },
+      {
+        "original": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\results\\rvc153-efficiency-full-20261006T175512Z-c62e55df\\inputs\\rtl\\rv32_machine.sv",
+        "portable": "simulation/inputs/rtl/rv32_machine.sv",
+        "sha256": "56b542e419c58216a08b0a5c83322506e42e2721fa28db50a6454ebe29607abd"
+      },
+      {
+        "original": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\results\\rvc153-efficiency-full-20261006T175512Z-c62e55df\\inputs\\rtl\\rv32_memory_system.sv",
+        "portable": "simulation/inputs/rtl/rv32_memory_system.sv",
+        "sha256": "0f408d7b59d45bec6623eb62baebdc259197a6e10b4d92556b4c3494a5441537"
+      },
+      {
+        "original": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\results\\rvc153-efficiency-full-20261006T175512Z-c62e55df\\inputs\\rtl\\rv32_muldiv.sv",
+        "portable": "simulation/inputs/rtl/rv32_muldiv.sv",
+        "sha256": "ea669ef9701bba4b2adbf6ff40c9e4e805620ec79de6cbdb323bbebeeac4fe59"
+      },
+      {
+        "original": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\results\\rvc153-efficiency-full-20261006T175512Z-c62e55df\\inputs\\rtl\\rv32_peripherals.sv",
+        "portable": "simulation/inputs/rtl/rv32_peripherals.sv",
+        "sha256": "049f990c8c9346b42720582eaa20c3ea325d4e47a4f5f91296cc3022c13d5de4"
+      },
+      {
+        "original": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\results\\rvc153-efficiency-full-20261006T175512Z-c62e55df\\inputs\\rtl\\rv32_rvc_expand.sv",
+        "portable": "simulation/inputs/rtl/rv32_rvc_expand.sv",
+        "sha256": "308ac8a65c9e29aeec27b38417483d0f43fd7c54487c26e89a3fa54b4647951b"
+      },
+      {
+        "original": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\results\\rvc153-efficiency-full-20261006T175512Z-c62e55df\\inputs\\rtl\\rv32_rvc_frontend.sv",
+        "portable": "simulation/inputs/rtl/rv32_rvc_frontend.sv",
+        "sha256": "77d7f21f153570b83d156a7b2fb3485f08da1225719a22d11074e8fa886708c7"
+      },
+      {
+        "original": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\results\\rvc153-efficiency-full-20261006T175512Z-c62e55df\\inputs\\rtl\\rv32_soc.sv",
+        "portable": "simulation/inputs/rtl/rv32_soc.sv",
+        "sha256": "4a9b81a7ce52b2239b77db16e21e32cf7fe208db0a918009cf922a54b13a6be5"
+      },
+      {
+        "original": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\results\\rvc153-efficiency-full-20261006T175512Z-c62e55df\\inputs\\rtl\\rv32_uart.sv",
+        "portable": "simulation/inputs/rtl/rv32_uart.sv",
+        "sha256": "b83f5d6055bd794ca49e3781e673a00749249eaeaf1f2e908398dd5ce54ab8a2"
+      },
+      {
+        "original": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\results\\rvc153-efficiency-full-20261006T175512Z-c62e55df\\inputs\\rtl\\rv32_uncached.sv",
+        "portable": "simulation/inputs/rtl/rv32_uncached.sv",
+        "sha256": "d276e6b38ddb05117f52e054367f7f3d4503ba76f8f49025973197943ef50907"
+      },
+      {
+        "original": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\results\\rvc153-efficiency-full-20261006T175512Z-c62e55df\\inputs\\sim\\rv32_observed_soc.sv",
+        "portable": "simulation/inputs/sim/rv32_observed_soc.sv",
+        "sha256": "a063b686ed7878f510c49426a0b9d4b16e48beafc1c62b9720030c3230f5a8c5"
+      },
+      {
+        "original": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\results\\rvc153-efficiency-full-20261006T175512Z-c62e55df\\inputs\\sim\\driver.cpp",
+        "portable": "simulation/inputs/sim/driver.cpp",
+        "sha256": "808598f016f257ed9d06d654245bd5015040b211aef5db4d1ed881e65d259298"
+      }
+    ],
+    "timed_native_memory": false,
+    "logical_uart_clock_hz": 3200,
+    "logical_uart_baud": 100,
+    "cycle_budget": 2400000000,
+    "top": "rv32_observed_soc",
+    "compile_receipt_original": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\results\\rvc153-efficiency-full-20261006T175512Z-c62e55df\\simulator\\compile.command.json"
+  }
+}

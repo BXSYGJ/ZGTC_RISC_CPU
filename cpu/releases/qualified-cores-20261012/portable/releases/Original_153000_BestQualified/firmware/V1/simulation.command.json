@@ -1,0 +1,8 @@
+{
+  "argv": [
+    "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/rvc153-efficiency-full-20261006T175512Z-c62e55df/simulator/objects/Vrv32_observed_soc",
+    "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/rvc153-efficiency-full-20261006T175512Z-c62e55df/firmware/V1/uart.log",
+    "2400000000"
+  ],
+  "cwd": "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/rvc153-efficiency-full-20261006T175512Z-c62e55df/firmware/V1"
+}

@@ -1,0 +1,267 @@
+Archive member included to satisfy reference by file (symbol)
+
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/ccfa-workfiles/reviewer3-current-report/experiments/r15525/simulation/frozen/toolchain/bin/../lib/gcc/riscv-none-embed/10.2.0/rv32imc/ilp32/libgcc.a(_udivdi3.o)
+                              /tmp/ccxnUnVS.o (__udivdi3)
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/ccfa-workfiles/reviewer3-current-report/experiments/r15525/simulation/frozen/toolchain/bin/../lib/gcc/riscv-none-embed/10.2.0/rv32imc/ilp32/libgcc.a(_clz.o)
+                              /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/ccfa-workfiles/reviewer3-current-report/experiments/r15525/simulation/frozen/toolchain/bin/../lib/gcc/riscv-none-embed/10.2.0/rv32imc/ilp32/libgcc.a(_udivdi3.o) (__clz_tab)
+
+Discarded input sections
+
+ .text          0x0000000000000000        0x0 /tmp/ccAOOku6.o
+ .data          0x0000000000000000        0x0 /tmp/ccAOOku6.o
+ .bss           0x0000000000000000        0x0 /tmp/ccAOOku6.o
+ .rodata.str1.4
+                0x0000000000000000       0x16 /tmp/ccAOOku6.o
+ .data.mem_name
+                0x0000000000000000        0xc /tmp/ccAOOku6.o
+ .text          0x0000000000000000        0x0 /tmp/ccWQWvhR.o
+ .data          0x0000000000000000        0x0 /tmp/ccWQWvhR.o
+ .bss           0x0000000000000000        0x0 /tmp/ccWQWvhR.o
+ .text.calc_func
+                0x0000000000000000       0xfa /tmp/ccWQWvhR.o
+ .text.cmp_idx  0x0000000000000000       0x52 /tmp/ccWQWvhR.o
+ .text.copy_info
+                0x0000000000000000       0x12 /tmp/ccWQWvhR.o
+ .text.core_list_insert_new
+                0x0000000000000000       0x50 /tmp/ccWQWvhR.o
+ .text.core_list_remove
+                0x0000000000000000       0x16 /tmp/ccWQWvhR.o
+ .text.core_list_undo_remove
+                0x0000000000000000       0x10 /tmp/ccWQWvhR.o
+ .text.core_list_find
+                0x0000000000000000       0x3c /tmp/ccWQWvhR.o
+ .text.core_list_reverse
+                0x0000000000000000       0x12 /tmp/ccWQWvhR.o
+ .text.core_list_mergesort
+                0x0000000000000000      0x14a /tmp/ccWQWvhR.o
+ .text          0x0000000000000000        0x0 /tmp/ccq0Tb5t.o
+ .data          0x0000000000000000        0x0 /tmp/ccq0Tb5t.o
+ .bss           0x0000000000000000        0x0 /tmp/ccq0Tb5t.o
+ .text.matrix_sum
+                0x0000000000000000      0x3f2 /tmp/ccq0Tb5t.o
+ .text.matrix_mul_const
+                0x0000000000000000      0x164 /tmp/ccq0Tb5t.o
+ .text.matrix_add_const
+                0x0000000000000000      0x1f4 /tmp/ccq0Tb5t.o
+ .text.matrix_mul_vect
+                0x0000000000000000      0x19c /tmp/ccq0Tb5t.o
+ .text.matrix_mul_matrix
+                0x0000000000000000      0x1e8 /tmp/ccq0Tb5t.o
+ .text.matrix_mul_matrix_bitextract
+                0x0000000000000000      0x1aa /tmp/ccq0Tb5t.o
+ .text          0x0000000000000000        0x0 /tmp/ccdKrszx.o
+ .data          0x0000000000000000        0x0 /tmp/ccdKrszx.o
+ .bss           0x0000000000000000        0x0 /tmp/ccdKrszx.o
+ .text          0x0000000000000000        0x0 /tmp/ccDPAHie.o
+ .data          0x0000000000000000        0x0 /tmp/ccDPAHie.o
+ .bss           0x0000000000000000        0x0 /tmp/ccDPAHie.o
+ .text.crcu8    0x0000000000000000      0x128 /tmp/ccDPAHie.o
+ .text          0x0000000000000000        0x0 /tmp/ccxnUnVS.o
+ .data          0x0000000000000000        0x0 /tmp/ccxnUnVS.o
+ .bss           0x0000000000000000        0x0 /tmp/ccxnUnVS.o
+ .text          0x0000000000000000        0x0 /tmp/ccjPCBAy.o
+ .data          0x0000000000000000        0x0 /tmp/ccjPCBAy.o
+ .bss           0x0000000000000000        0x0 /tmp/ccjPCBAy.o
+ .text          0x0000000000000000        0x0 /tmp/cc09dmC9.o
+ .data          0x0000000000000000        0x0 /tmp/cc09dmC9.o
+ .bss           0x0000000000000000        0x0 /tmp/cc09dmC9.o
+ .text          0x0000000000000000        0x0 /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/ccfa-workfiles/reviewer3-current-report/experiments/r15525/simulation/frozen/toolchain/bin/../lib/gcc/riscv-none-embed/10.2.0/rv32imc/ilp32/libgcc.a(_udivdi3.o)
+ .data          0x0000000000000000        0x0 /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/ccfa-workfiles/reviewer3-current-report/experiments/r15525/simulation/frozen/toolchain/bin/../lib/gcc/riscv-none-embed/10.2.0/rv32imc/ilp32/libgcc.a(_udivdi3.o)
+ .bss           0x0000000000000000        0x0 /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/ccfa-workfiles/reviewer3-current-report/experiments/r15525/simulation/frozen/toolchain/bin/../lib/gcc/riscv-none-embed/10.2.0/rv32imc/ilp32/libgcc.a(_udivdi3.o)
+ .eh_frame      0x0000000000000000       0x28 /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/ccfa-workfiles/reviewer3-current-report/experiments/r15525/simulation/frozen/toolchain/bin/../lib/gcc/riscv-none-embed/10.2.0/rv32imc/ilp32/libgcc.a(_udivdi3.o)
+ .text          0x0000000000000000        0x0 /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/ccfa-workfiles/reviewer3-current-report/experiments/r15525/simulation/frozen/toolchain/bin/../lib/gcc/riscv-none-embed/10.2.0/rv32imc/ilp32/libgcc.a(_clz.o)
+ .data          0x0000000000000000        0x0 /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/ccfa-workfiles/reviewer3-current-report/experiments/r15525/simulation/frozen/toolchain/bin/../lib/gcc/riscv-none-embed/10.2.0/rv32imc/ilp32/libgcc.a(_clz.o)
+ .bss           0x0000000000000000        0x0 /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/ccfa-workfiles/reviewer3-current-report/experiments/r15525/simulation/frozen/toolchain/bin/../lib/gcc/riscv-none-embed/10.2.0/rv32imc/ilp32/libgcc.a(_clz.o)
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+RAM              0x0000000000000000 0x0000000000010000 xrw
+*default*        0x0000000000000000 0xffffffffffffffff
+
+Linker script and memory map
+
+LOAD /tmp/ccAOOku6.o
+LOAD /tmp/ccWQWvhR.o
+LOAD /tmp/ccq0Tb5t.o
+LOAD /tmp/ccdKrszx.o
+LOAD /tmp/ccDPAHie.o
+LOAD /tmp/ccxnUnVS.o
+LOAD /tmp/ccjPCBAy.o
+LOAD /tmp/cc09dmC9.o
+LOAD /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/ccfa-workfiles/reviewer3-current-report/experiments/r15525/simulation/frozen/toolchain/bin/../lib/gcc/riscv-none-embed/10.2.0/rv32imc/ilp32/libgcc.a
+
+.text           0x0000000000000000     0x427e
+ *(.text.start)
+ .text.start    0x0000000000000000       0x88 /tmp/cc09dmC9.o
+                0x0000000000000000                _start
+ *(.text .text.*)
+ .text.iterate  0x0000000000000088       0x6a /tmp/ccAOOku6.o
+                0x0000000000000088                iterate
+ .text.startup.main
+                0x00000000000000f2      0x6a6 /tmp/ccAOOku6.o
+                0x00000000000000f2                main
+ .text.cmp_complex
+                0x0000000000000798      0x1aa /tmp/ccWQWvhR.o
+                0x0000000000000798                cmp_complex
+ .text.core_bench_list
+                0x0000000000000942      0x4ea /tmp/ccWQWvhR.o
+                0x0000000000000942                core_bench_list
+ .text.core_list_init
+                0x0000000000000e2c      0x432 /tmp/ccWQWvhR.o
+                0x0000000000000e2c                core_list_init
+ .text.matrix_test
+                0x000000000000125e     0x13a6 /tmp/ccq0Tb5t.o
+                0x000000000000125e                matrix_test
+ .text.core_bench_matrix
+                0x0000000000002604       0x22 /tmp/ccq0Tb5t.o
+                0x0000000000002604                core_bench_matrix
+ .text.core_init_matrix
+                0x0000000000002626      0x2fc /tmp/ccq0Tb5t.o
+                0x0000000000002626                core_init_matrix
+ .text.core_init_state
+                0x0000000000002922      0x274 /tmp/ccdKrszx.o
+                0x0000000000002922                core_init_state
+ .text.core_state_transition
+                0x0000000000002b96      0x282 /tmp/ccdKrszx.o
+                0x0000000000002b96                core_state_transition
+ .text.core_bench_state
+                0x0000000000002e18      0x164 /tmp/ccdKrszx.o
+                0x0000000000002e18                core_bench_state
+ .text.get_seed_32
+                0x0000000000002f7c       0x50 /tmp/ccDPAHie.o
+                0x0000000000002f7c                get_seed_32
+ .text.crcu16   0x0000000000002fcc      0x256 /tmp/ccDPAHie.o
+                0x0000000000002fcc                crcu16
+ .text.crcu32   0x0000000000003222      0x4b6 /tmp/ccDPAHie.o
+                0x0000000000003222                crcu32
+ .text.crc16    0x00000000000036d8      0x25c /tmp/ccDPAHie.o
+                0x00000000000036d8                crc16
+ .text.check_data_types
+                0x0000000000003934        0x4 /tmp/ccDPAHie.o
+                0x0000000000003934                check_data_types
+ .text.start_time
+                0x0000000000003938       0x5c /tmp/ccxnUnVS.o
+                0x0000000000003938                start_time
+ .text.stop_time
+                0x0000000000003994       0x5c /tmp/ccxnUnVS.o
+                0x0000000000003994                stop_time
+ .text.get_time
+                0x00000000000039f0       0x3a /tmp/ccxnUnVS.o
+                0x00000000000039f0                get_time
+ .text.time_in_secs
+                0x0000000000003a2a        0xa /tmp/ccxnUnVS.o
+                0x0000000000003a2a                time_in_secs
+ .text.portable_init
+                0x0000000000003a34       0x6c /tmp/ccxnUnVS.o
+                0x0000000000003a34                portable_init
+ .text.portable_fini
+                0x0000000000003aa0       0xf4 /tmp/ccxnUnVS.o
+                0x0000000000003aa0                portable_fini
+ .text.trap_handler
+                0x0000000000003b94       0x38 /tmp/ccxnUnVS.o
+                0x0000000000003b94                trap_handler
+ .text.ee_printf
+                0x0000000000003bcc      0x30e /tmp/ccjPCBAy.o
+                0x0000000000003bcc                ee_printf
+ .text.__udivdi3
+                0x0000000000003eda      0x3a4 /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/ccfa-workfiles/reviewer3-current-report/experiments/r15525/simulation/frozen/toolchain/bin/../lib/gcc/riscv-none-embed/10.2.0/rv32imc/ilp32/libgcc.a(_udivdi3.o)
+                0x0000000000003eda                __udivdi3
+
+.rodata         0x0000000000004280      0x870
+ *(.rodata .rodata.*)
+ .rodata.main.str1.4
+                0x0000000000004280      0x543 /tmp/ccAOOku6.o
+ *fill*         0x00000000000047c3        0x1 
+ .rodata.str1.4
+                0x00000000000047c4       0xad /tmp/ccdKrszx.o
+ *fill*         0x0000000000004871        0x3 
+ .rodata.errpat
+                0x0000000000004874       0x10 /tmp/ccdKrszx.o
+ .rodata.floatpat
+                0x0000000000004884       0x10 /tmp/ccdKrszx.o
+ .rodata.intpat
+                0x0000000000004894       0x10 /tmp/ccdKrszx.o
+ .rodata.scipat
+                0x00000000000048a4       0x10 /tmp/ccdKrszx.o
+ .rodata.get_seed_32
+                0x00000000000048b4       0x18 /tmp/ccDPAHie.o
+ .rodata.portable_init.str1.4
+                0x00000000000048cc       0x5d /tmp/ccxnUnVS.o
+ *fill*         0x0000000000004929        0x3 
+ .rodata.portable_fini.str1.4
+                0x000000000000492c       0x98 /tmp/ccxnUnVS.o
+ .rodata.trap_handler.str1.4
+                0x00000000000049c4       0x29 /tmp/ccxnUnVS.o
+ *fill*         0x00000000000049ed        0x3 
+ .rodata.__clz_tab
+                0x00000000000049f0      0x100 /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/ccfa-workfiles/reviewer3-current-report/experiments/r15525/simulation/frozen/toolchain/bin/../lib/gcc/riscv-none-embed/10.2.0/rv32imc/ilp32/libgcc.a(_clz.o)
+                0x00000000000049f0                __clz_tab
+
+.rela.dyn       0x0000000000004af0        0x0
+ .rela.text.start
+                0x0000000000004af0        0x0 /tmp/ccAOOku6.o
+
+.data           0x0000000000004af0       0x14
+ *(.data .data.*)
+ .data.default_num_contexts
+                0x0000000000004af0        0x4 /tmp/ccxnUnVS.o
+                0x0000000000004af0                default_num_contexts
+ .data.seed1_volatile
+                0x0000000000004af4        0x4 /tmp/ccxnUnVS.o
+                0x0000000000004af4                seed1_volatile
+ .data.seed2_volatile
+                0x0000000000004af8        0x4 /tmp/ccxnUnVS.o
+                0x0000000000004af8                seed2_volatile
+ .data.seed3_volatile
+                0x0000000000004afc        0x4 /tmp/ccxnUnVS.o
+                0x0000000000004afc                seed3_volatile
+ .data.seed4_volatile
+                0x0000000000004b00        0x4 /tmp/ccxnUnVS.o
+                0x0000000000004b00                seed4_volatile
+ *(.sdata .sdata.*)
+                0x0000000000004b04                . = ALIGN (0x4)
+                0x0000000000004b04                __bss_start = .
+
+.bss            0x0000000000004b08      0x820
+ *(.bss .bss.*)
+ .bss.static_memblk
+                0x0000000000004b08      0x7d0 /tmp/ccAOOku6.o
+                0x0000000000004b08                static_memblk
+ .bss.seed5_volatile
+                0x00000000000052d8        0x4 /tmp/ccxnUnVS.o
+                0x00000000000052d8                seed5_volatile
+ .bss.start_cache
+                0x00000000000052dc       0x14 /tmp/ccxnUnVS.o
+ .bss.start_cycles
+                0x00000000000052f0        0x8 /tmp/ccxnUnVS.o
+ .bss.start_retired
+                0x00000000000052f8        0x8 /tmp/ccxnUnVS.o
+ .bss.stop_cache
+                0x0000000000005300       0x14 /tmp/ccxnUnVS.o
+ *fill*         0x0000000000005314        0x4 
+ .bss.stop_cycles
+                0x0000000000005318        0x8 /tmp/ccxnUnVS.o
+ .bss.stop_retired
+                0x0000000000005320        0x8 /tmp/ccxnUnVS.o
+ *(.sbss .sbss.*)
+ *(COMMON)
+                0x0000000000005328                . = ALIGN (0x4)
+                0x0000000000005328                __bss_end = .
+                0x0000000000005328                __heap_start = .
+                0x0000000000010000                __stack_top = (ORIGIN (RAM) + LENGTH (RAM))
+                0x0000000000005304                __global_pointer$ = (__bss_start + 0x800)
+                0x0000000000000001                ASSERT ((__heap_start < (__stack_top - 0x1000)), Firmware leaves insufficient stack space)
+OUTPUT(/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/ccfa-workfiles/reviewer3-current-report/experiments/r15525/simulation/firmware/V1/reproduction153/firmware.elf elf32-littleriscv)
+
+.comment        0x0000000000000000       0x33
+ .comment       0x0000000000000000       0x33 /tmp/ccAOOku6.o
+                                         0x34 (size before relaxing)
+ .comment       0x0000000000000033       0x34 /tmp/ccWQWvhR.o
+ .comment       0x0000000000000033       0x34 /tmp/ccq0Tb5t.o
+ .comment       0x0000000000000033       0x34 /tmp/ccdKrszx.o
+ .comment       0x0000000000000033       0x34 /tmp/ccDPAHie.o
+ .comment       0x0000000000000033       0x34 /tmp/ccxnUnVS.o
+ .comment       0x0000000000000033       0x34 /tmp/ccjPCBAy.o
+ .comment       0x0000000000000033       0x34 /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/ccfa-workfiles/reviewer3-current-report/experiments/r15525/simulation/frozen/toolchain/bin/../lib/gcc/riscv-none-embed/10.2.0/rv32imc/ilp32/libgcc.a(_udivdi3.o)
+ .comment       0x0000000000000033       0x34 /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/ccfa-workfiles/reviewer3-current-report/experiments/r15525/simulation/frozen/toolchain/bin/../lib/gcc/riscv-none-embed/10.2.0/rv32imc/ilp32/libgcc.a(_clz.o)

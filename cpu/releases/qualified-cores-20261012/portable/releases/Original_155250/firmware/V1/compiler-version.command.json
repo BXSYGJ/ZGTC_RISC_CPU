@@ -1,0 +1,19 @@
+{
+  "argv": [
+    "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\ccfa-workfiles\\reviewer3-current-report\\experiments\\r15525\\simulation\\frozen\\toolchain\\bin\\riscv-none-embed-gcc",
+    "--version"
+  ],
+  "actual_argv": [
+    "wsl",
+    "--cd",
+    "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/ccfa-workfiles/reviewer3-current-report/experiments/r15525/simulation/firmware/V1",
+    "--exec",
+    "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/ccfa-workfiles/reviewer3-current-report/experiments/r15525/simulation/frozen/toolchain/bin/riscv-none-embed-gcc",
+    "--version"
+  ],
+  "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\ccfa-workfiles\\reviewer3-current-report\\experiments\\r15525\\simulation\\firmware\\V1",
+  "started_utc": "2026-10-08T14:37:54.002947+00:00",
+  "shell": false,
+  "returncode": 0,
+  "finished_utc": "2026-10-08T14:37:54.199339+00:00"
+}

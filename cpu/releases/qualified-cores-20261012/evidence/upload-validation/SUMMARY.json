@@ -1,0 +1,15 @@
+{
+  "schema": "qualified-core-github-upload-check/v1",
+  "checked_date": "2026-10-12",
+  "release_count": 2,
+  "saved_timing_reports_passed": 4,
+  "timing_checks_per_report": 10,
+  "required_clock_uncertainty_ns": 0.15,
+  "complete_board_capture_frames_passed": 12,
+  "physical_projects_prepared": 4,
+  "powershell_parse_passed": true,
+  "firmware_bitstream_reference_and_simulation_source_hashes_passed": true,
+  "fresh_full_simulation": false,
+  "fresh_routing": false,
+  "fresh_board_measurement": false
+}

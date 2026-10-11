@@ -1,0 +1,13 @@
+﻿{
+  "RawSHA256": "E0605A172BB2964F7CBB748061CD67DE842A536529027264C36BBFD851E17845",
+  "Passed": true,
+  "ExactFrameMatch": true,
+  "CoreMark": 522.5309808267934,
+  "ConfiguredClockHz": 155250000,
+  "Release": "Original_155250",
+  "Cycles": 1782669419,
+  "CoreMarkPerMHz": 3.3657390069358675,
+  "Role": "V0",
+  "Scope": "Configured frequency; no external oscillator measurement",
+  "Retired": 1649428429
+}

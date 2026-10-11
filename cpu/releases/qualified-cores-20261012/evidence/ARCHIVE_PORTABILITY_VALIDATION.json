@@ -1,0 +1,21 @@
+﻿{
+  "TimingChecksPerReport": 10,
+  "CompiledSimulators": 4,
+  "SpaceContainingRelocationPassed": true,
+  "PreparedPhysicalImages": 8,
+  "ValidationUtc": "2026-10-11T06:23:11.5754416Z",
+  "PowerShellScriptsUTF8BOM": true,
+  "NewFull6000SimulationPerformed": false,
+  "TimingReportsReparsed": 8,
+  "NewBoardProgrammingPerformed": false,
+  "NewRoutingPerformed": false,
+  "ExperimentForkPassed": true,
+  "UncertaintyNs": 0.15,
+  "OriginalFilesChanged": false,
+  "RebuiltExactFirmwareImages": 8,
+  "PowerShellParsePassed": true,
+  "QualifiedHistoricalBoardFramesReparsed": 24,
+  "PDFsRebuilt": false,
+  "Schema": "archive-portability-validation/v1",
+  "RelocatedVerilator4038RuntimeCompiled": true
+}
