@@ -1,6 +1,7 @@
 `timescale 1ns/1ps
 module rv32_memory_system #(
     parameter integer MEMORY_ADDRESS_BITS=12,
+    parameter integer CACHE_ADDRESS_BITS=MEMORY_ADDRESS_BITS+2,
     parameter integer ICACHE_SET_BITS=0,
     parameter integer CACHE_SET_BITS=4,
     parameter integer CACHE_WORD_BITS=2,
@@ -46,9 +47,27 @@ module rv32_memory_system #(
     input wire mmio_rsp_error,
     output wire [31:0] i_hit_count,
     output wire [31:0] i_miss_count,
-    output wire [31:0] d_hit_count,
+output wire [31:0] d_hit_count,
     output wire [31:0] d_miss_count,
-    output wire [31:0] d_writeback_count
+    output wire [31:0] d_writeback_count,
+    // ---- DDR3 backend port (burst bus slave, drives rv32_burst_ddr3) ----
+    output wire        ddr_cmd_valid,
+    input  wire        ddr_cmd_ready,
+    output wire        ddr_cmd_write,
+    output wire [31:0] ddr_cmd_address,
+    output wire [7:0]  ddr_cmd_length,
+    output wire        ddr_w_valid,
+    input  wire        ddr_w_ready,
+    output wire [31:0] ddr_w_data,
+    output wire        ddr_w_last,
+    input  wire        ddr_b_valid,
+    output wire        ddr_b_ready,
+    input  wire        ddr_b_error,
+    input  wire        ddr_r_valid,
+    output wire        ddr_r_ready,
+    input  wire [31:0] ddr_r_data,
+    input  wire        ddr_r_last,
+    input  wire        ddr_r_error
 );
     localparam [1:0] NORMAL=0,CLEAN_DATA=1,INVALIDATE_INSTRUCTIONS=2,MAINTENANCE_DONE=3;
     reg [1:0] maintenance_state;
@@ -107,7 +126,7 @@ module rv32_memory_system #(
     assign d_writeback_count=cache_writebacks[1];
     for(genvar cache_index=0;cache_index<2;cache_index=cache_index+1) begin : caches
         if(ENABLE_CACHE!=0) begin : enabled
-        rv32_cache #(.ADDRESS_BITS(MEMORY_ADDRESS_BITS+2),.SET_BITS(cache_index==0 && ICACHE_SET_BITS!=0 ? ICACHE_SET_BITS : CACHE_SET_BITS),.WORD_BITS(CACHE_WORD_BITS),.READ_ONLY(cache_index==0 ? 1 : 0),.READ_OVERLAP(cache_index==0 ? FETCH_OVERLAP : DATA_OVERLAP),.FAST_WRITE_HIT(cache_index==0 ? 0 : FAST_DCACHE_WRITE),.FAST_READ_HIT(cache_index==0 ? FAST_ICACHE_HIT : FAST_DCACHE_READ)) cache(
+        rv32_cache #(.ADDRESS_BITS(CACHE_ADDRESS_BITS),.SET_BITS(cache_index==0 && ICACHE_SET_BITS!=0 ? ICACHE_SET_BITS : CACHE_SET_BITS),.WORD_BITS(CACHE_WORD_BITS),.READ_ONLY(cache_index==0 ? 1 : 0),.READ_OVERLAP(cache_index==0 ? FETCH_OVERLAP : DATA_OVERLAP),.FAST_WRITE_HIT(cache_index==0 ? 0 : FAST_DCACHE_WRITE),.FAST_READ_HIT(cache_index==0 ? FAST_ICACHE_HIT : FAST_DCACHE_READ)) cache(
             .clk(clk),.rst_n(rst_n),.req_valid(cache_req_valid[cache_index]),.req_ready(cache_req_ready[cache_index]),
             .req_address(cache_req_address[cache_index]),.req_write(cache_req_write[cache_index]),
             .req_data(cache_req_data[cache_index]),.req_strobe(cache_req_strobe[cache_index]),
@@ -155,10 +174,38 @@ module rv32_memory_system #(
         .w_valid(w_valid),.w_ready(w_ready),.w_data(w_data),.w_last(w_last),
         .b_valid(b_valid),.b_ready(b_ready),.b_error(b_error),.r_valid(r_valid),.r_ready(r_ready),.r_data(r_data),.r_last(r_last),.r_error(r_error)
     );
+// Backend selection: low 64 KB stays in BRAM (boot ROM), everything above
+    // is routed to the DDR3 burst bridge (>= 0x0001_0000).
+    // The arbiter holds cmd_address stable for the whole transaction, so a
+    // combinational demux is safe; only one backend is active at a time.
+    wire ddr_select = cmd_address >= 32'h0001_0000;
+    wire bram_cmd_ready, bram_w_ready, bram_b_valid, bram_b_error, bram_r_valid, bram_r_last, bram_r_error;
+    wire [31:0] bram_r_data;
+    assign bram_cmd_valid = cmd_valid &&  !ddr_select;
+    assign bram_w_valid   = w_valid   &&  !ddr_select;
+    assign bram_b_ready   = b_ready   &&  !ddr_select;
+    assign bram_r_ready   = r_ready   &&  !ddr_select;
+    assign cmd_ready      = ddr_select ? ddr_cmd_ready : bram_cmd_ready;
+    assign w_ready        = ddr_select ? ddr_w_ready   : bram_w_ready;
+    assign b_valid        = ddr_select ? ddr_b_valid   : bram_b_valid;
+    assign b_error        = ddr_select ? ddr_b_error   : bram_b_error;
+    assign r_valid        = ddr_select ? ddr_r_valid   : bram_r_valid;
+    assign r_last         = ddr_select ? ddr_r_last    : bram_r_last;
+    assign r_error        = ddr_select ? ddr_r_error   : bram_r_error;
+    assign r_data         = ddr_select ? ddr_r_data    : bram_r_data;
+    assign ddr_cmd_valid  = cmd_valid && ddr_select;
+    assign ddr_cmd_write  = cmd_write;
+    assign ddr_cmd_address= cmd_address;
+    assign ddr_cmd_length = cmd_length;
+    assign ddr_w_valid    = w_valid   && ddr_select;
+    assign ddr_w_data     = w_data;
+    assign ddr_w_last     = w_last;
+    assign ddr_b_ready    = b_ready   && ddr_select;
+    assign ddr_r_ready    = r_ready   && ddr_select;
     rv32_burst_ram #(.ADDRESS_BITS(MEMORY_ADDRESS_BITS),.BUFFER_BITS(CACHE_WORD_BITS),.INIT_FILE(INIT_FILE)) ram(
-        .clk(clk),.rst_n(rst_n),.cmd_valid(cmd_valid),.cmd_ready(cmd_ready),.cmd_write(cmd_write),.cmd_address(cmd_address),.cmd_length(cmd_length),
-        .w_valid(w_valid),.w_ready(w_ready),.w_data(w_data),.w_last(w_last),
-        .b_valid(b_valid),.b_ready(b_ready),.b_error(b_error),.r_valid(r_valid),.r_ready(r_ready),.r_data(r_data),.r_last(r_last),.r_error(r_error)
+        .clk(clk),.rst_n(rst_n),.cmd_valid(bram_cmd_valid),.cmd_ready(bram_cmd_ready),.cmd_write(cmd_write),.cmd_address(cmd_address),.cmd_length(cmd_length),
+        .w_valid(bram_w_valid),.w_ready(bram_w_ready),.w_data(w_data),.w_last(w_last),
+        .b_valid(bram_b_valid),.b_ready(bram_b_ready),.b_error(bram_b_error),.r_valid(bram_r_valid),.r_ready(bram_r_ready),.r_data(bram_r_data),.r_last(bram_r_last),.r_error(bram_r_error)
     );
     always @(posedge clk or negedge rst_n) begin
         if(!rst_n) begin

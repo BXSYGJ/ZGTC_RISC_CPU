@@ -4,6 +4,7 @@ module rv32_soc #(
     parameter integer CLOCK_HZ=27000000,
     parameter integer BAUD=115200,
     parameter integer MEMORY_ADDRESS_BITS=14,
+    parameter integer CACHE_ADDRESS_BITS=MEMORY_ADDRESS_BITS+2,
     parameter integer ENABLE_PREDICTOR=1,
     parameter integer LOAD_USE_BUBBLE=0,
     parameter integer FAST_ICACHE_HIT=0,
@@ -36,7 +37,25 @@ module rv32_soc #(
     output wire trap_valid,
     output wire [31:0] trap_cause,
     output wire [63:0] cycle_count,
-    output wire [63:0] retired_count
+    output wire [63:0] retired_count,
+    // ---- DDR3 backend (burst bus slave passthrough) ----
+    output wire        ddr_cmd_valid,
+    input  wire        ddr_cmd_ready,
+    output wire        ddr_cmd_write,
+    output wire [31:0] ddr_cmd_address,
+    output wire [7:0]  ddr_cmd_length,
+    output wire        ddr_w_valid,
+    input  wire        ddr_w_ready,
+    output wire [31:0] ddr_w_data,
+    output wire        ddr_w_last,
+    input  wire        ddr_b_valid,
+    output wire        ddr_b_ready,
+    input  wire        ddr_b_error,
+    input  wire        ddr_r_valid,
+    output wire        ddr_r_ready,
+    input  wire [31:0] ddr_r_data,
+    input  wire        ddr_r_last,
+    input  wire        ddr_r_error
 );
     wire i_req_valid,i_req_ready,i_rsp_valid,i_rsp_ready,i_rsp_error;
     wire d_req_valid,d_req_ready,d_req_write,d_rsp_valid,d_rsp_ready,d_rsp_error;
@@ -55,7 +74,7 @@ module rv32_soc #(
     wire [287:0] performance_values={writebacks,d_misses,d_hits,i_misses,i_hits,retired_count,cycle_count};
     localparam [31:0] PERFORMANCE_CONFIG=((ICACHE_SET_BITS!=0 && ICACHE_SET_BITS!=CACHE_SET_BITS ? ICACHE_SET_BITS : 0)<<12) | (FAST_DCACHE_WRITE!=0 && ENABLE_CACHE!=0 ? (1<<19) : 0) | (DATA_OVERLAP!=0 ? (1<<18) : 0) | ((BTB_INDEX_BITS==4 ? 0 : BTB_INDEX_BITS)<<20) | (MEMORY_ADDRESS_BITS<<24) | (2<<16) | (CACHE_SET_BITS<<8) | (ENABLE_PREDICTOR!=0 ? 1 : 0) | (ENABLE_CACHE==0 ? 2 : 0) | (LOAD_USE_BUBBLE!=0 ? 4 : 0) | (FAST_ICACHE_HIT!=0 && ENABLE_CACHE!=0 ? 8 : 0) | (ENABLE_M!=0 ? 16 : 0) | (FETCH_OVERLAP!=0 ? 32 : 0) | (FAST_DCACHE_READ!=0 && ENABLE_CACHE!=0 ? 64 : 0) | (EARLY_D_REQUEST!=0 ? 128 : 0);
     assign maintenance_ready=memory_ready && !memory_error && !maintenance_fault;
-    rv32_core #(.BTB_ADDRESS_BITS(MEMORY_ADDRESS_BITS+2),.BTB_INDEX_BITS(BTB_INDEX_BITS),.EARLY_D_REQUEST(EARLY_D_REQUEST),.FETCH_OVERLAP(FETCH_OVERLAP),.ENABLE_M(ENABLE_M),.ENABLE_PREDICTOR(ENABLE_PREDICTOR),.LOAD_USE_BUBBLE(LOAD_USE_BUBBLE)) core(
+    rv32_core #(.BTB_ADDRESS_BITS(CACHE_ADDRESS_BITS),.BTB_INDEX_BITS(BTB_INDEX_BITS),.EARLY_D_REQUEST(EARLY_D_REQUEST),.FETCH_OVERLAP(FETCH_OVERLAP),.ENABLE_M(ENABLE_M),.ENABLE_PREDICTOR(ENABLE_PREDICTOR),.LOAD_USE_BUBBLE(LOAD_USE_BUBBLE)) core(
         .clk(clk),.rst_n(rst_n),
         .i_req_valid(i_req_valid),.i_req_ready(i_req_ready),.i_req_address(i_req_address),.i_rsp_valid(i_rsp_valid),.i_rsp_ready(i_rsp_ready),.i_rsp_data(i_rsp_data),.i_rsp_error(i_rsp_error),
         .d_req_valid(d_req_valid),.d_req_ready(d_req_ready),.d_req_address(d_req_address),.d_req_data(d_req_data),.d_req_strobe(d_req_strobe),.d_req_write(d_req_write),
@@ -64,7 +83,7 @@ module rv32_soc #(
         .trace_valid(trace_valid),.trace_pc(trace_pc),.trace_instruction(trace_instruction),.trace_write(unused_trace_write),.trace_rd(unused_trace_rd),.trace_data(unused_trace_data),
         .trap_valid(trap_valid),.trap_pc(unused_trap_pc),.trap_cause(trap_cause),.trap_value(unused_trap_value),.pipeline_valid(unused_pipeline_valid),.cycle_count(cycle_count),.retired_count(retired_count)
     );
-    rv32_memory_system #(.DATA_OVERLAP(DATA_OVERLAP),.MEMORY_ADDRESS_BITS(MEMORY_ADDRESS_BITS),.ICACHE_SET_BITS(ICACHE_SET_BITS),.CACHE_SET_BITS(CACHE_SET_BITS),.ENABLE_CACHE(ENABLE_CACHE),.FETCH_OVERLAP(FETCH_OVERLAP),.FAST_DCACHE_WRITE(FAST_DCACHE_WRITE),.FAST_DCACHE_READ(FAST_DCACHE_READ),.FAST_ICACHE_HIT(FAST_ICACHE_HIT),.INIT_FILE(INIT_FILE)) memory_system(
+    rv32_memory_system #(.DATA_OVERLAP(DATA_OVERLAP),.MEMORY_ADDRESS_BITS(MEMORY_ADDRESS_BITS),.CACHE_ADDRESS_BITS(CACHE_ADDRESS_BITS),.ICACHE_SET_BITS(ICACHE_SET_BITS),.CACHE_SET_BITS(CACHE_SET_BITS),.ENABLE_CACHE(ENABLE_CACHE),.FETCH_OVERLAP(FETCH_OVERLAP),.FAST_DCACHE_WRITE(FAST_DCACHE_WRITE),.FAST_DCACHE_READ(FAST_DCACHE_READ),.FAST_ICACHE_HIT(FAST_ICACHE_HIT),.INIT_FILE(INIT_FILE)) memory_system(
         .clk(clk),.rst_n(rst_n),
         .i_req_valid(i_req_valid),.i_req_ready(i_req_ready),.i_req_address(i_req_address),.i_rsp_valid(i_rsp_valid),.i_rsp_ready(i_rsp_ready),.i_rsp_data(i_rsp_data),.i_rsp_error(i_rsp_error),
         .d_req_valid(d_req_valid),.d_req_ready(d_req_ready),.d_req_address(d_req_address),.d_req_write(d_req_write),.d_req_data(d_req_data),.d_req_strobe(d_req_strobe),
@@ -72,7 +91,12 @@ module rv32_soc #(
         .maintenance_valid(maintenance_valid && !maintenance_fault),.maintenance_ready(memory_ready),.maintenance_error(memory_error),
         .mmio_req_valid(mmio_req_valid),.mmio_req_ready(mmio_req_ready),.mmio_req_address(mmio_req_address),.mmio_req_write(mmio_req_write),.mmio_req_data(mmio_req_data),.mmio_req_strobe(mmio_req_strobe),
         .mmio_rsp_valid(mmio_rsp_valid),.mmio_rsp_ready(mmio_rsp_ready),.mmio_rsp_data(mmio_rsp_data),.mmio_rsp_error(mmio_rsp_error),
-        .i_hit_count(i_hits),.i_miss_count(i_misses),.d_hit_count(d_hits),.d_miss_count(d_misses),.d_writeback_count(writebacks)
+        .i_hit_count(i_hits),.i_miss_count(i_misses),.d_hit_count(d_hits),.d_miss_count(d_misses),.d_writeback_count(writebacks),
+        .ddr_cmd_valid(ddr_cmd_valid),.ddr_cmd_ready(ddr_cmd_ready),.ddr_cmd_write(ddr_cmd_write),
+        .ddr_cmd_address(ddr_cmd_address),.ddr_cmd_length(ddr_cmd_length),
+        .ddr_w_valid(ddr_w_valid),.ddr_w_ready(ddr_w_ready),.ddr_w_data(ddr_w_data),.ddr_w_last(ddr_w_last),
+        .ddr_b_valid(ddr_b_valid),.ddr_b_ready(ddr_b_ready),.ddr_b_error(ddr_b_error),
+        .ddr_r_valid(ddr_r_valid),.ddr_r_ready(ddr_r_ready),.ddr_r_data(ddr_r_data),.ddr_r_last(ddr_r_last),.ddr_r_error(ddr_r_error)
     );
     rv32_peripherals #(.CLOCK_HZ(CLOCK_HZ),.BAUD(BAUD)) peripherals(
         .performance_values(performance_values),.performance_config(PERFORMANCE_CONFIG),

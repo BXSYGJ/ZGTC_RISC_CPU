@@ -1,0 +1,7 @@
+cfg_connect -ip 127.0.0.1 -port 65420
+puts "== CONNECT DONE =="
+cfg_set_cable_property -index 0 -freq 1Mhz
+puts "== SET 1Mhz DONE =="
+cfg_scan_chain
+puts "== SCAN DONE =="
+cfg_disconnect

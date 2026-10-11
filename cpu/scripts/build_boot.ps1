@@ -39,7 +39,7 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Bootloader binary conversion failed.' }
     & python ([System.IO.Path]::Combine($PSScriptRoot, 'bin_to_hex.py')) $bin $hexPath --bytes 65536
     if ($LASTEXITCODE -ne 0) { throw 'Bootloader memory image conversion failed.' }
-    & "${prefix}objdump" -d $elf | Set-Content -LiteralPath ([System.IO.Path]::Combine($build, 'bootloader.dis')) -Encoding utf8BOM
+    & "${prefix}objdump" -d $elf | Set-Content -LiteralPath ([System.IO.Path]::Combine($build, 'bootloader.dis')) -Encoding utf8
     $size = (Get-Item -LiteralPath $bin).Length
     if ($size -gt 4096) { throw "Bootloader is $size bytes, larger than the 4 KB boot region." }
     Write-Output ("Bootloader: {0} ({1} bytes) -> {2}" -f $bin, $size, $hexPath)

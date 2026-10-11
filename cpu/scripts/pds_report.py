@@ -11,7 +11,7 @@ def unique_match(pattern, text, label, flags=0):
     return matches[0]
 
 
-def _parse_reports(timing, log, clock_hz, require_synthesis):
+def _parse_reports(timing, log, clock_hz, require_synthesis, ddr3=False):
     if clock_hz <= 0:
         raise ValueError("Clock frequency must be positive")
     for label, value in (("Device", "PG2L200H"), ("Speed Grade", "-6"), ("Package", "FBB676")):
@@ -25,7 +25,7 @@ def _parse_reports(timing, log, clock_hz, require_synthesis):
     period, loads = float(clock.group(1)), int(clock.group(2))
     if abs(period - 1e9 / clock_hz) > 0.005 or loads < 1:
         raise ValueError("CPU clock period or synchronous load count does not match")
-    performance = unique_match(re.escape(clock_name) + r"\s+([0-9.]+) MHz\s+([0-9.]+) MHz\s+([0-9.]+)\s+([0-9.]+)\s+(-?[0-9.]+)", timing, "CPU performance summary")
+    performance = unique_match(r"^\s*" + re.escape(clock_name) + r"\s+([0-9.]+) MHz\s+([0-9.]+) MHz\s+([0-9.]+)\s+([0-9.]+)\s+(-?[0-9.]+)", timing, "CPU performance summary", re.M)
     if abs(float(performance.group(3)) - period) > 0.005:
         raise ValueError("Performance summary and clock table disagree")
     if abs(float(performance.group(1)) - 1000 / period) > 0.01:
@@ -52,8 +52,9 @@ def _parse_reports(timing, log, clock_hz, require_synthesis):
     for label in ("DRM", "GPLL"):
         match = unique_match(r"\| Use of " + label + r"\s+\|\s*([0-9.]+)\s*\|", physical, label + " resources")
         resources[label] = float(match.group(1))
-    if resources["GPLL"] != (0 if clock_hz == 27000000 else 1):
-        raise ValueError("GPLL resource count does not match clock source")
+    expected_gpll = (0 if clock_hz == 27000000 else 1) + (2 if ddr3 else 0)
+    if resources["GPLL"] != expected_gpll:
+        raise ValueError(f"GPLL resource count does not match clock source (expected {expected_gpll}, found {resources['GPLL']})")
     apm = re.findall(r"\| Use of APM\s+\|\s*(\d+)\s*\|", physical)
     if len(apm) > 1:
         raise ValueError("Duplicate physical APM resource count")
@@ -68,12 +69,12 @@ def _parse_reports(timing, log, clock_hz, require_synthesis):
             "lut_metric": "post-route CLMA LUT plus CLMS LUT; do not add Distributed RAM again"}
 
 
-def parse_reports(timing, log, clock_hz):
-    return _parse_reports(timing, log, clock_hz, require_synthesis=True)
+def parse_reports(timing, log, clock_hz, ddr3=False):
+    return _parse_reports(timing, log, clock_hz, require_synthesis=True, ddr3=ddr3)
 
 
-def parse_ila_reports(timing, log, clock_hz):
-    return _parse_reports(timing, log, clock_hz, require_synthesis=False)
+def parse_ila_reports(timing, log, clock_hz, ddr3=False):
+    return _parse_reports(timing, log, clock_hz, require_synthesis=False, ddr3=ddr3)
 
 
 def main():
@@ -81,9 +82,10 @@ def main():
     parser.add_argument("--timing", required=True, type=Path)
     parser.add_argument("--log", required=True, type=Path)
     parser.add_argument("--clock-hz", required=True, type=int)
+    parser.add_argument("--ddr3", action="store_true")
     parser.add_argument("--json", required=True, type=Path)
     args = parser.parse_args()
-    result = parse_reports(args.timing.read_text(encoding="utf-8-sig"), args.log.read_text(encoding="utf-8-sig"), args.clock_hz)
+    result = parse_reports(args.timing.read_text(encoding="utf-8-sig"), args.log.read_text(encoding="utf-8-sig"), args.clock_hz, ddr3=args.ddr3)
     args.json.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(result, indent=2))
     if not result["constraints_met"]:

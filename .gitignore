@@ -64,6 +64,11 @@ transcript
 account.txt
 account*.txt
 
+# Helper tooling artifacts
+.dumate/
+.workbuddy/
+_fpgalab_index.js
+
 # IDE and operating-system files
 .vscode/
 .idea/
