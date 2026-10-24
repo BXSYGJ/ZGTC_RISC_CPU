@@ -11,6 +11,7 @@ try {
     $project = [System.IO.Path]::GetFullPath([System.IO.Path]::Combine($PSScriptRoot, '..'))
     $repoRoot = [System.IO.Path]::GetFullPath([System.IO.Path]::Combine($PSScriptRoot, '..', '..'))
     $rtlRoot = [System.IO.Path]::Combine($repoRoot, 'cpu', 'rtl')
+    $fpgaRoot = [System.IO.Path]::Combine($repoRoot, 'cpu', 'fpga')
 
     # 1) bootloader firmware image (64 KB BRAM image, bootloader in first 4 KB)
     $bootHex = [System.IO.Path]::Combine($project, 'build', 'bootloader_100h.hex')
@@ -34,7 +35,7 @@ try {
     # 4) expand the PDS TCL
     $tclTemplate = [System.IO.File]::ReadAllText([System.IO.Path]::Combine($PSScriptRoot, 'build_full.tcl'))
     $scriptPath = [System.IO.Path]::Combine($buildRoot, 'build.tcl')
-    $tcl = $tclTemplate.Replace('__RTL_ROOT__', $rtlRoot.Replace([System.IO.Path]::DirectorySeparatorChar, '/')).Replace('__PROJECT_ROOT__', $project.Replace([System.IO.Path]::DirectorySeparatorChar, '/')).Replace('__BUILD_ROOT__', $buildRoot.Replace([System.IO.Path]::DirectorySeparatorChar, '/')).Replace('__TOP_SOURCE__', $topSource.Replace([System.IO.Path]::DirectorySeparatorChar, '/'))
+    $tcl = $tclTemplate.Replace('__RTL_ROOT__', $rtlRoot.Replace([System.IO.Path]::DirectorySeparatorChar, '/')).Replace('__PROJECT_ROOT__', $project.Replace([System.IO.Path]::DirectorySeparatorChar, '/')).Replace('__BUILD_ROOT__', $buildRoot.Replace([System.IO.Path]::DirectorySeparatorChar, '/')).Replace('__TOP_SOURCE__', $topSource.Replace([System.IO.Path]::DirectorySeparatorChar, '/')).Replace('__FPGA_ROOT__', $fpgaRoot.Replace([System.IO.Path]::DirectorySeparatorChar, '/'))
     [System.IO.File]::WriteAllText($scriptPath, $tcl, [System.Text.UTF8Encoding]::new($false))
 
     # 5) run PDS batch

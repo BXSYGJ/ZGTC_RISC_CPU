@@ -1,15 +1,17 @@
 `timescale 1ns/1ps
-// PG2L100H (MES2L676-100HP) CPU SoC top - BRAM-only bring-up variant.
+// PG2L100H (MES2L676-100HP) CPU SoC top - with DDR3.
 //
 // Wraps the mainline rv32_soc (cpu/rtl) for the 100Pro+ board:
-//   * DDR3 backend ports tied off (no DDR3 on this build; accesses above the
-//     64 KB BRAM window are rejected as bus errors instead of hanging).
+//   * DDR3 backend: rv32_burst_ddr3 (burst->AXI bridge) + rv32_ddr3_ip_wrapper
+//     (Pango DDR3 IP, 100H-generated idf). Addresses >= 0x0001_0000 go to DDR3;
+//     the low 64 KB stays in on-chip BRAM.
 //   * SPI flash controller kept internal (bootloader is UART/RAM only).
 //   * Pin map from the board's verified blink/uart projects:
 //     clk D18, rst_n C22, key C23, uart_rx B24, uart_tx C24,
-//     led[0..7] A20/C18/C19/E18/A17/A18/C17/B17.
+//     led[0..7] A20/C18/C19/E18/A17/A18/C17/B17; DDR3 ref_clk_p/n N3/N2.
+//   * DDR3 memory pins are placed by the IP idf (see constraints/ddr3_100h.fdc).
 //
-// Parameters default to the mainline configuration (27 MHz direct clock,
+// Parameters default to the mainline configuration (27 MHz direct CPU clock,
 // cache on, predictor on, RV32IM). ENABLE_M=1 matches the RV32IM target.
 //
 // NOTE: PDS's Verilog frontend rejects empty port connections (.port()),
@@ -37,7 +39,25 @@ module pds_cpu_top_100h #(
     input  wire       key,
     input  wire       uart_rx,
     output wire       uart_tx,
-    output wire [7:0] led
+    output wire [7:0] led,
+    // ---- DDR3 physical side (differential ref clock + pads) ----
+    input  wire ref_clk_p,
+    input  wire ref_clk_n,
+    output wire [14:0] mem_a,
+    output wire [2:0]  mem_ba,
+    output wire        mem_ck,
+    output wire        mem_ck_n,
+    output wire        mem_cke,
+    output wire        mem_cs_n,
+    output wire        mem_ras_n,
+    output wire        mem_cas_n,
+    output wire        mem_we_n,
+    output wire        mem_odt,
+    output wire        mem_rst_n,
+    inout  wire [31:0] mem_dq,
+    inout  wire [3:0]  mem_dqs,
+    inout  wire [3:0]  mem_dqs_n,
+    output wire [3:0]  mem_dm
 );
     reg [1:0] reset_pipe;
     wire [7:0] gpio_output;
@@ -47,12 +67,29 @@ module pds_cpu_top_100h #(
     wire spi_miso;
     wire spi_cs, spi_sck, spi_mosi;
 
-    // DDR3 backend tie-off (no DDR3 on the 100Pro+ bring-up build).
+    // DDR3 backend: burst-bus slave <-> AXI bridge <-> DDR3 IP wrapper
     wire ddr_cmd_valid, ddr_cmd_write, ddr_w_valid, ddr_w_last;
     wire ddr_cmd_ready, ddr_w_ready, ddr_b_ready, ddr_r_ready;
     wire ddr_b_valid, ddr_r_valid, ddr_r_last, ddr_b_error, ddr_r_error;
     wire [31:0] ddr_cmd_address, ddr_w_data, ddr_r_data;
     wire [7:0]  ddr_cmd_length;
+    wire core_clk, core_clk_rst_n, ddr_init_done, ddr_pll_lock;
+    // AXI (core_clk domain)
+    wire axiw_awvalid, axiw_awready, axiw_wvalid, axiw_wready, axiw_wusero_last;
+    wire [27:0] axiw_awaddr;
+    wire [3:0]  axiw_awuser_id, axiw_awlen, axiw_wusero_id;
+    wire [255:0] axiw_wdata;
+    wire [31:0] axiw_wstrb;
+    wire axir_arvalid, axir_arready, axir_rvalid, axir_rlast;
+    wire [27:0] axir_araddr;
+    wire [3:0]  axir_aruser_id, axir_arlen, axir_rid;
+    wire [255:0] axir_rdata;
+    wire axiw_awuser_ap, axir_aruser_ap;
+    // DDR debug bus (mirrors the 200H board_top gpio_input layout)
+    wire [3:0] ddr_dbg_state;
+    wire ddr_dbg_arvalid, ddr_dbg_arready, ddr_dbg_rvalid;
+    wire ddr_dbg_to_err;
+    wire [2:0] ddr_dbg_to_state;
 
     // Observer/status outputs unused on this top.
     wire [31:0] unused_status, unused_trace_pc, unused_trace_instruction, unused_trap_cause;
@@ -65,21 +102,10 @@ module pds_cpu_top_100h #(
     end
 
     assign spi_miso = 1'b0;
-    assign ddr_cmd_ready = 1'b1;
-    assign ddr_w_ready   = 1'b1;
-    assign ddr_b_ready   = 1'b0;
-    assign ddr_r_ready   = 1'b0;
-    // DDR3 backend: commands are never accepted, reads report an error so a
-    // stray DDR-window access fails fast instead of hanging the pipeline.
-    assign ddr_b_valid  = 1'b0;
-    assign ddr_r_valid  = 1'b0;
-    assign ddr_r_data   = 32'h0;
-    assign ddr_r_last   = 1'b0;
-    assign ddr_r_error  = 1'b1;
-    assign ddr_b_error  = 1'b0;
 
-    // gpio_input bit0 = KEY1 (external IRQ, active high after inversion),
-    // bit1 = uart_rx - same positions as the 200H board_top.
+    // gpio_input bit7=ddr_dbg_to_err, bits6:4=ddr_dbg_to_state, bit3=ddr_init_done,
+    // bit2=ddr_pll_lock, bit1=uart_rx, bit0=~key - same layout as the 200H board_top
+    // (the bootloader 'D' self-test reads these bits).
     rv32_soc #(
         .ENABLE_M(ENABLE_M), .CLOCK_HZ(CLOCK_HZ), .INIT_FILE(INIT_FILE),
         .ENABLE_PREDICTOR(ENABLE_PREDICTOR), .LOAD_USE_BUBBLE(LOAD_USE_BUBBLE),
@@ -91,7 +117,8 @@ module pds_cpu_top_100h #(
         .clk(clk), .rst_n(reset_pipe[1]),
         .serial_rx(uart_rx), .serial_tx(uart_tx),
         .spi_miso(spi_miso), .spi_cs(spi_cs), .spi_sck(spi_sck), .spi_mosi(spi_mosi),
-        .gpio_input({6'b0, uart_rx, ~key}), .gpio_output(gpio_output),
+        .gpio_input({ddr_dbg_to_err, ddr_dbg_to_state[2:0], ddr_init_done, ddr_pll_lock, uart_rx, ~key}),
+        .gpio_output(gpio_output),
         .status_code(unused_status), .maintenance_fault(maintenance_fault),
         .trace_valid(unused_trace_valid), .trace_pc(unused_trace_pc),
         .trace_instruction(unused_trace_instruction),
@@ -104,7 +131,41 @@ module pds_cpu_top_100h #(
         .ddr_r_valid(ddr_r_valid), .ddr_r_ready(ddr_r_ready), .ddr_r_data(ddr_r_data),
         .ddr_r_last(ddr_r_last), .ddr_r_error(ddr_r_error)
     );
+    rv32_burst_ddr3 ddr3_bridge(
+        .clk(clk), .rst_n(reset_pipe[1]),
+        .cmd_valid(ddr_cmd_valid), .cmd_ready(ddr_cmd_ready), .cmd_write(ddr_cmd_write),
+        .cmd_address(ddr_cmd_address), .cmd_length(ddr_cmd_length),
+        .w_valid(ddr_w_valid), .w_ready(ddr_w_ready), .w_data(ddr_w_data), .w_last(ddr_w_last),
+        .b_valid(ddr_b_valid), .b_ready(ddr_b_ready), .b_error(ddr_b_error),
+        .r_valid(ddr_r_valid), .r_ready(ddr_r_ready), .r_data(ddr_r_data), .r_last(ddr_r_last), .r_error(ddr_r_error),
+        .ddr_clk(core_clk), .ddr_rst_n(core_clk_rst_n), .ddr_init_done(ddr_init_done),
+        .axiw_awaddr(axiw_awaddr), .axiw_awuser_ap(axiw_awuser_ap), .axiw_awuser_id(axiw_awuser_id), .axiw_awlen(axiw_awlen),
+        .axiw_awvalid(axiw_awvalid), .axiw_awready(axiw_awready),
+        .axiw_wdata(axiw_wdata), .axiw_wstrb(axiw_wstrb), .axiw_wvalid(axiw_wvalid), .axiw_wready(axiw_wready),
+        .axiw_wusero_id(axiw_wusero_id), .axiw_wusero_last(axiw_wusero_last),
+        .axir_araddr(axir_araddr), .axir_aruser_ap(axir_aruser_ap), .axir_aruser_id(axir_aruser_id), .axir_arlen(axir_arlen),
+        .axir_arvalid(axir_arvalid), .axir_arready(axir_arready),
+        .axir_rdata(axir_rdata), .axir_rid(axir_rid), .axir_rlast(axir_rlast), .axir_rvalid(axir_rvalid),
+        .dbg_ddr_state(ddr_dbg_state), .dbg_arvalid(ddr_dbg_arvalid), .dbg_arready(ddr_dbg_arready), .dbg_rvalid(ddr_dbg_rvalid),
+        .dbg_to_err(ddr_dbg_to_err), .dbg_to_state(ddr_dbg_to_state)
+    );
+    rv32_ddr3_ip_wrapper ddr3_wrapper(
+        .ref_clk_p(ref_clk_p), .ref_clk_n(ref_clk_n),
+        .resetn(rst_n),
+        .core_clk(core_clk), .core_clk_rst_n(core_clk_rst_n), .ddr_init_done(ddr_init_done), .pll_lock(ddr_pll_lock),
+        .axiw_awaddr(axiw_awaddr), .axiw_awuser_ap(axiw_awuser_ap), .axiw_awuser_id(axiw_awuser_id), .axiw_awlen(axiw_awlen),
+        .axiw_awvalid(axiw_awvalid), .axiw_awready(axiw_awready),
+        .axiw_wdata(axiw_wdata), .axiw_wstrb(axiw_wstrb), .axiw_wvalid(axiw_wvalid), .axiw_wready(axiw_wready),
+        .axiw_wusero_id(axiw_wusero_id), .axiw_wusero_last(axiw_wusero_last),
+        .axir_araddr(axir_araddr), .axir_aruser_ap(axir_aruser_ap), .axir_aruser_id(axir_aruser_id), .axir_arlen(axir_arlen),
+        .axir_arvalid(axir_arvalid), .axir_arready(axir_arready),
+        .axir_rdata(axir_rdata), .axir_rid(axir_rid), .axir_rlast(axir_rlast), .axir_rvalid(axir_rvalid),
+        .mem_cs_n(mem_cs_n), .mem_rst_n(mem_rst_n), .mem_ck(mem_ck), .mem_ck_n(mem_ck_n), .mem_cke(mem_cke),
+        .mem_ras_n(mem_ras_n), .mem_cas_n(mem_cas_n), .mem_we_n(mem_we_n), .mem_odt(mem_odt),
+        .mem_a(mem_a), .mem_ba(mem_ba),
+        .mem_dqs(mem_dqs), .mem_dqs_n(mem_dqs_n), .mem_dq(mem_dq), .mem_dm(mem_dm)
+    );
 
-    // Maintenance fault (e.g. rejected DDR-window access) shows 0xE1 on LEDs.
+    // Maintenance fault (e.g. bus error) shows 0xE1 on LEDs.
     assign led = maintenance_fault ? 8'he1 : gpio_output;
 endmodule

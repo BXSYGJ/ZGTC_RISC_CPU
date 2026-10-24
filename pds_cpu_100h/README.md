@@ -1,8 +1,9 @@
-# pds_cpu_100h — PG2L100H 上的 RISC-V CPU SoC（BRAM-only bring-up）
+# pds_cpu_100h — PG2L100H 上的 RISC-V CPU SoC（BRAM + DDR3）
 
 把主线 RV32IM SoC（`cpu/rtl`）烧到 **MES2L676-100HP / PG2L100H-6IFBG676** 板上跑的工程。
 2026-10-24 实测全链路通过：PDS 构建 → JTAG 烧录 → ZBOOT 串口控制台 → 串口加载应用 →
-**SoC 自试 `ZSOC PASS`**。技能文档：`docs/skills/pango-pg2l100h-dev/references/cpu_serial_flash.md`。
+**SoC 自试 `ZSOC PASS`**；DDR3 后端（100H 目标 IP + burst→AXI 桥）构建通过，功能自检待上板。
+技能文档：`docs/skills/pango-pg2l100h-dev/references/cpu_serial_flash.md`（含 DDR3 章节）。
 
 ## 结构
 
@@ -10,6 +11,8 @@
 pds_cpu_100h/
 ├── src/pds_cpu_top_100h.v.in   # 100H 顶层模板（无 DDR3/SPI 引脚；令牌 __INIT_FILE__/__ENABLE_M__/__UART_BAUD__）
 ├── constraints/cpu_top_100h.fdc # clk D18 / rst_n C22 / key C23 / uart B24,C24 / led A20...
+├── constraints/ddr3_100h.fdc    # DDR3 时钟（ref_clk N3/N2 125MHz）+ 73 针引脚表
+├── ipcore/ddr3_test/            # PDS DDR3 IP（100H 目标 idf + RTL，官方 demo 复制）
 ├── sw/
 │   ├── boot_start.S  boot_link.ld      # 从 cpu/sw/boot 复制（链接 0x0，4KB）
 │   ├── bootloader_100h.c               # ZBOOT 控制台（R 加载 + ? 帮助；去掉了 DDR 自检）
@@ -43,8 +46,11 @@ python tool\serial\serial_cli.py send --hex 'a5' --expect 'SOC PASS'
 
 ## 要点 / 约束
 
-- **DDR3 暂不使用**：顶层把 rv32_soc 的 DDR 后端 tie-off，访问 ≥0x10000 会得到总线错误
-  （maintenance_fault 时 LED 显示 0xE1），不会挂死；软件请待在 64KB BRAM + MMIO。
+- **DDR3**：0x0001_0000 以上走 DDR3（rv32_burst_ddr3 → AXI → rv32_ddr3_ip_wrapper → IP），
+  低 64KB 仍是 BRAM。地址 0x0001_0000+ 需要 DDR 初始化完成（bootloader 的 `D` 命令可自检，
+  输出 D0 pll=/init=/to=/ts= → DDROK / DDRErr @addr）。DDR3 引脚两板一致；
+  **约束里实例路径不带顶层模块名**（`ddr3_wrapper.I_ips_ddr_top...`），
+  且 **mem_* 73 针必须在 fdc 显式约束**（否则 CA OSERDES 布局失败，见技能文档 §8.3）。
 - SPI 控制器在片内但不外接（bootloader 纯 UART/RAM，不依赖 flash）。
 - 配置：27MHz 直时钟、cache 开、预测器开、RV32IM（ENABLE_M=1）、115200 8N1。
 - PDS Verilog 前端不接受 `.port()` 空连接——顶层所有端口显式接线。

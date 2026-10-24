@@ -129,3 +129,56 @@ python tool\serial\serial_cli.py monitor --seconds 220                       # 1
 | **烧录后串口“没输出” | 90% 是测试方法错**：ZBOOT 横幅只在启动时打印一次，端口开晚了就永远等不到。**发 `?` 试探**：回帮助文本=控制台活着；被回显=在跑应用。别用“监听不到横幅”判断串口坏 |
 | **烧录“成功”但板子不动 | 查僵尸 cdt_js/cdt_cfg 进程**：多个实例会霸占 D2XX 会话，后续 program 全变空操作（日志仍报成功）。杀光所有 cdt 进程 → 重启 jtagserver → 用 `tool/serial/d2xx_probe.py` 验证下载器（0xAA→0xFA）→ 重烧 |
 | 大位流烧不进/1MHz 报 Program fail | JTAG 通路边际损坏；先断电重启板子+重插下载器，仍不行则送修 |
+
+
+## 8. DDR3 上板（2026-10-24 构建通过，功能待测）
+
+100Pro+ 核心板有 2 片 DDR3（MT41K128M16XX，32bit），地址空间从 0x0001_0000 起（低 64KB 仍是 BRAM）。
+
+### 8.1 关键结论：DDR3 设施几乎可以直接复用 200H 的
+
+- **IP RTL 完全相同**：官方 100Pro+ demo `2_9_ddr3_test` 的 `ddr3_test.v` / `ddr3_test_ddrphy_top.v`
+  与仓库 `cpu/fpga/ddr3/` 下的逐字节相同；唯一器件相关的是
+  `rtl/ddrphy/ddr3_test_slice_top_v1_10.v`（PHY 硬宏切片）。
+- **只有 .idf 不同**：demo 的 idf 器件目标是 `PG2L100H/FBG676`，仓库的是 `PG2L200H/FBB676`；
+  内存型号都是 MT41K128M16XX。
+- **DDR3 引脚两板完全一致**：官方 demo 的**生效**引脚表与仓库 200H 的 `cpu/constraints/ddr3.fdc`
+  逐针相同（73 针：mem_a[14:0]/mem_ba[2:0]/mem_dq[31:0]/mem_dqs[3:0]/mem_dqs_n/mem_dm/
+  mem_ck(P/N)/cke/cs_n/ras_n/cas_n/we_n/odt/rst_n），参考时钟同为差分 125MHz N3/N2。
+  注意 demo fdc 前半段是**注释掉的模板（含重复的占位引脚）**，真正的生效表在文件后段。
+- 因此 `rv32_burst_ddr3.sv`（burst→AXI 桥）与 `rv32_ddr3_ip_wrapper.sv`（IP 包装）**一行未改**直接复用。
+
+### 8.2 工程改动（pds_cpu_100h）
+
+1. `ipcore/ddr3_test/`：从官方 demo 复制 `ddr3_test.idf`（100H 目标）+ `.v` + `rtl/`。
+2. `src/pds_cpu_top_100h.v.in`：加 ref_clk_p/n + mem_* 端口；实例化 `rv32_burst_ddr3` +
+   `rv32_ddr3_ip_wrapper`；gpio_input 按 200H 布局接
+   `{ddr_dbg_to_err, ddr_dbg_to_state[2:0], ddr_init_done, ddr_pll_lock, uart_rx, ~key}`
+   （bootloader 的 `D` 自检读这些位）。
+3. `scripts/build_full.tcl`：加入 `rv32_burst_ddr3.sv`（不再排除）、wrapper、idf、`ddr3_100h.fdc`。
+4. `constraints/ddr3_100h.fdc`：时钟节从 demo 移植（**实例路径要按本工程层级重写**，见 8.3），
+   引脚表直接用 200H 的 73 针表（已验证与 100H demo 一致）。
+5. `sw/bootloader_100h.c`：恢复 `D` 命令（单字探针 → 64KB 窗口全写全读 → `DDROK`/`DDRErr @addr`），
+   并打印 `D0 pll=/init=/to=/ts=` 状态位以定位卡死阶段。
+
+### 8.3 两个必须踩的坑
+
+- **约束里的实例路径不带顶层模块名**，从顶层模块的**子实例**开始写：
+  `ddr3_wrapper.I_ips_ddr_top.u_ddrphy_top...`（不是 `pds_cpu_top_100h.ddr3_wrapper...`）。
+  写错会报 `CommandTiming-0057: Nothing matched for 'source_list'`。
+- **DDR3 引脚必须在 fdc 里显式约束**。只 `add_design <.idf>` 而不约束 mem_* 时，IP 的
+  PAD_* 参数是占位值（PAD_A0=PAD_ODT=PAD_RESET=H1 等），命令/地址组会落到没有 OSERDES 的 bank，
+  综合能过、**布局阶段报 `Place-0006: ...oserdes_inst cannot be placed`**。把 73 针表补上即解决。
+
+### 8.4 构建与测试
+
+```powershell
+pwsh -NoProfile -File .\pds_cpu_100h\scripts\run_pds_full.ps1      # 含 DDR3，约 8-10 分钟
+cd pds_cpu_100h\scripts
+& 'H:/GG/pango/PDS_2022.2-SP6.4/bin/cdt_cfg.exe' -file program_full.tcl
+python ..\..\tool\serial\serial_cli.py send --text 'D'              # bootloader DDR3 自检
+python ..\..\tool\serial\serial_cli.py monitor --seconds 20
+```
+
+自检输出：`D0 pll=1 init=1 to=0 ts=0` → `DDROK`；失败会打印 `DDRErr @0x<地址>`，
+`to=1` 表示总线超时（DDR 未初始化/PHY 未校准），`init=0` 表示控制器初始化未完成。

@@ -10,6 +10,8 @@ constraint_check/
 log/
 logbackup/
 ipcore/
+# 100H CPU 工程的 DDR3 IP 源码需要入库（其余 ipcore/ 是 PDS 生成物）
+!pds_cpu_100h/ipcore/
 impl.tcl
 multiseed_summary.csv
 
