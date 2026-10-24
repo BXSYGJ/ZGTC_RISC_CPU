@@ -100,7 +100,23 @@ python tool\serial\serial_cli.py send --hex 'a5' --expect 'SOC PASS'          # 
 - 未实测：KEY1 引脚外部中断（`-App selftest` 默认版需要按键时刻与应用运行窗口重合；
   中断通路与 UART 版同 RTL，仿真覆盖）。Flash 固化（.sfc）未做。
 
-## 6. 排障速查
+## 6. CoreMark 实测（2026-10-24）
+
+```powershell
+pwsh -NoProfile -File .\pds_cpu_100h\scripts\build_coremark_100h.ps1          # 1000 迭代 @27MHz
+python tool\serial\serial_cli.py load pds_cpu_100h\build\coremark_v0_i1000_rv32im_rv32gcc.bin
+python tool\serial\serial_cli.py send --text 'G'                              # 应用就绪后等这个字节
+python tool\serial\serial_cli.py monitor --seconds 220                       # 1000 迭代约 40-90s
+```
+
+结果（主线默认配置：cache 开/预测器开/无快路径优化，RV32IM，64KiB BRAM）：
+`Correct operation validated`（crcfinal 0xd340），cycles=0x412F10A6=1,093,603,494。
+**CoreMark = iterations × clock / timed_cycles = 1000 × 27MHz / 1.0936e9 ≈ 24.69**（CoreMark/MHz ≈ 0.91）。
+注意：项目规范的 `6000 × clock / timed_cycles` 里的 6000 是**迭代数**——换迭代数必须同步改公式，
+否则差 6 倍。0.91/MHz 低是因为没开快路径/大 cache 优化（200H 的 3.34/MHz 是全优化配置）；
+在 100H 上开优化配置属于新的 config 实验（要过资源/时序），另立证据。
+
+## 7. 排障速查
 
 | 现象 | 原因 / 处理 |
 | --- | --- |
@@ -110,3 +126,6 @@ python tool\serial\serial_cli.py send --hex 'a5' --expect 'SOC PASS'          # 
 | PDS 编译 `Expression as lvalue` | 顶层里用了 `.port()` 空连接或字面量直连端口；都改成显式 wire |
 | 构建日志停止更新、无 pds_shell 进程 | 外壳超时杀了 pds_shell，留下孤儿 lkads；杀掉孤儿重跑，并加长任务超时 |
 | 时钟不是 27MHz 时乱码 | 确认位流 CLOCK_HZ 与板载 27MHz 一致（bring-up 用直接时钟） |
+| **烧录后串口“没输出” | 90% 是测试方法错**：ZBOOT 横幅只在启动时打印一次，端口开晚了就永远等不到。**发 `?` 试探**：回帮助文本=控制台活着；被回显=在跑应用。别用“监听不到横幅”判断串口坏 |
+| **烧录“成功”但板子不动 | 查僵尸 cdt_js/cdt_cfg 进程**：多个实例会霸占 D2XX 会话，后续 program 全变空操作（日志仍报成功）。杀光所有 cdt 进程 → 重启 jtagserver → 用 `tool/serial/d2xx_probe.py` 验证下载器（0xAA→0xFA）→ 重烧 |
+| 大位流烧不进/1MHz 报 Program fail | JTAG 通路边际损坏；先断电重启板子+重插下载器，仍不行则送修 |
