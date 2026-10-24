@@ -1,0 +1,10 @@
+# PDS build artifacts (bitstreams are regenerable; keep provenance JSONs out too)
+build/
+*.sbit
+*.smsk
+*.bgr
+*.db
+log/
+scripts/log/
+scripts/*.log
+scripts/*.local.tcl

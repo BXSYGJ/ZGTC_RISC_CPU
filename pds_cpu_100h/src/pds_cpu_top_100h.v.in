@@ -1,0 +1,110 @@
+`timescale 1ns/1ps
+// PG2L100H (MES2L676-100HP) CPU SoC top - BRAM-only bring-up variant.
+//
+// Wraps the mainline rv32_soc (cpu/rtl) for the 100Pro+ board:
+//   * DDR3 backend ports tied off (no DDR3 on this build; accesses above the
+//     64 KB BRAM window are rejected as bus errors instead of hanging).
+//   * SPI flash controller kept internal (bootloader is UART/RAM only).
+//   * Pin map from the board's verified blink/uart projects:
+//     clk D18, rst_n C22, key C23, uart_rx B24, uart_tx C24,
+//     led[0..7] A20/C18/C19/E18/A17/A18/C17/B17.
+//
+// Parameters default to the mainline configuration (27 MHz direct clock,
+// cache on, predictor on, RV32IM). ENABLE_M=1 matches the RV32IM target.
+//
+// NOTE: PDS's Verilog frontend rejects empty port connections (.port()),
+// so every soc port is wired to an explicit signal here.
+module pds_cpu_top_100h #(
+    parameter integer ENABLE_M=__ENABLE_M__,
+    parameter integer CLOCK_HZ=27000000,
+    parameter integer ENABLE_PREDICTOR=1,
+    parameter integer LOAD_USE_BUBBLE=0,
+    parameter integer FAST_ICACHE_HIT=0,
+    parameter integer FAST_DCACHE_READ=0,
+    parameter integer FAST_DCACHE_WRITE=0,
+    parameter integer FETCH_OVERLAP=0,
+    parameter integer DATA_OVERLAP=0,
+    parameter integer EARLY_D_REQUEST=0,
+    parameter integer BTB_INDEX_BITS=4,
+    parameter integer ICACHE_SET_BITS=0,
+    parameter integer CACHE_SET_BITS=4,
+    parameter integer ENABLE_CACHE=1,
+    parameter integer UART_BAUD=__UART_BAUD__,
+    parameter INIT_FILE="__INIT_FILE__"
+) (
+    input  wire       clk,
+    input  wire       rst_n,
+    input  wire       key,
+    input  wire       uart_rx,
+    output wire       uart_tx,
+    output wire [7:0] led
+);
+    reg [1:0] reset_pipe;
+    wire [7:0] gpio_output;
+    wire maintenance_fault;
+
+    // SPI flash controller: no pins on this board's bring-up build.
+    wire spi_miso;
+    wire spi_cs, spi_sck, spi_mosi;
+
+    // DDR3 backend tie-off (no DDR3 on the 100Pro+ bring-up build).
+    wire ddr_cmd_valid, ddr_cmd_write, ddr_w_valid, ddr_w_last;
+    wire ddr_cmd_ready, ddr_w_ready, ddr_b_ready, ddr_r_ready;
+    wire ddr_b_valid, ddr_r_valid, ddr_r_last, ddr_b_error, ddr_r_error;
+    wire [31:0] ddr_cmd_address, ddr_w_data, ddr_r_data;
+    wire [7:0]  ddr_cmd_length;
+
+    // Observer/status outputs unused on this top.
+    wire [31:0] unused_status, unused_trace_pc, unused_trace_instruction, unused_trap_cause;
+    wire unused_trace_valid, unused_trap_valid;
+    wire [63:0] unused_cycles, unused_retired;
+
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) reset_pipe <= 2'b00;
+        else reset_pipe <= {reset_pipe[0], 1'b1};
+    end
+
+    assign spi_miso = 1'b0;
+    assign ddr_cmd_ready = 1'b1;
+    assign ddr_w_ready   = 1'b1;
+    assign ddr_b_ready   = 1'b0;
+    assign ddr_r_ready   = 1'b0;
+    // DDR3 backend: commands are never accepted, reads report an error so a
+    // stray DDR-window access fails fast instead of hanging the pipeline.
+    assign ddr_b_valid  = 1'b0;
+    assign ddr_r_valid  = 1'b0;
+    assign ddr_r_data   = 32'h0;
+    assign ddr_r_last   = 1'b0;
+    assign ddr_r_error  = 1'b1;
+    assign ddr_b_error  = 1'b0;
+
+    // gpio_input bit0 = KEY1 (external IRQ, active high after inversion),
+    // bit1 = uart_rx - same positions as the 200H board_top.
+    rv32_soc #(
+        .ENABLE_M(ENABLE_M), .CLOCK_HZ(CLOCK_HZ), .INIT_FILE(INIT_FILE),
+        .ENABLE_PREDICTOR(ENABLE_PREDICTOR), .LOAD_USE_BUBBLE(LOAD_USE_BUBBLE),
+        .FETCH_OVERLAP(FETCH_OVERLAP), .FAST_DCACHE_WRITE(FAST_DCACHE_WRITE),
+        .FAST_DCACHE_READ(FAST_DCACHE_READ), .FAST_ICACHE_HIT(FAST_ICACHE_HIT),
+        .ICACHE_SET_BITS(ICACHE_SET_BITS), .CACHE_SET_BITS(CACHE_SET_BITS),
+        .ENABLE_CACHE(ENABLE_CACHE), .BAUD(UART_BAUD)
+    ) soc (
+        .clk(clk), .rst_n(reset_pipe[1]),
+        .serial_rx(uart_rx), .serial_tx(uart_tx),
+        .spi_miso(spi_miso), .spi_cs(spi_cs), .spi_sck(spi_sck), .spi_mosi(spi_mosi),
+        .gpio_input({6'b0, uart_rx, ~key}), .gpio_output(gpio_output),
+        .status_code(unused_status), .maintenance_fault(maintenance_fault),
+        .trace_valid(unused_trace_valid), .trace_pc(unused_trace_pc),
+        .trace_instruction(unused_trace_instruction),
+        .trap_valid(unused_trap_valid), .trap_cause(unused_trap_cause),
+        .cycle_count(unused_cycles), .retired_count(unused_retired),
+        .ddr_cmd_valid(ddr_cmd_valid), .ddr_cmd_ready(ddr_cmd_ready), .ddr_cmd_write(ddr_cmd_write),
+        .ddr_cmd_address(ddr_cmd_address), .ddr_cmd_length(ddr_cmd_length),
+        .ddr_w_valid(ddr_w_valid), .ddr_w_ready(ddr_w_ready), .ddr_w_data(ddr_w_data), .ddr_w_last(ddr_w_last),
+        .ddr_b_valid(ddr_b_valid), .ddr_b_ready(ddr_b_ready), .ddr_b_error(ddr_b_error),
+        .ddr_r_valid(ddr_r_valid), .ddr_r_ready(ddr_r_ready), .ddr_r_data(ddr_r_data),
+        .ddr_r_last(ddr_r_last), .ddr_r_error(ddr_r_error)
+    );
+
+    // Maintenance fault (e.g. rejected DDR-window access) shows 0xE1 on LEDs.
+    assign led = maintenance_fault ? 8'he1 : gpio_output;
+endmodule
