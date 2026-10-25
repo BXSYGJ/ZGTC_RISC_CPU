@@ -24,30 +24,35 @@ module rv32_ddr3_ip_wrapper (
     output wire core_clk_rst_n,   // sync-released reset in core_clk domain
     output wire ddr_init_done,
     output wire pll_lock,
+    output wire ddrphy_cpd_lock,  // PHY calibration (CPD) lock - status only
     // ---- AXI write channel ----
-    output wire [27:0] axiw_awaddr,
-    output wire        axiw_awuser_ap,
-    output wire [3:0]  axiw_awuser_id,
-    output wire [3:0]  axiw_awlen,
-    output wire        axiw_awvalid,
-    input  wire        axiw_awready,
-    output wire [255:0] axiw_wdata,
-    output wire [31:0]  axiw_wstrb,
-    output wire        axiw_wvalid,
-    input  wire        axiw_wready,
-    input  wire [3:0]   axiw_wusero_id,
-    input  wire         axiw_wusero_last,
+    // NOTE: directions are from the master (rv32_burst_ddr3) perspective:
+    // request signals are INPUTS here and are forwarded to the IP; the IP's
+    // responses are OUTPUTS. Declaring them the other way left the bridge
+    // reading Z on awready/wready/rvalid and every transaction timed out.
+    input  wire [27:0] axiw_awaddr,
+    input  wire        axiw_awuser_ap,
+    input  wire [3:0]  axiw_awuser_id,
+    input  wire [3:0]  axiw_awlen,
+    input  wire        axiw_awvalid,
+    output wire        axiw_awready,
+    input  wire [255:0] axiw_wdata,
+    input  wire [31:0]  axiw_wstrb,
+    input  wire        axiw_wvalid,
+    output wire        axiw_wready,
+    output wire [3:0]   axiw_wusero_id,
+    output wire         axiw_wusero_last,
     // ---- AXI read channel ----
-    output wire [27:0] axir_araddr,
-    output wire        axir_aruser_ap,
-    output wire [3:0]  axir_aruser_id,
-    output wire [3:0]  axir_arlen,
-    output wire        axir_arvalid,
-    input  wire        axir_arready,
-    input  wire [255:0] axir_rdata,
-    input  wire [3:0]   axir_rid,
-    input  wire         axir_rlast,
-    input  wire         axir_rvalid,
+    input  wire [27:0] axir_araddr,
+    input  wire        axir_aruser_ap,
+    input  wire [3:0]  axir_aruser_id,
+    input  wire [3:0]  axir_arlen,
+    input  wire        axir_arvalid,
+    output wire        axir_arready,
+    output wire [255:0] axir_rdata,
+    output wire [3:0]   axir_rid,
+    output wire         axir_rlast,
+    output wire         axir_rvalid,
     // ---- DDR3 physical ----
     output wire        mem_cs_n,
     output wire        mem_rst_n,
@@ -109,7 +114,7 @@ module rv32_ddr3_ip_wrapper (
         .phy_pll_lock           (),
         .gpll_lock              (),
         .rst_gpll_lock          (),
-        .ddrphy_cpd_lock        (),
+        .ddrphy_cpd_lock        (ddrphy_cpd_lock),
         .ddr_init_done          (ddr_init_done),
 
         .axi_awaddr             (axiw_awaddr),
@@ -167,7 +172,7 @@ module rv32_ddr3_ip_wrapper (
         // debug: keep PHY out of reset, defaults otherwise
         .dbg_gate_start         (1'b0),
         .dbg_cpd_start          (1'b0),
-        .dbg_ddrphy_rst_n       (1'b1),  // official demo default: ctrl_bus_0[12]=1
+        .dbg_ddrphy_rst_n       (dbg_ddrphy_rst_n_r),  // release after pll_lock + 1024 cycles
         .dbg_gpll_scan_rst      (1'b0),
 
         .samp_position_dyn_adj  (1'b0),
@@ -198,7 +203,7 @@ module rv32_ddr3_ip_wrapper (
         .debug_dps_cnt_dir0     (),
         .debug_dps_cnt_dir1     (),
 
-        .ck_dly_en              (1'b1),
+        .ck_dly_en              (1'b0),  // official demo default: ctrl_bus_8[20]=0
         .init_ck_dly_step       (8'd0),
         .ck_dly_set_bin         (),
 

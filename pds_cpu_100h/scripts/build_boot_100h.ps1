@@ -30,7 +30,7 @@ try {
     )
     # _zifencei is needed because the bootloader issues fence.i to flush the
     # write-back d-cache and invalidate the i-cache before launching.
-    & "${prefix}gcc" -march=rv32i_zifencei -mabi=ilp32 -msmall-data-limit=0 -std=c11 -O2 -ffreestanding -fno-builtin -Wall -Wextra -Werror -nostdlib -nostartfiles '-Wl,--no-relax' "-Wl,-Map,$map" -T ([System.IO.Path]::Combine($project, 'sw', 'boot_link.ld')) -o $elf $sources -lgcc
+    & "${prefix}gcc" -march=rv32i_zicsr_zifencei -mabi=ilp32 -msmall-data-limit=0 -std=c11 -O2 -ffreestanding -fno-builtin -Wall -Wextra -Werror -nostdlib -nostartfiles '-Wl,--no-relax' "-Wl,-Map,$map" -T ([System.IO.Path]::Combine($project, 'sw', 'boot_link.ld')) -o $elf $sources -lgcc
     if ($LASTEXITCODE -ne 0) { throw 'Bootloader compilation failed.' }
     & "${prefix}objcopy" -O binary $elf $bin
     if ($LASTEXITCODE -ne 0) { throw 'Bootloader binary conversion failed.' }

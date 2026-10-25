@@ -1,5 +1,5 @@
 param(
-    [ValidateSet('hello','selftest','irqprobe','regprobe')][string]$App = 'hello',
+    [ValidateSet('hello','selftest','irqprobe','regprobe','ddrprobe')][string]$App = 'hello',
     [switch]$ExternalUart,
     [string]$Out = '',
     [string]$Toolchain = ''
@@ -37,6 +37,7 @@ try {
         'selftest' { [System.IO.Path]::Combine($swRoot, 'soc_selftest.c') }
         'irqprobe' { [System.IO.Path]::Combine($project, 'sw', 'irq_probe.c') }
         'regprobe'  { [System.IO.Path]::Combine($project, 'sw', 'reg_probe.c') }
+        'ddrprobe'  { [System.IO.Path]::Combine($project, 'sw', 'ddr_probe.c') }
     }
     $sources += $appSource
     # EXTERNAL_UART=0: external interrupt comes from KEY1 (gpio bit0), matching

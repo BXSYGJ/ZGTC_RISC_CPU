@@ -239,7 +239,7 @@ module rv32_burst_ddr3 (
     assign axiw_awaddr    = {ddr_address[29:5], 3'b0};   // word addr, 32B aligned
     assign axiw_awuser_ap = 1'b0;  // official demo always 0
     assign axiw_awuser_id = 4'b0;
-    assign axiw_awlen     = 4'b0;                        // single beat
+    assign axiw_awlen     = 4'b0;                        // single 32B beat
     assign axiw_awvalid   = (ddr_state == DDR_WR_AW);
     assign axiw_wdata     = ddr_wdata;
     assign axiw_wstrb     = ddr_wstrb;
@@ -250,9 +250,11 @@ module rv32_burst_ddr3 (
     assign axir_arlen     = 4'b0;
     assign axir_arvalid   = (ddr_state == DDR_RD_AR);
 
-    // AXI timeout: abort transaction after 4096 cycles and return error
-    reg [11:0] axi_to_cnt;
-    localparam AXI_TO_LIMIT = 12'd4096;
+    // AXI timeout: abort transaction after 4096 cycles and return error.
+    // NOTE: the counter must be 13 bits - a 12-bit 12'd4096 literal truncates
+    // to 0, which made the timeout fire on the first cycle of every state.
+    reg [12:0] axi_to_cnt;
+    localparam [12:0] AXI_TO_LIMIT = 13'd4096;
 
     always @(posedge ddr_clk or negedge ddr_rst_n) begin
         if (!ddr_rst_n) begin
@@ -280,11 +282,12 @@ module rv32_burst_ddr3 (
                             ddr_wdata <= req_address[4] ? {wbuf, 128'b0} : {128'b0, wbuf};
                             ddr_state <= DDR_WR_AW;
                         end else begin
-                            // Read: do a dummy write first (write all-0 with full strobe)
-                            // to prime the DDR3 IP, then read.
-                            ddr_wstrb <= 32'hFFFFFFFF;
-                            ddr_wdata <= 256'b0;
-                            ddr_state <= DDR_WR_AW;
+                            // Read: issue the AXI read directly.  (An earlier
+                            // version did a dummy write of 32 zero bytes with
+                            // full strobe to "prime" the IP first - that write
+                            // landed on the very address being read, so every
+                            // read came back as zero.  Removed.)
+                            ddr_state <= DDR_RD_AR;
                         end
                     end
                 end
@@ -303,12 +306,7 @@ module rv32_burst_ddr3 (
                 DDR_WR_W: begin
                     if (axiw_wready) begin
                         axi_to_cnt <= 12'd0;
-                        if (ddr_need_read) begin
-                            // Dummy write done, now do the read
-                            ddr_state <= DDR_RD_AR;
-                        end else begin
-                            ddr_state <= DDR_ACK;
-                        end
+                        ddr_state <= DDR_ACK;
                     end else if (axi_to_cnt >= AXI_TO_LIMIT) begin
                         dbg_to_err  <= 1'b1;
                         dbg_to_state <= DDR_WR_W;

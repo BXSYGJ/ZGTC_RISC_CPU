@@ -182,3 +182,18 @@ python ..\..\tool\serial\serial_cli.py monitor --seconds 20
 
 自检输出：`D0 pll=1 init=1 to=0 ts=0` → `DDROK`；失败会打印 `DDRErr @0x<地址>`，
 `to=1` 表示总线超时（DDR 未初始化/PHY 未校准），`init=0` 表示控制器初始化未完成。
+
+### 8.5 上板调试记录（2026-10-24，awready 不来，未解决）
+
+| 现象 | 结论 / 修复 |
+| --- | --- |
+| 读 0x10000 立即 trap cause=5 tval=10000，桥 ts/to 均为 0 | **cache 把 DDR 窗口拒了**：rv32_soc 的 CACHE_ADDRESS_BITS 默认 16（<0x10000），PDS 流程必须传 `CACHE_ADDRESS_BITS=27`（200H 的 run_pds.ps1 默认 27，100H 顶层要显式透传） |
+| 修复后能到桥，但 `to=1 ts=1`（DDR_WR_AW） | **桥的 AXI 超时计数器 12 位而 AXI_TO_LIMIT=12'd4096（12 位截断成 0）→ 超时首周期触发**；改 13 位 + 13'd4096 |
+| `cpd`（ddrphy_cpd_lock）不可见 | 包装器把 PHY 复位硬编码成 1（sequencer 输出悬空）。改成 `dbg_ddrphy_rst_n(dbg_ddrphy_rst_n_r)`，并把 cpd_lock 引到 gpio bit1 观察；**修复后 cpd=1** |
+| ck_dly_en=1（包装器）vs 官方默认 0 | 已改成 0 |
+| 仍 `to=1 ts=1`：pll=1 cpd=1 init=1 但 AXI `awready` 从不来（awlen 0 和 15 都试过） | **未解决**。已排除：cache 地址、超时计数器、PHY 复位时序、ck_dly_en、awlen、APB（官方也接 0）、时钟域（对比官方 test_ddr 同用 core_clk）、引脚约束（73 针与官方一致）。**下一步：烧官方预编译 test_ddr.sbit 看状态 LED（A17 pll_lock / A20 init_done / C18 cpd_lock / E18 心跳 / A18 bist / C19 err），判定 IP 本身在这块板能否工作** |
+
+**注意 IP 的 RTL 是 IEEE-1735 加密的（`pragma protect`），内部 AXI 从机逻辑不可读，只能黑盒调试。**
+**官方 demo 的 UART 在核心板 L8/J8（不是板载 CP2102 的 B24/C24），所以只能看 LED 判断。**
+
+**诊断用命令**：bootloader 新增 `S`（只打状态位）与 trap 处理（打印 cause/pc/tval + DDR 状态位），D 命令的第一行也会打 `pll=/cpd=/init=/to=/ts=`。

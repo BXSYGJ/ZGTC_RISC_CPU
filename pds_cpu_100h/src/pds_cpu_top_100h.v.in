@@ -31,6 +31,7 @@ module pds_cpu_top_100h #(
     parameter integer ICACHE_SET_BITS=0,
     parameter integer CACHE_SET_BITS=4,
     parameter integer ENABLE_CACHE=1,
+    parameter integer CACHE_ADDRESS_BITS=27,   // must cover the DDR window (>= 0x10000)
     parameter integer UART_BAUD=__UART_BAUD__,
     parameter INIT_FILE="__INIT_FILE__"
 ) (
@@ -73,7 +74,7 @@ module pds_cpu_top_100h #(
     wire ddr_b_valid, ddr_r_valid, ddr_r_last, ddr_b_error, ddr_r_error;
     wire [31:0] ddr_cmd_address, ddr_w_data, ddr_r_data;
     wire [7:0]  ddr_cmd_length;
-    wire core_clk, core_clk_rst_n, ddr_init_done, ddr_pll_lock;
+    wire core_clk, core_clk_rst_n, ddr_init_done, ddr_pll_lock, ddrphy_cpd_lock;
     // AXI (core_clk domain)
     wire axiw_awvalid, axiw_awready, axiw_wvalid, axiw_wready, axiw_wusero_last;
     wire [27:0] axiw_awaddr;
@@ -112,12 +113,12 @@ module pds_cpu_top_100h #(
         .FETCH_OVERLAP(FETCH_OVERLAP), .FAST_DCACHE_WRITE(FAST_DCACHE_WRITE),
         .FAST_DCACHE_READ(FAST_DCACHE_READ), .FAST_ICACHE_HIT(FAST_ICACHE_HIT),
         .ICACHE_SET_BITS(ICACHE_SET_BITS), .CACHE_SET_BITS(CACHE_SET_BITS),
-        .ENABLE_CACHE(ENABLE_CACHE), .BAUD(UART_BAUD)
+        .ENABLE_CACHE(ENABLE_CACHE), .CACHE_ADDRESS_BITS(CACHE_ADDRESS_BITS), .BAUD(UART_BAUD)
     ) soc (
         .clk(clk), .rst_n(reset_pipe[1]),
         .serial_rx(uart_rx), .serial_tx(uart_tx),
         .spi_miso(spi_miso), .spi_cs(spi_cs), .spi_sck(spi_sck), .spi_mosi(spi_mosi),
-        .gpio_input({ddr_dbg_to_err, ddr_dbg_to_state[2:0], ddr_init_done, ddr_pll_lock, uart_rx, ~key}),
+        .gpio_input({ddr_dbg_to_err, ddr_dbg_to_state[2:0], ddr_init_done, ddr_pll_lock, ddrphy_cpd_lock, ~key}),
         .gpio_output(gpio_output),
         .status_code(unused_status), .maintenance_fault(maintenance_fault),
         .trace_valid(unused_trace_valid), .trace_pc(unused_trace_pc),
@@ -153,6 +154,7 @@ module pds_cpu_top_100h #(
         .ref_clk_p(ref_clk_p), .ref_clk_n(ref_clk_n),
         .resetn(rst_n),
         .core_clk(core_clk), .core_clk_rst_n(core_clk_rst_n), .ddr_init_done(ddr_init_done), .pll_lock(ddr_pll_lock),
+        .ddrphy_cpd_lock(ddrphy_cpd_lock),
         .axiw_awaddr(axiw_awaddr), .axiw_awuser_ap(axiw_awuser_ap), .axiw_awuser_id(axiw_awuser_id), .axiw_awlen(axiw_awlen),
         .axiw_awvalid(axiw_awvalid), .axiw_awready(axiw_awready),
         .axiw_wdata(axiw_wdata), .axiw_wstrb(axiw_wstrb), .axiw_wvalid(axiw_wvalid), .axiw_wready(axiw_wready),

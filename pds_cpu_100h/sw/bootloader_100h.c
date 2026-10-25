@@ -95,6 +95,8 @@ static void ddr_selftest(void) {
         unsigned int gpio = GPIO_INPUT_REG;
         uart_print("D0 pll=");
         uart_putc((gpio & 0x4u) ? '1' : '0');
+        uart_print(" cpd=");
+        uart_putc((gpio & 0x2u) ? '1' : '0');
         uart_print(" init=");
         uart_putc((gpio & 0x8u) ? '1' : '0');
         uart_print(" to=");
@@ -188,6 +190,37 @@ static unsigned int receive_image(void) {
     return length;
 }
 
+/* Fatal trap handler: the bootloader has no recovery path, but printing the
+   cause and the DDR status bits turns a silent reboot into a diagnosis. */
+void trap_handler(void) {
+    unsigned int cause, pc, value;
+    __asm__ volatile ("csrr %0, mcause" : "=r"(cause));
+    __asm__ volatile ("csrr %0, mepc" : "=r"(pc));
+    __asm__ volatile ("csrr %0, mtval" : "=r"(value));
+    uart_print("\nTRAP cause=");
+    uart_put_x((unsigned long)cause);
+    uart_print(" pc=");
+    uart_put_x((unsigned long)pc);
+    uart_print(" tval=");
+    uart_put_x((unsigned long)value);
+    uart_print("\n");
+    {
+        unsigned int gpio = GPIO_INPUT_REG;
+        uart_print("DDRSTAT pll=");
+        uart_putc((gpio & 0x4u) ? '1' : '0');
+        uart_print(" cpd=");
+        uart_putc((gpio & 0x2u) ? '1' : '0');
+        uart_print(" init=");
+        uart_putc((gpio & 0x8u) ? '1' : '0');
+        uart_print(" to=");
+        uart_putc((gpio & 0x80u) ? '1' : '0');
+        uart_print(" ts=");
+        uart_putc('0' + ((gpio >> 4) & 0x7u));
+        uart_print("\n");
+    }
+    for (;;) { }
+}
+
 static void console(void) {
     uart_print("ZBOOT 100H\r\n");
     for (;;) {
@@ -201,6 +234,21 @@ static void console(void) {
             }
         } else if (command == 'D') {
             ddr_selftest();
+        } else if (command == 'S') {
+            {
+                unsigned int gpio = GPIO_INPUT_REG;
+                uart_print("S pll=");
+                uart_putc((gpio & 0x4u) ? '1' : '0');
+                uart_print(" cpd=");
+                uart_putc((gpio & 0x2u) ? '1' : '0');
+                uart_print(" init=");
+                uart_putc((gpio & 0x8u) ? '1' : '0');
+                uart_print(" to=");
+                uart_putc((gpio & 0x80u) ? '1' : '0');
+                uart_print(" ts=");
+                uart_putc('0' + ((gpio >> 4) & 0x7u));
+                uart_print("\r\n");
+            }
         } else if (command == '?') {
             uart_print("R<len32><bin> load+run\n");
             uart_print("D ddr3 selftest\n");
