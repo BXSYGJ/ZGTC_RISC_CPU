@@ -100,6 +100,8 @@ python tool\serial\serial_cli.py send --hex 'a5' --expect 'SOC PASS'          # 
 - 未实测：KEY1 引脚外部中断（`-App selftest` 默认版需要按键时刻与应用运行窗口重合；
   中断通路与 UART 版同 RTL，仿真覆盖）。Flash 固化（.sfc）未做。
 
+**掉电即失**：`program_full.tcl` 的 `cfg_program` 是 JTAG 加载到 RAM，**板子断电/重启后 done bit=0、FPGA 无配置**（表现为串口完全无响应）。重启后必须先重新烧位流再测串口。判断方法：jtagserver + `cdt_cfg -file test_scan.tcl` 看 `done bit`。Flash 固化流程待补。
+
 ## 6. CoreMark 实测（2026-10-24）
 
 ```powershell
@@ -183,7 +185,7 @@ python ..\..\tool\serial\serial_cli.py monitor --seconds 20
 自检输出：`D0 pll=1 init=1 to=0 ts=0` → `DDROK`；失败会打印 `DDRErr @0x<地址>`，
 `to=1` 表示总线超时（DDR 未初始化/PHY 未校准），`init=0` 表示控制器初始化未完成。
 
-### 8.5 上板调试记录（2026-10-24，awready 不来，未解决）
+### 8.5 上板调试记录（2026-10-25 已解决，DDROK）
 
 | 现象 | 结论 / 修复 |
 | --- | --- |
@@ -191,7 +193,10 @@ python ..\..\tool\serial\serial_cli.py monitor --seconds 20
 | 修复后能到桥，但 `to=1 ts=1`（DDR_WR_AW） | **桥的 AXI 超时计数器 12 位而 AXI_TO_LIMIT=12'd4096（12 位截断成 0）→ 超时首周期触发**；改 13 位 + 13'd4096 |
 | `cpd`（ddrphy_cpd_lock）不可见 | 包装器把 PHY 复位硬编码成 1（sequencer 输出悬空）。改成 `dbg_ddrphy_rst_n(dbg_ddrphy_rst_n_r)`，并把 cpd_lock 引到 gpio bit1 观察；**修复后 cpd=1** |
 | ck_dly_en=1（包装器）vs 官方默认 0 | 已改成 0 |
-| 仍 `to=1 ts=1`：pll=1 cpd=1 init=1 但 AXI `awready` 从不来（awlen 0 和 15 都试过） | **未解决**。已排除：cache 地址、超时计数器、PHY 复位时序、ck_dly_en、awlen、APB（官方也接 0）、时钟域（对比官方 test_ddr 同用 core_clk）、引脚约束（73 针与官方一致）。**下一步：烧官方预编译 test_ddr.sbit 看状态 LED（A17 pll_lock / A20 init_done / C18 cpd_lock / E18 心跳 / A18 bist / C19 err），判定 IP 本身在这块板能否工作** |
+| 仍 `to=1 ts=1`：pll=1 cpd=1 init=1 但 AXI `awready` 从不来（awlen 0 和 15 都试过） | **根因：包装器 AXI 端口方向全反**——IP 的输出（awready/wready/rdata/rid/rvalid/rlast）被声明成 wrapper 的 input，桥看到的是 Z。厂商预编译 test_ddr.sbit 与自行重建的厂商 demo 位流均运行正常（排除板/IP），把问题锁死在桥/包装器。全端口方向翻转后 awready 正常到达 |
+| 方向修复后 AXI 通了但读回全 0 | **读路径在读之前先做 32B 全 0 dummy write**（把目标地址覆盖了）。删掉 dummy write、直接进 DDR_RD_AR 后读回正确 |
+
+**最终验证（2026-10-25，ddrprobe 串口加载）**：8 地址缓存/DDR 读写比对全 OK；32 位 bit-walk 全 OK；**4MB sweep（1M 字写+校验读）bad=0，cycles=0x02cd7ff6（47,015,926 @27MHz ≈1.74s），读写合并吞吐 ≈4.6 MB/s**。 |
 
 **注意 IP 的 RTL 是 IEEE-1735 加密的（`pragma protect`），内部 AXI 从机逻辑不可读，只能黑盒调试。**
 **官方 demo 的 UART 在核心板 L8/J8（不是板载 CP2102 的 B24/C24），所以只能看 LED 判断。**
