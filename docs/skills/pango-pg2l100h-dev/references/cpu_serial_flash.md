@@ -202,3 +202,25 @@ python ..\..\tool\serial\serial_cli.py monitor --seconds 20
 **官方 demo 的 UART 在核心板 L8/J8（不是板载 CP2102 的 B24/C24），所以只能看 LED 判断。**
 
 **诊断用命令**：bootloader 新增 `S`（只打状态位）与 trap 处理（打印 cause/pc/tval + DDR 状态位），D 命令的第一行也会打 `pll=/cpd=/init=/to=/ts=`。
+
+## 9. 定稿 153MHz 配置在 100H 上的频率收敛（2026-10-25）
+
+构建入口：`pds_cpu_100h/scripts/run_pds_153.ps1 -ClockHz <Hz> [-PlacementSeed N]`。
+RTL = 定稿实验 `cpu/experiments/full_fetch_commit_factored/rtl`（含全部快路径/M/BTB 参数）+
+该实验的 `fpga/rv32_pll.sv`（153MHz GPLL 表）。顶层 `src/pds_cpu_top_100h_153.v.in`
+（BRAM-only，PLL 生成 CPU 时钟，锁存未锁定保持复位）。
+
+| 频点 | seed | WNS | 结论 |
+| --- | --- | --- | --- |
+| 153 MHz | 0 | -1.106 ns | 违例（估计 Fmax 130.9） |
+| 153 MHz | 1 | -1.286 ns | 违例；种子方差约 ±0.2，救不回 |
+| 126 MHz | 0 | -0.033 ns | 临界违例 |
+| 126 MHz | 1 | -0.221 ns | 布局 +1.019 但布线退化（100H 瓶颈在布线，77% 延迟占比） |
+| **120 MHz** | 0 | **+0.014 ns** | **All Constraints Met**（与 200H 定稿 +0.021 同量级临界收敛） |
+
+结论：这颗 PG2L100H-6IFBG676 比定稿 200H-6FBB676 慢约 17%（疑似工业级 -6I vs 商业级），
+153 MHz 配置在 100H 上不可复现；**120 MHz 是当前已收敛的最高 PLL 频点**。
+
+**120 MHz 上板 CoreMark（bitstream B4E623BF…，i1000）**：CRC 0xd340 与基线一致，
+timed_cycles=313,327,696，retired=289,606,905 → **CoreMark 383.0（3.19 CoreMark/MHz）**。
+配置 hash 0e8e96fd，ihit=302,543,892 / imiss=392（I-cache 16KiB 几乎全命中）。
