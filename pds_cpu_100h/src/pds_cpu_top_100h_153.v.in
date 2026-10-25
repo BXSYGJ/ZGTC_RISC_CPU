@@ -12,13 +12,13 @@ module pds_cpu_top_100h (
     output wire [7:0] led
 );
     wire cpu_clk, clock_locked;
-    rv32_pll #(.CLOCK_HZ(153000000)) clock_source(
+    rv32_pll #(.CLOCK_HZ(__CLOCK_HZ__)) clock_source(
         .reference_clk(clk), .reset(~rst_n), .cpu_clk(cpu_clk), .locked(clock_locked)
     );
     rv32_board_top #(
         .DATA_OVERLAP(1), .BTB_INDEX_BITS(8), .EARLY_D_REQUEST(1),
         .FAST_DCACHE_WRITE(1), .FAST_DCACHE_READ(1), .FETCH_OVERLAP(1),
-        .ENABLE_M(1), .CLOCK_HZ(153000000), .INIT_FILE("__INIT_FILE__"),
+        .ENABLE_M(1), .CLOCK_HZ(__CLOCK_HZ__), .INIT_FILE("__INIT_FILE__"),
         .ENABLE_PREDICTOR(1), .LOAD_USE_BUBBLE(1), .FAST_ICACHE_HIT(1),
         .ICACHE_SET_BITS(9), .CACHE_SET_BITS(6), .ENABLE_CACHE(1),
         .UART_BAUD(115200)
