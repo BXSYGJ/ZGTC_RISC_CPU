@@ -1,0 +1,46 @@
+{
+  "version": "6.3.1",
+  "flags": {},
+  "shapes": [
+    {
+      "label": "insufficient_solder",
+      "points": [
+        [
+          590.6451612903226,
+          147.74193548387098
+        ],
+        [
+          644.8387096774194,
+          197.4193548387097
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "insufficient_solder",
+      "points": [
+        [
+          664.8387096774194,
+          352.258064516129
+        ],
+        [
+          717.741935483871,
+          397.41935483870964
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    }
+  ],
+  "imagePath": "field_20260705_195440_541.jpg",
+  "imageData": null,
+  "imageHeight": 800,
+  "imageWidth": 1280
+}

@@ -1,0 +1,64 @@
+{
+  "version": "6.3.1",
+  "flags": {},
+  "shapes": [
+    {
+      "label": "excess_solder",
+      "points": [
+        [
+          964.1935483870968,
+          156.1290322580645
+        ],
+        [
+          1013.8709677419356,
+          204.51612903225808
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "improper_installation",
+      "points": [
+        [
+          615.1612903225807,
+          678.7096774193549
+        ],
+        [
+          748.0645161290323,
+          759.3548387096774
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "excess_solder",
+      "points": [
+        [
+          918.3870967741935,
+          371.6129032258064
+        ],
+        [
+          966.1290322580646,
+          418.7096774193548
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    }
+  ],
+  "imagePath": "field_20260705_194945_223.jpg",
+  "imageData": null,
+  "imageHeight": 800,
+  "imageWidth": 1280
+}

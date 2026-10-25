@@ -1,0 +1,100 @@
+{
+  "version": "7.0.2",
+  "flags": {},
+  "shapes": [
+    {
+      "label": "excess_solder",
+      "points": [
+        [
+          381.0184317400812,
+          102.74914089347074
+        ],
+        [
+          462.8678537956889,
+          159.6063730084348
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "insufficient_solder",
+      "points": [
+        [
+          265.4295532646048,
+          84.00499843798806
+        ],
+        [
+          337.28209934395505,
+          205.8419243986254
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "insufficient_solder",
+      "points": [
+        [
+          241.68697282099345,
+          402.65542018119316
+        ],
+        [
+          313.53951890034364,
+          511.9962511715089
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "excess_solder",
+      "points": [
+        [
+          465.3670727897532,
+          448.8909715713838
+        ],
+        [
+          517.8506716651046,
+          511.3714464229927
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "improper_installation",
+      "points": [
+        [
+          521.5995001562011,
+          103.37394564198684
+        ],
+        [
+          654.058106841612,
+          518.2442986566698
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    }
+  ],
+  "imagePath": "field_20260705_201345_719.jpg",
+  "imageData": null,
+  "imageHeight": 800,
+  "imageWidth": 1280
+}

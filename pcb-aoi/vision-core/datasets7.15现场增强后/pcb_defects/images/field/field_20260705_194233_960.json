@@ -1,0 +1,100 @@
+{
+  "version": "7.0.2",
+  "flags": {},
+  "shapes": [
+    {
+      "label": "insufficient_solder",
+      "points": [
+        [
+          1020.6451612903226,
+          324.19354838709677
+        ],
+        [
+          1135.1612903225805,
+          448.38709677419354
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "dry_solder_joint",
+      "points": [
+        [
+          679.6751015307716,
+          120.24367385192117
+        ],
+        [
+          754.0268666041861,
+          200.21868166198058
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "dry_solder_joint",
+      "points": [
+        [
+          792.1399562636675,
+          207.09153389565756
+        ],
+        [
+          869.6157450796626,
+          280.1936894720399
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "dry_solder_joint",
+      "points": [
+        [
+          692.7960012496094,
+          219.58762886597935
+        ],
+        [
+          775.2702280537331,
+          288.9409559512652
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "insufficient_solder",
+      "points": [
+        [
+          952.0899718837863,
+          447.6413620743516
+        ],
+        [
+          1040.8122461730707,
+          537.6132458606685
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    }
+  ],
+  "imagePath": "field_20260705_194233_960.jpg",
+  "imageData": null,
+  "imageHeight": 800,
+  "imageWidth": 1280
+}

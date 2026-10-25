@@ -28,3 +28,8 @@ All older processor experiments, temporary board projects, and unrelated develop
 ## Additional qualified releases
 
 The [155.25 MHz and best archived 153 MHz cores](cpu/releases/qualified-cores-20261012/README.md) include complete build snapshots, firmware, bitstreams, routed reports and board references.
+
+
+## PCB AOI vision and training dataset
+
+The [PCB AOI archive](pcb-aoi/README.md) contains the YOLOv8n detector, CNN implementation references, trained PyTorch/ONNX weights, and the recovered 1,164-image training / 66-image validation dataset, with 195 field-image archive copies and verification reports.

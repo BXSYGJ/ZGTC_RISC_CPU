@@ -1,0 +1,64 @@
+{
+  "version": "7.0.2",
+  "flags": {},
+  "shapes": [
+    {
+      "label": "short_circuit",
+      "points": [
+        [
+          824.0909090909091,
+          311.3636363636364
+        ],
+        [
+          918.0303030303031,
+          403.7878787878788
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "short_circuit",
+      "points": [
+        [
+          422.57575757575756,
+          438.6363636363636
+        ],
+        [
+          486.21212121212125,
+          525.0
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "insufficient_solder",
+      "points": [
+        [
+          1126.410496719775,
+          483.25523273976864
+        ],
+        [
+          1167.0228053733206,
+          527.616369884411
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    }
+  ],
+  "imagePath": "field_20260705_173903_992.jpg",
+  "imageData": null,
+  "imageHeight": 800,
+  "imageWidth": 1280
+}

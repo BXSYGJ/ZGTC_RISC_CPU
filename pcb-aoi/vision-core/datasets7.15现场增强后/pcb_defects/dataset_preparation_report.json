@@ -1,0 +1,791 @@
+{
+  "source_root": "D:/AAAED/code/Loongson_AOI_PCB/datasets7.15修改后/pcb_defects",
+  "output_root": "D:/AAAED/code/Loongson_AOI_PCB/datasets7.15现场增强后/pcb_defects",
+  "policy": {
+    "field_mode": "replace_existing_and_move_all_to_train",
+    "field_without_annotation": "negative_sample_with_empty_label",
+    "reverse_sampling": "drop_val_overlap_then_keep_max_per_source_group",
+    "max_reverse_per_non_overlap_group": 2,
+    "image_format": "preserve_original_jpg_grayscale_content_and_dimensions"
+  },
+  "base_samples_copied": {
+    "train_non_field": 1005,
+    "val_non_field": 66
+  },
+  "field": {
+    "source_field_images": 194,
+    "source_field_jsons": 190,
+    "training_field_samples": 195,
+    "recovered_images": {
+      "field_20260705_194247_383": "images/val/field_20260705_194247_383.jpg"
+    },
+    "negative_without_json": [
+      "field_20260705_200234_741",
+      "field_20260705_200236_875",
+      "field_20260705_200239_467",
+      "field_20260705_200242_456",
+      "field_20260705_200253_415"
+    ],
+    "negative_empty_json": [
+      "field_20260705_193826_778"
+    ]
+  },
+  "reverse_component": {
+    "max_per_non_overlap_group": 2,
+    "validation_overlap_groups": [
+      "147_png_jpg",
+      "157_png_jpg"
+    ],
+    "source_groups_before": 20,
+    "images_before": 72,
+    "images_kept": 36,
+    "images_removed": 36,
+    "reverse_instances_kept": 296,
+    "removed_class_instances": {
+      "5": 340
+    },
+    "kept": [
+      {
+        "file": "132_png_jpg.rf.82134a204e3ceb344bff6006c8389b03.jpg",
+        "group": "132_png_jpg",
+        "reverse_instances": 7,
+        "sharpness": 1143.3423318099976,
+        "brightness": 121.23859375,
+        "brightness_distance": 6.261406249999993
+      },
+      {
+        "file": "132_png_jpg.rf.3dd71a7b8910d819c39aa2c6ca81b61c.jpg",
+        "group": "132_png_jpg",
+        "reverse_instances": 7,
+        "sharpness": 1133.1099099349976,
+        "brightness": 121.2371484375,
+        "brightness_distance": 6.262851562500003
+      },
+      {
+        "file": "149_png_jpg.rf.9c8293f80ac1411085009160badb779b.jpg",
+        "group": "149_png_jpg",
+        "reverse_instances": 13,
+        "sharpness": 1372.562863999939,
+        "brightness": 106.4477734375,
+        "brightness_distance": 21.052226562499996
+      },
+      {
+        "file": "149_png_jpg.rf.0b9923719bd1bf97b44ac5c213b9e7d2.jpg",
+        "group": "149_png_jpg",
+        "reverse_instances": 13,
+        "sharpness": 1369.147008934021,
+        "brightness": 106.38109375,
+        "brightness_distance": 21.118906249999995
+      },
+      {
+        "file": "154_png_jpg.rf.bf5415064225f0ce940390fec5ddf1f6.jpg",
+        "group": "154_png_jpg",
+        "reverse_instances": 7,
+        "sharpness": 1446.0466265625,
+        "brightness": 111.8907421875,
+        "brightness_distance": 15.609257812500005
+      },
+      {
+        "file": "154_png_jpg.rf.d17949ab48ca44017ca3e571f82e7da8.jpg",
+        "group": "154_png_jpg",
+        "reverse_instances": 7,
+        "sharpness": 1429.8229095077515,
+        "brightness": 111.9045703125,
+        "brightness_distance": 15.595429687500001
+      },
+      {
+        "file": "155_png_jpg.rf.6d23b7e46f0c7b0ebd938c3a532d5d10.jpg",
+        "group": "155_png_jpg",
+        "reverse_instances": 11,
+        "sharpness": 1630.6521327575686,
+        "brightness": 103.2566796875,
+        "brightness_distance": 24.243320312500003
+      },
+      {
+        "file": "155_png_jpg.rf.6b11835c5386619fe5a722e358c0df72.jpg",
+        "group": "155_png_jpg",
+        "reverse_instances": 11,
+        "sharpness": 1624.1235467391969,
+        "brightness": 103.315078125,
+        "brightness_distance": 24.184921875
+      },
+      {
+        "file": "15_png_jpg.rf.370829d2d1ea432368dbe9b244defd2d.jpg",
+        "group": "15_png_jpg",
+        "reverse_instances": 6,
+        "sharpness": 825.9741083236694,
+        "brightness": 91.679921875,
+        "brightness_distance": 35.820078124999995
+      },
+      {
+        "file": "15_png_jpg.rf.a14cd564bc1c33e485d11ee128faa215.jpg",
+        "group": "15_png_jpg",
+        "reverse_instances": 6,
+        "sharpness": 815.3846283630372,
+        "brightness": 91.6644140625,
+        "brightness_distance": 35.8355859375
+      },
+      {
+        "file": "161_png_jpg.rf.84b6db334a9c95bd1fa10ff958c8d0be.jpg",
+        "group": "161_png_jpg",
+        "reverse_instances": 8,
+        "sharpness": 1072.9228135681153,
+        "brightness": 120.1933984375,
+        "brightness_distance": 7.306601562500006
+      },
+      {
+        "file": "161_png_jpg.rf.7e29c7172cebc514c70ea2ae60b9d32d.jpg",
+        "group": "161_png_jpg",
+        "reverse_instances": 8,
+        "sharpness": 1071.3058418563844,
+        "brightness": 120.2384375,
+        "brightness_distance": 7.261562499999997
+      },
+      {
+        "file": "167_png_jpg.rf.5db968e9578c583871bcfe248f78d49a.jpg",
+        "group": "167_png_jpg",
+        "reverse_instances": 13,
+        "sharpness": 1361.4173301696778,
+        "brightness": 118.086484375,
+        "brightness_distance": 9.413515625000002
+      },
+      {
+        "file": "167_png_jpg.rf.104fca47e7880b75d25535d2169c90bd.jpg",
+        "group": "167_png_jpg",
+        "reverse_instances": 13,
+        "sharpness": 1352.1875848251343,
+        "brightness": 118.0651953125,
+        "brightness_distance": 9.434804687500005
+      },
+      {
+        "file": "168_png_jpg.rf.12c5473c10434ee61aed9dbcae847521.jpg",
+        "group": "168_png_jpg",
+        "reverse_instances": 11,
+        "sharpness": 2646.358966111755,
+        "brightness": 126.30578125,
+        "brightness_distance": 1.1942187500000045
+      },
+      {
+        "file": "168_png_jpg.rf.d2918ad7567ff32f589d3bba26ad67cc.jpg",
+        "group": "168_png_jpg",
+        "reverse_instances": 11,
+        "sharpness": 2631.157559861755,
+        "brightness": 126.2543359375,
+        "brightness_distance": 1.2456640624999977
+      },
+      {
+        "file": "171_png_jpg.rf.3ec786e19861834b9a545ba11d6a5e9a.jpg",
+        "group": "171_png_jpg",
+        "reverse_instances": 7,
+        "sharpness": 966.1201892562865,
+        "brightness": 120.984921875,
+        "brightness_distance": 6.515078125000002
+      },
+      {
+        "file": "171_png_jpg.rf.e1f05c7f53987bff009be42f45948865.jpg",
+        "group": "171_png_jpg",
+        "reverse_instances": 7,
+        "sharpness": 965.7468742614745,
+        "brightness": 121.0009375,
+        "brightness_distance": 6.499062499999994
+      },
+      {
+        "file": "180_png_jpg.rf.04a98fb432e86fe6657d10d66fef7cde.jpg",
+        "group": "180_png_jpg",
+        "reverse_instances": 8,
+        "sharpness": 1333.0240026794436,
+        "brightness": 113.99609375,
+        "brightness_distance": 13.50390625
+      },
+      {
+        "file": "180_png_jpg.rf.c9bba865c73bb8f4bbdc913960d92e78.jpg",
+        "group": "180_png_jpg",
+        "reverse_instances": 8,
+        "sharpness": 1330.0519342712403,
+        "brightness": 114.0137890625,
+        "brightness_distance": 13.486210937500005
+      },
+      {
+        "file": "187_png_jpg.rf.8a1b9403c795664e02b1220ba959cb48.jpg",
+        "group": "187_png_jpg",
+        "reverse_instances": 10,
+        "sharpness": 2022.4844757064823,
+        "brightness": 115.505546875,
+        "brightness_distance": 11.994453125000007
+      },
+      {
+        "file": "187_png_jpg.rf.b3bef65e94a985595d73daff84d89ede.jpg",
+        "group": "187_png_jpg",
+        "reverse_instances": 10,
+        "sharpness": 2014.6794039535523,
+        "brightness": 115.4859765625,
+        "brightness_distance": 12.0140234375
+      },
+      {
+        "file": "190_png_jpg.rf.ba35d0531a9c7b78261e0e11191e4a57.jpg",
+        "group": "190_png_jpg",
+        "reverse_instances": 8,
+        "sharpness": 815.6997357177735,
+        "brightness": 105.477578125,
+        "brightness_distance": 22.022421875000006
+      },
+      {
+        "file": "190_png_jpg.rf.2f61f5cb5cd4dff14ccc960b37b5f760.jpg",
+        "group": "190_png_jpg",
+        "reverse_instances": 8,
+        "sharpness": 800.2473060974121,
+        "brightness": 105.451953125,
+        "brightness_distance": 22.048046874999997
+      },
+      {
+        "file": "192_png_jpg.rf.c79845ad6d5d7225a1301fa8b1ebafb2.jpg",
+        "group": "192_png_jpg",
+        "reverse_instances": 9,
+        "sharpness": 1105.0984775375366,
+        "brightness": 117.7428125,
+        "brightness_distance": 9.7571875
+      },
+      {
+        "file": "192_png_jpg.rf.14bdca3ad0e067577f83960f7942df90.jpg",
+        "group": "192_png_jpg",
+        "reverse_instances": 9,
+        "sharpness": 1103.9643273910522,
+        "brightness": 117.7399609375,
+        "brightness_distance": 9.760039062499999
+      },
+      {
+        "file": "193_png_jpg.rf.39af99c9d409091756614bfccf3a2c5e.jpg",
+        "group": "193_png_jpg",
+        "reverse_instances": 9,
+        "sharpness": 2187.6405328125,
+        "brightness": 125.762890625,
+        "brightness_distance": 1.7371093750000028
+      },
+      {
+        "file": "193_png_jpg.rf.2dc9c51e983da73972979b761e6d82c6.jpg",
+        "group": "193_png_jpg",
+        "reverse_instances": 9,
+        "sharpness": 2177.9721368881223,
+        "brightness": 125.693828125,
+        "brightness_distance": 1.806171875000004
+      },
+      {
+        "file": "194_png_jpg.rf.28340e0555217464e4c836b3f39344c9.jpg",
+        "group": "194_png_jpg",
+        "reverse_instances": 5,
+        "sharpness": 1463.766160520935,
+        "brightness": 130.4721875,
+        "brightness_distance": 2.9721874999999898
+      },
+      {
+        "file": "194_png_jpg.rf.fa56e2c17bd396fd72c5fce912f1e899.jpg",
+        "group": "194_png_jpg",
+        "reverse_instances": 5,
+        "sharpness": 1462.233894895935,
+        "brightness": 130.4646875,
+        "brightness_distance": 2.9646874999999966
+      },
+      {
+        "file": "195_png_jpg.rf.5545331141a6e6eece02b30d5da666a3.jpg",
+        "group": "195_png_jpg",
+        "reverse_instances": 8,
+        "sharpness": 1224.1734207626341,
+        "brightness": 125.1316015625,
+        "brightness_distance": 2.368398437500005
+      },
+      {
+        "file": "195_png_jpg.rf.b744c651b2851ce1b35bc8c5adc0f085.jpg",
+        "group": "195_png_jpg",
+        "reverse_instances": 8,
+        "sharpness": 1209.3188376937867,
+        "brightness": 125.1808203125,
+        "brightness_distance": 2.3191796874999966
+      },
+      {
+        "file": "196_png_jpg.rf.4da9f1e68bbd03ac599d43457abf04a2.jpg",
+        "group": "196_png_jpg",
+        "reverse_instances": 5,
+        "sharpness": 799.8307480331422,
+        "brightness": 116.1149609375,
+        "brightness_distance": 11.385039062499999
+      },
+      {
+        "file": "196_png_jpg.rf.f304b93a1ef481ce717af5edc95b05c0.jpg",
+        "group": "196_png_jpg",
+        "reverse_instances": 5,
+        "sharpness": 795.4984295272827,
+        "brightness": 116.1238671875,
+        "brightness_distance": 11.376132812500003
+      },
+      {
+        "file": "1_png_jpg.rf.ed1d6b7674ee80aeb1c04c37f4b461c3.jpg",
+        "group": "1_png_jpg",
+        "reverse_instances": 3,
+        "sharpness": 777.6602928710937,
+        "brightness": 114.391328125,
+        "brightness_distance": 13.108671874999999
+      },
+      {
+        "file": "1_png_jpg.rf.d8a1640de7ffdbdfaccb81cfb5363dd4.jpg",
+        "group": "1_png_jpg",
+        "reverse_instances": 3,
+        "sharpness": 770.4341991210937,
+        "brightness": 114.3747265625,
+        "brightness_distance": 13.125273437499999
+      }
+    ],
+    "removed": [
+      {
+        "file": "132_png_jpg.rf.fa9a5348564972e263b04af8609cb721.jpg",
+        "group": "132_png_jpg",
+        "reason": "source_group_limit",
+        "class_instances": {
+          "5": 7
+        },
+        "sharpness": 1101.4886599349975,
+        "brightness": 121.245234375,
+        "brightness_distance": 6.2547656250000045
+      },
+      {
+        "file": "147_png_jpg.rf.fa1e512f9ad13aa953a33f93c0b549cc.jpg",
+        "group": "147_png_jpg",
+        "reason": "train_val_source_overlap",
+        "class_instances": {
+          "5": 15
+        },
+        "sharpness": 1759.8651227401733,
+        "brightness": 122.7121484375,
+        "brightness_distance": 4.787851562499995
+      },
+      {
+        "file": "147_png_jpg.rf.5906154fe860e2359aac718a691a6b20.jpg",
+        "group": "147_png_jpg",
+        "reason": "train_val_source_overlap",
+        "class_instances": {
+          "5": 15
+        },
+        "sharpness": 1752.8642633651732,
+        "brightness": 122.6549609375,
+        "brightness_distance": 4.845039062500007
+      },
+      {
+        "file": "147_png_jpg.rf.695d8bff2eca5ca8bf12ceb4891955bb.jpg",
+        "group": "147_png_jpg",
+        "reason": "train_val_source_overlap",
+        "class_instances": {
+          "5": 15
+        },
+        "sharpness": 1734.7141071151736,
+        "brightness": 122.7140625,
+        "brightness_distance": 4.785937500000003
+      },
+      {
+        "file": "149_png_jpg.rf.9c753f9c9f24443c195d3d74cfe9a27e.jpg",
+        "group": "149_png_jpg",
+        "reason": "source_group_limit",
+        "class_instances": {
+          "5": 13
+        },
+        "sharpness": 1314.4196859375,
+        "brightness": 106.3790625,
+        "brightness_distance": 21.120937499999997
+      },
+      {
+        "file": "154_png_jpg.rf.72843872263b4e16531d656bdf9b3b44.jpg",
+        "group": "154_png_jpg",
+        "reason": "source_group_limit",
+        "class_instances": {
+          "5": 7
+        },
+        "sharpness": 1428.907877142334,
+        "brightness": 111.927421875,
+        "brightness_distance": 15.572578125000007
+      },
+      {
+        "file": "154_png_jpg.rf.b874e7c424a5b7230445c3e6ba74bac2.jpg",
+        "group": "154_png_jpg",
+        "reason": "source_group_limit",
+        "class_instances": {
+          "5": 10
+        },
+        "sharpness": 1385.056213670349,
+        "brightness": 112.0215234375,
+        "brightness_distance": 15.478476562500006
+      },
+      {
+        "file": "154_png_jpg.rf.c045ea6a69377e239d14d1772b4ccb86.jpg",
+        "group": "154_png_jpg",
+        "reason": "source_group_limit",
+        "class_instances": {
+          "5": 10
+        },
+        "sharpness": 1378.0693292907713,
+        "brightness": 112.022109375,
+        "brightness_distance": 15.477890625
+      },
+      {
+        "file": "154_png_jpg.rf.71139de847607905b7a371108e29feb9.jpg",
+        "group": "154_png_jpg",
+        "reason": "source_group_limit",
+        "class_instances": {
+          "5": 10
+        },
+        "sharpness": 1348.5631468368529,
+        "brightness": 112.03140625,
+        "brightness_distance": 15.468593749999997
+      },
+      {
+        "file": "155_png_jpg.rf.2bef3372518a48caf3ffdc0c52264456.jpg",
+        "group": "155_png_jpg",
+        "reason": "source_group_limit",
+        "class_instances": {
+          "5": 11
+        },
+        "sharpness": 1613.9481564804075,
+        "brightness": 103.3119921875,
+        "brightness_distance": 24.188007812500004
+      },
+      {
+        "file": "155_png_jpg.rf.958454494e21c517bd90fd01eaf56268.jpg",
+        "group": "155_png_jpg",
+        "reason": "source_group_limit",
+        "class_instances": {
+          "5": 9
+        },
+        "sharpness": 1300.9932360824587,
+        "brightness": 104.148515625,
+        "brightness_distance": 23.351484375
+      },
+      {
+        "file": "155_png_jpg.rf.2ed1888444240d62bcbed9848026e228.jpg",
+        "group": "155_png_jpg",
+        "reason": "source_group_limit",
+        "class_instances": {
+          "5": 9
+        },
+        "sharpness": 1296.3030642318727,
+        "brightness": 104.131171875,
+        "brightness_distance": 23.368828124999993
+      },
+      {
+        "file": "155_png_jpg.rf.758383d3dc5f480eb7f03610cbbd1716.jpg",
+        "group": "155_png_jpg",
+        "reason": "source_group_limit",
+        "class_instances": {
+          "5": 9
+        },
+        "sharpness": 1288.4809236083986,
+        "brightness": 104.0751953125,
+        "brightness_distance": 23.4248046875
+      },
+      {
+        "file": "157_png_jpg.rf.dd1d3d7bbccc8771f2cab718ba4ddb04.jpg",
+        "group": "157_png_jpg",
+        "reason": "train_val_source_overlap",
+        "class_instances": {
+          "5": 12
+        },
+        "sharpness": 1401.3578514099122,
+        "brightness": 121.8083203125,
+        "brightness_distance": 5.691679687499999
+      },
+      {
+        "file": "157_png_jpg.rf.4a3ca8afb04ea8193d129f1620ebe3ad.jpg",
+        "group": "157_png_jpg",
+        "reason": "train_val_source_overlap",
+        "class_instances": {
+          "5": 12
+        },
+        "sharpness": 1384.7928514099121,
+        "brightness": 121.7851171875,
+        "brightness_distance": 5.714882812499994
+      },
+      {
+        "file": "157_png_jpg.rf.a0aa575af73fb11e8dcecc7d149e4bd5.jpg",
+        "group": "157_png_jpg",
+        "reason": "train_val_source_overlap",
+        "class_instances": {
+          "5": 12
+        },
+        "sharpness": 1373.2034764099121,
+        "brightness": 121.811953125,
+        "brightness_distance": 5.688046874999998
+      },
+      {
+        "file": "157_png_jpg.rf.27dcaf5e72ae2bd187e98835c95a2aae.jpg",
+        "group": "157_png_jpg",
+        "reason": "train_val_source_overlap",
+        "class_instances": {
+          "5": 12
+        },
+        "sharpness": 1295.1128462997438,
+        "brightness": 117.4735546875,
+        "brightness_distance": 10.026445312500002
+      },
+      {
+        "file": "157_png_jpg.rf.14c7321a0a3bbc5622850bf9bbc17115.jpg",
+        "group": "157_png_jpg",
+        "reason": "train_val_source_overlap",
+        "class_instances": {
+          "5": 12
+        },
+        "sharpness": 1288.6857018295289,
+        "brightness": 117.42203125,
+        "brightness_distance": 10.077968749999997
+      },
+      {
+        "file": "157_png_jpg.rf.047450cf73ae08df7c200b5a53f3f5ce.jpg",
+        "group": "157_png_jpg",
+        "reason": "train_val_source_overlap",
+        "class_instances": {
+          "5": 12
+        },
+        "sharpness": 1232.0207626403808,
+        "brightness": 117.3833984375,
+        "brightness_distance": 10.116601562499994
+      },
+      {
+        "file": "15_png_jpg.rf.86a2a25d56ec2e237312f3784809bd1a.jpg",
+        "group": "15_png_jpg",
+        "reason": "source_group_limit",
+        "class_instances": {
+          "5": 6
+        },
+        "sharpness": 797.9702264999389,
+        "brightness": 91.6620703125,
+        "brightness_distance": 35.837929687499994
+      },
+      {
+        "file": "15_png_jpg.rf.b401c346ad3c5b3c10249e3543a379d2.jpg",
+        "group": "15_png_jpg",
+        "reason": "source_group_limit",
+        "class_instances": {
+          "5": 6
+        },
+        "sharpness": 734.7237255233765,
+        "brightness": 91.549765625,
+        "brightness_distance": 35.950234374999994
+      },
+      {
+        "file": "15_png_jpg.rf.aec78436130224f43c5e8e09d0cac982.jpg",
+        "group": "15_png_jpg",
+        "reason": "source_group_limit",
+        "class_instances": {
+          "5": 6
+        },
+        "sharpness": 702.9324743896484,
+        "brightness": 91.5121875,
+        "brightness_distance": 35.987812500000004
+      },
+      {
+        "file": "15_png_jpg.rf.e0926dee7310418096f892c0a7d574be.jpg",
+        "group": "15_png_jpg",
+        "reason": "source_group_limit",
+        "class_instances": {
+          "5": 6
+        },
+        "sharpness": 700.4424527343749,
+        "brightness": 91.5172265625,
+        "brightness_distance": 35.9827734375
+      },
+      {
+        "file": "161_png_jpg.rf.362c1cdd111b40e5ea01effb23e2a649.jpg",
+        "group": "161_png_jpg",
+        "reason": "source_group_limit",
+        "class_instances": {
+          "5": 8
+        },
+        "sharpness": 1057.3292607406618,
+        "brightness": 120.169921875,
+        "brightness_distance": 7.330078125
+      },
+      {
+        "file": "167_png_jpg.rf.e4bce0d7ebb06adaae636410ba8d4a46.jpg",
+        "group": "167_png_jpg",
+        "reason": "source_group_limit",
+        "class_instances": {
+          "5": 13
+        },
+        "sharpness": 1314.2101508728028,
+        "brightness": 118.0665234375,
+        "brightness_distance": 9.433476562500005
+      },
+      {
+        "file": "168_png_jpg.rf.092c3b6065754468094307c72dd25842.jpg",
+        "group": "168_png_jpg",
+        "reason": "source_group_limit",
+        "class_instances": {
+          "5": 11
+        },
+        "sharpness": 2623.7726379867554,
+        "brightness": 126.298359375,
+        "brightness_distance": 1.201640624999996
+      },
+      {
+        "file": "171_png_jpg.rf.080ce597cfa51b46b90b3a19c2555df7.jpg",
+        "group": "171_png_jpg",
+        "reason": "source_group_limit",
+        "class_instances": {
+          "5": 7
+        },
+        "sharpness": 928.0164004989623,
+        "brightness": 120.9572265625,
+        "brightness_distance": 6.542773437500003
+      },
+      {
+        "file": "180_png_jpg.rf.4d20e3b75ca9db393126dcc53e8b984e.jpg",
+        "group": "180_png_jpg",
+        "reason": "source_group_limit",
+        "class_instances": {
+          "5": 8
+        },
+        "sharpness": 1305.4332457870482,
+        "brightness": 113.9833984375,
+        "brightness_distance": 13.5166015625
+      },
+      {
+        "file": "187_png_jpg.rf.860c65761f5f400086f39dcf46fd6b2f.jpg",
+        "group": "187_png_jpg",
+        "reason": "source_group_limit",
+        "class_instances": {
+          "5": 10
+        },
+        "sharpness": 1995.9886818832397,
+        "brightness": 115.4808984375,
+        "brightness_distance": 12.019101562499998
+      },
+      {
+        "file": "190_png_jpg.rf.95daae3e935c6a53291cb95d26acd08d.jpg",
+        "group": "190_png_jpg",
+        "reason": "source_group_limit",
+        "class_instances": {
+          "5": 8
+        },
+        "sharpness": 777.9961737731934,
+        "brightness": 105.4005859375,
+        "brightness_distance": 22.099414062500003
+      },
+      {
+        "file": "192_png_jpg.rf.8fc17548726dba751d8642dc55a5db0f.jpg",
+        "group": "192_png_jpg",
+        "reason": "source_group_limit",
+        "class_instances": {
+          "5": 9
+        },
+        "sharpness": 1093.1763720321655,
+        "brightness": 117.72375,
+        "brightness_distance": 9.776250000000005
+      },
+      {
+        "file": "193_png_jpg.rf.1443e8344d2a34e6cd074af28d932940.jpg",
+        "group": "193_png_jpg",
+        "reason": "source_group_limit",
+        "class_instances": {
+          "5": 9
+        },
+        "sharpness": 2161.290952720642,
+        "brightness": 125.702421875,
+        "brightness_distance": 1.7975781250000011
+      },
+      {
+        "file": "194_png_jpg.rf.2633345646746bdb4d54fcbce06434d4.jpg",
+        "group": "194_png_jpg",
+        "reason": "source_group_limit",
+        "class_instances": {
+          "5": 5
+        },
+        "sharpness": 1456.778582395935,
+        "brightness": 130.4934375,
+        "brightness_distance": 2.993437499999999
+      },
+      {
+        "file": "195_png_jpg.rf.37137d6b04d8cc28c7805fce7a54ec9b.jpg",
+        "group": "195_png_jpg",
+        "reason": "source_group_limit",
+        "class_instances": {
+          "5": 8
+        },
+        "sharpness": 1197.836334222412,
+        "brightness": 125.0980078125,
+        "brightness_distance": 2.4019921874999994
+      },
+      {
+        "file": "196_png_jpg.rf.4c9d002e3b29c57283457dd31ee45621.jpg",
+        "group": "196_png_jpg",
+        "reason": "source_group_limit",
+        "class_instances": {
+          "5": 5
+        },
+        "sharpness": 761.5978802490234,
+        "brightness": 116.02375,
+        "brightness_distance": 11.476249999999993
+      },
+      {
+        "file": "1_png_jpg.rf.67ec7bb132a561033a8f960d773059ab.jpg",
+        "group": "1_png_jpg",
+        "reason": "source_group_limit",
+        "class_instances": {
+          "5": 3
+        },
+        "sharpness": 769.6384959960938,
+        "brightness": 114.38953125,
+        "brightness_distance": 13.110468749999995
+      }
+    ]
+  },
+  "final": {
+    "train": {
+      "images": 1164,
+      "labels": 1164,
+      "empty_labels": 56,
+      "dimensions": {
+        "1280x800": 195,
+        "640x640": 969
+      },
+      "class_images": {
+        "0": 143,
+        "1": 256,
+        "2": 42,
+        "3": 495,
+        "4": 215,
+        "5": 36,
+        "6": 203
+      },
+      "class_instances": {
+        "0": 453,
+        "1": 691,
+        "2": 108,
+        "3": 690,
+        "4": 1965,
+        "5": 296,
+        "6": 287
+      },
+      "all_images_are_three_channel_grayscale_jpg": true
+    },
+    "val": {
+      "images": 66,
+      "labels": 66,
+      "empty_labels": 8,
+      "dimensions": {
+        "640x640": 66
+      },
+      "class_images": {
+        "0": 4,
+        "1": 17,
+        "3": 25,
+        "4": 2,
+        "5": 7,
+        "6": 8
+      },
+      "class_instances": {
+        "0": 12,
+        "1": 65,
+        "3": 31,
+        "4": 24,
+        "5": 62,
+        "6": 9
+      },
+      "all_images_are_three_channel_grayscale_jpg": true
+    }
+  }
+}

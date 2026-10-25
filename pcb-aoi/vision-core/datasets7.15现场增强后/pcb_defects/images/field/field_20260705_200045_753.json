@@ -1,0 +1,118 @@
+{
+  "version": "7.0.2",
+  "flags": {},
+  "shapes": [
+    {
+      "label": "insufficient_solder",
+      "points": [
+        [
+          514.1018431740081,
+          99.0003124023742
+        ],
+        [
+          557.8381755701342,
+          140.23742580443607
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "insufficient_solder",
+      "points": [
+        [
+          674.0518587941268,
+          151.48391127772567
+        ],
+        [
+          714.0393626991565,
+          195.22024367385185
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "insufficient_solder",
+      "points": [
+        [
+          1059.5563886285533,
+          244.57981880662288
+        ],
+        [
+          1106.41674476726,
+          297.06341768197433
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "insufficient_solder",
+      "points": [
+        [
+          1008.9472039987503,
+          373.2895970009372
+        ],
+        [
+          1062.0556076226178,
+          431.3964386129334
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "excess_solder",
+      "points": [
+        [
+          642.1868166198062,
+          484.50484223680087
+        ],
+        [
+          709.6657294595439,
+          535.1140268666041
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "insufficient_solder",
+      "points": [
+        [
+          87.98500468603561,
+          25.273352077475707
+        ],
+        [
+          147.34145579506404,
+          81.50577944392373
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    }
+  ],
+  "imagePath": "field_20260705_200045_753.jpg",
+  "imageData": null,
+  "imageHeight": 800,
+  "imageWidth": 1280
+}

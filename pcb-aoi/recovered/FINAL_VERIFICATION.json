@@ -1,0 +1,11 @@
+﻿{
+  "result": "PASS",
+  "core_files_sha256_verified": 35,
+  "dataset_files_sha256_verified": 3781,
+  "archive_sha256_verified": true,
+  "train_images": 1164,
+  "val_images": 66,
+  "field_images": 195,
+  "images_in_all_folders": 1425,
+  "checkpoint_and_training_inputs_rechecked": true
+}

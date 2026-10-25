@@ -1,0 +1,154 @@
+{
+  "version": "7.0.2",
+  "flags": {},
+  "shapes": [
+    {
+      "label": "insufficient_solder",
+      "points": [
+        [
+          159.21274601686972,
+          204.59231490159323
+        ],
+        [
+          261.0559200249922,
+          262.69915651358946
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "insufficient_solder",
+      "points": [
+        [
+          176.08247422680412,
+          297.06341768197433
+        ],
+        [
+          282.2992814745392,
+          340.79975007810054
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "insufficient_solder",
+      "points": [
+        [
+          191.07778819119025,
+          335.17650734145576
+        ],
+        [
+          288.5473289597001,
+          397.65698219306466
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "insufficient_solder",
+      "points": [
+        [
+          207.94751640112466,
+          415.151515151515
+        ],
+        [
+          309.79069040924713,
+          480.13120899718837
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "dry_solder_joint",
+      "points": [
+        [
+          391.6401124648548,
+          123.9925023430177
+        ],
+        [
+          469.7407060293658,
+          201.46829115901275
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "dry_solder_joint",
+      "points": [
+        [
+          393.51452671040306,
+          228.9597000937207
+        ],
+        [
+          511.6026241799438,
+          339.5501405810684
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "dry_solder_joint",
+      "points": [
+        [
+          457.2446110590441,
+          410.7778819119025
+        ],
+        [
+          540.9684473601999,
+          498.87535145267105
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "dry_solder_joint",
+      "points": [
+        [
+          478.4879725085911,
+          526.991565135895
+        ],
+        [
+          587.2039987503905,
+          625.710715401437
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    }
+  ],
+  "imagePath": "field_20260705_200016_665.jpg",
+  "imageData": null,
+  "imageHeight": 800,
+  "imageWidth": 1280
+}

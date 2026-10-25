@@ -1,0 +1,6 @@
+﻿"RelativePath","Source","SHA256","Version","Origin"
+"cfg/models/v8/yolov8.yaml","D:/Anaconda\Lib\site-packages\ultralytics\cfg/models/v8/yolov8.yaml","405A3C302EB6096103A99AF4D82C1D2D8B2BBFF469A228C55AAC944B2C19672A","8.4.87","Locally installed ultralytics distribution; version matches best.pt and best.onnx"
+"nn/modules/conv.py","D:/Anaconda\Lib\site-packages\ultralytics\nn/modules/conv.py","C802F36EA1596D8910F2B651D57877B50A4960857B97CBB5A20D44A1DBBAA774","8.4.87","Locally installed ultralytics distribution; version matches best.pt and best.onnx"
+"nn/modules/block.py","D:/Anaconda\Lib\site-packages\ultralytics\nn/modules/block.py","20EDA06BE7AD7FEA69DB8161C91F6681371AA6AEDB1DCAE18DB1A004783E1CBD","8.4.87","Locally installed ultralytics distribution; version matches best.pt and best.onnx"
+"nn/modules/head.py","D:/Anaconda\Lib\site-packages\ultralytics\nn/modules/head.py","5701116D86881827AC9E1E7462DFAA44C33937BD68E23324763459685729E06F","8.4.87","Locally installed ultralytics distribution; version matches best.pt and best.onnx"
+"nn/tasks.py","D:/Anaconda\Lib\site-packages\ultralytics\nn/tasks.py","664C1422C8575A08B6D0A4E9F246F2799E949C7829D16942D0FC896E9F2D0E24","8.4.87","Locally installed ultralytics distribution; version matches best.pt and best.onnx"

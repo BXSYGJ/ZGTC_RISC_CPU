@@ -1,0 +1,184 @@
+﻿{
+  "root": "D:\\AAAED\\recovered\\github\\Loongson_AOI_PCB-main",
+  "onnx_checker": "PASS",
+  "producer": "pytorch",
+  "producer_version": "2.12.1",
+  "opsets": {
+    "ai.onnx": 12
+  },
+  "metadata": {
+    "description": "Ultralytics best model trained on D:\\AAAED\\code\\Loongson_AOI_PCB\\worktrees\\algorithm-ai\\algorithm\\outputs\\pcb_defects.runtime.yaml",
+    "author": "Ultralytics",
+    "date": "2026-07-16T12:15:49.950400",
+    "version": "8.4.87",
+    "license": "AGPL-3.0 License (https://ultralytics.com/license)",
+    "docs": "https://docs.ultralytics.com",
+    "stride": "32",
+    "task": "detect",
+    "head": "Detect",
+    "batch": "1",
+    "imgsz": "[1024, 1024]",
+    "names": "{0: 'dry_solder_joint', 1: 'improper_installation', 2: 'pcb_damage', 3: 'short_circuit', 4: 'insufficient_solder', 5: 'reverse_component', 6: 'excess_solder'}",
+    "args": "{'data': None, 'batch': 1, 'fraction': 1.0, 'quantize': None, 'dynamic': False, 'simplify': False, 'opset': 12, 'nms': False}",
+    "channels": "3",
+    "end2end": "False"
+  },
+  "inputs": {
+    "images": [
+      1,
+      3,
+      1024,
+      1024
+    ]
+  },
+  "outputs": {
+    "output0": [
+      1,
+      11,
+      21504
+    ]
+  },
+  "operation_counts": {
+    "Conv": 64,
+    "Sigmoid": 57,
+    "Mul": 59,
+    "Split": 8,
+    "Add": 9,
+    "Concat": 17,
+    "MaxPool": 3,
+    "Constant": 22,
+    "Resize": 2,
+    "Reshape": 8,
+    "Transpose": 2,
+    "Softmax": 1,
+    "Shape": 1,
+    "Gather": 1,
+    "Div": 2,
+    "Slice": 2,
+    "Sub": 2
+  },
+  "opencv_version": "5.0.0",
+  "opencv_cpu_zero_input": {
+    "input_shape": [
+      1,
+      3,
+      1024,
+      1024
+    ],
+    "output_shape": [
+      1,
+      11,
+      21504
+    ],
+    "all_finite": true,
+    "result": "PASS"
+  },
+  "files": {
+    "worktrees/algorithm-ai/runs/detect/pcb_defects/weights/best.onnx": {
+      "bytes": 12505409,
+      "sha256": "8521547765942fb063a572d8e9bbecf16983306bfd0c938294a91b7b3dbcfd42"
+    },
+    "worktrees/algorithm-ai/runs/detect/pcb_defects/weights/best.pt": {
+      "bytes": 6324074,
+      "sha256": "a0d5265a3d807e72469ac62dc8650921bffc7e87d1865d48e25bd364aee65aa1"
+    },
+    "worktrees/algorithm-ai/yolov8n.pt": {
+      "bytes": 6549796,
+      "sha256": "f59b3d833e2ff32e194b5bb8e08d211dc7c5bdf144b90d2c8412c47ccfc83b36"
+    }
+  },
+  "real_image_inference": {
+    "source": "D:\\AAAED\\recovered\\github\\Loongson_AOI_PCB-main\\tests\\fixtures\\val_136_139\\images\\136_png_jpg.rf.8b766410155d072086a106d12f7096b6.jpg",
+    "image_shape": [
+      640,
+      640,
+      3
+    ],
+    "conf_threshold": 0.25,
+    "iou_threshold": 0.45,
+    "detections": [
+      {
+        "class_id": 4,
+        "bbox": [
+          573,
+          546,
+          621,
+          596
+        ],
+        "confidence": 0.9717652201652527
+      },
+      {
+        "class_id": 4,
+        "bbox": [
+          449,
+          456,
+          496,
+          505
+        ],
+        "confidence": 0.9400603771209717
+      },
+      {
+        "class_id": 4,
+        "bbox": [
+          448,
+          365,
+          497,
+          415
+        ],
+        "confidence": 0.9226090908050537
+      },
+      {
+        "class_id": 4,
+        "bbox": [
+          382,
+          172,
+          439,
+          223
+        ],
+        "confidence": 0.8365569114685059
+      },
+      {
+        "class_id": 4,
+        "bbox": [
+          95,
+          544,
+          151,
+          597
+        ],
+        "confidence": 0.834345817565918
+      },
+      {
+        "class_id": 4,
+        "bbox": [
+          450,
+          105,
+          496,
+          156
+        ],
+        "confidence": 0.7076413035392761
+      },
+      {
+        "class_id": 4,
+        "bbox": [
+          97,
+          452,
+          148,
+          504
+        ],
+        "confidence": 0.6068794131278992
+      },
+      {
+        "class_id": 4,
+        "bbox": [
+          230,
+          454,
+          280,
+          508
+        ],
+        "confidence": 0.43683305382728577
+      }
+    ],
+    "annotated_image": "D:\\AAAED\\recovered\\verified-inference.jpg",
+    "result": "PASS"
+  }
+}

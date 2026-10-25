@@ -1,0 +1,384 @@
+﻿{
+  "weights": "D:\\AAAED\\recovered\\upload\\ZGTC_RISC_CPU-DYH\\pcb-aoi\\vision-core\\worktrees\\algorithm-ai\\runs\\detect\\pcb_defects\\weights\\best.pt",
+  "checkpoint_load": "PASS",
+  "model_type": "DetectionModel",
+  "task": "detect",
+  "names": {
+    "0": "dry_solder_joint",
+    "1": "improper_installation",
+    "2": "pcb_damage",
+    "3": "short_circuit",
+    "4": "insufficient_solder",
+    "5": "reverse_component",
+    "6": "excess_solder"
+  },
+  "total_parameters": 3012213,
+  "model_yaml": {
+    "nc": 7,
+    "depth_multiple": 0.33,
+    "width_multiple": 0.25,
+    "backbone": [
+      [
+        -1,
+        1,
+        "Conv",
+        [
+          64,
+          3,
+          2
+        ]
+      ],
+      [
+        -1,
+        1,
+        "Conv",
+        [
+          128,
+          3,
+          2
+        ]
+      ],
+      [
+        -1,
+        3,
+        "C2f",
+        [
+          128,
+          true
+        ]
+      ],
+      [
+        -1,
+        1,
+        "Conv",
+        [
+          256,
+          3,
+          2
+        ]
+      ],
+      [
+        -1,
+        6,
+        "C2f",
+        [
+          256,
+          true
+        ]
+      ],
+      [
+        -1,
+        1,
+        "Conv",
+        [
+          512,
+          3,
+          2
+        ]
+      ],
+      [
+        -1,
+        6,
+        "C2f",
+        [
+          512,
+          true
+        ]
+      ],
+      [
+        -1,
+        1,
+        "Conv",
+        [
+          1024,
+          3,
+          2
+        ]
+      ],
+      [
+        -1,
+        3,
+        "C2f",
+        [
+          1024,
+          true
+        ]
+      ],
+      [
+        -1,
+        1,
+        "SPPF",
+        [
+          1024,
+          5
+        ]
+      ]
+    ],
+    "head": [
+      [
+        -1,
+        1,
+        "nn.Upsample",
+        [
+          "None",
+          2,
+          "nearest"
+        ]
+      ],
+      [
+        [
+          -1,
+          6
+        ],
+        1,
+        "Concat",
+        [
+          1
+        ]
+      ],
+      [
+        -1,
+        3,
+        "C2f",
+        [
+          512
+        ]
+      ],
+      [
+        -1,
+        1,
+        "nn.Upsample",
+        [
+          "None",
+          2,
+          "nearest"
+        ]
+      ],
+      [
+        [
+          -1,
+          4
+        ],
+        1,
+        "Concat",
+        [
+          1
+        ]
+      ],
+      [
+        -1,
+        3,
+        "C2f",
+        [
+          256
+        ]
+      ],
+      [
+        -1,
+        1,
+        "Conv",
+        [
+          256,
+          3,
+          2
+        ]
+      ],
+      [
+        [
+          -1,
+          12
+        ],
+        1,
+        "Concat",
+        [
+          1
+        ]
+      ],
+      [
+        -1,
+        3,
+        "C2f",
+        [
+          512
+        ]
+      ],
+      [
+        -1,
+        1,
+        "Conv",
+        [
+          512,
+          3,
+          2
+        ]
+      ],
+      [
+        [
+          -1,
+          9
+        ],
+        1,
+        "Concat",
+        [
+          1
+        ]
+      ],
+      [
+        -1,
+        3,
+        "C2f",
+        [
+          1024
+        ]
+      ],
+      [
+        [
+          15,
+          18,
+          21
+        ],
+        1,
+        "Detect",
+        [
+          "nc"
+        ]
+      ]
+    ],
+    "ch": 3,
+    "channels": 3
+  },
+  "checkpoint_version": "8.4.87",
+  "checkpoint_date": "2026-07-16T03:01:28.827511",
+  "checkpoint_epoch": -1,
+  "train_args": {
+    "task": "detect",
+    "mode": "train",
+    "model": "D:\\AAAED\\code\\Loongson_AOI_PCB\\worktrees\\algorithm-ai\\yolov8n.pt",
+    "data": "D:\\AAAED\\code\\Loongson_AOI_PCB\\worktrees\\algorithm-ai\\algorithm\\outputs\\pcb_defects.runtime.yaml",
+    "epochs": 100,
+    "time": null,
+    "patience": 100,
+    "batch": 3,
+    "imgsz": 960,
+    "save": true,
+    "save_period": -1,
+    "cache": false,
+    "device": "0",
+    "workers": 0,
+    "project": "D:\\AAAED\\code\\Loongson_AOI_PCB\\worktrees\\algorithm-ai\\runs\\detect",
+    "name": "pcb_defects_20260716_014416",
+    "exist_ok": false,
+    "pretrained": true,
+    "optimizer": "auto",
+    "verbose": true,
+    "seed": 0,
+    "deterministic": true,
+    "single_cls": false,
+    "rect": false,
+    "cos_lr": false,
+    "close_mosaic": 10,
+    "resume": false,
+    "amp": false,
+    "fraction": 1.0,
+    "profile": false,
+    "freeze": null,
+    "multi_scale": 0.0,
+    "compile": false,
+    "overlap_mask": true,
+    "mask_ratio": 4,
+    "dropout": 0.0,
+    "val": true,
+    "split": "val",
+    "save_json": false,
+    "conf": null,
+    "iou": 0.7,
+    "max_det": 300,
+    "quantize": null,
+    "dnn": false,
+    "plots": true,
+    "end2end": null,
+    "source": null,
+    "vid_stride": 1,
+    "stream_buffer": false,
+    "visualize": false,
+    "augment": false,
+    "agnostic_nms": false,
+    "classes": null,
+    "retina_masks": false,
+    "embed": null,
+    "show": false,
+    "save_frames": false,
+    "save_txt": false,
+    "save_conf": false,
+    "save_crop": false,
+    "show_labels": true,
+    "show_conf": true,
+    "show_boxes": true,
+    "line_width": null,
+    "format": "torchscript",
+    "keras": false,
+    "optimize": false,
+    "dynamic": false,
+    "simplify": true,
+    "opset": null,
+    "workspace": null,
+    "nms": false,
+    "lr0": 0.01,
+    "lrf": 0.01,
+    "momentum": 0.937,
+    "weight_decay": 0.0005,
+    "warmup_epochs": 3.0,
+    "warmup_momentum": 0.8,
+    "warmup_bias_lr": 0.0,
+    "distill_model": null,
+    "dis": 6.0,
+    "box": 7.5,
+    "cls": 0.5,
+    "cls_pw": 0.0,
+    "dfl": 1.5,
+    "pose": 12.0,
+    "kobj": 1.0,
+    "rle": 1.0,
+    "angle": 1.0,
+    "nbs": 64,
+    "hsv_h": 0.015,
+    "hsv_s": 0.7,
+    "hsv_v": 0.4,
+    "degrees": 0.0,
+    "translate": 0.1,
+    "scale": 0.5,
+    "shear": 0.0,
+    "perspective": 0.0,
+    "flipud": 0.0,
+    "fliplr": 0.5,
+    "bgr": 0.0,
+    "mosaic": 1.0,
+    "mixup": 0.0,
+    "cutmix": 0.0,
+    "copy_paste": 0.0,
+    "copy_paste_mode": "flip",
+    "auto_augment": "randaugment",
+    "erasing": 0.4,
+    "cfg": null,
+    "tracker": "tracktrack.yaml"
+  },
+  "train_metrics": {
+    "metrics/precision(B)": 0.70333,
+    "metrics/recall(B)": 0.63132,
+    "metrics/mAP50(B)": 0.68273,
+    "metrics/mAP50-95(B)": 0.51638,
+    "val/box_loss": 1.11582,
+    "val/cls_loss": 1.97999,
+    "val/dfl_loss": 1.35631,
+    "fitness": 0.51638
+  },
+  "training_input_validation": {
+    "result": "PASS",
+    "config": "D:\\AAAED\\recovered\\upload\\ZGTC_RISC_CPU-DYH\\pcb-aoi\\vision-core\\worktrees\\algorithm-ai\\algorithm\\configs\\pcb_defects.yaml",
+    "resolved_dataset_root": "D:\\AAAED\\recovered\\upload\\ZGTC_RISC_CPU-DYH\\pcb-aoi\\vision-core\\datasets7.15现场增强后\\pcb_defects",
+    "counts": {
+      "train_images": 1164,
+      "val_images": 66
+    }
+  }
+}

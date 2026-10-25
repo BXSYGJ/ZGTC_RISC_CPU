@@ -1,0 +1,136 @@
+{
+  "version": "7.0.2",
+  "flags": {},
+  "shapes": [
+    {
+      "label": "insufficient_solder",
+      "points": [
+        [
+          876.4885973133395,
+          433.89565760699764
+        ],
+        [
+          935.8450484223679,
+          486.3792564823491
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "insufficient_solder",
+      "points": [
+        [
+          868.3661355826304,
+          495.1265229615745
+        ],
+        [
+          927.7225866916589,
+          541.9868791002812
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "insufficient_solder",
+      "points": [
+        [
+          866.4917213370821,
+          554.4829740706028
+        ],
+        [
+          920.8497344579818,
+          595.7200874726648
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "insufficient_solder",
+      "points": [
+        [
+          860.2436738519212,
+          605.092158700406
+        ],
+        [
+          918.9753202124335,
+          661.3245860668541
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "insufficient_solder",
+      "points": [
+        [
+          847.1227741330835,
+          663.1990003124023
+        ],
+        [
+          913.9768822243049,
+          714.4329896907217
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "insufficient_solder",
+      "points": [
+        [
+          851.496407372696,
+          720.6810371758825
+        ],
+        [
+          903.9800062480474,
+          768.7910028116214
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "improper_installation",
+      "points": [
+        [
+          664.0549828178694,
+          282.0681037175882
+        ],
+        [
+          739.0315526398,
+          383.2864729771945
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    }
+  ],
+  "imagePath": "field_20260705_201439_736.jpg",
+  "imageData": null,
+  "imageHeight": 800,
+  "imageWidth": 1280
+}

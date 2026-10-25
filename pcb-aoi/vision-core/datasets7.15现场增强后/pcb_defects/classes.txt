@@ -1,0 +1,7 @@
+dry_solder_joint
+improper_installation
+pcb_damage
+short_circuit
+insufficient_solder
+reverse_component
+excess_solder

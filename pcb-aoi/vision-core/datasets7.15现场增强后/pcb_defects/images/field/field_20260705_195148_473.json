@@ -1,0 +1,208 @@
+{
+  "version": "7.0.2",
+  "flags": {},
+  "shapes": [
+    {
+      "label": "insufficient_solder",
+      "points": [
+        [
+          600.3248984692283,
+          313.3083411433927
+        ],
+        [
+          659.0565448297406,
+          372.6647922524211
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "improper_installation",
+      "points": [
+        [
+          18.631677600749764,
+          501.3745704467352
+        ],
+        [
+          165.4607935020306,
+          638.2068103717588
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "excess_solder",
+      "points": [
+        [
+          174.8328647297719,
+          109.62199312714772
+        ],
+        [
+          256.0574820368635,
+          187.09778194314273
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "excess_solder",
+      "points": [
+        [
+          518.4754764136206,
+          392.0337394564199
+        ],
+        [
+          579.7063417681974,
+          452.63980006248033
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "excess_solder",
+      "points": [
+        [
+          592.2024367385192,
+          392.0337394564199
+        ],
+        [
+          659.6813495782568,
+          458.8878475476412
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "excess_solder",
+      "points": [
+        [
+          678.4254920337395,
+          392.0337394564199
+        ],
+        [
+          741.5307716338643,
+          457.0134333020929
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "insufficient_solder",
+      "points": [
+        [
+          596.5760699781318,
+          476.38238050609186
+        ],
+        [
+          657.1821305841924,
+          536.9884411121524
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "insufficient_solder",
+      "points": [
+        [
+          254.8078725398313,
+          231.458919087785
+        ],
+        [
+          349.7781943142768,
+          332.67728834739137
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "insufficient_solder",
+      "points": [
+        [
+          332.90846610434244,
+          122.11808809746945
+        ],
+        [
+          427.2539831302718,
+          214.58919087785063
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "insufficient_solder",
+      "points": [
+        [
+          366.6479225242112,
+          191.47141518275532
+        ],
+        [
+          461.6182442986567,
+          278.31927522649164
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "insufficient_solder",
+      "points": [
+        [
+          410.3842549203374,
+          37.76944704779752
+        ],
+        [
+          543.4676663542642,
+          173.97688222430486
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    }
+  ],
+  "imagePath": "field_20260705_195148_473.jpg",
+  "imageData": null,
+  "imageHeight": 800,
+  "imageWidth": 1280
+}
