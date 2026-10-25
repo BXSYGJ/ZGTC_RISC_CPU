@@ -7,6 +7,10 @@
 
 ## 0. 一句话现状
 
+> **2026-10-25 更新：已迁移到本地盘古 100Pro+（PG2L100H-6IFBG676）**。BRAM SoC + 串口烧录 + DDR3
+> 全部跑通；定稿高性能配置在本颗芯片收敛于 **120 MHz / CoreMark 383.0（3.19/兆赫）**，153 MHz 经种子
+> 扫描确认不可复现（芯片约慢 17%）。详见 **`cpu/docs/MIGRATION_100H_20261025.md`**（本节以下为 200H 历史基线）。
+
 **RV32IM SoC 已在 Pango PG2L200H (MES2L676-200HP) 上验证跑通（153 MHz，CoreMark 511 分，CRC 校验通过）。**
 已融合 DYH 高性能 CPU（`full_fetch_commit_factored`，RV32IM/153MHz/16KB I-Cache/分支预测）与 XSY 串口烧录（简化 bootloader 固化前 4KB，`R` 命令流控载应用）。
 **当前推荐交付**：`tool/fpga_lab/coremark_verify.py` 一键烧录验证（找箱 → 烧 153MHz 位流 → R 命令载 CoreMark → 算分）。
