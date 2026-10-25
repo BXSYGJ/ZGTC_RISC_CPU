@@ -1,0 +1,516 @@
+Archive member included to satisfy reference by file (symbol)
+
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/tools/xpack-riscv-none-embed-gcc-10.2.0-1.2/bin/../lib/gcc/riscv-none-embed/10.2.0/../../../../riscv-none-embed/lib/rv32im/ilp32/libc.a(lib_a-errno.o)
+                              /tmp/cc3kiPja.o (__errno)
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/tools/xpack-riscv-none-embed-gcc-10.2.0-1.2/bin/../lib/gcc/riscv-none-embed/10.2.0/../../../../riscv-none-embed/lib/rv32im/ilp32/libc.a(lib_a-impure.o)
+                              /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/tools/xpack-riscv-none-embed-gcc-10.2.0-1.2/bin/../lib/gcc/riscv-none-embed/10.2.0/../../../../riscv-none-embed/lib/rv32im/ilp32/libc.a(lib_a-errno.o) (_impure_ptr)
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/tools/xpack-riscv-none-embed-gcc-10.2.0-1.2/bin/../lib/gcc/riscv-none-embed/10.2.0/../../../../riscv-none-embed/lib/rv32im/ilp32/libc.a(lib_a-memset.o)
+                              /tmp/ccTLL7tF.o (memset)
+
+Discarded input sections
+
+ .text          0x0000000000000000        0x0 /tmp/ccTLL7tF.o
+ .data          0x0000000000000000        0x0 /tmp/ccTLL7tF.o
+ .bss           0x0000000000000000        0x0 /tmp/ccTLL7tF.o
+ .text.init     0x0000000000000000       0x9c /tmp/ccTLL7tF.o
+ .text.generic_KINDERSICHERUNG_CTRL
+                0x0000000000000000      0x354 /tmp/ccTLL7tF.o
+ .text.generic_FH_TUERMODUL_CTRL
+                0x0000000000000000       0x40 /tmp/ccTLL7tF.o
+ .bss.BLOCK_ERKENNUNG_CTRL__I_EIN_MAX_copy
+                0x0000000000000000        0x4 /tmp/ccTLL7tF.o
+ .bss.BLOCK_ERKENNUNG_CTRL__N_copy
+                0x0000000000000000        0x4 /tmp/ccTLL7tF.o
+ .bss.FH_DU__S_FH_TMBFAUFCAN_copy
+                0x0000000000000000        0x1 /tmp/ccTLL7tF.o
+ .bss.FH_DU__S_FH_TMBFZUCAN_copy
+                0x0000000000000000        0x1 /tmp/ccTLL7tF.o
+ .bss.FH_TUERMODUL_CTRL__FT
+                0x0000000000000000        0x1 /tmp/ccTLL7tF.o
+ .bss.FH_TUERMODUL_CTRL__N_copy
+                0x0000000000000000        0x4 /tmp/ccTLL7tF.o
+ .bss.FH_TUERMODUL__COM_CLOSE
+                0x0000000000000000        0x1 /tmp/ccTLL7tF.o
+ .bss.FH_TUERMODUL__COM_OPEN
+                0x0000000000000000        0x1 /tmp/ccTLL7tF.o
+ .text          0x0000000000000000        0x0 /tmp/ccfMY2Ng.o
+ .data          0x0000000000000000        0x0 /tmp/ccfMY2Ng.o
+ .bss           0x0000000000000000        0x0 /tmp/ccfMY2Ng.o
+ .text.rand_beebs
+                0x0000000000000000       0x38 /tmp/ccfMY2Ng.o
+ .text.srand_beebs
+                0x0000000000000000        0xc /tmp/ccfMY2Ng.o
+ .text.init_heap_beebs
+                0x0000000000000000       0x2c /tmp/ccfMY2Ng.o
+ .text.check_heap_beebs
+                0x0000000000000000       0x20 /tmp/ccfMY2Ng.o
+ .text.malloc_beebs
+                0x0000000000000000       0x70 /tmp/ccfMY2Ng.o
+ .text.calloc_beebs
+                0x0000000000000000       0xb0 /tmp/ccfMY2Ng.o
+ .text.realloc_beebs
+                0x0000000000000000      0x30c /tmp/ccfMY2Ng.o
+ .text.free_beebs
+                0x0000000000000000        0x4 /tmp/ccfMY2Ng.o
+ .bss.heap_end  0x0000000000000000        0x4 /tmp/ccfMY2Ng.o
+ .bss.heap_ptr  0x0000000000000000        0x4 /tmp/ccfMY2Ng.o
+ .bss.heap_requested
+                0x0000000000000000        0x4 /tmp/ccfMY2Ng.o
+ .bss.seed      0x0000000000000000        0x4 /tmp/ccfMY2Ng.o
+ .comment       0x0000000000000000       0x34 /tmp/ccfMY2Ng.o
+ .text          0x0000000000000000        0x0 /tmp/ccrdfRuE.o
+ .data          0x0000000000000000        0x0 /tmp/ccrdfRuE.o
+ .bss           0x0000000000000000        0x0 /tmp/ccrdfRuE.o
+ .text          0x0000000000000000        0x0 /tmp/ccCcLDjM.o
+ .data          0x0000000000000000        0x0 /tmp/ccCcLDjM.o
+ .bss           0x0000000000000000        0x0 /tmp/ccCcLDjM.o
+ .text          0x0000000000000000        0x0 /tmp/cc3kiPja.o
+ .data          0x0000000000000000        0x0 /tmp/cc3kiPja.o
+ .bss           0x0000000000000000        0x0 /tmp/cc3kiPja.o
+ .text._sbrk    0x0000000000000000       0x6c /tmp/cc3kiPja.o
+ .text._exit    0x0000000000000000       0x14 /tmp/cc3kiPja.o
+ .text.__assert_func
+                0x0000000000000000       0x14 /tmp/cc3kiPja.o
+ .bss.brk       0x0000000000000000        0x4 /tmp/cc3kiPja.o
+ .comment       0x0000000000000000       0x34 /tmp/cc3kiPja.o
+ .text          0x0000000000000000        0x0 /tmp/ccti9dGb.o
+ .data          0x0000000000000000        0x0 /tmp/ccti9dGb.o
+ .bss           0x0000000000000000        0x0 /tmp/ccti9dGb.o
+ .text          0x0000000000000000        0x0 /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/tools/xpack-riscv-none-embed-gcc-10.2.0-1.2/bin/../lib/gcc/riscv-none-embed/10.2.0/../../../../riscv-none-embed/lib/rv32im/ilp32/libc.a(lib_a-errno.o)
+ .data          0x0000000000000000        0x0 /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/tools/xpack-riscv-none-embed-gcc-10.2.0-1.2/bin/../lib/gcc/riscv-none-embed/10.2.0/../../../../riscv-none-embed/lib/rv32im/ilp32/libc.a(lib_a-errno.o)
+ .bss           0x0000000000000000        0x0 /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/tools/xpack-riscv-none-embed-gcc-10.2.0-1.2/bin/../lib/gcc/riscv-none-embed/10.2.0/../../../../riscv-none-embed/lib/rv32im/ilp32/libc.a(lib_a-errno.o)
+ .text.__errno  0x0000000000000000        0xc /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/tools/xpack-riscv-none-embed-gcc-10.2.0-1.2/bin/../lib/gcc/riscv-none-embed/10.2.0/../../../../riscv-none-embed/lib/rv32im/ilp32/libc.a(lib_a-errno.o)
+ .comment       0x0000000000000000       0x34 /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/tools/xpack-riscv-none-embed-gcc-10.2.0-1.2/bin/../lib/gcc/riscv-none-embed/10.2.0/../../../../riscv-none-embed/lib/rv32im/ilp32/libc.a(lib_a-errno.o)
+ .text          0x0000000000000000        0x0 /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/tools/xpack-riscv-none-embed-gcc-10.2.0-1.2/bin/../lib/gcc/riscv-none-embed/10.2.0/../../../../riscv-none-embed/lib/rv32im/ilp32/libc.a(lib_a-impure.o)
+ .data          0x0000000000000000        0x0 /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/tools/xpack-riscv-none-embed-gcc-10.2.0-1.2/bin/../lib/gcc/riscv-none-embed/10.2.0/../../../../riscv-none-embed/lib/rv32im/ilp32/libc.a(lib_a-impure.o)
+ .bss           0x0000000000000000        0x0 /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/tools/xpack-riscv-none-embed-gcc-10.2.0-1.2/bin/../lib/gcc/riscv-none-embed/10.2.0/../../../../riscv-none-embed/lib/rv32im/ilp32/libc.a(lib_a-impure.o)
+ .data.impure_data
+                0x0000000000000000      0x428 /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/tools/xpack-riscv-none-embed-gcc-10.2.0-1.2/bin/../lib/gcc/riscv-none-embed/10.2.0/../../../../riscv-none-embed/lib/rv32im/ilp32/libc.a(lib_a-impure.o)
+ .sdata._impure_ptr
+                0x0000000000000000        0x4 /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/tools/xpack-riscv-none-embed-gcc-10.2.0-1.2/bin/../lib/gcc/riscv-none-embed/10.2.0/../../../../riscv-none-embed/lib/rv32im/ilp32/libc.a(lib_a-impure.o)
+ .srodata._global_impure_ptr
+                0x0000000000000000        0x4 /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/tools/xpack-riscv-none-embed-gcc-10.2.0-1.2/bin/../lib/gcc/riscv-none-embed/10.2.0/../../../../riscv-none-embed/lib/rv32im/ilp32/libc.a(lib_a-impure.o)
+ .comment       0x0000000000000000       0x34 /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/tools/xpack-riscv-none-embed-gcc-10.2.0-1.2/bin/../lib/gcc/riscv-none-embed/10.2.0/../../../../riscv-none-embed/lib/rv32im/ilp32/libc.a(lib_a-impure.o)
+ .data          0x0000000000000000        0x0 /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/tools/xpack-riscv-none-embed-gcc-10.2.0-1.2/bin/../lib/gcc/riscv-none-embed/10.2.0/../../../../riscv-none-embed/lib/rv32im/ilp32/libc.a(lib_a-memset.o)
+ .bss           0x0000000000000000        0x0 /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/tools/xpack-riscv-none-embed-gcc-10.2.0-1.2/bin/../lib/gcc/riscv-none-embed/10.2.0/../../../../riscv-none-embed/lib/rv32im/ilp32/libc.a(lib_a-memset.o)
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+RAM              0x0000000000001000 0x000000000000f000 xrw
+*default*        0x0000000000000000 0xffffffffffffffff
+
+Linker script and memory map
+
+LOAD /tmp/ccTLL7tF.o
+LOAD /tmp/ccfMY2Ng.o
+LOAD /tmp/ccrdfRuE.o
+LOAD /tmp/ccCcLDjM.o
+LOAD /tmp/cc3kiPja.o
+LOAD /tmp/ccti9dGb.o
+START GROUP
+LOAD /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/tools/xpack-riscv-none-embed-gcc-10.2.0-1.2/bin/../lib/gcc/riscv-none-embed/10.2.0/../../../../riscv-none-embed/lib/rv32im/ilp32/libm.a
+LOAD /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/tools/xpack-riscv-none-embed-gcc-10.2.0-1.2/bin/../lib/gcc/riscv-none-embed/10.2.0/../../../../riscv-none-embed/lib/rv32im/ilp32/libc.a
+LOAD /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/tools/xpack-riscv-none-embed-gcc-10.2.0-1.2/bin/../lib/gcc/riscv-none-embed/10.2.0/rv32im/ilp32/libgcc.a
+END GROUP
+
+.text           0x0000000000001000     0x1bd4
+ *(.text.start)
+ .text.start    0x0000000000001000       0xd4 /tmp/ccti9dGb.o
+                0x0000000000001000                _start
+ *(.text .text.*)
+ .text.generic_FH_TUERMODUL_CTRL.part.0
+                0x00000000000010d4      0x5e0 /tmp/ccTLL7tF.o
+ .text.interface
+                0x00000000000016b4       0xbc /tmp/ccTLL7tF.o
+                0x00000000000016b4                interface
+ .text.generic_EINKLEMMSCHUTZ_CTRL
+                0x0000000000001770       0x7c /tmp/ccTLL7tF.o
+                0x0000000000001770                generic_EINKLEMMSCHUTZ_CTRL
+ .text.generic_BLOCK_ERKENNUNG_CTRL
+                0x00000000000017ec      0x140 /tmp/ccTLL7tF.o
+                0x00000000000017ec                generic_BLOCK_ERKENNUNG_CTRL
+ .text.FH_DU    0x000000000000192c      0x970 /tmp/ccTLL7tF.o
+                0x000000000000192c                FH_DU
+ .text.benchmark_body.constprop.0
+                0x000000000000229c      0x11c /tmp/ccTLL7tF.o
+ .text.benchmark_body.constprop.1.isra.0
+                0x00000000000023b8      0x148 /tmp/ccTLL7tF.o
+ .text.warm_caches
+                0x0000000000002500        0x4 /tmp/ccTLL7tF.o
+                0x0000000000002500                warm_caches
+ .text.benchmark
+                0x0000000000002504        0x4 /tmp/ccTLL7tF.o
+                0x0000000000002504                benchmark
+ .text.initialise_benchmark
+                0x0000000000002508        0x4 /tmp/ccTLL7tF.o
+                0x0000000000002508                initialise_benchmark
+ .text.verify_benchmark
+                0x000000000000250c      0x188 /tmp/ccTLL7tF.o
+                0x000000000000250c                verify_benchmark
+ .text.startup.main
+                0x0000000000002694       0x44 /tmp/ccrdfRuE.o
+                0x0000000000002694                main
+ .text.initialise_board
+                0x00000000000026d8       0xc4 /tmp/ccCcLDjM.o
+                0x00000000000026d8                initialise_board
+ .text.start_trigger
+                0x000000000000279c       0x38 /tmp/ccCcLDjM.o
+                0x000000000000279c                start_trigger
+ .text.stop_trigger
+                0x00000000000027d4       0x70 /tmp/ccCcLDjM.o
+                0x00000000000027d4                stop_trigger
+ .text.finish_benchmark
+                0x0000000000002844      0x260 /tmp/ccCcLDjM.o
+                0x0000000000002844                finish_benchmark
+ .text.trap_handler
+                0x0000000000002aa4       0x54 /tmp/ccCcLDjM.o
+                0x0000000000002aa4                trap_handler
+ .text          0x0000000000002af8       0xdc /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/tools/xpack-riscv-none-embed-gcc-10.2.0-1.2/bin/../lib/gcc/riscv-none-embed/10.2.0/../../../../riscv-none-embed/lib/rv32im/ilp32/libc.a(lib_a-memset.o)
+                0x0000000000002af8                memset
+
+.rodata         0x0000000000002bd4      0x124
+ *(.rodata .rodata.*)
+ .rodata        0x0000000000002bd4       0x40 /tmp/ccTLL7tF.o
+ .rodata.initialise_board.str1.4
+                0x0000000000002c14       0x5b /tmp/ccCcLDjM.o
+ *fill*         0x0000000000002c6f        0x1 
+ .rodata.finish_benchmark.str1.4
+                0x0000000000002c70       0x6d /tmp/ccCcLDjM.o
+ *fill*         0x0000000000002cdd        0x3 
+ .rodata.trap_handler.str1.4
+                0x0000000000002ce0       0x18 /tmp/ccCcLDjM.o
+
+.rela.dyn       0x0000000000002cf8        0x0
+ .rela.text.start
+                0x0000000000002cf8        0x0 /tmp/ccTLL7tF.o
+
+.data
+ *(.data .data.*)
+ *(.sdata .sdata.*)
+                0x0000000000002cf8                . = ALIGN (0x4)
+                0x0000000000002cf8                __bss_start = .
+
+.bss            0x0000000000002cf8      0x118
+ *(.bss .bss.*)
+ .bss.A_FH_TUERMODUL_CTRL_next_state
+                0x0000000000002cf8        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002cf8                A_FH_TUERMODUL_CTRL_next_state
+ .bss.BEWEGUNG_BLOCK_ERKENNUNG_CTRL_next_state
+                0x0000000000002cf9        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002cf9                BEWEGUNG_BLOCK_ERKENNUNG_CTRL_next_state
+ .bss.BLOCK_ERKENNUNG_CTRL_BLOCK_ERKENNUNG_CTRL_next_state
+                0x0000000000002cfa        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002cfa                BLOCK_ERKENNUNG_CTRL_BLOCK_ERKENNUNG_CTRL_next_state
+ *fill*         0x0000000000002cfb        0x1 
+ .bss.BLOCK_ERKENNUNG_CTRL__I_EIN_MAX
+                0x0000000000002cfc        0x4 /tmp/ccTLL7tF.o
+                0x0000000000002cfc                BLOCK_ERKENNUNG_CTRL__I_EIN_MAX
+ .bss.BLOCK_ERKENNUNG_CTRL__N
+                0x0000000000002d00        0x4 /tmp/ccTLL7tF.o
+                0x0000000000002d00                BLOCK_ERKENNUNG_CTRL__N
+ .bss.BLOCK_ERKENNUNG_CTRL__N_old
+                0x0000000000002d04        0x4 /tmp/ccTLL7tF.o
+                0x0000000000002d04                BLOCK_ERKENNUNG_CTRL__N_old
+ .bss.B_FH_TUERMODUL_CTRL_next_state
+                0x0000000000002d08        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002d08                B_FH_TUERMODUL_CTRL_next_state
+ *fill*         0x0000000000002d09        0x3 
+ .bss.Bitlist   0x0000000000002d0c       0x40 /tmp/ccTLL7tF.o
+ .bss.EINKLEMMSCHUTZ_CTRL_EINKLEMMSCHUTZ_CTRL_next_state
+                0x0000000000002d4c        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002d4c                EINKLEMMSCHUTZ_CTRL_EINKLEMMSCHUTZ_CTRL_next_state
+ .bss.FH_DU__BLOCK
+                0x0000000000002d4d        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002d4d                FH_DU__BLOCK
+ .bss.FH_DU__BLOCK_copy
+                0x0000000000002d4e        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002d4e                FH_DU__BLOCK_copy
+ .bss.FH_DU__BLOCK_old
+                0x0000000000002d4f        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002d4f                FH_DU__BLOCK_old
+ .bss.FH_DU__DOOR_ID
+                0x0000000000002d50        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002d50                FH_DU__DOOR_ID
+ .bss.FH_DU__EKS_LEISTE_AKTIV
+                0x0000000000002d51        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002d51                FH_DU__EKS_LEISTE_AKTIV
+ .bss.FH_DU__EKS_LEISTE_AKTIV_old
+                0x0000000000002d52        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002d52                FH_DU__EKS_LEISTE_AKTIV_old
+ .bss.FH_DU__FT
+                0x0000000000002d53        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002d53                FH_DU__FT
+ .bss.FH_DU__I_EIN
+                0x0000000000002d54        0x4 /tmp/ccTLL7tF.o
+                0x0000000000002d54                FH_DU__I_EIN
+ .bss.FH_DU__I_EIN_old
+                0x0000000000002d58        0x4 /tmp/ccTLL7tF.o
+                0x0000000000002d58                FH_DU__I_EIN_old
+ .bss.FH_DU__KL_50
+                0x0000000000002d5c        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002d5c                FH_DU__KL_50
+ *fill*         0x0000000000002d5d        0x3 
+ .bss.FH_DU__MFH
+                0x0000000000002d60        0x4 /tmp/ccTLL7tF.o
+                0x0000000000002d60                FH_DU__MFH
+ .bss.FH_DU__MFHA
+                0x0000000000002d64        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002d64                FH_DU__MFHA
+ .bss.FH_DU__MFHA_copy
+                0x0000000000002d65        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002d65                FH_DU__MFHA_copy
+ .bss.FH_DU__MFHA_old
+                0x0000000000002d66        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002d66                FH_DU__MFHA_old
+ .bss.FH_DU__MFHZ
+                0x0000000000002d67        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002d67                FH_DU__MFHZ
+ .bss.FH_DU__MFHZ_copy
+                0x0000000000002d68        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002d68                FH_DU__MFHZ_copy
+ .bss.FH_DU__MFHZ_old
+                0x0000000000002d69        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002d69                FH_DU__MFHZ_old
+ *fill*         0x0000000000002d6a        0x2 
+ .bss.FH_DU__MFH_copy
+                0x0000000000002d6c        0x4 /tmp/ccTLL7tF.o
+                0x0000000000002d6c                FH_DU__MFH_copy
+ .bss.FH_DU__POSITION
+                0x0000000000002d70        0x4 /tmp/ccTLL7tF.o
+                0x0000000000002d70                FH_DU__POSITION
+ .bss.FH_DU__S_FH_AUFDISC
+                0x0000000000002d74        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002d74                FH_DU__S_FH_AUFDISC
+ .bss.FH_DU__S_FH_FTAUF
+                0x0000000000002d75        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002d75                FH_DU__S_FH_FTAUF
+ .bss.FH_DU__S_FH_FTZU
+                0x0000000000002d76        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002d76                FH_DU__S_FH_FTZU
+ .bss.FH_DU__S_FH_TMBFAUFCAN
+                0x0000000000002d77        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002d77                FH_DU__S_FH_TMBFAUFCAN
+ .bss.FH_DU__S_FH_TMBFAUFCAN_old
+                0x0000000000002d78        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002d78                FH_DU__S_FH_TMBFAUFCAN_old
+ .bss.FH_DU__S_FH_TMBFAUFDISC
+                0x0000000000002d79        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002d79                FH_DU__S_FH_TMBFAUFDISC
+ .bss.FH_DU__S_FH_TMBFAUFDISC_old
+                0x0000000000002d7a        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002d7a                FH_DU__S_FH_TMBFAUFDISC_old
+ .bss.FH_DU__S_FH_TMBFZUCAN
+                0x0000000000002d7b        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002d7b                FH_DU__S_FH_TMBFZUCAN
+ .bss.FH_DU__S_FH_TMBFZUCAN_old
+                0x0000000000002d7c        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002d7c                FH_DU__S_FH_TMBFZUCAN_old
+ .bss.FH_DU__S_FH_TMBFZUDISC
+                0x0000000000002d7d        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002d7d                FH_DU__S_FH_TMBFZUDISC
+ .bss.FH_DU__S_FH_TMBFZUDISC_old
+                0x0000000000002d7e        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002d7e                FH_DU__S_FH_TMBFZUDISC_old
+ .bss.FH_DU__S_FH_ZUDISC
+                0x0000000000002d7f        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002d7f                FH_DU__S_FH_ZUDISC
+ .bss.FH_STEUERUNG_DUMMY_FH_STEUERUNG_DUMMY_next_state
+                0x0000000000002d80        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002d80                FH_STEUERUNG_DUMMY_FH_STEUERUNG_DUMMY_next_state
+ .bss.FH_TUERMODUL_CTRL__INREVERS1
+                0x0000000000002d81        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002d81                FH_TUERMODUL_CTRL__INREVERS1
+ .bss.FH_TUERMODUL_CTRL__INREVERS1_copy
+                0x0000000000002d82        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002d82                FH_TUERMODUL_CTRL__INREVERS1_copy
+ .bss.FH_TUERMODUL_CTRL__INREVERS2
+                0x0000000000002d83        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002d83                FH_TUERMODUL_CTRL__INREVERS2
+ .bss.FH_TUERMODUL_CTRL__INREVERS2_copy
+                0x0000000000002d84        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002d84                FH_TUERMODUL_CTRL__INREVERS2_copy
+ *fill*         0x0000000000002d85        0x3 
+ .bss.FH_TUERMODUL_CTRL__N
+                0x0000000000002d88        0x4 /tmp/ccTLL7tF.o
+                0x0000000000002d88                FH_TUERMODUL_CTRL__N
+ .bss.FH_TUERMODUL_CTRL__N_old
+                0x0000000000002d8c        0x4 /tmp/ccTLL7tF.o
+                0x0000000000002d8c                FH_TUERMODUL_CTRL__N_old
+ .bss.FH_TUERMODUL__BLOCK
+                0x0000000000002d90        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002d90                FH_TUERMODUL__BLOCK
+ .bss.FH_TUERMODUL__BLOCK_copy
+                0x0000000000002d91        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002d91                FH_TUERMODUL__BLOCK_copy
+ .bss.FH_TUERMODUL__BLOCK_old
+                0x0000000000002d92        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002d92                FH_TUERMODUL__BLOCK_old
+ .bss.FH_TUERMODUL__EKS_LEISTE_AKTIV
+                0x0000000000002d93        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002d93                FH_TUERMODUL__EKS_LEISTE_AKTIV
+ .bss.FH_TUERMODUL__EKS_LEISTE_AKTIV_old
+                0x0000000000002d94        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002d94                FH_TUERMODUL__EKS_LEISTE_AKTIV_old
+ .bss.FH_TUERMODUL__FT
+                0x0000000000002d95        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002d95                FH_TUERMODUL__FT
+ *fill*         0x0000000000002d96        0x2 
+ .bss.FH_TUERMODUL__I_EIN
+                0x0000000000002d98        0x4 /tmp/ccTLL7tF.o
+                0x0000000000002d98                FH_TUERMODUL__I_EIN
+ .bss.FH_TUERMODUL__I_EIN_old
+                0x0000000000002d9c        0x4 /tmp/ccTLL7tF.o
+                0x0000000000002d9c                FH_TUERMODUL__I_EIN_old
+ .bss.FH_TUERMODUL__KL_50
+                0x0000000000002da0        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002da0                FH_TUERMODUL__KL_50
+ .bss.FH_TUERMODUL__MFHA
+                0x0000000000002da1        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002da1                FH_TUERMODUL__MFHA
+ .bss.FH_TUERMODUL__MFHA_copy
+                0x0000000000002da2        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002da2                FH_TUERMODUL__MFHA_copy
+ .bss.FH_TUERMODUL__MFHA_old
+                0x0000000000002da3        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002da3                FH_TUERMODUL__MFHA_old
+ .bss.FH_TUERMODUL__MFHZ
+                0x0000000000002da4        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002da4                FH_TUERMODUL__MFHZ
+ .bss.FH_TUERMODUL__MFHZ_copy
+                0x0000000000002da5        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002da5                FH_TUERMODUL__MFHZ_copy
+ .bss.FH_TUERMODUL__MFHZ_old
+                0x0000000000002da6        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002da6                FH_TUERMODUL__MFHZ_old
+ *fill*         0x0000000000002da7        0x1 
+ .bss.FH_TUERMODUL__POSITION
+                0x0000000000002da8        0x4 /tmp/ccTLL7tF.o
+                0x0000000000002da8                FH_TUERMODUL__POSITION
+ .bss.FH_TUERMODUL__SFHA
+                0x0000000000002dac        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002dac                FH_TUERMODUL__SFHA
+ .bss.FH_TUERMODUL__SFHA_MEC
+                0x0000000000002dad        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002dad                FH_TUERMODUL__SFHA_MEC
+ .bss.FH_TUERMODUL__SFHA_MEC_old
+                0x0000000000002dae        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002dae                FH_TUERMODUL__SFHA_MEC_old
+ .bss.FH_TUERMODUL__SFHA_ZENTRAL
+                0x0000000000002daf        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002daf                FH_TUERMODUL__SFHA_ZENTRAL
+ .bss.FH_TUERMODUL__SFHA_ZENTRAL_old
+                0x0000000000002db0        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002db0                FH_TUERMODUL__SFHA_ZENTRAL_old
+ .bss.FH_TUERMODUL__SFHA_copy
+                0x0000000000002db1        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002db1                FH_TUERMODUL__SFHA_copy
+ .bss.FH_TUERMODUL__SFHA_old
+                0x0000000000002db2        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002db2                FH_TUERMODUL__SFHA_old
+ .bss.FH_TUERMODUL__SFHZ
+                0x0000000000002db3        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002db3                FH_TUERMODUL__SFHZ
+ .bss.FH_TUERMODUL__SFHZ_MEC
+                0x0000000000002db4        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002db4                FH_TUERMODUL__SFHZ_MEC
+ .bss.FH_TUERMODUL__SFHZ_MEC_old
+                0x0000000000002db5        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002db5                FH_TUERMODUL__SFHZ_MEC_old
+ .bss.FH_TUERMODUL__SFHZ_ZENTRAL
+                0x0000000000002db6        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002db6                FH_TUERMODUL__SFHZ_ZENTRAL
+ .bss.FH_TUERMODUL__SFHZ_ZENTRAL_old
+                0x0000000000002db7        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002db7                FH_TUERMODUL__SFHZ_ZENTRAL_old
+ .bss.FH_TUERMODUL__SFHZ_copy
+                0x0000000000002db8        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002db8                FH_TUERMODUL__SFHZ_copy
+ .bss.FH_TUERMODUL__SFHZ_old
+                0x0000000000002db9        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002db9                FH_TUERMODUL__SFHZ_old
+ .bss.INITIALISIERT_FH_TUERMODUL_CTRL_next_state
+                0x0000000000002dba        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002dba                INITIALISIERT_FH_TUERMODUL_CTRL_next_state
+ .bss.KINDERSICHERUNG_CTRL_KINDERSICHERUNG_CTRL_next_state
+                0x0000000000002dbb        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002dbb                KINDERSICHERUNG_CTRL_KINDERSICHERUNG_CTRL_next_state
+ .bss.MANUELL_SCHLIESSEN_FH_TUERMODUL_CTRL_next_state
+                0x0000000000002dbc        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002dbc                MANUELL_SCHLIESSEN_FH_TUERMODUL_CTRL_next_state
+ .bss.MEC_KINDERSICHERUNG_CTRL_next_state
+                0x0000000000002dbd        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002dbd                MEC_KINDERSICHERUNG_CTRL_next_state
+ .bss.NICHT_INITIALISIERT_NICHT_INITIALISIERT_next_state
+                0x0000000000002dbe        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002dbe                NICHT_INITIALISIERT_NICHT_INITIALISIERT_next_state
+ .bss.OEFFNEN_FH_TUERMODUL_CTRL_next_state
+                0x0000000000002dbf        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002dbf                OEFFNEN_FH_TUERMODUL_CTRL_next_state
+ .bss.SCHLIESSEN_FH_TUERMODUL_CTRL_next_state
+                0x0000000000002dc0        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002dc0                SCHLIESSEN_FH_TUERMODUL_CTRL_next_state
+ .bss.TIPP_SCHLIESSEN_FH_TUERMODUL_CTRL_next_state
+                0x0000000000002dc1        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002dc1                TIPP_SCHLIESSEN_FH_TUERMODUL_CTRL_next_state
+ .bss.WIEDERHOLSPERRE_FH_TUERMODUL_CTRL_next_state
+                0x0000000000002dc2        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002dc2                WIEDERHOLSPERRE_FH_TUERMODUL_CTRL_next_state
+ .bss.ZENTRAL_KINDERSICHERUNG_CTRL_next_state
+                0x0000000000002dc3        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002dc3                ZENTRAL_KINDERSICHERUNG_CTRL_next_state
+ .bss.sc_FH_TUERMODUL_CTRL_1739_10
+                0x0000000000002dc4        0x4 /tmp/ccTLL7tF.o
+                0x0000000000002dc4                sc_FH_TUERMODUL_CTRL_1739_10
+ .bss.sc_FH_TUERMODUL_CTRL_1781_10
+                0x0000000000002dc8        0x4 /tmp/ccTLL7tF.o
+                0x0000000000002dc8                sc_FH_TUERMODUL_CTRL_1781_10
+ .bss.sc_FH_TUERMODUL_CTRL_2329_1
+                0x0000000000002dcc        0x4 /tmp/ccTLL7tF.o
+                0x0000000000002dcc                sc_FH_TUERMODUL_CTRL_2329_1
+ .bss.sc_FH_TUERMODUL_CTRL_2352_1
+                0x0000000000002dd0        0x4 /tmp/ccTLL7tF.o
+                0x0000000000002dd0                sc_FH_TUERMODUL_CTRL_2352_1
+ .bss.sc_FH_TUERMODUL_CTRL_2375_2
+                0x0000000000002dd4        0x4 /tmp/ccTLL7tF.o
+                0x0000000000002dd4                sc_FH_TUERMODUL_CTRL_2375_2
+ .bss.stable    0x0000000000002dd8        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002dd8                stable
+ .bss.step      0x0000000000002dd9        0x1 /tmp/ccTLL7tF.o
+                0x0000000000002dd9                step
+ *fill*         0x0000000000002dda        0x2 
+ .bss.time      0x0000000000002ddc        0x4 /tmp/ccTLL7tF.o
+                0x0000000000002ddc                time
+ .bss.tm_entered_EINSCHALTSTROM_MESSEN_BLOCK_ERKENNUNG_CTRLch_BLOCK_ERKENNUNG_CTRL__N_copy
+                0x0000000000002de0        0x4 /tmp/ccTLL7tF.o
+                0x0000000000002de0                tm_entered_EINSCHALTSTROM_MESSEN_BLOCK_ERKENNUNG_CTRLch_BLOCK_ERKENNUNG_CTRL__N_copy
+ .bss.tm_entered_WIEDERHOLSPERRE_FH_TUERMODUL_CTRL
+                0x0000000000002de4        0x4 /tmp/ccTLL7tF.o
+                0x0000000000002de4                tm_entered_WIEDERHOLSPERRE_FH_TUERMODUL_CTRL
+ .bss.tm_entered_WIEDERHOLSPERRE_FH_TUERMODUL_CTRLexited_BEREIT_FH_TUERMODUL_CTRL
+                0x0000000000002de8        0x4 /tmp/ccTLL7tF.o
+                0x0000000000002de8                tm_entered_WIEDERHOLSPERRE_FH_TUERMODUL_CTRLexited_BEREIT_FH_TUERMODUL_CTRL
+ *fill*         0x0000000000002dec        0x4 
+ .bss.begin_cycles
+                0x0000000000002df0        0x8 /tmp/ccCcLDjM.o
+ .bss.begin_retired
+                0x0000000000002df8        0x8 /tmp/ccCcLDjM.o
+ .bss.elapsed_cycles
+                0x0000000000002e00        0x8 /tmp/ccCcLDjM.o
+ .bss.elapsed_retired
+                0x0000000000002e08        0x8 /tmp/ccCcLDjM.o
+ *(.sbss .sbss.*)
+ *(COMMON)
+                0x0000000000002e10                . = ALIGN (0x4)
+                0x0000000000002e10                __bss_end = .
+                0x0000000000002e10                __heap_start = .
+                0x0000000000010000                __stack_top = (ORIGIN (RAM) + LENGTH (RAM))
+                0x00000000000034f8                __global_pointer$ = (__bss_start + 0x800)
+                0x0000000000000001                ASSERT ((__heap_start < (__stack_top - 0x4000)), Firmware leaves insufficient stack space)
+OUTPUT(/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/workloads/statemate/firmware.elf elf32-littleriscv)
+
+.comment        0x0000000000000000       0x33
+ .comment       0x0000000000000000       0x33 /tmp/ccTLL7tF.o
+                                         0x34 (size before relaxing)
+ .comment       0x0000000000000033       0x34 /tmp/ccrdfRuE.o
+ .comment       0x0000000000000033       0x34 /tmp/ccCcLDjM.o

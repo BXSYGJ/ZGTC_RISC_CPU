@@ -1,0 +1,28 @@
+{
+  "device": "PG2L200H-6FBB676",
+  "clock_hz": 153000000,
+  "constraints_met": true,
+  "timing_summary": "All Constraints Met.",
+  "cpu_period_ns": 6.535,
+  "clock_loads": 3445,
+  "estimated_mhz_not_hardware_measurement": 154.2734,
+  "setup_wns_ns": 0.053,
+  "resources": {
+    "CLMA": {
+      "ff": 3151,
+      "lut": 5686
+    },
+    "CLMS": {
+      "ff": 872,
+      "lut": 1626
+    },
+    "synthesis_luts": null,
+    "post_route_luts": 7312,
+    "post_route_ffs": 4023,
+    "DRM": 22.5,
+    "GPLL": 1.0,
+    "APM": 4
+  },
+  "scbv_unset_warning": true,
+  "lut_metric": "post-route CLMA LUT plus CLMS LUT; do not add Distributed RAM again"
+}

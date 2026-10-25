@@ -1,0 +1,12 @@
+{
+  "status": "board_and_full_rtl_verified",
+  "qualified": true,
+  "hashes": {
+    "results.csv": "006fea6247a5da244ed963f546a16ae16b79a5f99ca06fc904ba0a9a2df009d8",
+    "review.json": "a67213f2dc96e94e170bd74703be2bc3d8a2bc77c87e4f56be5baf265ce3bcdb",
+    "tools/review_coremark_loader_evidence.py": "7def86f290990f5fd8e3d222df3a8dac266b68e38193ab16d2b937d1385a61a3",
+    "tools/review_gateway_health.py": "c10111de270075f97fd34853e66b899dfb7d4e5738fc3cd6760ca765630f68d2",
+    "tools/review_selected_coremark_board.py": "4a71aa4dbc6b708395e3ae28fd4714cd1950165209422e18f57d1e954b59cc8b",
+    "tools/selected_coremark_board_evidence.py": "1c0b27cded0ac20cda4f8fe8e41ee7585f30dcb214002698da793a11395359bb"
+  }
+}

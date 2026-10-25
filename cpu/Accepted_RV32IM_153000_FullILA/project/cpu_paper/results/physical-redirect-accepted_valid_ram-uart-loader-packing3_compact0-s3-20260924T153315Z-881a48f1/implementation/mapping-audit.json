@@ -1,0 +1,10 @@
+{
+  "data_channels": 42,
+  "trigger_channels": 33,
+  "depth": 1024,
+  "clock": "cpu_clk",
+  "trigger": "full_EX_PC_and_ex_fire_basic_match",
+  "full_ex_pc_preserved": true,
+  "hardware_validated": false,
+  "aliases": {}
+}

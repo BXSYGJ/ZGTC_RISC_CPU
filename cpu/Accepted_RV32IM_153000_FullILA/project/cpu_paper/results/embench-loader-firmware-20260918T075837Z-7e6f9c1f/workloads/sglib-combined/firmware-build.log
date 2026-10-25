@@ -1,0 +1,187 @@
+In file included from /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/combined.c:16:
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/combined.c: In function 'sglib_dllist_sort':
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/sglib.h:656:25: warning: unused variable '_dlt_' [-Wunused-variable]
+  656 |   type *_dll_, *_dlp_, *_dlt_;\
+      |                         ^~~~~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/sglib.h:1386:4: note: in expansion of macro 'SGLIB_DL_LIST_SORT'
+ 1386 |    SGLIB_DL_LIST_SORT(type, *list, comparator, previous, next);\
+      |    ^~~~~~~~~~~~~~~~~~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/combined.c:59:1: note: in expansion of macro 'SGLIB_DEFINE_DL_LIST_FUNCTIONS'
+   59 | SGLIB_DEFINE_DL_LIST_FUNCTIONS (dllist, DLLIST_COMPARATOR, ptr_to_previous,
+      | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/sglib.h:656:17: warning: unused variable '_dlp_' [-Wunused-variable]
+  656 |   type *_dll_, *_dlp_, *_dlt_;\
+      |                 ^~~~~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/sglib.h:1386:4: note: in expansion of macro 'SGLIB_DL_LIST_SORT'
+ 1386 |    SGLIB_DL_LIST_SORT(type, *list, comparator, previous, next);\
+      |    ^~~~~~~~~~~~~~~~~~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/combined.c:59:1: note: in expansion of macro 'SGLIB_DEFINE_DL_LIST_FUNCTIONS'
+   59 | SGLIB_DEFINE_DL_LIST_FUNCTIONS (dllist, DLLIST_COMPARATOR, ptr_to_previous,
+      | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/combined.c: In function 'sglib_dllist_len':
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/sglib.h:401:9: warning: unused variable '_ce_' [-Wunused-variable]
+  401 |   type *_ce_;\
+      |         ^~~~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/sglib.h:690:5: note: in expansion of macro 'SGLIB_LIST_LEN'
+  690 |     SGLIB_LIST_LEN(type, list, previous, _r1_);\
+      |     ^~~~~~~~~~~~~~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/sglib.h:1390:4: note: in expansion of macro 'SGLIB_DL_LIST_LEN'
+ 1390 |    SGLIB_DL_LIST_LEN(type, list, previous, next, res);\
+      |    ^~~~~~~~~~~~~~~~~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/combined.c:59:1: note: in expansion of macro 'SGLIB_DEFINE_DL_LIST_FUNCTIONS'
+   59 | SGLIB_DEFINE_DL_LIST_FUNCTIONS (dllist, DLLIST_COMPARATOR, ptr_to_previous,
+      | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/sglib.h:401:9: warning: unused variable '_ce_' [-Wunused-variable]
+  401 |   type *_ce_;\
+      |         ^~~~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/sglib.h:692:5: note: in expansion of macro 'SGLIB_LIST_LEN'
+  692 |     SGLIB_LIST_LEN(type, _dl_, next, _r2_);\
+      |     ^~~~~~~~~~~~~~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/sglib.h:1390:4: note: in expansion of macro 'SGLIB_DL_LIST_LEN'
+ 1390 |    SGLIB_DL_LIST_LEN(type, list, previous, next, res);\
+      |    ^~~~~~~~~~~~~~~~~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/combined.c:59:1: note: in expansion of macro 'SGLIB_DEFINE_DL_LIST_FUNCTIONS'
+   59 | SGLIB_DEFINE_DL_LIST_FUNCTIONS (dllist, DLLIST_COMPARATOR, ptr_to_previous,
+      | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/combined.c: In function 'sglib_ilist_len':
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/sglib.h:401:9: warning: unused variable '_ce_' [-Wunused-variable]
+  401 |   type *_ce_;\
+      |         ^~~~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/sglib.h:1178:4: note: in expansion of macro 'SGLIB_LIST_LEN'
+ 1178 |    SGLIB_LIST_LEN(type, list, next, res);\
+      |    ^~~~~~~~~~~~~~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/combined.c:85:1: note: in expansion of macro 'SGLIB_DEFINE_LIST_FUNCTIONS'
+   85 | SGLIB_DEFINE_LIST_FUNCTIONS (ilist, ILIST_COMPARATOR, next)
+      | ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/combined.c:16:
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/combined.c: In function 'sglib___rbtree_fix_left_insertion_discrepancy':
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/sglib.h:1451:35: warning: variable 'bl' set but not used [-Wunused-but-set-variable]
+ 1451 |   type *t, *tl, *a, *b, *c, *ar, *bl, *br, *cl, *cr;\
+      |                                   ^~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/sglib.h:1612:3: note: in expansion of macro 'SGLIB___RBTREE_FIX_INSERTION_DISCREPANCY'
+ 1612 |   SGLIB___RBTREE_FIX_INSERTION_DISCREPANCY(type, tree, left, right, bits, RED, BLACK);\
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/sglib.h:1925:3: note: in expansion of macro 'SGLIB_DEFINE_RBTREE_FUNCTIONS_GENERAL'
+ 1925 |   SGLIB_DEFINE_RBTREE_FUNCTIONS_GENERAL(type, left, right, colorbit, comparator, 1, 0)
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/combined.c:116:1: note: in expansion of macro 'SGLIB_DEFINE_RBTREE_FUNCTIONS'
+  116 | SGLIB_DEFINE_RBTREE_FUNCTIONS (rbtree, left, right, color_field, CMPARATOR)
+      | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/sglib.h:1451:30: warning: variable 'ar' set but not used [-Wunused-but-set-variable]
+ 1451 |   type *t, *tl, *a, *b, *c, *ar, *bl, *br, *cl, *cr;\
+      |                              ^~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/sglib.h:1612:3: note: in expansion of macro 'SGLIB___RBTREE_FIX_INSERTION_DISCREPANCY'
+ 1612 |   SGLIB___RBTREE_FIX_INSERTION_DISCREPANCY(type, tree, left, right, bits, RED, BLACK);\
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/sglib.h:1925:3: note: in expansion of macro 'SGLIB_DEFINE_RBTREE_FUNCTIONS_GENERAL'
+ 1925 |   SGLIB_DEFINE_RBTREE_FUNCTIONS_GENERAL(type, left, right, colorbit, comparator, 1, 0)
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/combined.c:116:1: note: in expansion of macro 'SGLIB_DEFINE_RBTREE_FUNCTIONS'
+  116 | SGLIB_DEFINE_RBTREE_FUNCTIONS (rbtree, left, right, color_field, CMPARATOR)
+      | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/combined.c: In function 'sglib___rbtree_fix_right_insertion_discrepancy':
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/sglib.h:1451:35: warning: variable 'bl' set but not used [-Wunused-but-set-variable]
+ 1451 |   type *t, *tl, *a, *b, *c, *ar, *bl, *br, *cl, *cr;\
+      |                                   ^~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/sglib.h:1616:3: note: in expansion of macro 'SGLIB___RBTREE_FIX_INSERTION_DISCREPANCY'
+ 1616 |   SGLIB___RBTREE_FIX_INSERTION_DISCREPANCY(type, tree, right, left, bits, RED, BLACK);\
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/sglib.h:1925:3: note: in expansion of macro 'SGLIB_DEFINE_RBTREE_FUNCTIONS_GENERAL'
+ 1925 |   SGLIB_DEFINE_RBTREE_FUNCTIONS_GENERAL(type, left, right, colorbit, comparator, 1, 0)
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/combined.c:116:1: note: in expansion of macro 'SGLIB_DEFINE_RBTREE_FUNCTIONS'
+  116 | SGLIB_DEFINE_RBTREE_FUNCTIONS (rbtree, left, right, color_field, CMPARATOR)
+      | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/sglib.h:1451:30: warning: variable 'ar' set but not used [-Wunused-but-set-variable]
+ 1451 |   type *t, *tl, *a, *b, *c, *ar, *bl, *br, *cl, *cr;\
+      |                              ^~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/sglib.h:1616:3: note: in expansion of macro 'SGLIB___RBTREE_FIX_INSERTION_DISCREPANCY'
+ 1616 |   SGLIB___RBTREE_FIX_INSERTION_DISCREPANCY(type, tree, right, left, bits, RED, BLACK);\
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/sglib.h:1925:3: note: in expansion of macro 'SGLIB_DEFINE_RBTREE_FUNCTIONS_GENERAL'
+ 1925 |   SGLIB_DEFINE_RBTREE_FUNCTIONS_GENERAL(type, left, right, colorbit, comparator, 1, 0)
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/combined.c:116:1: note: in expansion of macro 'SGLIB_DEFINE_RBTREE_FUNCTIONS'
+  116 | SGLIB_DEFINE_RBTREE_FUNCTIONS (rbtree, left, right, color_field, CMPARATOR)
+      | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/combined.c: In function 'sglib___rbtree_fix_left_deletion_discrepancy':
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/sglib.h:1490:30: warning: variable 'ar' set but not used [-Wunused-but-set-variable]
+ 1490 |   type  *t, *a, *b, *c, *d, *ar, *bl, *br, *cl, *cr, *dl, *dr;\
+      |                              ^~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/sglib.h:1621:3: note: in expansion of macro 'SGLIB___RBTREE_FIX_DELETION_DISCREPANCY'
+ 1621 |   SGLIB___RBTREE_FIX_DELETION_DISCREPANCY(type, tree, right, left, bits, RED, BLACK, res);\
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/sglib.h:1925:3: note: in expansion of macro 'SGLIB_DEFINE_RBTREE_FUNCTIONS_GENERAL'
+ 1925 |   SGLIB_DEFINE_RBTREE_FUNCTIONS_GENERAL(type, left, right, colorbit, comparator, 1, 0)
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/combined.c:116:1: note: in expansion of macro 'SGLIB_DEFINE_RBTREE_FUNCTIONS'
+  116 | SGLIB_DEFINE_RBTREE_FUNCTIONS (rbtree, left, right, color_field, CMPARATOR)
+      | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/combined.c: In function 'sglib___rbtree_fix_right_deletion_discrepancy':
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/sglib.h:1490:30: warning: variable 'ar' set but not used [-Wunused-but-set-variable]
+ 1490 |   type  *t, *a, *b, *c, *d, *ar, *bl, *br, *cl, *cr, *dl, *dr;\
+      |                              ^~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/sglib.h:1627:3: note: in expansion of macro 'SGLIB___RBTREE_FIX_DELETION_DISCREPANCY'
+ 1627 |   SGLIB___RBTREE_FIX_DELETION_DISCREPANCY(type, tree, left, right, bits, RED, BLACK, res);\
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/sglib.h:1925:3: note: in expansion of macro 'SGLIB_DEFINE_RBTREE_FUNCTIONS_GENERAL'
+ 1925 |   SGLIB_DEFINE_RBTREE_FUNCTIONS_GENERAL(type, left, right, colorbit, comparator, 1, 0)
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/combined.c:116:1: note: in expansion of macro 'SGLIB_DEFINE_RBTREE_FUNCTIONS'
+  116 | SGLIB_DEFINE_RBTREE_FUNCTIONS (rbtree, left, right, color_field, CMPARATOR)
+      | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/combined.c:16:
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/combined.c: In function 'sglib_rbtree_len':
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/sglib.h:1771:45: warning: variable 'e' set but not used [-Wunused-but-set-variable]
+ 1771 |     SGLIB_BIN_TREE_MAP_ON_ELEMENTS(type, t, e, left, right, n++);\
+      |                                             ^
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/sglib.h:744:9: note: in definition of macro 'SGLIB___BIN_TREE_MAP_ON_ELEMENTS'
+  744 |   type *iteratedVariable;\
+      |         ^~~~~~~~~~~~~~~~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/sglib.h:1771:5: note: in expansion of macro 'SGLIB_BIN_TREE_MAP_ON_ELEMENTS'
+ 1771 |     SGLIB_BIN_TREE_MAP_ON_ELEMENTS(type, t, e, left, right, n++);\
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/sglib.h:1925:3: note: in expansion of macro 'SGLIB_DEFINE_RBTREE_FUNCTIONS_GENERAL'
+ 1925 |   SGLIB_DEFINE_RBTREE_FUNCTIONS_GENERAL(type, left, right, colorbit, comparator, 1, 0)
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/combined.c:116:1: note: in expansion of macro 'SGLIB_DEFINE_RBTREE_FUNCTIONS'
+  116 | SGLIB_DEFINE_RBTREE_FUNCTIONS (rbtree, left, right, color_field, CMPARATOR)
+      | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/combined.c:16:
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/sglib.h:1769:12: warning: unused variable 'e' [-Wunused-variable]
+ 1769 |     type  *e;\
+      |            ^
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/sglib.h:1925:3: note: in expansion of macro 'SGLIB_DEFINE_RBTREE_FUNCTIONS_GENERAL'
+ 1925 |   SGLIB_DEFINE_RBTREE_FUNCTIONS_GENERAL(type, left, right, colorbit, comparator, 1, 0)
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/combined.c:116:1: note: in expansion of macro 'SGLIB_DEFINE_RBTREE_FUNCTIONS'
+  116 | SGLIB_DEFINE_RBTREE_FUNCTIONS (rbtree, left, right, color_field, CMPARATOR)
+      | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/combined.c: In function 'sglib__rbtree_it_compute_current_elem':
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/sglib.h:1776:15: warning: unused variable 'cmp' [-Wunused-variable]
+ 1776 |     int   i,j,cmp;\
+      |               ^~~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/sglib.h:1925:3: note: in expansion of macro 'SGLIB_DEFINE_RBTREE_FUNCTIONS_GENERAL'
+ 1925 |   SGLIB_DEFINE_RBTREE_FUNCTIONS_GENERAL(type, left, right, colorbit, comparator, 1, 0)
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/combined.c:116:1: note: in expansion of macro 'SGLIB_DEFINE_RBTREE_FUNCTIONS'
+  116 | SGLIB_DEFINE_RBTREE_FUNCTIONS (rbtree, left, right, color_field, CMPARATOR)
+      | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/combined.c: In function 'warm_caches':
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/combined.c:176:8: warning: unused variable 'res' [-Wunused-variable]
+  176 |   int  res = benchmark_body (1, heat);
+      |        ^~~
+In file included from /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/combined.c:16:
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/combined.c: In function 'benchmark_body':
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/sglib.h:99:9: warning: unused variable '_tmp_' [-Wunused-variable]
+   99 |   type  _tmp_;\
+      |         ^~~~~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/sglib.h:91:3: note: in expansion of macro 'SGLIB_ARRAY_QUICK_SORT'
+   91 |   SGLIB_ARRAY_QUICK_SORT(type, a, max, comparator, SGLIB_ARRAY_ELEMENTS_EXCHANGER);\
+      |   ^~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/combined.c:210:2: note: in expansion of macro 'SGLIB_ARRAY_SINGLE_QUICK_SORT'
+  210 |  SGLIB_ARRAY_SINGLE_QUICK_SORT (int, array2, 100,
+      |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/sglib-combined/combined.c:193:7: warning: unused variable 'i' [-Wunused-variable]
+  193 |   int i;
+      |       ^

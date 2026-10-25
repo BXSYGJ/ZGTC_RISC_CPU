@@ -1,0 +1,157 @@
+{
+  "schema": 1,
+  "run": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\results\\physical-redirect-accepted_valid_ram-uart-loader-packing3_compact0-s3-20260924T153315Z-881a48f1",
+  "checks": {
+    "Setup_Slow": {
+      "cpu_slack_ns": 0.053,
+      "cpu_total_slack_ns": 0.0,
+      "cpu_failing_endpoints": 0,
+      "cpu_endpoints": 17735,
+      "all_clock_minimum_slack_ns": 0.053,
+      "all_clock_failing_endpoints": 0
+    },
+    "Hold_Slow": {
+      "cpu_slack_ns": 0.149,
+      "cpu_total_slack_ns": 0.0,
+      "cpu_failing_endpoints": 0,
+      "cpu_endpoints": 17735,
+      "all_clock_minimum_slack_ns": 0.149,
+      "all_clock_failing_endpoints": 0
+    },
+    "Recovery_Slow": {
+      "cpu_slack_ns": 1.528,
+      "cpu_total_slack_ns": 0.0,
+      "cpu_failing_endpoints": 0,
+      "cpu_endpoints": 2946,
+      "all_clock_minimum_slack_ns": 1.528,
+      "all_clock_failing_endpoints": 0
+    },
+    "Removal_Slow": {
+      "cpu_slack_ns": 0.619,
+      "cpu_total_slack_ns": 0.0,
+      "cpu_failing_endpoints": 0,
+      "cpu_endpoints": 2946,
+      "all_clock_minimum_slack_ns": 0.619,
+      "all_clock_failing_endpoints": 0
+    },
+    "Minimum Pulse Width_Slow": {
+      "cpu_slack_ns": 1.922,
+      "cpu_total_slack_ns": 0.0,
+      "cpu_failing_endpoints": 0,
+      "cpu_endpoints": 3445,
+      "all_clock_minimum_slack_ns": 1.922,
+      "all_clock_failing_endpoints": 0
+    },
+    "Setup_Fast": {
+      "cpu_slack_ns": 2.481,
+      "cpu_total_slack_ns": 0.0,
+      "cpu_failing_endpoints": 0,
+      "cpu_endpoints": 17735,
+      "all_clock_minimum_slack_ns": 2.481,
+      "all_clock_failing_endpoints": 0
+    },
+    "Hold_Fast": {
+      "cpu_slack_ns": 0.102,
+      "cpu_total_slack_ns": 0.0,
+      "cpu_failing_endpoints": 0,
+      "cpu_endpoints": 17735,
+      "all_clock_minimum_slack_ns": 0.102,
+      "all_clock_failing_endpoints": 0
+    },
+    "Recovery_Fast": {
+      "cpu_slack_ns": 3.353,
+      "cpu_total_slack_ns": 0.0,
+      "cpu_failing_endpoints": 0,
+      "cpu_endpoints": 2946,
+      "all_clock_minimum_slack_ns": 3.353,
+      "all_clock_failing_endpoints": 0
+    },
+    "Removal_Fast": {
+      "cpu_slack_ns": 0.422,
+      "cpu_total_slack_ns": 0.0,
+      "cpu_failing_endpoints": 0,
+      "cpu_endpoints": 2946,
+      "all_clock_minimum_slack_ns": 0.422,
+      "all_clock_failing_endpoints": 0
+    },
+    "Minimum Pulse Width_Fast": {
+      "cpu_slack_ns": 2.469,
+      "cpu_total_slack_ns": 0.0,
+      "cpu_failing_endpoints": 0,
+      "cpu_endpoints": 3445,
+      "all_clock_minimum_slack_ns": 2.469,
+      "all_clock_failing_endpoints": 0
+    }
+  },
+  "internal_multicorner_timing_passed": true,
+  "cpu_setup_wns_ns": 0.053,
+  "cpu_hold_wns_ns": 0.102,
+  "constraint_scope": "Accepted constraints unchanged. Reset, key and UART RX are asynchronous/false-pathed; LED and UART TX have no synchronous external timing specification. Closure covers reported internal/generated-clock and ILA clock timing, not externally timed GPIO/UART paths.",
+  "unconstrained_port_diagnostics": [
+    [
+      "4086",
+      "key",
+      "input"
+    ],
+    [
+      "4086",
+      "rst_n",
+      "input"
+    ],
+    [
+      "4086",
+      "uart_rx",
+      "input"
+    ],
+    [
+      "4087",
+      "led[0]",
+      "output"
+    ],
+    [
+      "4087",
+      "led[1]",
+      "output"
+    ],
+    [
+      "4087",
+      "led[2]",
+      "output"
+    ],
+    [
+      "4087",
+      "led[3]",
+      "output"
+    ],
+    [
+      "4087",
+      "led[4]",
+      "output"
+    ],
+    [
+      "4087",
+      "led[5]",
+      "output"
+    ],
+    [
+      "4087",
+      "led[6]",
+      "output"
+    ],
+    [
+      "4087",
+      "led[7]",
+      "output"
+    ],
+    [
+      "4087",
+      "uart_tx",
+      "output"
+    ]
+  ],
+  "hardware_validated": false,
+  "timing_sha256": "bfc514164ffc3bb357717db15f52c10a809a5b28e498ba50c60fcef0f2064670",
+  "implementation_log_sha256": "2378645ecb876798bfd5be85a88d473e804c58ce4679c6e803057ac358c43cf3",
+  "board_constraint_sha256": "7e248a5022603d4b78b3758d4d552d8efd34c50e34d7d27b0a79ac71ec30e5d0",
+  "uart_constraint_sha256": "1660f87805fe18229114bc941a06c322dd6307e0c22b360cd2740eaf3b8ea9ad"
+}

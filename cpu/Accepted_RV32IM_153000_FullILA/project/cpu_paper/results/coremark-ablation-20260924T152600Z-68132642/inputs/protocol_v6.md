@@ -1,0 +1,9 @@
+# Protocol v6: remote UART transport pacing
+
+The first newly programmed priming-off CoreMark V0 image used CONSOLE_DELAY_CYCLES=0. Its remote UART log lost text within fields, including an invalid displayed CoreMark size, and never supplied a complete accepted report. Preserve that attempt as a capture/validation failure; do not infer a processor correctness failure or reconstruct missing characters.
+
+For new board-bound CoreMark images, set CONSOLE_DELAY_CYCLES=2700000 uniformly. After each transmitted character, poll the existing MMIO timer low word until unsigned elapsed ticks reach this value. The peripheral timer increments once per CPU clock. The period is therefore approximately 17.65 ms at the configured 153 MHz. This restores the historical transport pacing policy, using the shared MMIO timer so the port does not depend on machine-cycle CSRs absent from some comparators.
+
+All console output and its pacing remain outside start_time/stop_time. Do not assume the new binary has identical cache layout or cycles to an old unpaced image: keep firmware hashes distinct, pair identical newly built bytes, and report actual new measurements. Existing unpaced RTL ablation data and physical seed runs remain valid within their own recorded scope. They must not be silently relabelled as executions of the paced image. Independently bind and close each newly programmed paced image before its board measurements are accepted. No result is accepted without complete CRCs, iteration count, atomic cycle/retirement data, hardware configuration and duration checks.
+
+This amendment changes the transport port, not CoreMark algorithms, input seeds, RAM capacity, compiler optimization flags, clock target, CPU RTL, caches, peripherals or ILA geometry. V0 and V1 remain separate configurations. UART transport completeness and independently measured clock frequency are distinct: frequency remains configured unless separately measured.

@@ -1,0 +1,11 @@
+{
+  "argv": [
+    "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/tools/xpack-riscv-none-embed-gcc-10.2.0-1.2/bin/riscv-none-embed-objcopy",
+    "-O",
+    "binary",
+    "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/workloads/huffbench/firmware.elf",
+    "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/workloads/huffbench/firmware.bin"
+  ],
+  "cwd": "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/workloads/huffbench",
+  "timeout_seconds": 300
+}

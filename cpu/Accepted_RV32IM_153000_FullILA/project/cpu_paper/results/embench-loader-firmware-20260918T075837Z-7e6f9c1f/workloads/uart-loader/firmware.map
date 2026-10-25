@@ -1,0 +1,55 @@
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+RAM              0x0000000000000000 0x0000000000001000 xrw
+*default*        0x0000000000000000 0xffffffffffffffff
+
+Linker script and memory map
+
+LOAD /tmp/ccfSRtSE.o
+LOAD /tmp/ccbfWgad.o
+LOAD /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/tools/xpack-riscv-none-embed-gcc-10.2.0-1.2/bin/../lib/gcc/riscv-none-embed/10.2.0/rv32im/ilp32/libgcc.a
+
+.text           0x0000000000000000      0x2bc
+ *(.text.start)
+ .text.start    0x0000000000000000       0x30 /tmp/ccfSRtSE.o
+                0x0000000000000000                _start
+ *(.text .text.*)
+ .text          0x0000000000000030        0x0 /tmp/ccfSRtSE.o
+ .text          0x0000000000000030      0x28c /tmp/ccbfWgad.o
+                0x000000000000009c                main_boot
+
+.rodata         0x00000000000002bc       0x86
+ *(.rodata .rodata.*)
+ .rodata.str1.4
+                0x00000000000002bc       0x86 /tmp/ccbfWgad.o
+
+.rela.dyn       0x0000000000000344        0x0
+ .rela.text.start
+                0x0000000000000344        0x0 /tmp/ccfSRtSE.o
+
+.data           0x0000000000000342        0x0
+ *(.data .data.*)
+ .data          0x0000000000000342        0x0 /tmp/ccfSRtSE.o
+ .data          0x0000000000000342        0x0 /tmp/ccbfWgad.o
+ *(.sdata .sdata.*)
+                0x0000000000000344                . = ALIGN (0x4)
+                0x0000000000000344                __bss_start = .
+
+.bss            0x0000000000000342        0x2
+ *(.bss .bss.*)
+ .bss           0x0000000000000342        0x0 /tmp/ccfSRtSE.o
+ .bss           0x0000000000000342        0x0 /tmp/ccbfWgad.o
+ *(.sbss .sbss.*)
+ *(COMMON)
+                0x0000000000000344                . = ALIGN (0x4)
+ *fill*         0x0000000000000342        0x2 
+                0x0000000000000344                __bss_end = .
+                0x0000000000001000                __stack_top = (ORIGIN (RAM) + LENGTH (RAM))
+                0x0000000000000001                ASSERT ((__bss_end < (__stack_top - 0x100)), Bootloader leaves insufficient stack space)
+OUTPUT(/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/workloads/uart-loader/firmware.elf elf32-littleriscv)
+
+.comment        0x0000000000000000       0x33
+ .comment       0x0000000000000000       0x33 /tmp/ccbfWgad.o
+                                         0x34 (size before relaxing)

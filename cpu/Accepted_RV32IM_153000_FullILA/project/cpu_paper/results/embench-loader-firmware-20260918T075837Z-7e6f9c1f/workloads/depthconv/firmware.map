@@ -1,0 +1,207 @@
+Archive member included to satisfy reference by file (symbol)
+
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/tools/xpack-riscv-none-embed-gcc-10.2.0-1.2/bin/../lib/gcc/riscv-none-embed/10.2.0/../../../../riscv-none-embed/lib/rv32im/ilp32/libc.a(lib_a-errno.o)
+                              /tmp/ccw4ZLCw.o (__errno)
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/tools/xpack-riscv-none-embed-gcc-10.2.0-1.2/bin/../lib/gcc/riscv-none-embed/10.2.0/../../../../riscv-none-embed/lib/rv32im/ilp32/libc.a(lib_a-impure.o)
+                              /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/tools/xpack-riscv-none-embed-gcc-10.2.0-1.2/bin/../lib/gcc/riscv-none-embed/10.2.0/../../../../riscv-none-embed/lib/rv32im/ilp32/libc.a(lib_a-errno.o) (_impure_ptr)
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/tools/xpack-riscv-none-embed-gcc-10.2.0-1.2/bin/../lib/gcc/riscv-none-embed/10.2.0/../../../../riscv-none-embed/lib/rv32im/ilp32/libc.a(lib_a-memset.o)
+                              /tmp/ccoejof3.o (memset)
+
+Discarded input sections
+
+ .text          0x0000000000000000        0x0 /tmp/ccT0aVmd.o
+ .data          0x0000000000000000        0x0 /tmp/ccT0aVmd.o
+ .bss           0x0000000000000000        0x0 /tmp/ccT0aVmd.o
+ .text          0x0000000000000000        0x0 /tmp/ccoejof3.o
+ .data          0x0000000000000000        0x0 /tmp/ccoejof3.o
+ .bss           0x0000000000000000        0x0 /tmp/ccoejof3.o
+ .text.rand_beebs
+                0x0000000000000000       0x38 /tmp/ccoejof3.o
+ .text.srand_beebs
+                0x0000000000000000        0xc /tmp/ccoejof3.o
+ .text.init_heap_beebs
+                0x0000000000000000       0x2c /tmp/ccoejof3.o
+ .text.check_heap_beebs
+                0x0000000000000000       0x20 /tmp/ccoejof3.o
+ .text.malloc_beebs
+                0x0000000000000000       0x70 /tmp/ccoejof3.o
+ .text.calloc_beebs
+                0x0000000000000000       0xb0 /tmp/ccoejof3.o
+ .text.realloc_beebs
+                0x0000000000000000      0x30c /tmp/ccoejof3.o
+ .text.free_beebs
+                0x0000000000000000        0x4 /tmp/ccoejof3.o
+ .bss.heap_end  0x0000000000000000        0x4 /tmp/ccoejof3.o
+ .bss.heap_ptr  0x0000000000000000        0x4 /tmp/ccoejof3.o
+ .bss.heap_requested
+                0x0000000000000000        0x4 /tmp/ccoejof3.o
+ .bss.seed      0x0000000000000000        0x4 /tmp/ccoejof3.o
+ .comment       0x0000000000000000       0x34 /tmp/ccoejof3.o
+ .text          0x0000000000000000        0x0 /tmp/ccW8R0L6.o
+ .data          0x0000000000000000        0x0 /tmp/ccW8R0L6.o
+ .bss           0x0000000000000000        0x0 /tmp/ccW8R0L6.o
+ .text          0x0000000000000000        0x0 /tmp/cc5fPhy9.o
+ .data          0x0000000000000000        0x0 /tmp/cc5fPhy9.o
+ .bss           0x0000000000000000        0x0 /tmp/cc5fPhy9.o
+ .text          0x0000000000000000        0x0 /tmp/ccw4ZLCw.o
+ .data          0x0000000000000000        0x0 /tmp/ccw4ZLCw.o
+ .bss           0x0000000000000000        0x0 /tmp/ccw4ZLCw.o
+ .text._sbrk    0x0000000000000000       0x6c /tmp/ccw4ZLCw.o
+ .text._exit    0x0000000000000000       0x14 /tmp/ccw4ZLCw.o
+ .text.__assert_func
+                0x0000000000000000       0x14 /tmp/ccw4ZLCw.o
+ .bss.brk       0x0000000000000000        0x4 /tmp/ccw4ZLCw.o
+ .comment       0x0000000000000000       0x34 /tmp/ccw4ZLCw.o
+ .text          0x0000000000000000        0x0 /tmp/ccNCBE1W.o
+ .data          0x0000000000000000        0x0 /tmp/ccNCBE1W.o
+ .bss           0x0000000000000000        0x0 /tmp/ccNCBE1W.o
+ .text          0x0000000000000000        0x0 /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/tools/xpack-riscv-none-embed-gcc-10.2.0-1.2/bin/../lib/gcc/riscv-none-embed/10.2.0/../../../../riscv-none-embed/lib/rv32im/ilp32/libc.a(lib_a-errno.o)
+ .data          0x0000000000000000        0x0 /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/tools/xpack-riscv-none-embed-gcc-10.2.0-1.2/bin/../lib/gcc/riscv-none-embed/10.2.0/../../../../riscv-none-embed/lib/rv32im/ilp32/libc.a(lib_a-errno.o)
+ .bss           0x0000000000000000        0x0 /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/tools/xpack-riscv-none-embed-gcc-10.2.0-1.2/bin/../lib/gcc/riscv-none-embed/10.2.0/../../../../riscv-none-embed/lib/rv32im/ilp32/libc.a(lib_a-errno.o)
+ .text.__errno  0x0000000000000000        0xc /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/tools/xpack-riscv-none-embed-gcc-10.2.0-1.2/bin/../lib/gcc/riscv-none-embed/10.2.0/../../../../riscv-none-embed/lib/rv32im/ilp32/libc.a(lib_a-errno.o)
+ .comment       0x0000000000000000       0x34 /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/tools/xpack-riscv-none-embed-gcc-10.2.0-1.2/bin/../lib/gcc/riscv-none-embed/10.2.0/../../../../riscv-none-embed/lib/rv32im/ilp32/libc.a(lib_a-errno.o)
+ .text          0x0000000000000000        0x0 /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/tools/xpack-riscv-none-embed-gcc-10.2.0-1.2/bin/../lib/gcc/riscv-none-embed/10.2.0/../../../../riscv-none-embed/lib/rv32im/ilp32/libc.a(lib_a-impure.o)
+ .data          0x0000000000000000        0x0 /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/tools/xpack-riscv-none-embed-gcc-10.2.0-1.2/bin/../lib/gcc/riscv-none-embed/10.2.0/../../../../riscv-none-embed/lib/rv32im/ilp32/libc.a(lib_a-impure.o)
+ .bss           0x0000000000000000        0x0 /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/tools/xpack-riscv-none-embed-gcc-10.2.0-1.2/bin/../lib/gcc/riscv-none-embed/10.2.0/../../../../riscv-none-embed/lib/rv32im/ilp32/libc.a(lib_a-impure.o)
+ .data.impure_data
+                0x0000000000000000      0x428 /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/tools/xpack-riscv-none-embed-gcc-10.2.0-1.2/bin/../lib/gcc/riscv-none-embed/10.2.0/../../../../riscv-none-embed/lib/rv32im/ilp32/libc.a(lib_a-impure.o)
+ .sdata._impure_ptr
+                0x0000000000000000        0x4 /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/tools/xpack-riscv-none-embed-gcc-10.2.0-1.2/bin/../lib/gcc/riscv-none-embed/10.2.0/../../../../riscv-none-embed/lib/rv32im/ilp32/libc.a(lib_a-impure.o)
+ .srodata._global_impure_ptr
+                0x0000000000000000        0x4 /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/tools/xpack-riscv-none-embed-gcc-10.2.0-1.2/bin/../lib/gcc/riscv-none-embed/10.2.0/../../../../riscv-none-embed/lib/rv32im/ilp32/libc.a(lib_a-impure.o)
+ .comment       0x0000000000000000       0x34 /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/tools/xpack-riscv-none-embed-gcc-10.2.0-1.2/bin/../lib/gcc/riscv-none-embed/10.2.0/../../../../riscv-none-embed/lib/rv32im/ilp32/libc.a(lib_a-impure.o)
+ .text          0x0000000000000000       0xdc /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/tools/xpack-riscv-none-embed-gcc-10.2.0-1.2/bin/../lib/gcc/riscv-none-embed/10.2.0/../../../../riscv-none-embed/lib/rv32im/ilp32/libc.a(lib_a-memset.o)
+ .data          0x0000000000000000        0x0 /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/tools/xpack-riscv-none-embed-gcc-10.2.0-1.2/bin/../lib/gcc/riscv-none-embed/10.2.0/../../../../riscv-none-embed/lib/rv32im/ilp32/libc.a(lib_a-memset.o)
+ .bss           0x0000000000000000        0x0 /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/tools/xpack-riscv-none-embed-gcc-10.2.0-1.2/bin/../lib/gcc/riscv-none-embed/10.2.0/../../../../riscv-none-embed/lib/rv32im/ilp32/libc.a(lib_a-memset.o)
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+RAM              0x0000000000001000 0x000000000000f000 xrw
+*default*        0x0000000000000000 0xffffffffffffffff
+
+Linker script and memory map
+
+LOAD /tmp/ccT0aVmd.o
+LOAD /tmp/ccoejof3.o
+LOAD /tmp/ccW8R0L6.o
+LOAD /tmp/cc5fPhy9.o
+LOAD /tmp/ccw4ZLCw.o
+LOAD /tmp/ccNCBE1W.o
+START GROUP
+LOAD /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/tools/xpack-riscv-none-embed-gcc-10.2.0-1.2/bin/../lib/gcc/riscv-none-embed/10.2.0/../../../../riscv-none-embed/lib/rv32im/ilp32/libm.a
+LOAD /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/tools/xpack-riscv-none-embed-gcc-10.2.0-1.2/bin/../lib/gcc/riscv-none-embed/10.2.0/../../../../riscv-none-embed/lib/rv32im/ilp32/libc.a
+LOAD /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/tools/xpack-riscv-none-embed-gcc-10.2.0-1.2/bin/../lib/gcc/riscv-none-embed/10.2.0/rv32im/ilp32/libgcc.a
+END GROUP
+
+.text           0x0000000000001000      0xe94
+ *(.text.start)
+ .text.start    0x0000000000001000       0xd4 /tmp/ccNCBE1W.o
+                0x0000000000001000                _start
+ *(.text .text.*)
+ .text.DepthwiseConvPerChannel.constprop.0
+                0x00000000000010d4      0x798 /tmp/ccT0aVmd.o
+ .text.benchmark_body.constprop.0
+                0x000000000000186c       0x54 /tmp/ccT0aVmd.o
+ .text.benchmark_body.constprop.1.isra.0
+                0x00000000000018c0       0xd4 /tmp/ccT0aVmd.o
+ .text.initialise_benchmark
+                0x0000000000001994        0x4 /tmp/ccT0aVmd.o
+                0x0000000000001994                initialise_benchmark
+ .text.warm_caches
+                0x0000000000001998        0x4 /tmp/ccT0aVmd.o
+                0x0000000000001998                warm_caches
+ .text.benchmark
+                0x000000000000199c        0x4 /tmp/ccT0aVmd.o
+                0x000000000000199c                benchmark
+ .text.verify_benchmark
+                0x00000000000019a0       0x90 /tmp/ccT0aVmd.o
+                0x00000000000019a0                verify_benchmark
+ .text.startup.main
+                0x0000000000001a30       0x44 /tmp/ccW8R0L6.o
+                0x0000000000001a30                main
+ .text.initialise_board
+                0x0000000000001a74       0xc4 /tmp/cc5fPhy9.o
+                0x0000000000001a74                initialise_board
+ .text.start_trigger
+                0x0000000000001b38       0x38 /tmp/cc5fPhy9.o
+                0x0000000000001b38                start_trigger
+ .text.stop_trigger
+                0x0000000000001b70       0x70 /tmp/cc5fPhy9.o
+                0x0000000000001b70                stop_trigger
+ .text.finish_benchmark
+                0x0000000000001be0      0x260 /tmp/cc5fPhy9.o
+                0x0000000000001be0                finish_benchmark
+ .text.trap_handler
+                0x0000000000001e40       0x54 /tmp/cc5fPhy9.o
+                0x0000000000001e40                trap_handler
+
+.rodata         0x0000000000001e94       0xe4
+ *(.rodata .rodata.*)
+ .rodata.initialise_board.str1.4
+                0x0000000000001e94       0x5b /tmp/cc5fPhy9.o
+ *fill*         0x0000000000001eef        0x1 
+ .rodata.finish_benchmark.str1.4
+                0x0000000000001ef0       0x6d /tmp/cc5fPhy9.o
+ *fill*         0x0000000000001f5d        0x3 
+ .rodata.trap_handler.str1.4
+                0x0000000000001f60       0x18 /tmp/cc5fPhy9.o
+
+.rela.dyn       0x0000000000001f78        0x0
+ .rela.text.start
+                0x0000000000001f78        0x0 /tmp/ccT0aVmd.o
+
+.data           0x0000000000001f78      0x2b4
+ *(.data .data.*)
+ .data.EXPECTED_OUTPUT
+                0x0000000000001f78       0x20 /tmp/ccT0aVmd.o
+                0x0000000000001f78                EXPECTED_OUTPUT
+ .data.FILTER_DATA
+                0x0000000000001f98       0x80 /tmp/ccT0aVmd.o
+ .data.FILTER_SHAPE
+                0x0000000000002018       0x1c /tmp/ccT0aVmd.o
+ .data.INPUT_DATA
+                0x0000000000002034       0x80 /tmp/ccT0aVmd.o
+ .data.INPUT_SHAPE
+                0x00000000000020b4       0x1c /tmp/ccT0aVmd.o
+ .data.OUTPUT_MULTIPLIER
+                0x00000000000020d0       0x80 /tmp/ccT0aVmd.o
+ .data.OUTPUT_SHAPE
+                0x0000000000002150       0x1c /tmp/ccT0aVmd.o
+ .data.OUTPUT_SHIFT
+                0x000000000000216c       0x80 /tmp/ccT0aVmd.o
+ .data.PARAMS   0x00000000000021ec       0x40 /tmp/ccT0aVmd.o
+ *(.sdata .sdata.*)
+                0x000000000000222c                . = ALIGN (0x4)
+                0x000000000000222c                __bss_start = .
+
+.bss            0x0000000000002230       0xc0
+ *(.bss .bss.*)
+ .bss.BIAS_DATA
+                0x0000000000002230       0x80 /tmp/ccT0aVmd.o
+ .bss.OUTPUT_DATA
+                0x00000000000022b0       0x20 /tmp/ccT0aVmd.o
+                0x00000000000022b0                OUTPUT_DATA
+ .bss.begin_cycles
+                0x00000000000022d0        0x8 /tmp/cc5fPhy9.o
+ .bss.begin_retired
+                0x00000000000022d8        0x8 /tmp/cc5fPhy9.o
+ .bss.elapsed_cycles
+                0x00000000000022e0        0x8 /tmp/cc5fPhy9.o
+ .bss.elapsed_retired
+                0x00000000000022e8        0x8 /tmp/cc5fPhy9.o
+ *(.sbss .sbss.*)
+ *(COMMON)
+                0x00000000000022f0                . = ALIGN (0x4)
+                0x00000000000022f0                __bss_end = .
+                0x00000000000022f0                __heap_start = .
+                0x0000000000010000                __stack_top = (ORIGIN (RAM) + LENGTH (RAM))
+                0x0000000000002a2c                __global_pointer$ = (__bss_start + 0x800)
+                0x0000000000000001                ASSERT ((__heap_start < (__stack_top - 0x4000)), Firmware leaves insufficient stack space)
+OUTPUT(/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/workloads/depthconv/firmware.elf elf32-littleriscv)
+
+.comment        0x0000000000000000       0x33
+ .comment       0x0000000000000000       0x33 /tmp/ccT0aVmd.o
+                                         0x34 (size before relaxing)
+ .comment       0x0000000000000033       0x34 /tmp/ccW8R0L6.o
+ .comment       0x0000000000000033       0x34 /tmp/cc5fPhy9.o

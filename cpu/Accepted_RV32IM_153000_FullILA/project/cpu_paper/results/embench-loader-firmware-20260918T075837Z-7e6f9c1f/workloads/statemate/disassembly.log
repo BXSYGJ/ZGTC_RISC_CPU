@@ -1,0 +1,1826 @@
+
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/workloads/statemate/firmware.elf:     file format elf32-littleriscv
+
+
+Disassembly of section .text:
+
+00001000 <_start>:
+    1000:	0000f117          	auipc	sp,0xf
+    1004:	00010113          	mv	sp,sp
+    1008:	00002197          	auipc	gp,0x2
+    100c:	4f018193          	addi	gp,gp,1264 # 34f8 <__global_pointer$>
+    1010:	00002297          	auipc	t0,0x2
+    1014:	ce828293          	addi	t0,t0,-792 # 2cf8 <A_FH_TUERMODUL_CTRL_next_state>
+    1018:	91818313          	addi	t1,gp,-1768 # 2e10 <__bss_end>
+    101c:	0062f863          	bgeu	t0,t1,102c <_start+0x2c>
+    1020:	0002a023          	sw	zero,0(t0)
+    1024:	00428293          	addi	t0,t0,4
+    1028:	ff5ff06f          	j	101c <_start+0x1c>
+    102c:	00000297          	auipc	t0,0x0
+    1030:	01828293          	addi	t0,t0,24 # 1044 <trap_entry>
+    1034:	30529073          	csrw	mtvec,t0
+    1038:	65c010ef          	jal	ra,2694 <main>
+    103c:	10500073          	wfi
+    1040:	ffdff06f          	j	103c <_start+0x3c>
+
+00001044 <trap_entry>:
+    1044:	fc010113          	addi	sp,sp,-64 # ffc0 <__global_pointer$+0xcac8>
+    1048:	00112023          	sw	ra,0(sp)
+    104c:	00512223          	sw	t0,4(sp)
+    1050:	00612423          	sw	t1,8(sp)
+    1054:	00712623          	sw	t2,12(sp)
+    1058:	00a12823          	sw	a0,16(sp)
+    105c:	00b12a23          	sw	a1,20(sp)
+    1060:	00c12c23          	sw	a2,24(sp)
+    1064:	00d12e23          	sw	a3,28(sp)
+    1068:	02e12023          	sw	a4,32(sp)
+    106c:	02f12223          	sw	a5,36(sp)
+    1070:	03012423          	sw	a6,40(sp)
+    1074:	03112623          	sw	a7,44(sp)
+    1078:	03c12823          	sw	t3,48(sp)
+    107c:	03d12a23          	sw	t4,52(sp)
+    1080:	03e12c23          	sw	t5,56(sp)
+    1084:	03f12e23          	sw	t6,60(sp)
+    1088:	21d010ef          	jal	ra,2aa4 <trap_handler>
+    108c:	00012083          	lw	ra,0(sp)
+    1090:	00412283          	lw	t0,4(sp)
+    1094:	00812303          	lw	t1,8(sp)
+    1098:	00c12383          	lw	t2,12(sp)
+    109c:	01012503          	lw	a0,16(sp)
+    10a0:	01412583          	lw	a1,20(sp)
+    10a4:	01812603          	lw	a2,24(sp)
+    10a8:	01c12683          	lw	a3,28(sp)
+    10ac:	02012703          	lw	a4,32(sp)
+    10b0:	02412783          	lw	a5,36(sp)
+    10b4:	02812803          	lw	a6,40(sp)
+    10b8:	02c12883          	lw	a7,44(sp)
+    10bc:	03012e03          	lw	t3,48(sp)
+    10c0:	03412e83          	lw	t4,52(sp)
+    10c4:	03812f03          	lw	t5,56(sp)
+    10c8:	03c12f83          	lw	t6,60(sp)
+    10cc:	04010113          	addi	sp,sp,64
+    10d0:	30200073          	mret
+
+000010d4 <generic_FH_TUERMODUL_CTRL.part.0>:
+    10d4:	81418793          	addi	a5,gp,-2028 # 2d0c <Bitlist>
+    10d8:	00a7c703          	lbu	a4,10(a5)
+    10dc:	00071663          	bnez	a4,10e8 <generic_FH_TUERMODUL_CTRL.part.0+0x14>
+    10e0:	00300293          	li	t0,3
+    10e4:	8c5181a3          	sb	t0,-1853(gp) # 2dbb <KINDERSICHERUNG_CTRL_KINDERSICHERUNG_CTRL_next_state>
+    10e8:	0137c303          	lbu	t1,19(a5)
+    10ec:	80018fa3          	sb	zero,-2017(gp) # 2d17 <Bitlist+0xb>
+    10f0:	00031a63          	bnez	t1,1104 <generic_FH_TUERMODUL_CTRL.part.0+0x30>
+    10f4:	00100393          	li	t2,1
+    10f8:	80018a23          	sb	zero,-2028(gp) # 2d0c <Bitlist>
+    10fc:	00002697          	auipc	a3,0x2
+    1100:	be768f23          	sb	t2,-1026(a3) # 2cfa <BLOCK_ERKENNUNG_CTRL_BLOCK_ERKENNUNG_CTRL_next_state>
+    1104:	81018613          	addi	a2,gp,-2032 # 2d08 <B_FH_TUERMODUL_CTRL_next_state>
+    1108:	00064683          	lbu	a3,0(a2)
+    110c:	00100813          	li	a6,1
+    1110:	010785a3          	sb	a6,11(a5)
+    1114:	01078a23          	sb	a6,20(a5)
+    1118:	00200593          	li	a1,2
+    111c:	12b68c63          	beq	a3,a1,1254 <generic_FH_TUERMODUL_CTRL.part.0+0x180>
+    1120:	00300e13          	li	t3,3
+    1124:	0bc68263          	beq	a3,t3,11c8 <generic_FH_TUERMODUL_CTRL.part.0+0xf4>
+    1128:	07068e63          	beq	a3,a6,11a4 <generic_FH_TUERMODUL_CTRL.part.0+0xd0>
+    112c:	8e018023          	sb	zero,-1824(gp) # 2dd8 <stable>
+    1130:	00b60023          	sb	a1,0(a2)
+    1134:	00002897          	auipc	a7,0x2
+    1138:	bc488893          	addi	a7,a7,-1084 # 2cf8 <A_FH_TUERMODUL_CTRL_next_state>
+    113c:	0008c503          	lbu	a0,0(a7)
+    1140:	00100e13          	li	t3,1
+    1144:	03c50463          	beq	a0,t3,116c <generic_FH_TUERMODUL_CTRL.part.0+0x98>
+    1148:	8e018023          	sb	zero,-1824(gp) # 2dd8 <stable>
+    114c:	8801a823          	sw	zero,-1904(gp) # 2d88 <FH_TUERMODUL_CTRL__N>
+    1150:	01c88023          	sb	t3,0(a7)
+    1154:	8dc18523          	sb	t3,-1846(gp) # 2dc2 <WIEDERHOLSPERRE_FH_TUERMODUL_CTRL_next_state>
+    1158:	0047c503          	lbu	a0,4(a5)
+    115c:	0067ce03          	lbu	t3,6(a5)
+    1160:	00a782a3          	sb	a0,5(a5)
+    1164:	01c783a3          	sb	t3,7(a5)
+    1168:	00008067          	ret
+    116c:	80018ca3          	sb	zero,-2023(gp) # 2d11 <Bitlist+0x5>
+    1170:	8e11cf03          	lbu	t5,-1823(gp) # 2dd9 <step>
+    1174:	1eaf0e63          	beq	t5,a0,1370 <generic_FH_TUERMODUL_CTRL.part.0+0x29c>
+    1178:	8ca18293          	addi	t0,gp,-1846 # 2dc2 <WIEDERHOLSPERRE_FH_TUERMODUL_CTRL_next_state>
+    117c:	0002c583          	lbu	a1,0(t0)
+    1180:	fca58ce3          	beq	a1,a0,1158 <generic_FH_TUERMODUL_CTRL.part.0+0x84>
+    1184:	0047c503          	lbu	a0,4(a5)
+    1188:	0067ce03          	lbu	t3,6(a5)
+    118c:	00100713          	li	a4,1
+    1190:	8e018023          	sb	zero,-1824(gp) # 2dd8 <stable>
+    1194:	00e28023          	sb	a4,0(t0)
+    1198:	00a782a3          	sb	a0,5(a5)
+    119c:	01c783a3          	sb	t3,7(a5)
+    11a0:	00008067          	ret
+    11a4:	8901a383          	lw	t2,-1904(gp) # 2d88 <FH_TUERMODUL_CTRL__N>
+    11a8:	03b00713          	li	a4,59
+    11ac:	f8e394e3          	bne	t2,a4,1134 <generic_FH_TUERMODUL_CTRL.part.0+0x60>
+    11b0:	8941a803          	lw	a6,-1900(gp) # 2d8c <FH_TUERMODUL_CTRL__N_old>
+    11b4:	f87800e3          	beq	a6,t2,1134 <generic_FH_TUERMODUL_CTRL.part.0+0x60>
+    11b8:	8e018023          	sb	zero,-1824(gp) # 2dd8 <stable>
+    11bc:	01c60023          	sb	t3,0(a2)
+    11c0:	8dc18123          	sb	t3,-1854(gp) # 2dba <INITIALISIERT_FH_TUERMODUL_CTRL_next_state>
+    11c4:	f71ff06f          	j	1134 <generic_FH_TUERMODUL_CTRL.part.0+0x60>
+    11c8:	8901ae83          	lw	t4,-1904(gp) # 2d88 <FH_TUERMODUL_CTRL__N>
+    11cc:	03c00f13          	li	t5,60
+    11d0:	03df5a63          	bge	t5,t4,1204 <generic_FH_TUERMODUL_CTRL.part.0+0x130>
+    11d4:	8941af83          	lw	t6,-1900(gp) # 2d8c <FH_TUERMODUL_CTRL__N_old>
+    11d8:	03ff4663          	blt	t5,t6,1204 <generic_FH_TUERMODUL_CTRL.part.0+0x130>
+    11dc:	8891c703          	lbu	a4,-1911(gp) # 2d81 <FH_TUERMODUL_CTRL__INREVERS1>
+    11e0:	88b1c283          	lbu	t0,-1909(gp) # 2d83 <FH_TUERMODUL_CTRL__INREVERS2>
+    11e4:	00576333          	or	t1,a4,t0
+    11e8:	0ff37393          	zext.b	t2,t1
+    11ec:	00039c63          	bnez	t2,1204 <generic_FH_TUERMODUL_CTRL.part.0+0x130>
+    11f0:	8e018023          	sb	zero,-1824(gp) # 2dd8 <stable>
+    11f4:	8a0186a3          	sb	zero,-1875(gp) # 2da5 <FH_TUERMODUL__MFHZ_copy>
+    11f8:	8a018523          	sb	zero,-1878(gp) # 2da2 <FH_TUERMODUL__MFHA_copy>
+    11fc:	01060023          	sb	a6,0(a2)
+    1200:	f35ff06f          	j	1134 <generic_FH_TUERMODUL_CTRL.part.0+0x60>
+    1204:	8981c803          	lbu	a6,-1896(gp) # 2d90 <FH_TUERMODUL__BLOCK>
+    1208:	0a081863          	bnez	a6,12b8 <generic_FH_TUERMODUL_CTRL.part.0+0x1e4>
+    120c:	8c218693          	addi	a3,gp,-1854 # 2dba <INITIALISIERT_FH_TUERMODUL_CTRL_next_state>
+    1210:	0006ce03          	lbu	t3,0(a3)
+    1214:	00200e93          	li	t4,2
+    1218:	21de0e63          	beq	t3,t4,1434 <generic_FH_TUERMODUL_CTRL.part.0+0x360>
+    121c:	00300f93          	li	t6,3
+    1220:	25fe0463          	beq	t3,t6,1468 <generic_FH_TUERMODUL_CTRL.part.0+0x394>
+    1224:	00100613          	li	a2,1
+    1228:	08ce1263          	bne	t3,a2,12ac <generic_FH_TUERMODUL_CTRL.part.0+0x1d8>
+    122c:	8b01af03          	lw	t5,-1872(gp) # 2da8 <FH_TUERMODUL__POSITION>
+    1230:	19400293          	li	t0,404
+    1234:	1be2ce63          	blt	t0,t5,13f0 <generic_FH_TUERMODUL_CTRL.part.0+0x31c>
+    1238:	8c718f93          	addi	t6,gp,-1849 # 2dbf <OEFFNEN_FH_TUERMODUL_CTRL_next_state>
+    123c:	000fc303          	lbu	t1,0(t6)
+    1240:	35c30663          	beq	t1,t3,158c <generic_FH_TUERMODUL_CTRL.part.0+0x4b8>
+    1244:	33d30663          	beq	t1,t4,1570 <generic_FH_TUERMODUL_CTRL.part.0+0x49c>
+    1248:	8e018023          	sb	zero,-1824(gp) # 2dd8 <stable>
+    124c:	01df8023          	sb	t4,0(t6)
+    1250:	ee5ff06f          	j	1134 <generic_FH_TUERMODUL_CTRL.part.0+0x60>
+    1254:	8981c503          	lbu	a0,-1896(gp) # 2d90 <FH_TUERMODUL__BLOCK>
+    1258:	02050a63          	beqz	a0,128c <generic_FH_TUERMODUL_CTRL.part.0+0x1b8>
+    125c:	89a1c883          	lbu	a7,-1894(gp) # 2d92 <FH_TUERMODUL__BLOCK_old>
+    1260:	02089663          	bnez	a7,128c <generic_FH_TUERMODUL_CTRL.part.0+0x1b8>
+    1264:	8ac1ce03          	lbu	t3,-1876(gp) # 2da4 <FH_TUERMODUL__MFHZ>
+    1268:	020e0263          	beqz	t3,128c <generic_FH_TUERMODUL_CTRL.part.0+0x1b8>
+    126c:	8e018023          	sb	zero,-1824(gp) # 2dd8 <stable>
+    1270:	8a0186a3          	sb	zero,-1875(gp) # 2da5 <FH_TUERMODUL__MFHZ_copy>
+    1274:	00300893          	li	a7,3
+    1278:	8e41a683          	lw	a3,-1820(gp) # 2ddc <time>
+    127c:	8cd1aa23          	sw	a3,-1836(gp) # 2dcc <sc_FH_TUERMODUL_CTRL_2329_1>
+    1280:	01160023          	sb	a7,0(a2)
+    1284:	8d118123          	sb	a7,-1854(gp) # 2dba <INITIALISIERT_FH_TUERMODUL_CTRL_next_state>
+    1288:	eadff06f          	j	1134 <generic_FH_TUERMODUL_CTRL.part.0+0x60>
+    128c:	8c618693          	addi	a3,gp,-1850 # 2dbe <NICHT_INITIALISIERT_NICHT_INITIALISIERT_next_state>
+    1290:	0006ce83          	lbu	t4,0(a3)
+    1294:	00200f13          	li	t5,2
+    1298:	09ee8863          	beq	t4,t5,1328 <generic_FH_TUERMODUL_CTRL.part.0+0x254>
+    129c:	00300f93          	li	t6,3
+    12a0:	07fe8263          	beq	t4,t6,1304 <generic_FH_TUERMODUL_CTRL.part.0+0x230>
+    12a4:	00100593          	li	a1,1
+    12a8:	04be8263          	beq	t4,a1,12ec <generic_FH_TUERMODUL_CTRL.part.0+0x218>
+    12ac:	8e018023          	sb	zero,-1824(gp) # 2dd8 <stable>
+    12b0:	01f68023          	sb	t6,0(a3)
+    12b4:	e81ff06f          	j	1134 <generic_FH_TUERMODUL_CTRL.part.0+0x60>
+    12b8:	89a1c583          	lbu	a1,-1894(gp) # 2d92 <FH_TUERMODUL__BLOCK_old>
+    12bc:	f40598e3          	bnez	a1,120c <generic_FH_TUERMODUL_CTRL.part.0+0x138>
+    12c0:	8a91c503          	lbu	a0,-1879(gp) # 2da1 <FH_TUERMODUL__MFHA>
+    12c4:	08050063          	beqz	a0,1344 <generic_FH_TUERMODUL_CTRL.part.0+0x270>
+    12c8:	8e41af83          	lw	t6,-1820(gp) # 2ddc <time>
+    12cc:	00200313          	li	t1,2
+    12d0:	00300e93          	li	t4,3
+    12d4:	8e018023          	sb	zero,-1824(gp) # 2dd8 <stable>
+    12d8:	8a018523          	sb	zero,-1878(gp) # 2da2 <FH_TUERMODUL__MFHA_copy>
+    12dc:	8df1ae23          	sw	t6,-1828(gp) # 2dd4 <sc_FH_TUERMODUL_CTRL_2375_2>
+    12e0:	00660023          	sb	t1,0(a2)
+    12e4:	8dd18323          	sb	t4,-1850(gp) # 2dbe <NICHT_INITIALISIERT_NICHT_INITIALISIERT_next_state>
+    12e8:	e4dff06f          	j	1134 <generic_FH_TUERMODUL_CTRL.part.0+0x60>
+    12ec:	8bb1c503          	lbu	a0,-1861(gp) # 2db3 <FH_TUERMODUL__SFHZ>
+    12f0:	e40512e3          	bnez	a0,1134 <generic_FH_TUERMODUL_CTRL.part.0+0x60>
+    12f4:	8e018023          	sb	zero,-1824(gp) # 2dd8 <stable>
+    12f8:	8a0186a3          	sb	zero,-1875(gp) # 2da5 <FH_TUERMODUL__MFHZ_copy>
+    12fc:	01f68023          	sb	t6,0(a3)
+    1300:	e35ff06f          	j	1134 <generic_FH_TUERMODUL_CTRL.part.0+0x60>
+    1304:	8b41c283          	lbu	t0,-1868(gp) # 2dac <FH_TUERMODUL__SFHA>
+    1308:	0c029a63          	bnez	t0,13dc <generic_FH_TUERMODUL_CTRL.part.0+0x308>
+    130c:	8bb1c303          	lbu	t1,-1861(gp) # 2db3 <FH_TUERMODUL__SFHZ>
+    1310:	e20302e3          	beqz	t1,1134 <generic_FH_TUERMODUL_CTRL.part.0+0x60>
+    1314:	00100393          	li	t2,1
+    1318:	8e018023          	sb	zero,-1824(gp) # 2dd8 <stable>
+    131c:	8a7186a3          	sb	t2,-1875(gp) # 2da5 <FH_TUERMODUL__MFHZ_copy>
+    1320:	00768023          	sb	t2,0(a3)
+    1324:	e11ff06f          	j	1134 <generic_FH_TUERMODUL_CTRL.part.0+0x60>
+    1328:	8b41cf83          	lbu	t6,-1868(gp) # 2dac <FH_TUERMODUL__SFHA>
+    132c:	e00f94e3          	bnez	t6,1134 <generic_FH_TUERMODUL_CTRL.part.0+0x60>
+    1330:	8e018023          	sb	zero,-1824(gp) # 2dd8 <stable>
+    1334:	8a018523          	sb	zero,-1878(gp) # 2da2 <FH_TUERMODUL__MFHA_copy>
+    1338:	00300713          	li	a4,3
+    133c:	00e68023          	sb	a4,0(a3)
+    1340:	df5ff06f          	j	1134 <generic_FH_TUERMODUL_CTRL.part.0+0x60>
+    1344:	8ac1c883          	lbu	a7,-1876(gp) # 2da4 <FH_TUERMODUL__MFHZ>
+    1348:	ec0882e3          	beqz	a7,120c <generic_FH_TUERMODUL_CTRL.part.0+0x138>
+    134c:	8e41af03          	lw	t5,-1820(gp) # 2ddc <time>
+    1350:	8de1ac23          	sw	t5,-1832(gp) # 2dd0 <sc_FH_TUERMODUL_CTRL_2352_1>
+    1354:	00200693          	li	a3,2
+    1358:	00300293          	li	t0,3
+    135c:	00d60023          	sb	a3,0(a2)
+    1360:	8e018023          	sb	zero,-1824(gp) # 2dd8 <stable>
+    1364:	8a0186a3          	sb	zero,-1875(gp) # 2da5 <FH_TUERMODUL__MFHZ_copy>
+    1368:	8c518323          	sb	t0,-1850(gp) # 2dbe <NICHT_INITIALISIERT_NICHT_INITIALISIERT_next_state>
+    136c:	dc9ff06f          	j	1134 <generic_FH_TUERMODUL_CTRL.part.0+0x60>
+    1370:	8f01a603          	lw	a2,-1808(gp) # 2de8 <tm_entered_WIEDERHOLSPERRE_FH_TUERMODUL_CTRLexited_BEREIT_FH_TUERMODUL_CTRL>
+    1374:	00060863          	beqz	a2,1384 <generic_FH_TUERMODUL_CTRL.part.0+0x2b0>
+    1378:	8e41a683          	lw	a3,-1820(gp) # 2ddc <time>
+    137c:	40c68fb3          	sub	t6,a3,a2
+    1380:	09ef8063          	beq	t6,t5,1400 <generic_FH_TUERMODUL_CTRL.part.0+0x32c>
+    1384:	8ca18293          	addi	t0,gp,-1846 # 2dc2 <WIEDERHOLSPERRE_FH_TUERMODUL_CTRL_next_state>
+    1388:	0002c803          	lbu	a6,0(t0)
+    138c:	00100893          	li	a7,1
+    1390:	df181ae3          	bne	a6,a7,1184 <generic_FH_TUERMODUL_CTRL.part.0+0xb0>
+    1394:	8ec1a503          	lw	a0,-1812(gp) # 2de4 <tm_entered_WIEDERHOLSPERRE_FH_TUERMODUL_CTRL>
+    1398:	dc0500e3          	beqz	a0,1158 <generic_FH_TUERMODUL_CTRL.part.0+0x84>
+    139c:	8e41ae03          	lw	t3,-1820(gp) # 2ddc <time>
+    13a0:	ffde0f13          	addi	t5,t3,-3
+    13a4:	daaf1ae3          	bne	t5,a0,1158 <generic_FH_TUERMODUL_CTRL.part.0+0x84>
+    13a8:	8ac1c603          	lbu	a2,-1876(gp) # 2da4 <FH_TUERMODUL__MFHZ>
+    13ac:	8a91c583          	lbu	a1,-1879(gp) # 2da1 <FH_TUERMODUL__MFHA>
+    13b0:	00b666b3          	or	a3,a2,a1
+    13b4:	0ff6ff93          	zext.b	t6,a3
+    13b8:	da0f90e3          	bnez	t6,1158 <generic_FH_TUERMODUL_CTRL.part.0+0x84>
+    13bc:	89018313          	addi	t1,gp,-1904 # 2d88 <FH_TUERMODUL_CTRL__N>
+    13c0:	00032e83          	lw	t4,0(t1)
+    13c4:	d9d05ae3          	blez	t4,1158 <generic_FH_TUERMODUL_CTRL.part.0+0x84>
+    13c8:	fffe8393          	addi	t2,t4,-1
+    13cc:	8e018023          	sb	zero,-1824(gp) # 2dd8 <stable>
+    13d0:	00732023          	sw	t2,0(t1)
+    13d4:	01028023          	sb	a6,0(t0)
+    13d8:	d81ff06f          	j	1158 <generic_FH_TUERMODUL_CTRL.part.0+0x84>
+    13dc:	00100813          	li	a6,1
+    13e0:	8e018023          	sb	zero,-1824(gp) # 2dd8 <stable>
+    13e4:	8b018523          	sb	a6,-1878(gp) # 2da2 <FH_TUERMODUL__MFHA_copy>
+    13e8:	01e68023          	sb	t5,0(a3)
+    13ec:	d49ff06f          	j	1134 <generic_FH_TUERMODUL_CTRL.part.0+0x60>
+    13f0:	8e018023          	sb	zero,-1824(gp) # 2dd8 <stable>
+    13f4:	8a018523          	sb	zero,-1878(gp) # 2da2 <FH_TUERMODUL__MFHA_copy>
+    13f8:	01f68023          	sb	t6,0(a3)
+    13fc:	d39ff06f          	j	1134 <generic_FH_TUERMODUL_CTRL.part.0+0x60>
+    1400:	8ac1c303          	lbu	t1,-1876(gp) # 2da4 <FH_TUERMODUL__MFHZ>
+    1404:	8a91ce83          	lbu	t4,-1879(gp) # 2da1 <FH_TUERMODUL__MFHA>
+    1408:	01d363b3          	or	t2,t1,t4
+    140c:	0ff3f713          	zext.b	a4,t2
+    1410:	f6070ae3          	beqz	a4,1384 <generic_FH_TUERMODUL_CTRL.part.0+0x2b0>
+    1414:	89018293          	addi	t0,gp,-1904 # 2d88 <FH_TUERMODUL_CTRL__N>
+    1418:	0002a803          	lw	a6,0(t0)
+    141c:	01f88023          	sb	t6,0(a7)
+    1420:	8e018023          	sb	zero,-1824(gp) # 2dd8 <stable>
+    1424:	00180893          	addi	a7,a6,1
+    1428:	0112a023          	sw	a7,0(t0)
+    142c:	8df18523          	sb	t6,-1846(gp) # 2dc2 <WIEDERHOLSPERRE_FH_TUERMODUL_CTRL_next_state>
+    1430:	d29ff06f          	j	1158 <generic_FH_TUERMODUL_CTRL.part.0+0x84>
+    1434:	8b01a603          	lw	a2,-1872(gp) # 2da8 <FH_TUERMODUL__POSITION>
+    1438:	0ac05063          	blez	a2,14d8 <generic_FH_TUERMODUL_CTRL.part.0+0x404>
+    143c:	8c818f13          	addi	t5,gp,-1848 # 2dc0 <SCHLIESSEN_FH_TUERMODUL_CTRL_next_state>
+    1440:	000f4f83          	lbu	t6,0(t5)
+    1444:	00100293          	li	t0,1
+    1448:	0e5f8063          	beq	t6,t0,1528 <generic_FH_TUERMODUL_CTRL.part.0+0x454>
+    144c:	0bcf8063          	beq	t6,t3,14ec <generic_FH_TUERMODUL_CTRL.part.0+0x418>
+    1450:	8e018023          	sb	zero,-1824(gp) # 2dd8 <stable>
+    1454:	01cf0023          	sb	t3,0(t5)
+    1458:	8dc18223          	sb	t3,-1852(gp) # 2dbc <MANUELL_SCHLIESSEN_FH_TUERMODUL_CTRL_next_state>
+    145c:	005788a3          	sb	t0,17(a5)
+    1460:	8a5186a3          	sb	t0,-1875(gp) # 2da5 <FH_TUERMODUL__MFHZ_copy>
+    1464:	cd1ff06f          	j	1134 <generic_FH_TUERMODUL_CTRL.part.0+0x60>
+    1468:	8bb1cf03          	lbu	t5,-1861(gp) # 2db3 <FH_TUERMODUL__SFHZ>
+    146c:	020f0a63          	beqz	t5,14a0 <generic_FH_TUERMODUL_CTRL.part.0+0x3cc>
+    1470:	8c11c283          	lbu	t0,-1855(gp) # 2db9 <FH_TUERMODUL__SFHZ_old>
+    1474:	02029663          	bnez	t0,14a0 <generic_FH_TUERMODUL_CTRL.part.0+0x3cc>
+    1478:	8b01a303          	lw	t1,-1872(gp) # 2da8 <FH_TUERMODUL__POSITION>
+    147c:	02605263          	blez	t1,14a0 <generic_FH_TUERMODUL_CTRL.part.0+0x3cc>
+    1480:	00100593          	li	a1,1
+    1484:	01d68023          	sb	t4,0(a3)
+    1488:	8e018023          	sb	zero,-1824(gp) # 2dd8 <stable>
+    148c:	8dd18423          	sb	t4,-1848(gp) # 2dc0 <SCHLIESSEN_FH_TUERMODUL_CTRL_next_state>
+    1490:	8dd18223          	sb	t4,-1852(gp) # 2dbc <MANUELL_SCHLIESSEN_FH_TUERMODUL_CTRL_next_state>
+    1494:	00b788a3          	sb	a1,17(a5)
+    1498:	8ab186a3          	sb	a1,-1875(gp) # 2da5 <FH_TUERMODUL__MFHZ_copy>
+    149c:	c99ff06f          	j	1134 <generic_FH_TUERMODUL_CTRL.part.0+0x60>
+    14a0:	8b41c383          	lbu	t2,-1868(gp) # 2dac <FH_TUERMODUL__SFHA>
+    14a4:	c80388e3          	beqz	t2,1134 <generic_FH_TUERMODUL_CTRL.part.0+0x60>
+    14a8:	8ba1c703          	lbu	a4,-1862(gp) # 2db2 <FH_TUERMODUL__SFHA_old>
+    14ac:	c80714e3          	bnez	a4,1134 <generic_FH_TUERMODUL_CTRL.part.0+0x60>
+    14b0:	8b01a803          	lw	a6,-1872(gp) # 2da8 <FH_TUERMODUL__POSITION>
+    14b4:	19400513          	li	a0,404
+    14b8:	c7054ee3          	blt	a0,a6,1134 <generic_FH_TUERMODUL_CTRL.part.0+0x60>
+    14bc:	00100893          	li	a7,1
+    14c0:	00200e13          	li	t3,2
+    14c4:	01168023          	sb	a7,0(a3)
+    14c8:	8e018023          	sb	zero,-1824(gp) # 2dd8 <stable>
+    14cc:	8b118523          	sb	a7,-1878(gp) # 2da2 <FH_TUERMODUL__MFHA_copy>
+    14d0:	8dc183a3          	sb	t3,-1849(gp) # 2dbf <OEFFNEN_FH_TUERMODUL_CTRL_next_state>
+    14d4:	c61ff06f          	j	1134 <generic_FH_TUERMODUL_CTRL.part.0+0x60>
+    14d8:	8e018023          	sb	zero,-1824(gp) # 2dd8 <stable>
+    14dc:	8a0186a3          	sb	zero,-1875(gp) # 2da5 <FH_TUERMODUL__MFHZ_copy>
+    14e0:	00300613          	li	a2,3
+    14e4:	00c68023          	sb	a2,0(a3)
+    14e8:	c4dff06f          	j	1134 <generic_FH_TUERMODUL_CTRL.part.0+0x60>
+    14ec:	8bb1cf83          	lbu	t6,-1861(gp) # 2db3 <FH_TUERMODUL__SFHZ>
+    14f0:	000f9663          	bnez	t6,14fc <generic_FH_TUERMODUL_CTRL.part.0+0x428>
+    14f4:	8c11c283          	lbu	t0,-1855(gp) # 2db9 <FH_TUERMODUL__SFHZ_old>
+    14f8:	fe0290e3          	bnez	t0,14d8 <generic_FH_TUERMODUL_CTRL.part.0+0x404>
+    14fc:	8c418313          	addi	t1,gp,-1852 # 2dbc <MANUELL_SCHLIESSEN_FH_TUERMODUL_CTRL_next_state>
+    1500:	00034383          	lbu	t2,0(t1)
+    1504:	00100713          	li	a4,1
+    1508:	10e38263          	beq	t2,a4,160c <generic_FH_TUERMODUL_CTRL.part.0+0x538>
+    150c:	00200893          	li	a7,2
+    1510:	0d138663          	beq	t2,a7,15dc <generic_FH_TUERMODUL_CTRL.part.0+0x508>
+    1514:	8e018023          	sb	zero,-1824(gp) # 2dd8 <stable>
+    1518:	01130023          	sb	a7,0(t1)
+    151c:	00e788a3          	sb	a4,17(a5)
+    1520:	8ae186a3          	sb	a4,-1875(gp) # 2da5 <FH_TUERMODUL__MFHZ_copy>
+    1524:	c11ff06f          	j	1134 <generic_FH_TUERMODUL_CTRL.part.0+0x60>
+    1528:	8b41c703          	lbu	a4,-1868(gp) # 2dac <FH_TUERMODUL__SFHA>
+    152c:	00070663          	beqz	a4,1538 <generic_FH_TUERMODUL_CTRL.part.0+0x464>
+    1530:	8ba1c303          	lbu	t1,-1862(gp) # 2db2 <FH_TUERMODUL__SFHA_old>
+    1534:	fa0302e3          	beqz	t1,14d8 <generic_FH_TUERMODUL_CTRL.part.0+0x404>
+    1538:	8bb1c383          	lbu	t2,-1861(gp) # 2db3 <FH_TUERMODUL__SFHZ>
+    153c:	00038663          	beqz	t2,1548 <generic_FH_TUERMODUL_CTRL.part.0+0x474>
+    1540:	8c11c803          	lbu	a6,-1855(gp) # 2db9 <FH_TUERMODUL__SFHZ_old>
+    1544:	f8080ae3          	beqz	a6,14d8 <generic_FH_TUERMODUL_CTRL.part.0+0x404>
+    1548:	8c918513          	addi	a0,gp,-1847 # 2dc1 <TIPP_SCHLIESSEN_FH_TUERMODUL_CTRL_next_state>
+    154c:	00054883          	lbu	a7,0(a0)
+    1550:	00100693          	li	a3,1
+    1554:	10d88a63          	beq	a7,a3,1668 <generic_FH_TUERMODUL_CTRL.part.0+0x594>
+    1558:	00200e93          	li	t4,2
+    155c:	0dd88e63          	beq	a7,t4,1638 <generic_FH_TUERMODUL_CTRL.part.0+0x564>
+    1560:	8e018023          	sb	zero,-1824(gp) # 2dd8 <stable>
+    1564:	01d50023          	sb	t4,0(a0)
+    1568:	00d788a3          	sb	a3,17(a5)
+    156c:	bc9ff06f          	j	1134 <generic_FH_TUERMODUL_CTRL.part.0+0x60>
+    1570:	8bb1c503          	lbu	a0,-1861(gp) # 2db3 <FH_TUERMODUL__SFHZ>
+    1574:	04050063          	beqz	a0,15b4 <generic_FH_TUERMODUL_CTRL.part.0+0x4e0>
+    1578:	8c11c883          	lbu	a7,-1855(gp) # 2db9 <FH_TUERMODUL__SFHZ_old>
+    157c:	02089c63          	bnez	a7,15b4 <generic_FH_TUERMODUL_CTRL.part.0+0x4e0>
+    1580:	8e018023          	sb	zero,-1824(gp) # 2dd8 <stable>
+    1584:	01cf8023          	sb	t3,0(t6)
+    1588:	badff06f          	j	1134 <generic_FH_TUERMODUL_CTRL.part.0+0x60>
+    158c:	8bb1ce83          	lbu	t4,-1861(gp) # 2db3 <FH_TUERMODUL__SFHZ>
+    1590:	020e8c63          	beqz	t4,15c8 <generic_FH_TUERMODUL_CTRL.part.0+0x4f4>
+    1594:	8c11c383          	lbu	t2,-1855(gp) # 2db9 <FH_TUERMODUL__SFHZ_old>
+    1598:	02039863          	bnez	t2,15c8 <generic_FH_TUERMODUL_CTRL.part.0+0x4f4>
+    159c:	00300613          	li	a2,3
+    15a0:	8e018023          	sb	zero,-1824(gp) # 2dd8 <stable>
+    15a4:	8a018523          	sb	zero,-1878(gp) # 2da2 <FH_TUERMODUL__MFHA_copy>
+    15a8:	00c68023          	sb	a2,0(a3)
+    15ac:	8c0183a3          	sb	zero,-1849(gp) # 2dbf <OEFFNEN_FH_TUERMODUL_CTRL_next_state>
+    15b0:	b85ff06f          	j	1134 <generic_FH_TUERMODUL_CTRL.part.0+0x60>
+    15b4:	8b41ce03          	lbu	t3,-1868(gp) # 2dac <FH_TUERMODUL__SFHA>
+    15b8:	b60e1ee3          	bnez	t3,1134 <generic_FH_TUERMODUL_CTRL.part.0+0x60>
+    15bc:	8ba1c583          	lbu	a1,-1862(gp) # 2db2 <FH_TUERMODUL__SFHA_old>
+    15c0:	fc059ee3          	bnez	a1,159c <generic_FH_TUERMODUL_CTRL.part.0+0x4c8>
+    15c4:	b71ff06f          	j	1134 <generic_FH_TUERMODUL_CTRL.part.0+0x60>
+    15c8:	8b41c703          	lbu	a4,-1868(gp) # 2dac <FH_TUERMODUL__SFHA>
+    15cc:	b60704e3          	beqz	a4,1134 <generic_FH_TUERMODUL_CTRL.part.0+0x60>
+    15d0:	8ba1c803          	lbu	a6,-1862(gp) # 2db2 <FH_TUERMODUL__SFHA_old>
+    15d4:	b60810e3          	bnez	a6,1134 <generic_FH_TUERMODUL_CTRL.part.0+0x60>
+    15d8:	fc5ff06f          	j	159c <generic_FH_TUERMODUL_CTRL.part.0+0x4c8>
+    15dc:	0187c683          	lbu	a3,24(a5)
+    15e0:	0a068a63          	beqz	a3,1694 <generic_FH_TUERMODUL_CTRL.part.0+0x5c0>
+    15e4:	8e41ae83          	lw	t4,-1820(gp) # 2ddc <time>
+    15e8:	8e018023          	sb	zero,-1824(gp) # 2dd8 <stable>
+    15ec:	8a0186a3          	sb	zero,-1875(gp) # 2da5 <FH_TUERMODUL__MFHZ_copy>
+    15f0:	88e18523          	sb	a4,-1910(gp) # 2d82 <FH_TUERMODUL_CTRL__INREVERS1_copy>
+    15f4:	00e78ba3          	sb	a4,23(a5)
+    15f8:	00e30023          	sb	a4,0(t1)
+    15fc:	820182a3          	sb	zero,-2011(gp) # 2d1d <Bitlist+0x11>
+    1600:	8dd1a623          	sw	t4,-1844(gp) # 2dc4 <sc_FH_TUERMODUL_CTRL_1739_10>
+    1604:	8ae18523          	sb	a4,-1878(gp) # 2da2 <FH_TUERMODUL__MFHA_copy>
+    1608:	b2dff06f          	j	1134 <generic_FH_TUERMODUL_CTRL.part.0+0x60>
+    160c:	0167c803          	lbu	a6,22(a5)
+    1610:	820185a3          	sb	zero,-2005(gp) # 2d23 <Bitlist+0x17>
+    1614:	b20800e3          	beqz	a6,1134 <generic_FH_TUERMODUL_CTRL.part.0+0x60>
+    1618:	00200513          	li	a0,2
+    161c:	8e018023          	sb	zero,-1824(gp) # 2dd8 <stable>
+    1620:	88018523          	sb	zero,-1910(gp) # 2d82 <FH_TUERMODUL_CTRL__INREVERS1_copy>
+    1624:	00a30023          	sb	a0,0(t1)
+    1628:	8a018523          	sb	zero,-1878(gp) # 2da2 <FH_TUERMODUL__MFHA_copy>
+    162c:	007788a3          	sb	t2,17(a5)
+    1630:	8a7186a3          	sb	t2,-1875(gp) # 2da5 <FH_TUERMODUL__MFHZ_copy>
+    1634:	b01ff06f          	j	1134 <generic_FH_TUERMODUL_CTRL.part.0+0x60>
+    1638:	0187c603          	lbu	a2,24(a5)
+    163c:	ae060ce3          	beqz	a2,1134 <generic_FH_TUERMODUL_CTRL.part.0+0x60>
+    1640:	8e41af03          	lw	t5,-1820(gp) # 2ddc <time>
+    1644:	8e018023          	sb	zero,-1824(gp) # 2dd8 <stable>
+    1648:	88d18623          	sb	a3,-1908(gp) # 2d84 <FH_TUERMODUL_CTRL__INREVERS2_copy>
+    164c:	00d78ba3          	sb	a3,23(a5)
+    1650:	00d50023          	sb	a3,0(a0)
+    1654:	820182a3          	sb	zero,-2011(gp) # 2d1d <Bitlist+0x11>
+    1658:	8a0186a3          	sb	zero,-1875(gp) # 2da5 <FH_TUERMODUL__MFHZ_copy>
+    165c:	8de1a823          	sw	t5,-1840(gp) # 2dc8 <sc_FH_TUERMODUL_CTRL_1781_10>
+    1660:	8ad18523          	sb	a3,-1878(gp) # 2da2 <FH_TUERMODUL__MFHA_copy>
+    1664:	ad1ff06f          	j	1134 <generic_FH_TUERMODUL_CTRL.part.0+0x60>
+    1668:	0167ce03          	lbu	t3,22(a5)
+    166c:	820185a3          	sb	zero,-2005(gp) # 2d23 <Bitlist+0x17>
+    1670:	ac0e02e3          	beqz	t3,1134 <generic_FH_TUERMODUL_CTRL.part.0+0x60>
+    1674:	00200593          	li	a1,2
+    1678:	8e018023          	sb	zero,-1824(gp) # 2dd8 <stable>
+    167c:	8b1186a3          	sb	a7,-1875(gp) # 2da5 <FH_TUERMODUL__MFHZ_copy>
+    1680:	88018623          	sb	zero,-1908(gp) # 2d84 <FH_TUERMODUL_CTRL__INREVERS2_copy>
+    1684:	00b50023          	sb	a1,0(a0)
+    1688:	8a018523          	sb	zero,-1878(gp) # 2da2 <FH_TUERMODUL__MFHA_copy>
+    168c:	011788a3          	sb	a7,17(a5)
+    1690:	aa5ff06f          	j	1134 <generic_FH_TUERMODUL_CTRL.part.0+0x60>
+    1694:	8b41ce03          	lbu	t3,-1868(gp) # 2dac <FH_TUERMODUL__SFHA>
+    1698:	a80e0ee3          	beqz	t3,1134 <generic_FH_TUERMODUL_CTRL.part.0+0x60>
+    169c:	8ba1c583          	lbu	a1,-1862(gp) # 2db2 <FH_TUERMODUL__SFHA_old>
+    16a0:	a8059ae3          	bnez	a1,1134 <generic_FH_TUERMODUL_CTRL.part.0+0x60>
+    16a4:	00ef0023          	sb	a4,0(t5)
+    16a8:	8e018023          	sb	zero,-1824(gp) # 2dd8 <stable>
+    16ac:	8c018223          	sb	zero,-1852(gp) # 2dbc <MANUELL_SCHLIESSEN_FH_TUERMODUL_CTRL_next_state>
+    16b0:	a85ff06f          	j	1134 <generic_FH_TUERMODUL_CTRL.part.0+0x60>
+
+000016b4 <interface>:
+    16b4:	81418793          	addi	a5,gp,-2028 # 2d0c <Bitlist>
+    16b8:	0047c703          	lbu	a4,4(a5)
+    16bc:	0a070263          	beqz	a4,1760 <interface+0xac>
+    16c0:	8e41a303          	lw	t1,-1820(gp) # 2ddc <time>
+    16c4:	8e61a623          	sw	t1,-1812(gp) # 2de4 <tm_entered_WIEDERHOLSPERRE_FH_TUERMODUL_CTRL>
+    16c8:	8e61a823          	sw	t1,-1808(gp) # 2de8 <tm_entered_WIEDERHOLSPERRE_FH_TUERMODUL_CTRLexited_BEREIT_FH_TUERMODUL_CTRL>
+    16cc:	8dc1a383          	lw	t2,-1828(gp) # 2dd4 <sc_FH_TUERMODUL_CTRL_2375_2>
+    16d0:	00038a63          	beqz	t2,16e4 <interface+0x30>
+    16d4:	8e41a683          	lw	a3,-1820(gp) # 2ddc <time>
+    16d8:	00d38663          	beq	t2,a3,16e4 <interface+0x30>
+    16dc:	8a018523          	sb	zero,-1878(gp) # 2da2 <FH_TUERMODUL__MFHA_copy>
+    16e0:	8c01ae23          	sw	zero,-1828(gp) # 2dd4 <sc_FH_TUERMODUL_CTRL_2375_2>
+    16e4:	8d81a503          	lw	a0,-1832(gp) # 2dd0 <sc_FH_TUERMODUL_CTRL_2352_1>
+    16e8:	00050a63          	beqz	a0,16fc <interface+0x48>
+    16ec:	8e41a583          	lw	a1,-1820(gp) # 2ddc <time>
+    16f0:	00b50663          	beq	a0,a1,16fc <interface+0x48>
+    16f4:	8a0186a3          	sb	zero,-1875(gp) # 2da5 <FH_TUERMODUL__MFHZ_copy>
+    16f8:	8c01ac23          	sw	zero,-1832(gp) # 2dd0 <sc_FH_TUERMODUL_CTRL_2352_1>
+    16fc:	8d41a603          	lw	a2,-1836(gp) # 2dcc <sc_FH_TUERMODUL_CTRL_2329_1>
+    1700:	00060a63          	beqz	a2,1714 <interface+0x60>
+    1704:	8e41a803          	lw	a6,-1820(gp) # 2ddc <time>
+    1708:	01060663          	beq	a2,a6,1714 <interface+0x60>
+    170c:	8a0186a3          	sb	zero,-1875(gp) # 2da5 <FH_TUERMODUL__MFHZ_copy>
+    1710:	8c01aa23          	sw	zero,-1836(gp) # 2dcc <sc_FH_TUERMODUL_CTRL_2329_1>
+    1714:	8d01a883          	lw	a7,-1840(gp) # 2dc8 <sc_FH_TUERMODUL_CTRL_1781_10>
+    1718:	00088863          	beqz	a7,1728 <interface+0x74>
+    171c:	8e41ae03          	lw	t3,-1820(gp) # 2ddc <time>
+    1720:	01c88463          	beq	a7,t3,1728 <interface+0x74>
+    1724:	8c01a823          	sw	zero,-1840(gp) # 2dc8 <sc_FH_TUERMODUL_CTRL_1781_10>
+    1728:	8cc1ae83          	lw	t4,-1844(gp) # 2dc4 <sc_FH_TUERMODUL_CTRL_1739_10>
+    172c:	000e8863          	beqz	t4,173c <interface+0x88>
+    1730:	8e41af03          	lw	t5,-1820(gp) # 2ddc <time>
+    1734:	01ee8463          	beq	t4,t5,173c <interface+0x88>
+    1738:	8c01a623          	sw	zero,-1844(gp) # 2dc4 <sc_FH_TUERMODUL_CTRL_1739_10>
+    173c:	0007cf83          	lbu	t6,0(a5)
+    1740:	000f9863          	bnez	t6,1750 <interface+0x9c>
+    1744:	8081a703          	lw	a4,-2040(gp) # 2d00 <BLOCK_ERKENNUNG_CTRL__N>
+    1748:	80c1a783          	lw	a5,-2036(gp) # 2d04 <BLOCK_ERKENNUNG_CTRL__N_old>
+    174c:	00f70863          	beq	a4,a5,175c <interface+0xa8>
+    1750:	8e41a283          	lw	t0,-1820(gp) # 2ddc <time>
+    1754:	8e51a423          	sw	t0,-1816(gp) # 2de0 <tm_entered_EINSCHALTSTROM_MESSEN_BLOCK_ERKENNUNG_CTRLch_BLOCK_ERKENNUNG_CTRL__N_copy>
+    1758:	00008067          	ret
+    175c:	00008067          	ret
+    1760:	0067c283          	lbu	t0,6(a5)
+    1764:	f60284e3          	beqz	t0,16cc <interface+0x18>
+    1768:	8e41a303          	lw	t1,-1820(gp) # 2ddc <time>
+    176c:	f5dff06f          	j	16c8 <interface+0x14>
+
+00001770 <generic_EINKLEMMSCHUTZ_CTRL>:
+    1770:	81418793          	addi	a5,gp,-2028 # 2d0c <Bitlist>
+    1774:	0107c703          	lbu	a4,16(a5)
+    1778:	02070c63          	beqz	a4,17b0 <generic_EINKLEMMSCHUTZ_CTRL+0x40>
+    177c:	85418693          	addi	a3,gp,-1964 # 2d4c <EINKLEMMSCHUTZ_CTRL_EINKLEMMSCHUTZ_CTRL_next_state>
+    1780:	0006c283          	lbu	t0,0(a3)
+    1784:	00100613          	li	a2,1
+    1788:	02c28663          	beq	t0,a2,17b4 <generic_EINKLEMMSCHUTZ_CTRL+0x44>
+    178c:	00200e13          	li	t3,2
+    1790:	01c29c63          	bne	t0,t3,17a8 <generic_EINKLEMMSCHUTZ_CTRL+0x38>
+    1794:	82018623          	sb	zero,-2004(gp) # 2d24 <Bitlist+0x18>
+    1798:	89b1ce83          	lbu	t4,-1893(gp) # 2d93 <FH_TUERMODUL__EKS_LEISTE_AKTIV>
+    179c:	000e9a63          	bnez	t4,17b0 <generic_EINKLEMMSCHUTZ_CTRL+0x40>
+    17a0:	89c1cf03          	lbu	t5,-1892(gp) # 2d94 <FH_TUERMODUL__EKS_LEISTE_AKTIV_old>
+    17a4:	000f0663          	beqz	t5,17b0 <generic_EINKLEMMSCHUTZ_CTRL+0x40>
+    17a8:	8e018023          	sb	zero,-1824(gp) # 2dd8 <stable>
+    17ac:	00c68023          	sb	a2,0(a3)
+    17b0:	00008067          	ret
+    17b4:	89b1c303          	lbu	t1,-1893(gp) # 2d93 <FH_TUERMODUL__EKS_LEISTE_AKTIV>
+    17b8:	fe030ce3          	beqz	t1,17b0 <generic_EINKLEMMSCHUTZ_CTRL+0x40>
+    17bc:	89c1c383          	lbu	t2,-1892(gp) # 2d94 <FH_TUERMODUL__EKS_LEISTE_AKTIV_old>
+    17c0:	fe0398e3          	bnez	t2,17b0 <generic_EINKLEMMSCHUTZ_CTRL+0x40>
+    17c4:	8bb1c503          	lbu	a0,-1861(gp) # 2db3 <FH_TUERMODUL__SFHZ>
+    17c8:	00050663          	beqz	a0,17d4 <generic_EINKLEMMSCHUTZ_CTRL+0x64>
+    17cc:	8b41c583          	lbu	a1,-1868(gp) # 2dac <FH_TUERMODUL__SFHA>
+    17d0:	fe0590e3          	bnez	a1,17b0 <generic_EINKLEMMSCHUTZ_CTRL+0x40>
+    17d4:	00100813          	li	a6,1
+    17d8:	00200893          	li	a7,2
+    17dc:	8e018023          	sb	zero,-1824(gp) # 2dd8 <stable>
+    17e0:	01078c23          	sb	a6,24(a5)
+    17e4:	01168023          	sb	a7,0(a3)
+    17e8:	00008067          	ret
+
+000017ec <generic_BLOCK_ERKENNUNG_CTRL>:
+    17ec:	81418793          	addi	a5,gp,-2028 # 2d0c <Bitlist>
+    17f0:	0137c703          	lbu	a4,19(a5)
+    17f4:	02071c63          	bnez	a4,182c <generic_BLOCK_ERKENNUNG_CTRL+0x40>
+    17f8:	0157c683          	lbu	a3,21(a5)
+    17fc:	02068663          	beqz	a3,1828 <generic_BLOCK_ERKENNUNG_CTRL+0x3c>
+    1800:	0147ce03          	lbu	t3,20(a5)
+    1804:	020e1263          	bnez	t3,1828 <generic_BLOCK_ERKENNUNG_CTRL+0x3c>
+    1808:	80018a23          	sb	zero,-2028(gp) # 2d0c <Bitlist>
+    180c:	00008067          	ret
+    1810:	80018a23          	sb	zero,-2028(gp) # 2d0c <Bitlist>
+    1814:	8081a583          	lw	a1,-2040(gp) # 2d00 <BLOCK_ERKENNUNG_CTRL__N>
+    1818:	00b00393          	li	t2,11
+    181c:	00759663          	bne	a1,t2,1828 <generic_BLOCK_ERKENNUNG_CTRL+0x3c>
+    1820:	80c1a503          	lw	a0,-2036(gp) # 2d04 <BLOCK_ERKENNUNG_CTRL__N_old>
+    1824:	02b51263          	bne	a0,a1,1848 <generic_BLOCK_ERKENNUNG_CTRL+0x5c>
+    1828:	00008067          	ret
+    182c:	00001697          	auipc	a3,0x1
+    1830:	4ce68693          	addi	a3,a3,1230 # 2cfa <BLOCK_ERKENNUNG_CTRL_BLOCK_ERKENNUNG_CTRL_next_state>
+    1834:	0006c283          	lbu	t0,0(a3)
+    1838:	00100613          	li	a2,1
+    183c:	08c28663          	beq	t0,a2,18c8 <generic_BLOCK_ERKENNUNG_CTRL+0xdc>
+    1840:	00200813          	li	a6,2
+    1844:	01028863          	beq	t0,a6,1854 <generic_BLOCK_ERKENNUNG_CTRL+0x68>
+    1848:	8e018023          	sb	zero,-1824(gp) # 2dd8 <stable>
+    184c:	00c68023          	sb	a2,0(a3)
+    1850:	00008067          	ret
+    1854:	8a91c883          	lbu	a7,-1879(gp) # 2da1 <FH_TUERMODUL__MFHA>
+    1858:	00089663          	bnez	a7,1864 <generic_BLOCK_ERKENNUNG_CTRL+0x78>
+    185c:	8ab1ce03          	lbu	t3,-1877(gp) # 2da3 <FH_TUERMODUL__MFHA_old>
+    1860:	040e1863          	bnez	t3,18b0 <generic_BLOCK_ERKENNUNG_CTRL+0xc4>
+    1864:	8ac1ce83          	lbu	t4,-1876(gp) # 2da4 <FH_TUERMODUL__MFHZ>
+    1868:	000e9663          	bnez	t4,1874 <generic_BLOCK_ERKENNUNG_CTRL+0x88>
+    186c:	8ae1cf03          	lbu	t5,-1874(gp) # 2da6 <FH_TUERMODUL__MFHZ_old>
+    1870:	040f1063          	bnez	t5,18b0 <generic_BLOCK_ERKENNUNG_CTRL+0xc4>
+    1874:	00001697          	auipc	a3,0x1
+    1878:	48568693          	addi	a3,a3,1157 # 2cf9 <BEWEGUNG_BLOCK_ERKENNUNG_CTRL_next_state>
+    187c:	0006cf83          	lbu	t6,0(a3)
+    1880:	00200613          	li	a2,2
+    1884:	08cf8263          	beq	t6,a2,1908 <generic_BLOCK_ERKENNUNG_CTRL+0x11c>
+    1888:	00300313          	li	t1,3
+    188c:	f86f82e3          	beq	t6,t1,1810 <generic_BLOCK_ERKENNUNG_CTRL+0x24>
+    1890:	00100813          	li	a6,1
+    1894:	070f8863          	beq	t6,a6,1904 <generic_BLOCK_ERKENNUNG_CTRL+0x118>
+    1898:	8e018023          	sb	zero,-1824(gp) # 2dd8 <stable>
+    189c:	8001a423          	sw	zero,-2040(gp) # 2d00 <BLOCK_ERKENNUNG_CTRL__N>
+    18a0:	80c1a223          	sw	a2,-2044(gp) # 2cfc <BLOCK_ERKENNUNG_CTRL__I_EIN_MAX>
+    18a4:	00668023          	sb	t1,0(a3)
+    18a8:	01078023          	sb	a6,0(a5)
+    18ac:	00008067          	ret
+    18b0:	00100893          	li	a7,1
+    18b4:	8e018023          	sb	zero,-1824(gp) # 2dd8 <stable>
+    18b8:	01168023          	sb	a7,0(a3)
+    18bc:	00001797          	auipc	a5,0x1
+    18c0:	42078ea3          	sb	zero,1085(a5) # 2cf9 <BEWEGUNG_BLOCK_ERKENNUNG_CTRL_next_state>
+    18c4:	00008067          	ret
+    18c8:	8a01a303          	lw	t1,-1888(gp) # 2d98 <FH_TUERMODUL__I_EIN>
+    18cc:	8a41a583          	lw	a1,-1884(gp) # 2d9c <FH_TUERMODUL__I_EIN_old>
+    18d0:	f4b30ce3          	beq	t1,a1,1828 <generic_BLOCK_ERKENNUNG_CTRL+0x3c>
+    18d4:	f4605ae3          	blez	t1,1828 <generic_BLOCK_ERKENNUNG_CTRL+0x3c>
+    18d8:	00200393          	li	t2,2
+    18dc:	00300513          	li	a0,3
+    18e0:	00768023          	sb	t2,0(a3)
+    18e4:	8e018023          	sb	zero,-1824(gp) # 2dd8 <stable>
+    18e8:	88018ca3          	sb	zero,-1895(gp) # 2d91 <FH_TUERMODUL__BLOCK_copy>
+    18ec:	8001a423          	sw	zero,-2040(gp) # 2d00 <BLOCK_ERKENNUNG_CTRL__N>
+    18f0:	8071a223          	sw	t2,-2044(gp) # 2cfc <BLOCK_ERKENNUNG_CTRL__I_EIN_MAX>
+    18f4:	00001617          	auipc	a2,0x1
+    18f8:	40a602a3          	sb	a0,1029(a2) # 2cf9 <BEWEGUNG_BLOCK_ERKENNUNG_CTRL_next_state>
+    18fc:	00578023          	sb	t0,0(a5)
+    1900:	00008067          	ret
+    1904:	00008067          	ret
+    1908:	8041a783          	lw	a5,-2044(gp) # 2cfc <BLOCK_ERKENNUNG_CTRL__I_EIN_MAX>
+    190c:	fff78293          	addi	t0,a5,-1
+    1910:	8a01a703          	lw	a4,-1888(gp) # 2d98 <FH_TUERMODUL__I_EIN>
+    1914:	f0574ae3          	blt	a4,t0,1828 <generic_BLOCK_ERKENNUNG_CTRL+0x3c>
+    1918:	00100613          	li	a2,1
+    191c:	8e018023          	sb	zero,-1824(gp) # 2dd8 <stable>
+    1920:	88c18ca3          	sb	a2,-1895(gp) # 2d91 <FH_TUERMODUL__BLOCK_copy>
+    1924:	00c68023          	sb	a2,0(a3)
+    1928:	00008067          	ret
+
+0000192c <FH_DU>:
+    192c:	fa010113          	addi	sp,sp,-96
+    1930:	04812c23          	sw	s0,88(sp)
+    1934:	81418413          	addi	s0,gp,-2028 # 2d0c <Bitlist>
+    1938:	04112e23          	sw	ra,92(sp)
+    193c:	04912a23          	sw	s1,84(sp)
+    1940:	05212823          	sw	s2,80(sp)
+    1944:	05312623          	sw	s3,76(sp)
+    1948:	05412423          	sw	s4,72(sp)
+    194c:	05512223          	sw	s5,68(sp)
+    1950:	05612023          	sw	s6,64(sp)
+    1954:	03712e23          	sw	s7,60(sp)
+    1958:	03812c23          	sw	s8,56(sp)
+    195c:	03912a23          	sw	s9,52(sp)
+    1960:	03a12823          	sw	s10,48(sp)
+    1964:	03b12623          	sw	s11,44(sp)
+    1968:	01044883          	lbu	a7,16(s0)
+    196c:	01344803          	lbu	a6,19(s0)
+    1970:	00d44503          	lbu	a0,13(s0)
+    1974:	88318793          	addi	a5,gp,-1917 # 2d7b <FH_DU__S_FH_TMBFZUCAN>
+    1978:	88118093          	addi	ra,gp,-1919 # 2d79 <FH_DU__S_FH_TMBFAUFDISC>
+    197c:	88218393          	addi	t2,gp,-1918 # 2d7a <FH_DU__S_FH_TMBFAUFDISC_old>
+    1980:	00a44303          	lbu	t1,10(s0)
+    1984:	0007c283          	lbu	t0,0(a5)
+    1988:	0000c583          	lbu	a1,0(ra)
+    198c:	0003c383          	lbu	t2,0(t2)
+    1990:	88418713          	addi	a4,gp,-1916 # 2d7c <FH_DU__S_FH_TMBFZUCAN_old>
+    1994:	88518493          	addi	s1,gp,-1915 # 2d7d <FH_DU__S_FH_TMBFZUDISC>
+    1998:	88618693          	addi	a3,gp,-1914 # 2d7e <FH_DU__S_FH_TMBFZUDISC_old>
+    199c:	88018613          	addi	a2,gp,-1920 # 2d78 <FH_DU__S_FH_TMBFAUFCAN_old>
+    19a0:	87f18913          	addi	s2,gp,-1921 # 2d77 <FH_DU__S_FH_TMBFAUFCAN>
+    19a4:	00100e13          	li	t3,1
+    19a8:	00074f03          	lbu	t5,0(a4)
+    19ac:	0006cf83          	lbu	t6,0(a3)
+    19b0:	0004c703          	lbu	a4,0(s1)
+    19b4:	00064683          	lbu	a3,0(a2)
+    19b8:	8fc1a223          	sw	t3,-1820(gp) # 2ddc <time>
+    19bc:	00094603          	lbu	a2,0(s2)
+    19c0:	00088e13          	mv	t3,a7
+    19c4:	00000913          	li	s2,0
+    19c8:	8bc18b13          	addi	s6,gp,-1860 # 2db4 <FH_TUERMODUL__SFHZ_MEC>
+    19cc:	8be18a93          	addi	s5,gp,-1858 # 2db6 <FH_TUERMODUL__SFHZ_ZENTRAL>
+    19d0:	8a818b93          	addi	s7,gp,-1880 # 2da0 <FH_TUERMODUL__KL_50>
+    19d4:	8a918d93          	addi	s11,gp,-1879 # 2da1 <FH_TUERMODUL__MFHA>
+    19d8:	8ac18d13          	addi	s10,gp,-1876 # 2da4 <FH_TUERMODUL__MFHZ>
+    19dc:	8a018a13          	addi	s4,gp,-1888 # 2d98 <FH_TUERMODUL__I_EIN>
+    19e0:	89b18c13          	addi	s8,gp,-1893 # 2d93 <FH_TUERMODUL__EKS_LEISTE_AKTIV>
+    19e4:	8b018993          	addi	s3,gp,-1872 # 2da8 <FH_TUERMODUL__POSITION>
+    19e8:	89818c93          	addi	s9,gp,-1896 # 2d90 <FH_TUERMODUL__BLOCK>
+    19ec:	00100493          	li	s1,1
+    19f0:	00050893          	mv	a7,a0
+    19f4:	01012623          	sw	a6,12(sp)
+    19f8:	88818813          	addi	a6,gp,-1912 # 2d80 <FH_STEUERUNG_DUMMY_FH_STEUERUNG_DUMMY_next_state>
+    19fc:	00084783          	lbu	a5,0(a6)
+    1a00:	00190e93          	addi	t4,s2,1
+    1a04:	8e018513          	addi	a0,gp,-1824 # 2dd8 <stable>
+    1a08:	8e118093          	addi	ra,gp,-1823 # 2dd9 <step>
+    1a0c:	00950023          	sb	s1,0(a0)
+    1a10:	01d08023          	sb	t4,0(ra)
+    1a14:	00200913          	li	s2,2
+    1a18:	5d278a63          	beq	a5,s2,1fec <FH_DU+0x6c0>
+    1a1c:	00300513          	li	a0,3
+    1a20:	58a78e63          	beq	a5,a0,1fbc <FH_DU+0x690>
+    1a24:	5e978e63          	beq	a5,s1,2020 <FH_DU+0x6f4>
+    1a28:	88818e93          	addi	t4,gp,-1912 # 2d80 <FH_STEUERUNG_DUMMY_FH_STEUERUNG_DUMMY_next_state>
+    1a2c:	8e018023          	sb	zero,-1824(gp) # 2dd8 <stable>
+    1a30:	8601a423          	sw	zero,-1944(gp) # 2d60 <FH_DU__MFH>
+    1a34:	012e8023          	sb	s2,0(t4)
+    1a38:	00031863          	bnez	t1,1a48 <FH_DU+0x11c>
+    1a3c:	00300313          	li	t1,3
+    1a40:	8c318513          	addi	a0,gp,-1853 # 2dbb <KINDERSICHERUNG_CTRL_KINDERSICHERUNG_CTRL_next_state>
+    1a44:	00650023          	sb	t1,0(a0)
+    1a48:	80018fa3          	sb	zero,-2017(gp) # 2d17 <Bitlist+0xb>
+    1a4c:	000e1663          	bnez	t3,1a58 <FH_DU+0x12c>
+    1a50:	85418e13          	addi	t3,gp,-1964 # 2d4c <EINKLEMMSCHUTZ_CTRL_EINKLEMMSCHUTZ_CTRL_next_state>
+    1a54:	009e0023          	sb	s1,0(t3)
+    1a58:	00c12083          	lw	ra,12(sp)
+    1a5c:	820182a3          	sb	zero,-2011(gp) # 2d1d <Bitlist+0x11>
+    1a60:	00009a63          	bnez	ra,1a74 <FH_DU+0x148>
+    1a64:	00001917          	auipc	s2,0x1
+    1a68:	29690913          	addi	s2,s2,662 # 2cfa <BLOCK_ERKENNUNG_CTRL_BLOCK_ERKENNUNG_CTRL_next_state>
+    1a6c:	80018a23          	sb	zero,-2028(gp) # 2d0c <Bitlist>
+    1a70:	00990023          	sb	s1,0(s2)
+    1a74:	82018423          	sb	zero,-2008(gp) # 2d20 <Bitlist+0x14>
+    1a78:	02089a63          	bnez	a7,1aac <FH_DU+0x180>
+    1a7c:	80018d23          	sb	zero,-2022(gp) # 2d12 <Bitlist+0x6>
+    1a80:	8801a823          	sw	zero,-1904(gp) # 2d88 <FH_TUERMODUL_CTRL__N>
+    1a84:	00200893          	li	a7,2
+    1a88:	81018813          	addi	a6,gp,-2032 # 2d08 <B_FH_TUERMODUL_CTRL_next_state>
+    1a8c:	00001797          	auipc	a5,0x1
+    1a90:	26c78793          	addi	a5,a5,620 # 2cf8 <A_FH_TUERMODUL_CTRL_next_state>
+    1a94:	10000e93          	li	t4,256
+    1a98:	8ca18313          	addi	t1,gp,-1846 # 2dc2 <WIEDERHOLSPERRE_FH_TUERMODUL_CTRL_next_state>
+    1a9c:	01180023          	sb	a7,0(a6)
+    1aa0:	00978023          	sb	s1,0(a5)
+    1aa4:	01d41223          	sh	t4,4(s0)
+    1aa8:	00930023          	sb	s1,0(t1)
+    1aac:	009405a3          	sb	s1,11(s0)
+    1ab0:	009408a3          	sb	s1,17(s0)
+    1ab4:	00940a23          	sb	s1,20(s0)
+    1ab8:	00940723          	sb	s1,14(s0)
+    1abc:	49e28663          	beq	t0,t5,1f48 <FH_DU+0x61c>
+    1ac0:	85818e13          	addi	t3,gp,-1960 # 2d50 <FH_DU__DOOR_ID>
+    1ac4:	000e4083          	lbu	ra,0(t3)
+    1ac8:	4c009463          	bnez	ra,1f90 <FH_DU+0x664>
+    1acc:	87e18893          	addi	a7,gp,-1922 # 2d76 <FH_DU__S_FH_FTZU>
+    1ad0:	00588023          	sb	t0,0(a7)
+    1ad4:	49f70a63          	beq	a4,t6,1f68 <FH_DU+0x63c>
+    1ad8:	64c68463          	beq	a3,a2,2120 <FH_DU+0x7f4>
+    1adc:	87d18313          	addi	t1,gp,-1923 # 2d75 <FH_DU__S_FH_FTAUF>
+    1ae0:	00c30023          	sb	a2,0(t1)
+    1ae4:	87c18093          	addi	ra,gp,-1924 # 2d74 <FH_DU__S_FH_AUFDISC>
+    1ae8:	88718913          	addi	s2,gp,-1913 # 2d7f <FH_DU__S_FH_ZUDISC>
+    1aec:	00c44f83          	lbu	t6,12(s0)
+    1af0:	00f44f03          	lbu	t5,15(s0)
+    1af4:	01244503          	lbu	a0,18(s0)
+    1af8:	01544e03          	lbu	t3,21(s0)
+    1afc:	0000c783          	lbu	a5,0(ra)
+    1b00:	00094683          	lbu	a3,0(s2)
+    1b04:	8b718713          	addi	a4,gp,-1865 # 2daf <FH_TUERMODUL__SFHA_ZENTRAL>
+    1b08:	8b518893          	addi	a7,gp,-1867 # 2dad <FH_TUERMODUL__SFHA_MEC>
+    1b0c:	00c70023          	sb	a2,0(a4)
+    1b10:	01f40523          	sb	t6,10(s0)
+    1b14:	01e406a3          	sb	t5,13(s0)
+    1b18:	00a40823          	sb	a0,16(s0)
+    1b1c:	01c409a3          	sb	t3,19(s0)
+    1b20:	00f88023          	sb	a5,0(a7)
+    1b24:	00db0023          	sb	a3,0(s6)
+    1b28:	005a8023          	sb	t0,0(s5)
+    1b2c:	000bc703          	lbu	a4,0(s7)
+    1b30:	020f8663          	beqz	t6,1b5c <FH_DU+0x230>
+    1b34:	8c318393          	addi	t2,gp,-1853 # 2dbb <KINDERSICHERUNG_CTRL_KINDERSICHERUNG_CTRL_next_state>
+    1b38:	0003ce83          	lbu	t4,0(t2)
+    1b3c:	00200813          	li	a6,2
+    1b40:	570e8e63          	beq	t4,a6,20bc <FH_DU+0x790>
+    1b44:	00300f93          	li	t6,3
+    1b48:	55fe8863          	beq	t4,t6,2098 <FH_DU+0x76c>
+    1b4c:	529e8463          	beq	t4,s1,2074 <FH_DU+0x748>
+    1b50:	8c318513          	addi	a0,gp,-1853 # 2dbb <KINDERSICHERUNG_CTRL_KINDERSICHERUNG_CTRL_next_state>
+    1b54:	8e018023          	sb	zero,-1824(gp) # 2dd8 <stable>
+    1b58:	01f50023          	sb	t6,0(a0)
+    1b5c:	000dce83          	lbu	t4,0(s11)
+    1b60:	000d4e03          	lbu	t3,0(s10)
+    1b64:	000a2303          	lw	t1,0(s4)
+    1b68:	000c4883          	lbu	a7,0(s8)
+    1b6c:	0009a803          	lw	a6,0(s3)
+    1b70:	89d18913          	addi	s2,gp,-1891 # 2d95 <FH_TUERMODUL__FT>
+    1b74:	86c18093          	addi	ra,gp,-1940 # 2d64 <FH_DU__MFHA>
+    1b78:	86f18393          	addi	t2,gp,-1937 # 2d67 <FH_DU__MFHZ>
+    1b7c:	00094503          	lbu	a0,0(s2)
+    1b80:	000cc583          	lbu	a1,0(s9)
+    1b84:	01d08023          	sb	t4,0(ra)
+    1b88:	01c38023          	sb	t3,0(t2)
+    1b8c:	85c18f93          	addi	t6,gp,-1956 # 2d54 <FH_DU__I_EIN>
+    1b90:	85918093          	addi	ra,gp,-1959 # 2d51 <FH_DU__EKS_LEISTE_AKTIV>
+    1b94:	87818393          	addi	t2,gp,-1928 # 2d70 <FH_DU__POSITION>
+    1b98:	006fa023          	sw	t1,0(t6)
+    1b9c:	01108023          	sb	a7,0(ra)
+    1ba0:	0103a023          	sw	a6,0(t2)
+    1ba4:	85b18f93          	addi	t6,gp,-1957 # 2d53 <FH_DU__FT>
+    1ba8:	86418093          	addi	ra,gp,-1948 # 2d5c <FH_DU__KL_50>
+    1bac:	85518393          	addi	t2,gp,-1963 # 2d4d <FH_DU__BLOCK>
+    1bb0:	00af8023          	sb	a0,0(t6)
+    1bb4:	00e08023          	sb	a4,0(ra)
+    1bb8:	00b38023          	sb	a1,0(t2)
+    1bbc:	040f0063          	beqz	t5,1bfc <FH_DU+0x2d0>
+    1bc0:	d14ff0ef          	jal	ra,10d4 <generic_FH_TUERMODUL_CTRL.part.0>
+    1bc4:	8b518293          	addi	t0,gp,-1867 # 2dad <FH_TUERMODUL__SFHA_MEC>
+    1bc8:	8b718613          	addi	a2,gp,-1865 # 2daf <FH_TUERMODUL__SFHA_ZENTRAL>
+    1bcc:	0002c783          	lbu	a5,0(t0)
+    1bd0:	000dce83          	lbu	t4,0(s11)
+    1bd4:	000d4e03          	lbu	t3,0(s10)
+    1bd8:	000a2303          	lw	t1,0(s4)
+    1bdc:	000c4883          	lbu	a7,0(s8)
+    1be0:	0009a803          	lw	a6,0(s3)
+    1be4:	00094503          	lbu	a0,0(s2)
+    1be8:	00064603          	lbu	a2,0(a2)
+    1bec:	000b4683          	lbu	a3,0(s6)
+    1bf0:	000ac283          	lbu	t0,0(s5)
+    1bf4:	000bc703          	lbu	a4,0(s7)
+    1bf8:	000cc583          	lbu	a1,0(s9)
+    1bfc:	85918393          	addi	t2,gp,-1959 # 2d51 <FH_DU__EKS_LEISTE_AKTIV>
+    1c00:	85c18093          	addi	ra,gp,-1956 # 2d54 <FH_DU__I_EIN>
+    1c04:	01138023          	sb	a7,0(t2)
+    1c08:	88718893          	addi	a7,gp,-1913 # 2d7f <FH_DU__S_FH_ZUDISC>
+    1c0c:	86f18f93          	addi	t6,gp,-1937 # 2d67 <FH_DU__MFHZ>
+    1c10:	0060a023          	sw	t1,0(ra)
+    1c14:	00d88023          	sb	a3,0(a7)
+    1c18:	87c18313          	addi	t1,gp,-1924 # 2d74 <FH_DU__S_FH_AUFDISC>
+    1c1c:	86418693          	addi	a3,gp,-1948 # 2d5c <FH_DU__KL_50>
+    1c20:	86c18913          	addi	s2,gp,-1940 # 2d64 <FH_DU__MFHA>
+    1c24:	87e18f13          	addi	t5,gp,-1922 # 2d76 <FH_DU__S_FH_FTZU>
+    1c28:	01d90023          	sb	t4,0(s2)
+    1c2c:	01cf8023          	sb	t3,0(t6)
+    1c30:	87818e93          	addi	t4,gp,-1928 # 2d70 <FH_DU__POSITION>
+    1c34:	85b18e13          	addi	t3,gp,-1957 # 2d53 <FH_DU__FT>
+    1c38:	00f30023          	sb	a5,0(t1)
+    1c3c:	00e68023          	sb	a4,0(a3)
+    1c40:	87d18793          	addi	a5,gp,-1923 # 2d75 <FH_DU__S_FH_FTAUF>
+    1c44:	85518713          	addi	a4,gp,-1963 # 2d4d <FH_DU__BLOCK>
+    1c48:	005f0023          	sb	t0,0(t5)
+    1c4c:	010ea023          	sw	a6,0(t4)
+    1c50:	00ae0023          	sb	a0,0(t3)
+    1c54:	00c78023          	sb	a2,0(a5)
+    1c58:	00b70023          	sb	a1,0(a4)
+    1c5c:	b15ff0ef          	jal	ra,1770 <generic_EINKLEMMSCHUTZ_CTRL>
+    1c60:	000dc283          	lbu	t0,0(s11)
+    1c64:	000d4f03          	lbu	t5,0(s10)
+    1c68:	000a2e83          	lw	t4,0(s4)
+    1c6c:	000c4303          	lbu	t1,0(s8)
+    1c70:	8b718613          	addi	a2,gp,-1865 # 2daf <FH_TUERMODUL__SFHA_ZENTRAL>
+    1c74:	89d18813          	addi	a6,gp,-1891 # 2d95 <FH_TUERMODUL__FT>
+    1c78:	8b518513          	addi	a0,gp,-1867 # 2dad <FH_TUERMODUL__SFHA_MEC>
+    1c7c:	00084803          	lbu	a6,0(a6)
+    1c80:	00054503          	lbu	a0,0(a0)
+    1c84:	00064583          	lbu	a1,0(a2)
+    1c88:	0009a883          	lw	a7,0(s3)
+    1c8c:	86c18f93          	addi	t6,gp,-1940 # 2d64 <FH_DU__MFHA>
+    1c90:	000ac683          	lbu	a3,0(s5)
+    1c94:	000bc703          	lbu	a4,0(s7)
+    1c98:	000cc783          	lbu	a5,0(s9)
+    1c9c:	00060913          	mv	s2,a2
+    1ca0:	005f8023          	sb	t0,0(t6)
+    1ca4:	000b4603          	lbu	a2,0(s6)
+    1ca8:	86f18393          	addi	t2,gp,-1937 # 2d67 <FH_DU__MFHZ>
+    1cac:	85c18e13          	addi	t3,gp,-1956 # 2d54 <FH_DU__I_EIN>
+    1cb0:	85918293          	addi	t0,gp,-1959 # 2d51 <FH_DU__EKS_LEISTE_AKTIV>
+    1cb4:	01e38023          	sb	t5,0(t2)
+    1cb8:	01de2023          	sw	t4,0(t3)
+    1cbc:	00628023          	sb	t1,0(t0)
+    1cc0:	87818f13          	addi	t5,gp,-1928 # 2d70 <FH_DU__POSITION>
+    1cc4:	85b18e93          	addi	t4,gp,-1957 # 2d53 <FH_DU__FT>
+    1cc8:	87d18313          	addi	t1,gp,-1923 # 2d75 <FH_DU__S_FH_FTAUF>
+    1ccc:	87c18093          	addi	ra,gp,-1924 # 2d74 <FH_DU__S_FH_AUFDISC>
+    1cd0:	011f2023          	sw	a7,0(t5)
+    1cd4:	010e8023          	sb	a6,0(t4)
+    1cd8:	00b30023          	sb	a1,0(t1)
+    1cdc:	88718893          	addi	a7,gp,-1913 # 2d7f <FH_DU__S_FH_ZUDISC>
+    1ce0:	87e18813          	addi	a6,gp,-1922 # 2d76 <FH_DU__S_FH_FTZU>
+    1ce4:	85518593          	addi	a1,gp,-1963 # 2d4d <FH_DU__BLOCK>
+    1ce8:	00a08023          	sb	a0,0(ra)
+    1cec:	86418513          	addi	a0,gp,-1948 # 2d5c <FH_DU__KL_50>
+    1cf0:	00c88023          	sb	a2,0(a7)
+    1cf4:	00d80023          	sb	a3,0(a6)
+    1cf8:	00e50023          	sb	a4,0(a0)
+    1cfc:	00f58023          	sb	a5,0(a1)
+    1d00:	aedff0ef          	jal	ra,17ec <generic_BLOCK_ERKENNUNG_CTRL>
+    1d04:	000a2703          	lw	a4,0(s4)
+    1d08:	000c4783          	lbu	a5,0(s8)
+    1d0c:	8b518613          	addi	a2,gp,-1867 # 2dad <FH_TUERMODUL__SFHA_MEC>
+    1d10:	89018293          	addi	t0,gp,-1904 # 2d88 <FH_TUERMODUL_CTRL__N>
+    1d14:	00064f03          	lbu	t5,0(a2)
+    1d18:	0009a803          	lw	a6,0(s3)
+    1d1c:	0002a603          	lw	a2,0(t0)
+    1d20:	89d18693          	addi	a3,gp,-1891 # 2d95 <FH_TUERMODUL__FT>
+    1d24:	85c18293          	addi	t0,gp,-1956 # 2d54 <FH_DU__I_EIN>
+    1d28:	00e2a023          	sw	a4,0(t0)
+    1d2c:	0006c503          	lbu	a0,0(a3)
+    1d30:	85918293          	addi	t0,gp,-1959 # 2d51 <FH_DU__EKS_LEISTE_AKTIV>
+    1d34:	00f28023          	sb	a5,0(t0)
+    1d38:	87818293          	addi	t0,gp,-1928 # 2d70 <FH_DU__POSITION>
+    1d3c:	0102a023          	sw	a6,0(t0)
+    1d40:	000bc583          	lbu	a1,0(s7)
+    1d44:	85b18813          	addi	a6,gp,-1957 # 2d53 <FH_DU__FT>
+    1d48:	000b4e83          	lbu	t4,0(s6)
+    1d4c:	00a80023          	sb	a0,0(a6)
+    1d50:	87c18513          	addi	a0,gp,-1924 # 2d74 <FH_DU__S_FH_AUFDISC>
+    1d54:	00094f83          	lbu	t6,0(s2)
+    1d58:	000ac383          	lbu	t2,0(s5)
+    1d5c:	01344903          	lbu	s2,19(s0)
+    1d60:	01e50023          	sb	t5,0(a0)
+    1d64:	00a44303          	lbu	t1,10(s0)
+    1d68:	00d44883          	lbu	a7,13(s0)
+    1d6c:	01044e03          	lbu	t3,16(s0)
+    1d70:	86418513          	addi	a0,gp,-1948 # 2d5c <FH_DU__KL_50>
+    1d74:	87418693          	addi	a3,gp,-1932 # 2d6c <FH_DU__MFH_copy>
+    1d78:	00b50023          	sb	a1,0(a0)
+    1d7c:	0006a683          	lw	a3,0(a3)
+    1d80:	88718813          	addi	a6,gp,-1913 # 2d7f <FH_DU__S_FH_ZUDISC>
+    1d84:	89418593          	addi	a1,gp,-1900 # 2d8c <FH_TUERMODUL_CTRL__N_old>
+    1d88:	01d80023          	sb	t4,0(a6)
+    1d8c:	00c5a023          	sw	a2,0(a1)
+    1d90:	87d18293          	addi	t0,gp,-1923 # 2d75 <FH_DU__S_FH_FTAUF>
+    1d94:	01d12823          	sw	t4,16(sp)
+    1d98:	8a418613          	addi	a2,gp,-1884 # 2d9c <FH_TUERMODUL__I_EIN_old>
+    1d9c:	87e18e93          	addi	t4,gp,-1922 # 2d76 <FH_DU__S_FH_FTZU>
+    1da0:	01f28023          	sb	t6,0(t0)
+    1da4:	007e8023          	sb	t2,0(t4)
+    1da8:	00e62023          	sw	a4,0(a2)
+    1dac:	01212623          	sw	s2,12(sp)
+    1db0:	01240a23          	sb	s2,20(s0)
+    1db4:	86818293          	addi	t0,gp,-1944 # 2d60 <FH_DU__MFH>
+    1db8:	006405a3          	sb	t1,11(s0)
+    1dbc:	01140723          	sb	a7,14(s0)
+    1dc0:	01c408a3          	sb	t3,17(s0)
+    1dc4:	00d2a023          	sw	a3,0(t0)
+    1dc8:	86018693          	addi	a3,gp,-1952 # 2d58 <FH_DU__I_EIN_old>
+    1dcc:	00e6a023          	sw	a4,0(a3)
+    1dd0:	80818713          	addi	a4,gp,-2040 # 2d00 <BLOCK_ERKENNUNG_CTRL__N>
+    1dd4:	00072903          	lw	s2,0(a4)
+    1dd8:	8c018513          	addi	a0,gp,-1856 # 2db8 <FH_TUERMODUL__SFHZ_copy>
+    1ddc:	8aa18713          	addi	a4,gp,-1878 # 2da2 <FH_TUERMODUL__MFHA_copy>
+    1de0:	00054583          	lbu	a1,0(a0)
+    1de4:	00074503          	lbu	a0,0(a4)
+    1de8:	89918813          	addi	a6,gp,-1895 # 2d91 <FH_TUERMODUL__BLOCK_copy>
+    1dec:	00b12a23          	sw	a1,20(sp)
+    1df0:	00a12e23          	sw	a0,28(sp)
+    1df4:	8ad18693          	addi	a3,gp,-1875 # 2da5 <FH_TUERMODUL__MFHZ_copy>
+    1df8:	87f18593          	addi	a1,gp,-1921 # 2d77 <FH_DU__S_FH_TMBFAUFCAN>
+    1dfc:	88118513          	addi	a0,gp,-1919 # 2d79 <FH_DU__S_FH_TMBFAUFDISC>
+    1e00:	00084e83          	lbu	t4,0(a6)
+    1e04:	0006c803          	lbu	a6,0(a3)
+    1e08:	0005c683          	lbu	a3,0(a1)
+    1e0c:	00054583          	lbu	a1,0(a0)
+    1e10:	80c18513          	addi	a0,gp,-2036 # 2d04 <BLOCK_ERKENNUNG_CTRL__N_old>
+    1e14:	01252023          	sw	s2,0(a0)
+    1e18:	8bf18913          	addi	s2,gp,-1857 # 2db7 <FH_TUERMODUL__SFHZ_ZENTRAL_old>
+    1e1c:	00790023          	sb	t2,0(s2)
+    1e20:	01012383          	lw	t2,16(sp)
+    1e24:	8b918613          	addi	a2,gp,-1863 # 2db1 <FH_TUERMODUL__SFHA_copy>
+    1e28:	00064283          	lbu	t0,0(a2)
+    1e2c:	8bd18513          	addi	a0,gp,-1859 # 2db5 <FH_TUERMODUL__SFHZ_MEC_old>
+    1e30:	8b818913          	addi	s2,gp,-1864 # 2db0 <FH_TUERMODUL__SFHA_ZENTRAL_old>
+    1e34:	00750023          	sb	t2,0(a0)
+    1e38:	01f90023          	sb	t6,0(s2)
+    1e3c:	01412383          	lw	t2,20(sp)
+    1e40:	8b618f93          	addi	t6,gp,-1866 # 2dae <FH_TUERMODUL__SFHA_MEC_old>
+    1e44:	01ef8023          	sb	t5,0(t6)
+    1e48:	89a18f13          	addi	t5,gp,-1894 # 2d92 <FH_TUERMODUL__BLOCK_old>
+    1e4c:	01df0023          	sb	t4,0(t5)
+    1e50:	00512c23          	sw	t0,24(sp)
+    1e54:	01dc8023          	sb	t4,0(s9)
+    1e58:	8bb18e93          	addi	t4,gp,-1861 # 2db3 <FH_TUERMODUL__SFHZ>
+    1e5c:	01812f83          	lw	t6,24(sp)
+    1e60:	007e8023          	sb	t2,0(t4)
+    1e64:	8ae18e93          	addi	t4,gp,-1874 # 2da6 <FH_TUERMODUL__MFHZ_old>
+    1e68:	010e8023          	sb	a6,0(t4)
+    1e6c:	010d0023          	sb	a6,0(s10)
+    1e70:	01c12803          	lw	a6,28(sp)
+    1e74:	88318613          	addi	a2,gp,-1917 # 2d7b <FH_DU__S_FH_TMBFZUCAN>
+    1e78:	8c118513          	addi	a0,gp,-1855 # 2db9 <FH_TUERMODUL__SFHZ_old>
+    1e7c:	8b418913          	addi	s2,gp,-1868 # 2dac <FH_TUERMODUL__SFHA>
+    1e80:	8ba18f13          	addi	t5,gp,-1862 # 2db2 <FH_TUERMODUL__SFHA_old>
+    1e84:	88518713          	addi	a4,gp,-1915 # 2d7d <FH_DU__S_FH_TMBFZUDISC>
+    1e88:	00064283          	lbu	t0,0(a2)
+    1e8c:	00750023          	sb	t2,0(a0)
+    1e90:	01f90023          	sb	t6,0(s2)
+    1e94:	01ff0023          	sb	t6,0(t5)
+    1e98:	00074703          	lbu	a4,0(a4)
+    1e9c:	8ab18393          	addi	t2,gp,-1877 # 2da3 <FH_TUERMODUL__MFHA_old>
+    1ea0:	85618613          	addi	a2,gp,-1962 # 2d4e <FH_DU__BLOCK_copy>
+    1ea4:	00064603          	lbu	a2,0(a2)
+    1ea8:	89c18513          	addi	a0,gp,-1892 # 2d94 <FH_TUERMODUL__EKS_LEISTE_AKTIV_old>
+    1eac:	010d8023          	sb	a6,0(s11)
+    1eb0:	85a18913          	addi	s2,gp,-1958 # 2d52 <FH_DU__EKS_LEISTE_AKTIV_old>
+    1eb4:	01038023          	sb	a6,0(t2)
+    1eb8:	87018393          	addi	t2,gp,-1936 # 2d68 <FH_DU__MFHZ_copy>
+    1ebc:	00f50023          	sb	a5,0(a0)
+    1ec0:	00f90023          	sb	a5,0(s2)
+    1ec4:	0003c503          	lbu	a0,0(t2)
+    1ec8:	88018793          	addi	a5,gp,-1920 # 2d78 <FH_DU__S_FH_TMBFAUFCAN_old>
+    1ecc:	88418f93          	addi	t6,gp,-1916 # 2d7c <FH_DU__S_FH_TMBFZUCAN_old>
+    1ed0:	88618f13          	addi	t5,gp,-1914 # 2d7e <FH_DU__S_FH_TMBFZUDISC_old>
+    1ed4:	86d18913          	addi	s2,gp,-1939 # 2d65 <FH_DU__MFHA_copy>
+    1ed8:	005f8023          	sb	t0,0(t6)
+    1edc:	00ef0023          	sb	a4,0(t5)
+    1ee0:	88218e93          	addi	t4,gp,-1918 # 2d7a <FH_DU__S_FH_TMBFAUFDISC_old>
+    1ee4:	85518813          	addi	a6,gp,-1963 # 2d4d <FH_DU__BLOCK>
+    1ee8:	00d78023          	sb	a3,0(a5)
+    1eec:	8e018f93          	addi	t6,gp,-1824 # 2dd8 <stable>
+    1ef0:	00094783          	lbu	a5,0(s2)
+    1ef4:	85718f13          	addi	t5,gp,-1961 # 2d4f <FH_DU__BLOCK_old>
+    1ef8:	00be8023          	sb	a1,0(t4)
+    1efc:	00c80023          	sb	a2,0(a6)
+    1f00:	00cf0023          	sb	a2,0(t5)
+    1f04:	87118e93          	addi	t4,gp,-1935 # 2d69 <FH_DU__MFHZ_old>
+    1f08:	86f18613          	addi	a2,gp,-1937 # 2d67 <FH_DU__MFHZ>
+    1f0c:	000fc803          	lbu	a6,0(t6)
+    1f10:	00a60023          	sb	a0,0(a2)
+    1f14:	00ae8023          	sb	a0,0(t4)
+    1f18:	86c18393          	addi	t2,gp,-1940 # 2d64 <FH_DU__MFHA>
+    1f1c:	86e18513          	addi	a0,gp,-1938 # 2d66 <FH_DU__MFHA_old>
+    1f20:	00f38023          	sb	a5,0(t2)
+    1f24:	00f50023          	sb	a5,0(a0)
+    1f28:	1a081e63          	bnez	a6,20e4 <FH_DU+0x7b8>
+    1f2c:	8e118093          	addi	ra,gp,-1823 # 2dd9 <step>
+    1f30:	0000c903          	lbu	s2,0(ra)
+    1f34:	00068613          	mv	a2,a3
+    1f38:	00070f93          	mv	t6,a4
+    1f3c:	00058393          	mv	t2,a1
+    1f40:	00028f13          	mv	t5,t0
+    1f44:	ab5ff06f          	j	19f8 <FH_DU+0xcc>
+    1f48:	87e18f13          	addi	t5,gp,-1922 # 2d76 <FH_DU__S_FH_FTZU>
+    1f4c:	000f4283          	lbu	t0,0(t5)
+    1f50:	01f70c63          	beq	a4,t6,1f68 <FH_DU+0x63c>
+    1f54:	85818f93          	addi	t6,gp,-1960 # 2d50 <FH_DU__DOOR_ID>
+    1f58:	000fc503          	lbu	a0,0(t6)
+    1f5c:	b6050ee3          	beqz	a0,1ad8 <FH_DU+0x1ac>
+    1f60:	88318913          	addi	s2,gp,-1917 # 2d7b <FH_DU__S_FH_TMBFZUCAN>
+    1f64:	00e90023          	sb	a4,0(s2)
+    1f68:	02c68c63          	beq	a3,a2,1fa0 <FH_DU+0x674>
+    1f6c:	85818813          	addi	a6,gp,-1960 # 2d50 <FH_DU__DOOR_ID>
+    1f70:	00084783          	lbu	a5,0(a6)
+    1f74:	b60784e3          	beqz	a5,1adc <FH_DU+0x1b0>
+    1f78:	87d18613          	addi	a2,gp,-1923 # 2d75 <FH_DU__S_FH_FTAUF>
+    1f7c:	00064603          	lbu	a2,0(a2)
+    1f80:	b67582e3          	beq	a1,t2,1ae4 <FH_DU+0x1b8>
+    1f84:	87f18e93          	addi	t4,gp,-1921 # 2d77 <FH_DU__S_FH_TMBFAUFCAN>
+    1f88:	00be8023          	sb	a1,0(t4)
+    1f8c:	b59ff06f          	j	1ae4 <FH_DU+0x1b8>
+    1f90:	87e18293          	addi	t0,gp,-1922 # 2d76 <FH_DU__S_FH_FTZU>
+    1f94:	0002c283          	lbu	t0,0(t0)
+    1f98:	fdf714e3          	bne	a4,t6,1f60 <FH_DU+0x634>
+    1f9c:	fcc69ee3          	bne	a3,a2,1f78 <FH_DU+0x64c>
+    1fa0:	87d18713          	addi	a4,gp,-1923 # 2d75 <FH_DU__S_FH_FTAUF>
+    1fa4:	00074603          	lbu	a2,0(a4)
+    1fa8:	b2758ee3          	beq	a1,t2,1ae4 <FH_DU+0x1b8>
+    1fac:	85818393          	addi	t2,gp,-1960 # 2d50 <FH_DU__DOOR_ID>
+    1fb0:	0003c683          	lbu	a3,0(t2)
+    1fb4:	fc0698e3          	bnez	a3,1f84 <FH_DU+0x658>
+    1fb8:	b2dff06f          	j	1ae4 <FH_DU+0x1b8>
+    1fbc:	86c18093          	addi	ra,gp,-1940 # 2d64 <FH_DU__MFHA>
+    1fc0:	0000c903          	lbu	s2,0(ra)
+    1fc4:	a6091ae3          	bnez	s2,1a38 <FH_DU+0x10c>
+    1fc8:	86e18813          	addi	a6,gp,-1938 # 2d66 <FH_DU__MFHA_old>
+    1fcc:	00084783          	lbu	a5,0(a6)
+    1fd0:	a60784e3          	beqz	a5,1a38 <FH_DU+0x10c>
+    1fd4:	8e018023          	sb	zero,-1824(gp) # 2dd8 <stable>
+    1fd8:	8601a423          	sw	zero,-1944(gp) # 2d60 <FH_DU__MFH>
+    1fdc:	00200813          	li	a6,2
+    1fe0:	88818793          	addi	a5,gp,-1912 # 2d80 <FH_STEUERUNG_DUMMY_FH_STEUERUNG_DUMMY_next_state>
+    1fe4:	01078023          	sb	a6,0(a5)
+    1fe8:	a51ff06f          	j	1a38 <FH_DU+0x10c>
+    1fec:	86f18813          	addi	a6,gp,-1937 # 2d67 <FH_DU__MFHZ>
+    1ff0:	00084783          	lbu	a5,0(a6)
+    1ff4:	04078463          	beqz	a5,203c <FH_DU+0x710>
+    1ff8:	87118e93          	addi	t4,gp,-1935 # 2d69 <FH_DU__MFHZ_old>
+    1ffc:	000ec503          	lbu	a0,0(t4)
+    2000:	02051e63          	bnez	a0,203c <FH_DU+0x710>
+    2004:	8e018023          	sb	zero,-1824(gp) # 2dd8 <stable>
+    2008:	f9c00813          	li	a6,-100
+    200c:	86818793          	addi	a5,gp,-1944 # 2d60 <FH_DU__MFH>
+    2010:	88818e93          	addi	t4,gp,-1912 # 2d80 <FH_STEUERUNG_DUMMY_FH_STEUERUNG_DUMMY_next_state>
+    2014:	0107a023          	sw	a6,0(a5)
+    2018:	009e8023          	sb	s1,0(t4)
+    201c:	a1dff06f          	j	1a38 <FH_DU+0x10c>
+    2020:	86f18e93          	addi	t4,gp,-1937 # 2d67 <FH_DU__MFHZ>
+    2024:	000ec503          	lbu	a0,0(t4)
+    2028:	a00518e3          	bnez	a0,1a38 <FH_DU+0x10c>
+    202c:	87118093          	addi	ra,gp,-1935 # 2d69 <FH_DU__MFHZ_old>
+    2030:	0000c903          	lbu	s2,0(ra)
+    2034:	a00902e3          	beqz	s2,1a38 <FH_DU+0x10c>
+    2038:	f9dff06f          	j	1fd4 <FH_DU+0x6a8>
+    203c:	86c18093          	addi	ra,gp,-1940 # 2d64 <FH_DU__MFHA>
+    2040:	0000c903          	lbu	s2,0(ra)
+    2044:	9e090ae3          	beqz	s2,1a38 <FH_DU+0x10c>
+    2048:	86e18813          	addi	a6,gp,-1938 # 2d66 <FH_DU__MFHA_old>
+    204c:	00084783          	lbu	a5,0(a6)
+    2050:	9e0794e3          	bnez	a5,1a38 <FH_DU+0x10c>
+    2054:	06400e93          	li	t4,100
+    2058:	86818513          	addi	a0,gp,-1944 # 2d60 <FH_DU__MFH>
+    205c:	00300093          	li	ra,3
+    2060:	88818913          	addi	s2,gp,-1912 # 2d80 <FH_STEUERUNG_DUMMY_FH_STEUERUNG_DUMMY_next_state>
+    2064:	8e018023          	sb	zero,-1824(gp) # 2dd8 <stable>
+    2068:	01d52023          	sw	t4,0(a0)
+    206c:	00190023          	sb	ra,0(s2)
+    2070:	9c9ff06f          	j	1a38 <FH_DU+0x10c>
+    2074:	0e061863          	bnez	a2,2164 <FH_DU+0x838>
+    2078:	18029a63          	bnez	t0,220c <FH_DU+0x8e0>
+    207c:	8e018023          	sb	zero,-1824(gp) # 2dd8 <stable>
+    2080:	8c018023          	sb	zero,-1856(gp) # 2db8 <FH_TUERMODUL__SFHZ_copy>
+    2084:	8a018ca3          	sb	zero,-1863(gp) # 2db1 <FH_TUERMODUL__SFHA_copy>
+    2088:	8c318593          	addi	a1,gp,-1853 # 2dbb <KINDERSICHERUNG_CTRL_KINDERSICHERUNG_CTRL_next_state>
+    208c:	01f58023          	sb	t6,0(a1)
+    2090:	8c0185a3          	sb	zero,-1845(gp) # 2dc3 <ZENTRAL_KINDERSICHERUNG_CTRL_next_state>
+    2094:	ac9ff06f          	j	1b5c <FH_DU+0x230>
+    2098:	08071a63          	bnez	a4,212c <FH_DU+0x800>
+    209c:	14069a63          	bnez	a3,21f0 <FH_DU+0x8c4>
+    20a0:	08078663          	beqz	a5,212c <FH_DU+0x800>
+    20a4:	8b918313          	addi	t1,gp,-1863 # 2db1 <FH_TUERMODUL__SFHA_copy>
+    20a8:	8e018023          	sb	zero,-1824(gp) # 2dd8 <stable>
+    20ac:	00930023          	sb	s1,0(t1)
+    20b0:	8c318f93          	addi	t6,gp,-1853 # 2dbb <KINDERSICHERUNG_CTRL_KINDERSICHERUNG_CTRL_next_state>
+    20b4:	010f8023          	sb	a6,0(t6)
+    20b8:	aa5ff06f          	j	1b5c <FH_DU+0x230>
+    20bc:	08079a63          	bnez	a5,2150 <FH_DU+0x824>
+    20c0:	0e069e63          	bnez	a3,21bc <FH_DU+0x890>
+    20c4:	8e018023          	sb	zero,-1824(gp) # 2dd8 <stable>
+    20c8:	8c018023          	sb	zero,-1856(gp) # 2db8 <FH_TUERMODUL__SFHZ_copy>
+    20cc:	8a018ca3          	sb	zero,-1863(gp) # 2db1 <FH_TUERMODUL__SFHA_copy>
+    20d0:	00300593          	li	a1,3
+    20d4:	8c318313          	addi	t1,gp,-1853 # 2dbb <KINDERSICHERUNG_CTRL_KINDERSICHERUNG_CTRL_next_state>
+    20d8:	00b30023          	sb	a1,0(t1)
+    20dc:	8c0182a3          	sb	zero,-1851(gp) # 2dbd <MEC_KINDERSICHERUNG_CTRL_next_state>
+    20e0:	a7dff06f          	j	1b5c <FH_DU+0x230>
+    20e4:	05c12083          	lw	ra,92(sp)
+    20e8:	05812403          	lw	s0,88(sp)
+    20ec:	05412483          	lw	s1,84(sp)
+    20f0:	05012903          	lw	s2,80(sp)
+    20f4:	04c12983          	lw	s3,76(sp)
+    20f8:	04812a03          	lw	s4,72(sp)
+    20fc:	04412a83          	lw	s5,68(sp)
+    2100:	04012b03          	lw	s6,64(sp)
+    2104:	03c12b83          	lw	s7,60(sp)
+    2108:	03812c03          	lw	s8,56(sp)
+    210c:	03412c83          	lw	s9,52(sp)
+    2110:	03012d03          	lw	s10,48(sp)
+    2114:	02c12d83          	lw	s11,44(sp)
+    2118:	06010113          	addi	sp,sp,96
+    211c:	00008067          	ret
+    2120:	87d18593          	addi	a1,gp,-1923 # 2d75 <FH_DU__S_FH_FTAUF>
+    2124:	0005c603          	lbu	a2,0(a1)
+    2128:	9bdff06f          	j	1ae4 <FH_DU+0x1b8>
+    212c:	06029863          	bnez	t0,219c <FH_DU+0x870>
+    2130:	a20606e3          	beqz	a2,1b5c <FH_DU+0x230>
+    2134:	a20714e3          	bnez	a4,1b5c <FH_DU+0x230>
+    2138:	8e018023          	sb	zero,-1824(gp) # 2dd8 <stable>
+    213c:	8b918393          	addi	t2,gp,-1863 # 2db1 <FH_TUERMODUL__SFHA_copy>
+    2140:	00938023          	sb	s1,0(t2)
+    2144:	8c318e93          	addi	t4,gp,-1853 # 2dbb <KINDERSICHERUNG_CTRL_KINDERSICHERUNG_CTRL_next_state>
+    2148:	009e8023          	sb	s1,0(t4)
+    214c:	a11ff06f          	j	1b5c <FH_DU+0x230>
+    2150:	8c518593          	addi	a1,gp,-1851 # 2dbd <MEC_KINDERSICHERUNG_CTRL_next_state>
+    2154:	0005c303          	lbu	t1,0(a1)
+    2158:	10930063          	beq	t1,s1,2258 <FH_DU+0x92c>
+    215c:	8e018023          	sb	zero,-1824(gp) # 2dd8 <stable>
+    2160:	9fdff06f          	j	1b5c <FH_DU+0x230>
+    2164:	8cb18593          	addi	a1,gp,-1845 # 2dc3 <ZENTRAL_KINDERSICHERUNG_CTRL_next_state>
+    2168:	0005c803          	lbu	a6,0(a1)
+    216c:	fe9818e3          	bne	a6,s1,215c <FH_DU+0x830>
+    2170:	8b818513          	addi	a0,gp,-1864 # 2db0 <FH_TUERMODUL__SFHA_ZENTRAL_old>
+    2174:	00054e03          	lbu	t3,0(a0)
+    2178:	100e0063          	beqz	t3,2278 <FH_DU+0x94c>
+    217c:	8bf18093          	addi	ra,gp,-1857 # 2db7 <FH_TUERMODUL__SFHZ_ZENTRAL_old>
+    2180:	0000c083          	lbu	ra,0(ra)
+    2184:	0e029663          	bnez	t0,2270 <FH_DU+0x944>
+    2188:	9c008ae3          	beqz	ra,1b5c <FH_DU+0x230>
+    218c:	8e018023          	sb	zero,-1824(gp) # 2dd8 <stable>
+    2190:	8c018023          	sb	zero,-1856(gp) # 2db8 <FH_TUERMODUL__SFHZ_copy>
+    2194:	00958023          	sb	s1,0(a1)
+    2198:	9c5ff06f          	j	1b5c <FH_DU+0x230>
+    219c:	08061e63          	bnez	a2,2238 <FH_DU+0x90c>
+    21a0:	9a071ee3          	bnez	a4,1b5c <FH_DU+0x230>
+    21a4:	8e018023          	sb	zero,-1824(gp) # 2dd8 <stable>
+    21a8:	8c018513          	addi	a0,gp,-1856 # 2db8 <FH_TUERMODUL__SFHZ_copy>
+    21ac:	00950023          	sb	s1,0(a0)
+    21b0:	8c318e13          	addi	t3,gp,-1853 # 2dbb <KINDERSICHERUNG_CTRL_KINDERSICHERUNG_CTRL_next_state>
+    21b4:	009e0023          	sb	s1,0(t3)
+    21b8:	9a5ff06f          	j	1b5c <FH_DU+0x230>
+    21bc:	8c518593          	addi	a1,gp,-1851 # 2dbd <MEC_KINDERSICHERUNG_CTRL_next_state>
+    21c0:	0005c903          	lbu	s2,0(a1)
+    21c4:	f8991ce3          	bne	s2,s1,215c <FH_DU+0x830>
+    21c8:	8bd18893          	addi	a7,gp,-1859 # 2db5 <FH_TUERMODUL__SFHZ_MEC_old>
+    21cc:	0008c383          	lbu	t2,0(a7)
+    21d0:	04038a63          	beqz	t2,2224 <FH_DU+0x8f8>
+    21d4:	8b618e93          	addi	t4,gp,-1866 # 2dae <FH_TUERMODUL__SFHA_MEC_old>
+    21d8:	000ec803          	lbu	a6,0(t4)
+    21dc:	980800e3          	beqz	a6,1b5c <FH_DU+0x230>
+    21e0:	8e018023          	sb	zero,-1824(gp) # 2dd8 <stable>
+    21e4:	8a018ca3          	sb	zero,-1863(gp) # 2db1 <FH_TUERMODUL__SFHA_copy>
+    21e8:	00958023          	sb	s1,0(a1)
+    21ec:	971ff06f          	j	1b5c <FH_DU+0x230>
+    21f0:	8e018023          	sb	zero,-1824(gp) # 2dd8 <stable>
+    21f4:	8c018593          	addi	a1,gp,-1856 # 2db8 <FH_TUERMODUL__SFHZ_copy>
+    21f8:	00958023          	sb	s1,0(a1)
+    21fc:	ea078ae3          	beqz	a5,20b0 <FH_DU+0x784>
+    2200:	8b918313          	addi	t1,gp,-1863 # 2db1 <FH_TUERMODUL__SFHA_copy>
+    2204:	00930023          	sb	s1,0(t1)
+    2208:	ea9ff06f          	j	20b0 <FH_DU+0x784>
+    220c:	8cb18593          	addi	a1,gp,-1845 # 2dc3 <ZENTRAL_KINDERSICHERUNG_CTRL_next_state>
+    2210:	0005c883          	lbu	a7,0(a1)
+    2214:	f49894e3          	bne	a7,s1,215c <FH_DU+0x830>
+    2218:	8bf18393          	addi	t2,gp,-1857 # 2db7 <FH_TUERMODUL__SFHZ_ZENTRAL_old>
+    221c:	0003ce83          	lbu	t4,0(t2)
+    2220:	060e9663          	bnez	t4,228c <FH_DU+0x960>
+    2224:	8e018023          	sb	zero,-1824(gp) # 2dd8 <stable>
+    2228:	8c018813          	addi	a6,gp,-1856 # 2db8 <FH_TUERMODUL__SFHZ_copy>
+    222c:	00980023          	sb	s1,0(a6)
+    2230:	00958023          	sb	s1,0(a1)
+    2234:	929ff06f          	j	1b5c <FH_DU+0x230>
+    2238:	8b918093          	addi	ra,gp,-1863 # 2db1 <FH_TUERMODUL__SFHA_copy>
+    223c:	8e018023          	sb	zero,-1824(gp) # 2dd8 <stable>
+    2240:	00908023          	sb	s1,0(ra)
+    2244:	8c018913          	addi	s2,gp,-1856 # 2db8 <FH_TUERMODUL__SFHZ_copy>
+    2248:	00990023          	sb	s1,0(s2)
+    224c:	8c318893          	addi	a7,gp,-1853 # 2dbb <KINDERSICHERUNG_CTRL_KINDERSICHERUNG_CTRL_next_state>
+    2250:	00988023          	sb	s1,0(a7)
+    2254:	909ff06f          	j	1b5c <FH_DU+0x230>
+    2258:	8b618f93          	addi	t6,gp,-1866 # 2dae <FH_TUERMODUL__SFHA_MEC_old>
+    225c:	000fc503          	lbu	a0,0(t6)
+    2260:	00050c63          	beqz	a0,2278 <FH_DU+0x94c>
+    2264:	8bd18e13          	addi	t3,gp,-1859 # 2db5 <FH_TUERMODUL__SFHZ_MEC_old>
+    2268:	000e4083          	lbu	ra,0(t3)
+    226c:	f0068ee3          	beqz	a3,2188 <FH_DU+0x85c>
+    2270:	fa008ae3          	beqz	ra,2224 <FH_DU+0x8f8>
+    2274:	8e9ff06f          	j	1b5c <FH_DU+0x230>
+    2278:	8e018023          	sb	zero,-1824(gp) # 2dd8 <stable>
+    227c:	8b918913          	addi	s2,gp,-1863 # 2db1 <FH_TUERMODUL__SFHA_copy>
+    2280:	00990023          	sb	s1,0(s2)
+    2284:	00958023          	sb	s1,0(a1)
+    2288:	8d5ff06f          	j	1b5c <FH_DU+0x230>
+    228c:	8b818313          	addi	t1,gp,-1864 # 2db0 <FH_TUERMODUL__SFHA_ZENTRAL_old>
+    2290:	00034f83          	lbu	t6,0(t1)
+    2294:	8c0f84e3          	beqz	t6,1b5c <FH_DU+0x230>
+    2298:	f49ff06f          	j	21e0 <FH_DU+0x8b4>
+
+0000229c <benchmark_body.constprop.0>:
+    229c:	ff010113          	addi	sp,sp,-16
+    22a0:	00812423          	sw	s0,8(sp)
+    22a4:	00001437          	lui	s0,0x1
+    22a8:	00912223          	sw	s1,4(sp)
+    22ac:	00112623          	sw	ra,12(sp)
+    22b0:	d0240413          	addi	s0,s0,-766 # d02 <_start-0x2fe>
+    22b4:	81418493          	addi	s1,gp,-2028 # 2d0c <Bitlist>
+    22b8:	04000613          	li	a2,64
+    22bc:	00000593          	li	a1,0
+    22c0:	00048513          	mv	a0,s1
+    22c4:	035000ef          	jal	ra,2af8 <memset>
+    22c8:	8e01a423          	sw	zero,-1816(gp) # 2de0 <tm_entered_EINSCHALTSTROM_MESSEN_BLOCK_ERKENNUNG_CTRLch_BLOCK_ERKENNUNG_CTRL__N_copy>
+    22cc:	8e01a823          	sw	zero,-1808(gp) # 2de8 <tm_entered_WIEDERHOLSPERRE_FH_TUERMODUL_CTRLexited_BEREIT_FH_TUERMODUL_CTRL>
+    22d0:	8e01a623          	sw	zero,-1812(gp) # 2de4 <tm_entered_WIEDERHOLSPERRE_FH_TUERMODUL_CTRL>
+    22d4:	8c018323          	sb	zero,-1850(gp) # 2dbe <NICHT_INITIALISIERT_NICHT_INITIALISIERT_next_state>
+    22d8:	8c0185a3          	sb	zero,-1845(gp) # 2dc3 <ZENTRAL_KINDERSICHERUNG_CTRL_next_state>
+    22dc:	8c0182a3          	sb	zero,-1851(gp) # 2dbd <MEC_KINDERSICHERUNG_CTRL_next_state>
+    22e0:	8c0181a3          	sb	zero,-1853(gp) # 2dbb <KINDERSICHERUNG_CTRL_KINDERSICHERUNG_CTRL_next_state>
+    22e4:	80018823          	sb	zero,-2032(gp) # 2d08 <B_FH_TUERMODUL_CTRL_next_state>
+    22e8:	00001797          	auipc	a5,0x1
+    22ec:	a0078823          	sb	zero,-1520(a5) # 2cf8 <A_FH_TUERMODUL_CTRL_next_state>
+    22f0:	8c018523          	sb	zero,-1846(gp) # 2dc2 <WIEDERHOLSPERRE_FH_TUERMODUL_CTRL_next_state>
+    22f4:	8c018123          	sb	zero,-1854(gp) # 2dba <INITIALISIERT_FH_TUERMODUL_CTRL_next_state>
+    22f8:	8c0184a3          	sb	zero,-1847(gp) # 2dc1 <TIPP_SCHLIESSEN_FH_TUERMODUL_CTRL_next_state>
+    22fc:	8c018223          	sb	zero,-1852(gp) # 2dbc <MANUELL_SCHLIESSEN_FH_TUERMODUL_CTRL_next_state>
+    2300:	8c0183a3          	sb	zero,-1849(gp) # 2dbf <OEFFNEN_FH_TUERMODUL_CTRL_next_state>
+    2304:	8c018423          	sb	zero,-1848(gp) # 2dc0 <SCHLIESSEN_FH_TUERMODUL_CTRL_next_state>
+    2308:	88018423          	sb	zero,-1912(gp) # 2d80 <FH_STEUERUNG_DUMMY_FH_STEUERUNG_DUMMY_next_state>
+    230c:	84018a23          	sb	zero,-1964(gp) # 2d4c <EINKLEMMSCHUTZ_CTRL_EINKLEMMSCHUTZ_CTRL_next_state>
+    2310:	00001797          	auipc	a5,0x1
+    2314:	9e0784a3          	sb	zero,-1559(a5) # 2cf9 <BEWEGUNG_BLOCK_ERKENNUNG_CTRL_next_state>
+    2318:	00001797          	auipc	a5,0x1
+    231c:	9e078123          	sb	zero,-1566(a5) # 2cfa <BLOCK_ERKENNUNG_CTRL_BLOCK_ERKENNUNG_CTRL_next_state>
+    2320:	b94ff0ef          	jal	ra,16b4 <interface>
+    2324:	e08ff0ef          	jal	ra,192c <FH_DU>
+    2328:	04000613          	li	a2,64
+    232c:	00000593          	li	a1,0
+    2330:	00048513          	mv	a0,s1
+    2334:	7c4000ef          	jal	ra,2af8 <memset>
+    2338:	8e01a423          	sw	zero,-1816(gp) # 2de0 <tm_entered_EINSCHALTSTROM_MESSEN_BLOCK_ERKENNUNG_CTRLch_BLOCK_ERKENNUNG_CTRL__N_copy>
+    233c:	8e01a823          	sw	zero,-1808(gp) # 2de8 <tm_entered_WIEDERHOLSPERRE_FH_TUERMODUL_CTRLexited_BEREIT_FH_TUERMODUL_CTRL>
+    2340:	8e01a623          	sw	zero,-1812(gp) # 2de4 <tm_entered_WIEDERHOLSPERRE_FH_TUERMODUL_CTRL>
+    2344:	8c018323          	sb	zero,-1850(gp) # 2dbe <NICHT_INITIALISIERT_NICHT_INITIALISIERT_next_state>
+    2348:	8c0185a3          	sb	zero,-1845(gp) # 2dc3 <ZENTRAL_KINDERSICHERUNG_CTRL_next_state>
+    234c:	8c0182a3          	sb	zero,-1851(gp) # 2dbd <MEC_KINDERSICHERUNG_CTRL_next_state>
+    2350:	8c0181a3          	sb	zero,-1853(gp) # 2dbb <KINDERSICHERUNG_CTRL_KINDERSICHERUNG_CTRL_next_state>
+    2354:	80018823          	sb	zero,-2032(gp) # 2d08 <B_FH_TUERMODUL_CTRL_next_state>
+    2358:	00001797          	auipc	a5,0x1
+    235c:	9a078023          	sb	zero,-1632(a5) # 2cf8 <A_FH_TUERMODUL_CTRL_next_state>
+    2360:	8c018523          	sb	zero,-1846(gp) # 2dc2 <WIEDERHOLSPERRE_FH_TUERMODUL_CTRL_next_state>
+    2364:	ffe40413          	addi	s0,s0,-2
+    2368:	8c018123          	sb	zero,-1854(gp) # 2dba <INITIALISIERT_FH_TUERMODUL_CTRL_next_state>
+    236c:	8c0184a3          	sb	zero,-1847(gp) # 2dc1 <TIPP_SCHLIESSEN_FH_TUERMODUL_CTRL_next_state>
+    2370:	8c018223          	sb	zero,-1852(gp) # 2dbc <MANUELL_SCHLIESSEN_FH_TUERMODUL_CTRL_next_state>
+    2374:	8c0183a3          	sb	zero,-1849(gp) # 2dbf <OEFFNEN_FH_TUERMODUL_CTRL_next_state>
+    2378:	8c018423          	sb	zero,-1848(gp) # 2dc0 <SCHLIESSEN_FH_TUERMODUL_CTRL_next_state>
+    237c:	88018423          	sb	zero,-1912(gp) # 2d80 <FH_STEUERUNG_DUMMY_FH_STEUERUNG_DUMMY_next_state>
+    2380:	84018a23          	sb	zero,-1964(gp) # 2d4c <EINKLEMMSCHUTZ_CTRL_EINKLEMMSCHUTZ_CTRL_next_state>
+    2384:	00001797          	auipc	a5,0x1
+    2388:	96078aa3          	sb	zero,-1675(a5) # 2cf9 <BEWEGUNG_BLOCK_ERKENNUNG_CTRL_next_state>
+    238c:	00001797          	auipc	a5,0x1
+    2390:	96078723          	sb	zero,-1682(a5) # 2cfa <BLOCK_ERKENNUNG_CTRL_BLOCK_ERKENNUNG_CTRL_next_state>
+    2394:	b20ff0ef          	jal	ra,16b4 <interface>
+    2398:	d94ff0ef          	jal	ra,192c <FH_DU>
+    239c:	f0041ee3          	bnez	s0,22b8 <benchmark_body.constprop.0+0x1c>
+    23a0:	00c12083          	lw	ra,12(sp)
+    23a4:	00812403          	lw	s0,8(sp)
+    23a8:	00412483          	lw	s1,4(sp)
+    23ac:	00000513          	li	a0,0
+    23b0:	01010113          	addi	sp,sp,16
+    23b4:	00008067          	ret
+
+000023b8 <benchmark_body.constprop.1.isra.0>:
+    23b8:	14050263          	beqz	a0,24fc <benchmark_body.constprop.1.isra.0+0x144>
+    23bc:	ff010113          	addi	sp,sp,-16
+    23c0:	00812423          	sw	s0,8(sp)
+    23c4:	00912223          	sw	s1,4(sp)
+    23c8:	01212023          	sw	s2,0(sp)
+    23cc:	00112623          	sw	ra,12(sp)
+    23d0:	00157793          	andi	a5,a0,1
+    23d4:	00050913          	mv	s2,a0
+    23d8:	00000413          	li	s0,0
+    23dc:	81418493          	addi	s1,gp,-2028 # 2d0c <Bitlist>
+    23e0:	10079263          	bnez	a5,24e4 <benchmark_body.constprop.1.isra.0+0x12c>
+    23e4:	04000613          	li	a2,64
+    23e8:	00000593          	li	a1,0
+    23ec:	00048513          	mv	a0,s1
+    23f0:	708000ef          	jal	ra,2af8 <memset>
+    23f4:	8e01a423          	sw	zero,-1816(gp) # 2de0 <tm_entered_EINSCHALTSTROM_MESSEN_BLOCK_ERKENNUNG_CTRLch_BLOCK_ERKENNUNG_CTRL__N_copy>
+    23f8:	8e01a823          	sw	zero,-1808(gp) # 2de8 <tm_entered_WIEDERHOLSPERRE_FH_TUERMODUL_CTRLexited_BEREIT_FH_TUERMODUL_CTRL>
+    23fc:	8e01a623          	sw	zero,-1812(gp) # 2de4 <tm_entered_WIEDERHOLSPERRE_FH_TUERMODUL_CTRL>
+    2400:	8c018323          	sb	zero,-1850(gp) # 2dbe <NICHT_INITIALISIERT_NICHT_INITIALISIERT_next_state>
+    2404:	8c0185a3          	sb	zero,-1845(gp) # 2dc3 <ZENTRAL_KINDERSICHERUNG_CTRL_next_state>
+    2408:	8c0182a3          	sb	zero,-1851(gp) # 2dbd <MEC_KINDERSICHERUNG_CTRL_next_state>
+    240c:	8c0181a3          	sb	zero,-1853(gp) # 2dbb <KINDERSICHERUNG_CTRL_KINDERSICHERUNG_CTRL_next_state>
+    2410:	80018823          	sb	zero,-2032(gp) # 2d08 <B_FH_TUERMODUL_CTRL_next_state>
+    2414:	00001797          	auipc	a5,0x1
+    2418:	8e078223          	sb	zero,-1820(a5) # 2cf8 <A_FH_TUERMODUL_CTRL_next_state>
+    241c:	8c018523          	sb	zero,-1846(gp) # 2dc2 <WIEDERHOLSPERRE_FH_TUERMODUL_CTRL_next_state>
+    2420:	8c018123          	sb	zero,-1854(gp) # 2dba <INITIALISIERT_FH_TUERMODUL_CTRL_next_state>
+    2424:	8c0184a3          	sb	zero,-1847(gp) # 2dc1 <TIPP_SCHLIESSEN_FH_TUERMODUL_CTRL_next_state>
+    2428:	8c018223          	sb	zero,-1852(gp) # 2dbc <MANUELL_SCHLIESSEN_FH_TUERMODUL_CTRL_next_state>
+    242c:	8c0183a3          	sb	zero,-1849(gp) # 2dbf <OEFFNEN_FH_TUERMODUL_CTRL_next_state>
+    2430:	8c018423          	sb	zero,-1848(gp) # 2dc0 <SCHLIESSEN_FH_TUERMODUL_CTRL_next_state>
+    2434:	88018423          	sb	zero,-1912(gp) # 2d80 <FH_STEUERUNG_DUMMY_FH_STEUERUNG_DUMMY_next_state>
+    2438:	84018a23          	sb	zero,-1964(gp) # 2d4c <EINKLEMMSCHUTZ_CTRL_EINKLEMMSCHUTZ_CTRL_next_state>
+    243c:	00001797          	auipc	a5,0x1
+    2440:	8a078ea3          	sb	zero,-1859(a5) # 2cf9 <BEWEGUNG_BLOCK_ERKENNUNG_CTRL_next_state>
+    2444:	00001797          	auipc	a5,0x1
+    2448:	8a078b23          	sb	zero,-1866(a5) # 2cfa <BLOCK_ERKENNUNG_CTRL_BLOCK_ERKENNUNG_CTRL_next_state>
+    244c:	a68ff0ef          	jal	ra,16b4 <interface>
+    2450:	cdcff0ef          	jal	ra,192c <FH_DU>
+    2454:	04000613          	li	a2,64
+    2458:	00000593          	li	a1,0
+    245c:	00048513          	mv	a0,s1
+    2460:	698000ef          	jal	ra,2af8 <memset>
+    2464:	00240413          	addi	s0,s0,2
+    2468:	8e01a423          	sw	zero,-1816(gp) # 2de0 <tm_entered_EINSCHALTSTROM_MESSEN_BLOCK_ERKENNUNG_CTRLch_BLOCK_ERKENNUNG_CTRL__N_copy>
+    246c:	8e01a823          	sw	zero,-1808(gp) # 2de8 <tm_entered_WIEDERHOLSPERRE_FH_TUERMODUL_CTRLexited_BEREIT_FH_TUERMODUL_CTRL>
+    2470:	8e01a623          	sw	zero,-1812(gp) # 2de4 <tm_entered_WIEDERHOLSPERRE_FH_TUERMODUL_CTRL>
+    2474:	8c018323          	sb	zero,-1850(gp) # 2dbe <NICHT_INITIALISIERT_NICHT_INITIALISIERT_next_state>
+    2478:	8c0185a3          	sb	zero,-1845(gp) # 2dc3 <ZENTRAL_KINDERSICHERUNG_CTRL_next_state>
+    247c:	8c0182a3          	sb	zero,-1851(gp) # 2dbd <MEC_KINDERSICHERUNG_CTRL_next_state>
+    2480:	8c0181a3          	sb	zero,-1853(gp) # 2dbb <KINDERSICHERUNG_CTRL_KINDERSICHERUNG_CTRL_next_state>
+    2484:	80018823          	sb	zero,-2032(gp) # 2d08 <B_FH_TUERMODUL_CTRL_next_state>
+    2488:	00001797          	auipc	a5,0x1
+    248c:	86078823          	sb	zero,-1936(a5) # 2cf8 <A_FH_TUERMODUL_CTRL_next_state>
+    2490:	8c018523          	sb	zero,-1846(gp) # 2dc2 <WIEDERHOLSPERRE_FH_TUERMODUL_CTRL_next_state>
+    2494:	8c018123          	sb	zero,-1854(gp) # 2dba <INITIALISIERT_FH_TUERMODUL_CTRL_next_state>
+    2498:	8c0184a3          	sb	zero,-1847(gp) # 2dc1 <TIPP_SCHLIESSEN_FH_TUERMODUL_CTRL_next_state>
+    249c:	8c018223          	sb	zero,-1852(gp) # 2dbc <MANUELL_SCHLIESSEN_FH_TUERMODUL_CTRL_next_state>
+    24a0:	8c0183a3          	sb	zero,-1849(gp) # 2dbf <OEFFNEN_FH_TUERMODUL_CTRL_next_state>
+    24a4:	8c018423          	sb	zero,-1848(gp) # 2dc0 <SCHLIESSEN_FH_TUERMODUL_CTRL_next_state>
+    24a8:	88018423          	sb	zero,-1912(gp) # 2d80 <FH_STEUERUNG_DUMMY_FH_STEUERUNG_DUMMY_next_state>
+    24ac:	84018a23          	sb	zero,-1964(gp) # 2d4c <EINKLEMMSCHUTZ_CTRL_EINKLEMMSCHUTZ_CTRL_next_state>
+    24b0:	00001797          	auipc	a5,0x1
+    24b4:	840784a3          	sb	zero,-1975(a5) # 2cf9 <BEWEGUNG_BLOCK_ERKENNUNG_CTRL_next_state>
+    24b8:	00001797          	auipc	a5,0x1
+    24bc:	84078123          	sb	zero,-1982(a5) # 2cfa <BLOCK_ERKENNUNG_CTRL_BLOCK_ERKENNUNG_CTRL_next_state>
+    24c0:	9f4ff0ef          	jal	ra,16b4 <interface>
+    24c4:	c68ff0ef          	jal	ra,192c <FH_DU>
+    24c8:	f1241ee3          	bne	s0,s2,23e4 <benchmark_body.constprop.1.isra.0+0x2c>
+    24cc:	00c12083          	lw	ra,12(sp)
+    24d0:	00812403          	lw	s0,8(sp)
+    24d4:	00412483          	lw	s1,4(sp)
+    24d8:	00012903          	lw	s2,0(sp)
+    24dc:	01010113          	addi	sp,sp,16
+    24e0:	00008067          	ret
+    24e4:	04000613          	li	a2,64
+    24e8:	00000593          	li	a1,0
+    24ec:	00048513          	mv	a0,s1
+    24f0:	608000ef          	jal	ra,2af8 <memset>
+    24f4:	00100413          	li	s0,1
+    24f8:	f71ff06f          	j	2468 <benchmark_body.constprop.1.isra.0+0xb0>
+    24fc:	00008067          	ret
+
+00002500 <warm_caches>:
+    2500:	eb9ff06f          	j	23b8 <benchmark_body.constprop.1.isra.0>
+
+00002504 <benchmark>:
+    2504:	d99ff06f          	j	229c <benchmark_body.constprop.0>
+
+00002508 <initialise_benchmark>:
+    2508:	00008067          	ret
+
+0000250c <verify_benchmark>:
+    250c:	fc010113          	addi	sp,sp,-64
+    2510:	00000797          	auipc	a5,0x0
+    2514:	6c478793          	addi	a5,a5,1732 # 2bd4 <memset+0xdc>
+    2518:	00010713          	mv	a4,sp
+    251c:	00000817          	auipc	a6,0x0
+    2520:	6f880813          	addi	a6,a6,1784 # 2c14 <memset+0x11c>
+    2524:	0007a503          	lw	a0,0(a5)
+    2528:	0047a583          	lw	a1,4(a5)
+    252c:	0087a603          	lw	a2,8(a5)
+    2530:	00c7a683          	lw	a3,12(a5)
+    2534:	00a72023          	sw	a0,0(a4)
+    2538:	00b72223          	sw	a1,4(a4)
+    253c:	00c72423          	sw	a2,8(a4)
+    2540:	00d72623          	sw	a3,12(a4)
+    2544:	01078793          	addi	a5,a5,16
+    2548:	01070713          	addi	a4,a4,16
+    254c:	fd079ce3          	bne	a5,a6,2524 <verify_benchmark+0x18>
+    2550:	81418713          	addi	a4,gp,-2028 # 2d0c <Bitlist>
+    2554:	00010793          	mv	a5,sp
+    2558:	85418293          	addi	t0,gp,-1964 # 2d4c <EINKLEMMSCHUTZ_CTRL_EINKLEMMSCHUTZ_CTRL_next_state>
+    255c:	00074303          	lbu	t1,0(a4)
+    2560:	0007c383          	lbu	t2,0(a5)
+    2564:	12731263          	bne	t1,t2,2688 <verify_benchmark+0x17c>
+    2568:	00174883          	lbu	a7,1(a4)
+    256c:	0017ce03          	lbu	t3,1(a5)
+    2570:	11c89c63          	bne	a7,t3,2688 <verify_benchmark+0x17c>
+    2574:	00274e83          	lbu	t4,2(a4)
+    2578:	0027cf03          	lbu	t5,2(a5)
+    257c:	11ee9663          	bne	t4,t5,2688 <verify_benchmark+0x17c>
+    2580:	00374f83          	lbu	t6,3(a4)
+    2584:	0037c803          	lbu	a6,3(a5)
+    2588:	110f9063          	bne	t6,a6,2688 <verify_benchmark+0x17c>
+    258c:	00474503          	lbu	a0,4(a4)
+    2590:	0047c583          	lbu	a1,4(a5)
+    2594:	0eb51a63          	bne	a0,a1,2688 <verify_benchmark+0x17c>
+    2598:	00574603          	lbu	a2,5(a4)
+    259c:	0057c683          	lbu	a3,5(a5)
+    25a0:	0ed61463          	bne	a2,a3,2688 <verify_benchmark+0x17c>
+    25a4:	00674303          	lbu	t1,6(a4)
+    25a8:	0067c383          	lbu	t2,6(a5)
+    25ac:	0c731e63          	bne	t1,t2,2688 <verify_benchmark+0x17c>
+    25b0:	00774883          	lbu	a7,7(a4)
+    25b4:	0077ce03          	lbu	t3,7(a5)
+    25b8:	00870713          	addi	a4,a4,8
+    25bc:	00878793          	addi	a5,a5,8
+    25c0:	0dc89463          	bne	a7,t3,2688 <verify_benchmark+0x17c>
+    25c4:	f8571ce3          	bne	a4,t0,255c <verify_benchmark+0x50>
+    25c8:	8e81a283          	lw	t0,-1816(gp) # 2de0 <tm_entered_EINSCHALTSTROM_MESSEN_BLOCK_ERKENNUNG_CTRLch_BLOCK_ERKENNUNG_CTRL__N_copy>
+    25cc:	8f01ae83          	lw	t4,-1808(gp) # 2de8 <tm_entered_WIEDERHOLSPERRE_FH_TUERMODUL_CTRLexited_BEREIT_FH_TUERMODUL_CTRL>
+    25d0:	01d2ef33          	or	t5,t0,t4
+    25d4:	8ec1af83          	lw	t6,-1812(gp) # 2de4 <tm_entered_WIEDERHOLSPERRE_FH_TUERMODUL_CTRL>
+    25d8:	01ff6833          	or	a6,t5,t6
+    25dc:	00000513          	li	a0,0
+    25e0:	0a081663          	bnez	a6,268c <verify_benchmark+0x180>
+    25e4:	8c31c583          	lbu	a1,-1853(gp) # 2dbb <KINDERSICHERUNG_CTRL_KINDERSICHERUNG_CTRL_next_state>
+    25e8:	00300613          	li	a2,3
+    25ec:	0ac59063          	bne	a1,a2,268c <verify_benchmark+0x180>
+    25f0:	8101c303          	lbu	t1,-2032(gp) # 2d08 <B_FH_TUERMODUL_CTRL_next_state>
+    25f4:	00200693          	li	a3,2
+    25f8:	08d31a63          	bne	t1,a3,268c <verify_benchmark+0x180>
+    25fc:	00000397          	auipc	t2,0x0
+    2600:	6fc3c383          	lbu	t2,1788(t2) # 2cf8 <A_FH_TUERMODUL_CTRL_next_state>
+    2604:	00100893          	li	a7,1
+    2608:	09139263          	bne	t2,a7,268c <verify_benchmark+0x180>
+    260c:	8ca1ce03          	lbu	t3,-1846(gp) # 2dc2 <WIEDERHOLSPERRE_FH_TUERMODUL_CTRL_next_state>
+    2610:	067e1e63          	bne	t3,t2,268c <verify_benchmark+0x180>
+    2614:	8881c703          	lbu	a4,-1912(gp) # 2d80 <FH_STEUERUNG_DUMMY_FH_STEUERUNG_DUMMY_next_state>
+    2618:	06671a63          	bne	a4,t1,268c <verify_benchmark+0x180>
+    261c:	8541c783          	lbu	a5,-1964(gp) # 2d4c <EINKLEMMSCHUTZ_CTRL_EINKLEMMSCHUTZ_CTRL_next_state>
+    2620:	07c79663          	bne	a5,t3,268c <verify_benchmark+0x180>
+    2624:	8c61c283          	lbu	t0,-1850(gp) # 2dbe <NICHT_INITIALISIERT_NICHT_INITIALISIERT_next_state>
+    2628:	8cb1ce83          	lbu	t4,-1845(gp) # 2dc3 <ZENTRAL_KINDERSICHERUNG_CTRL_next_state>
+    262c:	01d2ef33          	or	t5,t0,t4
+    2630:	8c51cf83          	lbu	t6,-1851(gp) # 2dbd <MEC_KINDERSICHERUNG_CTRL_next_state>
+    2634:	01ff6833          	or	a6,t5,t6
+    2638:	8c21c583          	lbu	a1,-1854(gp) # 2dba <INITIALISIERT_FH_TUERMODUL_CTRL_next_state>
+    263c:	00b86633          	or	a2,a6,a1
+    2640:	8c91c303          	lbu	t1,-1847(gp) # 2dc1 <TIPP_SCHLIESSEN_FH_TUERMODUL_CTRL_next_state>
+    2644:	006666b3          	or	a3,a2,t1
+    2648:	8c41c383          	lbu	t2,-1852(gp) # 2dbc <MANUELL_SCHLIESSEN_FH_TUERMODUL_CTRL_next_state>
+    264c:	0076e8b3          	or	a7,a3,t2
+    2650:	8c71ce03          	lbu	t3,-1849(gp) # 2dbf <OEFFNEN_FH_TUERMODUL_CTRL_next_state>
+    2654:	01c8e7b3          	or	a5,a7,t3
+    2658:	8c81c703          	lbu	a4,-1848(gp) # 2dc0 <SCHLIESSEN_FH_TUERMODUL_CTRL_next_state>
+    265c:	00e7e2b3          	or	t0,a5,a4
+    2660:	00000e97          	auipc	t4,0x0
+    2664:	699ece83          	lbu	t4,1689(t4) # 2cf9 <BEWEGUNG_BLOCK_ERKENNUNG_CTRL_next_state>
+    2668:	01d2ef33          	or	t5,t0,t4
+    266c:	0fff7f93          	zext.b	t6,t5
+    2670:	000f9e63          	bnez	t6,268c <verify_benchmark+0x180>
+    2674:	00000517          	auipc	a0,0x0
+    2678:	68654503          	lbu	a0,1670(a0) # 2cfa <BLOCK_ERKENNUNG_CTRL_BLOCK_ERKENNUNG_CTRL_next_state>
+    267c:	fff50813          	addi	a6,a0,-1
+    2680:	00183513          	seqz	a0,a6
+    2684:	0080006f          	j	268c <verify_benchmark+0x180>
+    2688:	00000513          	li	a0,0
+    268c:	04010113          	addi	sp,sp,64
+    2690:	00008067          	ret
+
+00002694 <main>:
+    2694:	fe010113          	addi	sp,sp,-32
+    2698:	00112e23          	sw	ra,28(sp)
+    269c:	03c000ef          	jal	ra,26d8 <initialise_board>
+    26a0:	e69ff0ef          	jal	ra,2508 <initialise_benchmark>
+    26a4:	00100513          	li	a0,1
+    26a8:	e59ff0ef          	jal	ra,2500 <warm_caches>
+    26ac:	0f0000ef          	jal	ra,279c <start_trigger>
+    26b0:	e55ff0ef          	jal	ra,2504 <benchmark>
+    26b4:	00a12623          	sw	a0,12(sp)
+    26b8:	11c000ef          	jal	ra,27d4 <stop_trigger>
+    26bc:	00c12503          	lw	a0,12(sp)
+    26c0:	e4dff0ef          	jal	ra,250c <verify_benchmark>
+    26c4:	180000ef          	jal	ra,2844 <finish_benchmark>
+    26c8:	01c12083          	lw	ra,28(sp)
+    26cc:	00000513          	li	a0,0
+    26d0:	02010113          	addi	sp,sp,32
+    26d4:	00008067          	ret
+
+000026d8 <initialise_board>:
+    26d8:	10000737          	lui	a4,0x10000
+    26dc:	eb0007b7          	lui	a5,0xeb000
+    26e0:	10072423          	sw	zero,264(a4) # 10000108 <__stack_top+0xfff0108>
+    26e4:	01078293          	addi	t0,a5,16 # eb000010 <__stack_top+0xeaff0010>
+    26e8:	00293637          	lui	a2,0x293
+    26ec:	00572023          	sw	t0,0(a4)
+    26f0:	04500e13          	li	t3,69
+    26f4:	00000597          	auipc	a1,0x0
+    26f8:	52058593          	addi	a1,a1,1312 # 2c14 <memset+0x11c>
+    26fc:	2df60313          	addi	t1,a2,735 # 2932df <__stack_top+0x2832df>
+    2700:	00158593          	addi	a1,a1,1
+    2704:	10472383          	lw	t2,260(a4)
+    2708:	0013f513          	andi	a0,t2,1
+    270c:	fe050ce3          	beqz	a0,2704 <initialise_board+0x2c>
+    2710:	11c72023          	sw	t3,256(a4)
+    2714:	30072683          	lw	a3,768(a4)
+    2718:	30072803          	lw	a6,768(a4)
+    271c:	40d808b3          	sub	a7,a6,a3
+    2720:	ff137ce3          	bgeu	t1,a7,2718 <initialise_board+0x40>
+    2724:	0005ce03          	lbu	t3,0(a1)
+    2728:	fc0e1ce3          	bnez	t3,2700 <initialise_board+0x28>
+    272c:	10000eb7          	lui	t4,0x10000
+    2730:	04700f13          	li	t5,71
+    2734:	100eaf83          	lw	t6,256(t4) # 10000100 <__stack_top+0xfff0100>
+    2738:	ffef9ee3          	bne	t6,t5,2734 <initialise_board+0x5c>
+    273c:	002937b7          	lui	a5,0x293
+    2740:	04500813          	li	a6,69
+    2744:	00000617          	auipc	a2,0x0
+    2748:	4f060613          	addi	a2,a2,1264 # 2c34 <memset+0x13c>
+    274c:	10000737          	lui	a4,0x10000
+    2750:	2df78293          	addi	t0,a5,735 # 2932df <__stack_top+0x2832df>
+    2754:	00160613          	addi	a2,a2,1
+    2758:	10472303          	lw	t1,260(a4) # 10000104 <__stack_top+0xfff0104>
+    275c:	00137593          	andi	a1,t1,1
+    2760:	fe058ce3          	beqz	a1,2758 <initialise_board+0x80>
+    2764:	11072023          	sw	a6,256(a4)
+    2768:	30072383          	lw	t2,768(a4)
+    276c:	30072503          	lw	a0,768(a4)
+    2770:	407506b3          	sub	a3,a0,t2
+    2774:	fed2fce3          	bgeu	t0,a3,276c <initialise_board+0x94>
+    2778:	00064803          	lbu	a6,0(a2)
+    277c:	fc081ce3          	bnez	a6,2754 <initialise_board+0x7c>
+    2780:	100008b7          	lui	a7,0x10000
+    2784:	1048ae03          	lw	t3,260(a7) # 10000104 <__stack_top+0xfff0104>
+    2788:	002e7e93          	andi	t4,t3,2
+    278c:	fe0e8ce3          	beqz	t4,2784 <initialise_board+0xac>
+    2790:	eb000f37          	lui	t5,0xeb000
+    2794:	01e8a023          	sw	t5,0(a7)
+    2798:	00008067          	ret
+
+0000279c <start_trigger>:
+    279c:	100007b7          	lui	a5,0x10000
+    27a0:	00100713          	li	a4,1
+    27a4:	40e7a023          	sw	a4,1024(a5) # 10000400 <__stack_top+0xfff0400>
+    27a8:	4107a683          	lw	a3,1040(a5)
+    27ac:	4147a583          	lw	a1,1044(a5)
+    27b0:	4187a603          	lw	a2,1048(a5)
+    27b4:	41c7a303          	lw	t1,1052(a5)
+    27b8:	8f818293          	addi	t0,gp,-1800 # 2df0 <begin_cycles>
+    27bc:	90018393          	addi	t2,gp,-1792 # 2df8 <begin_retired>
+    27c0:	00d2a023          	sw	a3,0(t0)
+    27c4:	00b2a223          	sw	a1,4(t0)
+    27c8:	00c3a023          	sw	a2,0(t2)
+    27cc:	0063a223          	sw	t1,4(t2)
+    27d0:	00008067          	ret
+
+000027d4 <stop_trigger>:
+    27d4:	10000637          	lui	a2,0x10000
+    27d8:	00100793          	li	a5,1
+    27dc:	40f62023          	sw	a5,1024(a2) # 10000400 <__stack_top+0xfff0400>
+    27e0:	8f818e13          	addi	t3,gp,-1800 # 2df0 <begin_cycles>
+    27e4:	90018313          	addi	t1,gp,-1792 # 2df8 <begin_retired>
+    27e8:	41062883          	lw	a7,1040(a2)
+    27ec:	000e2283          	lw	t0,0(t3)
+    27f0:	41462683          	lw	a3,1044(a2)
+    27f4:	00032583          	lw	a1,0(t1)
+    27f8:	41862503          	lw	a0,1048(a2)
+    27fc:	004e2e83          	lw	t4,4(t3)
+    2800:	41c62703          	lw	a4,1052(a2)
+    2804:	00432f03          	lw	t5,4(t1)
+    2808:	405883b3          	sub	t2,a7,t0
+    280c:	40b50fb3          	sub	t6,a0,a1
+    2810:	0078b633          	sltu	a2,a7,t2
+    2814:	90818813          	addi	a6,gp,-1784 # 2e00 <elapsed_cycles>
+    2818:	41d687b3          	sub	a5,a3,t4
+    281c:	01f53e33          	sltu	t3,a0,t6
+    2820:	41e708b3          	sub	a7,a4,t5
+    2824:	91018293          	addi	t0,gp,-1776 # 2e08 <elapsed_retired>
+    2828:	00782023          	sw	t2,0(a6)
+    282c:	40c786b3          	sub	a3,a5,a2
+    2830:	41c883b3          	sub	t2,a7,t3
+    2834:	00d82223          	sw	a3,4(a6)
+    2838:	01f2a023          	sw	t6,0(t0)
+    283c:	0072a223          	sw	t2,4(t0)
+    2840:	00008067          	ret
+
+00002844 <finish_benchmark>:
+    2844:	00293637          	lui	a2,0x293
+    2848:	04500893          	li	a7,69
+    284c:	00000597          	auipc	a1,0x0
+    2850:	42458593          	addi	a1,a1,1060 # 2c70 <memset+0x178>
+    2854:	10000737          	lui	a4,0x10000
+    2858:	2df60293          	addi	t0,a2,735 # 2932df <__stack_top+0x2832df>
+    285c:	00158593          	addi	a1,a1,1
+    2860:	10472783          	lw	a5,260(a4) # 10000104 <__stack_top+0xfff0104>
+    2864:	0017f313          	andi	t1,a5,1
+    2868:	fe030ce3          	beqz	t1,2860 <finish_benchmark+0x1c>
+    286c:	11172023          	sw	a7,256(a4)
+    2870:	30072683          	lw	a3,768(a4)
+    2874:	30072383          	lw	t2,768(a4)
+    2878:	40d38833          	sub	a6,t2,a3
+    287c:	ff02fce3          	bgeu	t0,a6,2874 <finish_benchmark+0x30>
+    2880:	0005c883          	lbu	a7,0(a1)
+    2884:	fc089ce3          	bnez	a7,285c <finish_benchmark+0x18>
+    2888:	90818e13          	addi	t3,gp,-1784 # 2e00 <elapsed_cycles>
+    288c:	004e2f83          	lw	t6,4(t3)
+    2890:	000e2f03          	lw	t5,0(t3)
+    2894:	00293637          	lui	a2,0x293
+    2898:	03c00813          	li	a6,60
+    289c:	00000297          	auipc	t0,0x0
+    28a0:	43028293          	addi	t0,t0,1072 # 2ccc <memset+0x1d4>
+    28a4:	001f9e93          	slli	t4,t6,0x1
+    28a8:	01f00313          	li	t1,31
+    28ac:	10000737          	lui	a4,0x10000
+    28b0:	2df60593          	addi	a1,a2,735 # 2932df <__stack_top+0x2832df>
+    28b4:	ffc00693          	li	a3,-4
+    28b8:	fe080793          	addi	a5,a6,-32
+    28bc:	1c07c063          	bltz	a5,2a7c <finish_benchmark+0x238>
+    28c0:	00ffd633          	srl	a2,t6,a5
+    28c4:	00f67793          	andi	a5,a2,15
+    28c8:	00f283b3          	add	t2,t0,a5
+    28cc:	0003c883          	lbu	a7,0(t2)
+    28d0:	10472e03          	lw	t3,260(a4) # 10000104 <__stack_top+0xfff0104>
+    28d4:	001e7613          	andi	a2,t3,1
+    28d8:	fe060ce3          	beqz	a2,28d0 <finish_benchmark+0x8c>
+    28dc:	11172023          	sw	a7,256(a4)
+    28e0:	30072383          	lw	t2,768(a4)
+    28e4:	30072783          	lw	a5,768(a4)
+    28e8:	407788b3          	sub	a7,a5,t2
+    28ec:	ff15fce3          	bgeu	a1,a7,28e4 <finish_benchmark+0xa0>
+    28f0:	ffc80813          	addi	a6,a6,-4
+    28f4:	fcd812e3          	bne	a6,a3,28b8 <finish_benchmark+0x74>
+    28f8:	00293f37          	lui	t5,0x293
+    28fc:	02000393          	li	t2,32
+    2900:	00000317          	auipc	t1,0x0
+    2904:	38430313          	addi	t1,t1,900 # 2c84 <memset+0x18c>
+    2908:	10000fb7          	lui	t6,0x10000
+    290c:	2dff0e93          	addi	t4,t5,735 # 2932df <__stack_top+0x2832df>
+    2910:	00130313          	addi	t1,t1,1
+    2914:	104fa703          	lw	a4,260(t6) # 10000104 <__stack_top+0xfff0104>
+    2918:	00177593          	andi	a1,a4,1
+    291c:	fe058ce3          	beqz	a1,2914 <finish_benchmark+0xd0>
+    2920:	107fa023          	sw	t2,256(t6)
+    2924:	300fa683          	lw	a3,768(t6)
+    2928:	300fae03          	lw	t3,768(t6)
+    292c:	40de0633          	sub	a2,t3,a3
+    2930:	fecefce3          	bgeu	t4,a2,2928 <finish_benchmark+0xe4>
+    2934:	00034383          	lbu	t2,0(t1)
+    2938:	fc039ce3          	bnez	t2,2910 <finish_benchmark+0xcc>
+    293c:	91018793          	addi	a5,gp,-1776 # 2e08 <elapsed_retired>
+    2940:	0047af83          	lw	t6,4(a5)
+    2944:	0007af03          	lw	t5,0(a5)
+    2948:	002938b7          	lui	a7,0x293
+    294c:	03c00813          	li	a6,60
+    2950:	001f9e93          	slli	t4,t6,0x1
+    2954:	01f00313          	li	t1,31
+    2958:	10000737          	lui	a4,0x10000
+    295c:	2df88593          	addi	a1,a7,735 # 2932df <__stack_top+0x2832df>
+    2960:	ffc00693          	li	a3,-4
+    2964:	fe080e13          	addi	t3,a6,-32
+    2968:	100e4063          	bltz	t3,2a68 <finish_benchmark+0x224>
+    296c:	01cfd8b3          	srl	a7,t6,t3
+    2970:	00f8fe13          	andi	t3,a7,15
+    2974:	01c28633          	add	a2,t0,t3
+    2978:	00064383          	lbu	t2,0(a2)
+    297c:	10472783          	lw	a5,260(a4) # 10000104 <__stack_top+0xfff0104>
+    2980:	0017f893          	andi	a7,a5,1
+    2984:	fe088ce3          	beqz	a7,297c <finish_benchmark+0x138>
+    2988:	10772023          	sw	t2,256(a4)
+    298c:	30072e03          	lw	t3,768(a4)
+    2990:	30072603          	lw	a2,768(a4)
+    2994:	41c603b3          	sub	t2,a2,t3
+    2998:	fe75fce3          	bgeu	a1,t2,2990 <finish_benchmark+0x14c>
+    299c:	ffc80813          	addi	a6,a6,-4
+    29a0:	fcd812e3          	bne	a6,a3,2964 <finish_benchmark+0x120>
+    29a4:	00100293          	li	t0,1
+    29a8:	00000f97          	auipc	t6,0x0
+    29ac:	304f8f93          	addi	t6,t6,772 # 2cac <memset+0x1b4>
+    29b0:	00550663          	beq	a0,t0,29bc <finish_benchmark+0x178>
+    29b4:	00000f97          	auipc	t6,0x0
+    29b8:	308f8f93          	addi	t6,t6,776 # 2cbc <memset+0x1c4>
+    29bc:	00293337          	lui	t1,0x293
+    29c0:	02000f13          	li	t5,32
+    29c4:	10000eb7          	lui	t4,0x10000
+    29c8:	2df30713          	addi	a4,t1,735 # 2932df <__stack_top+0x2832df>
+    29cc:	001f8f93          	addi	t6,t6,1
+    29d0:	104ea583          	lw	a1,260(t4) # 10000104 <__stack_top+0xfff0104>
+    29d4:	0015f693          	andi	a3,a1,1
+    29d8:	fe068ce3          	beqz	a3,29d0 <finish_benchmark+0x18c>
+    29dc:	11eea023          	sw	t5,256(t4)
+    29e0:	300ea883          	lw	a7,768(t4)
+    29e4:	300ea783          	lw	a5,768(t4)
+    29e8:	41178e33          	sub	t3,a5,a7
+    29ec:	ffc77ce3          	bgeu	a4,t3,29e4 <finish_benchmark+0x1a0>
+    29f0:	000fcf03          	lbu	t5,0(t6)
+    29f4:	fc0f1ce3          	bnez	t5,29cc <finish_benchmark+0x188>
+    29f8:	00293637          	lui	a2,0x293
+    29fc:	04500593          	li	a1,69
+    2a00:	00000297          	auipc	t0,0x0
+    2a04:	29028293          	addi	t0,t0,656 # 2c90 <memset+0x198>
+    2a08:	100003b7          	lui	t2,0x10000
+    2a0c:	2df60813          	addi	a6,a2,735 # 2932df <__stack_top+0x2832df>
+    2a10:	00128293          	addi	t0,t0,1
+    2a14:	1043af83          	lw	t6,260(t2) # 10000104 <__stack_top+0xfff0104>
+    2a18:	001fff13          	andi	t5,t6,1
+    2a1c:	fe0f0ce3          	beqz	t5,2a14 <finish_benchmark+0x1d0>
+    2a20:	10b3a023          	sw	a1,256(t2)
+    2a24:	3003ae83          	lw	t4,768(t2)
+    2a28:	3003a303          	lw	t1,768(t2)
+    2a2c:	41d30733          	sub	a4,t1,t4
+    2a30:	fee87ce3          	bgeu	a6,a4,2a28 <finish_benchmark+0x1e4>
+    2a34:	0002c583          	lbu	a1,0(t0)
+    2a38:	fc059ce3          	bnez	a1,2a10 <finish_benchmark+0x1cc>
+    2a3c:	100006b7          	lui	a3,0x10000
+    2a40:	1046a883          	lw	a7,260(a3) # 10000104 <__stack_top+0xfff0104>
+    2a44:	0028f793          	andi	a5,a7,2
+    2a48:	fe078ce3          	beqz	a5,2a40 <finish_benchmark+0x1fc>
+    2a4c:	00100e13          	li	t3,1
+    2a50:	05c50063          	beq	a0,t3,2a90 <finish_benchmark+0x24c>
+    2a54:	eb000537          	lui	a0,0xeb000
+    2a58:	0ff50613          	addi	a2,a0,255 # eb0000ff <__stack_top+0xeaff00ff>
+    2a5c:	10000837          	lui	a6,0x10000
+    2a60:	00c82023          	sw	a2,0(a6) # 10000000 <__stack_top+0xfff0000>
+    2a64:	00008067          	ret
+    2a68:	41030633          	sub	a2,t1,a6
+    2a6c:	00ce93b3          	sll	t2,t4,a2
+    2a70:	010f57b3          	srl	a5,t5,a6
+    2a74:	00f3e8b3          	or	a7,t2,a5
+    2a78:	ef9ff06f          	j	2970 <finish_benchmark+0x12c>
+    2a7c:	410303b3          	sub	t2,t1,a6
+    2a80:	007e98b3          	sll	a7,t4,t2
+    2a84:	010f5e33          	srl	t3,t5,a6
+    2a88:	01c8e633          	or	a2,a7,t3
+    2a8c:	e39ff06f          	j	28c4 <finish_benchmark+0x80>
+    2a90:	eb0003b7          	lui	t2,0xeb000
+    2a94:	00138613          	addi	a2,t2,1 # eb000001 <__stack_top+0xeaff0001>
+    2a98:	10000837          	lui	a6,0x10000
+    2a9c:	00c82023          	sw	a2,0(a6) # 10000000 <__stack_top+0xfff0000>
+    2aa0:	00008067          	ret
+
+00002aa4 <trap_handler>:
+    2aa4:	00293637          	lui	a2,0x293
+    2aa8:	04500813          	li	a6,69
+    2aac:	00000597          	auipc	a1,0x0
+    2ab0:	23458593          	addi	a1,a1,564 # 2ce0 <memset+0x1e8>
+    2ab4:	10000737          	lui	a4,0x10000
+    2ab8:	2df60293          	addi	t0,a2,735 # 2932df <__stack_top+0x2832df>
+    2abc:	00158593          	addi	a1,a1,1
+    2ac0:	10472783          	lw	a5,260(a4) # 10000104 <__stack_top+0xfff0104>
+    2ac4:	0017f313          	andi	t1,a5,1
+    2ac8:	fe030ce3          	beqz	t1,2ac0 <trap_handler+0x1c>
+    2acc:	11072023          	sw	a6,256(a4)
+    2ad0:	30072683          	lw	a3,768(a4)
+    2ad4:	30072383          	lw	t2,768(a4)
+    2ad8:	40d38533          	sub	a0,t2,a3
+    2adc:	fea2fce3          	bgeu	t0,a0,2ad4 <trap_handler+0x30>
+    2ae0:	0005c803          	lbu	a6,0(a1)
+    2ae4:	fc081ce3          	bnez	a6,2abc <trap_handler+0x18>
+    2ae8:	eb0008b7          	lui	a7,0xeb000
+    2aec:	0fe88e13          	addi	t3,a7,254 # eb0000fe <__stack_top+0xeaff00fe>
+    2af0:	01c72023          	sw	t3,0(a4)
+    2af4:	0000006f          	j	2af4 <trap_handler+0x50>
+
+00002af8 <memset>:
+    2af8:	00f00313          	li	t1,15
+    2afc:	00050713          	mv	a4,a0
+    2b00:	02c37e63          	bgeu	t1,a2,2b3c <memset+0x44>
+    2b04:	00f77793          	andi	a5,a4,15
+    2b08:	0a079063          	bnez	a5,2ba8 <memset+0xb0>
+    2b0c:	08059263          	bnez	a1,2b90 <memset+0x98>
+    2b10:	ff067693          	andi	a3,a2,-16
+    2b14:	00f67613          	andi	a2,a2,15
+    2b18:	00e686b3          	add	a3,a3,a4
+    2b1c:	00b72023          	sw	a1,0(a4)
+    2b20:	00b72223          	sw	a1,4(a4)
+    2b24:	00b72423          	sw	a1,8(a4)
+    2b28:	00b72623          	sw	a1,12(a4)
+    2b2c:	01070713          	addi	a4,a4,16
+    2b30:	fed766e3          	bltu	a4,a3,2b1c <memset+0x24>
+    2b34:	00061463          	bnez	a2,2b3c <memset+0x44>
+    2b38:	00008067          	ret
+    2b3c:	40c306b3          	sub	a3,t1,a2
+    2b40:	00269693          	slli	a3,a3,0x2
+    2b44:	00000297          	auipc	t0,0x0
+    2b48:	005686b3          	add	a3,a3,t0
+    2b4c:	00c68067          	jr	12(a3)
+    2b50:	00b70723          	sb	a1,14(a4)
+    2b54:	00b706a3          	sb	a1,13(a4)
+    2b58:	00b70623          	sb	a1,12(a4)
+    2b5c:	00b705a3          	sb	a1,11(a4)
+    2b60:	00b70523          	sb	a1,10(a4)
+    2b64:	00b704a3          	sb	a1,9(a4)
+    2b68:	00b70423          	sb	a1,8(a4)
+    2b6c:	00b703a3          	sb	a1,7(a4)
+    2b70:	00b70323          	sb	a1,6(a4)
+    2b74:	00b702a3          	sb	a1,5(a4)
+    2b78:	00b70223          	sb	a1,4(a4)
+    2b7c:	00b701a3          	sb	a1,3(a4)
+    2b80:	00b70123          	sb	a1,2(a4)
+    2b84:	00b700a3          	sb	a1,1(a4)
+    2b88:	00b70023          	sb	a1,0(a4)
+    2b8c:	00008067          	ret
+    2b90:	0ff5f593          	zext.b	a1,a1
+    2b94:	00859693          	slli	a3,a1,0x8
+    2b98:	00d5e5b3          	or	a1,a1,a3
+    2b9c:	01059693          	slli	a3,a1,0x10
+    2ba0:	00d5e5b3          	or	a1,a1,a3
+    2ba4:	f6dff06f          	j	2b10 <memset+0x18>
+    2ba8:	00279693          	slli	a3,a5,0x2
+    2bac:	00000297          	auipc	t0,0x0
+    2bb0:	005686b3          	add	a3,a3,t0
+    2bb4:	00008293          	mv	t0,ra
+    2bb8:	fa0680e7          	jalr	-96(a3)
+    2bbc:	00028093          	mv	ra,t0
+    2bc0:	ff078793          	addi	a5,a5,-16
+    2bc4:	40f70733          	sub	a4,a4,a5
+    2bc8:	00f60633          	add	a2,a2,a5
+    2bcc:	f6c378e3          	bgeu	t1,a2,2b3c <memset+0x44>
+    2bd0:	f3dff06f          	j	2b0c <memset+0x14>

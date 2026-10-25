@@ -1,0 +1,188 @@
+
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/workloads/uart-loader/firmware.elf:     file format elf32-littleriscv
+
+
+Disassembly of section .text:
+
+00000000 <_start>:
+   0:	00001117          	auipc	sp,0x1
+   4:	00010113          	mv	sp,sp
+   8:	00000297          	auipc	t0,0x0
+   c:	33c28293          	addi	t0,t0,828 # 344 <__bss_end>
+  10:	00000317          	auipc	t1,0x0
+  14:	33430313          	addi	t1,t1,820 # 344 <__bss_end>
+  18:	0062f863          	bgeu	t0,t1,28 <_start+0x28>
+  1c:	0002a023          	sw	zero,0(t0)
+  20:	00428293          	addi	t0,t0,4
+  24:	ff5ff06f          	j	18 <_start+0x18>
+  28:	074000ef          	jal	ra,9c <main_boot>
+  2c:	0000006f          	j	2c <_start+0x2c>
+
+00000030 <puts_uart>:
+  30:	00054683          	lbu	a3,0(a0)
+  34:	02068263          	beqz	a3,58 <puts_uart+0x28>
+  38:	10000737          	lui	a4,0x10000
+  3c:	00150513          	addi	a0,a0,1
+  40:	10472783          	lw	a5,260(a4) # 10000104 <__stack_top+0xffff104>
+  44:	0017f793          	andi	a5,a5,1
+  48:	fe078ce3          	beqz	a5,40 <puts_uart+0x10>
+  4c:	10d72023          	sw	a3,256(a4)
+  50:	00054683          	lbu	a3,0(a0)
+  54:	fe0694e3          	bnez	a3,3c <puts_uart+0xc>
+  58:	00008067          	ret
+
+0000005c <hex32>:
+  5c:	000005b7          	lui	a1,0x0
+  60:	01c00693          	li	a3,28
+  64:	2bc58593          	addi	a1,a1,700 # 2bc <main_boot+0x220>
+  68:	10000737          	lui	a4,0x10000
+  6c:	ffc00813          	li	a6,-4
+  70:	00d557b3          	srl	a5,a0,a3
+  74:	00f7f793          	andi	a5,a5,15
+  78:	00f587b3          	add	a5,a1,a5
+  7c:	0007c603          	lbu	a2,0(a5)
+  80:	10472783          	lw	a5,260(a4) # 10000104 <__stack_top+0xffff104>
+  84:	0017f793          	andi	a5,a5,1
+  88:	fe078ce3          	beqz	a5,80 <hex32+0x24>
+  8c:	10c72023          	sw	a2,256(a4)
+  90:	ffc68693          	addi	a3,a3,-4
+  94:	fd069ee3          	bne	a3,a6,70 <hex32+0x14>
+  98:	00008067          	ret
+
+0000009c <main_boot>:
+  9c:	fd010113          	addi	sp,sp,-48 # fd0 <__bss_end+0xc8c>
+  a0:	02812423          	sw	s0,40(sp)
+  a4:	03212023          	sw	s2,32(sp)
+  a8:	01312e23          	sw	s3,28(sp)
+  ac:	01412c23          	sw	s4,24(sp)
+  b0:	01512a23          	sw	s5,20(sp)
+  b4:	01612823          	sw	s6,16(sp)
+  b8:	01712623          	sw	s7,12(sp)
+  bc:	01812423          	sw	s8,8(sp)
+  c0:	02112623          	sw	ra,44(sp)
+  c4:	02912223          	sw	s1,36(sp)
+  c8:	100007b7          	lui	a5,0x10000
+  cc:	00000537          	lui	a0,0x0
+  d0:	1007a423          	sw	zero,264(a5) # 10000108 <__stack_top+0xffff108>
+  d4:	2d050513          	addi	a0,a0,720 # 2d0 <main_boot+0x234>
+  d8:	00000097          	auipc	ra,0x0
+  dc:	f58080e7          	jalr	-168(ra) # 30 <puts_uart>
+  e0:	00000a37          	lui	s4,0x0
+  e4:	00000937          	lui	s2,0x0
+  e8:	000009b7          	lui	s3,0x0
+  ec:	10000437          	lui	s0,0x10000
+  f0:	03f00b13          	li	s6,63
+  f4:	05200b93          	li	s7,82
+  f8:	02000a93          	li	s5,32
+  fc:	0000bc37          	lui	s8,0xb
+ 100:	10442783          	lw	a5,260(s0) # 10000104 <__stack_top+0xffff104>
+ 104:	0047f793          	andi	a5,a5,4
+ 108:	fe078ce3          	beqz	a5,100 <main_boot+0x64>
+ 10c:	10042783          	lw	a5,256(s0)
+ 110:	0ff7f793          	zext.b	a5,a5
+ 114:	19678c63          	beq	a5,s6,2ac <main_boot+0x210>
+ 118:	00000713          	li	a4,0
+ 11c:	00000493          	li	s1,0
+ 120:	17779663          	bne	a5,s7,28c <main_boot+0x1f0>
+ 124:	10442783          	lw	a5,260(s0)
+ 128:	0047f793          	andi	a5,a5,4
+ 12c:	fe078ce3          	beqz	a5,124 <main_boot+0x88>
+ 130:	10042783          	lw	a5,256(s0)
+ 134:	0ff7f793          	zext.b	a5,a5
+ 138:	00e797b3          	sll	a5,a5,a4
+ 13c:	00870713          	addi	a4,a4,8
+ 140:	00f4e4b3          	or	s1,s1,a5
+ 144:	ff5710e3          	bne	a4,s5,124 <main_boot+0x88>
+ 148:	fff48793          	addi	a5,s1,-1
+ 14c:	1587f863          	bgeu	a5,s8,29c <main_boot+0x200>
+ 150:	00000693          	li	a3,0
+ 154:	00001837          	lui	a6,0x1
+ 158:	10000737          	lui	a4,0x10000
+ 15c:	0ff00513          	li	a0,255
+ 160:	04b00893          	li	a7,75
+ 164:	010685b3          	add	a1,a3,a6
+ 168:	10472783          	lw	a5,260(a4) # 10000104 <__stack_top+0xffff104>
+ 16c:	0047f793          	andi	a5,a5,4
+ 170:	fe078ce3          	beqz	a5,168 <main_boot+0xcc>
+ 174:	10072603          	lw	a2,256(a4)
+ 178:	0ff6f793          	zext.b	a5,a3
+ 17c:	0ff67613          	zext.b	a2,a2
+ 180:	00c58023          	sb	a2,0(a1)
+ 184:	0ea78a63          	beq	a5,a0,278 <main_boot+0x1dc>
+ 188:	00168693          	addi	a3,a3,1
+ 18c:	fc96ece3          	bltu	a3,s1,164 <main_boot+0xc8>
+ 190:	10000737          	lui	a4,0x10000
+ 194:	10472783          	lw	a5,260(a4) # 10000104 <__stack_top+0xffff104>
+ 198:	0017f793          	andi	a5,a5,1
+ 19c:	fe078ce3          	beqz	a5,194 <main_boot+0xf8>
+ 1a0:	04b00793          	li	a5,75
+ 1a4:	10f72023          	sw	a5,256(a4)
+ 1a8:	0000100f          	fence.i
+ 1ac:	edb886b7          	lui	a3,0xedb88
+ 1b0:	fff00413          	li	s0,-1
+ 1b4:	00000613          	li	a2,0
+ 1b8:	000015b7          	lui	a1,0x1
+ 1bc:	32068693          	addi	a3,a3,800 # edb88320 <__stack_top+0xedb87320>
+ 1c0:	00b607b3          	add	a5,a2,a1
+ 1c4:	0007c783          	lbu	a5,0(a5)
+ 1c8:	00800713          	li	a4,8
+ 1cc:	0ff7f793          	zext.b	a5,a5
+ 1d0:	00f44433          	xor	s0,s0,a5
+ 1d4:	00147793          	andi	a5,s0,1
+ 1d8:	40f007b3          	neg	a5,a5
+ 1dc:	00145413          	srli	s0,s0,0x1
+ 1e0:	00d7f7b3          	and	a5,a5,a3
+ 1e4:	fff70713          	addi	a4,a4,-1
+ 1e8:	00f44433          	xor	s0,s0,a5
+ 1ec:	fe0714e3          	bnez	a4,1d4 <main_boot+0x138>
+ 1f0:	00160613          	addi	a2,a2,1
+ 1f4:	fc9666e3          	bltu	a2,s1,1c0 <main_boot+0x124>
+ 1f8:	00000537          	lui	a0,0x0
+ 1fc:	30c50513          	addi	a0,a0,780 # 30c <main_boot+0x270>
+ 200:	00000097          	auipc	ra,0x0
+ 204:	e30080e7          	jalr	-464(ra) # 30 <puts_uart>
+ 208:	fff44513          	not	a0,s0
+ 20c:	00000097          	auipc	ra,0x0
+ 210:	e50080e7          	jalr	-432(ra) # 5c <hex32>
+ 214:	00000537          	lui	a0,0x0
+ 218:	31c50513          	addi	a0,a0,796 # 31c <main_boot+0x280>
+ 21c:	00000097          	auipc	ra,0x0
+ 220:	e14080e7          	jalr	-492(ra) # 30 <puts_uart>
+ 224:	00048513          	mv	a0,s1
+ 228:	00000097          	auipc	ra,0x0
+ 22c:	e34080e7          	jalr	-460(ra) # 5c <hex32>
+ 230:	10000737          	lui	a4,0x10000
+ 234:	10472783          	lw	a5,260(a4) # 10000104 <__stack_top+0xffff104>
+ 238:	0017f793          	andi	a5,a5,1
+ 23c:	fe078ce3          	beqz	a5,234 <main_boot+0x198>
+ 240:	00a00793          	li	a5,10
+ 244:	10f72023          	sw	a5,256(a4)
+ 248:	10000737          	lui	a4,0x10000
+ 24c:	10472783          	lw	a5,260(a4) # 10000104 <__stack_top+0xffff104>
+ 250:	0027f793          	andi	a5,a5,2
+ 254:	fe078ce3          	beqz	a5,24c <main_boot+0x1b0>
+ 258:	0000100f          	fence.i
+ 25c:	000017b7          	lui	a5,0x1
+ 260:	000780e7          	jalr	a5 # 1000 <__stack_top>
+ 264:	00000537          	lui	a0,0x0
+ 268:	32850513          	addi	a0,a0,808 # 328 <main_boot+0x28c>
+ 26c:	00000097          	auipc	ra,0x0
+ 270:	dc4080e7          	jalr	-572(ra) # 30 <puts_uart>
+ 274:	0000006f          	j	274 <main_boot+0x1d8>
+ 278:	10472783          	lw	a5,260(a4)
+ 27c:	0017f793          	andi	a5,a5,1
+ 280:	fe078ce3          	beqz	a5,278 <main_boot+0x1dc>
+ 284:	11172023          	sw	a7,256(a4)
+ 288:	f01ff06f          	j	188 <main_boot+0xec>
+ 28c:	2f090513          	addi	a0,s2,752 # 2f0 <main_boot+0x254>
+ 290:	00000097          	auipc	ra,0x0
+ 294:	da0080e7          	jalr	-608(ra) # 30 <puts_uart>
+ 298:	e69ff06f          	j	100 <main_boot+0x64>
+ 29c:	30098513          	addi	a0,s3,768 # 300 <main_boot+0x264>
+ 2a0:	00000097          	auipc	ra,0x0
+ 2a4:	d90080e7          	jalr	-624(ra) # 30 <puts_uart>
+ 2a8:	e59ff06f          	j	100 <main_boot+0x64>
+ 2ac:	2e0a0513          	addi	a0,s4,736 # 2e0 <main_boot+0x244>
+ 2b0:	00000097          	auipc	ra,0x0
+ 2b4:	d80080e7          	jalr	-640(ra) # 30 <puts_uart>
+ 2b8:	e49ff06f          	j	100 <main_boot+0x64>

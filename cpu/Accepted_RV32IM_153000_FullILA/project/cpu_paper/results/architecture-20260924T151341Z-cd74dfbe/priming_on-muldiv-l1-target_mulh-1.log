@@ -1,0 +1,1 @@
+PASS muldiv_core checks=2 irq_pc=00000064 delay=1 loadbubble=1

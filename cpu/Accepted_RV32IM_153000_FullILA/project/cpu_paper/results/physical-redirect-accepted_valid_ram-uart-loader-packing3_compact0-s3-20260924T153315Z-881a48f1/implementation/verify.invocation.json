@@ -1,0 +1,20 @@
+{
+  "argv": [
+    "D:\\PDS_2022.2-SP6.4\\bin\\cdt_ins.exe",
+    "-device",
+    "PG2L200H",
+    "-package",
+    "FBB676",
+    "-speedgrade",
+    "-6",
+    "-file",
+    "D:/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/physical-redirect-accepted_valid_ram-uart-loader-packing3_compact0-s3-20260924T153315Z-881a48f1/implementation/verify.tcl"
+  ],
+  "working_directory": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\results\\physical-redirect-accepted_valid_ram-uart-loader-packing3_compact0-s3-20260924T153315Z-881a48f1\\implementation",
+  "executable_sha256": "b526da86da96b84a591f63d1e35f3b4ca50433f14da9d136f7bf10dd50f07d94",
+  "started_utc": "2026-09-24T15:34:08.693664+00:00",
+  "exit_code": 0,
+  "timeout_seconds": 300,
+  "pid": 24124,
+  "finished_utc": "2026-09-24T15:34:10.954115+00:00"
+}

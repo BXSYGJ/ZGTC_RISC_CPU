@@ -1,0 +1,40 @@
+##### Written on 2026/09/24 23:33:36 ###############################
+
+
+##### INFO ##################################################
+
+Current device : 
+	PG2L200H-6FBB676
+
+Top Module : 
+	pds_soc_top
+
+Constraint File(s) : 
+	D:/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/physical-redirect-accepted_valid_ram-uart-loader-packing3_compact0-s3-20260924T153315Z-881a48f1/inputs/constraints/board.fdc
+	D:/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/physical-redirect-accepted_valid_ram-uart-loader-packing3_compact0-s3-20260924T153315Z-881a48f1/inputs/constraints/uart_remotelab.fdc
+
+##### SUMMARY ######################################################
+
+Found 0 error(s), 0 critical warning(s), 0 warning(s), out of 85 constraint(s)
+
+
+Inapplicable constraints(except overwritten constraints):
+********************************************
+
+
+Constraints with issues:
+********************************************
+
+
+Issues without commands:
+********************************************
+
+
+Unconstrained ports:
+********************************************
+
+
+Constraints with matching wildcard expressions:
+********************************************
+
+

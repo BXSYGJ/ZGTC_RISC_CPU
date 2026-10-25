@@ -1,0 +1,326 @@
+{
+  "status": "passed",
+  "physical": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\results\\physical-redirect-accepted_valid_ram-uart-loader-packing3_compact0-s3-20260924T153315Z-881a48f1",
+  "physical_manifest_sha256": "df60eb32650f2ec366cfb20f7ae3dd070b0c04ec53c0ea504138b2744382ea78",
+  "variant_manifest_sha256": "6340cdf9a9e266bce64eeb1c0c355b6bb73435dcd2dd73ffe6c25e7f9ef3069c",
+  "firmware_manifest_sha256": "9ac5f59c4cd50a6f07aeab0b2b24fdbf83589d45708fee4749f38c77c01d478f",
+  "instrumentation_profile": "full",
+  "report": {
+    "device": "PG2L200H-6FBB676",
+    "clock_hz": 153000000,
+    "constraints_met": true,
+    "timing_summary": "All Constraints Met.",
+    "cpu_period_ns": 6.535,
+    "clock_loads": 3445,
+    "estimated_mhz_not_hardware_measurement": 154.2734,
+    "setup_wns_ns": 0.053,
+    "resources": {
+      "CLMA": {
+        "ff": 3151,
+        "lut": 5686
+      },
+      "CLMS": {
+        "ff": 872,
+        "lut": 1626
+      },
+      "synthesis_luts": null,
+      "post_route_luts": 7312,
+      "post_route_ffs": 4023,
+      "DRM": 22.5,
+      "GPLL": 1.0,
+      "APM": 4
+    },
+    "scbv_unset_warning": true,
+    "lut_metric": "post-route CLMA LUT plus CLMS LUT; do not add Distributed RAM again"
+  },
+  "timing": {
+    "schema": 1,
+    "run": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\results\\physical-redirect-accepted_valid_ram-uart-loader-packing3_compact0-s3-20260924T153315Z-881a48f1",
+    "checks": {
+      "Setup_Slow": {
+        "cpu_slack_ns": 0.053,
+        "cpu_total_slack_ns": 0.0,
+        "cpu_failing_endpoints": 0,
+        "cpu_endpoints": 17735,
+        "all_clock_minimum_slack_ns": 0.053,
+        "all_clock_failing_endpoints": 0
+      },
+      "Hold_Slow": {
+        "cpu_slack_ns": 0.149,
+        "cpu_total_slack_ns": 0.0,
+        "cpu_failing_endpoints": 0,
+        "cpu_endpoints": 17735,
+        "all_clock_minimum_slack_ns": 0.149,
+        "all_clock_failing_endpoints": 0
+      },
+      "Recovery_Slow": {
+        "cpu_slack_ns": 1.528,
+        "cpu_total_slack_ns": 0.0,
+        "cpu_failing_endpoints": 0,
+        "cpu_endpoints": 2946,
+        "all_clock_minimum_slack_ns": 1.528,
+        "all_clock_failing_endpoints": 0
+      },
+      "Removal_Slow": {
+        "cpu_slack_ns": 0.619,
+        "cpu_total_slack_ns": 0.0,
+        "cpu_failing_endpoints": 0,
+        "cpu_endpoints": 2946,
+        "all_clock_minimum_slack_ns": 0.619,
+        "all_clock_failing_endpoints": 0
+      },
+      "Minimum Pulse Width_Slow": {
+        "cpu_slack_ns": 1.922,
+        "cpu_total_slack_ns": 0.0,
+        "cpu_failing_endpoints": 0,
+        "cpu_endpoints": 3445,
+        "all_clock_minimum_slack_ns": 1.922,
+        "all_clock_failing_endpoints": 0
+      },
+      "Setup_Fast": {
+        "cpu_slack_ns": 2.481,
+        "cpu_total_slack_ns": 0.0,
+        "cpu_failing_endpoints": 0,
+        "cpu_endpoints": 17735,
+        "all_clock_minimum_slack_ns": 2.481,
+        "all_clock_failing_endpoints": 0
+      },
+      "Hold_Fast": {
+        "cpu_slack_ns": 0.102,
+        "cpu_total_slack_ns": 0.0,
+        "cpu_failing_endpoints": 0,
+        "cpu_endpoints": 17735,
+        "all_clock_minimum_slack_ns": 0.102,
+        "all_clock_failing_endpoints": 0
+      },
+      "Recovery_Fast": {
+        "cpu_slack_ns": 3.353,
+        "cpu_total_slack_ns": 0.0,
+        "cpu_failing_endpoints": 0,
+        "cpu_endpoints": 2946,
+        "all_clock_minimum_slack_ns": 3.353,
+        "all_clock_failing_endpoints": 0
+      },
+      "Removal_Fast": {
+        "cpu_slack_ns": 0.422,
+        "cpu_total_slack_ns": 0.0,
+        "cpu_failing_endpoints": 0,
+        "cpu_endpoints": 2946,
+        "all_clock_minimum_slack_ns": 0.422,
+        "all_clock_failing_endpoints": 0
+      },
+      "Minimum Pulse Width_Fast": {
+        "cpu_slack_ns": 2.469,
+        "cpu_total_slack_ns": 0.0,
+        "cpu_failing_endpoints": 0,
+        "cpu_endpoints": 3445,
+        "all_clock_minimum_slack_ns": 2.469,
+        "all_clock_failing_endpoints": 0
+      }
+    },
+    "internal_multicorner_timing_passed": true,
+    "cpu_setup_wns_ns": 0.053,
+    "cpu_hold_wns_ns": 0.102,
+    "constraint_scope": "Accepted constraints unchanged. Reset, key and UART RX are asynchronous/false-pathed; LED and UART TX have no synchronous external timing specification. Closure covers reported internal/generated-clock and ILA clock timing, not externally timed GPIO/UART paths.",
+    "unconstrained_port_diagnostics": [
+      [
+        "4086",
+        "key",
+        "input"
+      ],
+      [
+        "4086",
+        "rst_n",
+        "input"
+      ],
+      [
+        "4086",
+        "uart_rx",
+        "input"
+      ],
+      [
+        "4087",
+        "led[0]",
+        "output"
+      ],
+      [
+        "4087",
+        "led[1]",
+        "output"
+      ],
+      [
+        "4087",
+        "led[2]",
+        "output"
+      ],
+      [
+        "4087",
+        "led[3]",
+        "output"
+      ],
+      [
+        "4087",
+        "led[4]",
+        "output"
+      ],
+      [
+        "4087",
+        "led[5]",
+        "output"
+      ],
+      [
+        "4087",
+        "led[6]",
+        "output"
+      ],
+      [
+        "4087",
+        "led[7]",
+        "output"
+      ],
+      [
+        "4087",
+        "uart_tx",
+        "output"
+      ]
+    ],
+    "hardware_validated": false,
+    "timing_sha256": "bfc514164ffc3bb357717db15f52c10a809a5b28e498ba50c60fcef0f2064670",
+    "implementation_log_sha256": "2378645ecb876798bfd5be85a88d473e804c58ce4679c6e803057ac358c43cf3",
+    "board_constraint_sha256": "7e248a5022603d4b78b3758d4d552d8efd34c50e34d7d27b0a79ac71ec30e5d0",
+    "uart_constraint_sha256": "1660f87805fe18229114bc941a06c322dd6307e0c22b360cd2740eaf3b8ea9ad"
+  },
+  "paths": [
+    {
+      "rank": 1,
+      "startpoint": "board/soc/core/wb_rd[2]/opit_0_inv/CLK",
+      "endpoint": "board/soc/core/mem_result[19]/opit_0_inv_L6Q_perm/I4",
+      "setup_slack_ns": 0.053,
+      "logic_ns": 1.821,
+      "route_ns": 4.278,
+      "route_percent": 70.143,
+      "maximum_data_fanout": 68,
+      "clock_skew_ns": -0.086,
+      "clock_uncertainty_ns": 0.15,
+      "setup_requirement_ns": 0.147,
+      "largest_route_nets": [
+        {
+          "fanout": 1,
+          "delay_ns": 0.817,
+          "name": "board/soc/core/alu/N91 [19]"
+        },
+        {
+          "fanout": 62,
+          "delay_ns": 0.775,
+          "name": "board/soc/core/N330"
+        },
+        {
+          "fanout": 5,
+          "delay_ns": 0.637,
+          "name": "board/soc/core/alu/_N1279"
+        },
+        {
+          "fanout": 68,
+          "delay_ns": 0.423,
+          "name": "board/soc/core/trace_rd [2]"
+        },
+        {
+          "fanout": 1,
+          "delay_ns": 0.419,
+          "name": "board/soc/core/_N10172"
+        }
+      ]
+    },
+    {
+      "rank": 2,
+      "startpoint": "board/soc/core/wb_rd[2]/opit_0_inv/CLK",
+      "endpoint": "board/soc/core/mem_result[12]/opit_0_inv_L6Q_perm/I5",
+      "setup_slack_ns": 0.064,
+      "logic_ns": 1.951,
+      "route_ns": 4.172,
+      "route_percent": 68.137,
+      "maximum_data_fanout": 68,
+      "clock_skew_ns": -0.081,
+      "clock_uncertainty_ns": 0.15,
+      "setup_requirement_ns": 0.117,
+      "largest_route_nets": [
+        {
+          "fanout": 62,
+          "delay_ns": 0.775,
+          "name": "board/soc/core/N330"
+        },
+        {
+          "fanout": 5,
+          "delay_ns": 0.637,
+          "name": "board/soc/core/alu/_N1279"
+        },
+        {
+          "fanout": 1,
+          "delay_ns": 0.494,
+          "name": "board/soc/core/alu/_N9761"
+        },
+        {
+          "fanout": 1,
+          "delay_ns": 0.46,
+          "name": "board/soc/core/_N10165"
+        },
+        {
+          "fanout": 1,
+          "delay_ns": 0.44,
+          "name": "board/soc/core/alu_result [12]"
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "startpoint": "board/soc/core/wb_rd[2]/opit_0_inv/CLK",
+      "endpoint": "board/soc/core/mem_result[10]/opit_0_inv_L6Q_perm/I0",
+      "setup_slack_ns": 0.136,
+      "logic_ns": 1.794,
+      "route_ns": 4.095,
+      "route_percent": 69.536,
+      "maximum_data_fanout": 68,
+      "clock_skew_ns": -0.08,
+      "clock_uncertainty_ns": 0.15,
+      "setup_requirement_ns": 0.28,
+      "largest_route_nets": [
+        {
+          "fanout": 1,
+          "delay_ns": 0.89,
+          "name": "board/soc/core/alu_result [10]"
+        },
+        {
+          "fanout": 16,
+          "delay_ns": 0.614,
+          "name": "board/soc/core/alu_a [17]"
+        },
+        {
+          "fanout": 2,
+          "delay_ns": 0.483,
+          "name": "board/soc/core/alu/N91 [10]"
+        },
+        {
+          "fanout": 2,
+          "delay_ns": 0.448,
+          "name": "_N8"
+        },
+        {
+          "fanout": 2,
+          "delay_ns": 0.444,
+          "name": "board/soc/core/alu/_N1262"
+        }
+      ]
+    }
+  ],
+  "source_hashes": {
+    "common-validator.py": "85d49e4fbeef74172155776801e71b522e9dc15c5d0d01da8c32ba74fa62db6e",
+    "selected-validator.py": "3f4a8695310e2d2ea6643be404ef5df59b941314e5197682ad34f11c3f754761",
+    "tools/audit_physical_timing.py": "8658d9956b1f148c196d8c208751b6bc9581cfb647ec7cc1d1de16bd44bb3b0a",
+    "tools/embench_board_evidence.py": "f3f38e451ddd9541c9cc4d3002461dd14040c24a85fa8ea441bf625b4b4c439b",
+    "tools/physical_instrumentation.py": "b277e0bc76198c7030339740d1ad3e0264a967b3c197313e1576675668e6364a",
+    "tools/redirect_physical_binding.py": "eefb87885fa4f57da84a5ca2c609e0cfaf1087f2262f9df8c11844a2c104af32",
+    "tools/review_accepted_area_physical.py": "61b5ab371fbf08c75f3146b78299ea80f8c05911e2647629259b2f5d75fbb501",
+    "tools/review_selected_clock.py": "79a9e11470e433e68f1640c1bbe9bb8c2668aa50ee6aa27c0373b0287aeaefb2",
+    "tools/selected_clock_profiles.py": "f916a1346c28cce3485ce226e16656028b03acb1df06ac616a5fd4ccae0d1f97"
+  }
+}

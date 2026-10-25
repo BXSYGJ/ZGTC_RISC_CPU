@@ -1,0 +1,8 @@
+00000000 T _start
+0000002c T target_div
+00000048 t after_wrong_path
+00000048 T target_mul
+00000064 T target_mulh
+00000098 t finished
+0000009c t handler
+000000a4 t fail

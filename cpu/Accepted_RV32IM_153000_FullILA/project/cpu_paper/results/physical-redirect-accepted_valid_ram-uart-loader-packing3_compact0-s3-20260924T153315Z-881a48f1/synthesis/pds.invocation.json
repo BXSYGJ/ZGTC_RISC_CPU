@@ -1,0 +1,18 @@
+{
+  "argv": [
+    "D:\\PDS_2022.2-SP6.4\\bin\\pds_shell.exe",
+    "-file",
+    "D:/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/physical-redirect-accepted_valid_ram-uart-loader-packing3_compact0-s3-20260924T153315Z-881a48f1/synthesis/build.tcl",
+    "-work_dir",
+    "D:/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/physical-redirect-accepted_valid_ram-uart-loader-packing3_compact0-s3-20260924T153315Z-881a48f1/synthesis",
+    "-project_name",
+    "cpu_ablation"
+  ],
+  "working_directory": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\results\\physical-redirect-accepted_valid_ram-uart-loader-packing3_compact0-s3-20260924T153315Z-881a48f1\\synthesis",
+  "executable_sha256": "631ffd8f14d6246872873c72025cbc2734c9f8c388075b7afb0b042f3a684e6f",
+  "started_utc": "2026-09-24T15:33:15.544042+00:00",
+  "exit_code": 0,
+  "timeout_seconds": 1800,
+  "pid": 51068,
+  "finished_utc": "2026-09-24T15:34:05.625668+00:00"
+}

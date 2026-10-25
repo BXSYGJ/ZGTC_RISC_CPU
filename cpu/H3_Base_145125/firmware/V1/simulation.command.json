@@ -1,0 +1,8 @@
+{
+  "argv": [
+    "/mnt/e/AAAFPGA-builds/dual-release-area-optimization/h3-early935-full/h3-native4-early-read-efficiency-full-20261007T010553Z-125f2a53/simulator/objects/Vrv32_observed_soc",
+    "/mnt/e/AAAFPGA-builds/dual-release-area-optimization/h3-early935-full/h3-native4-early-read-efficiency-full-20261007T010553Z-125f2a53/firmware/V1/uart.log",
+    "2400000000"
+  ],
+  "cwd": "/mnt/e/AAAFPGA-builds/dual-release-area-optimization/h3-early935-full/h3-native4-early-read-efficiency-full-20261007T010553Z-125f2a53/firmware/V1"
+}

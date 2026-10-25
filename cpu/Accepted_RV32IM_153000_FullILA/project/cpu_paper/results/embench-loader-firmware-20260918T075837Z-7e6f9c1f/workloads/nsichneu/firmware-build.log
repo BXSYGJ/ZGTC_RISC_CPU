@@ -1,0 +1,12 @@
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/nsichneu/libnsichneu.c: In function 'warm_caches':
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/nsichneu/libnsichneu.c:79:8: warning: unused variable 'res' [-Wunused-variable]
+   79 |   int  res = benchmark_body (1, heat);
+      |        ^~~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/nsichneu/libnsichneu.c: In function 'benchmark_body':
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/nsichneu/libnsichneu.c:96:7: warning: unused variable 'j' [-Wunused-variable]
+   96 |   int j;
+      |       ^
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/nsichneu/libnsichneu.c: In function 'verify_benchmark':
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/nsichneu/libnsichneu.c:4538:23: warning: unused parameter 'unused' [-Wunused-parameter]
+ 4538 | verify_benchmark (int unused)
+      |                   ~~~~^~~~~~

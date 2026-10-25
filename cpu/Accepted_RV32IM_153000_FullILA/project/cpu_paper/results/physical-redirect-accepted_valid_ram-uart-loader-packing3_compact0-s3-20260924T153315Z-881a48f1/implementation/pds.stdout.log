@@ -1,0 +1,1236 @@
+License checkout: fabric_shell from D:\AAAFPGA\PangoLicense\pds_windows_c03532573d51_2029-09-04.lic
+Compiling architecture definition.
+Analyzing project file 'D:/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/physical-redirect-accepted_valid_ram-uart-loader-packing3_compact0-s3-20260924T153315Z-881a48f1/implementation/cpu_ila.pds'.
+Executing : add_design D:/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/physical-redirect-accepted_valid_ram-uart-loader-packing3_compact0-s3-20260924T153315Z-881a48f1/implementation/netlist.v
+Executing : add_design D:/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/physical-redirect-accepted_valid_ram-uart-loader-packing3_compact0-s3-20260924T153315Z-881a48f1/implementation/netlist.v successfully.
+Executing : add_constraint D:/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/physical-redirect-accepted_valid_ram-uart-loader-packing3_compact0-s3-20260924T153315Z-881a48f1/inputs/constraints/board.fdc
+Executing : add_constraint D:/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/physical-redirect-accepted_valid_ram-uart-loader-packing3_compact0-s3-20260924T153315Z-881a48f1/inputs/constraints/board.fdc successfully.
+Executing : add_constraint D:/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/physical-redirect-accepted_valid_ram-uart-loader-packing3_compact0-s3-20260924T153315Z-881a48f1/inputs/constraints/uart_remotelab.fdc
+Executing : add_constraint D:/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/physical-redirect-accepted_valid_ram-uart-loader-packing3_compact0-s3-20260924T153315Z-881a48f1/inputs/constraints/uart_remotelab.fdc successfully.
+Executing : add_fic D:/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/physical-redirect-accepted_valid_ram-uart-loader-packing3_compact0-s3-20260924T153315Z-881a48f1/implementation/cpu-remapped.fic
+Executing : add_fic D:/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/physical-redirect-accepted_valid_ram-uart-loader-packing3_compact0-s3-20260924T153315Z-881a48f1/implementation/cpu-remapped.fic successfully.
+Executing : set_arch -family Logos2 -device PG2L200H -speedgrade -6 -package FBB676
+Executing : set_arch -family Logos2 -device PG2L200H -speedgrade -6 -package FBB676 successfully.
+
+
+Executing : compile -system_verilog -top_module pds_soc_top
+Executing : compile -system_verilog -top_module pds_soc_top successfully.
+
+
+Executing : dev_map -input_db_file D:/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/physical-redirect-accepted_valid_ram-uart-loader-packing3_compact0-s3-20260924T153315Z-881a48f1/implementation/source.adf
+
+
+Process "Device Map" started.
+Current time: Thu Sep 24 23:34:13 2026
+Compiling architecture definition.
+Analyzing project file 'D:/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/physical-redirect-accepted_valid_ram-uart-loader-packing3_compact0-s3-20260924T153315Z-881a48f1/implementation/cpu_ila.pds'.
+Compiling verification operator library.
+Compiling common defs.
+Loading technology operator library.
+Compiling technology operator library.
+Compiling technology operator (valence) library.
+Compiling operator packing rules.
+Compiling prim grid devices.
+Compiling gate devices.
+Compiling gate operators.
+Compiling tech operator impls.
+Building architecture model.
+Loading device packaging model.
+NOTE: The technology fpga was specified.
+NOTE: delay_model specified was generic_cmos.
+NOTE: Using the fpga syntax tables...
+Totals:
+ Calls to malloc = 0
+ Calls to calloc = 148672
+
+License checkout: fabric_inserter from D:\AAAFPGA\PangoLicense\pds_windows_c03532573d51_2029-09-04.lic
+Generating cores. Please be patient as this can take several minutes...
+  >Generating core DebugCore0...
+  >Running ADS for debugcore...
+  >Making net connections...
+Core Insertion Complete.
+Flattening design 'pds_soc_top'
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_rden[1]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_rden[2]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_rden[3]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_rden[4]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_rden[5]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_rden[6]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_rden[7]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_rden[8]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_rden[9]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_rden[10]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_rden[11]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_rden[12]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_rden[13]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_rden[14]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_rden[15]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_rden[17]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_rden[19]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_sel_int[1]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_sel_int[2]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_sel_int[3]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_sel_int[4]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_sel_int[5]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_sel_int[6]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_sel_int[7]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_sel_int[8]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_sel_int[9]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_sel_int[10]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_sel_int[11]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_sel_int[12]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_sel_int[13]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_sel_int[14]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_sel_int[15]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_sel_int[17]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_sel_int[19]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'board/soc/memory_system/caches[0].enabled.cache/request_address[0]_1' of 'GTP_DFF_CE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'board/soc/memory_system/caches[0].enabled.cache/request_address[1]_1' of 'GTP_DFF_CE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'board/soc/memory_system/caches[0].enabled.cache_1/request_address[0]_1' of 'GTP_DFF_CE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'board/soc/memory_system/caches[0].enabled.cache_1/request_address[1]_1' of 'GTP_DFF_CE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'board/soc/memory_system/caches[0].enabled.cache_1/request_address_1_copy[6]' of 'GTP_DFF_CE' unit is dangling and will be cleaned.
+Device mapping started.
+Optimizing circuit logic.
+Checking design netlist.
+Processing tech operator.
+I: The instance clkbufg_3(GTP_CLKBUFG) has been inserted on the net cpu_clk in design, driver pin CLKOUT0(instance multiplied_clock.clock_source/pll) -> load pin CLK(instance board/reset_pipe[0]).
+I: The instance clkbufg_4(GTP_CLKBUFG) has been inserted on the net u_CORES/drck_o in design, driver pin TCK_USER(instance u_CORES/u_GTP_SCANCHAIN_PG) -> load pin CLK(instance u_CORES/u_debug_core_0/u0_trig_unit/conf_reg[0]).
+Converting tech operator to gate operator.
+Processing gate operator.
+I: Infer CARRY group, base inst: board/soc/core/N36_9/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/N45.eq_0/gateop, insts:16.
+I: Infer CARRY group, base inst: board/soc/core/N49/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/N160_6/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/N170_0.eq_0/gateop, insts:16.
+I: Infer CARRY group, base inst: board/soc/core/N170_1.eq_0/gateop, insts:16.
+I: Infer CARRY group, base inst: board/soc/core/N324_5/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/N340/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/memory_system/ram/N8_1_1/gateop, insts:29.
+I: Infer CARRY group, base inst: board/soc/core/N416.eq_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/N418.lt_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/N420.eq_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/N422.lt_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/N425.eq_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/N427.lt_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/N429.eq_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/N431.lt_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/N434.eq_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/N436.lt_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/N438.eq_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/N440.lt_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/N443.eq_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/N445.lt_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/N447.eq_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/N449.lt_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/N457.eq_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/N459.lt_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/N461.eq_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/N463.lt_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/N465.eq_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/N467.lt_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/N469.eq_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/N471.lt_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/N481_4/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/N496_4/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/N503.eq_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/N505.lt_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/N507.eq_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/N509.lt_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/N511.eq_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/N513.lt_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/N515.eq_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/N517.lt_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/N527_4/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/N549.eq_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/N551.lt_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/N553.eq_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/N555.lt_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/N557.eq_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/N559.lt_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/N561.eq_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/N563.lt_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/N573_4/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/N589_4/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/N712/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/N788_189/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/N791_0_1/gateop, insts:29.
+I: Infer CARRY group, base inst: board/soc/core/N876[8]_1/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/N876[9]_1/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/N876[10]_1/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/N876[11]_1/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/N876[12]_1/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/N876[13]_1/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/N876[14]_1/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/N876[15]_1/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/N876[18]/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/N876[21]/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/N884_1_1/gateop, insts:9.
+I: Infer CARRY group, base inst: board/soc/core/N886_1/gateop, insts:8.
+I: Infer CARRY group, base inst: board/soc/core/N892_1_0/gateop, insts:10.
+I: Infer CARRY group, base inst: board/soc/core/N894_0/gateop, insts:9.
+I: Infer CARRY group, base inst: board/soc/core/N898_0/gateop, insts:9.
+I: Infer CARRY group, base inst: board/soc/core/N902_0/gateop, insts:9.
+I: Infer CARRY group, base inst: board/soc/core/N909_0/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/N909_3/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/N915_1_12/gateop, insts:3.
+I: Infer CARRY group, base inst: board/soc/core/N962_2/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/N980[2]/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/N980[3]/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/N980[4]/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/N980[5]/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/N980[6]/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/N980[7]/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/N998_2/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/N1218.eq_0/gateop, insts:17.
+I: Infer CARRY group, base inst: board/soc/core/N1223.slt_0/gateop, insts:16.
+I: Infer CARRY group, base inst: board/soc/core/N1228.lt_0/gateop, insts:16.
+I: Infer CARRY group, base inst: board/soc/core/N1541_1/gateop, insts:32.
+I: Infer CARRY group, base inst: board/soc/core/N1543.eq_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/N1545.lt_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/N1548.eq_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/N1550.lt_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/N1553.eq_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/N1555.lt_0/gateop, insts:5.
+I: Infer CARRY group, base inst: board/soc/core/N1558.eq_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/N1560.lt_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/N1633_0_1/gateop, insts:29.
+I: Infer CARRY group, base inst: board/soc/core/N1928_7/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/N2397_4/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/memory_system/ram/N25_1_1/gateop, insts:12.
+I: Infer CARRY group, base inst: board/soc/core/address_byte0_0/gateop, insts:10.
+I: Infer CARRY group, base inst: board/soc/memory_system/N0_4/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/memory_system/N17_1/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/peripherals/N51_0_1/gateop, insts:15.
+I: Infer CARRY group, base inst: board/soc/peripherals/N56_1/gateop, insts:16.
+I: Infer CARRY group, base inst: board/soc/peripherals/N61_1/gateop, insts:16.
+I: Infer CARRY group, base inst: board/soc/peripherals/N66_0/gateop, insts:17.
+I: Infer CARRY group, base inst: board/soc/peripherals/N100.eq_0/gateop, insts:16.
+I: Infer CARRY group, base inst: board/soc/peripherals/N101.lt_0/gateop, insts:16.
+I: Infer CARRY group, base inst: board/soc/peripherals/N102.lt_0/gateop, insts:16.
+I: Infer CARRY group, base inst: board/soc/peripherals/N184_0_1/gateop, insts:31.
+I: Infer CARRY group, base inst: board/soc/peripherals/N371_53/gateop, insts:3.
+I: Infer CARRY group, base inst: u_CORES/u_debug_core_0/u_Storage_Condition/N256_1_1/gateop, insts:9.
+I: Infer CARRY group, base inst: u_CORES/u_debug_core_0/u_Storage_Condition/N275_1.fsub_1/gateop, insts:9.
+I: Infer CARRY group, base inst: u_CORES/u_debug_core_0/u_Storage_Condition/N308_1_1/gateop, insts:9.
+I: Infer CARRY group, base inst: u_CORES/u_debug_core_0/u_Storage_Condition/N317_1_1/gateop, insts:9.
+I: Infer CARRY group, base inst: u_CORES/u_debug_core_0/u_rd_addr_gen/N38_1_1/gateop, insts:9.
+I: Infer CARRY group, base inst: board/soc/core/alu/N2_0/gateop, insts:18.
+I: Infer CARRY group, base inst: board/soc/core/alu/N5.fsub_0/gateop, insts:18.
+I: Infer CARRY group, base inst: board/soc/core/alu/N6_0/gateop, insts:17.
+I: Infer CARRY group, base inst: board/soc/core/alu/N9_0/gateop, insts:17.
+I: Infer CARRY group, base inst: board/soc/core/alu/N10.fsub_0/gateop, insts:17.
+I: Infer CARRY group, base inst: board/soc/core/alu/N13.fsub_0/gateop, insts:17.
+I: Infer CARRY group, base inst: board/soc/core/alu/N91_2_29/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/alu/N91_4_16/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/alu/N91_4_17/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/alu/N91_4_18/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/alu/N91_4_19/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/alu/N91_4_20/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/alu/N91_4_21/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/alu/N91_4_22/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/alu/N91_4_23/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/alu/N91_4_24/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/alu/N91_4_26/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/alu/N91_4_27/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/alu/N91_4_28/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/alu/N104.slt_0/gateop, insts:16.
+I: Infer CARRY group, base inst: board/soc/core/alu/N108.lt_0/gateop, insts:16.
+I: Infer CARRY group, base inst: board/soc/core/alu/result_15[0]/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/alu/result_15[1]/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/alu/result_15[2]/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/alu/result_15[3]/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/alu/result_15[4]/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/alu/result_15[5]/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/alu/result_15[6]/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/alu/result_15[7]/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/alu/result_15[8]/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/alu/result_15[9]/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/alu/result_15[10]/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/alu/result_15[11]/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/alu/result_15[12]/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/alu/result_15[13]/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/alu/result_15[14]/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/alu/result_15[15]/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/machine/N29_0_0/gateop, insts:31.
+I: Infer CARRY group, base inst: board/soc/core/machine/N102_0_0/gateop, insts:64.
+I: Infer CARRY group, base inst: board/soc/core/machine/N104_0_1/gateop, insts:63.
+I: Infer CARRY group, base inst: board/soc/core/multiply_divide.unit/N34_1_0/gateop, insts:48.
+I: Infer CARRY group, base inst: board/soc/core/multiply_divide.unit/N41.lt_0/gateop, insts:16.
+I: Infer CARRY group, base inst: board/soc/core/multiply_divide.unit/N117_1.fsub_0/gateop, insts:32.
+I: Infer CARRY group, base inst: board/soc/core/multiply_divide.unit/N119_1.fsub_0/gateop, insts:32.
+I: Infer CARRY group, base inst: board/soc/core/multiply_divide.unit/N160_3.fsub_0/gateop, insts:33.
+I: Infer CARRY group, base inst: board/soc/core/multiply_divide.unit/N170_1.fsub_1/gateop, insts:31.
+I: Infer CARRY group, base inst: board/soc/core/multiply_divide.unit/N172_1.fsub_0/gateop, insts:32.
+I: Infer CARRY group, base inst: board/soc/peripherals/uart/N26_0.fsub_1/gateop, insts:10.
+I: Infer CARRY group, base inst: board/soc/peripherals/uart/N59_0.fsub_0/gateop, insts:11.
+I: Infer CARRY group, base inst: board/soc/core/predictor/N41.eq_0/gateop, insts:3.
+I: Infer CARRY group, base inst: board/soc/memory_system/caches[0].enabled.cache_1/stored_state_fsm[3:0]_143/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/predictor/N56.eq_0/gateop, insts:3.
+I: Infer CARRY group, base inst: board/soc/memory_system/caches[0].enabled.cache/N13_4/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/memory_system/caches[0].enabled.cache/N1175_0.eq_0/gateop, insts:6.
+I: Infer CARRY group, base inst: board/soc/memory_system/caches[0].enabled.cache/N1223_1_1/gateop, insts:31.
+I: Infer CARRY group, base inst: board/soc/memory_system/caches[0].enabled.cache/N1230_1_1/gateop, insts:31.
+I: Infer CARRY group, base inst: board/soc/memory_system/caches[0].enabled.cache/N1279_1_1/gateop, insts:9.
+I: Infer CARRY group, base inst: board/soc/memory_system/caches[0].enabled.cache_1/N8.eq_0/gateop, insts:3.
+I: Infer CARRY group, base inst: board/soc/memory_system/caches[0].enabled.cache_1/N11.eq_0/gateop, insts:3.
+I: Infer CARRY group, base inst: board/soc/memory_system/caches[0].enabled.cache_1/N220.eq_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/memory_system/caches[0].enabled.cache_1/N284_1_1/gateop, insts:31.
+I: Infer CARRY group, base inst: board/soc/memory_system/caches[0].enabled.cache_1/N291_1_1/gateop, insts:31.
+I: Infer CARRY group, base inst: board/soc/memory_system/caches[0].enabled.cache_1/N336_1_1/gateop, insts:31.
+I: Infer CARRY group, base inst: board/soc/memory_system/caches[0].enabled.cache_1/N513/gateop, insts:2.
+Device Utilization Summary:
++------------------------------------------------------------------------+
+| Logic Utilization     | Used     | Available     | Utilization(%)     
++------------------------------------------------------------------------+
+| APM                   | 4        | 740           | 1                  
+| FF                    | 3997     | 319600        | 2                  
+| LUT                   | 6820     | 159800        | 5                  
+| Distributed RAM       | 389      | 39500         | 1                  
+| DRM                   | 22.5     | 415           | 6                  
+| IO                    | 13       | 400           | 4                  
+| RCKB                  | 0        | 40            | 0                  
+| SCANCHAIN             | 1        | 1             | 100                
+| USCM                  | 2        | 32            | 7                  
+| CCS                   | 1        | 1             | 100                
+| ADC                   | 0        | 1             | 0                  
+| DDR_PHY               | 0        | 40            | 0                  
+| HSSTLP                | 0        | 2             | 0                  
+| GPLL                  | 1        | 10            | 10                 
+| PPLL                  | 0        | 10            | 0                  
+| DDRPHY_CPD            | 0        | 20            | 0                  
+| HCKB                  | 0        | 120           | 0                  
+| IOCKB                 | 0        | 40            | 0                  
+| MRCKB                 | 0        | 20            | 0                  
+| PCIE                  | 0        | 1             | 0                  
+| DDRPHY_IOCLK_DIV      | 0        | 10            | 0                  
+| ANALOG                | 0        | 1             | 0                  
+| TSERDES               | 0        | 80            | 0                  
+| KEYRAM                | 0        | 1             | 0                  
++------------------------------------------------------------------------+
+
+Device mapping done.
+Total device mapping takes 1.16 sec.
+
+Design 'pds_soc_top' has been successfully mapped to architecture-specific objects.
+Saving design to DB.
+Action dev_map: Real time elapsed is 0h:0m:31s
+Action dev_map: CPU time elapsed is 0h:0m:12s
+Action dev_map: Process CPU time elapsed is 0h:0m:12s
+Current time: Thu Sep 24 23:34:43 2026
+Action dev_map: Peak memory pool usage is 532 MB
+Action from dev_map to dev_map: Total Real Time elapsed is 0h:0m:31s
+Action from dev_map to dev_map: Total CPU time elapsed is 0h:0m:12s
+Action from dev_map to dev_map: Total Process CPU Time elapsed is 0h:0m:12s
+Process "Device Map" done.
+Executing : dev_map -input_db_file D:/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/physical-redirect-accepted_valid_ram-uart-loader-packing3_compact0-s3-20260924T153315Z-881a48f1/implementation/source.adf successfully.
+
+
+Executing : pnr -gplace_seed 3 -logic_optimize_enable TRUE -logic_optimize_lut6d_combing_strategy 3 -plc_decongestion 0
+
+
+Process "Place & Route" started.
+Current time: Thu Sep 24 23:34:43 2026
+Compiling architecture definition.
+Analyzing project file 'D:/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/physical-redirect-accepted_valid_ram-uart-loader-packing3_compact0-s3-20260924T153315Z-881a48f1/implementation/cpu_ila.pds'.
+Compiling verification operator library.
+Compiling common defs.
+Compiling prim grid devices.
+Compiling gate devices.
+Compiling gate operators.
+Building architecture model.
+Loading device packaging model.
+pnr strategy configuration : 
+strategy name : 0
+Building architecture floorplan logic view.
+Constraint check start.
+Executing : def_port {led[0]} LOC=A20 VCCIO=3.3 IOSTANDARD=LVCMOS33 DRIVE=8 SLEW=SLOW NONE=TRUE
+Executing : def_port {led[0]} LOC=A20 VCCIO=3.3 IOSTANDARD=LVCMOS33 DRIVE=8 SLEW=SLOW NONE=TRUE successfully
+Executing : def_port {led[1]} LOC=C18 VCCIO=3.3 IOSTANDARD=LVCMOS33 DRIVE=8 SLEW=SLOW NONE=TRUE
+Executing : def_port {led[1]} LOC=C18 VCCIO=3.3 IOSTANDARD=LVCMOS33 DRIVE=8 SLEW=SLOW NONE=TRUE successfully
+Executing : def_port {led[2]} LOC=C19 VCCIO=3.3 IOSTANDARD=LVCMOS33 DRIVE=8 SLEW=SLOW NONE=TRUE
+Executing : def_port {led[2]} LOC=C19 VCCIO=3.3 IOSTANDARD=LVCMOS33 DRIVE=8 SLEW=SLOW NONE=TRUE successfully
+Executing : def_port {led[3]} LOC=E18 VCCIO=3.3 IOSTANDARD=LVCMOS33 DRIVE=8 SLEW=SLOW NONE=TRUE
+Executing : def_port {led[3]} LOC=E18 VCCIO=3.3 IOSTANDARD=LVCMOS33 DRIVE=8 SLEW=SLOW NONE=TRUE successfully
+Executing : def_port {led[4]} LOC=A17 VCCIO=3.3 IOSTANDARD=LVCMOS33 DRIVE=8 SLEW=SLOW NONE=TRUE
+Executing : def_port {led[4]} LOC=A17 VCCIO=3.3 IOSTANDARD=LVCMOS33 DRIVE=8 SLEW=SLOW NONE=TRUE successfully
+Executing : def_port {led[5]} LOC=A18 VCCIO=3.3 IOSTANDARD=LVCMOS33 DRIVE=8 SLEW=SLOW NONE=TRUE
+Executing : def_port {led[5]} LOC=A18 VCCIO=3.3 IOSTANDARD=LVCMOS33 DRIVE=8 SLEW=SLOW NONE=TRUE successfully
+Executing : def_port {led[6]} LOC=C17 VCCIO=3.3 IOSTANDARD=LVCMOS33 DRIVE=8 SLEW=SLOW NONE=TRUE
+Executing : def_port {led[6]} LOC=C17 VCCIO=3.3 IOSTANDARD=LVCMOS33 DRIVE=8 SLEW=SLOW NONE=TRUE successfully
+Executing : def_port {led[7]} LOC=B17 VCCIO=3.3 IOSTANDARD=LVCMOS33 DRIVE=8 SLEW=SLOW NONE=TRUE
+Executing : def_port {led[7]} LOC=B17 VCCIO=3.3 IOSTANDARD=LVCMOS33 DRIVE=8 SLEW=SLOW NONE=TRUE successfully
+Executing : def_port {uart_tx} LOC=AB26 VCCIO=3.3 IOSTANDARD=LVCMOS33 DRIVE=8 SLEW=SLOW NONE=TRUE
+Executing : def_port {uart_tx} LOC=AB26 VCCIO=3.3 IOSTANDARD=LVCMOS33 DRIVE=8 SLEW=SLOW NONE=TRUE successfully
+Executing : def_port {clk} LOC=D18 VCCIO=3.3 IOSTANDARD=LVCMOS33 NONE=TRUE
+Executing : def_port {clk} LOC=D18 VCCIO=3.3 IOSTANDARD=LVCMOS33 NONE=TRUE successfully
+Executing : def_port {key} LOC=C23 VCCIO=3.3 IOSTANDARD=LVCMOS33 NONE=TRUE
+Executing : def_port {key} LOC=C23 VCCIO=3.3 IOSTANDARD=LVCMOS33 NONE=TRUE successfully
+Executing : def_port {rst_n} LOC=C22 VCCIO=3.3 IOSTANDARD=LVCMOS33 NONE=TRUE
+Executing : def_port {rst_n} LOC=C22 VCCIO=3.3 IOSTANDARD=LVCMOS33 NONE=TRUE successfully
+Executing : def_port {uart_rx} LOC=AC26 VCCIO=3.3 IOSTANDARD=LVCMOS33 NONE=TRUE
+Executing : def_port {uart_rx} LOC=AC26 VCCIO=3.3 IOSTANDARD=LVCMOS33 NONE=TRUE successfully
+Constraint check end.
+NOTE: The technology fpga was specified.
+NOTE: delay_model specified was generic_cmos.
+NOTE: Using the fpga syntax tables...
+Totals:
+ Calls to malloc = 0
+ Calls to calloc = 5993935
+
+I: Column Clock Check open.
+Read Column Clock Map.
+
+Placement started.
+Phase 1 Pre global placement started.
+Mapping instance GRS_INST/grs_ccs to CCS_75_622.
+Mapping instance u_CORES/u_GTP_SCANCHAIN_PG/scanchain to SCANCHAIN_76_618.
+Mapping instance multiplied_clock.clock_source/pll/gpll_inst to GPLL_7_1381.
+Phase 1.1 1st GP placement started.
+Design Utilization : 5%.
+Build SRB system takes 5.77 sec.
+Wirelength after clock region global placement is 69000 and checksum is A9C1F9C317E27754.
+1st GP placement takes 9.30 sec.
+
+Phase 1.2 Clock placement started.
+Mapping instance clkbufg_3/gopclkbufg to USCM_383_930.
+C: Place-2028: GLOBAL_CLOCK: the driver u_CORES/u_GTP_SCANCHAIN_PG/scanchain fixed at SCANCHAIN_76_618 is unreasonable. Sub-optimal placement for a clock source and a clock buffer.
+Mapping instance clkbufg_4/gopclkbufg to USCM_383_882.
+Clock placement takes 0.22 sec.
+
+Wirelength after Pre Global Placement is 69000 and checksum is A9C1F9C317E27754.
+Pre global placement takes 10.70 sec.
+
+Phase 2 Global placement started.
+Phase 2.1 Fixed placement started.
+First map gop timing takes 1.62 sec
+Init coarse delay table.
+Read place coarse delay table takes 2.05 sec.
+Placed fixed group with base inst clk_ibuf/opit_1 on IOLHR_16_1386.
+Placed fixed group with base inst key_ibuf/opit_1 on IOLHR_16_1290.
+Placed fixed group with base inst led_obuf[0]/opit_1 on IOLHR_16_1338.
+Placed fixed group with base inst led_obuf[1]/opit_1 on IOLHR_16_1380.
+Placed fixed group with base inst led_obuf[2]/opit_1 on IOLHR_16_1362.
+Placed fixed group with base inst led_obuf[3]/opit_1 on IOLHR_16_1392.
+Placed fixed group with base inst led_obuf[4]/opit_1 on IOLHR_16_1422.
+Placed fixed group with base inst led_obuf[5]/opit_1 on IOLHR_16_1416.
+Placed fixed group with base inst led_obuf[6]/opit_1 on IOLHR_16_1446.
+Placed fixed group with base inst led_obuf[7]/opit_1 on IOLHR_16_1440.
+Placed fixed group with base inst rst_n_ibuf/opit_1 on IOLHR_16_1296.
+Placed fixed group with base inst uart_rx_ibuf/opit_1 on IOLHR_16_570.
+Placed fixed group with base inst uart_tx_obuf/opit_1 on IOLHR_16_576.
+Placed fixed instance GRS_INST/grs_ccs on CCS_75_622.
+Placed fixed instance clkbufg_3/gopclkbufg on USCM_383_930.
+Placed fixed instance clkbufg_4/gopclkbufg on USCM_383_882.
+Placed fixed instance multiplied_clock.clock_source/pll/gpll_inst on GPLL_7_1381.
+Placed fixed instance u_CORES/u_GTP_SCANCHAIN_PG/scanchain on SCANCHAIN_76_618.
+Placed fixed instance BKCL_auto_0 on BKCL_1_1258.
+Placed fixed instance BKCL_auto_1 on BKCL_1_340.
+Fixed placement takes 5.67 sec.
+
+Phase 2.2 Process placement started.
+Process placement takes 0.00 sec.
+
+Phase 2.3 IO placement started.
+IO placement takes 0.08 sec.
+
+PBM start.
+Total cost after SA planning is 1684.100000.
+SA total time: 1889 msec
+PBM of GP end, takes 2.11 sec.
+Phase 2.4 2nd GP placement started.
+Run super clustering :
+	Initial slack -10486.
+	15 iterations finished.
+	Final slack -5088.
+Super clustering done.
+Design Utilization : 5%.
+I: GP end with result: density(0.001045)
+Worst slack after global placement is -460
+2nd GP placement takes 7.91 sec.
+
+Wirelength after global placement is 85189 and checksum is 6A415D81F50DAAA.
+Global placement takes 15.77 sec.
+
+Phase 3 Post global placement started.
+Packing LUT6D started.
+I: LUT6D pack result: There are 2000 LUT6 in collection, pack success:28
+Packing LUT6D takes 1.20 sec.
+Phase 3.1 Macro cell placement started.
+I: Process macros using "Global".
+Wirelength after macro cell placement is 93282 and checksum is 4827E421F7BF414C.
+Macro cell placement takes 0.62 sec.
+
+PBM start.
+PBM of PostGP end, takes 0.00 sec.
+Phase 3.2 3rd GP placement started.
+Design Utilization : 5%.
+I: GP end with result: density(0.002215)
+Worst slack after post global placement is -629
+3rd GP placement takes 4.42 sec.
+
+Wirelength after post global placement is 85868 and checksum is 70F67E01C1414E8A.
+Packing LUT6D started.
+I: LUT6D pack result: There are 2104 LUT6 in collection, pack success:13
+Packing LUT6D takes 1.23 sec.
+Post global placement takes 7.52 sec.
+
+Phase 4 Legalization started.
+The average distance in LP is 0.261792.
+Wirelength after legalization is 91426 and checksum is C7E17C844E55A80C.
+Legalization takes 0.50 sec.
+
+Phase 5 Timing-driven detailed placement started.
+Phase 5.1 Replication placement started.
+Worst slack before Replication Place is -748.
+Replication placement takes 12.70 sec.
+
+Wirelength after replication placement is 94341 and checksum is 49427F5E70BD9E58.
+Phase 5.2 Swapping placement started.
+Worst slack before detailed placement is -747, TNS before detailed placement is -128881. 
+Cost at Swap iteration 0 : -747, wslk -743, tns -124036, takes 0.64 sec.
+    wire length at Swap iteration 0 : last 94501.00, curr 94460.00, change rate -0.04%
+Cost at DP iteration 0 : -743, wslk -417, tns -19274, takes 2.06 sec.
+    wire length at DP iteration 0 : last 94460.00, curr 97236.00, change rate 2.94%
+Cost at Swap iteration 1 : -417, wslk -183, tns -7699, takes 0.62 sec.
+    wire length at Swap iteration 1 : last 97236.00, curr 97121.00, change rate -0.12%
+Cost at Swap iteration 2 : -183, wslk -183, tns -4927, takes 0.55 sec.
+    wire length at Swap iteration 2 : last 97121.00, curr 97104.00, change rate -0.02%
+Cost at DP iteration 2 : -183, wslk 112, tns 0, takes 1.83 sec.
+    wire length at DP iteration 2 : last 97104.00, curr 98627.00, change rate 1.57%
+Cost at Swap iteration 3 : 112, wslk 115, tns 0, takes 0.84 sec.
+    wire length at Swap iteration 3 : last 98627.00, curr 98554.00, change rate -0.07%
+Cost at Swap iteration 4 : 115, wslk 118, tns 0, takes 0.70 sec.
+    wire length at Swap iteration 4 : last 98554.00, curr 98537.00, change rate -0.02%
+Cost at DP iteration 4 : 118, wslk 161, tns 0, takes 1.97 sec.
+    wire length at DP iteration 4 : last 98537.00, curr 100576.00, change rate 2.07%
+Cost at Swap iteration 5 : 161, wslk 161, tns 0, takes 0.55 sec.
+    wire length at Swap iteration 5 : last 100576.00, curr 100576.00, change rate 0.00%
+Cost at Swap iteration 6 : 161, wslk 161, tns 0, takes 0.45 sec.
+    wire length at Swap iteration 6 : last 100576.00, curr 100576.00, change rate 0.00%
+Cost at DP iteration 6 : 161, wslk 216, tns 0, takes 1.50 sec.
+    wire length at DP iteration 6 : last 100576.00, curr 101415.00, change rate 0.83%
+Cost at Swap iteration 7 : 216, wslk 216, tns 0, takes 0.56 sec.
+    wire length at Swap iteration 7 : last 101415.00, curr 101388.00, change rate -0.03%
+Cost at Swap iteration 8 : 216, wslk 216, tns 0, takes 0.53 sec.
+    wire length at Swap iteration 8 : last 101388.00, curr 101388.00, change rate 0.00%
+Cost at DP iteration 8 : 216, wslk 228, tns 0, takes 1.84 sec.
+    wire length at DP iteration 8 : last 101388.00, curr 101986.00, change rate 0.59%
+Cost at Swap iteration 9 : 228, wslk 228, tns 0, takes 0.47 sec.
+    wire length at Swap iteration 9 : last 101986.00, curr 101894.00, change rate -0.09%
+Cost at Swap iteration 10 : 228, wslk 228, tns 0, takes 0.52 sec.
+    wire length at Swap iteration 10 : last 101894.00, curr 101888.00, change rate -0.01%
+Cost at DP iteration 10 : 228, wslk 228, tns 0, takes 1.72 sec.
+    wire length at DP iteration 10 : last 101888.00, curr 102321.00, change rate 0.42%
+Cost at Swap iteration 11 : 228, wslk 228, tns 0, takes 0.45 sec.
+    wire length at Swap iteration 11 : last 102321.00, curr 102298.00, change rate -0.02%
+Worst slack after detailed placement is 228, TNS after detailed placement is 0. 
+Swapping placement takes 18.41 sec.
+
+I: Place-6001: Add the new LUT instances CLMA_297_828(/devAL6) replicated by the LUT instance CLMA_291_810(/devDL6).
+Origin board/soc/core/N1187_9[20]/LUT6_inst replicates:
+    CLMA_297_828(/devAL6) : board/soc/core/N1187_9[20]/LUT6_inst_1(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMS_291_841(/devAL6_S) replicated by the LUT instance CLMA_303_835(/devBL6).
+Origin board/soc/core/N1187_9[16]/LUT6_inst replicates:
+    CLMS_291_841(/devAL6_S) : board/soc/core/N1187_9[16]/LUT6_inst_1(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMA_273_828(/devDL6) CLMA_273_841(/devDL6) CLMA_315_792(/devBL6) replicated by the LUT instance CLMA_303_846(/devBL6).
+Origin board/soc/core/N1187_9[29]/LUT6_inst replicates:
+    CLMA_273_828(/devDL6) : board/soc/core/N1187_9[29]/LUT6_inst_1(gopLUT6)
+    CLMA_273_841(/devDL6) : board/soc/core/N1187_9[29]/LUT6_inst_2(gopLUT6)
+    CLMA_315_792(/devBL6) : board/soc/core/N1187_9[29]/LUT6_inst_3(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMS_291_859(/devBL6_S) replicated by the LUT instance CLMS_291_847(/devAL6_S).
+Origin board/soc/core/N808[7]/gateop replicates:
+    CLMS_291_859(/devBL6_S) : board/soc/core/N808[7]/gateop_0(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMA_321_798(/devAL6) replicated by the LUT instance CLMA_303_828(/devDL6).
+Origin board/soc/core/N1187_9[26]/LUT6_inst replicates:
+    CLMA_321_798(/devAL6) : board/soc/core/N1187_9[26]/LUT6_inst_1(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMA_291_828(/devCL6) replicated by the LUT instance CLMA_285_823(/devBL6).
+Origin board/soc/core/N1187_9[17]/LUT6_inst replicates:
+    CLMA_291_828(/devCL6) : board/soc/core/N1187_9[17]/LUT6_inst_1(gopLUT6)
+I: Place-6001: Add the new FF instances CLMA_339_804(/FFAPP2/FF) replicated by the FF instance CLMS_291_817(/FF0/FF) .
+Origin board/soc/core/wb_rd[4]/opit_0_inv replicates:
+    CLMA_339_804(/FFAPP2/FF)  : board/soc/core/wb_rd[4]/opit_0_inv_1(gopQ)
+I: Place-6001: Add the new LUT instances CLMA_273_829(/devDL6) replicated by the LUT instance CLMA_315_864(/devDL6).
+Origin board/soc/core/N1187_9[25]/LUT6_inst replicates:
+    CLMA_273_829(/devDL6) : board/soc/core/N1187_9[25]/LUT6_inst_1(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMA_285_834(/devBL6) replicated by the LUT instance CLMA_291_828(/devAL6).
+Origin board/soc/core/N1187_9[2]/LUT6_inst replicates:
+    CLMA_285_834(/devBL6) : board/soc/core/N1187_9[2]/LUT6_inst_1(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMA_297_877(/devCL6) replicated by the LUT instance CLMA_285_864(/devDL6).
+Origin board/soc/core/alu/N89_4/gateop replicates:
+    CLMA_297_877(/devCL6) : board/soc/core/alu/N89_4/gateop_1(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMS_261_745(/devDL6_S) replicated by the LUT instance CLMA_273_745(/devAL6).
+Origin board/soc/core/N199_3/gateop replicates:
+    CLMS_261_745(/devDL6_S) : board/soc/core/N199_3/gateop_1(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMA_273_744(/devDL6) CLMA_297_768(/devDL6) replicated by the LUT instance CLMA_285_768(/devAL6).
+Origin board/soc/core/N172_15/LUT6_inst replicates:
+    CLMA_273_744(/devDL6) : board/soc/core/N172_15/LUT6_inst_1(gopLUT6)
+    CLMA_297_768(/devDL6) : board/soc/core/N172_15/LUT6_inst_2(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMA_267_882(/devAL6) CLMA_285_840(/devDL6) CLMA_327_852(/devDL6) replicated by the LUT instance CLMA_339_828(/devCL6).
+Origin board/soc/core/N1198_9[18]/LUT6_inst replicates:
+    CLMA_267_882(/devAL6) : board/soc/core/N1198_9[18]/LUT6_inst_1(gopLUT6)
+    CLMA_285_840(/devDL6) : board/soc/core/N1198_9[18]/LUT6_inst_2(gopLUT6)
+    CLMA_327_852(/devDL6) : board/soc/core/N1198_9[18]/LUT6_inst_3(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMA_285_852(/devDL6) replicated by the LUT instance CLMA_303_877(/devDL6).
+Origin board/soc/core/alu/N91_4_132[1]/LUT6_inst replicates:
+    CLMA_285_852(/devDL6) : board/soc/core/alu/N91_4_132[1]/LUT6_inst_1(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMA_297_835(/devCL6) replicated by the LUT instance CLMA_297_829(/devBL6).
+Origin board/soc/core/N1187_9[18]/LUT6_inst replicates:
+    CLMA_297_835(/devCL6) : board/soc/core/N1187_9[18]/LUT6_inst_1(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMA_219_793(/devDL6) replicated by the LUT instance CLMA_285_834(/devDL6).
+Origin board/soc/core/N1187_9[5]/LUT6_inst replicates:
+    CLMA_219_793(/devDL6) : board/soc/core/N1187_9[5]/LUT6_inst_1(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMA_255_798(/devDL6) CLMA_273_822(/devDL6) CLMA_303_835(/devAL6) replicated by the LUT instance CLMA_303_780(/devBL6).
+Origin board/soc/core/N1198_9[14]/LUT6_inst replicates:
+    CLMA_255_798(/devDL6) : board/soc/core/N1198_9[14]/LUT6_inst_1(gopLUT6)
+    CLMA_273_822(/devDL6) : board/soc/core/N1198_9[14]/LUT6_inst_2(gopLUT6)
+    CLMA_303_835(/devAL6) : board/soc/core/N1198_9[14]/LUT6_inst_3(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMS_267_853(/devBL6_S) CLMA_285_846(/devCL6) replicated by the LUT instance CLMS_255_859(/devBL6_S).
+Origin board/soc/core/N814[4]/gateop replicates:
+    CLMS_267_853(/devBL6_S) : board/soc/core/N814[4]/gateop_0(gopLUT6)
+    CLMA_285_846(/devCL6) : board/soc/core/N814[4]/gateop_1(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMS_291_883(/devDL6_S) CLMS_321_805(/devCL6_S) replicated by the LUT instance CLMA_315_870(/devAL6).
+Origin board/soc/core/N1187_9[24]/LUT6_inst replicates:
+    CLMS_291_883(/devDL6_S) : board/soc/core/N1187_9[24]/LUT6_inst_1(gopLUT6)
+    CLMS_321_805(/devCL6_S) : board/soc/core/N1187_9[24]/LUT6_inst_2(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMA_285_816(/devDL6) replicated by the LUT instance CLMA_285_816(/devCL6).
+Origin board/soc/core/N301/LUT6_inst replicates:
+    CLMA_285_816(/devDL6) : board/soc/core/N301/LUT6_inst_1(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMS_291_847(/devCL6_S) replicated by the LUT instance CLMA_285_816(/devAL6).
+Origin board/soc/core/N1187_9[10]/LUT6_inst replicates:
+    CLMS_291_847(/devCL6_S) : board/soc/core/N1187_9[10]/LUT6_inst_1(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMA_273_805(/devBL6) CLMA_321_858(/devBL6) replicated by the LUT instance CLMA_327_799(/devCL6).
+Origin board/soc/core/N1198_9[28]/LUT6_inst replicates:
+    CLMA_273_805(/devBL6) : board/soc/core/N1198_9[28]/LUT6_inst_1(gopLUT6)
+    CLMA_321_858(/devBL6) : board/soc/core/N1198_9[28]/LUT6_inst_2(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMA_231_744(/devBL6) CLMA_249_756(/devBL6) replicated by the LUT instance CLMA_231_750(/devDL6).
+Origin board/soc/memory_system/caches[0].enabled.cache_1/N505/LUT6_inst replicates:
+    CLMA_231_744(/devBL6) : board/soc/memory_system/caches[0].enabled.cache_1/N505/LUT6_inst_1(gopLUT6)
+    CLMA_249_756(/devBL6) : board/soc/memory_system/caches[0].enabled.cache_1/N505/LUT6_inst_2(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMA_285_739(/devCL6) replicated by the LUT instance CLMA_285_738(/devCL6).
+Origin board/soc/core/N955_3/LUT6_inst replicates:
+    CLMA_285_739(/devCL6) : board/soc/core/N955_3/LUT6_inst_1(gopLUT6)
+I: Place-6001: Add the new FF instances CLMA_255_822(/FF0/FF) replicated by the FF instance CLMA_285_817(/FF1/FF) .
+Origin board/soc/core/mem_instruction[11]/opit_0_inv replicates:
+    CLMA_255_822(/FF0/FF)  : board/soc/core/mem_instruction[11]/opit_0_inv_1(gopQ)
+I: Place-6001: Add the new LUT instances CLMA_273_811(/devBL6) CLMA_273_834(/devDL6) CLMA_285_840(/devCL6) replicated by the LUT instance CLMA_315_834(/devDL6).
+Origin board/soc/core/N1198_9[22]/LUT6_inst replicates:
+    CLMA_273_811(/devBL6) : board/soc/core/N1198_9[22]/LUT6_inst_1(gopLUT6)
+    CLMA_273_834(/devDL6) : board/soc/core/N1198_9[22]/LUT6_inst_2(gopLUT6)
+    CLMA_285_840(/devCL6) : board/soc/core/N1198_9[22]/LUT6_inst_3(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMA_213_792(/devBL6) CLMA_321_840(/devBL6) replicated by the LUT instance CLMA_303_876(/devBL6).
+Origin board/soc/core/N1187_9[27]/LUT6_inst replicates:
+    CLMA_213_792(/devBL6) : board/soc/core/N1187_9[27]/LUT6_inst_1(gopLUT6)
+    CLMA_321_840(/devBL6) : board/soc/core/N1187_9[27]/LUT6_inst_2(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMA_321_852(/devAL6) CLMA_303_847(/devCL6) replicated by the LUT instance CLMA_327_834(/devAL6).
+Origin board/soc/core/N1198_9[26]/LUT6_inst replicates:
+    CLMA_321_852(/devAL6) : board/soc/core/N1198_9[26]/LUT6_inst_1(gopLUT6)
+    CLMA_303_847(/devCL6) : board/soc/core/N1198_9[26]/LUT6_inst_2(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMS_291_811(/devDL6_S) replicated by the LUT instance CLMA_303_828(/devBL6).
+Origin board/soc/core/N1187_9[30]/LUT6_inst replicates:
+    CLMS_291_811(/devDL6_S) : board/soc/core/N1187_9[30]/LUT6_inst_1(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMA_327_822(/devBL6) CLMA_303_871(/devBL6) CLMA_315_847(/devDL6) replicated by the LUT instance CLMA_339_828(/devDL6).
+Origin board/soc/core/N1198_9[25]/LUT6_inst replicates:
+    CLMA_327_822(/devBL6) : board/soc/core/N1198_9[25]/LUT6_inst_1(gopLUT6)
+    CLMA_303_871(/devBL6) : board/soc/core/N1198_9[25]/LUT6_inst_2(gopLUT6)
+    CLMA_315_847(/devDL6) : board/soc/core/N1198_9[25]/LUT6_inst_3(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMA_285_817(/devDL6) replicated by the LUT instance CLMA_285_828(/devAL6).
+Origin board/soc/core/N814[2]/gateop replicates:
+    CLMA_285_817(/devDL6) : board/soc/core/N814[2]/gateop_0(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMA_291_810(/devAL6) CLMA_297_822(/devBL6) replicated by the LUT instance CLMA_327_834(/devDL6).
+Origin board/soc/core/N1198_9[24]/LUT6_inst replicates:
+    CLMA_291_810(/devAL6) : board/soc/core/N1198_9[24]/LUT6_inst_1(gopLUT6)
+    CLMA_297_822(/devBL6) : board/soc/core/N1198_9[24]/LUT6_inst_2(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMA_285_798(/devCL6) replicated by the LUT instance CLMA_303_834(/devDL6).
+Origin board/soc/core/N1198_9[27]/LUT6_inst replicates:
+    CLMA_285_798(/devCL6) : board/soc/core/N1198_9[27]/LUT6_inst_1(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMS_267_853(/devCL6L5Q_S) replicated by the LUT instance CLMA_291_840(/devAL6L5Q).
+Origin board/soc/core/N808[0]/LUT6D_inst replicates:
+    CLMS_267_853(/devCL6L5Q_S) : board/soc/core/N808[0]/LUT6D_inst_1(gopLUT6L5)
+I: Place-6001: Add the new LUT instances CLMA_285_775(/devBL6) CLMA_273_835(/devDL6) replicated by the LUT instance CLMA_303_810(/devBL6).
+Origin board/soc/core/N1198_9[10]/LUT6_inst replicates:
+    CLMA_285_775(/devBL6) : board/soc/core/N1198_9[10]/LUT6_inst_1(gopLUT6)
+    CLMA_273_835(/devDL6) : board/soc/core/N1198_9[10]/LUT6_inst_2(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMA_297_828(/devBL6) replicated by the LUT instance CLMA_303_834(/devBL6).
+Origin board/soc/core/N1198_9[23]/LUT6_inst replicates:
+    CLMA_297_828(/devBL6) : board/soc/core/N1198_9[23]/LUT6_inst_1(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMA_273_829(/devBL6) CLMA_315_846(/devDL6) replicated by the LUT instance CLMA_285_805(/devDL6).
+Origin board/soc/core/N1198_9[21]/LUT6_inst replicates:
+    CLMA_273_829(/devBL6) : board/soc/core/N1198_9[21]/LUT6_inst_1(gopLUT6)
+    CLMA_315_846(/devDL6) : board/soc/core/N1198_9[21]/LUT6_inst_2(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMA_315_792(/devCL6) replicated by the LUT instance CLMA_297_834(/devCL6).
+Origin board/soc/core/N1198_9[31]/LUT6_inst replicates:
+    CLMA_315_792(/devCL6) : board/soc/core/N1198_9[31]/LUT6_inst_1(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMA_303_780(/devAL6) CLMA_273_858(/devCL6) replicated by the LUT instance CLMA_321_840(/devCL6).
+Origin board/soc/core/N1198_9[7]/LUT6_inst replicates:
+    CLMA_303_780(/devAL6) : board/soc/core/N1198_9[7]/LUT6_inst_1(gopLUT6)
+    CLMA_273_858(/devCL6) : board/soc/core/N1198_9[7]/LUT6_inst_2(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMA_285_811(/devDL6) CLMS_291_853(/devBL6_S) replicated by the LUT instance CLMA_321_834(/devCL6).
+Origin board/soc/core/N1198_9[8]/LUT6_inst replicates:
+    CLMA_285_811(/devDL6) : board/soc/core/N1198_9[8]/LUT6_inst_1(gopLUT6)
+    CLMS_291_853(/devBL6_S) : board/soc/core/N1198_9[8]/LUT6_inst_2(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMA_249_834(/devDL6L5Q) replicated by the LUT instance CLMA_339_828(/devAL6L5Q).
+Origin board/soc/core/N1084[31]/LUT6D_inst replicates:
+    CLMA_249_834(/devDL6L5Q) : board/soc/core/N1084[31]/LUT6D_inst_1(gopLUT6L5)
+I: Place-6001: Add the new LUT instances CLMA_285_847(/devBL6L5Q) replicated by the LUT instance CLMA_339_828(/devBL6L5Q).
+Origin board/soc/core/N1085[31]/LUT6D_inst replicates:
+    CLMA_285_847(/devBL6L5Q) : board/soc/core/N1085[31]/LUT6D_inst_1(gopLUT6L5)
+I: Place-6001: Add the new FF instances CLMA_255_708(/FF0/FF) replicated by the FF instance CLMA_243_810(/FFAPP1/FF) .
+Origin board/soc/core/mem_pc[10]/opit_0_inv replicates:
+    CLMA_255_708(/FF0/FF)  : board/soc/core/mem_pc[10]/opit_0_inv_1(gopQ)
+I: Place-6001: Add the new LUT instances CLMA_285_750(/devBL6) CLMA_285_744(/devAL6) replicated by the LUT instance CLMS_243_811(/devDL6_S).
+Origin board/soc/core/predictor/N15_4/gateop replicates:
+    CLMA_285_750(/devBL6) : board/soc/core/predictor/N15_4/gateop_1(gopLUT6)
+    CLMA_285_744(/devAL6) : board/soc/core/predictor/N15_4/gateop_2(gopLUT6)
+I: Place-6001: Add the new FF instances CLMA_267_792(/FF2/FF) replicated by the FF instance CLMS_255_775(/FFAPP1/FF) .
+Origin board/soc/core/ex_pc[5]/opit_0_inv replicates:
+    CLMA_267_792(/FF2/FF)  : board/soc/core/ex_pc[5]/opit_0_inv_1(gopQ)
+I: Place-6001: Add the new LUT instances CLMA_315_823(/devCL6) CLMA_273_835(/devBL6) replicated by the LUT instance CLMA_303_810(/devDL6).
+Origin board/soc/core/N1198_9[20]/LUT6_inst replicates:
+    CLMA_315_823(/devCL6) : board/soc/core/N1198_9[20]/LUT6_inst_1(gopLUT6)
+    CLMA_273_835(/devBL6) : board/soc/core/N1198_9[20]/LUT6_inst_2(gopLUT6)
+I: Place-6001: Add the new FF instances CLMA_261_708(/FF0/FF) replicated by the FF instance CLMA_285_774(/FF0/FF) .
+Origin board/soc/core/mem_pc[12]/opit_0_inv replicates:
+    CLMA_261_708(/FF0/FF)  : board/soc/core/mem_pc[12]/opit_0_inv_1(gopQ)
+I: Place-6001: Add the new LUT instances CLMS_267_823(/devDL6_S) CLMA_273_859(/devCL6) CLMA_327_810(/devDL6) replicated by the LUT instance CLMA_321_840(/devDL6).
+Origin board/soc/core/N1198_9[6]/LUT6_inst replicates:
+    CLMS_267_823(/devDL6_S) : board/soc/core/N1198_9[6]/LUT6_inst_1(gopLUT6)
+    CLMA_273_859(/devCL6) : board/soc/core/N1198_9[6]/LUT6_inst_2(gopLUT6)
+    CLMA_327_810(/devDL6) : board/soc/core/N1198_9[6]/LUT6_inst_3(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMA_297_792(/devCL6) replicated by the LUT instance CLMA_285_810(/devDL6).
+Origin board/soc/core/N1198_9[13]/LUT6_inst replicates:
+    CLMA_297_792(/devCL6) : board/soc/core/N1198_9[13]/LUT6_inst_1(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMA_297_793(/devAL6) replicated by the LUT instance CLMA_285_846(/devBL6).
+Origin board/soc/core/N1198_9[11]/LUT6_inst replicates:
+    CLMA_297_793(/devAL6) : board/soc/core/N1198_9[11]/LUT6_inst_1(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMA_315_883(/devBL6) CLMA_273_823(/devCL6) CLMA_303_793(/devCL6) replicated by the LUT instance CLMA_327_853(/devAL6).
+Origin board/soc/core/N1198_9[30]/LUT6_inst replicates:
+    CLMA_315_883(/devBL6) : board/soc/core/N1198_9[30]/LUT6_inst_1(gopLUT6)
+    CLMA_273_823(/devCL6) : board/soc/core/N1198_9[30]/LUT6_inst_2(gopLUT6)
+    CLMA_303_793(/devCL6) : board/soc/core/N1198_9[30]/LUT6_inst_3(gopLUT6)
+I: Place-6001: Add the new FF instances CLMA_273_804(/FF2/FF) replicated by the FF instance CLMA_261_744(/FF3/FF) .
+Origin board/soc/core/ex_pc[17]/opit_0_inv replicates:
+    CLMA_273_804(/FF2/FF)  : board/soc/core/ex_pc[17]/opit_0_inv_1(gopQ)
+I: Place-6001: Add the new LUT instances CLMA_249_793(/devDL6) replicated by the LUT instance CLMA_303_835(/devCL6).
+Origin board/soc/core/N1198_9[9]/LUT6_inst replicates:
+    CLMA_249_793(/devDL6) : board/soc/core/N1198_9[9]/LUT6_inst_1(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMA_273_835(/devCL6) replicated by the LUT instance CLMA_297_835(/devAL6).
+Origin board/soc/core/N1198_9[19]/LUT6_inst replicates:
+    CLMA_273_835(/devCL6) : board/soc/core/N1198_9[19]/LUT6_inst_1(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMA_261_816(/devAL6) replicated by the LUT instance CLMA_285_841(/devDL6).
+Origin board/soc/core/N1198_9[3]/LUT6_inst replicates:
+    CLMA_261_816(/devAL6) : board/soc/core/N1198_9[3]/LUT6_inst_1(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMA_297_852(/devCL6) replicated by the LUT instance CLMA_303_817(/devDL6).
+Origin board/soc/core/N1198_9[17]/LUT6_inst replicates:
+    CLMA_297_852(/devCL6) : board/soc/core/N1198_9[17]/LUT6_inst_1(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMA_273_817(/devAL6) replicated by the LUT instance CLMA_273_811(/devAL6).
+Origin board/soc/core/N1187_9[13]/LUT6_inst replicates:
+    CLMA_273_817(/devAL6) : board/soc/core/N1187_9[13]/LUT6_inst_1(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMA_273_829(/devAL6) CLMA_285_835(/devBL6) replicated by the LUT instance CLMA_303_792(/devDL6).
+Origin board/soc/core/N1198_9[15]/LUT6_inst replicates:
+    CLMA_273_829(/devAL6) : board/soc/core/N1198_9[15]/LUT6_inst_1(gopLUT6)
+    CLMA_285_835(/devBL6) : board/soc/core/N1198_9[15]/LUT6_inst_2(gopLUT6)
+I: Place-6001: Add the new FF instances CLMA_267_792(/FF3/FF) replicated by the FF instance CLMS_261_751(/FF1/FF) .
+Origin board/soc/core/ex_pc[6]/opit_0_inv replicates:
+    CLMA_267_792(/FF3/FF)  : board/soc/core/ex_pc[6]/opit_0_inv_1(gopQ)
+I: Place-6001: Add the new LUT instances CLMA_285_798(/devBL6) replicated by the LUT instance CLMA_303_858(/devBL6).
+Origin board/soc/core/N1198_9[12]/LUT6_inst replicates:
+    CLMA_285_798(/devBL6) : board/soc/core/N1198_9[12]/LUT6_inst_1(gopLUT6)
+I: Place-6001: Add the new FF instances CLMS_255_709(/FF0/FF) CLMS_255_709(/FFAPP0/FF) replicated by the FF instance CLMA_249_714(/FFAPP2/FF) .
+Origin board/soc/core/mem_pc[11]/opit_0_inv replicates:
+    CLMS_255_709(/FF0/FF)  : board/soc/core/mem_pc[11]/opit_0_inv_1(gopQ)
+    CLMS_255_709(/FFAPP0/FF)  : board/soc/core/mem_pc[11]/opit_0_inv_2(gopQ)
+I: Place-6001: Add the new LUT instances CLMA_273_774(/devBL6) replicated by the LUT instance CLMA_273_744(/devCL6).
+Origin board/soc/core/N51_9[17]/gateop replicates:
+    CLMA_273_774(/devBL6) : board/soc/core/N51_9[17]/gateop_1(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMA_285_702(/devDL6) replicated by the LUT instance CLMA_249_714(/devBL6).
+Origin board/soc/core/predictor/N15_5/gateop replicates:
+    CLMA_285_702(/devDL6) : board/soc/core/predictor/N15_5/gateop_1(gopLUT6)
+I: Place-6001: Add the new FF instances CLMA_273_810(/FFAPP1/FF) replicated by the FF instance CLMS_261_751(/FF2/FF) .
+Origin board/soc/core/ex_pc[19]/opit_0_inv replicates:
+    CLMA_273_810(/FFAPP1/FF)  : board/soc/core/ex_pc[19]/opit_0_inv_1(gopQ)
+I: Place-6001: Add the new LUT instances CLMA_237_811(/devAL6) CLMA_237_841(/devAL6) replicated by the LUT instance CLMA_315_792(/devAL6).
+Origin board/soc/core/N1084[19]/gateop replicates:
+    CLMA_237_811(/devAL6) : board/soc/core/N1084[19]/gateop_0(gopLUT6)
+    CLMA_237_841(/devAL6) : board/soc/core/N1084[19]/gateop_1(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMS_243_715(/devCL6_S) replicated by the LUT instance CLMA_237_828(/devCL6).
+Origin board/soc/core/N197_0/LUT6_inst replicates:
+    CLMS_243_715(/devCL6_S) : board/soc/core/N197_0/LUT6_inst_1(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMA_267_756(/devDL6L5Q) CLMA_285_768(/devCL6L5Q) replicated by the LUT instance CLMA_237_757(/devDL6L5Q).
+Origin board/soc/core/N969/LUT6D_inst replicates:
+    CLMA_267_756(/devDL6L5Q) : board/soc/core/N969/LUT6D_inst_1(gopLUT6L5)
+    CLMA_285_768(/devCL6L5Q) : board/soc/core/N969/LUT6D_inst_2(gopLUT6L5)
+I: Place-6001: Add the new LUT instances CLMA_249_768(/devDL6) replicated by the LUT instance CLMA_237_721(/devBL6).
+Origin board/soc/core/N1121/gateop replicates:
+    CLMA_249_768(/devDL6) : board/soc/core/N1121/gateop_0(gopLUT6)
+I: Place-6001: Add the new FF instances CLMA_273_805(/FF3/FF) replicated by the FF instance CLMA_261_744(/FF2/FF) .
+Origin board/soc/core/ex_pc[18]/opit_0_inv replicates:
+    CLMA_273_805(/FF3/FF)  : board/soc/core/ex_pc[18]/opit_0_inv_1(gopQ)
+I: Place-6001: Add the new LUT instances CLMA_201_714(/devBL6) CLMA_213_714(/devBL6) replicated by the LUT instance CLMA_201_685(/devDL6).
+Origin board/soc/memory_system/caches[0].enabled.cache_1/N518_1/gateop replicates:
+    CLMA_201_714(/devBL6) : board/soc/memory_system/caches[0].enabled.cache_1/N518_1/gateop_1(gopLUT6)
+    CLMA_213_714(/devBL6) : board/soc/memory_system/caches[0].enabled.cache_1/N518_1/gateop_2(gopLUT6)
+I: Place-6001: Add the new FF instances CLMA_315_798(/FFAPP0/FF) replicated by the FF instance CLMA_291_780(/FF3/FF) .
+Origin board/soc/core/id_instruction[22]/opit_0_inv replicates:
+    CLMA_315_798(/FFAPP0/FF)  : board/soc/core/id_instruction[22]/opit_0_inv_1(gopQ)
+I: Place-6001: Add the new LUT instances CLMA_249_816(/devDL6) replicated by the LUT instance CLMA_339_817(/devCL6).
+Origin board/soc/core/N1085[7]/gateop replicates:
+    CLMA_249_816(/devDL6) : board/soc/core/N1085[7]/gateop_0(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMA_255_810(/devDL6) replicated by the LUT instance CLMA_339_816(/devCL6).
+Origin board/soc/core/N1085[15]/gateop replicates:
+    CLMA_255_810(/devDL6) : board/soc/core/N1085[15]/gateop_0(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMA_255_834(/devDL6) replicated by the LUT instance CLMA_339_834(/devAL6).
+Origin board/soc/core/N1085[18]/gateop replicates:
+    CLMA_255_834(/devDL6) : board/soc/core/N1085[18]/gateop_0(gopLUT6)
+I: Place-6001: Add the new FF instances CLMS_321_793(/FF3/FF) replicated by the FF instance CLMS_291_781(/FF3/FF) .
+Origin board/soc/core/id_instruction[23]/opit_0_inv replicates:
+    CLMS_321_793(/FF3/FF)  : board/soc/core/id_instruction[23]/opit_0_inv_1(gopQ)
+I: Place-6001: Add the new LUT instances CLMS_243_811(/devCL6_S) replicated by the LUT instance CLMA_339_816(/devDL6).
+Origin board/soc/core/N1085[10]/gateop replicates:
+    CLMS_243_811(/devCL6_S) : board/soc/core/N1085[10]/gateop_0(gopLUT6)
+I: Place-6001: Add the new FF instances CLMA_237_792(/FF0/FF) replicated by the FF instance CLMS_261_799(/FF0/FF) .
+Origin board/soc/core/mem_pc[15]/opit_0_inv replicates:
+    CLMA_237_792(/FF0/FF)  : board/soc/core/mem_pc[15]/opit_0_inv_1(gopQ)
+I: Place-6001: Add the new FF instances CLMA_315_798(/FF1/FF) replicated by the FF instance CLMS_291_781(/FFAPP2/FF) .
+Origin board/soc/core/id_instruction[24]/opit_0_inv replicates:
+    CLMA_315_798(/FF1/FF)  : board/soc/core/id_instruction[24]/opit_0_inv_1(gopQ)
+I: Place-6001: Add the new LUT instances CLMS_231_847(/devAL6L5Q_S) replicated by the LUT instance CLMA_297_793(/devCL6L5Q).
+Origin board/soc/core/N383[21]/LUT6D_inst replicates:
+    CLMS_231_847(/devAL6L5Q_S) : board/soc/core/N383[21]/LUT6D_inst_1(gopLUT6L5)
+I: Place-6001: Add the new LUT instances CLMS_243_817(/devCL6_S) replicated by the LUT instance CLMA_339_810(/devDL6).
+Origin board/soc/core/N1085[3]/gateop replicates:
+    CLMS_243_817(/devCL6_S) : board/soc/core/N1085[3]/gateop_0(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMS_321_805(/devDL6_S) replicated by the LUT instance CLMA_291_804(/devBL6).
+Origin board/soc/core/N378[5]/gateop replicates:
+    CLMS_321_805(/devDL6_S) : board/soc/core/N378[5]/gateop_0(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMA_237_828(/devAL6) CLMS_321_871(/devAL6_S) replicated by the LUT instance CLMS_321_835(/devCL6_S).
+Origin board/soc/core/N1084[16]/gateop replicates:
+    CLMA_237_828(/devAL6) : board/soc/core/N1084[16]/gateop_0(gopLUT6)
+    CLMS_321_871(/devAL6_S) : board/soc/core/N1084[16]/gateop_1(gopLUT6)
+I: Place-6001: Add the new FF instances CLMA_315_786(/FF0/FF) CLMA_315_816(/FFAPP0/FF) replicated by the FF instance CLMA_273_786(/FF1/FF) .
+Origin board/soc/core/id_instruction[18]/opit_0_inv replicates:
+    CLMA_315_786(/FF0/FF)  : board/soc/core/id_instruction[18]/opit_0_inv_1(gopQ)
+    CLMA_315_816(/FFAPP0/FF)  : board/soc/core/id_instruction[18]/opit_0_inv_2(gopQ)
+I: Place-6001: Add the new LUT instances CLMA_231_816(/devCL6) replicated by the LUT instance CLMA_327_828(/devCL6).
+Origin board/soc/core/N1084[9]/gateop replicates:
+    CLMA_231_816(/devCL6) : board/soc/core/N1084[9]/gateop_0(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMS_243_823(/devDL6_S) replicated by the LUT instance CLMA_315_853(/devBL6).
+Origin board/soc/core/N1084[12]/gateop replicates:
+    CLMS_243_823(/devDL6_S) : board/soc/core/N1084[12]/gateop_0(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMA_219_750(/devBL6) CLMA_219_751(/devCL6) replicated by the LUT instance CLMA_237_768(/devDL6).
+Origin board/soc/memory_system/caches[0].enabled.cache_1/N167_3/LUT6_inst replicates:
+    CLMA_219_750(/devBL6) : board/soc/memory_system/caches[0].enabled.cache_1/N167_3/LUT6_inst_1(gopLUT6)
+    CLMA_219_751(/devCL6) : board/soc/memory_system/caches[0].enabled.cache_1/N167_3/LUT6_inst_2(gopLUT6)
+I: Place-6001: Add the new FF instances CLMA_249_696(/FFAPP1/FF) replicated by the FF instance CLMS_255_715(/FF0/FF) .
+Origin board/soc/core/mem_pc[13]/opit_0_inv replicates:
+    CLMA_249_696(/FFAPP1/FF)  : board/soc/core/mem_pc[13]/opit_0_inv_1(gopQ)
+I: Place-6001: Add the new FF instances CLMA_315_786(/FF3/FF) replicated by the FF instance CLMA_273_792(/FF3/FF) .
+Origin board/soc/core/id_instruction[19]/opit_0_inv replicates:
+    CLMA_315_786(/FF3/FF)  : board/soc/core/id_instruction[19]/opit_0_inv_1(gopQ)
+I: Place-6001: Add the new FF instances CLMA_195_846(/FFAPP2/FF) replicated by the FF instance CLMA_195_822(/FFAPP1/FF) .
+Origin board/soc/peripherals/timer_value[20]/opit_0_inv_L5Q replicates:
+    CLMA_195_846(/FFAPP2/FF)  : board/soc/peripherals/timer_value[20]/opit_0_inv_L5Q_1(gopLUT6L5Q)
+I: Place-6001: Add the new LUT instances CLMA_267_708(/devCL6L5Q) replicated by the LUT instance CLMA_273_679(/devAL6L5Q).
+Origin board/soc/core/predictor/N14_3_copy_1/gateop_LUT6DL5 replicates:
+    CLMA_267_708(/devCL6L5Q) : board/soc/core/predictor/N14_3_copy_1/gateop_LUT6DL5_1(gopLUT6L5)
+I: Place-6001: Add the new FF instances CLMA_297_786(/FF2/FF) CLMA_303_841(/FF0/FF) replicated by the FF instance CLMA_261_828(/FFAPP1/FF) .
+Origin board/soc/core/ex_instruction[12]/opit_0_inv replicates:
+    CLMA_297_786(/FF2/FF)  : board/soc/core/ex_instruction[12]/opit_0_inv_1(gopQ)
+    CLMA_303_841(/FF0/FF)  : board/soc/core/ex_instruction[12]/opit_0_inv_2(gopQ)
+I: Place-6001: Add the new FF instances CLMA_285_799(/FF0/FF) replicated by the FF instance CLMS_255_835(/FF1/FF) .
+Origin board/soc/core/ex_instruction[14]/opit_0_inv replicates:
+    CLMA_285_799(/FF0/FF)  : board/soc/core/ex_instruction[14]/opit_0_inv_1(gopQ)
+I: Place-6001: Add the new LUT instances CLMS_243_817(/devAL6_S) replicated by the LUT instance CLMA_339_810(/devCL6).
+Origin board/soc/core/N1085[8]/gateop replicates:
+    CLMS_243_817(/devAL6_S) : board/soc/core/N1085[8]/gateop_0(gopLUT6)
+I: Place-6001: Add the new FF instances CLMA_291_786(/FF1/FF) replicated by the FF instance CLMA_327_805(/FF1/FF) .
+Origin board/soc/core/id_instruction[17]/opit_0_inv replicates:
+    CLMA_291_786(/FF1/FF)  : board/soc/core/id_instruction[17]/opit_0_inv_1(gopQ)
+I: Place-6001: Add the new LUT instances CLMA_249_817(/devDL6) replicated by the LUT instance CLMA_339_810(/devBL6).
+Origin board/soc/core/N1085[14]/gateop replicates:
+    CLMA_249_817(/devDL6) : board/soc/core/N1085[14]/gateop_0(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMA_243_834(/devBL6) replicated by the LUT instance CLMA_321_834(/devDL6).
+Origin board/soc/core/N1084[27]/gateop replicates:
+    CLMA_243_834(/devBL6) : board/soc/core/N1084[27]/gateop_0(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMA_213_828(/devAL6) replicated by the LUT instance CLMA_315_840(/devCL6).
+Origin board/soc/core/N1084[26]/gateop replicates:
+    CLMA_213_828(/devAL6) : board/soc/core/N1084[26]/gateop_0(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMA_249_816(/devCL6) replicated by the LUT instance CLMA_339_817(/devBL6).
+Origin board/soc/core/N1085[2]/gateop replicates:
+    CLMA_249_816(/devCL6) : board/soc/core/N1085[2]/gateop_0(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMA_249_817(/devBL6) replicated by the LUT instance CLMA_339_816(/devBL6).
+Origin board/soc/core/N1085[12]/gateop replicates:
+    CLMA_249_817(/devBL6) : board/soc/core/N1085[12]/gateop_0(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMA_321_852(/devCL6) replicated by the LUT instance CLMA_153_817(/devDL6).
+Origin board/soc/core/N1084[18]/gateop replicates:
+    CLMA_321_852(/devCL6) : board/soc/core/N1084[18]/gateop_0(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMS_243_835(/devBL6_S) replicated by the LUT instance CLMA_339_829(/devAL6).
+Origin board/soc/core/N1085[23]/gateop replicates:
+    CLMS_243_835(/devBL6_S) : board/soc/core/N1085[23]/gateop_0(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMA_249_823(/devAL6L5Q) replicated by the LUT instance CLMA_327_811(/devBL6L5Q).
+Origin board/soc/core/N383[5]/LUT6D_inst replicates:
+    CLMA_249_823(/devAL6L5Q) : board/soc/core/N383[5]/LUT6D_inst_1(gopLUT6L5)
+I: Place-6001: Add the new LUT instances CLMA_249_823(/devBL6) replicated by the LUT instance CLMA_339_817(/devAL6).
+Origin board/soc/core/N1085[6]/gateop replicates:
+    CLMA_249_823(/devBL6) : board/soc/core/N1085[6]/gateop_0(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMS_243_823(/devCL6_S) replicated by the LUT instance CLMA_339_816(/devAL6).
+Origin board/soc/core/N1085[9]/gateop replicates:
+    CLMS_243_823(/devCL6_S) : board/soc/core/N1085[9]/gateop_0(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMA_255_822(/devDL6) replicated by the LUT instance CLMA_339_810(/devAL6).
+Origin board/soc/core/N1085[1]/gateop replicates:
+    CLMA_255_822(/devDL6) : board/soc/core/N1085[1]/gateop_0(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMS_261_709(/devCL6L5Q_S) replicated by the LUT instance CLMA_255_690(/devDL6L5Q).
+Origin board/soc/core/predictor/N14_5_copy_2/gateop_LUT6DL5 replicates:
+    CLMS_261_709(/devCL6L5Q_S) : board/soc/core/predictor/N14_5_copy_2/gateop_LUT6DL5_1(gopLUT6L5)
+I: Place-6001: Add the new LUT instances CLMS_207_817(/devBL6L5Q_S) replicated by the LUT instance CLMA_327_811(/devCL6L5Q).
+Origin board/soc/core/N383[4]/LUT6D_inst replicates:
+    CLMS_207_817(/devBL6L5Q_S) : board/soc/core/N383[4]/LUT6D_inst_1(gopLUT6L5)
+I: Place-6001: Add the new LUT instances CLMA_315_876(/devCL6) CLMA_267_876(/devCL6) replicated by the LUT instance CLMA_327_835(/devDL6).
+Origin board/soc/core/N1198_9[29]/LUT6_inst replicates:
+    CLMA_315_876(/devCL6) : board/soc/core/N1198_9[29]/LUT6_inst_1(gopLUT6)
+    CLMA_267_876(/devCL6) : board/soc/core/N1198_9[29]/LUT6_inst_2(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMA_201_798(/devBL6L5Q) replicated by the LUT instance CLMA_201_787(/devBL6L5Q).
+Origin board/soc/peripherals/N308_46/LUT6D_inst replicates:
+    CLMA_201_798(/devBL6L5Q) : board/soc/peripherals/N308_46/LUT6D_inst_1(gopLUT6L5)
+I: Place-6001: Add the new LUT instances CLMS_243_847(/devBL6_S) replicated by the LUT instance CLMA_339_840(/devBL6).
+Origin board/soc/core/N1085[17]/gateop replicates:
+    CLMS_243_847(/devBL6_S) : board/soc/core/N1085[17]/gateop_0(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMA_285_882(/devAL6) replicated by the LUT instance CLMA_327_828(/devBL6).
+Origin board/soc/core/N1084[11]/gateop replicates:
+    CLMA_285_882(/devAL6) : board/soc/core/N1084[11]/gateop_0(gopLUT6)
+I: Place-6001: Add the new FF instances CLMA_297_793(/FF0/FF) replicated by the FF instance CLMA_261_828(/FFAPP0/FF) .
+Origin board/soc/core/ex_instruction[13]/opit_0_inv replicates:
+    CLMA_297_793(/FF0/FF)  : board/soc/core/ex_instruction[13]/opit_0_inv_1(gopQ)
+I: Place-6001: Add the new LUT instances CLMA_315_852(/devAL6) replicated by the LUT instance CLMA_291_804(/devAL6).
+Origin board/soc/core/N1084[17]/gateop replicates:
+    CLMA_315_852(/devAL6) : board/soc/core/N1084[17]/gateop_0(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMS_231_823(/devCL6_S) replicated by the LUT instance CLMA_327_823(/devCL6).
+Origin board/soc/core/N1085[13]/gateop replicates:
+    CLMS_231_823(/devCL6_S) : board/soc/core/N1085[13]/gateop_0(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMA_201_775(/devAL6L5Q) replicated by the LUT instance CLMA_171_780(/devBL6L5Q).
+Origin board/soc/peripherals/N308_14/LUT6D_inst replicates:
+    CLMA_201_775(/devAL6L5Q) : board/soc/peripherals/N308_14/LUT6D_inst_1(gopLUT6L5)
+I: Place-6001: Add the new LUT instances CLMS_231_841(/devDL6_S) replicated by the LUT instance CLMA_327_840(/devCL6).
+Origin board/soc/core/N1085[26]/gateop replicates:
+    CLMS_231_841(/devDL6_S) : board/soc/core/N1085[26]/gateop_0(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMA_273_714(/devBL6L5Q) replicated by the LUT instance CLMA_255_666(/devAL6L5Q).
+Origin board/soc/core/predictor/N14_6/gateop_LUT6DL5 replicates:
+    CLMA_273_714(/devBL6L5Q) : board/soc/core/predictor/N14_6/gateop_LUT6DL5_1(gopLUT6L5)
+I: Place-6001: Add the new LUT instances CLMS_231_853(/devAL6_S) replicated by the LUT instance CLMA_327_835(/devCL6).
+Origin board/soc/core/N1085[24]/gateop replicates:
+    CLMS_231_853(/devAL6_S) : board/soc/core/N1085[24]/gateop_0(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMA_297_883(/devDL6L5Q) replicated by the LUT instance CLMA_321_870(/devAL6L5Q).
+Origin board/soc/core/alu/N89_3/LUT6D_inst replicates:
+    CLMA_297_883(/devDL6L5Q) : board/soc/core/alu/N89_3/LUT6D_inst_1(gopLUT6L5)
+I: Place-6001: Add the new LUT instances CLMA_321_864(/devDL6) replicated by the LUT instance CLMA_297_834(/devBL6).
+Origin board/soc/core/N1084[13]/gateop replicates:
+    CLMA_321_864(/devDL6) : board/soc/core/N1084[13]/gateop_0(gopLUT6)
+I: Place-6001: Add the new FF instances CLMA_255_822(/FF1/FF) replicated by the FF instance CLMA_291_816(/FF0/FF) .
+Origin board/soc/core/mem_instruction[19]/opit_0_inv replicates:
+    CLMA_255_822(/FF1/FF)  : board/soc/core/mem_instruction[19]/opit_0_inv_1(gopQ)
+I: Place-6001: Add the new LUT instances CLMA_327_865(/devBL6) replicated by the LUT instance CLMA_291_810(/devBL6).
+Origin board/soc/core/N1084[10]/gateop replicates:
+    CLMA_327_865(/devBL6) : board/soc/core/N1084[10]/gateop_0(gopLUT6)
+I: Place-6001: Add the new LUT instances CLMA_195_798(/devDL6L5Q) replicated by the LUT instance CLMA_171_786(/devAL6L5Q).
+Origin board/soc/peripherals/N308_36/LUT6D_inst replicates:
+    CLMA_195_798(/devDL6L5Q) : board/soc/peripherals/N308_36/LUT6D_inst_1(gopLUT6L5)
+Wirelength after detailed placement is 102206 and checksum is 182F17ADF5F8C664.
+Timing-driven detailed placement takes 31.22 sec.
+
+Worst slack is 242, TNS after placement is 0.
+Placement done.
+Total placement takes 68.16 sec.
+Finished placement.
+
+Routing started.
+Build routing arch for double attribute device.
+Enter timing driven router mode.
+Route thread size: 5
+Building routing graph takes 10.70 sec.
+Init coarse delay table.
+Read place coarse delay table takes 1.88 sec.
+Build SRB system takes 2.66 sec.
+Setup STE netlist take 5726 msec.
+Dispose control chain take 224 msec.
+Collect const net info take 198 msec.
+Worst slack is 242, TNS before route is 0.
+Total nets for routing: 8828.
+Total loads for routing: 47691.
+Direct connect net size: 1137
+Build all design net take 450 msec.
+Processing design graph takes 6.60 sec.
+Delay table total memory: 72.73170853 MB
+Route graph total memory: 322.45782185 MB
+Route design total memory: 18.61678314 MB
+Global routing takes 0.00 sec.
+Total 8826 subnets.
+Unrouted clock nets at iteration 0 (0.073 sec): 0
+Total route nets size: 8820
+Pre route takes 4.137 sec
+Unrouted general nets at iteration 2 (MT total route time: 3.013 sec): 7943(overused: 69907)
+Unrouted general nets at iteration 3 (MT total route time: 3.051 sec): 7125(overused: 55487)
+Unrouted general nets at iteration 4 (MT total route time: 3.002 sec): 6394(overused: 41818)
+Unrouted general nets at iteration 5 (MT total route time: 2.699 sec): 5805(overused: 33299)
+Unrouted general nets at iteration 6 (MT total route time: 2.245 sec): 5301(overused: 27299)
+Unrouted general nets at iteration 7 (MT total route time: 2.149 sec): 4541(overused: 23893)
+Unrouted general nets at iteration 8 (MT total route time: 2.041 sec): 4012(overused: 19823)
+Unrouted general nets at iteration 9 (MT total route time: 1.913 sec): 3503(overused: 15817)
+Unrouted general nets at iteration 10 (MT total route time: 1.746 sec): 3193(overused: 13267)
+Unrouted general nets at iteration 11 (MT total route time: 1.583 sec): 2882(overused: 11473)
+Unrouted general nets at iteration 12 (MT total route time: 1.349 sec): 2635(overused: 9831)
+Unrouted general nets at iteration 13 (MT total route time: 1.227 sec): 2619(overused: 9830)
+Unrouted general nets at iteration 14 (MT total route time: 1.265 sec): 2606(overused: 9634)
+Unrouted general nets at iteration 15 (MT total route time: 1.345 sec): 2441(overused: 9024)
+Unrouted general nets at iteration 16 (MT total route time: 1.128 sec): 2193(overused: 7496)
+Unrouted general nets at iteration 17 (MT total route time: 1.056 sec): 2015(overused: 6371)
+Unrouted general nets at iteration 18 (MT total route time: 0.980 sec): 1936(overused: 6112)
+Unrouted general nets at iteration 19 (MT total route time: 0.854 sec): 1841(overused: 5668)
+Unrouted general nets at iteration 20 (MT total route time: 0.877 sec): 1706(overused: 4999)
+Unrouted general nets at iteration 21 (MT total route time: 0.855 sec): 1587(overused: 4637)
+Unrouted general nets at iteration 22 (MT total route time: 0.739 sec): 1485(overused: 4049)
+Unrouted general nets at iteration 23 (MT total route time: 0.819 sec): 1405(overused: 3719)
+Unrouted general nets at iteration 24 (MT total route time: 0.665 sec): 1411(overused: 3622)
+Unrouted general nets at iteration 25 (MT total route time: 0.695 sec): 1248(overused: 3188)
+Unrouted general nets at iteration 26 (MT total route time: 0.715 sec): 1141(overused: 2898)
+Unrouted general nets at iteration 27 (MT total route time: 0.519 sec): 993(overused: 2377)
+Unrouted general nets at iteration 28 (MT total route time: 0.433 sec): 927(overused: 2095)
+Unrouted general nets at iteration 29 (MT total route time: 0.338 sec): 855(overused: 1955)
+Unrouted general nets at iteration 30 (MT total route time: 0.380 sec): 735(overused: 1592)
+Unrouted general nets at iteration 31 (MT total route time: 0.314 sec): 684(overused: 1467)
+Unrouted general nets at iteration 32 (MT total route time: 0.313 sec): 686(overused: 1504)
+Unrouted general nets at iteration 33 (MT total route time: 0.368 sec): 661(overused: 1388)
+Unrouted general nets at iteration 34 (MT total route time: 0.450 sec): 696(overused: 1619)
+Unrouted general nets at iteration 35 (MT total route time: 0.333 sec): 677(overused: 1385)
+Unrouted general nets at iteration 36 (MT total route time: 0.354 sec): 645(overused: 1288)
+Unrouted general nets at iteration 37 (MT total route time: 0.247 sec): 519(overused: 1024)
+Unrouted general nets at iteration 38 (MT total route time: 0.236 sec): 494(overused: 1017)
+Unrouted general nets at iteration 39 (MT total route time: 0.248 sec): 431(overused: 836)
+Unrouted general nets at iteration 40 (MT total route time: 0.217 sec): 420(overused: 841)
+Unrouted general nets at iteration 41 (MT total route time: 0.227 sec): 468(overused: 874)
+Unrouted general nets at iteration 42 (MT total route time: 0.215 sec): 438(overused: 802)
+Unrouted general nets at iteration 43 (MT total route time: 0.332 sec): 486(overused: 1261)
+Unrouted general nets at iteration 44 (MT total route time: 0.362 sec): 503(overused: 1177)
+Unrouted general nets at iteration 45 (MT total route time: 0.294 sec): 496(overused: 1051)
+Unrouted general nets at iteration 46 (MT total route time: 0.266 sec): 473(overused: 984)
+Unrouted general nets at iteration 47 (MT total route time: 0.264 sec): 486(overused: 999)
+Unrouted general nets at iteration 48 (MT total route time: 0.251 sec): 396(overused: 788)
+Unrouted general nets at iteration 49 (MT total route time: 0.177 sec): 346(overused: 664)
+Unrouted general nets at iteration 50 (MT total route time: 0.154 sec): 273(overused: 458)
+Unrouted general nets at iteration 51 (MT total route time: 0.120 sec): 207(overused: 318)
+Unrouted general nets at iteration 52 (MT total route time: 0.121 sec): 196(overused: 334)
+Unrouted general nets at iteration 53 (MT total route time: 0.110 sec): 183(overused: 292)
+Unrouted general nets at iteration 54 (MT total route time: 0.090 sec): 166(overused: 274)
+Unrouted general nets at iteration 55 (MT total route time: 0.102 sec): 187(overused: 318)
+Unrouted general nets at iteration 56 (MT total route time: 0.095 sec): 164(overused: 285)
+Unrouted general nets at iteration 57 (MT total route time: 0.107 sec): 166(overused: 286)
+Unrouted general nets at iteration 58 (MT total route time: 0.095 sec): 157(overused: 264)
+Unrouted general nets at iteration 59 (MT total route time: 0.112 sec): 120(overused: 202)
+Unrouted general nets at iteration 60 (MT total route time: 0.075 sec): 106(overused: 168)
+Unrouted general nets at iteration 61 (MT total route time: 0.064 sec): 83(overused: 128)
+Unrouted general nets at iteration 62 (MT total route time: 0.078 sec): 68(overused: 108)
+Unrouted general nets at iteration 63 (MT total route time: 0.074 sec): 46(overused: 78)
+Unrouted general nets at iteration 64 (MT total route time: 0.046 sec): 34(overused: 56)
+Unrouted general nets at iteration 65 (MT total route time: 0.045 sec): 24(overused: 38)
+Unrouted general nets at iteration 66 (MT total route time: 0.050 sec): 21(overused: 32)
+Unrouted general nets at iteration 67 (MT total route time: 0.056 sec): 27(overused: 46)
+Unrouted general nets at iteration 68 (MT total route time: 0.059 sec): 22(overused: 36)
+Unrouted general nets at iteration 69 (MT total route time: 0.050 sec): 21(overused: 34)
+Unrouted general nets at iteration 70 (MT total route time: 0.058 sec): 17(overused: 32)
+Unrouted general nets at iteration 71 (MT total route time: 0.055 sec): 15(overused: 30)
+Unrouted general nets at iteration 72 (MT total route time: 0.049 sec): 17(overused: 42)
+Unrouted general nets at iteration 73 (MT total route time: 0.042 sec): 16(overused: 26)
+Unrouted general nets at iteration 74 (MT total route time: 0.045 sec): 19(overused: 32)
+Unrouted general nets at iteration 75 (MT total route time: 0.040 sec): 16(overused: 26)
+Unrouted general nets at iteration 76 (MT total route time: 0.043 sec): 13(overused: 20)
+Unrouted general nets at iteration 77 (MT total route time: 0.042 sec): 14(overused: 26)
+Unrouted general nets at iteration 78 (MT total route time: 0.034 sec): 11(overused: 18)
+Unrouted general nets at iteration 79 (MT total route time: 0.042 sec): 8(overused: 10)
+Unrouted general nets at iteration 80 (MT total route time: 0.040 sec): 2(overused: 2)
+Unrouted general nets at iteration 81 (MT total route time: 0.037 sec): 2(overused: 2)
+Unrouted general nets at iteration 82 (MT total route time: 0.036 sec): 0(overused: 0)
+----General net take 0.039 sec(route net take 0.018 sec, inc cost take 0.021 sec, iter times: 1)
+----const net route take 0.039 sec
+Unrouted nets at iteration 83 (0.080 sec): 0
+Detailed routing takes 66.26 sec.
+I: Design net ntclkbufg_1 is routed by general path.
+C: Route-2036: The clock path from clkbufg_4/gopclkbufg:CLKOUT to u_CORES/u_debug_core_0/u_Data_Capture_Memory/block_ram.ram_data_1/gopdrm_18k:CLKB is routed by SRB.
+I: Design net u_CORES/capt_o is routed by general path.
+C: Route-2036: The clock path from u_CORES/u_GTP_SCANCHAIN_PG/scanchain:CAPTUREDR to u_CORES/u_debug_core_0/u_hub_data_decode/id_sample.conf_id[1]/opit_0_inv:CLK is routed by SRB.
+I: Design net u_CORES/drck_o is routed by general path.
+C: Route-2036: The clock path from u_CORES/u_GTP_SCANCHAIN_PG/scanchain:TCK1 to clkbufg_4/gopclkbufg:CLK is routed by SRB.
+Fix violation Finished.
+Fix violation Finished.
+Hold Violation Fix in router takes 24.38 sec.
+Sort Original Nets take 0.006 sec
+Build solution node for device pins which were mapped to more than one design pin take 0.024 sec
+Total net: 8828, route succeed net: 8828
+Generate routing result take 0.026 sec
+Handle PERMUX permutation take 0.614 sec
+Handle const net take 0.018 sec
+Handle route through take 0.018 sec
+Handle loads' routing node take 0.097 sec
+Used SRB routing arc is 120656.
+Finish routing takes 1.01 sec.
+Total routing takes 112.51 sec.
+
+
+Device Utilization Summary :
++------------------------------------------------------------------------------------+
+| Logic Utilization                 | Used     | Available     | Utilization(%)     
++------------------------------------------------------------------------------------+
+| Use of ADC                        | 0        | 1             | 0                  
+| Use of ANALOG                     | 0        | 1             | 0                  
+| Use of APM                        | 4        | 740           | 1                  
+| Use of BKCL                       | 2        | 10            | 20                 
+| Use of CCS                        | 1        | 1             | 100                
+| Use of CLMA                       | 1699     | 30075         | 6                  
+|   FF                              | 3151     | 240600        | 2                  
+|   LUT                             | 5686     | 120300        | 5                  
+|   LUT-FF pairs                    | 1915     | 120300        | 2                  
+| Use of CLMS                       | 487      | 9875          | 5                  
+|   FF                              | 872      | 79000         | 2                  
+|   LUT                             | 1626     | 39500         | 5                  
+|   LUT-FF pairs                    | 506      | 39500         | 2                  
+|   Distributed RAM                 | 389      | 39500         | 1                  
+| Use of DDRPHY_CPD                 | 0        | 20            | 0                  
+| Use of DDRPHY_IOCLK_DIV           | 0        | 10            | 0                  
+| Use of DDR_PHY                    | 0        | 40            | 0                  
+| Use of DRM                        | 22.5     | 415           | 6                  
+| Use of GCLK_INBUF_SYN             | 0        | 40            | 0                  
+| Use of GPLL                       | 1        | 10            | 10                 
+| Use of GSEB                       | 0        | 512           | 0                  
+| Use of HARD0                      | 575      | 25050         | 3                  
+| Use of HCKB                       | 5        | 120           | 5                  
+|  HCKB dataused                    | 0        | 120           | 0                  
+| Use of HCKMUX_TEST                | 0        | 10            | 0                  
+| Use of HSSTLP                     | 0        | 2             | 0                  
+| Use of IO                         | 13       | 400           | 4                  
+|   IOBD                            | 5        | 192           | 3                  
+|   IOBS                            | 8        | 208           | 4                  
+| Use of IOCKB                      | 0        | 40            | 0                  
+| Use of IOCKMUX_TEST               | 0        | 10            | 0                  
+| Use of IOLHR                      | 13       | 500           | 3                  
+| Use of KEYRAM                     | 0        | 1             | 0                  
+| Use of MFG_TEST                   | 0        | 1             | 0                  
+| Use of MRCKB                      | 0        | 20            | 0                  
+| Use of MRCKMUX_TEST               | 0        | 10            | 0                  
+| Use of MRPOSTMUX_TEST             | 0        | 10            | 0                  
+| Use of PCIE                       | 0        | 1             | 0                  
+| Use of PCKMUX_TEST                | 0        | 20            | 0                  
+| Use of PLLMRMUX_TEST              | 0        | 10            | 0                  
+| Use of PLLREFMUX_TEST             | 0        | 10            | 0                  
+| Use of POSTGMUXLR_TEST            | 0        | 4             | 0                  
+| Use of PPLL                       | 0        | 10            | 0                  
+| Use of PREGMUXC_TEST              | 0        | 3             | 0                  
+| Use of PREGMUXC_X16_200H_TEST     | 0        | 4             | 0                  
+| Use of PREGMUXLR_TEST             | 0        | 10            | 0                  
+| Use of RCKB                       | 0        | 40            | 0                  
+|  RCKB dataused                    | 0        | 40            | 0                  
+| Use of RCKMUX_TEST                | 0        | 10            | 0                  
+| Use of SCANCHAIN                  | 1        | 1             | 100                
+| Use of SCKMUX_TEST                | 0        | 20            | 0                  
+| Use of SFB                        | 0        | 5075          | 0                  
+| Use of SPAD                       | 0        | 8             | 0                  
+| Use of TSERDES                    | 0        | 80            | 0                  
+| Use of USCM                       | 2        | 32            | 7                  
+|  USCM dataused                    | 0        | 32            | 0                  
+| Use of USCMMUX_TEST               | 0        | 32            | 0                  
++------------------------------------------------------------------------------------+
+
+Finished routing.
+Design 'pds_soc_top' has been placed and routed successfully.
+Saving design to DB.
+Finished placement and routing.
+Action pnr: Real time elapsed is 0h:3m:40s
+Action pnr: CPU time elapsed is 0h:3m:22s
+Action pnr: Process CPU time elapsed is 0h:4m:19s
+Current time: Thu Sep 24 23:38:22 2026
+Action pnr: Peak memory pool usage is 3,087 MB
+Action from dev_map to pnr: Total Real Time elapsed is 0h:4m:11s
+Action from dev_map to pnr: Total CPU time elapsed is 0h:3m:34s
+Action from dev_map to pnr: Total Process CPU Time elapsed is 0h:4m:31s
+Process "Place & Route" done.
+Executing : pnr -gplace_seed 3 -logic_optimize_enable TRUE -logic_optimize_lut6d_combing_strategy 3 -plc_decongestion 0 successfully.
+
+
+Executing : report_timing
+
+
+Process "Report Timing" started.
+Current time: Thu Sep 24 23:38:23 2026
+Compiling architecture definition.
+Analyzing project file 'D:/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/physical-redirect-accepted_valid_ram-uart-loader-packing3_compact0-s3-20260924T153315Z-881a48f1/implementation/cpu_ila.pds'.
+Compiling verification operator library.
+Compiling common defs.
+Compiling prim grid devices.
+Compiling gate devices.
+Compiling gate operators.
+Building architecture model.
+Loading device packaging model.
+Reading design from pnr DB.
+Start Report Post-PnR timing.
+NOTE: The technology fpga was specified.
+NOTE: delay_model specified was generic_cmos.
+NOTE: Using the fpga syntax tables...
+Totals:
+ Calls to malloc = 0
+ Calls to calloc = 5993935
+
+Constructing timing graph ...
+Timing graph has been constructed successfully
+W: Timing-4087: Port 'led[0]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'led[1]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'led[2]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'led[3]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'led[4]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'led[5]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'led[6]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'led[7]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'uart_tx' is not constrained, it is treated as combinational output.
+W: Timing-4086: Port 'key' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'rst_n' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'uart_rx' is not constrained, it is treated as combinational input.
+Report timing is finished successfully.
+Action report_timing: Real time elapsed is 0h:0m:23s
+Action report_timing: CPU time elapsed is 0h:0m:19s
+Action report_timing: Process CPU time elapsed is 0h:0m:21s
+Current time: Thu Sep 24 23:38:46 2026
+Action report_timing: Peak memory pool usage is 1,594 MB
+Action from dev_map to report_timing: Total Real Time elapsed is 0h:4m:34s
+Action from dev_map to report_timing: Total CPU time elapsed is 0h:3m:53s
+Action from dev_map to report_timing: Total Process CPU Time elapsed is 0h:4m:52s
+Process "Report Timing" done.
+Executing : report_timing successfully.
+
+
+Executing : gen_bit_stream
+
+
+Process "Generate Bitstream" started.
+Current time: Thu Sep 24 23:38:46 2026
+Compiling architecture definition.
+Analyzing project file 'D:/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/physical-redirect-accepted_valid_ram-uart-loader-packing3_compact0-s3-20260924T153315Z-881a48f1/implementation/cpu_ila.pds'.
+Compiling verification operator library.
+Compiling common defs.
+Compiling prim grid devices.
+Compiling gate devices.
+Compiling gate operators.
+Building architecture model.
+Loading device packaging model.
+Reading design from DB.
+Start Generating Programming File...
+Reading design from DB takes 1.671875 sec.
+Generating architecture configuration.
+C: Bitstream-2001: SCBV has not been set. Please set SCBV value based on PCB board, where is in configuration tab of bit stream options.
+The bitstream file is "D:/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/physical-redirect-accepted_valid_ram-uart-loader-packing3_compact0-s3-20260924T153315Z-881a48f1/implementation/generate_bitstream/pds_soc_top.sbit"
+Generate programming file takes 11.640625 sec.
+Generating Programming File done.
+Action gen_bit_stream: Real time elapsed is 0h:0m:27s
+Action gen_bit_stream: CPU time elapsed is 0h:0m:24s
+Action gen_bit_stream: Process CPU time elapsed is 0h:0m:24s
+Current time: Thu Sep 24 23:39:13 2026
+Action gen_bit_stream: Peak memory pool usage is 2,435 MB
+Action from dev_map to gen_bit_stream: Total Real Time elapsed is 0h:5m:1s
+Action from dev_map to gen_bit_stream: Total CPU time elapsed is 0h:4m:17s
+Action from dev_map to gen_bit_stream: Total Process CPU Time elapsed is 0h:5m:16s
+Process "Generate Bitstream" done.
+Executing : gen_bit_stream successfully.

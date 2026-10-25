@@ -1,0 +1,9 @@
+{
+  "argv": [
+    "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/coremark-ablation-20260924T151848Z-836ada5c/models/priming_on/simulator/objects/Vrv32_observed_soc",
+    "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/coremark-ablation-20260924T151848Z-836ada5c/runs/V1/priming_on/2/uart.log",
+    "100000000000"
+  ],
+  "cwd": "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/coremark-ablation-20260924T151848Z-836ada5c/runs/V1/priming_on/2",
+  "timeout_seconds": 7200
+}

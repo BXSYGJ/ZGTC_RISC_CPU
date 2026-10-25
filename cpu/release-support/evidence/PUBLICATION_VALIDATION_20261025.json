@@ -1,0 +1,128 @@
+﻿{
+  "published_layout_date": "2026-10-25",
+  "baseline_commit": "51f84e089fb158c3a21192390f89bcc7babbbcec",
+  "offline_checks": {
+    "status": "passed",
+    "tested_utc": "2026-10-25T03:29:19.5259609Z",
+    "rv32imc_releases": 4,
+    "ila_releases": 1,
+    "rv32imc_capture_audits": 24,
+    "ila_qualified_observations": 6,
+    "ila_original_payload_hashes": 1703,
+    "source_bindings": 80,
+    "timing_reports": 9,
+    "timing_sections": 90,
+    "clock_uncertainty_ns": 0.15,
+    "powershell_scripts_parsed": 12,
+    "results": [
+      {
+        "lut": 6097,
+        "release": "H3_Base_145125",
+        "coremark": 499.5061242548546,
+        "role": "V0",
+        "captures": 3,
+        "timing": "passed"
+      },
+      {
+        "lut": 6097,
+        "release": "H3_Base_145125",
+        "coremark": 498.6428407880837,
+        "role": "V1",
+        "captures": 3,
+        "timing": "passed"
+      },
+      {
+        "lut": 6150,
+        "release": "H3_Retained_145125",
+        "coremark": 499.53110364880644,
+        "role": "V0",
+        "captures": 3,
+        "timing": "passed"
+      },
+      {
+        "lut": 6150,
+        "release": "H3_Retained_145125",
+        "coremark": 498.66683005032695,
+        "role": "V1",
+        "captures": 3,
+        "timing": "passed"
+      },
+      {
+        "lut": 6439,
+        "release": "Original_153000_BestQualified",
+        "coremark": 514.9580680611878,
+        "role": "V0",
+        "captures": 3,
+        "timing": "passed"
+      },
+      {
+        "lut": 6439,
+        "release": "Original_153000_BestQualified",
+        "coremark": 514.4543723154309,
+        "role": "V1",
+        "captures": 3,
+        "timing": "passed"
+      },
+      {
+        "lut": 6109,
+        "release": "Original_155250",
+        "coremark": 522.5309808267934,
+        "role": "V0",
+        "captures": 3,
+        "timing": "passed"
+      },
+      {
+        "lut": 6109,
+        "release": "Original_155250",
+        "coremark": 522.0198777906577,
+        "role": "V1",
+        "captures": 3,
+        "timing": "passed"
+      }
+    ],
+    "scope": "Offline archive, source, measurement and timing validation; no new PDS route, full simulation or board execution."
+  },
+  "relocated_physical_project_preparations": 8,
+  "relocated_ila_netlist_project_preparations": 1,
+  "embedded_credential_pattern_scan": "No matches",
+  "original_package_payload_checks": [
+    {
+      "release": "H3_Base_145125",
+      "original_payload_hashes_checked": 164,
+      "excluded_local_compile_cache": [],
+      "readme": "New release instructions; original ILA README retained below the GitHub introduction."
+    },
+    {
+      "release": "H3_Retained_145125",
+      "original_payload_hashes_checked": 167,
+      "excluded_local_compile_cache": [],
+      "readme": "New release instructions; original ILA README retained below the GitHub introduction."
+    },
+    {
+      "release": "Original_153000_BestQualified",
+      "original_payload_hashes_checked": 162,
+      "excluded_local_compile_cache": [
+        "source\\rtl\\syntax-check.vvp"
+      ],
+      "readme": "New release instructions; original ILA README retained below the GitHub introduction."
+    },
+    {
+      "release": "Original_155250",
+      "original_payload_hashes_checked": 212,
+      "excluded_local_compile_cache": [
+        "source\\rtl\\syntax-check.vvp"
+      ],
+      "readme": "New release instructions; original ILA README retained below the GitHub introduction."
+    },
+    {
+      "release": "Accepted_RV32IM_153000_FullILA",
+      "original_payload_hashes_checked": 1708,
+      "excluded_local_compile_cache": [],
+      "readme": "New release instructions; original ILA README retained below the GitHub introduction."
+    }
+  ],
+  "compiler_release_asset_verified": true,
+  "new_pds_run": false,
+  "new_board_measurements": false,
+  "new_full_benchmark_simulation": false
+}

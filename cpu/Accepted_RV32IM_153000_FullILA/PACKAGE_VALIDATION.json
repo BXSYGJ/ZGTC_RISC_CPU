@@ -1,0 +1,12 @@
+﻿{
+  "validated_utc": "2026-10-12T14:47:20.3329832Z",
+  "extracted_files_verified": 1703,
+  "extracted_bytes": 130004471.0,
+  "original_archive_sha256": "3aed6da97e622917246be91341870a54f53fdcdafadba6ec491fd022fbe6237d",
+  "bitstream_sha256": "c7cc550011e051a9ac91131a67c696d4244e5b84d6bd15b020c8fad566814feb",
+  "powershell_scripts_parse": "passed",
+  "relocated_project_preparation": "passed",
+  "pds_rerun": false,
+  "new_board_run": false,
+  "historical_board_qualification": "Six cold-programmed observations match full-length RTL; final joint review qualified true."
+}

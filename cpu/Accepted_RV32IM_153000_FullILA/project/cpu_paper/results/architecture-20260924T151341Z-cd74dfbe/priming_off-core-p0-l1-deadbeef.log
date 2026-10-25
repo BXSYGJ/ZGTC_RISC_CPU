@@ -1,0 +1,4 @@
+EARLY_DATA accepted=46 fallback=72
+LINK pushes=3
+PASS relation reuse=999 mem=5 wb=5 stalls=159 load=110 bubble=1
+PASS core checks=40514 traps=13 cycles=7264 retired=229 predictor=0

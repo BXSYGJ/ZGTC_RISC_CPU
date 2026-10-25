@@ -1,0 +1,14 @@
+ZBOOT RAM v26
+KKKKKKKKKKKKK
+BOOT CRC32=9778aa9f bytes=0x00000c5c
+EMBENCH READY crc32 send G
+EMBENCH STprogress cycles=100000000
+ART crc32 heat=1 scale=1 clock_hz=153progress cycles=200000000
+000000
+EMBENCH cycles=0x00000000003dprogress cycles=300000000
+cdc4 retired=0x00000000003b2021 verifprogress cycles=400000000
+ied=1
+EMBENCH FINISHED crc32
+PASS RTL Embench smoke total_cycles=480631056 total_retired=289895695
+OBSERVER cycles=4050372 retired=3874849 minimum_sp=65472
+EVENTS redirects=173,12,2,0,0,0,0 eligible=172,3,1,0,0,0,0 request_stalls=0 response_waits=222 barrier_cycles=0

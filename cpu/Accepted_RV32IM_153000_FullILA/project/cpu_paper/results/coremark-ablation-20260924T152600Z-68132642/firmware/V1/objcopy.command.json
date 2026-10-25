@@ -1,0 +1,11 @@
+{
+  "argv": [
+    "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/tools/xpack-riscv-none-embed-gcc-10.2.0-1.2/bin/riscv-none-embed-objcopy",
+    "-O",
+    "binary",
+    "firmware.elf",
+    "firmware.bin"
+  ],
+  "cwd": "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/coremark-ablation-20260924T152600Z-68132642/firmware/V1",
+  "timeout_seconds": 300
+}

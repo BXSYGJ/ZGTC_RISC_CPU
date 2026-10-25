@@ -1,0 +1,70 @@
+{
+  "protocol": "v27",
+  "status": "passed",
+  "variant_manifest_sha256": "6340cdf9a9e266bce64eeb1c0c355b6bb73435dcd2dd73ffe6c25e7f9ef3069c",
+  "variants": "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/variants/accepted-153-valid-ram-v31-r1",
+  "runs": [
+    {
+      "variant": "priming_off",
+      "name": "o0-p0",
+      "passed": true
+    },
+    {
+      "variant": "priming_off",
+      "name": "o0-p1",
+      "passed": true
+    },
+    {
+      "variant": "priming_off",
+      "name": "o1-p0",
+      "passed": true
+    },
+    {
+      "variant": "priming_off",
+      "name": "o1-p1",
+      "passed": true
+    },
+    {
+      "variant": "priming_on",
+      "name": "o0-p0",
+      "passed": true
+    },
+    {
+      "variant": "priming_on",
+      "name": "o0-p1",
+      "passed": true
+    },
+    {
+      "variant": "priming_on",
+      "name": "o1-p0",
+      "passed": true
+    },
+    {
+      "variant": "priming_on",
+      "name": "o1-p1",
+      "passed": true
+    },
+    {
+      "variant": "accepted_valid_ram",
+      "name": "o0-p0",
+      "passed": true
+    },
+    {
+      "variant": "accepted_valid_ram",
+      "name": "o0-p1",
+      "passed": true
+    },
+    {
+      "variant": "accepted_valid_ram",
+      "name": "o1-p0",
+      "passed": true
+    },
+    {
+      "variant": "accepted_valid_ram",
+      "name": "o1-p1",
+      "passed": true
+    }
+  ],
+  "bench_sha256": "f53517bdda5458b135c02278cd5b492cc99e37d1b5cd1e5e7608df96214b9753",
+  "architecture_runner_sha256": "9f74e01166f20378baea401af8a696818e6c0cf3e40445f21d4900949d1db879"
+}

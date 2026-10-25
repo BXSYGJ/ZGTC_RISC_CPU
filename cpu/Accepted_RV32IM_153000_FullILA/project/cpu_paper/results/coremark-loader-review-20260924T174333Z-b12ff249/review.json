@@ -1,0 +1,44 @@
+{
+  "status": "full_coremark_loader_evidence_verified",
+  "protocol": "v27",
+  "scope": "One RTL observation per configuration. No hardware score, measured frequency, timing qualification or final repetition claim.",
+  "receipt": {
+    "run": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\results\\coremark-loader-rtl-20260924T152726Z-315bd383",
+    "manifest_sha256": "72d1d8d70784214cbb680af0f21ddc3c0cbe999c39fdbcaf052c1a3a52b5da66",
+    "variant": "accepted_valid_ram",
+    "variant_manifest_sha256": "6340cdf9a9e266bce64eeb1c0c355b6bb73435dcd2dd73ffe6c25e7f9ef3069c",
+    "firmware_manifest_sha256": "143cba9c3330b44a121d96142def3e6d5b71476575d2d8f72f660dc9a3959a0c",
+    "firmware_source_inventory_sha256": "956d54ce59772ae27543f4a3886abc401128d6b05f175377772503c380268c68",
+    "model_source_manifest_sha256": "d1c18e619ab2c1e6e097782aa113978274d359462c80fafe2a5b1e5b12b727b6",
+    "executable_sha256": "f0ba92a11f93fd08a7cc883c5604fbb238dc1ba2d4284bf13c76184f1b62b3d2",
+    "compile_command_sha256": "412b6287de8f65eb5a5d31c583a452da8e324e59c9d90b309db365e3fa01ff9a",
+    "checker_sha256": "418f86ed9cea8c1e4e1a6980f4ffea578478e27f7eb31dc1e6b0b17cf565a211",
+    "parameters": {
+      "CLOCK_HZ": "3200",
+      "BAUD": "100",
+      "INIT_FILE": "\"firmware.hex\"",
+      "ENABLE_M": "1",
+      "ENABLE_PREDICTOR": "1",
+      "LOAD_USE_BUBBLE": "1",
+      "FAST_ICACHE_HIT": "1",
+      "FAST_DCACHE_READ": "1",
+      "FAST_DCACHE_WRITE": "1",
+      "FETCH_OVERLAP": "1",
+      "DATA_OVERLAP": "1",
+      "EARLY_D_REQUEST": "1",
+      "BTB_INDEX_BITS": "8",
+      "ICACHE_SET_BITS": "9",
+      "CACHE_SET_BITS": "6",
+      "ENABLE_CACHE": "1",
+      "MEMORY_ADDRESS_BITS": "14"
+    }
+  },
+  "source_hashes": {
+    "review_coremark_loader_evidence.py": "7def86f290990f5fd8e3d222df3a8dac266b68e38193ab16d2b937d1385a61a3",
+    "redirect_loader_binding.py": "9e744c2002d761734790ea46a9fe8dfb08470ac313c4bb298372fad36401d087",
+    "embench_board_evidence.py": "f3f38e451ddd9541c9cc4d3002461dd14040c24a85fa8ea441bf625b4b4c439b",
+    "run_embench.py": "b859d2eb1db1d4be4216650c84d071a490d43bce39a7666b2710d8e55e8eb172"
+  },
+  "results_sha256": "429af9dec8d0daef9303199fcf51a09cc092104bdbf431bd007cce46f5dfebac",
+  "csv_sha256": "313ef03a0b189718b84e34c23e0810b4b951b4b0af092bd7e12d164d9dff0223"
+}

@@ -1,0 +1,18 @@
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/matmult-int/matmult-int.c: In function 'warm_caches':
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/matmult-int/matmult-int.c:79:8: warning: unused variable 'res' [-Wunused-variable]
+   79 |   int  res = benchmark_body (1, heat);
+      |        ^~~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/matmult-int/matmult-int.c: In function 'benchmark_body':
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/matmult-int/matmult-int.c:95:7: warning: unused variable 'i' [-Wunused-variable]
+   95 |   int i;
+      |       ^
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/matmult-int/matmult-int.c: In function 'verify_benchmark':
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/matmult-int/matmult-int.c:175:10: warning: unused variable 'j' [-Wunused-variable]
+  175 |   int i, j;
+      |          ^
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/matmult-int/matmult-int.c:175:7: warning: unused variable 'i' [-Wunused-variable]
+  175 |   int i, j;
+      |       ^
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/matmult-int/matmult-int.c:173:23: warning: unused parameter 'unused' [-Wunused-parameter]
+  173 | verify_benchmark (int unused)
+      |                   ~~~~^~~~~~

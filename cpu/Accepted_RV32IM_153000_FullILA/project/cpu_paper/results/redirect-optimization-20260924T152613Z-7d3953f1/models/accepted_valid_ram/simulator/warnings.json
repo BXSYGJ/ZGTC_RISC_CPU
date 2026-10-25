@@ -1,0 +1,6 @@
+{
+  "warnings": [
+    "%Warning-WIDTH: /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/redirect-optimization-20260924T152613Z-7d3953f1/models/accepted_valid_ram/inputs/rtl/rv32_burst_ram.sv:46:21: Operator NEQ expects 96 bits on the RHS, but RHS's CONST '?1?h0' generates 1 bits."
+  ],
+  "unexpected": []
+}

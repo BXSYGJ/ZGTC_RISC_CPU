@@ -1,3 +1,11 @@
+# Qualified CPU release collection
+
+The current board-ready releases each have a separate folder under [cpu/](cpu/README.md): H3 Base 145.125 MHz, H3 Retained 145.125 MHz, Original 153 MHz, Original 155.25 MHz, and the selected full-ILA RV32IM 153 MHz build. See that index for performance, resources, firmware, captures and rebuild instructions.
+
+The following 153 MHz section documents the older full-fetch experiment.
+
+---
+
 # ZGTC_RISC_CPU
 
 ## Final 153 MHz release

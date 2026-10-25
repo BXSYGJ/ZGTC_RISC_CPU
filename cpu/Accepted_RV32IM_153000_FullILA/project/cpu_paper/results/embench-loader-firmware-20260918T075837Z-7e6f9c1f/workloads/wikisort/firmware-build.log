@@ -1,0 +1,41 @@
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/wikisort/libwikisort.c: In function 'TestingRandom':
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/wikisort/libwikisort.c:896:21: warning: unused parameter 'index' [-Wunused-parameter]
+  896 | TestingRandom (long index, long total)
+      |                ~~~~~^~~~~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/wikisort/libwikisort.c:896:33: warning: unused parameter 'total' [-Wunused-parameter]
+  896 | TestingRandom (long index, long total)
+      |                            ~~~~~^~~~~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/wikisort/libwikisort.c: In function 'TestingMostlyAscending':
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/wikisort/libwikisort.c:908:42: warning: unused parameter 'total' [-Wunused-parameter]
+  908 | TestingMostlyAscending (long index, long total)
+      |                                     ~~~~~^~~~~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/wikisort/libwikisort.c: In function 'TestingAscending':
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/wikisort/libwikisort.c:914:36: warning: unused parameter 'total' [-Wunused-parameter]
+  914 | TestingAscending (long index, long total)
+      |                               ~~~~~^~~~~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/wikisort/libwikisort.c: In function 'TestingEqual':
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/wikisort/libwikisort.c:926:20: warning: unused parameter 'index' [-Wunused-parameter]
+  926 | TestingEqual (long index, long total)
+      |               ~~~~~^~~~~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/wikisort/libwikisort.c:926:32: warning: unused parameter 'total' [-Wunused-parameter]
+  926 | TestingEqual (long index, long total)
+      |                           ~~~~~^~~~~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/wikisort/libwikisort.c: In function 'TestingJittered':
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/wikisort/libwikisort.c:932:35: warning: unused parameter 'total' [-Wunused-parameter]
+  932 | TestingJittered (long index, long total)
+      |                              ~~~~~^~~~~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/wikisort/libwikisort.c: In function 'TestingMostlyEqual':
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/wikisort/libwikisort.c:938:26: warning: unused parameter 'index' [-Wunused-parameter]
+  938 | TestingMostlyEqual (long index, long total)
+      |                     ~~~~~^~~~~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/wikisort/libwikisort.c:938:38: warning: unused parameter 'total' [-Wunused-parameter]
+  938 | TestingMostlyEqual (long index, long total)
+      |                                 ~~~~~^~~~~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/wikisort/libwikisort.c: In function 'warm_caches':
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/wikisort/libwikisort.c:1051:8: warning: unused variable 'res' [-Wunused-variable]
+ 1051 |   int  res = benchmark_body (1, heat);
+      |        ^~~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/wikisort/libwikisort.c: In function 'benchmark_body':
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/wikisort/libwikisort.c:1080:7: warning: unused variable 'i' [-Wunused-variable]
+ 1080 |   int i;
+      |       ^

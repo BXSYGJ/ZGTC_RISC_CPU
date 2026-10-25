@@ -1,0 +1,40 @@
+{
+  "protocol": "v27",
+  "status": "running",
+  "firmware": "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/coremark-ablation-20260924T152600Z-68132642",
+  "firmware_manifest_sha256": "143cba9c3330b44a121d96142def3e6d5b71476575d2d8f72f660dc9a3959a0c",
+  "variant_manifest_sha256": "6340cdf9a9e266bce64eeb1c0c355b6bb73435dcd2dd73ffe6c25e7f9ef3069c",
+  "loader_sha256": "0c72a82af6700abaf149c867414c8d9687dc10910fb0b7498322febe9ea84095",
+  "iterations": 6000,
+  "configured_clock_hz": 153000000,
+  "console_delay_cycles": 2700000,
+  "models": {
+    "accepted_valid_ram": {
+      "executable_sha256": "f0ba92a11f93fd08a7cc883c5604fbb238dc1ba2d4284bf13c76184f1b62b3d2",
+      "source_manifest_sha256": "d1c18e619ab2c1e6e097782aa113978274d359462c80fafe2a5b1e5b12b727b6"
+    }
+  },
+  "results": [
+    {
+      "variant": "accepted_valid_ram",
+      "configuration": "V0",
+      "status": "passed",
+      "binary_sha256": "ba096213876766aa2c5a0aaa1ee055c34d3418912d3d50e67fd83c2c906aa118",
+      "evidence": "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/coremark-loader-rtl-20260924T152726Z-315bd383/runs/accepted_valid_ram/V0",
+      "cycles": 1793942498,
+      "retired_instructions": 1649428429,
+      "cpi": 1.087614634535925,
+      "ram_crc32": "bba62a9a",
+      "minimum_sp": 65152,
+      "uart_sha256": "6966fe7d9c6dfb3e04fbf9f88549527eda5346e90e7614ce14dbd91633f591d4",
+      "simulation_log_sha256": "ed83d6111c1a4491cf32205f929cd254414bd9cf64b49a64438f7d92a9fe9d63"
+    },
+    {
+      "variant": "accepted_valid_ram",
+      "configuration": "V1",
+      "status": "running",
+      "binary_sha256": "d7440a2776e19c36db9869380fb4fd8b67bf90c55b4e3fd9d6bc3f69477c80b6",
+      "evidence": "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/coremark-loader-rtl-20260924T152726Z-315bd383/runs/accepted_valid_ram/V1"
+    }
+  ]
+}

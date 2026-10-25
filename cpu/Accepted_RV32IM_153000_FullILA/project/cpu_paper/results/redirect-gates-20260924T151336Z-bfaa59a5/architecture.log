@@ -1,0 +1,56 @@
+RUN /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/architecture-20260924T151341Z-cd74dfbe
+PASS priming_off-core-p0-l0-12345678
+PASS priming_off-core-p0-l0-a5a5c3c3
+PASS priming_off-core-p0-l0-deadbeef
+PASS priming_off-core-p0-l1-12345678
+PASS priming_off-core-p0-l1-a5a5c3c3
+PASS priming_off-core-p0-l1-deadbeef
+PASS priming_off-cached-p0-l0-12345678
+PASS priming_off-cached-p0-l1-12345678
+PASS priming_off-core-p1-l0-12345678
+PASS priming_off-core-p1-l0-a5a5c3c3
+PASS priming_off-core-p1-l0-deadbeef
+PASS priming_off-core-p1-l1-12345678
+PASS priming_off-core-p1-l1-a5a5c3c3
+PASS priming_off-core-p1-l1-deadbeef
+PASS priming_off-cached-p1-l0-12345678
+PASS priming_off-cached-p1-l1-12345678
+PASS priming_off-muldiv-l0 (7 interrupt cases)
+PASS priming_off-muldiv-l1 (7 interrupt cases)
+PASS priming_on-core-p0-l0-12345678
+PASS priming_on-core-p0-l0-a5a5c3c3
+PASS priming_on-core-p0-l0-deadbeef
+PASS priming_on-core-p0-l1-12345678
+PASS priming_on-core-p0-l1-a5a5c3c3
+PASS priming_on-core-p0-l1-deadbeef
+PASS priming_on-cached-p0-l0-12345678
+PASS priming_on-cached-p0-l1-12345678
+PASS priming_on-core-p1-l0-12345678
+PASS priming_on-core-p1-l0-a5a5c3c3
+PASS priming_on-core-p1-l0-deadbeef
+PASS priming_on-core-p1-l1-12345678
+PASS priming_on-core-p1-l1-a5a5c3c3
+PASS priming_on-core-p1-l1-deadbeef
+PASS priming_on-cached-p1-l0-12345678
+PASS priming_on-cached-p1-l1-12345678
+PASS priming_on-muldiv-l0 (7 interrupt cases)
+PASS priming_on-muldiv-l1 (7 interrupt cases)
+PASS accepted_valid_ram-core-p0-l0-12345678
+PASS accepted_valid_ram-core-p0-l0-a5a5c3c3
+PASS accepted_valid_ram-core-p0-l0-deadbeef
+PASS accepted_valid_ram-core-p0-l1-12345678
+PASS accepted_valid_ram-core-p0-l1-a5a5c3c3
+PASS accepted_valid_ram-core-p0-l1-deadbeef
+PASS accepted_valid_ram-cached-p0-l0-12345678
+PASS accepted_valid_ram-cached-p0-l1-12345678
+PASS accepted_valid_ram-core-p1-l0-12345678
+PASS accepted_valid_ram-core-p1-l0-a5a5c3c3
+PASS accepted_valid_ram-core-p1-l0-deadbeef
+PASS accepted_valid_ram-core-p1-l1-12345678
+PASS accepted_valid_ram-core-p1-l1-a5a5c3c3
+PASS accepted_valid_ram-core-p1-l1-deadbeef
+PASS accepted_valid_ram-cached-p1-l0-12345678
+PASS accepted_valid_ram-cached-p1-l1-12345678
+PASS accepted_valid_ram-muldiv-l0 (7 interrupt cases)
+PASS accepted_valid_ram-muldiv-l1 (7 interrupt cases)
+PASS 90 matched regression runs: /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/architecture-20260924T151341Z-cd74dfbe

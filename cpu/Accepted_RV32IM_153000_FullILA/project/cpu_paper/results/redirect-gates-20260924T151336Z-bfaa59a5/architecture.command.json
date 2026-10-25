@@ -1,0 +1,9 @@
+{
+  "argv": [
+    "/usr/bin/python3",
+    "-B",
+    "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/redirect-gates-20260924T151336Z-bfaa59a5/architecture_runner.py"
+  ],
+  "cwd": "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/redirect-gates-20260924T151336Z-bfaa59a5",
+  "timeout_seconds": 7200
+}

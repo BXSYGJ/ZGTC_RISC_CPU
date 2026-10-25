@@ -1,0 +1,6 @@
+{
+  "warnings": [
+    "%Warning-WIDTH: /mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/coremark-ablation-20260924T151848Z-836ada5c/models/priming_off/inputs/rtl/rv32_burst_ram.sv:46:21: Operator NEQ expects 96 bits on the RHS, but RHS's CONST '?1?h0' generates 1 bits."
+  ],
+  "unexpected": []
+}

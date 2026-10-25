@@ -1,0 +1,8 @@
+{
+  "argv": [
+    "/usr/bin/vvp",
+    "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/redirect-gates-20260924T151336Z-bfaa59a5/priming_on/o0-p1.vvp"
+  ],
+  "cwd": "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/redirect-gates-20260924T151336Z-bfaa59a5/priming_on",
+  "timeout_seconds": 120
+}

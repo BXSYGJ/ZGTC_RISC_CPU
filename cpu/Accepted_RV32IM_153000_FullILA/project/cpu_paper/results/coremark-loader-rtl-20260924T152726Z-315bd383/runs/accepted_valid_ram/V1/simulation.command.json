@@ -1,0 +1,10 @@
+{
+  "argv": [
+    "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/coremark-loader-rtl-20260924T152726Z-315bd383/models/accepted_valid_ram/simulator/objects/Vrv32_observed_soc",
+    "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/coremark-loader-rtl-20260924T152726Z-315bd383/runs/accepted_valid_ram/V1/uart.log",
+    "10000000000",
+    "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/coremark-loader-rtl-20260924T152726Z-315bd383/runs/accepted_valid_ram/V1/application.bin"
+  ],
+  "cwd": "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/coremark-loader-rtl-20260924T152726Z-315bd383/runs/accepted_valid_ram/V1",
+  "timeout_seconds": 7200
+}

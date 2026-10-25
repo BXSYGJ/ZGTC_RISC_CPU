@@ -1,0 +1,24 @@
+{
+  "argv": [
+    "/usr/bin/iverilog",
+    "-g2012",
+    "-s",
+    "redirect_prime_tb",
+    "-o",
+    "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/redirect-gates-20260924T151336Z-bfaa59a5/accepted_valid_ram/o0-p0.vvp",
+    "-Predirect_prime_tb.BUFFER=0",
+    "-Predirect_prime_tb.EARLY=0",
+    "-Predirect_prime_tb.PRIMING=1",
+    "-Predirect_prime_tb.FETCH_OVERLAP=0",
+    "-Predirect_prime_tb.PREDICTOR=0",
+    "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/redirect-gates-20260924T151336Z-bfaa59a5/accepted_valid_ram/rv32_core.sv",
+    "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/redirect-gates-20260924T151336Z-bfaa59a5/accepted_valid_ram/rv32_machine.sv",
+    "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/redirect-gates-20260924T151336Z-bfaa59a5/accepted_valid_ram/rv32_decode.sv",
+    "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/redirect-gates-20260924T151336Z-bfaa59a5/accepted_valid_ram/rv32_alu.sv",
+    "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/redirect-gates-20260924T151336Z-bfaa59a5/accepted_valid_ram/rv32_btb.sv",
+    "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/redirect-gates-20260924T151336Z-bfaa59a5/accepted_valid_ram/rv32_muldiv.sv",
+    "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/redirect-gates-20260924T151336Z-bfaa59a5/redirect_prime_tb.sv"
+  ],
+  "cwd": "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/redirect-gates-20260924T151336Z-bfaa59a5/accepted_valid_ram",
+  "timeout_seconds": 120
+}

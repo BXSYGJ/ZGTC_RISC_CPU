@@ -1,0 +1,7 @@
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/md5sum/md5.c: In function 'benchmark_body':
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/md5sum/md5.c:222:11: warning: unused variable 'p' [-Wunused-variable]
+  222 |  uint8_t *p;
+      |           ^
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/md5sum/md5.c:208:10: warning: unused variable 'j' [-Wunused-variable]
+  208 |   int i, j;
+      |          ^

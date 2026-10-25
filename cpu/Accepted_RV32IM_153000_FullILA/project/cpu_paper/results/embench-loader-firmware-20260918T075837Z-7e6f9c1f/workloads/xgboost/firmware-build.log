@@ -1,0 +1,8 @@
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/xgboost/testbench.c: In function 'warm_caches':
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/xgboost/testbench.c:21:7: warning: unused variable 'res' [-Wunused-variable]
+   21 |   int res = benchmark_body(1, heat);
+      |       ^~~
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/xgboost/testbench.c: In function 'verify_benchmark':
+/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f/inputs/embench/src/xgboost/testbench.c:60:54: warning: left-hand operand of comma expression has no effect [-Wunused-value]
+   60 |     return r >= SAMPLES_IN_FILE * (LOCAL_SCALE_FACTOR, GLOBAL_SCALE_FACTOR / 12);
+      |                                                      ^

@@ -1,0 +1,79 @@
+{
+  "protocol": "v27",
+  "status": "screening_passed",
+  "qualification": "screening_only_not_architectural_or_physical_qualification",
+  "variant_manifest_sha256": "6340cdf9a9e266bce64eeb1c0c355b6bb73435dcd2dd73ffe6c25e7f9ef3069c",
+  "variants": "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/variants/accepted-153-valid-ram-v31-r1",
+  "firmware": "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/embench-loader-firmware-20260918T075837Z-7e6f9c1f",
+  "firmware_manifest_sha256": "9ac5f59c4cd50a6f07aeab0b2b24fdbf83589d45708fee4749f38c77c01d478f",
+  "configured_clock_hz": 153000000,
+  "measured_clock_hz": null,
+  "modes": [
+    "accepted_valid_ram"
+  ],
+  "workloads": [
+    "instrumentation-dummy",
+    "crc32",
+    "xgboost"
+  ],
+  "repetitions": 1,
+  "models": {
+    "accepted_valid_ram": {
+      "executable_sha256": "1b31ebff995cc213753f1e12c3c1bf4e0696a00bf6f57f17ee0dcc6fceeee4ae",
+      "source_manifest_sha256": "a84fc95d73ce45c04b6796cf3115152dddda62d13c2cd38fba89e69999a3e066"
+    }
+  },
+  "results": [
+    {
+      "variant": "accepted_valid_ram",
+      "workload": "instrumentation-dummy",
+      "repetition": 1,
+      "status": "passed",
+      "cycles": 83,
+      "retired_instructions": 20,
+      "cpi": 4.15,
+      "returncode": 0,
+      "application_sha256": "efd1ab430f9eb0891df08919427eeed4c6b44af673aa6f9a0e8565193281400f",
+      "loader_sha256": "0c72a82af6700abaf149c867414c8d9687dc10910fb0b7498322febe9ea84095",
+      "uart_sha256": "422eaefe7d87ae5685fa391b7d00516b5681f9ee0e01da3fd2658a8ec71bf1e8",
+      "simulation_log_sha256": "732a5a6be09cdf4c58fed1ea3377c2dd2910a344abf879b5de69b6c70e1367e6",
+      "evidence": "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/redirect-optimization-20260924T152613Z-7d3953f1/runs/accepted_valid_ram/instrumentation-dummy/1",
+      "minimum_sp": 65504,
+      "profile_sha256": "0d38bb0eaea1de5074a6c943da0fd9973f0356e1f230a59f286054e19155b268"
+    },
+    {
+      "variant": "accepted_valid_ram",
+      "workload": "crc32",
+      "repetition": 1,
+      "status": "passed",
+      "cycles": 4050372,
+      "retired_instructions": 3874849,
+      "cpi": 1.0452980232261955,
+      "returncode": 0,
+      "application_sha256": "d73d3feee02da6ddbe9f685e95f58f38363ddf1f67093082cccbe53f146a12ec",
+      "loader_sha256": "0c72a82af6700abaf149c867414c8d9687dc10910fb0b7498322febe9ea84095",
+      "uart_sha256": "3724398ed62e3dce26067bdf692fe3af20c03fd44d63f7ad2a13e61b5052ef16",
+      "simulation_log_sha256": "24a85ab6468f22c752db19ca29d22517b8190a8d90a252b7d5d96d7e0cfa2ebb",
+      "evidence": "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/redirect-optimization-20260924T152613Z-7d3953f1/runs/accepted_valid_ram/crc32/1",
+      "minimum_sp": 65472,
+      "profile_sha256": "0788ff8d62bfbe84310ed2b52fa20f5504a71b82964f915e4e52c25326c25151"
+    },
+    {
+      "variant": "accepted_valid_ram",
+      "workload": "xgboost",
+      "repetition": 1,
+      "status": "passed",
+      "cycles": 5821941,
+      "retired_instructions": 3400412,
+      "cpi": 1.7121281185926882,
+      "returncode": 0,
+      "application_sha256": "5ed6ea2e68830d91fb2f17bb116069b7a9320f781db3ae01541166c43dc66631",
+      "loader_sha256": "0c72a82af6700abaf149c867414c8d9687dc10910fb0b7498322febe9ea84095",
+      "uart_sha256": "75e23cd6f746d3dba8c28db412368fa2385023689545e3cc63d4d1686dd94b3e",
+      "simulation_log_sha256": "0dbf29d21ffc7b0cb35dd40203c0a65c53194ff3795f00d520d39350e642cb82",
+      "evidence": "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/redirect-optimization-20260924T152613Z-7d3953f1/runs/accepted_valid_ram/xgboost/1",
+      "minimum_sp": 65408,
+      "profile_sha256": "7d6ecc609ff0403bf1addcd54bc19a78b0a60a8917757d78e98d0cd079061d31"
+    }
+  ]
+}

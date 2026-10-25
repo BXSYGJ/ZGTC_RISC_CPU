@@ -1,0 +1,10 @@
+{
+  "argv": [
+    "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/redirect-optimization-20260924T152613Z-7d3953f1/models/accepted_valid_ram/simulator/objects/Vrv32_observed_soc",
+    "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/redirect-optimization-20260924T152613Z-7d3953f1/runs/accepted_valid_ram/instrumentation-dummy/1/uart.log",
+    "2500000000",
+    "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/redirect-optimization-20260924T152613Z-7d3953f1/runs/accepted_valid_ram/instrumentation-dummy/1/application.bin"
+  ],
+  "cwd": "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/results/redirect-optimization-20260924T152613Z-7d3953f1/runs/accepted_valid_ram/instrumentation-dummy/1",
+  "timeout_seconds": 1800
+}

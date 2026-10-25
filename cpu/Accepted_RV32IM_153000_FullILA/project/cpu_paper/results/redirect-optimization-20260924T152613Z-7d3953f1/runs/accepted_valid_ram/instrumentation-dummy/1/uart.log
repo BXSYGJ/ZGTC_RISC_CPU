@@ -1,0 +1,7 @@
+ZBOOT RAM v26
+KKKKKKK
+BOOT CRC32=c942d9d8 bytes=0x00000670
+EMBENCH READY instrumentation-dummy send G
+EMBENCH START instrumentation-dummy heat=1 scale=1 clock_hz=153000000
+EMBENCH cycles=0x0000000000000053 retired=0x0000000000000014 verified=1
+EMBENCH FINISHED instrumentation-dummy

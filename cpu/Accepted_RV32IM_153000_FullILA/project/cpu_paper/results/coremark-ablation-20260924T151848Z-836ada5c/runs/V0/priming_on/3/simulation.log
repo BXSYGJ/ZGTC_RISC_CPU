@@ -1,0 +1,23 @@
+ZGTC COREMARK READY send G; clock=153000000 Hz
+ZGTC COREMARK START iterations=10 validation=0
+2K performance run parameters for coremark.
+CoreMark Size    : 666
+Total ticks      : 19
+Total time (secs): 0
+ERROR! Must execute for at least 10 secs for a valid result!
+Iterations       : 10
+Compiler version : GCC 10.2.0
+Compiler flags   : -march=rv32im -mabi=ilp32 -mcmodel=medany -msmall-data-limit=0 -std=c11 -O3 -funroll-loops -ffreestanding -fno-builtin -ffunction-sections -fdata-sections -Wall -Wextra -DTOTAL_DATA_SIZE=2000 -DITERATIONS=10 -DVALIDATION_RUN=0 -DPERFORMANCE_RUN=1 -DCPU_CLOCK_HZ=153000000u -DCONSOLE_DELAY_CYCLES=0
+Memory location  : 64KiB on-chip RAM; cache mode/geometry in ZGTC config
+seedcrc          : 0xe9f5
+[0]crclist       : 0xe714
+[0]crcmatrix     : 0x1fd7
+[0]crcstate      : 0x8e3a
+[0]crcfinal      : 0xfcaf
+Errors detected
+ZGTC cycles_hex=00000000002db178 retired_hex=000000000029f212 clock_hz=153000000
+ZGTC config=0e8e96fd ihit=2920264 imiss=696 dhit=684479 dmiss=220 writebacks=116
+ZGTC COREMARK FINISHED
+PASS RTL CoreMark smoke total_cycles=3341636 total_retired=2953821
+OBSERVER cycles=2994552 retired=2748946 minimum_sp=65152
+EVENTS redirects=54297,1864,396,0,0,0,0 eligible=54230,1829,382,0,0,0,0 request_stalls=0 response_waits=5592 barrier_cycles=0

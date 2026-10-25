@@ -1,0 +1,448 @@
+{
+  "status": "board_and_full_rtl_verified",
+  "qualified": true,
+  "efficiency_threshold_met": true,
+  "full_rtl_pending": false,
+  "rows": [
+    {
+      "configuration": "V0",
+      "repetition": 1,
+      "configured_clock_hz": 144000000,
+      "measured_clock_hz": null,
+      "cycles": 1760010319,
+      "retired": 1649428429,
+      "seconds": 12.222293881944445,
+      "coremark": 490.906212692495,
+      "lut": 6792,
+      "coremark_per_lut": 0.07227712201008465,
+      "crc_valid": true,
+      "duration_pass": true,
+      "efficiency_pass": true
+    },
+    {
+      "configuration": "V1",
+      "repetition": 1,
+      "configured_clock_hz": 144000000,
+      "measured_clock_hz": null,
+      "cycles": 1759807190,
+      "retired": 1649775527,
+      "seconds": 12.220883263888888,
+      "coremark": 490.9628764501184,
+      "lut": 6792,
+      "coremark_per_lut": 0.07228546473058281,
+      "crc_valid": true,
+      "duration_pass": true,
+      "efficiency_pass": true
+    },
+    {
+      "configuration": "V1",
+      "repetition": 2,
+      "configured_clock_hz": 144000000,
+      "measured_clock_hz": null,
+      "cycles": 1759807190,
+      "retired": 1649775527,
+      "seconds": 12.220883263888888,
+      "coremark": 490.9628764501184,
+      "lut": 6792,
+      "coremark_per_lut": 0.07228546473058281,
+      "crc_valid": true,
+      "duration_pass": true,
+      "efficiency_pass": true
+    },
+    {
+      "configuration": "V0",
+      "repetition": 2,
+      "configured_clock_hz": 144000000,
+      "measured_clock_hz": null,
+      "cycles": 1760010319,
+      "retired": 1649428429,
+      "seconds": 12.222293881944445,
+      "coremark": 490.906212692495,
+      "lut": 6792,
+      "coremark_per_lut": 0.07227712201008465,
+      "crc_valid": true,
+      "duration_pass": true,
+      "efficiency_pass": true
+    },
+    {
+      "configuration": "V0",
+      "repetition": 3,
+      "configured_clock_hz": 144000000,
+      "measured_clock_hz": null,
+      "cycles": 1760010319,
+      "retired": 1649428429,
+      "seconds": 12.222293881944445,
+      "coremark": 490.906212692495,
+      "lut": 6792,
+      "coremark_per_lut": 0.07227712201008465,
+      "crc_valid": true,
+      "duration_pass": true,
+      "efficiency_pass": true
+    },
+    {
+      "configuration": "V1",
+      "repetition": 3,
+      "configured_clock_hz": 144000000,
+      "measured_clock_hz": null,
+      "cycles": 1759807190,
+      "retired": 1649775527,
+      "seconds": 12.220883263888888,
+      "coremark": 490.9628764501184,
+      "lut": 6792,
+      "coremark_per_lut": 0.07228546473058281,
+      "crc_valid": true,
+      "duration_pass": true,
+      "efficiency_pass": true
+    }
+  ],
+  "receipt": {
+    "physical": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\results\\physical-selected-clock-144000000-internal_fanout_banked_early-uart-loader-packing3_compact0-s3-20260924T073554Z-d94ec852",
+    "variants": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\variants\\redirect-optimization-v27-r58",
+    "boot": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\results\\embench-loader-firmware-20260920T032541Z-501f949d",
+    "smoke": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\results\\selected-clock-smoke-20260924T061340Z-ca1fea74",
+    "firmware": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\results\\coremark-ablation-20260924T063659Z-90053b23",
+    "screen": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\results\\coremark-ablation-20260924T060927Z-e5e2a819",
+    "full_rtl": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\results\\coremark-loader-rtl-20260924T063850Z-eb6fac4f",
+    "configured_clock_hz": 144000000,
+    "physical_manifest_sha256": "b6f82c9b832fc76f5aa0496df75fe37d90802bcc1560f25aa5856977235eb118",
+    "variant_manifest_sha256": "c3f5fe8b3840e5c6d7cc0077c6936830b4f6fa1e071fa43e41f3c774784a0909",
+    "boot_manifest_sha256": "ebb7ae8b6b9ec0b0e2efc24eb1890214ba70eef090097bd7f2b11a8fd26a8195",
+    "smoke_manifest_sha256": "d5b27cd671d65e151b0545c79617420dcfe3e83dc0d8bad4e0bfe707611416a4",
+    "firmware_manifest_sha256": "09b25980c876730ae9bbf61aebf4e9da8def841fb1bd8c0950fe5c05057bf525",
+    "screen_manifest_sha256": "ee09f06564c30083451db316a9fae84064969f36eda0479cef5f8ecd14095c37",
+    "full_rtl_pending_at_preparation": false,
+    "full_rtl_receipt": {
+      "receipt": {
+        "run": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\results\\coremark-loader-rtl-20260924T063850Z-eb6fac4f",
+        "manifest_sha256": "547b5194d90df6b3f4aa0ecfdaf258c4559229e0c16dc8e6336c02dd69fdd006",
+        "variant": "internal_fanout_banked_early",
+        "variant_manifest_sha256": "c3f5fe8b3840e5c6d7cc0077c6936830b4f6fa1e071fa43e41f3c774784a0909",
+        "firmware_manifest_sha256": "09b25980c876730ae9bbf61aebf4e9da8def841fb1bd8c0950fe5c05057bf525",
+        "firmware_source_inventory_sha256": "1706b875c7847897d834498dba88b4c3e90bc96dcbc395788f536a05e24b4efb",
+        "model_source_manifest_sha256": "2de73b9327b3c83c937f5fc55f5bb7a9c2bc3ecfe6792afb1bbf0940d52b1644",
+        "executable_sha256": "24190ff0f7a52fdef2421a5033155b6b5799c764dc3677db41851b63cf37fa95",
+        "compile_command_sha256": "170ee153ef099d1199c172d9cce66676381e8c101a1ac0f319c80458fb1497a3",
+        "checker_sha256": "418f86ed9cea8c1e4e1a6980f4ffea578478e27f7eb31dc1e6b0b17cf565a211",
+        "parameters": {
+          "CLOCK_HZ": "3200",
+          "BAUD": "100",
+          "INIT_FILE": "\"firmware.hex\"",
+          "ENABLE_M": "1",
+          "ENABLE_PREDICTOR": "1",
+          "LOAD_USE_BUBBLE": "1",
+          "FAST_ICACHE_HIT": "1",
+          "FAST_DCACHE_READ": "1",
+          "FAST_DCACHE_WRITE": "1",
+          "FETCH_OVERLAP": "1",
+          "DATA_OVERLAP": "1",
+          "EARLY_D_REQUEST": "1",
+          "BTB_INDEX_BITS": "8",
+          "ICACHE_SET_BITS": "9",
+          "CACHE_SET_BITS": "6",
+          "ENABLE_CACHE": "1",
+          "MEMORY_ADDRESS_BITS": "14"
+        }
+      },
+      "observations": [
+        {
+          "variant": "internal_fanout_banked_early",
+          "configuration": "V0",
+          "iterations": 6000,
+          "observations": 1,
+          "correctness": true,
+          "cycles": 1760010319,
+          "retired_instructions": 1649428429,
+          "cpi": 1.067042551259434,
+          "configured_clock_hz": 144000000,
+          "measured_clock_hz": null,
+          "configured_clock_seconds": 12.222293881944445,
+          "reportable_duration": true,
+          "hardware_score": null,
+          "minimum_sp": 65152,
+          "binary_sha256": "41d3c5313a90cab86406522fd6df979698871c45d3d1927614ec1d2237a81a83",
+          "ram_crc32": "b2c51ccd",
+          "uart_sha256": "5d2ef15538236b4fc7c1a0b1edd7ba0b10f089687a08d576eed79e92d6564fd1",
+          "simulation_log_sha256": "4f177dd46bd8153a80db7dd40ac9c2cbe190afaa932af2116075059b74a0e5d7",
+          "evidence": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\results\\coremark-loader-rtl-20260924T063850Z-eb6fac4f\\runs\\internal_fanout_banked_early\\V0"
+        },
+        {
+          "variant": "internal_fanout_banked_early",
+          "configuration": "V1",
+          "iterations": 6000,
+          "observations": 1,
+          "correctness": true,
+          "cycles": 1759807190,
+          "retired_instructions": 1649775527,
+          "cpi": 1.0666949298248378,
+          "configured_clock_hz": 144000000,
+          "measured_clock_hz": null,
+          "configured_clock_seconds": 12.220883263888888,
+          "reportable_duration": true,
+          "hardware_score": null,
+          "minimum_sp": 65152,
+          "binary_sha256": "d19c2e611db48f8aa08c663844aaa6f98e2ab7b8139c72b2e0b8e763810e3d0d",
+          "ram_crc32": "38c4d148",
+          "uart_sha256": "eafc11b7737d54ab163930e43795fdc025bdd125c91e909c12d12a0328b44a92",
+          "simulation_log_sha256": "6b5d4ab31410697594e13089ddc3d42a037317bd511b29492ebbcf9c29f80f07",
+          "evidence": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\results\\coremark-loader-rtl-20260924T063850Z-eb6fac4f\\runs\\internal_fanout_banked_early\\V1"
+        }
+      ]
+    },
+    "screen_receipt": {
+      "variant_manifest_sha256": "c3f5fe8b3840e5c6d7cc0077c6936830b4f6fa1e071fa43e41f3c774784a0909",
+      "coremark_manifest_sha256": "ee09f06564c30083451db316a9fae84064969f36eda0479cef5f8ecd14095c37",
+      "correctness_gates": {
+        "architecture": {
+          "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\results\\architecture-20260924T060724Z-5b7dc869\\manifest.json",
+          "sha256": "91c56e0945f2c9dfc2229bcb0aaec76d04cc67bf7c939122be1efb5ca7f26b89"
+        },
+        "directed": {
+          "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\results\\redirect-gates-20260924T060715Z-a209db57\\manifest.json",
+          "sha256": "64cdf0c50d39784b93153f352f3f7226a481552bbc80de7587e6e3158a83ad90"
+        }
+      }
+    },
+    "loader_receipt": {
+      "protocol": "v28",
+      "scope": "Verified loader RTL observations; not architectural, physical or hardware qualification",
+      "variant": "internal_fanout_banked_early",
+      "variant_manifest_sha256": "c3f5fe8b3840e5c6d7cc0077c6936830b4f6fa1e071fa43e41f3c774784a0909",
+      "firmware_manifest_sha256": "ebb7ae8b6b9ec0b0e2efc24eb1890214ba70eef090097bd7f2b11a8fd26a8195",
+      "smoke_workloads_verified": true,
+      "runs": [
+        {
+          "run": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\results\\selected-clock-smoke-20260924T061340Z-ca1fea74",
+          "manifest_sha256": "d5b27cd671d65e151b0545c79617420dcfe3e83dc0d8bad4e0bfe707611416a4",
+          "model_source_manifest_sha256": "c17860d45e45fc1c56f64dbef04abdcd5158a5020c6e577e0c6e686da529d1bd",
+          "executable_sha256": "ee324e6fb6c2c4a4e9c826e5f2d0dec672165588f251f827a6bacc646d9ebbf1",
+          "compile_command_sha256": "990a7e0f1994ab107aee9812e7acea1f4ab38ac065371525100f3030e3ca4c08",
+          "parameters": {
+            "CLOCK_HZ": "3200",
+            "BAUD": "100",
+            "INIT_FILE": "\"firmware.hex\"",
+            "ENABLE_M": "1",
+            "ENABLE_PREDICTOR": "1",
+            "LOAD_USE_BUBBLE": "1",
+            "FAST_ICACHE_HIT": "1",
+            "FAST_DCACHE_READ": "1",
+            "FAST_DCACHE_WRITE": "1",
+            "FETCH_OVERLAP": "1",
+            "DATA_OVERLAP": "1",
+            "EARLY_D_REQUEST": "1",
+            "BTB_INDEX_BITS": "8",
+            "ICACHE_SET_BITS": "9",
+            "CACHE_SET_BITS": "6",
+            "ENABLE_CACHE": "1",
+            "MEMORY_ADDRESS_BITS": "14"
+          }
+        }
+      ],
+      "observations": {
+        "instrumentation-dummy": [
+          {
+            "run": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\results\\selected-clock-smoke-20260924T061340Z-ca1fea74",
+            "repetition": 1,
+            "cycles": 81,
+            "retired_instructions": 20,
+            "uart_sha256": "5b90a8c1f656d471799193914eca482779a9f208b292be7df5736a2246cf3641"
+          }
+        ],
+        "xgboost": [
+          {
+            "run": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\results\\selected-clock-smoke-20260924T061340Z-ca1fea74",
+            "repetition": 1,
+            "cycles": 5692161,
+            "retired_instructions": 3400412,
+            "uart_sha256": "ca9e218e1acd5569c3c3c44a6108b8f9348382e4f437b4373740ed32cb308b6c"
+          }
+        ],
+        "crc32": [
+          {
+            "run": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\results\\selected-clock-smoke-20260924T061340Z-ca1fea74",
+            "repetition": 1,
+            "cycles": 4050196,
+            "retired_instructions": 3874849,
+            "uart_sha256": "be0a67d974b95bef294e5be848f532bdd0b2fdfc241c5b828e9f8a2123f60f9c"
+          }
+        ]
+      }
+    },
+    "bitstream_sha256": "a354ecb88a9b9b1adbbe3e8e3ed6d0509c44055c5a930fdda5b14049f1b9196c",
+    "resources": {
+      "CLMA": {
+        "ff": 2520,
+        "lut": 5041
+      },
+      "CLMS": {
+        "ff": 782,
+        "lut": 1751
+      },
+      "synthesis_luts": null,
+      "post_route_luts": 6792,
+      "post_route_ffs": 3302,
+      "DRM": 21.0,
+      "GPLL": 1.0,
+      "APM": 4
+    },
+    "timing": {
+      "schema": 1,
+      "run": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\results\\physical-selected-clock-144000000-internal_fanout_banked_early-uart-loader-packing3_compact0-s3-20260924T073554Z-d94ec852",
+      "checks": {
+        "Setup_Slow": {
+          "cpu_slack_ns": 0.003,
+          "cpu_total_slack_ns": 0.0,
+          "cpu_failing_endpoints": 0,
+          "cpu_endpoints": 17158,
+          "all_clock_minimum_slack_ns": 0.003,
+          "all_clock_failing_endpoints": 0
+        },
+        "Hold_Slow": {
+          "cpu_slack_ns": 0.143,
+          "cpu_total_slack_ns": 0.0,
+          "cpu_failing_endpoints": 0,
+          "cpu_endpoints": 17158,
+          "all_clock_minimum_slack_ns": 0.143,
+          "all_clock_failing_endpoints": 0
+        },
+        "Recovery_Slow": {
+          "cpu_slack_ns": 2.736,
+          "cpu_total_slack_ns": 0.0,
+          "cpu_failing_endpoints": 0,
+          "cpu_endpoints": 2720,
+          "all_clock_minimum_slack_ns": 2.736,
+          "all_clock_failing_endpoints": 0
+        },
+        "Removal_Slow": {
+          "cpu_slack_ns": 0.607,
+          "cpu_total_slack_ns": 0.0,
+          "cpu_failing_endpoints": 0,
+          "cpu_endpoints": 2720,
+          "all_clock_minimum_slack_ns": 0.607,
+          "all_clock_failing_endpoints": 0
+        },
+        "Minimum Pulse Width_Slow": {
+          "cpu_slack_ns": 2.127,
+          "cpu_total_slack_ns": 0.0,
+          "cpu_failing_endpoints": 0,
+          "cpu_endpoints": 3124,
+          "all_clock_minimum_slack_ns": 2.127,
+          "all_clock_failing_endpoints": 0
+        },
+        "Setup_Fast": {
+          "cpu_slack_ns": 2.755,
+          "cpu_total_slack_ns": 0.0,
+          "cpu_failing_endpoints": 0,
+          "cpu_endpoints": 17158,
+          "all_clock_minimum_slack_ns": 2.755,
+          "all_clock_failing_endpoints": 0
+        },
+        "Hold_Fast": {
+          "cpu_slack_ns": 0.1,
+          "cpu_total_slack_ns": 0.0,
+          "cpu_failing_endpoints": 0,
+          "cpu_endpoints": 17158,
+          "all_clock_minimum_slack_ns": 0.1,
+          "all_clock_failing_endpoints": 0
+        },
+        "Recovery_Fast": {
+          "cpu_slack_ns": 4.358,
+          "cpu_total_slack_ns": 0.0,
+          "cpu_failing_endpoints": 0,
+          "cpu_endpoints": 2720,
+          "all_clock_minimum_slack_ns": 4.358,
+          "all_clock_failing_endpoints": 0
+        },
+        "Removal_Fast": {
+          "cpu_slack_ns": 0.412,
+          "cpu_total_slack_ns": 0.0,
+          "cpu_failing_endpoints": 0,
+          "cpu_endpoints": 2720,
+          "all_clock_minimum_slack_ns": 0.412,
+          "all_clock_failing_endpoints": 0
+        },
+        "Minimum Pulse Width_Fast": {
+          "cpu_slack_ns": 2.674,
+          "cpu_total_slack_ns": 0.0,
+          "cpu_failing_endpoints": 0,
+          "cpu_endpoints": 3124,
+          "all_clock_minimum_slack_ns": 2.674,
+          "all_clock_failing_endpoints": 0
+        }
+      },
+      "internal_multicorner_timing_passed": true,
+      "cpu_setup_wns_ns": 0.003,
+      "cpu_hold_wns_ns": 0.1,
+      "constraint_scope": "Accepted constraints unchanged. Reset, key and UART RX are asynchronous/false-pathed; LED and UART TX have no synchronous external timing specification. Closure covers reported internal/generated-clock timing with ILA omitted, not externally timed GPIO/UART paths.",
+      "unconstrained_port_diagnostics": [
+        [
+          "4086",
+          "key",
+          "input"
+        ],
+        [
+          "4086",
+          "rst_n",
+          "input"
+        ],
+        [
+          "4086",
+          "uart_rx",
+          "input"
+        ],
+        [
+          "4087",
+          "led[0]",
+          "output"
+        ],
+        [
+          "4087",
+          "led[1]",
+          "output"
+        ],
+        [
+          "4087",
+          "led[2]",
+          "output"
+        ],
+        [
+          "4087",
+          "led[3]",
+          "output"
+        ],
+        [
+          "4087",
+          "led[4]",
+          "output"
+        ],
+        [
+          "4087",
+          "led[5]",
+          "output"
+        ],
+        [
+          "4087",
+          "led[6]",
+          "output"
+        ],
+        [
+          "4087",
+          "led[7]",
+          "output"
+        ],
+        [
+          "4087",
+          "uart_tx",
+          "output"
+        ]
+      ],
+      "hardware_validated": false,
+      "timing_sha256": "c0b3e33e1bb88c3d0b0981fba49a4a25a02316012a12d650d9ddda6c0d686780",
+      "implementation_log_sha256": "3c507e52740eb0a326e0d31bc064222581028543d572f01d71ba4faf96dc1f61",
+      "board_constraint_sha256": "7e248a5022603d4b78b3758d4d552d8efd34c50e34d7d27b0a79ac71ec30e5d0",
+      "uart_constraint_sha256": "1660f87805fe18229114bc941a06c322dd6307e0c22b360cd2740eaf3b8ea9ad"
+    },
+    "instrumentation_profile": "none"
+  },
+  "board_manifest_sha256": "36cfac40a1453621a88bd0c8ea9875f667949b2c812a22f66a0265a19e5a59cb",
+  "scope": "Configured PLL throughput and exact image resources; frequency is not independently measured."
+}

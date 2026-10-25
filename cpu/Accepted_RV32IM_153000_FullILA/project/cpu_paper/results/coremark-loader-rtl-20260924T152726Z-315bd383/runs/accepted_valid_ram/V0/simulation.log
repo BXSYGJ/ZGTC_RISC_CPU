@@ -1,0 +1,73 @@
+ZBOOT RAM v26
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+BOOT CRC32=bba62a9a bytes=0x00005950
+ZGTC COREMARK READY send G; clock=progress cycles=100000000
+153000000 Hz
+ZGTC COREMARK START iterprogress cycles=200000000
+ations=6000 validation=0
+progress cycles=300000000
+progress cycles=400000000
+progress cycles=500000000
+progress cycles=600000000
+progress cycles=700000000
+progress cycles=800000000
+progress cycles=900000000
+progress cycles=1000000000
+progress cycles=1100000000
+progress cycles=1200000000
+progress cycles=1300000000
+progress cycles=1400000000
+progress cycles=1500000000
+progress cycles=1600000000
+progress cycles=1700000000
+progress cycles=1800000000
+progress cycles=1900000000
+progress cycles=2000000000
+2K performanceprogress cycles=2100000000
+ run parameters for coremark.
+CoreMarprogress cycles=2200000000
+k Size    : 666
+Total ticks      : 11progress cycles=2300000000
+725
+Total time (secs): 11
+Iterations/progress cycles=2400000000
+Sec   : 545
+Iterations       : 6000
+Cprogress cycles=2500000000
+ompiler version : GCC 10.2.0
+Compilerprogress cycles=2600000000
+ flags   : -march=rv32im -mabi=ilp32 progress cycles=2700000000
+-mcmodel=medany -msmall-data-limit=0 -progress cycles=2800000000
+std=c11 -O3 -funroll-loops -ffreestanprogress cycles=2900000000
+ding -fno-builtin -ffunction-sectionsprogress cycles=3000000000
+ -fdata-sections -Wall -Wextra -DTOTAprogress cycles=3100000000
+L_DATA_SIZE=2000 -DITERATIONS=6000 -Dprogress cycles=3200000000
+VALIDATION_RUN=0 -DPERFORMANCE_RUN=1 progress cycles=3300000000
+-DCPU_CLOCK_HZ=153000000u -DCONSOLE_Dprogress cycles=3400000000
+ELAY_CYCLES=2700000
+Memory location  progress cycles=3500000000
+: 64KiB on-chip RAM; cache mode/geomeprogress cycles=3600000000
+try in ZGTC config
+seedcrc          :progress cycles=3700000000
+ 0xe9f5
+[0]crclist       : 0xe714
+[0]progress cycles=3800000000
+crcmatrix     : 0x1fd7
+[0]crcstate   progress cycles=3900000000
+   : 0x8e3a
+[0]crcfinal      : 0xa14cprogress cycles=4000000000
+
+Correct operation validated. See REAprogress cycles=4100000000
+DME.md for run and reporting rules.
+Zprogress cycles=4200000000
+GTC cycles_hex=000000006aed63e2 retirprogress cycles=4300000000
+ed_hex=00000000625047cd clock_hz=1530progress cycles=4400000000
+00000
+ZGTC config=0e8e96fd ihit=17526progress cycles=4500000000
+54167 imiss=54606 dhit=410696442 dmisprogress cycles=4600000000
+s=108029 writebacks=78011
+ZGTC COREMAprogress cycles=4700000000
+RK FINISHED
+PASS RTL CoreMark smoke total_cycles=4733150762 total_retired=3413449260
+OBSERVER cycles=1793942498 retired=1649428429 minimum_sp=65152
+EVENTS redirects=32545005,1166881,222006,0,0,0,0 eligible=32543332,1166846,222001,0,0,0,0 request_stalls=0 response_waits=436876 barrier_cycles=0
