@@ -1,0 +1,27 @@
+InstRec-FPGA M1 timing summary (run 20261027-104218-acb7a788)
+Source: build/pds/20261027-104218-acb7a788/report_timing/instrec_top.rtr
+Device: PG2L100H-6IFBG676, PDS 2022.2-SP6.4
+Result: Some Constraints Violated; gen_bit_stream interrupted, NO M1 bitstream.
+
+Performance Summary:
+  clk_nco          216.0002 MHz requested, 304.7440 MHz estimated, slack +1.348
+  pix_clk          148.5001 MHz requested, 160.0512 MHz estimated, slack +0.486
+  cfg_clk           10.3950 MHz requested, 260.7562 MHz estimated, slack +92.365
+  rst_clk          125.0000 MHz requested, 305.5301 MHz estimated, slack +4.727
+  ddrphy_sysclk    125.0000 MHz requested,  80.6387 MHz estimated, slack -4.401
+
+Setup Summary (Slow Corner):
+  ddrphy_sysclk -> ddrphy_sysclk   WNS -4.401 ns   TNS -487.619 ns   200 failing / 41356 endpoints
+
+Worst path (slack -4.401):
+  u_mel_engine/feat_rd_data -> u_mel_engine/u_db_norm APM/LUT chain
+  Data arrival 17.539 ns, data required 13.138 ns, 5 logic levels
+  Logic 8.121 ns (67.692%), Route 3.876 ns (32.308%)
+  Chain: DRAM_256 -> APM_281 -> CLMA_267 -> CLMA_249 -> APM_239 -> CLMA_249 -> APM_239
+
+Reference: same DDR3 IP in pds_cpu_100h build (20261025-002007-aa74ca7d)
+  ddrphy_sysclk -> ddrphy_sysclk   WNS +2.110 ns   0 failing / 14561 endpoints
+
+Resource (device map):
+  LUT 15731/66600 (24%), FF 11855/133200 (9%), DRM 43.5/155 (29%),
+  APM 29/240 (13%), Distributed RAM 996 (6%), HSSTHP 5 (16%), HCKB 2 (9%)

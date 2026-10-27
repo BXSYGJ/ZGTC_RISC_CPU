@@ -54,6 +54,7 @@ InstRec 8 类乐器识别（INT8 CNN）正在移植到盘古 100Pro+（PG2L100H-
 | 数值真源 | `scripts/outputs/layer_contract.json`、`weights_image.bin`、`mel_tables.*` |
 | 金标准 | `scripts/golden_pipeline.py` + `scripts/outputs/golden/*.npy` |
 | SDD | `docs/sdd/{spec,design,tasks}.md`（从 `.codeartsdoer` 复制的可交接副本） |
+| 证据 | `reports/m0-manifest-20261027.json`（M0 位流哈希/WNS/资源）、`reports/m1-timing-20261027-104218.txt`（M1 时序摘要） |
 | 交接 | `docs/HANDOFF_SNAPSHOT_20261027.md` + 本文件 |
 | Agent 规则 | 仓库根 `AGENTS.md` |
 
@@ -70,3 +71,10 @@ InstRec 8 类乐器识别（INT8 CNN）正在移植到盘古 100Pro+（PG2L100H-
 - License：`PANGO_LICENSE_FILE=E:\License\pango\new_pds_F4A80DA47D72.lic`
 - 构建脚本必须 PS 5.1 兼容；一次只能跑一个 `pds_shell.exe`（脚本不查并发）。
 - 构建成功 ≠ 时序收敛：脚本只校验位流存在与新鲜度，**不校验 WNS**，必须看 `manifest.json` / `.rtr`。
+
+## 版本基线（git，分支 XSY，未 push）
+
+- `1298395` feat(instrec): 首次纳管 InstRec-FPGA 工程并建立可交接文档（182 文件，含 IP 源文件与 SDD）
+- `2abf5ed` wip(cpu): 存档已搁置的 PCB 视觉 AI 加速 RTL（未验证）
+- 工作区有意保留未纳管：`ai_pcb/`、`pcb-aoi/`（含大 ONNX，已搁置）、`1571364599 paper.pdf`。
+- 位流本体不入库（`*.sbit` 全局忽略）；以 `reports/m0-manifest-20261027.json` 的 SHA-256 为准。

@@ -11,7 +11,10 @@
 - `.gitignore` 增加 `!instrec_fpga/ipcore/`：DDR3 / GPLL IP 源文件是重建必需资产，此前被全局 `ipcore/` 忽略。
 - SDD 三份文档复制到 `docs/sdd/`（`.codeartsdoer/` 被自身 `*` 规则整体忽略，交接会丢）。
 - 新增 `docs/STATUS.md`（唯一实时状态源）与本文件。
-- `instrec_fpga/` 首次纳入 git（此前 0 个文件被跟踪）。
+- `instrec_fpga/` 首次纳入 git（此前 0 个文件被跟踪）：commit `1298395`，180 个文件。
+- 搁置路线的 AI RTL 单独存档：commit `2abf5ed`。
+- 证据从 `build/` 提取到可追踪位置：`reports/m0-manifest-20261027.json`、
+  `reports/m1-timing-20261027-104218.txt`。
 - 核对基线：pytest 63 passed；check_rtl 26 文件 0 violation。
 
 ## 2026-10-27 10:56 — M1 语法修复后的首次完整构建

@@ -1,5 +1,10 @@
 # ZGTC_RISC_CPU
 
+> **当前活跃主线（2026-10-27）：`instrec_fpga/`** —— InstRec 8 类乐器识别在盘古 100Pro+（PG2L100H）上的
+> 纯 FPGA 移植（I2S → DDR3 → Mel 引擎 → INT8 NPU → HDMI UI）。
+> 恢复开发请先读 `instrec_fpga/docs/STATUS.md` 与仓库根 `AGENTS.md`；本文件以下内容为 RV32IM SoC 历史记录
+> （200H 153 MHz/511 分为历史成绩；100H 可交付点为 120 MHz/383 分，见 `cpu/docs/MIGRATION_100H_20261025.md`）。
+
 ## September 11, 2026 — provisional validation complete
 
 The complete `cpu/experiments/full_fetch_commit_factored` version passes local 42-data/33-trigger ILA validation and remote hardware CoreMark V0/V1 bring-up at **153 MHz, 511.317879224 CoreMark, 3.341946923 CoreMark/MHz and 0.053811605896 CoreMark/LUT** (9502 complete LUT / 5079 FF, +0.021 ns setup WNS). The user explicitly accepts local ILA checking; remote ILA is not a gate. Further optimization is paused, AI acceleration remains deferred, and electrical/stability caveats remain documented.
