@@ -19,6 +19,9 @@ multiseed_summary.csv
 
 # FPGA programming and implementation artifacts
 *.sbit
+# 里程碑位流按 releases 目录归档入库（其余 *.sbit 仍是构建产物）
+!instrec_fpga/releases/**/*.sbit
+!pds_cpu_100h/releases/**/*.sbit
 *.smsk
 *.bgr
 *.adf

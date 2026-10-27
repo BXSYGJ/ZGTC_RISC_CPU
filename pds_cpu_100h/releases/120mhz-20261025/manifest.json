@@ -1,0 +1,12 @@
+{
+  "Schema": 1,
+  "BuildDirectory": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\pds_cpu_100h\\build\\pds\\20261025-112034-df03c4e4",
+  "Bitstream": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\pds_cpu_100h\\build\\pds\\20261025-112034-df03c4e4\\generate_bitstream\\pds_cpu_top_100h.sbit",
+  "BitstreamSha256": "B4E623BF97B26734D3F3C723D0356A695FBD84E91B58F0D56395214BEACE4B98",
+  "FirmwareSha256": "992407A640DB825DBD9AD0F1DB974BC606409DA73D1443A1509800668C94E50D",
+  "Device": "PG2L100H-6IFBG676",
+  "ClockHz": 120000000,
+  "UartBaud": null,
+  "EnableM": null,
+  "GeneratedUtc": "2026-10-25T03:26:26.6386596Z"
+}

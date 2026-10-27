@@ -55,6 +55,7 @@ InstRec 8 类乐器识别（INT8 CNN）正在移植到盘古 100Pro+（PG2L100H-
 | 金标准 | `scripts/golden_pipeline.py` + `scripts/outputs/golden/*.npy` |
 | SDD | `docs/sdd/{spec,design,tasks}.md`（从 `.codeartsdoer` 复制的可交接副本） |
 | 证据 | `reports/m0-manifest-20261027.json`（M0 位流哈希/WNS/资源）、`reports/m1-timing-20261027-104218.txt`（M1 时序摘要） |
+| 位流归档 | `releases/m0-20261027/`（`instrec_top.sbit` + manifest + SHA256SUMS，已入库，可离线校验） |
 | 交接 | `docs/HANDOFF_SNAPSHOT_20261027.md` + 本文件 |
 | Agent 规则 | 仓库根 `AGENTS.md` |
 
@@ -77,4 +78,7 @@ InstRec 8 类乐器识别（INT8 CNN）正在移植到盘古 100Pro+（PG2L100H-
 - `1298395` feat(instrec): 首次纳管 InstRec-FPGA 工程并建立可交接文档（182 文件，含 IP 源文件与 SDD）
 - `2abf5ed` wip(cpu): 存档已搁置的 PCB 视觉 AI 加速 RTL（未验证）
 - 工作区有意保留未纳管：`ai_pcb/`、`pcb-aoi/`（含大 ONNX，已搁置）、`1571364599 paper.pdf`。
-- 位流本体不入库（`*.sbit` 全局忽略）；以 `reports/m0-manifest-20261027.json` 的 SHA-256 为准。
+- 位流本体不入库（`*.sbit` 全局忽略）；**例外**：`instrec_fpga/releases/**` 与 `pds_cpu_100h/releases/**`
+  的里程碑位流已入库并附 `SHA256SUMS`，`.gitattributes` 设 `-text` 防止二进制被换行改写。
+- 里程碑位流：`instrec_fpga/releases/m0-20261027/`（instrec M0）、`pds_cpu_100h/releases/120mhz-20261025/`
+  （100H 120 MHz 交付）。

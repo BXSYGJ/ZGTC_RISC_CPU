@@ -1,2 +1,4 @@
 cpu/experiments/** -text
 cpu/docs/evidence/** -text
+instrec_fpga/releases/** -text
+pds_cpu_100h/releases/** -text
