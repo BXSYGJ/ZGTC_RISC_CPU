@@ -94,6 +94,11 @@ set_arch -family Logos2 -device PG2L100H -speedgrade -6 -package FBG676
 
 # ---- Six-stage batch flow ----
 compile -system_verilog -top_module instrec_top
+# Parallelism: PDS 2022.2 on PG2L100H rejects BOTH thread switches
+# (Flow-0182: -max_parallel_jobs and -number_of_router_thread are "not
+# support for the device"). Synthesis and PnR therefore run single-threaded;
+# multi-seed (-parallel/-route_parallel) is a different mechanism and is
+# deliberately NOT enabled. Do not re-add the thread switches.
 synthesize -ads -selected_syn_tool_opt 2
 dev_map
 pnr

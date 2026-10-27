@@ -142,6 +142,11 @@ module conv_engine #(
     // [wdma alignment point] group contract stream, 48 beats per group
     // (16 x bias, 16 x M, 16 x shift), loaded into the shadow contract
     // bank; becomes active at the next grp_advance boundary.
+    // Beat protocol (must match the shared beat counter in the loader):
+    // exactly ONE valid strobe per beat, fixed order 16 x bias ->
+    // 16 x M -> 16 x shift. Driving two valid strobes in the same beat
+    // would advance the shared counter only once and leave the bank
+    // partially loaded, so wdma must serialize the three sub-streams.
     input  wire               grp_start,   // pulse: restart shadow pointer
     input  wire               bias_valid,  // beats 0..15: bias_s32
     input  wire signed [31:0] bias_s32,
@@ -375,6 +380,10 @@ module conv_engine #(
     // line RAM banks: one write port (ingress) + one synchronous read
     // port (tap scan). Write row = scan row + 2, never a window row,
     // so write and read never touch the same bank in the same cycle.
+    // rd_addr_c is declared here (it is used by the RAM always blocks
+    // below) and assigned later with the window address generator.
+    wire [AW-1:0] rd_addr_c;
+
     always @(posedge clk) begin
         if (wr_en && (wr_bank_ptr == 2'd0))
             line_ram0[wr_addr] <= x_u8;
@@ -392,15 +401,19 @@ module conv_engine #(
     end
 
     // -----------------------------------------------------------------------
-    // Group contract loader. Beat order is free (three independent
-    // valid strobes, 16 beats each); the channel index is the shared
-    // low nibble of the beat counter. First full round (48 beats)
+    // Group contract loader. Exactly one valid strobe per beat, fixed
+    // order 16 x bias -> 16 x M -> 16 x shift; the channel index is the
+    // shared low nibble of the beat counter. First full round (48 beats)
     // fills the ACTIVE bank and arms the engine; every later round
     // fills the SHADOW bank. At a group boundary the shadow bank is
     // promoted to active (protocol: wdma completes the shadow load
     // before the engine reaches the boundary -- the >=435-cycle group
     // computation gives ample prefetch window).
     // -----------------------------------------------------------------------
+    // The contract-bank always block below uses advance_now, so the net is
+    // declared before it and assigned with the scan-control equations.
+    wire advance_now;
+
     wire [3:0] cload_idx = cload_cnt[3:0];
 
     always @(posedge clk or negedge rst_n) begin
@@ -482,7 +495,7 @@ module conv_engine #(
     // register is overwritten -- this stretches conv1 to 16 beats/px)
     wire snapshot_go  = run_reg && (phase_reg == PH_SNAP)
                         && (rhe_busy_cnt == 5'd0) && boundary_ok;
-    wire advance_now  = snapshot_go && need_advance;
+    assign advance_now = snapshot_go && need_advance;
     wire load_go      = run_reg && (phase_reg == PH_LOAD)
                         && row_ready && grp_arm;
     wire layer_done_comb = run_reg && rq_y_valid && (y_cnt == Y_TOTAL - 32'd1);
@@ -499,8 +512,8 @@ module conv_engine #(
     wire          col_pad = (col_u == {(RW+2){1'b0}}) || (col_u > W_IN);
     wire          rd_pad_c  = wy_pad || col_pad;
     wire [1:0]    rd_bank_c = add3(rd_bank_base, dy_cnt);
-    wire [AW-1:0] rd_addr_c = rd_pad_c ? {AW{1'b0}}
-                            : cin_cnt * W_IN + (col_u - {{(RW+1){1'b0}}, 1'b1});
+    assign rd_addr_c = rd_pad_c ? {AW{1'b0}}
+                     : cin_cnt * W_IN + (col_u - {{(RW+1){1'b0}}, 1'b1});
 
     // -----------------------------------------------------------------------
     // Weight stream alignment: lock the 16-lane tap word and the read

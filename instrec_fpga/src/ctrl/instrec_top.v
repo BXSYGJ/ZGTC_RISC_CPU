@@ -16,9 +16,9 @@
 //   rst_n     asynchronous board reset (KEY0, C22)
 //   rst_sync_nco   clk_nco domain, lock-gated sync release (audio_pll)
 //   rst_pix_n      pix_clk domain, sync release (hdmi_tx_if)
-//   rst_sync_core  core_clk domain, generated HERE: async assert on
-//                  KEY0, sync release + 10 ms delay, feeds ONLY
-//                  ddr3_wrapper.resetn (blueprint section 5.1)
+//   rst_sync_core  = rst_n directly; feeds ONLY ddr3_wrapper.resetn.
+//                  Must not depend on core_clk (the IP GPLL produces it,
+//                  so a core_clk-based release counter deadlocks).
 //   core_clk_rst_n core_clk domain, sync release (ddr3_wrapper IP)
 //
 // CDC points (producers synchronize internally, the top level only wires):
@@ -98,35 +98,15 @@ module instrec_top (
     wire hdmi_pll_lock;      // HDMI GPLL_B lock
 
     // ==================================================================
-    // DDR3 IP reset (blueprint section 5.1): asynchronous assert on the
-    // board reset, release synchronized to core_clk plus a 10 ms power
-    // stabilisation delay. Feeds ONLY ddr3_wrapper.resetn; all core_clk
-    // domain logic resets from the IP-produced core_clk_rst_n. The two
-    // reset sources must never be cross-connected (resetn tied to an IP
-    // output would close a combinational reset loop).
+    // DDR3 IP reset: drive resetn straight from the board reset.
+    // The IP's GPLL produces core_clk, so a reset-release counter that
+    // runs on core_clk would deadlock (no reset -> no GPLL clock ->
+    // counter never advances -> reset never releases). The validated
+    // 100H CPU top (pds_cpu_top_100h.v.in) also ties .resetn(rst_n);
+    // the IP's internal ips2l_rst_sync_v1_3 releases core_clk_rst_n
+    // synchronously, so all core_clk logic still gets a clean reset.
     // ==================================================================
-    localparam integer RST_DELAY_CYCLES = 1250000;  // 10 ms at 125 MHz
-
-    reg  [1:0]  rst_sync_pipe;   // 2FF release synchronizer
-    reg  [20:0] rst_delay_cnt;   // 1.25e6 < 2^21
-    reg         rst_sync_core;   // DDR3 IP reset, active low
-
-    always @(posedge core_clk or negedge rst_n) begin
-        if (!rst_n) begin
-            rst_sync_pipe <= 2'b00;
-            rst_delay_cnt <= 21'd0;
-            rst_sync_core <= 1'b0;
-        end else begin
-            rst_sync_pipe <= {rst_sync_pipe[0], 1'b1};
-            if (rst_sync_pipe[1]) begin
-                if (rst_delay_cnt != RST_DELAY_CYCLES[20:0]) begin
-                    rst_delay_cnt <= rst_delay_cnt + 21'd1;
-                end else begin
-                    rst_sync_core <= 1'b1;
-                end
-            end
-        end
-    end
+    wire rst_sync_core = rst_n;   // DDR3 IP reset, active low
 
     // ==================================================================
     // Audio chain (clk_nco / core_clk domains)

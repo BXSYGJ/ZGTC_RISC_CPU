@@ -3,6 +3,18 @@
 > 每次会话结束前追加一条：时间、做了什么、结论、证据路径。倒序，最新在上。
 > 状态汇总见 `docs/STATUS.md`。
 
+## 2026-10-27 23:55 — 板级根因收窄 + M2 三模块落地
+
+- 板级突破：`cfg_read_device_property -mode 3` 直读状态寄存器，早期 `0x00180C80` 中 **done=0**，
+  说明此前“烧录成功”后 FPGA 没有有效配置；重新 program 后 `0x081FFCA0`，done=1、crc_err=0。
+- 无复位探针（27 MHz 发 `P`）烧录后 COM5 收到 46 个 `P`，证明 27 MHz/UART/CP2102 链路正常；
+  M1 烧录后 done=1 但串口 0 字节，问题收窄到 core_clk / sys_ctrl。
+- 随后 FTDI 再次掉线，板级暂停；恢复后直接做 core_clk 探针。
+- M2：`conv_engine.v` 修复两处先使用后声明并单独编译通过；新增 `weight_loader.v`（帧解析+CRC16+
+  写 m1+读回摘要）、`pool_engine.v`（2×2 floor、奇偶列分 bank、同步读）；
+  `scripts/weight_upload.py` + 8 项测试；`tests/test_pool_gap_model.py` 5 项。
+- 全量回归：76 passed；check_rtl 28 个 .v、0 violation。
+
 ## 2026-10-27 12:23 — M1 时序收敛、位流归档
 
 - `db_norm` scan 2 改 4 拍流水（DIFF/MUL/SQ/ACC），`standardize` 量化扫描改 5 拍流水

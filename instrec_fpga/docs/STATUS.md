@@ -1,12 +1,12 @@
 # InstRec-FPGA 当前状态（STATUS）
 
 > 本文件是**唯一实时状态源**，优先于任何交接快照与记忆。每次会话结束前必须更新，
-> 并在 `CHANGELOG.md` 追加一条。最后更新：2026-10-27 12:30。
+> 并在 `CHANGELOG.md` 追加一条。最后更新：2026-10-27 23:55。
 
 ## 一句话
 
 InstRec 8 类乐器识别（INT8 CNN）正在移植到盘古 100Pro+（PG2L100H-6IFBG676）纯 FPGA 管线。
-**M0/M1 位流均已产出且时序收敛；M1 已归档待板级对拍，下一步是上板与 M2 NPU。**
+**M1 时序收敛并归档；板级已定位到 `done=0` 配置问题并用探针验证了 27 MHz/UART 链路；M2 已交付 conv_engine 修复、weight_loader、pool_engine 与上位机上传协议。**
 
 ## 里程碑
 
@@ -15,31 +15,48 @@ InstRec 8 类乐器识别（INT8 CNN）正在移植到盘古 100Pro+（PG2L100H-
 | P0 工具链 + Python 金标准 | 完成 | `pytest -q` 63 passed；`golden_pipeline.py` 位级真值 |
 | M0 I2S→DDR3→HDMI 波形 | 完成（未上板） | run `20261027-000612-a71f1451`，sha256 `C517736C…`，WNS +1.757 |
 | M1 Mel 特征引擎 | **构建完成、时序收敛、待板级对拍** | run `20261027-121101-5c24a968`，sha256 `BD40D10A…`，WNS +1.438 / All Constraints Met |
-| M2 INT8 NPU | 起步 | `requant_unit.v` 已交付；`conv_engine.v` 待复核；其余未做 |
+| M2 INT8 NPU | 约 45% | `requant_unit`/`conv_engine`（编译通过）+ `weight_loader`（写+读回）+ `pool_engine` + `weight_upload.py`；wdma/gap_fc/npu_top 未做 |
 | M3 UI 集成 | 未开始 | `src/ui/` 仅 M0 的网格 + 波形 |
 
 ## 当前状态
 
-- 最新构建：`build/pds/20261027-121101-5c24a968`，六阶段全 OK，已归档到 `releases/m1-20261027/`。
-- 时序：**All Constraints Met**；WNS +1.438（clk_nco）、WHS +0.224；
-  `ddrphy_sysclk`（core_clk 125 MHz）+0.837（修复前 -4.401）。
-- 资源：LUT 15740/66600 (24%)、FF 11915/133200 (9%)、APM 29/240 (13%)、DRAM 43.5/155 (29%)、BKCL 6/6。
-- 修复方式：`db_norm` scan 2 改 4 拍流水、`standardize` 量化扫描改 5 拍流水；算术顺序不变，位级结果不变。
-- 构建脚本：`Get-FileHash` 在本机 PS 5.1 缺失，已改用 .NET SHA-256（`run_pds_full.ps1`）。
-- **板级阻塞**：板子已上电（CP2102 串口 `COM5` 在线），但 **USB Cable II 下载器未被识别**
-  （`cdt_js` 的 cable 列表为空，系统无 FTDI 设备），JTAG 扫描报 `No devices detected`。
-  JTAG 脚本已就绪：`scripts/jtag_scan.tcl`、`scripts/jtag_program_m1.tcl`。
+### 板级（2026-10-27 深夜，关键突破）
+
+- 用 `cfg_read_device_property -device_index 0 -mode 3` 直接读状态寄存器：早期读数为 `0x00180C80`，
+  其中 **`done=0`、`done_i=0`**（`pll_lock=1`、`init_complete=1`）→ 说明此前所有“烧录成功”后
+  FPGA 内根本没有有效配置，这解释了 M0/M1/探针全部无输出。
+- 重新 `program` 后复读为 `0x081FFCA0`：**`done=1`、`done_i=1`、`crc_err=0`**，配置确实生效。
+- 无复位探针（27 MHz 发 `P` + `rst_n` 电平编码）烧录后，COM5 **收到 46 个 `P`** →
+  27 MHz 时钟、UART 位层、C18/C24 引脚与 CP2102 链路全部正常。
+- 但 M1 位流烧录后 `done=1` 而串口仍 0 字节 → 问题已收窄到 **core_clk（DDR3 IP 125 MHz）或 sys_ctrl**。
+- 随后 FTDI 下载器再次从系统掉线（CP2102 仍在线），板级工作暂停；恢复后直接做 `core_clk` 探针。
+
+### M1 构建
+
+- 最新构建 `20261027-121101-5c24a968` 已归档 `releases/m1-20261027/`，All Constraints Met，
+  WNS +1.438 / WHS +0.224；复位链已改为 `.resetn(rst_n)` 直连，后续重建 WNS +1.603。
+- 构建脚本：`Get-FileHash` 在本机 PS 5.1 缺失，已改用 .NET SHA-256；PDS 对该器件不支持多线程
+  （`-max_parallel_jobs`/`-number_of_router_thread` 均报 Flow-0182），单线程约 11~13 分钟。
+
+### M2
+
+- `conv_engine.v`：修正两处“先使用后声明”，PDS 单独编译通过；组契约注释明确为
+  “每拍一个 valid、16 bias → 16 M → 16 shift”。
+- `weight_loader.v`：UART 帧解析 + CRC16 + 按帧写 m1 + ACK/NAK 重传 + 全镜像读回摘要比对（WOK/WERR），编译通过。
+- `pool_engine.v`：2×2 floor、奇偶列分 bank、同步读两拍流水，编译通过。
+- `scripts/weight_upload.py` + 测试：2701 帧，CRC-16/CCITT-FALSE，8 项测试通过。
+- `tests/test_pool_gap_model.py`：形状链 / floor / channel-local / GAP 语义，5 项通过。
 
 ## 下一步（按序）
 
-1. 插好 USB Cable II（J12，红线对 1 脚）→ `jtag_scan.tcl` 确认扫到器件 → `jtag_program_m1.tcl` 烧 M1。
-2. 串口 115200 看 BOOT/PLL/DDROK 状态行；HDMI 看网格 + 波形；再验 Mel 段（T-M1-07，需补 `uart_capture.py`）。
-3. M2：先复核 `conv_engine.v` 的 16 lane / 行缓冲 / 层参数，再 `wdma → weight_loader → pool → gap_fc → npu_top`。
+1. FTDI 恢复后：烧 M1 → 读 `done` → 若仍 0 字节，做 `core_clk` 探针（DDR3 IP 的 core_clk 驱动 uart_tx 发 `C`）。
+2. 若 `core_clk` 起振则查 `sys_ctrl`/`uart_debug`；若不起振则查 125 MHz 差分 `ref_clk` 与 IP 时钟配置。
+3. M2：`wdma` → `gap_fc` → `npu_top` → T-M2-07 逐层导出。
 
 ## 验证基线
 
-- `python -m pytest -q` → **63 passed**（约 60 s）。
-- `python scripts/check_rtl.py` → **26 个 .v，0 violation**（hdmi demo 默认排除）。
+- `python -m pytest -q` → **76 passed**（约 43 s）。
+- `python scripts/check_rtl.py` → **28 个 .v，0 violation**（hdmi demo 默认排除）。
 - 数值对拍只认 `scripts/golden_pipeline.py`；torch 2.14.1 的 oneDNN 有 21~67 LSB tile 噪声。
 - 本机无 WSL 仿真（Ubuntu 发行版 vhdx 缺失），RTL 行为只能靠 Python 对拍 + 板级实测。
 
