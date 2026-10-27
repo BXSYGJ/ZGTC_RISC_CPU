@@ -3,6 +3,14 @@
 > 每次会话结束前追加一条：时间、做了什么、结论、证据路径。倒序，最新在上。
 > 状态汇总见 `docs/STATUS.md`。
 
+## 2026-10-28 01:35 — FC 引擎与流式模型测试
+
+- 新增 `fc_engine.v`：16 并行输出、CIN 拍/组、复用 requant_unit；
+  fc2 的 8 通道按上取整 pad 到 1 组（GRP_NUM=(COUT+15)/16），编译通过。
+- 新增 `tests/test_conv_model.py`（流式扫描顺序与向量化数学逐位一致，2 项）
+  与 `tests/test_fc_model.py`（ReLU rail / fc2 logits 容器，3 项）。
+- 全量回归 88 passed；check_rtl 31 个 .v、0 violation。
+
 ## 2026-10-28 00:55 — GAP/帧解析落地 + core_clk 诊断位流
 
 - 新增 `gap_unit.v`（256 通道 GAP + round-half-even >>6），单编译通过；

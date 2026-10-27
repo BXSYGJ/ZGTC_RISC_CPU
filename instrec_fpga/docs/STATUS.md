@@ -1,7 +1,7 @@
 # InstRec-FPGA 当前状态（STATUS）
 
 > 本文件是**唯一实时状态源**，优先于任何交接快照与记忆。每次会话结束前必须更新，
-> 并在 `CHANGELOG.md` 追加一条。最后更新：2026-10-28 00:55。
+> 并在 `CHANGELOG.md` 追加一条。最后更新：2026-10-28 01:35。
 
 ## 一句话
 
@@ -50,6 +50,8 @@ InstRec 8 类乐器识别（INT8 CNN）正在移植到盘古 100Pro+（PG2L100H-
 - `uart_frames.py` + `uart_capture.py --frames`：design 9.2 帧解析/重组/对拍，6 项测试通过。
 - `core_probe.v`（诊断）：core_clk 域复位后发 16 个 `C`，已集成顶层并构建 run `20261028-002353-43f24360`，
   **尚未烧录**（FTDI 仍掉线）。这是诊断版，验证后决定保留或移除。
+- `fc_engine.v`：16 并行输出、组数为上取整（fc2 8 通道 pad 到 1 组）、复用 requant_unit，编译通过。
+- `tests/test_conv_model.py`（流式扫描顺序 vs 向量化，2 项）与 `tests/test_fc_model.py`（3 项）通过。
 
 ## 下一步（按序）
 
@@ -59,8 +61,8 @@ InstRec 8 类乐器识别（INT8 CNN）正在移植到盘古 100Pro+（PG2L100H-
 
 ## 验证基线
 
-- `python -m pytest -q` → **83 passed**（约 34 s）。
-- `python scripts/check_rtl.py` → **30 个 .v，0 violation**（hdmi demo 默认排除）。
+- `python -m pytest -q` → **88 passed**（约 34 s）。
+- `python scripts/check_rtl.py` → **31 个 .v，0 violation**（hdmi demo 默认排除）。
 - 数值对拍只认 `scripts/golden_pipeline.py`；torch 2.14.1 的 oneDNN 有 21~67 LSB tile 噪声。
 - 本机无 WSL 仿真（Ubuntu 发行版 vhdx 缺失），RTL 行为只能靠 Python 对拍 + 板级实测。
 
