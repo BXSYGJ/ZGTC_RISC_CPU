@@ -26,13 +26,16 @@
 //   inv_sigma = (2^20 + (sigma_eff >> 1))      S_DIV_INV: shared divider
 //   // sigma_eff     (round-half-up, positive) on the 2^20+half dividend
 //                                               (unsigned floor = rhu)
-//   z_q412 = sat16(rhu_shift(                  S_SCAN_Z: (dB-mu)*inv_sigma
-//   (dB - mu) * inv_sigma, 8))                 +128 >>> 8, sat16
+//   z_q412 = sat16(rhu_shift(                  S_SCAN_DIFF + S_SCAN_MUL:
+//   (dB - mu) * inv_sigma, 8))                 subtract registered first,
+//                                               then +128 >>> 8, sat16
 //   --------------------------------------------------------------------
 //   golden quantize_int8() (QuantStub parity,
 //   layer_contract.json quant_stub_input_contract):
-//   prod = z_q412 * inv_s_in (int64)           S_SCAN_Q: s16 * s32 -> s48
-//   x = round_half_even_shift(prod, 24)        bitwise round-half-to-even:
+//   prod = z_q412 * inv_s_in (int64)           S_SCAN_QPROD: s16 * s32 ->
+//                                               s48, registered
+//   x = round_half_even_shift(prod, 24)        S_SCAN_Q: bitwise
+//   + zp_in                                      round-half-to-even:
 //   + zp_in                                      abs -> q=av>>24 ->
 //   clip(x, 0, 255) -> uint8                    rem==half tie -> even q
 //                                               -> sign restore -> +ZP_IN
@@ -155,20 +158,25 @@ module standardize #(
 
     // ------------------------------------------------------------------
     // Main FSM. Statistics phase (shared divider + sqrt), then a
-    // 3-beat scan pipeline: RD (issue read) -> Z (compute z, register)
-    // -> Q (quantize, write feature).
+    // 5-beat scan pipeline: RD (issue read) -> DIFF (dB-mu register) ->
+    // MUL (z = (dB-mu)*inv_sigma >> 8, register) -> QPROD (z*inv_s_in,
+    // register) -> Q (round/quantize, write feature). The extra stages
+    // split the former RD->Z->Q combinational chains so no path spans a
+    // 125 MHz core_clk period; arithmetic order is unchanged.
     // ------------------------------------------------------------------
-    localparam [3:0] S_IDLE     = 4'd0;
-    localparam [3:0] S_DIV_MU   = 4'd1;
-    localparam [3:0] S_MUL_MU   = 4'd2;
-    localparam [3:0] S_DIV_VAR  = 4'd3;
-    localparam [3:0] S_SUB_VAR  = 4'd4;
-    localparam [3:0] S_SQRT     = 4'd5;
-    localparam [3:0] S_SEL_INV  = 4'd6;
-    localparam [3:0] S_DIV_INV  = 4'd7;
-    localparam [3:0] S_SCAN_RD  = 4'd8;
-    localparam [3:0] S_SCAN_Z   = 4'd9;
-    localparam [3:0] S_SCAN_Q   = 4'd10;
+    localparam [3:0] S_IDLE      = 4'd0;
+    localparam [3:0] S_DIV_MU    = 4'd1;
+    localparam [3:0] S_MUL_MU    = 4'd2;
+    localparam [3:0] S_DIV_VAR   = 4'd3;
+    localparam [3:0] S_SUB_VAR   = 4'd4;
+    localparam [3:0] S_SQRT      = 4'd5;
+    localparam [3:0] S_SEL_INV   = 4'd6;
+    localparam [3:0] S_DIV_INV   = 4'd7;
+    localparam [3:0] S_SCAN_RD   = 4'd8;
+    localparam [3:0] S_SCAN_DIFF = 4'd9;
+    localparam [3:0] S_SCAN_MUL  = 4'd10;
+    localparam [3:0] S_SCAN_QPROD= 4'd11;
+    localparam [3:0] S_SCAN_Q    = 4'd12;
 
     reg [3:0]         state;
 
@@ -179,7 +187,9 @@ module standardize #(
     reg [31:0]        var_q16_u32;  // Q8.16 variance, floored at 0
     reg [23:0]        sigma_u24;    // Q8.8 floor sqrt of var
     reg [20:0]        inv_sigma_u21;// 2^20 / sigma_eff multiplier
+    reg signed [16:0] d_q;          // dB - mu, registered at DIFF beat
     reg signed [15:0] z_reg;        // Q4.12 standardized value
+    reg signed [47:0] qprod_q;      // z_reg * inv_s_in, registered at QPROD beat
 
     // scan position (feature-element index 0..16511)
     reg [14:0]        scan_cnt;
@@ -231,12 +241,15 @@ module standardize #(
     wire [21:0] inv_dividend_w = 22'd1048576 + {1'b0, sigma_eff_w[20:1]};
 
     // ------------------------------------------------------------------
-    // Quantization-scan combinational datapaths.
-    // Beat Z: z = sat16(rhu_shift((dB - mu) * inv_sigma, 8))  (Q4.12)
+    // Quantization-scan datapaths, split across pipeline registers.
+    // DIFF beat: d = dB - mu
+    // MUL beat:  z = sat16(rhu_shift(d * inv_sigma, 8))  (Q4.12)
+    // QPROD beat: prod = z * inv_s_in
+    // Q beat:    x_u8 = sat_u8(rhe_shift(prod, 24) + zp_in)
     // ------------------------------------------------------------------
     wire signed [16:0] d_s17 = db_rd_data - mu_q88;
     wire signed [21:0] inv_sigma_s22 = {1'b0, inv_sigma_u21}; // positive
-    wire signed [38:0] z_prod_s39 = d_s17 * inv_sigma_s22;
+    wire signed [38:0] z_prod_s39 = d_q * inv_sigma_s22;
     wire signed [38:0] z_rhu_s39 = $signed(z_prod_s39 + 39'sd128) >>> 8;
     wire signed [15:0] z_sat_s16 =
         (z_rhu_s39 > 39'sd32767)   ? 16'sd32767  :
@@ -248,8 +261,8 @@ module standardize #(
     // bitwise round-half-to-even (golden round_half_even_shift).
     // ------------------------------------------------------------------
     wire signed [47:0] qprod_s48 = z_reg * INV_S_IN_S;
-    wire               q_neg = qprod_s48[47];
-    wire [47:0]        q_abs = q_neg ? (~qprod_s48 + 48'd1) : qprod_s48;
+    wire               q_neg = qprod_q[47];
+    wire [47:0]        q_abs = q_neg ? (~qprod_q + 48'd1) : qprod_q;
     wire [23:0]        q_shift = q_abs[47:24];
     wire [23:0]        q_rem = q_abs[23:0];
     // tie threshold 2^23: rem > half, or rem == half and q odd -> +1
@@ -287,7 +300,9 @@ module standardize #(
             var_q16_u32  <= 32'd0;
             sigma_u24    <= 24'd0;
             inv_sigma_u21<= 21'd0;
+            d_q          <= 17'sd0;
             z_reg        <= 16'sd0;
+            qprod_q      <= 48'sd0;
             scan_cnt     <= 15'd0;
             feat_done    <= 1'b0;
             div_n        <= 48'd0;
@@ -402,14 +417,24 @@ module standardize #(
                 end
                 // ---- scan beat 1: issue the dB read -----------------
                 S_SCAN_RD: begin
-                    state <= S_SCAN_Z;
+                    state <= S_SCAN_DIFF;
                 end
-                // ---- scan beat 2: z = sat16((dB-mu)*inv_sigma >> 8) -
-                S_SCAN_Z: begin
-                    z_reg <= z_sat_s16;  // db_rd_data valid this beat
-                    state <= S_SCAN_Q;
+                // ---- scan beat 2: register dB - mu --------------------
+                S_SCAN_DIFF: begin
+                    d_q   <= d_s17;  // db_rd_data valid this beat
+                    state <= S_SCAN_MUL;
                 end
-                // ---- scan beat 3: quantize + feature write -----------
+                // ---- scan beat 3: z = sat16((dB-mu)*inv_sigma >> 8) --
+                S_SCAN_MUL: begin
+                    z_reg <= z_sat_s16;
+                    state <= S_SCAN_QPROD;
+                end
+                // ---- scan beat 4: register z * inv_s_in --------------
+                S_SCAN_QPROD: begin
+                    qprod_q <= qprod_s48;
+                    state   <= S_SCAN_Q;
+                end
+                // ---- scan beat 5: quantize + feature write -----------
                 S_SCAN_Q: begin
                     if (scan_cnt == OUT_ELEM_LAST) begin
                         feat_done <= 1'b1;  // pulse, sampled in S_IDLE

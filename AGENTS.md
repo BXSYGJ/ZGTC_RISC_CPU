@@ -16,22 +16,21 @@
 
 ## 当前状态（2026-10-27，详见 `instrec_fpga/docs/STATUS.md`）
 
-- **M0 完成**：全约束通过，位流 sha256 `C517736C7E61…`（`instrec_fpga/build/instrec-latest.sbit`），**尚未上板**（T-M0-10）。
-- **M1 语法已全部修复**：交接时 3 处 SV 语法错误（mel_engine 参数基数字面量、standardize 重复声明、fft 嵌套 generate）
-  均已修，`fft2048_sdf.v` 现为裸 `if/else` + 条件 assign。
-- **M1 新阻塞 = 时序**：`ddrphy_sysclk`（即 `core_clk`，125 MHz）WNS **-4.401 ns** / TNS -487.619 / 200 failing endpoints。
-  最差路径在 `u_mel_engine/u_db_norm`：DRAM→APM→LUT→APM→LUT→APM 组合链，arrival 17.539 ns、仅 5 logic levels。
-  **不是 DDR3 IP 固有**——同一 IP 在 `pds_cpu_100h` 为 +2.110 ns。
-- 其余时钟收敛：`clk_nco` 216 MHz +1.348、`pix_clk` 148.5 MHz +0.486、`rst_clk` 125 MHz +4.727。
-- **M1 位流未产出**：gen_bit_stream 在会话中断时未完成，`build/instrec-latest.*` 仍是 M0 内容。
+- **M0 完成**：全约束通过，sha256 `C517736C…`，归档 `releases/m0-20261027/`，**尚未上板**（T-M0-10）。
+- **M1 构建与时序完成**：run `20261027-121101-5c24a968` **All Constraints Met**，WNS +1.438 / WHS +0.224，
+  `ddrphy_sysclk`（core_clk 125 MHz）+0.837；sha256 `BD40D10A…`，归档 `releases/m1-20261027/`。
+- 收敛手段：`db_norm` scan 2 → 4 拍流水，`standardize` 量化扫描 → 5 拍流水；算术顺序与位级结果不变。
+  修复前最差 WNS -4.401（`u_db_norm` 17.539 ns 组合链），不是 DDR3 IP 固有。
+- **当前板级阻塞**：板子已上电（CP2102 串口 COM5 在线），但 **USB Cable II 未被识别**
+  （`cdt_js` cable 列表为空，系统无 FTDI 设备），`jtag_scan.tcl` 报 `No devices detected`。
+  脚本已备：`scripts/jtag_scan.tcl`、`scripts/jtag_program_m1.tcl`。
 - **M2**：`requant_unit.v` 已交付；`conv_engine.v` 已落盘但完整性未深验；wdma / weight_loader / pool / gap_fc /
   softmax / npu_top 未做。**M3 未开始**。
 
 ## 下一步（按序）
 
-1. 给 `db_norm` 的乘加链插流水寄存器（保持 259 帧全局 max 与位级结果不变），重跑构建直到 All Constraints Met。
-   这是 M1 收官的唯一阻塞。
-2. 出 M1 位流后做 T-M0-10 板级冒烟：JTAG 烧录 → UART 115200 状态行（BOOT/PLL/DDROK）→ HDMI 网格+波形。
+1. 接好 USB Cable II（J12，红线对 1 脚）→ 扫描 → 烧 M1 位流 → UART 115200 看 BOOT/PLL/DDROK → HDMI 网格+波形。
+2. M1 板级对拍（T-M1-07）：需先补 `scripts/uart_capture.py`，再按 tasks.md 导出 Mel 谱与 golden 比对。
 3. 回 M2：先核对 conv_engine 的 16 lane / 行缓冲 / 层参数是否完整，再按 wdma→weight_loader→pool→gap_fc→npu_top 推进。
 
 ## 命令（在 `instrec_fpga/` 下执行）

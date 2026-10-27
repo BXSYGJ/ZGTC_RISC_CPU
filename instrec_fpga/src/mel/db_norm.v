@@ -59,26 +59,30 @@
 //       around the maximum, mirroring the golden form) maps to 0.
 //   Hence clip(scaled, -20480, 0) equals the golden chain exactly.
 //
-// Architecture (two scans, two cycles per element):
-//   * Scan 1 (max): read every element, keep the running max of the
-//     signed Q8.8 log2 values.
-//   * Scan 2 (dB + statistics): recompute dB for every element; elements
-//     at addresses >= HEAD_DROP*N_MELS (the kept 258 frames) are written
-//     back to the spectrum bank and accumulated into sum_db/sum_db_sq.
-//   * Two-cycle element beat: RD beat presents spec_rd_en/spec_rd_addr,
-//     CALC beat samples spec_rd_data (assumes a 1-cycle synchronous read
-//     RAM, PDS DRM style) and presents db_wr_en/db_wr_addr/db_wr_data.
-//     Read and write never fire in the same cycle, so mel_engine may map
-//     both ports onto one single-port RAM bank.
+// Architecture (two scans; scan 2 uses a 4-beat pipeline):
+//   * Scan 1 (max): two-cycle beat, unchanged. Read every element and
+//     keep the running max of the signed Q8.8 log2 values.
+//   * Scan 2 (dB + statistics): four-beat pipeline. Beat 0 issues the
+//     read, beat 1 registers the difference against max_l2, beat 2
+//     computes diff*775/256 + clamp into db_s16_q, beat 3 registers the
+//     square and writes the dB value back, beat 4 accumulates dB^2.
+//     The pipeline splits the former single-cycle
+//     DRAM->APM->LUT->APM->LUT->APM chain into four short stages
+//     (125 MHz core_clk timing closure, T-M1-06 build fix). It only
+//     adds latency: every element still produces the same dB value and
+//     contributes exactly once to both sums, so the bit-exact golden
+//     parity is unchanged.
+//   * Read and write never fire in the same cycle (write is beat 3,
+//     read is beat 0 of the next element), so mel_engine may map both
+//     ports onto one single-port RAM bank.
 //
 // Storage / INTEGRATION ALIGNMENT POINTS (buffer NOT instantiated here):
 //   * The 64 x 259 int16 log2-spectrum buffer is owned by the mel_engine
 //     integration (T-M1-05; first pass writes it - Jiang's line). This
 //     module only drives the external read port (spec_rd_*) and the
 //     external overwrite port (db_wr_*). Scan 2 reads log2[i] on the RD
-//     beat and overwrites the SAME address with dB[i] on the CALC beat
-//     (in-place log2 -> dB bank reuse, design.md Sec. 3.7 ping-pong bank
-//     scheme). Frame-major addressing: addr = frame * N_MELS + mel;
+//     beat and overwrites the SAME address with dB[i] three beats later
+//     (pipeline beat 3). Frame-major addressing: addr = frame * N_MELS + mel;
 //     frame-0 addresses 0..63 are never written (dB occupies 64..16575).
 //   * SPEC_FRAME_COUNT defaults to 259 for golden parity. If the first
 //     pass stores only the truncated 258 frames (design.md Sec. 3.5
@@ -92,11 +96,10 @@
 //
 // Cycle budget (125 MHz core_clk, REQ-FTR-007 / design.md Sec. 3.8):
 //   scan 1 (max):      2 cycles/element * 16576 = 33152 cycles
-//   scan 2 (dB+sums):  2 cycles/element * 16576 = 33152 cycles
-//   total ~66.3k cycles = 0.53 ms, inside the Sec. 3.5/3.8 second-pass
-//   budget (2x16512x4 = 132k cycles for both scans) with 2x headroom.
-//   Full second pass (db_norm + standardize) ~ 116k cycles = 0.93 ms,
-//   far below the 3 s window cadence (21x margin on the whole engine).
+//   scan 2 (dB+sums):  4 cycles/element * 16576 = 66304 cycles
+//   total ~99.5k cycles = 0.80 ms, well inside the 3 s window cadence
+//   and the M1 150 ms budget (T1.2). The extra two beats per element
+//   are the cost of closing 125 MHz timing; no numerical change.
 // -----------------------------------------------------------------------------
 
 module db_norm #(
@@ -138,48 +141,65 @@ module db_norm #(
     localparam signed [9:0] DB_NUM_S   = DB_SCALE_NUM;        // 775
 
     // ------------------------------------------------------------------
-    // Scan FSM. Two-beat element rhythm: *_RD issues the read, *_CALC
-    // consumes spec_rd_data one cycle later (sync RAM latency).
+    // Scan FSM. Scan 1 keeps the two-beat rhythm; scan 2 is a four-beat
+    // pipeline so no stage exceeds a 125 MHz core_clk period.
     // ------------------------------------------------------------------
     localparam [2:0] S_IDLE      = 3'd0;
     localparam [2:0] S_MAX_RD    = 3'd1;
     localparam [2:0] S_MAX_CALC  = 3'd2;
     localparam [2:0] S_DB_RD     = 3'd3;
-    localparam [2:0] S_DB_CALC   = 3'd4;
+    localparam [2:0] S_DB_DIFF   = 3'd4;
+    localparam [2:0] S_DB_MUL    = 3'd5;
+    localparam [2:0] S_DB_SQ     = 3'd6;
+    localparam [2:0] S_DB_ACC    = 3'd7;
 
     reg [2:0]        state;
     reg [14:0]       elem_cnt;      // current element address (frame-major)
     reg signed [15:0] max_l2;       // running max of log2_q88 (s16 init min)
 
+    // Scan-2 pipeline registers (one element in flight per stage).
+    reg signed [16:0] diff_q;       // log2 - max_l2, registered at beat 1
+    reg [14:0]        addr_q;       // element address carried with the pipeline
+    reg               is_out_q;     // addr_q belongs to the kept 258 frames
+    reg signed [15:0] db_s16_q;     // clamped dB value, registered at beat 2
+    reg signed [31:0] db_sq_q;      // db_s16_q * db_s16_q, registered at beat 3
+
     // ------------------------------------------------------------------
-    // dB datapath (combinational, golden db_convert bit-exact).
+    // dB datapath. Stage 1 (S_DB_DIFF) subtracts max_l2; stage 2
+    // (S_DB_MUL) applies the golden db_convert scale and clamps; stage 3
+    // (S_DB_SQ) forms the square and writes the dB value back; stage 4
+    // (S_DB_ACC) accumulates the square. Splitting the former
+    // combinational chain across registers keeps the golden value
+    // bit-exact (each stage is the same arithmetic, only later in time).
     // ------------------------------------------------------------------
-    wire signed [16:0] diff_s17 = spec_rd_data - max_l2;      // <= 0
-    wire signed [26:0] db_mul_s27 = diff_s17 * DB_NUM_S;      // diff * 775
+    wire signed [16:0] diff_c   = spec_rd_data - max_l2;      // <= 0
+    wire signed [26:0] db_mul_c = diff_q * DB_NUM_S;          // diff * 775
     // rhu_shift(db_mul, 8) = floor((db_mul + 128) / 256)
-    wire signed [26:0] db_rhu_s27 = $signed(db_mul_s27 + 27'sd128) >>> 8;
+    wire signed [26:0] db_rhu_c = $signed(db_mul_c + 27'sd128) >>> 8;
     // merged sat16 + top_db floor + upper clamp (proof in header)
-    wire signed [15:0] db_s16 =
-        (db_rhu_s27 < $signed({{11{DB_TOP_S[15]}}, DB_TOP_S})) ? DB_TOP_S :
-        (db_rhu_s27 > 27'sd0)                                   ? 16'sd0   :
-                                                                    db_rhu_s27[15:0];
+    wire signed [15:0] db_s16_c =
+        (db_rhu_c < $signed({{11{DB_TOP_S[15]}}, DB_TOP_S})) ? DB_TOP_S :
+        (db_rhu_c > 27'sd0)                                  ? 16'sd0   :
+                                                               db_rhu_c[15:0];
 
     // dB^2 for the variance accumulator (s16*s16 -> s32, <= 20480^2)
-    wire signed [31:0] db_sq_s32 = db_s16 * db_s16;
+    wire signed [31:0] db_sq_c = db_s16_q * db_s16_q;
 
     // Kept-frame test: addresses below OUT_FIRST_C belong to the dropped
-    // head frame (no dB write, no statistics update).
+    // head frame (no dB write, no statistics update). Sampled into
+    // is_out_q with the address so the write and accumulate stages use
+    // the same classification.
     wire is_out_now = (elem_cnt >= OUT_FIRST_C);
 
     // ------------------------------------------------------------------
-    // External RAM ports (pure combinational: read on RD beats, write on
-    // CALC beats - never both in one cycle, single-port-bank friendly).
+    // External RAM ports (read on the scan RD beat, write on pipeline
+    // beat 3; never both in one cycle - single-port-bank friendly).
     // ------------------------------------------------------------------
     assign spec_rd_en   = (state == S_MAX_RD) || (state == S_DB_RD);
     assign spec_rd_addr = elem_cnt;
-    assign db_wr_en     = (state == S_DB_CALC) && is_out_now;
-    assign db_wr_addr   = elem_cnt;
-    assign db_wr_data   = db_s16;
+    assign db_wr_en     = (state == S_DB_SQ) && is_out_q;
+    assign db_wr_addr   = addr_q;
+    assign db_wr_data   = db_s16_q;
 
     assign busy = (state != S_IDLE);
 
@@ -191,6 +211,11 @@ module db_norm #(
             state       <= S_IDLE;
             elem_cnt    <= 15'd0;
             max_l2      <= -16'sd32768;
+            diff_q      <= 17'sd0;
+            addr_q      <= 15'd0;
+            is_out_q    <= 1'b0;
+            db_s16_q    <= 16'sd0;
+            db_sq_q     <= 32'sd0;
             sum_db      <= 48'sd0;
             sum_db_sq   <= 48'd0;
             stats_valid <= 1'b0;
@@ -224,13 +249,33 @@ module db_norm #(
                 end
                 // -------- scan 2: dB conversion + statistics -----------
                 S_DB_RD: begin
-                    state <= S_DB_CALC;
+                    state <= S_DB_DIFF;
                 end
-                S_DB_CALC: begin
-                    if (is_out_now) begin
-                        sum_db    <= sum_db + {{32{db_s16[15]}}, db_s16};
+                // beat 1: capture the synchronous read and the address
+                S_DB_DIFF: begin
+                    diff_q   <= diff_c;
+                    addr_q   <= elem_cnt;
+                    is_out_q <= is_out_now;
+                    state    <= S_DB_MUL;
+                end
+                // beat 2: scale + clamp into the registered dB value
+                S_DB_MUL: begin
+                    db_s16_q <= db_s16_c;
+                    state    <= S_DB_SQ;
+                end
+                // beat 3: write dB back, form the square, accumulate dB
+                S_DB_SQ: begin
+                    db_sq_q <= db_sq_c;
+                    if (is_out_q) begin
+                        sum_db <= sum_db + {{32{db_s16_q[15]}}, db_s16_q};
+                    end
+                    state <= S_DB_ACC;
+                end
+                // beat 4: accumulate the square, advance / finish
+                S_DB_ACC: begin
+                    if (is_out_q) begin
                         sum_db_sq <= sum_db_sq +
-                                    {{16{db_sq_s32[31]}}, db_sq_s32};
+                                     {{16{db_sq_q[31]}}, db_sq_q};
                     end
                     if (elem_cnt == SPEC_ELEM_LAST) begin
                         stats_valid <= 1'b1;  // sums final, bank overwritten

@@ -88,7 +88,15 @@ try {
     $bitstream = [System.IO.Path]::Combine($buildRoot, 'generate_bitstream', ($topModule + '.sbit'))
     if (-not (Test-Path -LiteralPath $bitstream -PathType Leaf)) { throw "PDS did not produce the expected bitstream: $bitstream" }
     if ((Get-Item -LiteralPath $bitstream).LastWriteTimeUtc -lt $started.AddSeconds(-1)) { throw 'Bitstream is stale (older than this run).' }
-    $sbitHash = (Get-FileHash -LiteralPath $bitstream -Algorithm SHA256).Hash
+    # Get-FileHash is not available in every PS 5.1 installation; use .NET.
+    $sha256 = [System.Security.Cryptography.SHA256]::Create()
+    $shaStream = [System.IO.File]::OpenRead($bitstream)
+    try {
+        $sbitHash = ([System.BitConverter]::ToString($sha256.ComputeHash($shaStream)) -replace '-', '')
+    } finally {
+        $shaStream.Dispose()
+        $sha256.Dispose()
+    }
 
     # 8) extract the post-PnR device utilization summary from the log.
     #    The table splits FF/LUT rows per logic-array segment (CLMA/CLMS),

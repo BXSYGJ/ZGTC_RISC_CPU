@@ -3,6 +3,20 @@
 > 每次会话结束前追加一条：时间、做了什么、结论、证据路径。倒序，最新在上。
 > 状态汇总见 `docs/STATUS.md`。
 
+## 2026-10-27 12:23 — M1 时序收敛、位流归档
+
+- `db_norm` scan 2 改 4 拍流水（DIFF/MUL/SQ/ACC），`standardize` 量化扫描改 5 拍流水
+  （DIFF/MUL/QPROD/Q）；算术顺序不变，位级结果不变。
+- 第一轮 run `20261027-115358-d5a76b9d`：WNS 由 -4.401 改善到 -1.316（db_norm 路径消失，
+  剩余违例转到 `u_standardize`）。
+- 第二轮 run `20261027-121101-5c24a968`：**All Constraints Met**，WNS +1.438、WHS +0.224，
+  `ddrphy_sysclk` +0.837；sha256 `BD40D10A…`；六阶段 OK。
+- 归档 `releases/m1-20261027/`（sbit + manifest + timing.rtr + SHA256SUMS + README）。
+- 修复 `run_pds_full.ps1` 的 `Get-FileHash` 依赖（本机 PS 5.1 该 cmdlet 缺失），改用 .NET SHA-256。
+- 新增 `scripts/jtag_scan.tcl`、`scripts/jtag_program_m1.tcl`。
+- 板级：CP2102 串口 COM5 在线；USB Cable II 未被识别（cable 列表空），JTAG 扫描 `No devices detected`，
+  待接入下载器后继续。
+
 ## 2026-10-27 11:25 — 里程碑位流归档入库
 
 - `releases/m0-20261027/`：InstRec M0 位流 + manifest + SHA256SUMS（sha256 校验与 manifest 一致）。
