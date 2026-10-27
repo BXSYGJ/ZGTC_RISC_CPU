@@ -3,6 +3,16 @@
 > 每次会话结束前追加一条：时间、做了什么、结论、证据路径。倒序，最新在上。
 > 状态汇总见 `docs/STATUS.md`。
 
+## 2026-10-28 03:40 — softmax 定点单元
+
+- 新增 `softmax_top.v`：Q16.15 预缩放、减 max、Q6.9 饱和、512 项 exp LUT、
+  组合 round-half-up 除法、top1/percent；S_Q15 按实测 fc2 契约修正为 9197。
+- 导出 `src/mel/exp_lut.hex`（512×Q0.16）。
+- `tests/test_softmax_model.py` 5 项（Q15 常量、LUT、归一、单类饱和、percent）。
+- wdma 草稿因「DDR3 2 tap/beat vs conv 1 tap/cycle + burst≤16 + 读侧不可反压」
+  需读 FIFO，未入库。
+- 全量 93 passed；check_rtl 33 个 .v、0 violation。
+
 ## 2026-10-28 02:10 — npu_top 控制壳与一键板级脚本
 
 - 新增 `npu_top.v`：11 层序列（conv1→pool1→…→fc2）、busy/done、npu_cycles、
