@@ -63,3 +63,12 @@ def test_pool_preserves_dtype():
     x = np.zeros((4, 8, 8), dtype=np.uint8)
     out = gp.maxpool2x2_floor(x)
     assert out.dtype == np.uint8
+
+def test_gap_all_channels_match_round_half_even():
+    rng = np.random.default_rng(1234)
+    x = rng.integers(0, 256, size=(256, 4, 16), dtype=np.uint8)
+    gap = gp.gap_s32(x)
+    for c in (0, 1, 77, 128, 255):
+        total = int(x[c].astype(np.int64).sum())
+        want = int(gp.round_half_even_shift(np.int64(total), 6))
+        assert int(gap[c]) == want, f'channel {c}'

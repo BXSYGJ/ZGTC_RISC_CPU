@@ -3,6 +3,17 @@
 > 每次会话结束前追加一条：时间、做了什么、结论、证据路径。倒序，最新在上。
 > 状态汇总见 `docs/STATUS.md`。
 
+## 2026-10-28 00:55 — GAP/帧解析落地 + core_clk 诊断位流
+
+- 新增 `gap_unit.v`（256 通道 GAP + round-half-even >>6），单编译通过；
+  `tests/test_pool_gap_model.py` 增补全通道路径，6 项通过。
+- 新增 `scripts/uart_frames.py`（design 9.2 帧解析/重组/对拍）与
+  `uart_capture.py --frames`；`tests/test_uart_frames.py` 6 项通过。
+- 新增 `core_probe.v` 并集成顶层：core_clk 域复位后发 16 个 `C`，用于判断
+  DDR3 IP 的 core_clk 是否起振；诊断位流 run `20261028-002353-43f24360` 已构建，
+  FTDI 掉线未能烧录。诊断版验证后决定保留或移除。
+- 全量回归 83 passed；check_rtl 30 个 .v、0 violation。
+
 ## 2026-10-27 23:55 — 板级根因收窄 + M2 三模块落地
 
 - 板级突破：`cfg_read_device_property -mode 3` 直读状态寄存器，早期 `0x00180C80` 中 **done=0**，
