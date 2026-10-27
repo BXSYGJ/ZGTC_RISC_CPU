@@ -2,9 +2,10 @@
 
 本仓库当前只有**一条活跃主线**：`instrec_fpga/`（InstRec 8 类乐器识别移植到盘古 100Pro+ / PG2L100H-6IFBG676）。
 `cpu/`、`pds_cpu_100h/` 是已交付的 RV32IM SoC 历史工程；`ai_pcb/`、`pcb-aoi/` 已搁置。
-`README.md`、`DEV_SNAPSHOT.md`、`CODEBUDDY.md` 记录的是 200H 时代状态，**不要当作当前事实**。
+`DEV_SNAPSHOT.md`、`CODEBUDDY.md` 已过时，不要作为当前依据；`README.md` 仅顶部“当前活跃主线”说明有效，
+其余是 200H 历史记录。
 
-## 恢复开发：先读这三处
+## 恢复开发：先读这些
 
 1. `instrec_fpga/docs/STATUS.md` —— **唯一实时状态源**（当前阻塞、证据、下一步）；变更史见 `docs/CHANGELOG.md`。
 2. `instrec_fpga/docs/HANDOFF_SNAPSHOT_20261027.md` —— 资产清单与踩坑记录（其 4.1 节已被 STATUS 更新覆盖）。
