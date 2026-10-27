@@ -12,6 +12,8 @@ logbackup/
 ipcore/
 # 100H CPU 工程的 DDR3 IP 源码需要入库（其余 ipcore/ 是 PDS 生成物）
 !pds_cpu_100h/ipcore/
+# InstRec-FPGA 的 DDR3/GPLL IP 源文件是重建必需资产，必须入库
+!instrec_fpga/ipcore/
 impl.tcl
 multiseed_summary.csv
 
@@ -69,6 +71,7 @@ account*.txt
 # Helper tooling artifacts
 .dumate/
 .workbuddy/
+.skills/
 _fpgalab_index.js
 
 # IDE and operating-system files

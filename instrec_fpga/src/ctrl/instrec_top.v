@@ -1,0 +1,639 @@
+// -----------------------------------------------------------------------------
+// File    : instrec_top.v
+// Module  : instrec_top
+// Project : InstRec-FPGA (PG2L100H-6IFBG676, PDS 2022.2-SP6.4)
+// Purpose : M0 top-level integration: I2S capture -> CDC -> DDR3 -> HDMI
+//           waveform display with the debug / self-test chain
+//           (design doc sections 1.1 / 2.2.1, REQ-VER-001 M0 scope).
+//
+// Clock domains (design doc section 1.2):
+//   clk       27 MHz board crystal (D18), reference of both GPLLs
+//   clk_nco   216 MHz audio NCO time base (audio_pll / pll_audio IP)
+//   pix_clk   148.5 MHz pixel clock (hdmi_tx_if / demo GPLL_B IP)
+//   core_clk  125 MHz DDR3 controller user clock (ddr3_wrapper IP output)
+//
+// Reset tree (design doc section 1.3):
+//   rst_n     asynchronous board reset (KEY0, C22)
+//   rst_sync_nco   clk_nco domain, lock-gated sync release (audio_pll)
+//   rst_pix_n      pix_clk domain, sync release (hdmi_tx_if)
+//   rst_sync_core  core_clk domain, generated HERE: async assert on
+//                  KEY0, sync release + 10 ms delay, feeds ONLY
+//                  ddr3_wrapper.resetn (blueprint section 5.1)
+//   core_clk_rst_n core_clk domain, sync release (ddr3_wrapper IP)
+//
+// CDC points (producers synchronize internally, the top level only wires):
+//   * pcm path        clk_nco -> core_clk  : audio_cdc_fifo dual-clock FIFO
+//   * sd_idle         clk_nco -> core_clk  : 2FF inside audio_sink/sys_ctrl
+//   * vsync_pulse     pix_clk -> core_clk  : 2FF + edge detect in audio_sink
+//   * wave_rd channel pix_clk -> pix_clk   : same domain, direct wiring
+//   * overflow_cnt    clk_nco -> core_clk  : 2FF in sys_ctrl (quasi-static)
+//
+// Observation taps left unconnected at this milestone (consumed by the
+// T-M2-07 UART stats exporter; synthesis prunes them): wait_cnt_0..3,
+// addr_err, to_err, cmd_to_err, dbg_to_state, wlast_miss_cnt, win_tick,
+// win_id, mute_flag, err_cnt, fifo_full, sys_run, rx_byte_cnt,
+// dbg_line_wready.
+//
+// The DDR3 IP instance hierarchy is instrec_top.ddr3_wrapper.I_ips_ddr_top
+// (constraint paths in ddr3_100h.fdc depend on it, REQ-MEM-001).
+// -----------------------------------------------------------------------------
+
+`timescale 1ns / 1ps
+
+module instrec_top (
+    // ---- board pins ----
+    input  wire        clk,          // 27 MHz crystal (D18)
+    input  wire        rst_n,        // KEY0, active low (C22)
+    input  wire        key1_n,       // KEY1, export trigger (C23)
+    output wire [7:0]  led,          // status LEDs (A20..B17)
+    input  wire        uart_rx,      // CP2102 RX (B24)
+    output wire        uart_tx,      // CP2102 TX (C24)
+    // ---- I2S audio pins ----
+    output wire        i2s_bck,      // bit clock 1.4112 MHz (U20)
+    output wire        i2s_lrck,     // frame clock 44.1 kHz (T20)
+    input  wire        i2s_sd,       // serial data (V16)
+    // ---- HDMI transmitter pins (demo fdc pinout) ----
+    output wire        iic_tx_scl,   // I2C clock (K22)
+    inout  wire        iic_tx_sda,   // I2C data (K23)
+    output wire        vout_clk,     // pixel clock (T24)
+    output wire        vout_de,      // data enable (N19)
+    output wire        vout_hs,      // horizontal sync (R20)
+    output wire        vout_vs,      // vertical sync (R21)
+    output wire [23:0] vout_data,    // parallel RGB (demo 24-pin map)
+    // ---- DDR3 physical side (ddr3_wrapper pass-through, N3/N2 + 73 pins) ----
+    input  wire        ref_clk_p,    // 125 MHz differential reference
+    input  wire        ref_clk_n,
+    output wire        mem_cs_n,
+    output wire        mem_rst_n,
+    output wire        mem_ck,
+    output wire        mem_ck_n,
+    output wire        mem_cke,
+    output wire        mem_ras_n,
+    output wire        mem_cas_n,
+    output wire        mem_we_n,
+    output wire        mem_odt,
+    output wire [14:0] mem_a,
+    output wire [2:0]  mem_ba,
+    inout  wire [3:0]  mem_dqs,
+    inout  wire [3:0]  mem_dqs_n,
+    inout  wire [31:0] mem_dq,
+    output wire [3:0]  mem_dm
+);
+
+    // ==================================================================
+    // Clock and reset nets
+    // ==================================================================
+    wire clk_nco;            // 216 MHz NCO time base
+    wire pll_audio_locked;   // audio GPLL lock
+    wire rst_sync_nco;       // clk_nco domain reset (lock gated)
+    wire pix_clk;            // 148.5 MHz pixel clock
+    wire rst_pix_n;          // pix_clk domain reset
+    wire core_clk;           // 125 MHz DDR3 user clock
+    wire core_clk_rst_n;     // core_clk domain reset
+    wire ddr_init_done;      // DDR3 initialization done
+    wire ddr_pll_lock;       // DDR3 controller PLL lock
+    wire ddrphy_cpd_lock;    // DDR3 PHY CPD lock
+    wire hdmi_init_over;     // HDMI I2C configuration done
+    wire hdmi_init_fail;     // HDMI I2C retries exhausted
+    wire hdmi_pll_lock;      // HDMI GPLL_B lock
+
+    // ==================================================================
+    // DDR3 IP reset (blueprint section 5.1): asynchronous assert on the
+    // board reset, release synchronized to core_clk plus a 10 ms power
+    // stabilisation delay. Feeds ONLY ddr3_wrapper.resetn; all core_clk
+    // domain logic resets from the IP-produced core_clk_rst_n. The two
+    // reset sources must never be cross-connected (resetn tied to an IP
+    // output would close a combinational reset loop).
+    // ==================================================================
+    localparam integer RST_DELAY_CYCLES = 1250000;  // 10 ms at 125 MHz
+
+    reg  [1:0]  rst_sync_pipe;   // 2FF release synchronizer
+    reg  [20:0] rst_delay_cnt;   // 1.25e6 < 2^21
+    reg         rst_sync_core;   // DDR3 IP reset, active low
+
+    always @(posedge core_clk or negedge rst_n) begin
+        if (!rst_n) begin
+            rst_sync_pipe <= 2'b00;
+            rst_delay_cnt <= 21'd0;
+            rst_sync_core <= 1'b0;
+        end else begin
+            rst_sync_pipe <= {rst_sync_pipe[0], 1'b1};
+            if (rst_sync_pipe[1]) begin
+                if (rst_delay_cnt != RST_DELAY_CYCLES[20:0]) begin
+                    rst_delay_cnt <= rst_delay_cnt + 21'd1;
+                end else begin
+                    rst_sync_core <= 1'b1;
+                end
+            end
+        end
+    end
+
+    // ==================================================================
+    // Audio chain (clk_nco / core_clk domains)
+    // ==================================================================
+    wire [4:0]  bck_phase;
+    wire        bck_tick;
+    wire [15:0] pcm_l;
+    wire [15:0] pcm_r;
+    wire        pcm_valid;
+    wire        sd_idle;
+    wire        fifo_rd_en;
+    wire [31:0] fifo_rd_data;
+    wire        fifo_rd_valid;
+    wire        fifo_empty;
+    wire        fifo_full;       // observation tap (unused in M0)
+    wire [15:0] overflow_cnt;
+    wire        m0_cmd_valid;
+    wire [36:0] m0_cmd;
+    wire [255:0] m0_wdata;
+    wire        m0_done;
+    wire        m0_wready_beat;  // observation tap (audio single-beat cmds)
+    wire        win_tick;        // observation tap (T0.2 board check)
+    wire [15:0] win_id;         // observation tap
+    wire        mute_flag;       // observation tap
+    wire [15:0] audio_err_cnt;  // observation tap
+
+    // ==================================================================
+    // Video chain (pix_clk domain)
+    // ==================================================================
+    wire [10:0] pix_x;
+    wire [10:0] pix_y;
+    wire        pix_de;
+    wire        pix_hs;
+    wire        pix_vs;
+    wire [23:0] ui_rgb;
+    wire        ui_de;
+    wire        ui_hs;
+    wire        ui_vs;
+    wire [10:0] wave_rd_addr;
+    wire [15:0] wave_min;
+    wire [15:0] wave_max;
+    wire        wave_valid;
+    wire        mute_flag_sync;
+    wire        vsync_pulse;
+
+    // ==================================================================
+    // DDR3 controller user side (core_clk domain)
+    // ==================================================================
+    // master 0: audio_sink PCM writes; master 1: NPU wdma (M2, tied off);
+    // master 2: mel_engine (M1, wired below); master 3: self_test.
+    wire [3:0]   ddr_cmd_valid;
+    wire [36:0]  m1_cmd;          // tied off (T-M2-02 wdma alignment point)
+    wire [36:0]  m2_cmd;          // mel_engine
+    wire [36:0]  m3_cmd;
+    wire [255:0] m1_wdata;        // tied off (T-M2-02)
+    wire [255:0] m2_wdata;        // mel_engine
+    wire [255:0] m3_wdata;
+    wire [3:0]   ddr_wready_beat;
+    wire [3:0]   ddr_rd_valid;
+    wire [255:0] rd_data_0;
+    wire [255:0] rd_data_1;
+    wire [255:0] rd_data_2;
+    wire [255:0] rd_data_3;
+    wire [3:0]   ddr_done;
+    // mel_engine master-2 port nets (per-master signals, packed into the
+    // shared ctrl_axi buses exactly like audio_sink does for master 0)
+    wire         mel_m2_cmd_valid;
+    wire [36:0]  mel_m2_cmd;
+    wire [255:0] mel_m2_wdata;
+    wire         mel_m2_rd_ready;
+    // AXI nets between ddr3_ctrl_axi and ddr3_wrapper
+    wire [27:0]  axi_awaddr;
+    wire         axi_awuser_ap;
+    wire [3:0]   axi_awuser_id;
+    wire [3:0]   axi_awlen;
+    wire         axi_awvalid;
+    wire         axi_awready;
+    wire [255:0] axi_wdata;
+    wire [31:0]  axi_wstrb;
+    wire         axi_wready;
+    wire [3:0]   axi_wusero_id;
+    wire         axi_wusero_last;
+    wire [27:0]  axi_araddr;
+    wire         axi_aruser_ap;
+    wire [3:0]   axi_aruser_id;
+    wire [3:0]   axi_arlen;
+    wire         axi_arvalid;
+    wire         axi_arready;
+    wire [255:0] axi_rdata;
+    wire [3:0]   axi_rid;
+    wire         axi_rlast;
+    wire         axi_rvalid;
+    // observation taps (M0: unconsumed, T-M2-07 UART exporter)
+    wire [31:0]  wait_cnt_0;
+    wire [31:0]  wait_cnt_1;
+    wire [31:0]  wait_cnt_2;
+    wire [31:0]  wait_cnt_3;
+    wire [3:0]   ddr_addr_err;
+    wire         ddr_to_err;
+    wire [3:0]   ddr_cmd_to_err;
+    wire [2:0]   ddr_dbg_to_state;
+    wire [7:0]   ddr_wlast_miss_cnt;
+
+    // ==================================================================
+    // Control / debug chain (core_clk domain)
+    // ==================================================================
+    wire        st_start;
+    wire        st_cmd_valid;
+    wire        st_done;
+    wire        st_fail;
+    wire [27:0] st_fail_addr;
+    wire        st_wready_beat;
+    wire        st_rd_ready;
+    wire [2:0]  dbg_line_id;
+    wire [31:0] dbg_line_arg;
+    wire        dbg_line_fire;
+    wire        dbg_busy;
+    wire        sys_run;           // observation tap (pipeline gate)
+    wire        safe_err;
+    wire [1:0]  stage_code;
+    wire        heartbeat;
+    wire        overflow_warn;
+    wire [7:0]  tx_byte_data;
+    wire        tx_byte_valid;
+    wire        tx_byte_ready;
+    wire [7:0]  rx_byte_data;
+    wire        rx_byte_valid;
+    wire        dbg_line_wready;   // observation tap (no text writer in M0)
+    wire [15:0] uart_rx_byte_cnt;  // observation tap
+
+    // ==================================================================
+    // Module instances
+    // ==================================================================
+
+    // ---- 216 MHz audio time base (clk_nco domain reset included) ----
+    audio_pll u_audio_pll (
+        .clk_27m     (clk),
+        .rst_n       (rst_n),
+        .clk_nco     (clk_nco),
+        .pll_locked  (pll_audio_locked),
+        .rst_sync_nco(rst_sync_nco)
+    );
+
+    // ---- I2S clock generator (clk_nco domain) ----
+    i2s_clk_gen u_i2s_clk_gen (
+        .clk_nco   (clk_nco),
+        .rst_n     (rst_sync_nco),
+        .bck_phase (bck_phase),
+        .bck_tick  (bck_tick),
+        .i2s_bck   (i2s_bck),
+        .i2s_lrck  (i2s_lrck)
+    );
+
+    // ---- I2S receiver (clk_nco domain, SD 2FF synchronized inside) ----
+    i2s_rx u_i2s_rx (
+        .clk_nco   (clk_nco),
+        .rst_n     (rst_sync_nco),
+        .i2s_sd    (i2s_sd),
+        .bck_tick  (bck_tick),
+        .bck_phase (bck_phase),
+        .i2s_lrck  (i2s_lrck),
+        .pcm_l     (pcm_l),
+        .pcm_r     (pcm_r),
+        .pcm_valid (pcm_valid),
+        .sd_idle   (sd_idle)
+    );
+
+    // ---- 216 MHz -> 125 MHz stereo sample CDC FIFO ----
+    audio_cdc_fifo u_audio_cdc_fifo (
+        .clk_nco     (clk_nco),
+        .wr_rst_n    (rst_sync_nco),
+        .pcm_valid   (pcm_valid),
+        .pcm_l       (pcm_l),
+        .pcm_r       (pcm_r),
+        .i2s_lrck    (i2s_lrck),
+        .clk_core    (core_clk),
+        .rd_rst_n    (core_clk_rst_n),
+        .rd_en       (fifo_rd_en),
+        .rd_data     (fifo_rd_data),
+        .rd_valid    (fifo_rd_valid),
+        .empty       (fifo_empty),
+        .full        (fifo_full),
+        .overflow_cnt(overflow_cnt)
+    );
+
+    // ---- PCM ring-buffer writer / DDR3 master 0 / waveform columns ----
+    audio_sink u_audio_sink (
+        .clk           (core_clk),
+        .rst_n         (core_clk_rst_n),
+        .fifo_rd_en    (fifo_rd_en),
+        .fifo_rd_data  (fifo_rd_data),
+        .fifo_rd_valid (fifo_rd_valid),
+        .fifo_empty    (fifo_empty),
+        .sd_idle       (sd_idle),
+        .m0_cmd_valid  (m0_cmd_valid),
+        .m0_cmd        (m0_cmd),
+        .m0_wdata      (m0_wdata),
+        .m0_done       (m0_done),
+        .win_tick      (win_tick),
+        .win_id        (win_id),
+        .mute_flag     (mute_flag),
+        .err_cnt       (audio_err_cnt),
+        .pix_clk       (pix_clk),
+        .vsync_pulse   (vsync_pulse),
+        .wave_rd_addr  (wave_rd_addr),
+        .wave_min      (wave_min),
+        .wave_max      (wave_max),
+        .wave_valid    (wave_valid),
+        .mute_flag_sync(mute_flag_sync)
+    );
+
+    // ---- Mel feature engine (M1): PCM window -> log2 mel -> int8 feat ----
+    // Master 2 of ddr3_ctrl_axi; starts on audio_sink win_tick (window
+    // complete in DDR3). Feature export (npu_start/feat_rd_*) is the
+    // T-M2 NPU alignment point - observation taps until the NPU lands.
+    // Hex tables: PDS resolves $readmemh paths against the -work_dir
+    // root (probe-verified in T-M1-06), so the "src/mel/..." prefix
+    // form is used here (matching the fft twiddle ROM hardcodes) and
+    // build_full.tcl copies src/mel/*.hex into <work_dir>/src/mel/.
+    wire        mel_npu_start;
+    wire        mel_feat_page;
+    wire [14:0] mel_feat_rd_addr;   // NPU read request (tied 0 until M2)
+    wire [7:0]  mel_feat_rd_data;
+    wire        mel_done;
+    wire [31:0] mel_cycles;
+    wire        mel_timeout;
+    wire        mel_win_miss;
+    wire        mel_busy;
+
+    mel_engine #(
+        .HAN_HEX_FILE ("src/mel/hann_q15.hex"),
+        .COO_HEX_FILE ("src/mel/mel_coo.hex"),
+        .LUT_HEX_FILE ("src/mel/log2_lut.hex")
+    ) u_mel_engine (
+        .clk           (core_clk),
+        .rst_n         (core_clk_rst_n),
+        .win_tick      (win_tick),
+        .win_id        (win_id),
+        .m2_cmd_valid  (mel_m2_cmd_valid),
+        .m2_cmd        (mel_m2_cmd),
+        .m2_wdata      (mel_m2_wdata),
+        .m2_wready     (ddr_wready_beat[2]),
+        .m2_rd_valid   (ddr_rd_valid[2]),
+        .m2_rd_ready   (mel_m2_rd_ready),
+        .m2_rd_data    (rd_data_2),
+        .m2_done       (ddr_done[2]),
+        .npu_start     (mel_npu_start),
+        .feat_page     (mel_feat_page),
+        .feat_rd_addr  (mel_feat_rd_addr),
+        .feat_rd_data  (mel_feat_rd_data),
+        .mel_done      (mel_done),
+        .mel_cycles    (mel_cycles),
+        .mel_timeout   (mel_timeout),
+        .win_miss      (mel_win_miss),
+        .busy          (mel_busy)
+    );
+
+    // T-M2 alignment point: the NPU will drive feat_rd_addr and consume
+    // npu_start/feat_rd_data; until then the read address is parked at 0
+    // (single-cycle synchronous read, no side effects).
+    assign mel_feat_rd_addr = 15'd0;
+
+    // ---- HDMI transmitter front end (GPLL_B + I2C config + pads) ----
+    hdmi_tx_if u_hdmi_tx_if (
+        .clk_27m        (clk),
+        .rst_n          (rst_n),
+        .pix_clk        (pix_clk),
+        .rst_pix_n      (rst_pix_n),
+        .pix_x          (pix_x),
+        .pix_y          (pix_y),
+        .pix_de         (pix_de),
+        .pix_hs         (pix_hs),
+        .pix_vs         (pix_vs),
+        .rgb_in         (ui_rgb),
+        .de_in          (ui_de),
+        .hs_in          (ui_hs),
+        .vs_in          (ui_vs),
+        .vout_clk       (vout_clk),
+        .vout_de        (vout_de),
+        .vout_hs        (vout_hs),
+        .vout_vs        (vout_vs),
+        .vout_data      (vout_data),
+        .iic_tx_scl     (iic_tx_scl),
+        .iic_tx_sda     (iic_tx_sda),
+        .hdmi_init_over (hdmi_init_over),
+        .hdmi_init_fail (hdmi_init_fail),
+        .pll_lock       (hdmi_pll_lock)
+    );
+
+    // ---- UI renderer (waveform region; instantiates waveform_disp) ----
+    ui_renderer u_ui_renderer (
+        .pix_clk       (pix_clk),
+        .rst_pix_n     (rst_pix_n),
+        .pix_x         (pix_x),
+        .pix_y         (pix_y),
+        .pix_de        (pix_de),
+        .pix_hs        (pix_hs),
+        .pix_vs        (pix_vs),
+        .wave_rd_addr  (wave_rd_addr),
+        .wave_min      (wave_min),
+        .wave_max      (wave_max),
+        .wave_valid    (wave_valid),
+        .mute_flag_sync(mute_flag_sync),
+        .vsync_pulse   (vsync_pulse),
+        .rgb           (ui_rgb),
+        .de_out        (ui_de),
+        .hs_out        (ui_hs),
+        .vs_out        (ui_vs)
+    );
+
+    // ---- DDR3 arbitration + IP contract adaptation ----
+    assign ddr_cmd_valid = {st_cmd_valid, mel_m2_cmd_valid, 1'b0, m0_cmd_valid};
+    assign m1_cmd        = 37'd0;
+    assign m2_cmd        = mel_m2_cmd;
+    assign m1_wdata      = 256'd0;
+    assign m2_wdata      = mel_m2_wdata;
+
+    ddr3_ctrl_axi u_ddr3_ctrl_axi (
+        .clk            (core_clk),
+        .rst_n          (core_clk_rst_n),
+        .cmd_valid      (ddr_cmd_valid),
+        .m0_cmd         (m0_cmd),
+        .m1_cmd         (m1_cmd),
+        .m2_cmd         (m2_cmd),
+        .m3_cmd         (m3_cmd),
+        .m0_wdata       (m0_wdata),
+        .m1_wdata       (m1_wdata),
+        .m2_wdata       (m2_wdata),
+        .m3_wdata       (m3_wdata),
+        .wready_beat    (ddr_wready_beat),
+        .rd_ready       ({st_rd_ready, mel_m2_rd_ready, 1'b0, 1'b0}),
+        .rd_data_0      (rd_data_0),
+        .rd_data_1      (rd_data_1),
+        .rd_data_2      (rd_data_2),
+        .rd_data_3      (rd_data_3),
+        .rd_valid       (ddr_rd_valid),
+        .done           (ddr_done),
+        .wait_cnt_0     (wait_cnt_0),
+        .wait_cnt_1     (wait_cnt_1),
+        .wait_cnt_2     (wait_cnt_2),
+        .wait_cnt_3     (wait_cnt_3),
+        .addr_err       (ddr_addr_err),
+        .to_err         (ddr_to_err),
+        .cmd_to_err     (ddr_cmd_to_err),
+        .dbg_to_state   (ddr_dbg_to_state),
+        .wlast_miss_cnt (ddr_wlast_miss_cnt),
+        .axi_awaddr     (axi_awaddr),
+        .axi_awuser_ap  (axi_awuser_ap),
+        .axi_awuser_id  (axi_awuser_id),
+        .axi_awlen      (axi_awlen),
+        .axi_awvalid    (axi_awvalid),
+        .axi_awready    (axi_awready),
+        .axi_wdata      (axi_wdata),
+        .axi_wstrb      (axi_wstrb),
+        .axi_wready     (axi_wready),
+        .axi_wusero_id  (axi_wusero_id),
+        .axi_wusero_last(axi_wusero_last),
+        .axi_araddr     (axi_araddr),
+        .axi_aruser_ap  (axi_aruser_ap),
+        .axi_aruser_id  (axi_aruser_id),
+        .axi_arlen      (axi_arlen),
+        .axi_arvalid    (axi_arvalid),
+        .axi_arready    (axi_arready),
+        .axi_rdata      (axi_rdata),
+        .axi_rid        (axi_rid),
+        .axi_rlast      (axi_rlast),
+        .axi_rvalid     (axi_rvalid)
+    );
+
+    // ---- DDR3 IP shell (instance hierarchy: ddr3_wrapper.I_ips_ddr_top) ----
+    ddr3_wrapper ddr3_wrapper (
+        .ref_clk_p      (ref_clk_p),
+        .ref_clk_n      (ref_clk_n),
+        .resetn         (rst_sync_core),
+        .core_clk       (core_clk),
+        .core_clk_rst_n (core_clk_rst_n),
+        .ddr_init_done  (ddr_init_done),
+        .pll_lock       (ddr_pll_lock),
+        .ddrphy_cpd_lock(ddrphy_cpd_lock),
+        .axi_awaddr     (axi_awaddr),
+        .axi_awuser_ap  (axi_awuser_ap),
+        .axi_awuser_id  (axi_awuser_id),
+        .axi_awlen      (axi_awlen),
+        .axi_awvalid    (axi_awvalid),
+        .axi_awready    (axi_awready),
+        .axi_wdata      (axi_wdata),
+        .axi_wstrb      (axi_wstrb),
+        .axi_wready     (axi_wready),
+        .axi_wusero_id  (axi_wusero_id),
+        .axi_wusero_last(axi_wusero_last),
+        .axi_araddr     (axi_araddr),
+        .axi_aruser_ap  (axi_aruser_ap),
+        .axi_aruser_id  (axi_aruser_id),
+        .axi_arlen      (axi_arlen),
+        .axi_arvalid    (axi_arvalid),
+        .axi_arready    (axi_arready),
+        .axi_rdata      (axi_rdata),
+        .axi_rid        (axi_rid),
+        .axi_rlast      (axi_rlast),
+        .axi_rvalid     (axi_rvalid),
+        .mem_cs_n       (mem_cs_n),
+        .mem_rst_n      (mem_rst_n),
+        .mem_ck         (mem_ck),
+        .mem_ck_n       (mem_ck_n),
+        .mem_cke        (mem_cke),
+        .mem_ras_n      (mem_ras_n),
+        .mem_cas_n      (mem_cas_n),
+        .mem_we_n       (mem_we_n),
+        .mem_odt        (mem_odt),
+        .mem_a          (mem_a),
+        .mem_ba         (mem_ba),
+        .mem_dqs        (mem_dqs),
+        .mem_dqs_n      (mem_dqs_n),
+        .mem_dq         (mem_dq),
+        .mem_dm         (mem_dm)
+    );
+
+    // ---- DDR3 write-read self test (master 3, self-test pattern area) ----
+    self_test u_self_test (
+        .clk          (core_clk),
+        .rst_n        (core_clk_rst_n),
+        .st_start     (st_start),
+        .cmd_valid    (st_cmd_valid),
+        .cmd          (m3_cmd),
+        .wdata        (m3_wdata),
+        .wready_beat  (st_wready_beat),
+        .rd_ready     (st_rd_ready),
+        .rd_data      (rd_data_3),
+        .rd_valid     (ddr_rd_valid[3]),
+        .done         (ddr_done[3]),
+        .st_done      (st_done),
+        .st_fail      (st_fail),
+        .st_fail_addr (st_fail_addr)
+    );
+
+    // ---- System controller (boot self-test chain + LED encoding) ----
+    sys_ctrl u_sys_ctrl (
+        .clk             (core_clk),
+        .rst_n           (core_clk_rst_n),
+        .pll_locked      (pll_audio_locked),
+        .ddrphy_cpd_lock (ddrphy_cpd_lock),
+        .ddr_init_done   (ddr_init_done),
+        .hdmi_init_over  (hdmi_init_over),
+        .hdmi_init_fail  (hdmi_init_fail),
+        .sd_idle         (sd_idle),
+        .overflow_cnt    (overflow_cnt),
+        .st_start        (st_start),
+        .st_done         (st_done),
+        .st_fail         (st_fail),
+        .st_fail_addr    (st_fail_addr),
+        .dbg_line_id     (dbg_line_id),
+        .dbg_line_arg    (dbg_line_arg),
+        .dbg_line_fire   (dbg_line_fire),
+        .dbg_busy        (dbg_busy),
+        .sys_run         (sys_run),
+        .safe_err        (safe_err),
+        .stage_code      (stage_code),
+        .heartbeat       (heartbeat),
+        .overflow_warn   (overflow_warn),
+        .key1_n          (key1_n)
+    );
+
+    // ---- UART physical byte layer ----
+    uart_tx u_uart_tx (
+        .clk         (core_clk),
+        .rst_n       (core_clk_rst_n),
+        .byte_wdata  (tx_byte_data),
+        .byte_wvalid (tx_byte_valid),
+        .byte_wready (tx_byte_ready),
+        .uart_txd    (uart_tx)
+    );
+
+    uart_rx u_uart_rx (
+        .clk         (core_clk),
+        .rst_n       (core_clk_rst_n),
+        .uart_rxd    (uart_rx),
+        .byte_rdata  (rx_byte_data),
+        .byte_rvalid (rx_byte_valid)
+    );
+
+    // ---- Debug line formatter (M0: status lines only, no text writer) ----
+    uart_debug u_uart_debug (
+        .clk            (core_clk),
+        .rst_n          (core_clk_rst_n),
+        .tx_byte_data   (tx_byte_data),
+        .tx_byte_valid  (tx_byte_valid),
+        .tx_byte_ready  (tx_byte_ready),
+        .rx_byte_data   (rx_byte_data),
+        .rx_byte_valid  (rx_byte_valid),
+        .dbg_line_wdata (8'd0),
+        .dbg_line_wvalid(1'b0),
+        .dbg_line_wready(dbg_line_wready),
+        .dbg_line_id    (dbg_line_id),
+        .dbg_line_arg   (dbg_line_arg),
+        .dbg_line_fire  (dbg_line_fire),
+        .dbg_busy       (dbg_busy),
+        .rx_byte_cnt    (uart_rx_byte_cnt)
+    );
+
+    // ==================================================================
+    // LED assembly (design doc section 2.2.9 / sys_ctrl contract):
+    //   led[7:6] self-test stage code
+    //   led[5]   CDC FIFO overflow warning (sticky)
+    //   led[4]   SAFE_ERR latched state
+    //   led[3:1] reserved for the M2 stats exporter
+    //   led[0]   1 Hz heartbeat (active after RUN)
+    // ==================================================================
+    assign led = {stage_code, overflow_warn, safe_err, 3'b000, heartbeat};
+
+endmodule

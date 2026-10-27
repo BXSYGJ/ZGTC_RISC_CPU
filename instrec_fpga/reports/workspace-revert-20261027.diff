@@ -1,0 +1,189 @@
+diff --git a/.gitignore b/.gitignore
+index 931e7f6..5d685c7 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -10,8 +10,6 @@ constraint_check/
+ log/
+ logbackup/
+ ipcore/
+-# 100H CPU 工程的 DDR3 IP 源码需要入库（其余 ipcore/ 是 PDS 生成物）
+-!pds_cpu_100h/ipcore/
+ impl.tcl
+ multiseed_summary.csv
+ 
+@@ -66,11 +64,6 @@ transcript
+ account.txt
+ account*.txt
+ 
+-# Helper tooling artifacts
+-.dumate/
+-.workbuddy/
+-_fpgalab_index.js
+-
+ # IDE and operating-system files
+ .vscode/
+ .idea/
+diff --git a/DEV_SNAPSHOT.md b/DEV_SNAPSHOT.md
+index e82bb61..6269127 100644
+--- a/DEV_SNAPSHOT.md
++++ b/DEV_SNAPSHOT.md
+@@ -7,10 +7,6 @@
+ 
+ ## 0. 一句话现状
+ 
+-> **2026-10-25 更新：已迁移到本地盘古 100Pro+（PG2L100H-6IFBG676）**。BRAM SoC + 串口烧录 + DDR3
+-> 全部跑通；定稿高性能配置在本颗芯片收敛于 **120 MHz / CoreMark 383.0（3.19/兆赫）**，153 MHz 经种子
+-> 扫描确认不可复现（芯片约慢 17%）。详见 **`cpu/docs/MIGRATION_100H_20261025.md`**（本节以下为 200H 历史基线）。
+-
+ **RV32IM SoC 已在 Pango PG2L200H (MES2L676-200HP) 上验证跑通（153 MHz，CoreMark 511 分，CRC 校验通过）。**
+ 已融合 DYH 高性能 CPU（`full_fetch_commit_factored`，RV32IM/153MHz/16KB I-Cache/分支预测）与 XSY 串口烧录（简化 bootloader 固化前 4KB，`R` 命令流控载应用）。
+ **当前推荐交付**：`tool/fpga_lab/coremark_verify.py` 一键烧录验证（找箱 → 烧 153MHz 位流 → R 命令载 CoreMark → 算分）。
+diff --git a/cpu/fpga/rv32_ddr3_ip_wrapper.sv b/cpu/fpga/rv32_ddr3_ip_wrapper.sv
+index 7995c38..da42e10 100644
+--- a/cpu/fpga/rv32_ddr3_ip_wrapper.sv
++++ b/cpu/fpga/rv32_ddr3_ip_wrapper.sv
+@@ -24,35 +24,30 @@ module rv32_ddr3_ip_wrapper (
+     output wire core_clk_rst_n,   // sync-released reset in core_clk domain
+     output wire ddr_init_done,
+     output wire pll_lock,
+-    output wire ddrphy_cpd_lock,  // PHY calibration (CPD) lock - status only
+     // ---- AXI write channel ----
+-    // NOTE: directions are from the master (rv32_burst_ddr3) perspective:
+-    // request signals are INPUTS here and are forwarded to the IP; the IP's
+-    // responses are OUTPUTS. Declaring them the other way left the bridge
+-    // reading Z on awready/wready/rvalid and every transaction timed out.
+-    input  wire [27:0] axiw_awaddr,
+-    input  wire        axiw_awuser_ap,
+-    input  wire [3:0]  axiw_awuser_id,
+-    input  wire [3:0]  axiw_awlen,
+-    input  wire        axiw_awvalid,
+-    output wire        axiw_awready,
+-    input  wire [255:0] axiw_wdata,
+-    input  wire [31:0]  axiw_wstrb,
+-    input  wire        axiw_wvalid,
+-    output wire        axiw_wready,
+-    output wire [3:0]   axiw_wusero_id,
+-    output wire         axiw_wusero_last,
++    output wire [27:0] axiw_awaddr,
++    output wire        axiw_awuser_ap,
++    output wire [3:0]  axiw_awuser_id,
++    output wire [3:0]  axiw_awlen,
++    output wire        axiw_awvalid,
++    input  wire        axiw_awready,
++    output wire [255:0] axiw_wdata,
++    output wire [31:0]  axiw_wstrb,
++    output wire        axiw_wvalid,
++    input  wire        axiw_wready,
++    input  wire [3:0]   axiw_wusero_id,
++    input  wire         axiw_wusero_last,
+     // ---- AXI read channel ----
+-    input  wire [27:0] axir_araddr,
+-    input  wire        axir_aruser_ap,
+-    input  wire [3:0]  axir_aruser_id,
+-    input  wire [3:0]  axir_arlen,
+-    input  wire        axir_arvalid,
+-    output wire        axir_arready,
+-    output wire [255:0] axir_rdata,
+-    output wire [3:0]   axir_rid,
+-    output wire         axir_rlast,
+-    output wire         axir_rvalid,
++    output wire [27:0] axir_araddr,
++    output wire        axir_aruser_ap,
++    output wire [3:0]  axir_aruser_id,
++    output wire [3:0]  axir_arlen,
++    output wire        axir_arvalid,
++    input  wire        axir_arready,
++    input  wire [255:0] axir_rdata,
++    input  wire [3:0]   axir_rid,
++    input  wire         axir_rlast,
++    input  wire         axir_rvalid,
+     // ---- DDR3 physical ----
+     output wire        mem_cs_n,
+     output wire        mem_rst_n,
+@@ -114,7 +109,7 @@ module rv32_ddr3_ip_wrapper (
+         .phy_pll_lock           (),
+         .gpll_lock              (),
+         .rst_gpll_lock          (),
+-        .ddrphy_cpd_lock        (ddrphy_cpd_lock),
++        .ddrphy_cpd_lock        (),
+         .ddr_init_done          (ddr_init_done),
+ 
+         .axi_awaddr             (axiw_awaddr),
+@@ -172,7 +167,7 @@ module rv32_ddr3_ip_wrapper (
+         // debug: keep PHY out of reset, defaults otherwise
+         .dbg_gate_start         (1'b0),
+         .dbg_cpd_start          (1'b0),
+-        .dbg_ddrphy_rst_n       (dbg_ddrphy_rst_n_r),  // release after pll_lock + 1024 cycles
++        .dbg_ddrphy_rst_n       (1'b1),  // official demo default: ctrl_bus_0[12]=1
+         .dbg_gpll_scan_rst      (1'b0),
+ 
+         .samp_position_dyn_adj  (1'b0),
+@@ -203,7 +198,7 @@ module rv32_ddr3_ip_wrapper (
+         .debug_dps_cnt_dir0     (),
+         .debug_dps_cnt_dir1     (),
+ 
+-        .ck_dly_en              (1'b0),  // official demo default: ctrl_bus_8[20]=0
++        .ck_dly_en              (1'b1),
+         .init_ck_dly_step       (8'd0),
+         .ck_dly_set_bin         (),
+ 
+diff --git a/cpu/rtl/rv32_burst_ddr3.sv b/cpu/rtl/rv32_burst_ddr3.sv
+index 155976f..7c77183 100644
+--- a/cpu/rtl/rv32_burst_ddr3.sv
++++ b/cpu/rtl/rv32_burst_ddr3.sv
+@@ -239,7 +239,7 @@ module rv32_burst_ddr3 (
+     assign axiw_awaddr    = {ddr_address[29:5], 3'b0};   // word addr, 32B aligned
+     assign axiw_awuser_ap = 1'b0;  // official demo always 0
+     assign axiw_awuser_id = 4'b0;
+-    assign axiw_awlen     = 4'b0;                        // single 32B beat
++    assign axiw_awlen     = 4'b0;                        // single beat
+     assign axiw_awvalid   = (ddr_state == DDR_WR_AW);
+     assign axiw_wdata     = ddr_wdata;
+     assign axiw_wstrb     = ddr_wstrb;
+@@ -250,11 +250,9 @@ module rv32_burst_ddr3 (
+     assign axir_arlen     = 4'b0;
+     assign axir_arvalid   = (ddr_state == DDR_RD_AR);
+ 
+-    // AXI timeout: abort transaction after 4096 cycles and return error.
+-    // NOTE: the counter must be 13 bits - a 12-bit 12'd4096 literal truncates
+-    // to 0, which made the timeout fire on the first cycle of every state.
+-    reg [12:0] axi_to_cnt;
+-    localparam [12:0] AXI_TO_LIMIT = 13'd4096;
++    // AXI timeout: abort transaction after 4096 cycles and return error
++    reg [11:0] axi_to_cnt;
++    localparam AXI_TO_LIMIT = 12'd4096;
+ 
+     always @(posedge ddr_clk or negedge ddr_rst_n) begin
+         if (!ddr_rst_n) begin
+@@ -282,12 +280,11 @@ module rv32_burst_ddr3 (
+                             ddr_wdata <= req_address[4] ? {wbuf, 128'b0} : {128'b0, wbuf};
+                             ddr_state <= DDR_WR_AW;
+                         end else begin
+-                            // Read: issue the AXI read directly.  (An earlier
+-                            // version did a dummy write of 32 zero bytes with
+-                            // full strobe to "prime" the IP first - that write
+-                            // landed on the very address being read, so every
+-                            // read came back as zero.  Removed.)
+-                            ddr_state <= DDR_RD_AR;
++                            // Read: do a dummy write first (write all-0 with full strobe)
++                            // to prime the DDR3 IP, then read.
++                            ddr_wstrb <= 32'hFFFFFFFF;
++                            ddr_wdata <= 256'b0;
++                            ddr_state <= DDR_WR_AW;
+                         end
+                     end
+                 end
+@@ -306,7 +303,12 @@ module rv32_burst_ddr3 (
+                 DDR_WR_W: begin
+                     if (axiw_wready) begin
+                         axi_to_cnt <= 12'd0;
+-                        ddr_state <= DDR_ACK;
++                        if (ddr_need_read) begin
++                            // Dummy write done, now do the read
++                            ddr_state <= DDR_RD_AR;
++                        end else begin
++                            ddr_state <= DDR_ACK;
++                        end
+                     end else if (axi_to_cnt >= AXI_TO_LIMIT) begin
+                         dbg_to_err  <= 1'b1;
+                         dbg_to_state <= DDR_WR_W;

@@ -1,0 +1,5 @@
+build/
+reports/*.log
+scripts/outputs/*.npy
+__pycache__/
+*.pyc
