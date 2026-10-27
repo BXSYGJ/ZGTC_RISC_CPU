@@ -14,31 +14,35 @@
 4. 记忆目录 `C:\Users\menss\.codeartsdoer\memory\D--0000-111-001-Pango-ZGTC_RISC_CPU`：优先
    `project-multi-phase-workflow-state.md`、`project-instrec-quant-contract-facts.md`、`project-instrec-npu-golden-baseline.md`。
 
-## 当前状态（2026-10-27，详见 `instrec_fpga/docs/STATUS.md`）
+## 当前状态（2026-10-28，详见 `instrec_fpga/docs/STATUS.md`）
 
-- **M0 完成**：全约束通过，sha256 `C517736C…`，归档 `releases/m0-20261027/`，**尚未上板**（T-M0-10）。
-- **M1 构建与时序完成**：run `20261027-121101-5c24a968` **All Constraints Met**，WNS +1.438 / WHS +0.224，
-  `ddrphy_sysclk`（core_clk 125 MHz）+0.837；sha256 `BD40D10A…`，归档 `releases/m1-20261027/`。
-- 收敛手段：`db_norm` scan 2 → 4 拍流水，`standardize` 量化扫描 → 5 拍流水；算术顺序与位级结果不变。
-  修复前最差 WNS -4.401（`u_db_norm` 17.539 ns 组合链），不是 DDR3 IP 固有。
-- **当前板级阻塞**：板子已上电（CP2102 串口 COM5 在线），但 **USB Cable II 未被识别**
-  （`cdt_js` cable 列表为空，系统无 FTDI 设备），`jtag_scan.tcl` 报 `No devices detected`。
-  脚本已备：`scripts/jtag_scan.tcl`、`scripts/jtag_program_m1.tcl`。
-- **M2**：`requant_unit.v` 已交付；`conv_engine.v` 已落盘但完整性未深验；wdma / weight_loader / pool / gap_fc /
-  softmax / npu_top 未做。**M3 未开始**。
+- **M0/M1 位流均已产出并归档**：M0 sha256 `C517736C…`、M1 `BD40D10A…`（`releases/` 下），
+  M1 run `20261027-121101-5c24a968` All Constraints Met（WNS +1.438 / WHS +0.224）。
+  收敛手段：`db_norm` 4 拍、`standardize` 5 拍流水，位级结果不变。
+- **板级关键结论（2026-10-28）**：`cfg_read_device_property -mode 3` 直读状态寄存器，早期读数为
+  `0x00180C80`，**done=0** —— 此前“烧录成功”后 FPGA 内根本没有有效配置，这解释了所有无输出。
+  重新 program 后 `0x081FFCA0`（done=1、crc_err=0），无复位探针在 COM5 收到 46 个 `P`，
+  证明 27 MHz/UART/CP2102 链路正常。M1 烧录后 done=1 但串口仍 0 字节 → 收窄到 core_clk / sys_ctrl。
+- **当前板级阻塞**：FTDI 下载器（USB Cable II）反复从系统掉线（CP2102 仍在线）。
+  一键验证脚本已备：`scripts/board_check.py`（设备→烧录→读 done→抓串口）。
+- **M2（约 60%）**：`requant_unit`/`conv_engine`/`weight_loader`/`pool_engine`/`gap_unit`/`fc_engine`
+  均已落盘并单独编译通过；`weight_upload.py`、`uart_frames.py`、`uart_capture.py --frames` 就绪。
+  未做：wdma、softmax_top、npu_top 整合。**M3 未开始**。
 
 ## 下一步（按序）
 
-1. 接好 USB Cable II（J12，红线对 1 脚）→ 扫描 → 烧 M1 位流 → UART 115200 看 BOOT/PLL/DDROK → HDMI 网格+波形。
-2. M1 板级对拍（T-M1-07）：需先补 `scripts/uart_capture.py`，再按 tasks.md 导出 Mel 谱与 golden 比对。
-3. 回 M2：先核对 conv_engine 的 16 lane / 行缓冲 / 层参数是否完整，再按 wdma→weight_loader→pool→gap_fc→npu_top 推进。
+1. FTDI 恢复后：`python scripts/board_check.py --sbit build/instrec-latest.sbit`，先看 done 与串口；
+   当前 `build/instrec-latest.sbit` 是含 `core_probe` 的诊断版（core_clk 域发 16 个 `C`）。
+2. 若 `core_probe` 无 `C`：查 125 MHz 差分 `ref_clk` 与 DDR3 IP 的 GPLL；若有 `C`：查 `sys_ctrl`/`uart_debug`。
+3. M2：`wdma` → `npu_top` 整合 → `softmax_top` → T-M2-07 逐层导出对拍。
 
 ## 命令（在 `instrec_fpga/` 下执行）
 
 ```powershell
-python scripts/check_rtl.py        # SV-2005 词法检查，必须 0 violation（约 26 个 .v，hdmi demo 默认排除）
-python -m pytest -q                # 全量 63 passed，约 60 s
+python scripts/check_rtl.py        # SV-2005 词法检查，必须 0 violation（31 个 .v，hdmi demo 默认排除）
+python -m pytest -q                # 全量 88 passed，约 34 s
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/run_pds_full.ps1
+python scripts/board_check.py --sbit build/instrec-latest.sbit   # 一键板级检查
 ```
 
 - 构建脚本必须 **PowerShell 5.1 兼容**：只用 `[System.IO.File]::WriteAllText` + BOM-less UTF8，不用
