@@ -3,6 +3,14 @@
 > 每次会话结束前追加一条：时间、做了什么、结论、证据路径。倒序，最新在上。
 > 状态汇总见 `docs/STATUS.md`。
 
+## 2026-10-28 05:15 — wdma 初版与镜像布局验证
+
+- 新增 `tests/test_wdma_layout.py`（4 项）与 `tests/test_wdma_stream_model.py`（5 项）：
+  确认所有层权重区 32B 对齐、conv1 每组 144B/27 tap 尾部单 tap、fc2 tap=8B。
+- `wdma.v` 初版：整层 32B beat 连续读（burst≤16）、16 深 FIFO、16B/8B tap 切分、
+  `w_ready` 反压握手、组边界脉冲；PDS 单编译通过，**未仿真/未上板**。
+- 全量 102 passed；check_rtl 34 个 .v、0 violation。
+
 ## 2026-10-28 03:40 — softmax 定点单元
 
 - 新增 `softmax_top.v`：Q16.15 预缩放、减 max、Q6.9 饱和、512 项 exp LUT、
