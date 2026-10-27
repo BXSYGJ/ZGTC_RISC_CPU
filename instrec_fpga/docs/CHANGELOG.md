@@ -3,6 +3,13 @@
 > 每次会话结束前追加一条：时间、做了什么、结论、证据路径。倒序，最新在上。
 > 状态汇总见 `docs/STATUS.md`。
 
+## 2026-10-28 02:10 — npu_top 控制壳与一键板级脚本
+
+- 新增 `npu_top.v`：11 层序列（conv1→pool1→…→fc2）、busy/done、npu_cycles、
+  REQ-REL-002 超时标志；编译通过，数据通路与 wdma 留待接入。
+- 新增 `scripts/board_check.py`：FTDI 检查→烧录→读状态寄存器→抓串口，一条命令完成。
+- check_rtl 32 个 .v、0 violation。
+
 ## 2026-10-28 01:35 — FC 引擎与流式模型测试
 
 - 新增 `fc_engine.v`：16 并行输出、CIN 拍/组、复用 requant_unit；
