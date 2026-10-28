@@ -3,6 +3,11 @@
 > 每次会话结束前追加一条：时间、做了什么、结论、证据路径。倒序，最新在上。
 > 状态汇总见 `docs/STATUS.md`。
 
+## 2026-10-29 04:25 — ui_overlay 并回 ui_renderer
+
+- `ui_renderer` 例化 `ui_overlay`，de/hs/vs 延迟由 3 拍改为 4 拍；顶层 spec/bars 暂 tie-off。
+- 全量构建 All Constraints Met，WNS +1.357 / WHS +0.184。
+
 ## 2026-10-29 03:20 — M3 图层合并
 
 - 新增 `ui_overlay.v`：bars > spectrum > base 的优先级合成，1 拍寄存输出。

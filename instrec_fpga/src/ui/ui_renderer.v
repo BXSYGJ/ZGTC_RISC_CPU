@@ -72,9 +72,15 @@ module ui_renderer #(
     // (single-cycle pulse on the rising edge of pix_vs).
     output wire        vsync_pulse,
 
-    // Rendered video towards hdmi_tx_if. rgb is a register output of
-    // waveform_disp and is mutually aligned with de_out / hs_out /
-    // vs_out (all correspond to the pixel seen 3 cycles earlier).
+    // Overlay layers (M3): spectrogram and probability bars, already
+    // registered in the pix domain by their own modules.
+    input  wire [23:0] spec_rgb,
+    input  wire        spec_on,
+    input  wire [23:0] bars_rgb,
+    input  wire        bars_on,
+
+    // Rendered video towards hdmi_tx_if. rgb/de/hs/vs now correspond to
+    // the pixel seen 4 cycles earlier (3 from waveform + 1 from overlay).
     output wire [23:0] rgb,
     output wire        de_out,
     output wire        hs_out,
@@ -102,35 +108,44 @@ module ui_renderer #(
         .rgb            ( wf_rgb         )
     );
 
-    // The rgb output is the register output of waveform_disp; no extra
-    // register stage is inserted here (that would only add latency -
-    // the signal is already registered and already aligned with the
-    // 3-cycle delayed control signals below).
-    assign rgb = wf_rgb;
+    // Layer compositor: bars > spectrum > waveform/grid.
+    ui_overlay u_overlay (
+        .pix_clk   (pix_clk),
+        .rst_pix_n (rst_pix_n),
+        .de        (de_pipe[2]),
+        .base_rgb  (wf_rgb),
+        .base_on   (de_pipe[2]),
+        .spec_rgb  (spec_rgb),
+        .spec_on   (spec_on),
+        .bars_rgb  (bars_rgb),
+        .bars_on   (bars_on),
+        .rgb       (rgb),
+        .de_out    (de_out)
+    );
 
     // -----------------------------------------------------------------
     // Control-signal pipeline: 3-cycle delay to match the waveform
     // pixel pipeline (lookup reg + geometry reg + output reg).
     // -----------------------------------------------------------------
-    reg [2:0] de_pipe;
-    reg [2:0] hs_pipe;
-    reg [2:0] vs_pipe;
+    reg [3:0] de_pipe;
+    reg [3:0] hs_pipe;
+    reg [3:0] vs_pipe;
 
     always @(posedge pix_clk) begin
         if (!rst_pix_n) begin
-            de_pipe <= 3'b000;
-            hs_pipe <= 3'b000;
-            vs_pipe <= 3'b000;
+            de_pipe <= 4'b0000;
+            hs_pipe <= 4'b0000;
+            vs_pipe <= 4'b0000;
         end else begin
-            de_pipe <= {de_pipe[1:0], pix_de};
-            hs_pipe <= {hs_pipe[1:0], pix_hs};
-            vs_pipe <= {vs_pipe[1:0], pix_vs};
+            de_pipe <= {de_pipe[2:0], pix_de};
+            hs_pipe <= {hs_pipe[2:0], pix_hs};
+            vs_pipe <= {vs_pipe[2:0], pix_vs};
         end
     end
 
-    assign de_out = de_pipe[2];
-    assign hs_out = hs_pipe[2];
-    assign vs_out = vs_pipe[2];
+    // de_out comes from the overlay (4th stage); hs/vs use pipe[3].
+    assign hs_out = hs_pipe[3];
+    assign vs_out = vs_pipe[3];
 
     // -----------------------------------------------------------------
     // vsync_pulse: rising-edge strobe of pix_vs (frame start marker).
