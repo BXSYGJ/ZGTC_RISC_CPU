@@ -262,81 +262,152 @@ module npu_top (
     assign feat_rd_addr = feat_addr;
     assign feat_rd_en   = feat_run;
 
-    conv_engine #(.CIN(1), .COUT(48), .H_IN(64), .W_IN(258)) u_conv1 (
+    // -----------------------------------------------------------------------
+    // Shared conv cores: conv1+conv2 share one 16-lane MAC/requant core and
+    // conv3+conv4 share the second one. The sequencer is serial, so the two
+    // logical layers of a pair never scan at the same time; each still owns
+    // its own line buffer and ingress counters, because the pool egress of
+    // layer i overlaps the scan of layer i and feeds conv i+1 (see the
+    // conv_engine.v header). Only the compute core is time-shared.
+    // The layer-dependent zero point rides the shared cfg port: conv1 is
+    // the only layer with a non-zero zp_in, latched at layer_start.
+    // -----------------------------------------------------------------------
+    wire       core_a_y_valid;
+    wire [7:0] core_a_y_u8;
+    wire       core_b_y_valid;
+    wire [7:0] core_b_y_u8;
+    wire       core_a_w_ready;
+    wire       core_b_w_ready;
+    wire [7:0] conv_zp_in = (layer == L_CONV1) ? 8'd49 : 8'd0;
+
+    conv_engine #(
+        .CIN0(1),   .COUT0(48),  .H0(64),  .W0(258),
+        .CIN1(48),  .COUT1(96),  .H1(32),  .W1(129)
+    ) u_conv12 (
         .clk(clk), .rst_n(rst_n),
-        .cfg_valid(1'b1), .cfg_zp_in(8'd49), .cfg_zp_out(8'd0),
-        .layer_start(conv1_start), .layer_done(conv1_done),
-        .x_valid(feat_dv), .x_u8(feat_rd_data),
+        .cfg_valid(1'b1), .cfg_zp_in(conv_zp_in), .cfg_zp_out(8'd0),
+        .start0(conv1_start), .start1(conv2_start),
+        .done0(conv1_done), .done1(conv2_done),
+        .x0_valid(feat_dv), .x0_u8(feat_rd_data),
+        .x1_valid(p1_v), .x1_u8(p1_d),
         .grp_start(grp_start),
-        .bias_valid(cb1), .bias_s32(wl_bias),
-        .mult_valid(cm1), .m_s32(wl_m),
-        .shft_valid(cs1), .shift(wl_shift),
-        .w_valid(wbuf_rd_valid), .w_data(wbuf_rd_data), .w_ready(conv_wready[0]),
-        .y_valid(c1_v), .y_u8(c1_d), .grp_advance(conv_grpadv[0])
+        .bias_valid(cb1 | cb2), .bias_s32(wl_bias),
+        .mult_valid(cm1 | cm2), .m_s32(wl_m),
+        .shft_valid(cs1 | cs2), .shift(wl_shift),
+        .w_valid(wbuf_rd_valid), .w_data(wbuf_rd_data), .w_ready(core_a_w_ready),
+        .y_valid(core_a_y_valid), .y_u8(core_a_y_u8),
+        .adv0(conv_grpadv[0]), .adv1(conv_grpadv[1])
     );
 
-    pool_engine #(.CIN(48), .W_IN(258), .H_IN(64)) u_pool1 (
-        .clk(clk), .rst_n(rst_n), .layer_start(pool1_start),
-        .y_valid(c1_v), .y_u8(c1_d),
-        .p_valid(p1_v), .p_u8(p1_d), .p_last(pool1_done)
+    assign conv_wready[0] = core_a_w_ready;
+    assign conv_wready[1] = core_a_w_ready;
+
+    // -----------------------------------------------------------------------
+    // Single shared pool_engine. The sequencer runs exactly one layer at a
+    // time, so the four pooling stages can share one instance instead of
+    // keeping four sets of line banks. The select window spans the producing
+    // conv layer and the following pool layer: the pool consumes the conv
+    // egress stream while that conv layer is still active and finishes its
+    // two-beat drain inside the pool layer.
+    // -----------------------------------------------------------------------
+    wire pool_sel1 = (layer == L_CONV1) || (layer == L_POOL1);
+    wire pool_sel2 = (layer == L_CONV2) || (layer == L_POOL2);
+    wire pool_sel3 = (layer == L_CONV3) || (layer == L_POOL3);
+    wire pool_sel4 = (layer == L_CONV4) || (layer == L_POOL4);
+
+    reg [15:0] pool_cin;
+    reg [15:0] pool_win;
+    reg [15:0] pool_hin;
+
+    // Geometry of the pooling stage that owns the select window (same shape
+    // as the conv layer feeding it). The shared bank capacity in pool_engine
+    // covers the deepest stage: conv1's 48 * 129 = 6192 bytes.
+    always @* begin
+        if (pool_sel1) begin
+            pool_cin = 16'd48;
+            pool_win = 16'd258;
+            pool_hin = 16'd64;
+        end else if (pool_sel2) begin
+            pool_cin = 16'd96;
+            pool_win = 16'd129;
+            pool_hin = 16'd32;
+        end else if (pool_sel3) begin
+            pool_cin = 16'd192;
+            pool_win = 16'd64;
+            pool_hin = 16'd16;
+        end else begin
+            pool_cin = 16'd256;
+            pool_win = 16'd32;
+            pool_hin = 16'd8;
+        end
+    end
+
+    wire       pool_y_valid = (pool_sel1 && c1_v) || (pool_sel2 && c2_v) ||
+                              (pool_sel3 && c3_v) || (pool_sel4 && c4_v);
+    wire [7:0] pool_y_u8    = pool_sel1 ? c1_d : pool_sel2 ? c2_d :
+                              pool_sel3 ? c3_d : c4_d;
+    wire       pool_start   = pool1_start | pool2_start | pool3_start | pool4_start;
+
+    wire       pool_p_valid;
+    wire [7:0] pool_p_u8;
+    wire       pool_p_last;
+
+    pool_engine u_pool (
+        .clk(clk), .rst_n(rst_n), .layer_start(pool_start),
+        .cin(pool_cin), .w_in(pool_win), .h_in(pool_hin),
+        .y_valid(pool_y_valid), .y_u8(pool_y_u8),
+        .p_valid(pool_p_valid), .p_u8(pool_p_u8), .p_last(pool_p_last)
     );
 
-    conv_engine #(.CIN(48), .COUT(96), .H_IN(32), .W_IN(129)) u_conv2 (
+    // Route the shared pool output back to the stage that owns the current
+    // window. The four select windows are mutually exclusive, so each
+    // consumer sees exactly the stream its own pool stage used to produce.
+    assign p1_v       = pool_p_valid && pool_sel1;
+    assign p1_d       = pool_p_u8;
+    assign pool1_done = pool_p_last && pool_sel1;
+    assign p2_v       = pool_p_valid && pool_sel2;
+    assign p2_d       = pool_p_u8;
+    assign pool2_done = pool_p_last && pool_sel2;
+    assign p3_v       = pool_p_valid && pool_sel3;
+    assign p3_d       = pool_p_u8;
+    assign pool3_done = pool_p_last && pool_sel3;
+    assign p4_v       = pool_p_valid && pool_sel4;
+    assign p4_d       = pool_p_u8;
+    assign pool4_done = pool_p_last && pool_sel4;
+
+    conv_engine #(
+        .CIN0(96),  .COUT0(192), .H0(16),  .W0(64),
+        .CIN1(192), .COUT1(256), .H1(8),   .W1(32)
+    ) u_conv34 (
         .clk(clk), .rst_n(rst_n),
-        .cfg_valid(1'b0), .cfg_zp_in(8'd0), .cfg_zp_out(8'd0),
-        .layer_start(conv2_start), .layer_done(conv2_done),
-        .x_valid(p1_v), .x_u8(p1_d),
+        .cfg_valid(1'b1), .cfg_zp_in(conv_zp_in), .cfg_zp_out(8'd0),
+        .start0(conv3_start), .start1(conv4_start),
+        .done0(conv3_done), .done1(conv4_done),
+        .x0_valid(p2_v), .x0_u8(p2_d),
+        .x1_valid(p3_v), .x1_u8(p3_d),
         .grp_start(grp_start),
-        .bias_valid(cb2), .bias_s32(wl_bias),
-        .mult_valid(cm2), .m_s32(wl_m),
-        .shft_valid(cs2), .shift(wl_shift),
-        .w_valid(wbuf_rd_valid), .w_data(wbuf_rd_data), .w_ready(conv_wready[1]),
-        .y_valid(c2_v), .y_u8(c2_d), .grp_advance(conv_grpadv[1])
+        .bias_valid(cb3 | cb4), .bias_s32(wl_bias),
+        .mult_valid(cm3 | cm4), .m_s32(wl_m),
+        .shft_valid(cs3 | cs4), .shift(wl_shift),
+        .w_valid(wbuf_rd_valid), .w_data(wbuf_rd_data), .w_ready(core_b_w_ready),
+        .y_valid(core_b_y_valid), .y_u8(core_b_y_u8),
+        .adv0(conv_grpadv[2]), .adv1(conv_grpadv[3])
     );
 
-    pool_engine #(.CIN(96), .W_IN(129), .H_IN(32)) u_pool2 (
-        .clk(clk), .rst_n(rst_n), .layer_start(pool2_start),
-        .y_valid(c2_v), .y_u8(c2_d),
-        .p_valid(p2_v), .p_u8(p2_d), .p_last(pool2_done)
-    );
+    assign conv_wready[2] = core_b_w_ready;
+    assign conv_wready[3] = core_b_w_ready;
 
-    conv_engine #(.CIN(96), .COUT(192), .H_IN(16), .W_IN(64)) u_conv3 (
-        .clk(clk), .rst_n(rst_n),
-        .cfg_valid(1'b0), .cfg_zp_in(8'd0), .cfg_zp_out(8'd0),
-        .layer_start(conv3_start), .layer_done(conv3_done),
-        .x_valid(p2_v), .x_u8(p2_d),
-        .grp_start(grp_start),
-        .bias_valid(cb3), .bias_s32(wl_bias),
-        .mult_valid(cm3), .m_s32(wl_m),
-        .shft_valid(cs3), .shift(wl_shift),
-        .w_valid(wbuf_rd_valid), .w_data(wbuf_rd_data), .w_ready(conv_wready[2]),
-        .y_valid(c3_v), .y_u8(c3_d), .grp_advance(conv_grpadv[2])
-    );
-
-    pool_engine #(.CIN(192), .W_IN(64), .H_IN(16)) u_pool3 (
-        .clk(clk), .rst_n(rst_n), .layer_start(pool3_start),
-        .y_valid(c3_v), .y_u8(c3_d),
-        .p_valid(p3_v), .p_u8(p3_d), .p_last(pool3_done)
-    );
-
-    conv_engine #(.CIN(192), .COUT(256), .H_IN(8), .W_IN(32)) u_conv4 (
-        .clk(clk), .rst_n(rst_n),
-        .cfg_valid(1'b0), .cfg_zp_in(8'd0), .cfg_zp_out(8'd0),
-        .layer_start(conv4_start), .layer_done(conv4_done),
-        .x_valid(p3_v), .x_u8(p3_d),
-        .grp_start(grp_start),
-        .bias_valid(cb4), .bias_s32(wl_bias),
-        .mult_valid(cm4), .m_s32(wl_m),
-        .shft_valid(cs4), .shift(wl_shift),
-        .w_valid(wbuf_rd_valid), .w_data(wbuf_rd_data), .w_ready(conv_wready[3]),
-        .y_valid(c4_v), .y_u8(c4_d), .grp_advance(conv_grpadv[3])
-    );
-
-    pool_engine #(.CIN(256), .W_IN(32), .H_IN(8)) u_pool4 (
-        .clk(clk), .rst_n(rst_n), .layer_start(pool4_start),
-        .y_valid(c4_v), .y_u8(c4_d),
-        .p_valid(p4_v), .p_u8(p4_d), .p_last(pool4_done)
-    );
+    // The shared core emits its egress while the owning layer's select
+    // window is open, so c1/c2 and c3/c4 alias the two core streams. The
+    // pool select gates below keep each stage on its own layer window.
+    assign c1_v = core_a_y_valid;
+    assign c1_d = core_a_y_u8;
+    assign c2_v = core_a_y_valid;
+    assign c2_d = core_a_y_u8;
+    assign c3_v = core_b_y_valid;
+    assign c3_d = core_b_y_u8;
+    assign c4_v = core_b_y_valid;
+    assign c4_d = core_b_y_u8;
 
     wire        gap_we;
     wire [7:0]  gap_waddr;

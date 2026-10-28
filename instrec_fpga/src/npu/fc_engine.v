@@ -59,9 +59,9 @@ module fc_engine #(
     localparam [7:0] GRP_LAST = GRP_NUM - 1;
 
     reg signed [15:0] x_buf [0:CIN-1];
-    reg signed [31:0] b_ram [0:GRP_NUM*16-1];
-    reg signed [31:0] m_ram [0:GRP_NUM*16-1];
-    reg        [6:0]  s_ram [0:GRP_NUM*16-1];
+    (* syn_ramstyle = "registers" *) reg signed [31:0] b_ram [0:GRP_NUM*16-1];
+    (* syn_ramstyle = "registers" *) reg signed [31:0] m_ram [0:GRP_NUM*16-1];
+    (* syn_ramstyle = "registers" *) reg        [6:0]  s_ram [0:GRP_NUM*16-1];
 
     reg signed [31:0] acc [0:15];
     reg [7:0]  x_cnt;

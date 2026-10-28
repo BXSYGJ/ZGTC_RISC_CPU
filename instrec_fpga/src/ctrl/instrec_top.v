@@ -41,9 +41,9 @@
 `timescale 1ns / 1ps
 
 module instrec_top #(
-    // 0 keeps the M1 behaviour (NPU idle); set to 1 once weights are loaded
-    // and the end-to-end NPU chain is verified.
-    parameter NPU_ENABLE = 0
+    // 1 = full system (Mel -> NPU -> UI). Weights are loaded over UART
+    // before sys_ctrl reaches RUN; the NPU starts on mel's window pulse.
+    parameter NPU_ENABLE = 1
 ) (
     // ---- board pins ----
     input  wire        clk,          // 27 MHz crystal (D18)
