@@ -110,6 +110,12 @@ module npu_top (
     wire cb4 = wl_b_valid && (layer == L_CONV4);
     wire cm4 = wl_m_valid && (layer == L_CONV4);
     wire cs4 = wl_s_valid && (layer == L_CONV4);
+    wire fb1 = wl_b_valid && (layer == L_FC1);
+    wire fm1 = wl_m_valid && (layer == L_FC1);
+    wire fs1 = wl_s_valid && (layer == L_FC1);
+    wire fb2 = wl_b_valid && (layer == L_FC2);
+    wire fm2 = wl_m_valid && (layer == L_FC2);
+    wire fs2 = wl_s_valid && (layer == L_FC2);
     wire        wdma_busy;
     wire [3:0]  conv_wready;
     wire [3:0]  conv_grpadv;
@@ -118,7 +124,7 @@ module npu_top (
     wdma u_wdma (
         .clk          (clk),
         .rst_n        (rst_n),
-        .start        (layer_pulse && (layer <= L_CONV4)),
+        .start        (layer_pulse && (layer <= L_FC2)),
         .layer_id     (layer),
         .rd_cmd_valid (rd_cmd_valid),
         .rd_cmd       (rd_cmd),
@@ -258,7 +264,8 @@ module npu_top (
         .clk(clk), .rst_n(rst_n), .layer_start(fc1_start),
         .x_valid(fc1_x_valid), .x_s16(fc1_x_s16),
         .w_valid(w_valid), .w_data(w_data), .w_ready(conv_wready[0]),
-        .b_valid(1'b0), .bias_s32(32'sd0), .m_valid(1'b0), .m_s32(32'sd0), .s_valid(1'b0), .shift(7'd0),
+        .b_valid(fb1), .bias_s32(wl_bias), .m_valid(fm1), .m_s32(wl_m),
+        .s_valid(fs1), .shift(wl_shift),
         .y_valid(fc1_y_valid), .y_u8(fc1_y), .done(fc1_done)
     );
 
@@ -266,7 +273,8 @@ module npu_top (
         .clk(clk), .rst_n(rst_n), .layer_start(fc2_start),
         .x_valid(fc1_y_valid), .x_s16({8'd0, fc1_y}),
         .w_valid(w_valid), .w_data(w_data), .w_ready(conv_wready[1]),
-        .b_valid(1'b0), .bias_s32(32'sd0), .m_valid(1'b0), .m_s32(32'sd0), .s_valid(1'b0), .shift(7'd0),
+        .b_valid(fb2), .bias_s32(wl_bias), .m_valid(fm2), .m_s32(wl_m),
+        .s_valid(fs2), .shift(wl_shift),
         .y_valid(fc2_y_valid), .y_u8(fc2_y), .done(fc2_done)
     );
 

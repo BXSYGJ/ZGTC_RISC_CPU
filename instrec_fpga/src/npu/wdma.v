@@ -101,7 +101,7 @@ module wdma (
     reg [8:0]  cfg_idx;      // element index inside the current contract
 
     // contract emit
-    reg [5:0]  c_cnt;
+    reg [8:0]  c_cnt;
     reg [15:0] grp_cnt;
 
     // weight stream
@@ -118,6 +118,8 @@ module wdma (
     wire [31:0]  total_bytes = total_taps * tap_bytes;
     wire [15:0]  total_beats = (total_bytes + 32'd31) >> 5;
     wire [4:0]   chunk = (cfg_beats_left > 16'd16) ? 5'd16 : cfg_beats_left[4:0];
+    wire         is_fc = (layer_id >= 4'd4);
+    wire [9:0]   cfg_end = is_fc ? ({1'b0, cout} * 10'd3) : 10'd48;
 
     // FIFO write (never back-pressured by the IP).
     always @(posedge clk) begin
@@ -260,7 +262,7 @@ module wdma (
                         cfg_beats_left <= cfg_beats_left - {11'd0, cfg_cmd_beats};
                         cfg_idx        <= cfg_idx + {4'd1, 5'd0};   // +32 bytes
                         if (cfg_beats_left <= 16'd16) begin
-                            c_cnt     <= 6'd0;
+                            c_cnt     <= 9'd0;
                             grp_cnt   <= 16'd0;
                             tap_in_grp<= 16'd0;
                             cur_addr  <= wb;
@@ -278,22 +280,39 @@ module wdma (
 
                 // ---- 48-beat group contract ----
                 S_GRP: begin
-                    if (c_cnt == 6'd0) grp_start <= 1'b1;
-                    if (c_cnt < 6'd16) begin
-                        b_valid  <= 1'b1;
-                        bias_s32 <= (grp_cnt * 16 + c_cnt[3:0] < cout)
-                                    ? bram[grp_cnt * 16 + c_cnt[3:0]] : 32'sd0;
-                    end else if (c_cnt < 6'd32) begin
-                        m_valid  <= 1'b1;
-                        m_s32    <= (grp_cnt * 16 + c_cnt[3:0] < cout)
-                                    ? mram[grp_cnt * 16 + c_cnt[3:0]] : 32'sd0;
+                    if (c_cnt == 9'd0) grp_start <= 1'b1;
+
+                    if (is_fc) begin
+                        // fc contract: COUT beats each of bias, M, shift.
+                        if (c_cnt < cout) begin
+                            b_valid  <= 1'b1;
+                            bias_s32 <= bram[c_cnt];
+                        end else if (c_cnt < {1'b0, cout} + {1'b0, cout}) begin
+                            m_valid  <= 1'b1;
+                            m_s32    <= mram[c_cnt - cout];
+                        end else begin
+                            s_valid  <= 1'b1;
+                            shift    <= sram[c_cnt - cout - cout][6:0];
+                        end
                     end else begin
-                        s_valid  <= 1'b1;
-                        shift    <= (grp_cnt * 16 + c_cnt[3:0] < cout)
-                                    ? sram[grp_cnt * 16 + c_cnt[3:0]][6:0] : 7'd0;
+                        // conv contract: 16 bias + 16 M + 16 shift per group.
+                        if (c_cnt < 9'd16) begin
+                            b_valid  <= 1'b1;
+                            bias_s32 <= (grp_cnt * 16 + c_cnt[3:0] < cout)
+                                        ? bram[grp_cnt * 16 + c_cnt[3:0]] : 32'sd0;
+                        end else if (c_cnt < 9'd32) begin
+                            m_valid  <= 1'b1;
+                            m_s32    <= (grp_cnt * 16 + c_cnt[3:0] < cout)
+                                        ? mram[grp_cnt * 16 + c_cnt[3:0]] : 32'sd0;
+                        end else begin
+                            s_valid  <= 1'b1;
+                            shift    <= (grp_cnt * 16 + c_cnt[3:0] < cout)
+                                        ? sram[grp_cnt * 16 + c_cnt[3:0]][6:0] : 7'd0;
+                        end
                     end
-                    c_cnt <= c_cnt + 6'd1;
-                    if (c_cnt == 6'd47) state <= S_TCMD;
+
+                    c_cnt <= c_cnt + 9'd1;
+                    if (({1'b0, c_cnt} + 10'd1) == cfg_end) state <= S_TCMD;
                 end
 
                 // ---- weight burst for this group ----
@@ -360,7 +379,7 @@ module wdma (
                         taps_left  <= taps_per_grp;
                         beats_left <= (taps_per_grp * tap_bytes + 32'd31) >> 5;
                         cur_addr   <= cur_addr + (taps_per_grp * tap_bytes + 32'd31) / 32 * 32;
-                        c_cnt      <= 6'd0;
+                        c_cnt      <= 9'd0;
                         state      <= S_GRP;
                     end
                 end
