@@ -3,6 +3,11 @@
 > 每次会话结束前追加一条：时间、做了什么、结论、证据路径。倒序，最新在上。
 > 状态汇总见 `docs/STATUS.md`。
 
+## 2026-10-29 03:20 — M3 图层合并
+
+- 新增 `ui_overlay.v`：bars > spectrum > base 的优先级合成，1 拍寄存输出。
+- 单编译通过；尚未并回 `ui_renderer`。
+
 ## 2026-10-29 03:00 — M3 字库
 
 - `scripts/gen_font_hex.py` 用 Consolas 渲染 95 个 ASCII 字符为 8×16 点阵
