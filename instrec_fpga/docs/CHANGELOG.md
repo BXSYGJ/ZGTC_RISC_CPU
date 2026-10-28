@@ -3,6 +3,12 @@
 > 每次会话结束前追加一条：时间、做了什么、结论、证据路径。倒序，最新在上。
 > 状态汇总见 `docs/STATUS.md`。
 
+## 2026-10-29 02:25 — M3 谱图模块
+
+- 新增 `spectrum_disp.v`：258x64 Mel 页映射到 512x256 窗口（col=x*258>>9、
+  row=y>>2），5 档伪彩，同步读地址 + 1 拍对齐。
+- 单编译通过，尚未并入 `ui_renderer`。
+
 ## 2026-10-29 01:40 — npu.start 触发
 
 - `instrec_top` 用 mel_engine 的 `mel_npu_start` 触发 NPU，`NPU_ENABLE` 参数默认 0。
