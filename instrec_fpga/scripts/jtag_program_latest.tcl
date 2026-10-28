@@ -16,3 +16,4 @@ cfg_program -device_index 0
 puts "== step5: disconnect =="
 cfg_disconnect
 puts "== PROGRAM FLOW DONE =="
+exit
