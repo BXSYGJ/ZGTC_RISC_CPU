@@ -34,8 +34,12 @@ def run_ps(cmd):
                           capture_output=True, text=True)
 
 
-def kill_tools():
-    run_ps('Get-Process cdt_js,cdt_cfg -ErrorAction SilentlyContinue | Stop-Process -Force')
+def tools_running():
+    out = run_ps("(Get-Process cdt_js -ErrorAction SilentlyContinue | Measure-Object).Count")
+    try:
+        return int(out.stdout.strip().splitlines()[-1]) > 0
+    except Exception:
+        return False
 
 
 def ftdi_present():
@@ -124,7 +128,7 @@ def main():
         print('--sbit is required unless --status-only is used')
         return 2
 
-    sbit = str((ROOT / args.sbit).resolve()) if args.sbit else None
+    sbit = (ROOT / args.sbit).resolve().as_posix() if args.sbit else None
     if sbit and not Path(sbit).is_file():
         print(f'sbit not found: {sbit}')
         return 2
@@ -140,9 +144,21 @@ def main():
             print(f'cannot open {args.port}: {exc}')
             return 2
 
-    kill_tools()
-    time.sleep(2)
-    js = start_server()
+    # Never force-kill cdt_js/cdt_cfg: a killed D2XX process leaves the FTDI
+    # device in a bad state and it disappears from PnP until re-plugged.
+    js = None
+    port_open = False
+    try:
+        with socket.create_connection(('127.0.0.1', 65420), timeout=0.5):
+            port_open = True
+    except OSError:
+        pass
+    if not port_open:
+        js = start_server()
+        if js is None:
+            print('jtagserver did not open port 65420')
+            return 2
+
     if js is None:
         print('jtagserver did not open port 65420')
         return 2
@@ -165,9 +181,8 @@ def main():
     finally:
         if ser is not None:
             ser.close()
-        if js is not None:
-            js.terminate()
-        kill_tools()
+        # Leave jtagserver running; it exits cleanly on its own and keeps the
+        # FTDI handle valid for the next invocation.
 
     raw = b''.join(chunks)
     if raw:
