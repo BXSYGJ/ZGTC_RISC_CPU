@@ -3,6 +3,11 @@
 > 每次会话结束前追加一条：时间、做了什么、结论、证据路径。倒序，最新在上。
 > 状态汇总见 `docs/STATUS.md`。
 
+## 2026-10-29 11:35 — 审查记录：grp_advance 未回接
+
+- 代码审查发现 `conv_engine.grp_advance` 未送入 wdma，组契约预取时机可能与 conv 的组边界错位。
+- 已记录为板上验证前必须修复的整合项（4 个 conv 按层 mux 后驱动 wdma）。
+
 ## 2026-10-29 10:35 — bars 槽位 bug 修复
 
 - `bars_disp` 的槽位循环无 break，d=0 恒满足，实测 slot 永远 0；改为 if-else 优先链。

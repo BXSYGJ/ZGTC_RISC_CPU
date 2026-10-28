@@ -1,7 +1,7 @@
 # InstRec-FPGA 当前状态（STATUS）
 
 > 本文件是**唯一实时状态源**，优先于任何交接快照与记忆。每次会话结束前必须更新，
-> 并在 `CHANGELOG.md` 追加一条。最后更新：2026-10-29 10:35。
+> 并在 `CHANGELOG.md` 追加一条。最后更新：2026-10-29 11:35。
 
 ## 一句话
 
@@ -89,6 +89,9 @@ InstRec 8 类乐器识别（INT8 CNN）正在移植到盘古 100Pro+（PG2L100H-
 - `npu.start` 已接 mel 的窗口完成脉冲（`NPU_ENABLE` 参数默认 0，置 1 即启用）；
   全量构建 WNS +1.406 / WHS +0.270。
 - **M2 顶层接入完成**：唯一剩余是端到端仿真/板级对拍（USB 恢复后）。
+- **已知整合缺口（代码审查发现）**：`conv_engine.grp_advance` 未回接 wdma，wdma 目前按自身
+  节奏发组契约，可能与 conv 的组边界错位。板上验证前需把 4 个 conv 的 grp_advance 按层
+  mux 后送入 wdma，并让 wdma 在组切换时等待该脉冲。
 - **weight_loader 已接入 `instrec_top`**：UART 字节共用、TX 仲裁（加载优先）、m1 写/读通道、
   `weight_ok/weight_err` 接 `sys_ctrl`；`REQUIRE_WEIGHT=0` 保持 M1 链路不被阻塞。
   全量构建成功（15 分钟，比 M1 多约 3 分钟，资源增加）。
