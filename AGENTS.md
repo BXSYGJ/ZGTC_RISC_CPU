@@ -16,25 +16,27 @@
 
 ## 当前状态（2026-10-28，详见 `instrec_fpga/docs/STATUS.md`）
 
-- **M0/M1 位流均已产出并归档**：M0 sha256 `C517736C…`、M1 `BD40D10A…`（`releases/` 下），
-  M1 run `20261027-121101-5c24a968` All Constraints Met（WNS +1.438 / WHS +0.224）。
+- **M0/M1 位流均已产出并归档**：M0 `C517736C…`、M1 `BD40D10A…`，M1 All Constraints Met。
   收敛手段：`db_norm` 4 拍、`standardize` 5 拍流水，位级结果不变。
-- **板级关键结论（2026-10-28）**：`cfg_read_device_property -mode 3` 直读状态寄存器，早期读数为
-  `0x00180C80`，**done=0** —— 此前“烧录成功”后 FPGA 内根本没有有效配置，这解释了所有无输出。
-  重新 program 后 `0x081FFCA0`（done=1、crc_err=0），无复位探针在 COM5 收到 46 个 `P`，
-  证明 27 MHz/UART/CP2102 链路正常。M1 烧录后 done=1 但串口仍 0 字节 → 收窄到 core_clk / sys_ctrl。
-- **当前板级阻塞**：FTDI 下载器（USB Cable II）反复从系统掉线（CP2102 仍在线）。
-  一键验证脚本已备：`scripts/board_check.py`（设备→烧录→读 done→抓串口）。
-- **M2（约 60%）**：`requant_unit`/`conv_engine`/`weight_loader`/`pool_engine`/`gap_unit`/`fc_engine`
-  均已落盘并单独编译通过；`weight_upload.py`、`uart_frames.py`、`uart_capture.py --frames` 就绪。
-  未做：wdma、softmax_top、npu_top 整合。**M3 未开始**。
+- **板级已确认 `core_clk` 起振**：`core_probe` 诊断位流在 COM5 收到 13 个 `C`。
+  更早的 `done=0`（状态寄存器 `0x00180C80`）已由重新 program 修正为 `0x081FFCA0`。
+- **BOOT 乱码已修**：`uart_debug` 的字符串字面量位序假设错误，已改为显式 ASCII case 表
+  （位流已构建，待 USB 恢复后验证）。
+- **M2 编译闭环**：`wdma`（权重+48 拍契约）、`conv_engine`、`pool_engine`、`gap_unit`、
+  `fc_engine`（bias/M/shift 三流）、`softmax_top`、`weight_loader`（写+读回）、`npu_top`
+  全链例化；`instrec_top` 已例化 `npu_top`（start/feat 暂置 0），全量构建
+  **All Constraints Met，WNS +1.059**，sha256 `07062C4E…`。
+- **NPU 资源实测**：LUT 19522/66600 (29.3%)、DRM 34.5/155 (22.3%)、APM 35/240 (14.6%)。
+- **M3 起步**：新增 `bars_disp`（8 类概率条），尚未并入 `ui_renderer`。
+- **待接**：mel feat 读口、m1 在 `weight_loader` 与 `npu` 间的仲裁、端到端对拍。
+- **板级阻塞**：FTDI 下载器反复掉线（CP2102 正常）；已停止强杀 `cdt_*`，改用 TCL `exit`。
 
 ## 下一步（按序）
 
-1. FTDI 恢复后：`python scripts/board_check.py --sbit build/instrec-latest.sbit`，先看 done 与串口；
-   当前 `build/instrec-latest.sbit` 是含 `core_probe` 的诊断版（core_clk 域发 16 个 `C`）。
-2. 若 `core_probe` 无 `C`：查 125 MHz 差分 `ref_clk` 与 DDR3 IP 的 GPLL；若有 `C`：查 `sys_ctrl`/`uart_debug`。
-3. M2：`wdma` → `npu_top` 整合 → `softmax_top` → T-M2-07 逐层导出对拍。
+1. FTDI 恢复后 `python scripts/board_check.py --sbit build/instrec-latest.sbit`：
+   确认 `INSTREC BOOT` 可读、`done=1`；再跑 `weight_upload.py` 看 `WOK`。
+2. 接 mel feat 读口与 m1 仲裁，然后跑单层 conv1 对拍（契约已由测试向量固定）。
+3. M3：`spectrum_disp`/`font_rom` 并入 `ui_renderer`。
 
 ## 命令（在 `instrec_fpga/` 下执行）
 
