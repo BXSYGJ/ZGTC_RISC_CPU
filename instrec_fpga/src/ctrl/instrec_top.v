@@ -418,10 +418,8 @@ module instrec_top (
     );
 
     // ---- DDR3 arbitration + IP contract adaptation ----
-    assign ddr_cmd_valid = {st_cmd_valid, mel_m2_cmd_valid, 1'b0, m0_cmd_valid};
-    assign m1_cmd        = 37'd0;
+    assign ddr_cmd_valid = {st_cmd_valid, mel_m2_cmd_valid, wl_cmd_valid, m0_cmd_valid};
     assign m2_cmd        = mel_m2_cmd;
-    assign m1_wdata      = 256'd0;
     assign m2_wdata      = mel_m2_wdata;
 
     ddr3_ctrl_axi u_ddr3_ctrl_axi (
@@ -437,7 +435,7 @@ module instrec_top (
         .m2_wdata       (m2_wdata),
         .m3_wdata       (m3_wdata),
         .wready_beat    (ddr_wready_beat),
-        .rd_ready       ({st_rd_ready, mel_m2_rd_ready, 1'b0, 1'b0}),
+        .rd_ready       ({st_rd_ready, mel_m2_rd_ready, wl_rd_ready, 1'b0}),
         .rd_data_0      (rd_data_0),
         .rd_data_1      (rd_data_1),
         .rd_data_2      (rd_data_2),
@@ -543,11 +541,22 @@ module instrec_top (
     );
 
     // ---- System controller (boot self-test chain + LED encoding) ----
+    wire        wl_tx_valid, wl_tx_ready;
+    wire [7:0]  wl_tx_data;
+    wire        wl_cmd_valid, wl_done, wl_wready;
+    wire        wl_rd_ready;
+    wire [255:0] wl_wdata;
+    wire        weight_ok, weight_err;
+    wire        wl_busy_unused;
+    wire [27:0] wl_err_unused;
+    wire [15:0] wl_cnt_unused;
+    wire [31:0] wl_digest_unused;
+
     wire weight_start_unused;
 
     sys_ctrl u_sys_ctrl (
-        .weight_ok    (1'b0),
-        .weight_err   (1'b0),
+        .weight_ok    (weight_ok),
+        .weight_err   (weight_err),
         .weight_start (weight_start_unused),
         .clk             (core_clk),
         .rst_n           (core_clk_rst_n),
@@ -578,11 +587,14 @@ module instrec_top (
     wire [7:0] dbg_tx_data;
     wire       dbg_tx_valid;
 
+    assign wl_tx_ready   = tx_byte_ready;
+    assign dbg_tx_ready  = tx_byte_ready & ~wl_tx_valid;
+
     uart_tx u_uart_tx (
         .clk         (core_clk),
         .rst_n       (core_clk_rst_n),
-        .byte_wdata  (dbg_tx_data),
-        .byte_wvalid (dbg_tx_valid),
+        .byte_wdata  (wl_tx_valid ? wl_tx_data : dbg_tx_data),
+        .byte_wvalid (wl_tx_valid | dbg_tx_valid),
         .byte_wready (tx_byte_ready),
         .uart_txd    (uart_tx)
     );
@@ -595,13 +607,39 @@ module instrec_top (
         .byte_rvalid (rx_byte_valid)
     );
 
+    // ---- Weight loader (T-M2-01): UART frames -> DDR3 master 1 ----
+
+    weight_loader u_weight_loader (
+        .clk         (core_clk),
+        .rst_n       (core_clk_rst_n),
+        .rx_valid    (rx_byte_valid),
+        .rx_data     (rx_byte_data),
+        .tx_valid    (wl_tx_valid),
+        .tx_data     (wl_tx_data),
+        .tx_ready    (wl_tx_ready),
+        .cmd_valid   (wl_cmd_valid),
+        .cmd         (m1_cmd),
+        .wdata       (m1_wdata),
+        .wready_beat (ddr_wready_beat[1]),
+        .done        (ddr_done[1]),
+        .rd_ready    (wl_rd_ready),
+        .rd_data     (rd_data_1),
+        .rd_valid    (ddr_rd_valid[1]),
+        .busy        (wl_busy_unused),
+        .weight_ok   (weight_ok),
+        .weight_err  (weight_err),
+        .err_addr    (wl_err_unused),
+        .frame_cnt   (wl_cnt_unused),
+        .digest      (wl_digest_unused)
+    );
+
     // ---- Debug line formatter (M0: status lines only, no text writer) ----
     uart_debug u_uart_debug (
         .clk            (core_clk),
         .rst_n          (core_clk_rst_n),
         .tx_byte_data   (dbg_tx_data),
         .tx_byte_valid  (dbg_tx_valid),
-        .tx_byte_ready  (tx_byte_ready),
+        .tx_byte_ready  (dbg_tx_ready),
         .rx_byte_data   (rx_byte_data),
         .rx_byte_valid  (rx_byte_valid),
         .dbg_line_wdata (8'd0),

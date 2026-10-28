@@ -3,6 +3,13 @@
 > 每次会话结束前追加一条：时间、做了什么、结论、证据路径。倒序，最新在上。
 > 状态汇总见 `docs/STATUS.md`。
 
+## 2026-10-28 16:50 — weight_loader 接入顶层
+
+- `instrec_top` 例化 `weight_loader`：UART 字节共用、TX 仲裁（加载期优先）、
+  m1 写/读通道、`weight_ok/weight_err` 接 `sys_ctrl`。
+- `REQUIRE_WEIGHT` 仍为 0，M1 启动链不被加载阻塞；加载链已可板级验证。
+- 全量构建成功，耗时 15 分钟。
+
 ## 2026-10-28 15:30 — M3 概率条模块
 
 - 新增 `src/ui/bars_disp.v`：8 类概率条，pct*4 定长、slot 内偏移、按类取色；
