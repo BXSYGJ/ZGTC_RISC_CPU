@@ -3,6 +3,13 @@
 > 每次会话结束前追加一条：时间、做了什么、结论、证据路径。倒序，最新在上。
 > 状态汇总见 `docs/STATUS.md`。
 
+## 2026-10-28 07:40 — 契约流事实与 fc_engine 缺口
+
+- 新增 `tests/test_contract_stream.py`（4 项）：conv 组契约 48 拍、fc 契约 3×COUT 拍，
+  逐值与 `layer_contract.json` 一致；shift 全域落在 37..53。
+- 记录 `fc_engine` 接口缺口：无 bias 输入、M/shift 共用 `c_valid`，需拆分后才能真正接契约。
+- 全量 106 passed。
+
 ## 2026-10-28 06:30 — npu_top 数据通路整合
 
 - `npu_top.v` 全链例化：conv1→pool1→…→conv4→pool4→gap→fc1→fc2→softmax，

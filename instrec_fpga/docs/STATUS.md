@@ -1,7 +1,7 @@
 # InstRec-FPGA 当前状态（STATUS）
 
 > 本文件是**唯一实时状态源**，优先于任何交接快照与记忆。每次会话结束前必须更新，
-> 并在 `CHANGELOG.md` 追加一条。最后更新：2026-10-28 06:30。
+> 并在 `CHANGELOG.md` 追加一条。最后更新：2026-10-28 07:40。
 
 ## 一句话
 
@@ -61,8 +61,11 @@ InstRec 8 类乐器识别（INT8 CNN）正在移植到盘古 100Pro+（PG2L100H-
   2:1 速率差、16B/8B tap 切分、`w_ready` 反压握手、组边界脉冲；PDS 单编译通过。
   **尚未仿真/板级验证**。
 - `npu_top.v` 整合骨架：conv1→pool1→conv2→pool2→conv3→pool3→conv4→pool4→gap→fc1→fc2→softmax
-  全链例化，层序列、GAP 结果缓存与 fc1 回放、fc2→logits 总线已接；**唯一缺口是 48 拍
-  bias/M/shift 契约流（conv/fc 均 tie-off）**，因此尚不具备端到端功能。PDS 编译通过。
+  全链例化，层序列、GAP 结果缓存与 fc1 回放、fc2→logits 总线已接；PDS 编译通过。
+- `tests/test_contract_stream.py`（4 项）固定了契约地址与内容：conv 层每组 48 拍
+  （16 bias + 16 M + 16 shift），fc 层为 3×COUT 拍；与 layer_contract.json 逐值一致。
+- **已知接口缺口（尚未修）**：`fc_engine` 没有 bias 输入端口，且 M/shift 共用一个
+  `c_valid`；需拆成 b_valid/m_valid/s_valid 三条独立流并加 bias RAM。修好后才能接契约流。
 - 布局事实（`tests/test_wdma_layout.py`、`test_wdma_stream_model.py`，9 项通过）：
   所有层权重区 32B 对齐；conv1 每组 144B（27 tap）尾部仅 1 tap；fc2 tap 为 8B/4 个每 beat。
 
@@ -74,7 +77,7 @@ InstRec 8 类乐器识别（INT8 CNN）正在移植到盘古 100Pro+（PG2L100H-
 
 ## 验证基线
 
-- `python -m pytest -q` → **102 passed**（约 53 s）。
+- `python -m pytest -q` → **106 passed**（约 54 s）。
 - `python scripts/check_rtl.py` → **34 个 .v，0 violation**（hdmi demo 默认排除）。
 - 数值对拍只认 `scripts/golden_pipeline.py`；torch 2.14.1 的 oneDNN 有 21~67 LSB tile 噪声。
 - 本机无 WSL 仿真（Ubuntu 发行版 vhdx 缺失），RTL 行为只能靠 Python 对拍 + 板级实测。
