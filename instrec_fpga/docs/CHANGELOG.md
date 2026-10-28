@@ -3,6 +3,12 @@
 > 每次会话结束前追加一条：时间、做了什么、结论、证据路径。倒序，最新在上。
 > 状态汇总见 `docs/STATUS.md`。
 
+## 2026-10-28 20:35 — NPU 资源实测
+
+- 用只暴露 clk/rst/start/din 的 wrapper 对 `npu_top` 做 synthesize+dev_map（避免 DRC-0018 全端口绑定）：
+  LUT 19522/66600 (29.3%)、DRM 34.5/155 (22.3%)、APM 35/240 (14.6%)。
+- 结论：4 个 conv 实例 + pool/gap/fc/softmax/wdma 的资源可控，顶层例化可行。
+
 ## 2026-10-28 19:35 — fc 契约接入，M2 编译闭环
 
 - `wdma` 增加 fc 模式：3×COUT 拍（bias/M/shift 各 COUT），start 放宽到 fc2。
