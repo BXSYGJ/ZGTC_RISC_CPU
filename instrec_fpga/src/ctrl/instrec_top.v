@@ -40,7 +40,11 @@
 
 `timescale 1ns / 1ps
 
-module instrec_top (
+module instrec_top #(
+    // 0 keeps the M1 behaviour (NPU idle); set to 1 once weights are loaded
+    // and the end-to-end NPU chain is verified.
+    parameter NPU_ENABLE = 0
+) (
     // ---- board pins ----
     input  wire        clk,          // 27 MHz crystal (D18)
     input  wire        rst_n,        // KEY0, active low (C22)
@@ -651,11 +655,12 @@ module instrec_top (
     wire [3:0]  npu_probs_idx_u;
     wire [3:0]  npu_top1_u;
     wire        npu_feat_rd_en_u;
+    wire        npu_start = NPU_ENABLE ? mel_npu_start : 1'b0;
 
     npu_top u_npu (
         .clk          (core_clk),
         .rst_n        (core_clk_rst_n),
-        .start        (1'b0),
+        .start        (npu_start),
         .busy         (npu_busy_u),
         .done         (npu_done_u),
         .npu_cycles   (npu_cycles_u),

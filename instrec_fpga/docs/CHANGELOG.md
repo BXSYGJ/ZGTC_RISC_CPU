@@ -3,6 +3,12 @@
 > 每次会话结束前追加一条：时间、做了什么、结论、证据路径。倒序，最新在上。
 > 状态汇总见 `docs/STATUS.md`。
 
+## 2026-10-29 01:40 — npu.start 触发
+
+- `instrec_top` 用 mel_engine 的 `mel_npu_start` 触发 NPU，`NPU_ENABLE` 参数默认 0。
+- 全量构建 All Constraints Met，WNS +1.406 / WHS +0.270；M2 顶层接入完成。
+- 剩余：端到端仿真/板级对拍。
+
 ## 2026-10-29 00:55 — m1 仲裁接通
 
 - `instrec_top` m1 仲裁：`weight_loader` busy 时独占，空闲时交给 NPU wdma；
