@@ -543,7 +543,12 @@ module instrec_top (
     );
 
     // ---- System controller (boot self-test chain + LED encoding) ----
+    wire weight_start_unused;
+
     sys_ctrl u_sys_ctrl (
+        .weight_ok    (1'b0),
+        .weight_err   (1'b0),
+        .weight_start (weight_start_unused),
         .clk             (core_clk),
         .rst_n           (core_clk_rst_n),
         .pll_locked      (pll_audio_locked),

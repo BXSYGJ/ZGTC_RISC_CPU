@@ -55,7 +55,10 @@
 module sys_ctrl #(
     // Watchdog budgets in core_clk cycles (125 MHz).
     parameter integer PLL_TIMEOUT_CYCLES = 125000000 * 5,   // 5 s
-    parameter integer DDR_TIMEOUT_CYCLES = 12500000         // 100 ms
+    parameter integer DDR_TIMEOUT_CYCLES = 12500000,        // 100 ms
+    // 0 = legacy M1 chain (no weight loader); set to 1 once the loader is
+    // wired into instrec_top and npu_top consumes the weights.
+    parameter REQUIRE_WEIGHT = 0
 ) (
     input  wire        clk,              // core_clk 125 MHz
     input  wire        rst_n,            // core_clk_rst_n (IP output)
@@ -67,6 +70,10 @@ module sys_ctrl #(
     input  wire        hdmi_init_fail,   // HDMI retries exhausted (cfg)
     input  wire        sd_idle,          // I2S idle flag (nco domain)
     input  wire [15:0] overflow_cnt,     // audio CDC FIFO overflow count
+    // weight-loader self-test ring (REQ-REL-001 stage 4)
+    input  wire        weight_ok,
+    input  wire        weight_err,
+    output reg         weight_start,
     // self_test control/status
     output reg         st_start,         // one-cycle start request
     input  wire        st_done,          // self-test pass
@@ -171,6 +178,7 @@ module sys_ctrl #(
     localparam [2:0] ST_DDW     = 3'd3;
     localparam [2:0] ST_RUN     = 3'd4;
     localparam [2:0] ST_SAFEERR = 3'd5;
+    localparam [2:0] ST_WEIGHT  = 3'd6;
 
     reg [2:0]  state;
     reg [31:0] timeout_cnt;
@@ -184,7 +192,8 @@ module sys_ctrl #(
     assign safe_err   = err_latch;
     assign stage_code = (state == ST_BOOT)              ? 2'd00 :
                         (state == ST_PLL)               ? 2'd01 :
-                        (state == ST_DDR || state == ST_DDW) ? 2'd10 :
+                        (state == ST_DDR || state == ST_DDW ||
+                         state == ST_WEIGHT)            ? 2'd10 :
                         (state == ST_RUN)               ? 2'd11 : 2'd11;
 
     // pll_all: all lock/init conditions for the PLL stage.
@@ -276,6 +285,20 @@ module sys_ctrl #(
                         state         <= ST_SAFEERR;
                     end else begin
                         timeout_cnt <= timeout_cnt + 32'd1;
+                    end
+                end
+
+                ST_WEIGHT: begin
+                    // Wait for weight_loader's final read-back digest check.
+                    weight_start <= 1'b1;
+                    if (weight_ok) begin
+                        weight_start <= 1'b0;
+                        state        <= ST_RUN;
+                        sys_run      <= 1'b1;
+                    end else if (weight_err) begin
+                        weight_start <= 1'b0;
+                        err_latch    <= 1'b1;
+                        state        <= ST_SAFEERR;
                     end
                 end
 

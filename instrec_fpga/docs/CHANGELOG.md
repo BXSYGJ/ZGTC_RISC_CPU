@@ -3,6 +3,13 @@
 > 每次会话结束前追加一条：时间、做了什么、结论、证据路径。倒序，最新在上。
 > 状态汇总见 `docs/STATUS.md`。
 
+## 2026-10-28 13:55 — sys_ctrl 权重自检环与 M2 接入蓝图
+
+- `sys_ctrl` 新增 `ST_WEIGHT`：等 `weight_ok` 后放行 `sys_run`，`weight_err` 进 SAFE_ERR；
+  `REQUIRE_WEIGHT` 默认 0（保持当前 M1 链路），接入 weight_loader 后置 1。
+- 新增 `docs/m2_top_integration.md`：m1 口仲裁、自检链、weight_loader/npu_top 接线与验证顺序。
+- sys_ctrl 单编译通过；check_rtl 34 个 .v、0 violation。
+
 ## 2026-10-28 12:30 — fc_engine 契约接口补齐
 
 - `fc_engine` 新增 bias 输入与独立 b_valid/m_valid/s_valid 三条加载流，
