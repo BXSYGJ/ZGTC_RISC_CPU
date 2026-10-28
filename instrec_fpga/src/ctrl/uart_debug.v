@@ -85,7 +85,7 @@ module uart_debug (
     // ------------------------------------------------------------------
     localparam LINE_BOOT    = "INSTREC BOOT\n";     // id 0, 13 bytes
     localparam LINE_PLLERR  = "PLL LOCK ERR\n";     // id 1, 13 bytes
-    localparam LINE_DDRTEST = "DDR3 SELFTEST...\n"; // id 2, 16 bytes
+    localparam LINE_DDRTEST = "DDR3 SELFTEST...\n"; // id 2, 17 bytes
     localparam LINE_DDROK   = "DDROK\n";            // id 3,  6 bytes
     localparam LINE_DDRERR  = "DDR3 ERR @";         // id 4, 10-byte prefix
     localparam LINE_RUN     = "RUN\n";              // id 5,  4 bytes
@@ -96,7 +96,7 @@ module uart_debug (
     // the hex digits and newline are appended by the hex path).
     localparam [4:0] LINE_LEN_BOOT    = 5'd13;
     localparam [4:0] LINE_LEN_PLLERR  = 5'd13;
-    localparam [4:0] LINE_LEN_DDRTEST = 5'd16;
+    localparam [4:0] LINE_LEN_DDRTEST = 5'd17;
     localparam [4:0] LINE_LEN_DDROK   = 5'd6;
     localparam [4:0] LINE_LEN_DDRERR  = 5'd10;
     localparam [4:0] LINE_LEN_RUN     = 5'd4;
@@ -104,22 +104,111 @@ module uart_debug (
     localparam [2:0] LINE_ID_DDRERR = 3'd4;
 
     // ROM lookup: character idx of line id. Strings are zero-extended
-    // into a LINE_MAX-wide word; the leftmost character sits at the top
-    // byte, so char idx selects (LINE_MAX-1-idx)*8 +: 8.
+    // into a LINE_MAX-wide word. Measured on PDS 2022.2: the string is
+    // right-aligned (first character in the LOW byte), so char idx selects
+    // idx*8 +: 8. The earlier left-aligned assumption returned zero bytes
+    // for the leading characters (observed on the board as 00 00 ...).
     function [7:0] rom_char;
         input [2:0] id;
         input [4:0] idx;
-        reg [LINE_MAX*8-1:0] w;
         begin
+            rom_char = 8'h20;   // space default
             case (id)
-                3'd0:    w = LINE_BOOT;
-                3'd1:    w = LINE_PLLERR;
-                3'd2:    w = LINE_DDRTEST;
-                3'd3:    w = LINE_DDROK;
-                3'd4:    w = LINE_DDRERR;
-                default: w = LINE_RUN;
+                3'd0: begin
+                    case (idx)
+                        5'd0: rom_char = 8'h49;
+                        5'd1: rom_char = 8'h4e;
+                        5'd2: rom_char = 8'h53;
+                        5'd3: rom_char = 8'h54;
+                        5'd4: rom_char = 8'h52;
+                        5'd5: rom_char = 8'h45;
+                        5'd6: rom_char = 8'h43;
+                        5'd7: rom_char = 8'h20;
+                        5'd8: rom_char = 8'h42;
+                        5'd9: rom_char = 8'h4f;
+                        5'd10: rom_char = 8'h4f;
+                        5'd11: rom_char = 8'h54;
+                        5'd12: rom_char = 8'h0a;
+                        default: rom_char = 8'h20;
+                    endcase
+                end
+                3'd1: begin
+                    case (idx)
+                        5'd0: rom_char = 8'h50;
+                        5'd1: rom_char = 8'h4c;
+                        5'd2: rom_char = 8'h4c;
+                        5'd3: rom_char = 8'h20;
+                        5'd4: rom_char = 8'h4c;
+                        5'd5: rom_char = 8'h4f;
+                        5'd6: rom_char = 8'h43;
+                        5'd7: rom_char = 8'h4b;
+                        5'd8: rom_char = 8'h20;
+                        5'd9: rom_char = 8'h45;
+                        5'd10: rom_char = 8'h52;
+                        5'd11: rom_char = 8'h52;
+                        5'd12: rom_char = 8'h0a;
+                        default: rom_char = 8'h20;
+                    endcase
+                end
+                3'd2: begin
+                    case (idx)
+                        5'd0: rom_char = 8'h44;
+                        5'd1: rom_char = 8'h44;
+                        5'd2: rom_char = 8'h52;
+                        5'd3: rom_char = 8'h33;
+                        5'd4: rom_char = 8'h20;
+                        5'd5: rom_char = 8'h53;
+                        5'd6: rom_char = 8'h45;
+                        5'd7: rom_char = 8'h4c;
+                        5'd8: rom_char = 8'h46;
+                        5'd9: rom_char = 8'h54;
+                        5'd10: rom_char = 8'h45;
+                        5'd11: rom_char = 8'h53;
+                        5'd12: rom_char = 8'h54;
+                        5'd13: rom_char = 8'h2e;
+                        5'd14: rom_char = 8'h2e;
+                        5'd15: rom_char = 8'h2e;
+                        5'd16: rom_char = 8'h0a;
+                        default: rom_char = 8'h20;
+                    endcase
+                end
+                3'd3: begin
+                    case (idx)
+                        5'd0: rom_char = 8'h44;
+                        5'd1: rom_char = 8'h44;
+                        5'd2: rom_char = 8'h52;
+                        5'd3: rom_char = 8'h4f;
+                        5'd4: rom_char = 8'h4b;
+                        5'd5: rom_char = 8'h0a;
+                        default: rom_char = 8'h20;
+                    endcase
+                end
+                3'd4: begin
+                    case (idx)
+                        5'd0: rom_char = 8'h44;
+                        5'd1: rom_char = 8'h44;
+                        5'd2: rom_char = 8'h52;
+                        5'd3: rom_char = 8'h33;
+                        5'd4: rom_char = 8'h20;
+                        5'd5: rom_char = 8'h45;
+                        5'd6: rom_char = 8'h52;
+                        5'd7: rom_char = 8'h52;
+                        5'd8: rom_char = 8'h20;
+                        5'd9: rom_char = 8'h40;
+                        default: rom_char = 8'h20;
+                    endcase
+                end
+                3'd5: begin
+                    case (idx)
+                        5'd0: rom_char = 8'h52;
+                        5'd1: rom_char = 8'h55;
+                        5'd2: rom_char = 8'h4e;
+                        5'd3: rom_char = 8'h0a;
+                        default: rom_char = 8'h20;
+                    endcase
+                end
+                default: rom_char = 8'h20;
             endcase
-            rom_char = w[(LINE_MAX - 1 - idx)*8 +: 8];
         end
     endfunction
 

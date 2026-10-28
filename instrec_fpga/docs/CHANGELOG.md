@@ -3,6 +3,14 @@
 > 每次会话结束前追加一条：时间、做了什么、结论、证据路径。倒序，最新在上。
 > 状态汇总见 `docs/STATUS.md`。
 
+## 2026-10-28 12:00 — core_clk 确认与 BOOT 乱码修复
+
+- 烧 `core_probe` 后 COM5 收到 13 个 `C`：**core_clk 已起振，core 域退出复位**。
+- BOOT 行乱码定位：`uart_debug` 的字符串字面量位序假设错误，板级收到 `00 00 00 00 4e ...`；
+  改为显式 ASCII case 表，并修正 `DDR3 SELFTEST...` 长度为 17 字节。位流已构建，待验证。
+- 移除 `core_probe` 的 UART 仲裁（避免干扰 BOOT），文件保留作诊断资产。
+- FTDI 再次掉线；`terminate()` 后仍发生，下一步用 TCL `exit` 自然退出。
+
 ## 2026-10-28 07:40 — 契约流事实与 fc_engine 缺口
 
 - 新增 `tests/test_contract_stream.py`（4 项）：conv 组契约 48 拍、fc 契约 3×COUT 拍，

@@ -570,33 +570,16 @@ module instrec_top (
     );
 
     // ---- UART physical byte layer ----
-    // TX arbitration: the core_clk liveness probe (diagnostic, 16 bytes
-    // after reset) has priority; uart_debug is paused while it transmits.
     wire [7:0] dbg_tx_data;
     wire       dbg_tx_valid;
-    wire       dbg_tx_ready;
-    wire [7:0] cp_tx_data;
-    wire       cp_tx_valid;
-    wire       cp_tx_ready;
-
-    assign dbg_tx_ready = tx_byte_ready & ~cp_tx_valid;
-    assign cp_tx_ready  = tx_byte_ready;
 
     uart_tx u_uart_tx (
         .clk         (core_clk),
         .rst_n       (core_clk_rst_n),
-        .byte_wdata  (cp_tx_valid ? cp_tx_data : dbg_tx_data),
-        .byte_wvalid (cp_tx_valid | dbg_tx_valid),
+        .byte_wdata  (dbg_tx_data),
+        .byte_wvalid (dbg_tx_valid),
         .byte_wready (tx_byte_ready),
         .uart_txd    (uart_tx)
-    );
-
-    core_probe u_core_probe (
-        .clk      (core_clk),
-        .rst_n    (core_clk_rst_n),
-        .tx_valid (cp_tx_valid),
-        .tx_data  (cp_tx_data),
-        .tx_ready (cp_tx_ready)
     );
 
     uart_rx u_uart_rx (
@@ -613,7 +596,7 @@ module instrec_top (
         .rst_n          (core_clk_rst_n),
         .tx_byte_data   (dbg_tx_data),
         .tx_byte_valid  (dbg_tx_valid),
-        .tx_byte_ready  (dbg_tx_ready),
+        .tx_byte_ready  (tx_byte_ready),
         .rx_byte_data   (rx_byte_data),
         .rx_byte_valid  (rx_byte_valid),
         .dbg_line_wdata (8'd0),
