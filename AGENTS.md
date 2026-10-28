@@ -27,8 +27,10 @@
   全链例化；`instrec_top` 已例化 `npu_top`（start/feat 暂置 0），全量构建
   **All Constraints Met，WNS +1.059**，sha256 `07062C4E…`。
 - **NPU 资源实测**：LUT 19522/66600 (29.3%)、DRM 34.5/155 (22.3%)、APM 35/240 (14.6%)。
-- **M3 起步**：新增 `bars_disp`（8 类概率条），尚未并入 `ui_renderer`。
-- **待接**：mel feat 读口、m1 在 `weight_loader` 与 `npu` 间的仲裁、端到端对拍。
+- **M3**：`bars_disp`/`spectrum_disp`/`font_rom`/`ui_overlay`/`bars_data`/
+  `ui_coord_delay`/`feat_page_buf`/`feat_copy_engine` 均单编译通过；
+  `ui_overlay` 已并入 `ui_renderer`，概率条链路已接顶层（WNS +1.443）；spectrum 顶层接线待做。
+- **待接**：spectrum 顶层接线（feat_copy + page_buf + mux）、端到端对拍。
 - **板级阻塞**：FTDI 下载器反复掉线（CP2102 正常）；已停止强杀 `cdt_*`，改用 TCL `exit`。
 
 ## 下一步（按序）
