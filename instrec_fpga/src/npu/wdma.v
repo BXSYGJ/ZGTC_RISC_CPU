@@ -13,11 +13,21 @@
 //     (16 B conv/fc1, 8 B fc2). conv1 is the odd case: 27 taps = 432 B =
 //     13.5 beats, so the last beat contributes one tap.
 //
-// Flow: contract read -> per group {48 contract beats, weight burst(s),
-// tap emit} -> next group. A 16-beat FIFO absorbs the 2:1 rate difference
-// between a 32-byte beat and a 16-byte tap, because the DDR3 IP cannot be
-// back-pressured. w_data/w_valid are held until w_ready (conv/fc only
-// accept during their MAC window).
+// Flow: contract read -> per (row, group) {48 contract beats, weight
+// burst(s), tap emit} -> next (row, group). A 16-beat FIFO absorbs the 2:1
+// rate difference between a 32-byte beat and a 16-byte tap, because the
+// DDR3 IP cannot be back-pressured. w_data/w_valid are held until w_ready
+// (conv/fc only accept during their MAC window).
+//
+// Group walk: conv_engine re-arms the weight window once per (row, group)
+// -- the row pipeline walks H_IN rows and every row scans the same GRP_NUM
+// channel groups, so the walk is grp_total = h_times * grp_num long
+// (conv1 64*3=192, conv2 32*6=192, conv3 16*12=192, conv4 8*16=128).
+// Every (row, group) re-reads the SAME weight group from DDR3 (h_times
+// read amplification). The extra volume is bounded: ~7.6 MB per inference
+// (conv4 alone 8*16*27648 B = 3.5 MB) against a 4 GB/s beat rate at
+// 125 MHz -- under 2 ms of bus time versus ~234 ms of MAC time, so the
+// re-read is acceptable and no weight cache is needed.
 // ---------------------------------------------------------------------------
 
 module wdma (
@@ -54,25 +64,53 @@ module wdma (
 );
 
     // ---- layer geometry ----
+    // h_times    : row repeats of the group table (== H_IN, pad-1 stride-1
+    //              keeps out rows == in rows).
+    // grp_num    : channel groups per row (16 output channels per group).
+    // grp_total  : h_times * grp_num, counted out as (row, group)
+    //              boundaries (explicit literals, no runtime multiply).
+    // group_bytes: taps_per_grp * tap_bytes, the byte span of one group;
+    // grp_beats  : ceil(group_bytes / 32), the beats read per group.
     reg [27:0] wb, bb, mb, sb;
     reg [8:0]  cout;
-    reg [15:0] grp_total, taps_per_grp;
+    reg [15:0] grp_num, grp_total;
+    reg [7:0]  h_times;
+    reg [15:0] taps_per_grp;
     reg [7:0]  tap_bytes;
+    reg [15:0] group_bytes, grp_beats;
 
     always @* begin
         case (layer_id)
             4'd0: begin wb=28'd512;    bb=28'd944;    mb=28'd1136;   sb=28'd1328;
-                         cout=9'd48;  grp_total=16'd3;  taps_per_grp=16'd9;    tap_bytes=8'd16; end
+                         cout=9'd48;  h_times=8'd64; grp_num=16'd3;
+                         grp_total=16'd192;   // 64 * 3
+                         taps_per_grp=16'd9;    tap_bytes=8'd16;
+                         group_bytes=16'd144;  grp_beats=16'd5;    end
             4'd1: begin wb=28'd1376;   bb=28'd42848;  mb=28'd43232;  sb=28'd43616;
-                         cout=9'd96;  grp_total=16'd6;  taps_per_grp=16'd432;  tap_bytes=8'd16; end
+                         cout=9'd96;  h_times=8'd32; grp_num=16'd6;
+                         grp_total=16'd192;   // 32 * 6
+                         taps_per_grp=16'd432;  tap_bytes=8'd16;
+                         group_bytes=16'd6912; grp_beats=16'd216;  end
             4'd2: begin wb=28'd43712;  bb=28'd209600; mb=28'd210368; sb=28'd211136;
-                         cout=9'd192; grp_total=16'd12; taps_per_grp=16'd864;  tap_bytes=8'd16; end
+                         cout=9'd192; h_times=8'd16; grp_num=16'd12;
+                         grp_total=16'd192;   // 16 * 12
+                         taps_per_grp=16'd864;  tap_bytes=8'd16;
+                         group_bytes=16'd13824; grp_beats=16'd432; end
             4'd3: begin wb=28'd211328; bb=28'd653696; mb=28'd654720; sb=28'd655744;
-                         cout=9'd256; grp_total=16'd16; taps_per_grp=16'd1728; tap_bytes=8'd16; end
+                         cout=9'd256; h_times=8'd8;  grp_num=16'd16;
+                         grp_total=16'd128;   // 8 * 16
+                         taps_per_grp=16'd1728; tap_bytes=8'd16;
+                         group_bytes=16'd27648; grp_beats=16'd864; end
             4'd4: begin wb=28'd656000; bb=28'd688768; mb=28'd689280; sb=28'd689792;
-                         cout=9'd128; grp_total=16'd8;  taps_per_grp=16'd256;  tap_bytes=8'd16; end
+                         cout=9'd128; h_times=8'd1;  grp_num=16'd8;
+                         grp_total=16'd8;     // 1 * 8 (fc: one row only)
+                         taps_per_grp=16'd256;  tap_bytes=8'd16;
+                         group_bytes=16'd4096; grp_beats=16'd128;  end
             default: begin wb=28'd689920; bb=28'd690944; mb=28'd690976; sb=28'd691008;
-                         cout=9'd8;  grp_total=16'd1;  taps_per_grp=16'd128;  tap_bytes=8'd8; end
+                         cout=9'd8;   h_times=8'd1;  grp_num=16'd1;
+                         grp_total=16'd1;     // 1 * 1 (fc: one row only)
+                         taps_per_grp=16'd128;  tap_bytes=8'd8;
+                         group_bytes=16'd1024; grp_beats=16'd32;   end
         endcase
     end
 
@@ -103,7 +141,9 @@ module wdma (
 
     // contract emit
     reg [8:0]  c_cnt;
-    reg [15:0] grp_cnt;
+    reg [15:0] grp_cnt;      // 0..grp_total-1: (row, group) walk position
+    reg [4:0]  grp_mod;      // 0..grp_num-1: channel group inside the row
+    reg [27:0] grp_base;     // wb + grp_mod * group_bytes (tracked by add)
 
     // weight stream
     reg [255:0] fifo [0:15];
@@ -121,6 +161,11 @@ module wdma (
     wire [4:0]   chunk = (cfg_beats_left > 16'd16) ? 5'd16 : cfg_beats_left[4:0];
     wire         is_fc = (layer_id >= 4'd4);
     wire [9:0]   cfg_end = is_fc ? ({1'b0, cout} * 10'd3) : 10'd48;
+
+    // Contract RAM index: grp_mod * 16 + lane (no modulo, no divider).
+    wire [8:0]  ctr_idx  = {grp_mod[3:0], 5'd0} + {5'd0, c_cnt[3:0]};
+    wire        ctr_hit  = (ctr_idx < {1'b0, cout});
+    wire [7:0]  ctr_addr = ctr_idx[7:0];
 
     // FIFO write (never back-pressured by the IP).
     always @(posedge clk) begin
@@ -163,6 +208,8 @@ module wdma (
             cfg_idx        <= 9'd0;
             c_cnt          <= 6'd0;
             grp_cnt        <= 16'd0;
+            grp_mod        <= 5'd0;
+            grp_base       <= 28'd0;
             wr_ptr         <= 5'd0;
             rd_ptr         <= 5'd0;
             fifo_cnt       <= 5'd0;
@@ -265,10 +312,12 @@ module wdma (
                         if (cfg_beats_left <= 16'd16) begin
                             c_cnt     <= 9'd0;
                             grp_cnt   <= 16'd0;
+                            grp_mod   <= 5'd0;
+                            grp_base  <= wb;
                             tap_in_grp<= 16'd0;
                             cur_addr  <= wb;
                             taps_left <= taps_per_grp;
-                            beats_left<= (taps_per_grp * tap_bytes + 32'd31) >> 5;
+                            beats_left<= grp_beats;
                             wr_ptr    <= 5'd0;
                             rd_ptr    <= 5'd0;
                             fifo_cnt  <= 5'd0;
@@ -296,19 +345,18 @@ module wdma (
                             shift    <= sram[c_cnt - cout - cout][6:0];
                         end
                     end else begin
-                        // conv contract: 16 bias + 16 M + 16 shift per group.
+                        // conv contract: 16 bias + 16 M + 16 shift per group,
+                        // indexed by the channel group inside the current row
+                        // (grp_mod), NOT by the (row, group) walk counter.
                         if (c_cnt < 9'd16) begin
                             b_valid  <= 1'b1;
-                            bias_s32 <= (grp_cnt * 16 + c_cnt[3:0] < cout)
-                                        ? bram[grp_cnt * 16 + c_cnt[3:0]] : 32'sd0;
+                            bias_s32 <= ctr_hit ? bram[ctr_addr] : 32'sd0;
                         end else if (c_cnt < 9'd32) begin
-                            m_valid  <= 1'b1;
-                            m_s32    <= (grp_cnt * 16 + c_cnt[3:0] < cout)
-                                        ? mram[grp_cnt * 16 + c_cnt[3:0]] : 32'sd0;
+                            m_valid <= 1'b1;
+                            m_s32   <= ctr_hit ? mram[ctr_addr] : 32'sd0;
                         end else begin
-                            s_valid  <= 1'b1;
-                            shift    <= (grp_cnt * 16 + c_cnt[3:0] < cout)
-                                        ? sram[grp_cnt * 16 + c_cnt[3:0]][6:0] : 7'd0;
+                            s_valid <= 1'b1;
+                            shift   <= ctr_hit ? sram[ctr_addr][6:0] : 7'd0;
                         end
                     end
 
@@ -379,11 +427,30 @@ module wdma (
                     if (grp_cnt + 16'd1 == grp_total) begin
                         state <= S_DONE;
                     end else begin
-                        grp_cnt    <= grp_cnt + 16'd1;
+                        grp_cnt <= grp_cnt + 16'd1;
+                        // Next (row, group): grp_mod cycles 0..grp_num-1, and
+                        // the weight base steps by group_bytes inside a row
+                        // (== wb + grp_mod * group_bytes) and snaps back to
+                        // wb on row rollover. Tracked by addition so no
+                        // multiplier/divider is inferred.
+                        if (grp_mod + 5'd1 == grp_num[4:0]) begin
+                            grp_mod  <= 5'd0;
+                            grp_base <= wb;
+                            cur_addr <= wb;
+                        end else begin
+                            grp_mod  <= grp_mod + 5'd1;
+                            grp_base <= grp_base + group_bytes;
+                            cur_addr <= grp_base + group_bytes;
+                        end
                         tap_in_grp <= 16'd0;
                         taps_left  <= taps_per_grp;
-                        beats_left <= (taps_per_grp * tap_bytes + 32'd31) >> 5;
-                        cur_addr   <= cur_addr + (taps_per_grp * tap_bytes + 32'd31) / 32 * 32;
+                        beats_left <= grp_beats;
+                        // Drop the leftover of a partial last beat (conv1:
+                        // 9 taps = 4.5 beats) so the next group's burst starts
+                        // with clean FIFO pointers.
+                        wr_ptr     <= 5'd0;
+                        rd_ptr     <= 5'd0;
+                        fifo_cnt   <= 5'd0;
                         c_cnt      <= 9'd0;
                         state      <= S_GRP;
                     end

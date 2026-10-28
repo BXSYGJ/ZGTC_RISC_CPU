@@ -125,14 +125,84 @@ module npu_top (
                                (layer == L_CONV3) ? conv_grpadv[2] :
                                (layer == L_CONV4) ? conv_grpadv[3] : 1'b0;
     wire [3:0]  conv_wready;
+    wire [1:0]  fc_wready;
     wire [3:0]  conv_grpadv;
     wire [15:0] gap_unused_rdata;
+
+    // Tap-stream back-pressure: the engine that owns the current layer is
+    // the only one whose MAC window may consume w_data. Conv/fc engines all
+    // publish w_ready = (their own MAC window), and exactly one of them runs
+    // per layer, so the layer select below picks the live one. FC layers
+    // reuse conv_wready[0]/[1] (fc1/fc2 drive those two bits); the remaining
+    // layers never stream weights (wdma_start only arms the six weight layers).
+    wire conv_wready_mux = (layer == L_CONV1) ? conv_wready[0] :
+                           (layer == L_CONV2) ? conv_wready[1] :
+                           (layer == L_CONV3) ? conv_wready[2] :
+                           (layer == L_CONV4) ? conv_wready[3] :
+                           (layer == L_FC1)   ? fc_wready[0] :
+                           (layer == L_FC2)   ? fc_wready[1] : 1'b0;
+
+    // -----------------------------------------------------------------------
+    // Weight group cache (wbuf). wdma streams each (row, group) weight group
+    // once; conv_engine needs the same group once per output pixel, so wbuf
+    // holds the group on chip and replays it. tap_num tracks the layer's
+    // tap count (9 / 432 / 864 / 1728 / 256 / 128); the memory depth is
+    // fixed at the deepest group (1728 taps).
+    // -----------------------------------------------------------------------
+    wire [15:0] wbuf_tap_num = (layer == L_CONV1) ? 16'd9    :
+                               (layer == L_CONV2) ? 16'd432  :
+                               (layer == L_CONV3) ? 16'd864  :
+                               (layer == L_CONV4) ? 16'd1728 :
+                               (layer == L_FC1)   ? 16'd256  :
+                               (layer == L_FC2)   ? 16'd128  : 16'd0;
+
+    wire stream_layer = (layer == L_CONV1) || (layer == L_CONV2) ||
+                        (layer == L_CONV3) || (layer == L_CONV4) ||
+                        (layer == L_FC1)   || (layer == L_FC2);
+
+    // Conv layers own one weight group per (row, group) boundary, so wbuf
+    // reloads on the conv group-boundary pulse (grp_advance). fc_engine keeps
+    // a 1:1 group rhythm with wdma, so its reload follows wdma's grp_start.
+    // The layer-start pulse seeds group 0 for both cases.
+    wire wbuf_grp_start = (layer_pulse && stream_layer) ? 1'b1 :
+                          ((layer == L_FC1) || (layer == L_FC2)) ? grp_start :
+                          conv_grp_adv;
+
+    wire         wbuf_ld_ready;
+    wire         wbuf_rd_valid;
+    wire [127:0] wbuf_rd_data;
+    wire         wbuf_load_done;
+    wire         wbuf_load_active;
+
+    // Only wbuf can back-pressure wdma. Non-stream layers (pool/gap/softmax)
+    // release the DMA so its group walk always reaches S_DONE instead of
+    // stalling on a cache that is not loading.
+    wire wdma_w_ready = stream_layer ? wbuf_ld_ready : 1'b1;
+
+    // wdma numbers its layer geometries 0..5 (conv1..conv4, fc1, fc2), which
+    // is NOT the sequencer's layer encoding (0/2/4/6/9/10). Map before the
+    // instantiation so the tap count of one group matches wbuf_tap_num.
+    wire [3:0] wdma_layer_id = (layer == L_CONV1) ? 4'd0 :
+                               (layer == L_CONV2) ? 4'd1 :
+                               (layer == L_CONV3) ? 4'd2 :
+                               (layer == L_CONV4) ? 4'd3 :
+                               (layer == L_FC1)   ? 4'd4 :
+                               (layer == L_FC2)   ? 4'd5 : 4'd0;
+
+    // Only the six weight layers arm the DMA; pool/gap/softmax must not,
+    // otherwise the group walk starts from a geometry that has no consumer.
+    wire wdma_start = layer_pulse && ((layer == L_CONV1) ||
+                                      (layer == L_CONV2) ||
+                                      (layer == L_CONV3) ||
+                                      (layer == L_CONV4) ||
+                                      (layer == L_FC1)   ||
+                                      (layer == L_FC2));
 
     wdma u_wdma (
         .clk          (clk),
         .rst_n        (rst_n),
-        .start        (layer_pulse && (layer <= L_FC2)),
-        .layer_id     (layer),
+        .start        (wdma_start),
+        .layer_id     (wdma_layer_id),
         .rd_cmd_valid (rd_cmd_valid),
         .rd_cmd       (rd_cmd),
         .rd_ready     (rd_ready),
@@ -141,7 +211,7 @@ module npu_top (
         .rd_done      (rd_done),
         .w_valid      (w_valid),
         .w_data       (w_data),
-        .w_ready      (1'b1),
+        .w_ready      (wdma_w_ready),
         .grp_advance  (conv_grp_adv),
         .grp_start    (grp_start),
         .b_valid      (wl_b_valid), .bias_s32 (wl_bias),
@@ -149,6 +219,24 @@ module npu_top (
         .s_valid      (wl_s_valid), .shift    (wl_shift),
         .busy         (wdma_busy),
         .done         (wdma_done)
+    );
+
+    // Shared weight group cache: exactly one conv/fc engine streams weights
+    // per layer, so a single cache serves all six weight consumers. The
+    // replay side is flow-controlled by the active engine's w_ready.
+    wbuf u_wbuf (
+        .clk         (clk),
+        .rst_n       (rst_n),
+        .grp_start   (wbuf_grp_start),
+        .tap_num     (wbuf_tap_num),
+        .ld_valid    (w_valid),
+        .ld_data     (w_data),
+        .ld_ready    (wbuf_ld_ready),
+        .rd_valid    (wbuf_rd_valid),
+        .rd_data     (wbuf_rd_data),
+        .rd_ready    (conv_wready_mux),
+        .load_active (wbuf_load_active),
+        .load_done   (wbuf_load_done)
     );
 
     // Feature replay: 64x258 uint8 stream read from mel_engine.
@@ -183,7 +271,7 @@ module npu_top (
         .bias_valid(cb1), .bias_s32(wl_bias),
         .mult_valid(cm1), .m_s32(wl_m),
         .shft_valid(cs1), .shift(wl_shift),
-        .w_valid(w_valid), .w_data(w_data), .w_ready(conv_wready[0]),
+        .w_valid(wbuf_rd_valid), .w_data(wbuf_rd_data), .w_ready(conv_wready[0]),
         .y_valid(c1_v), .y_u8(c1_d), .grp_advance(conv_grpadv[0])
     );
 
@@ -202,7 +290,7 @@ module npu_top (
         .bias_valid(cb2), .bias_s32(wl_bias),
         .mult_valid(cm2), .m_s32(wl_m),
         .shft_valid(cs2), .shift(wl_shift),
-        .w_valid(w_valid), .w_data(w_data), .w_ready(conv_wready[1]),
+        .w_valid(wbuf_rd_valid), .w_data(wbuf_rd_data), .w_ready(conv_wready[1]),
         .y_valid(c2_v), .y_u8(c2_d), .grp_advance(conv_grpadv[1])
     );
 
@@ -221,7 +309,7 @@ module npu_top (
         .bias_valid(cb3), .bias_s32(wl_bias),
         .mult_valid(cm3), .m_s32(wl_m),
         .shft_valid(cs3), .shift(wl_shift),
-        .w_valid(w_valid), .w_data(w_data), .w_ready(conv_wready[2]),
+        .w_valid(wbuf_rd_valid), .w_data(wbuf_rd_data), .w_ready(conv_wready[2]),
         .y_valid(c3_v), .y_u8(c3_d), .grp_advance(conv_grpadv[2])
     );
 
@@ -240,7 +328,7 @@ module npu_top (
         .bias_valid(cb4), .bias_s32(wl_bias),
         .mult_valid(cm4), .m_s32(wl_m),
         .shft_valid(cs4), .shift(wl_shift),
-        .w_valid(w_valid), .w_data(w_data), .w_ready(conv_wready[3]),
+        .w_valid(wbuf_rd_valid), .w_data(wbuf_rd_data), .w_ready(conv_wready[3]),
         .y_valid(c4_v), .y_u8(c4_d), .grp_advance(conv_grpadv[3])
     );
 
@@ -294,7 +382,7 @@ module npu_top (
     fc_engine #(.CIN(256), .COUT(128), .ZP_IN(8'd0), .ZP_OUT(8'd0)) u_fc1 (
         .clk(clk), .rst_n(rst_n), .layer_start(fc1_start),
         .x_valid(fc1_x_valid), .x_s16(fc1_x_s16),
-        .w_valid(w_valid), .w_data(w_data), .w_ready(conv_wready[0]),
+        .w_valid(wbuf_rd_valid), .w_data(wbuf_rd_data), .w_ready(fc_wready[0]),
         .b_valid(fb1), .bias_s32(wl_bias), .m_valid(fm1), .m_s32(wl_m),
         .s_valid(fs1), .shift(wl_shift),
         .y_valid(fc1_y_valid), .y_u8(fc1_y), .done(fc1_done)
@@ -303,7 +391,7 @@ module npu_top (
     fc_engine #(.CIN(128), .COUT(16), .ZP_IN(8'd0), .ZP_OUT(8'd57)) u_fc2 (
         .clk(clk), .rst_n(rst_n), .layer_start(fc2_start),
         .x_valid(fc1_y_valid), .x_s16({8'd0, fc1_y}),
-        .w_valid(w_valid), .w_data(w_data), .w_ready(conv_wready[1]),
+        .w_valid(wbuf_rd_valid), .w_data(wbuf_rd_data), .w_ready(fc_wready[1]),
         .b_valid(fb2), .bias_s32(wl_bias), .m_valid(fm2), .m_s32(wl_m),
         .s_valid(fs2), .shift(wl_shift),
         .y_valid(fc2_y_valid), .y_u8(fc2_y), .done(fc2_done)

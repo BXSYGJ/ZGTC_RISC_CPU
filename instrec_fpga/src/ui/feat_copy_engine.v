@@ -34,12 +34,14 @@ module feat_copy_engine (
     reg [14:0] idx;
     reg [14:0] idx_q;
     reg        run;
+    reg        fin;       // last byte written; flip page on the next beat
 
     always @(posedge core_clk or negedge core_rst_n) begin
         if (!core_rst_n) begin
             idx      <= 15'd0;
             idx_q    <= 15'd0;
             run      <= 1'b0;
+            fin      <= 1'b0;
             src_addr <= 15'd0;
             src_en   <= 1'b0;
             dst_addr <= 15'd0;
@@ -69,14 +71,21 @@ module feat_copy_engine (
                 end
 
                 if (idx == DEPTH) begin
-                    run      <= 1'b0;
-                    src_en   <= 1'b0;
-                    dst_page <= ~dst_page;
-                    done     <= 1'b1;
+                    // The final byte is written on THIS beat; flip the page
+                    // one beat later so it lands in the completed page.
+                    fin    <= 1'b1;
+                    src_en <= 1'b0;
                 end else begin
                     idx      <= idx + 15'd1;
                     src_addr <= idx + 15'd1;
                     src_en   <= ((idx + 15'd1) < DEPTH);
+                end
+
+                if (fin && idx == DEPTH) begin
+                    run      <= 1'b0;
+                    fin      <= 1'b0;
+                    dst_page <= ~dst_page;
+                    done     <= 1'b1;
                 end
             end
         end
