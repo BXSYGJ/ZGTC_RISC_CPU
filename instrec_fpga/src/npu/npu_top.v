@@ -92,6 +92,24 @@ module npu_top (
     wire [127:0] w_data;
     wire        grp_start;
     wire        wdma_done;
+    wire        wl_b_valid, wl_m_valid, wl_s_valid;
+    wire signed [31:0] wl_bias, wl_m;
+    wire [6:0]  wl_shift;
+
+    // Only the conv instance owning the current layer may consume the
+    // 48-beat contract; all four share the same data bus.
+    wire cb1 = wl_b_valid && (layer == L_CONV1);
+    wire cm1 = wl_m_valid && (layer == L_CONV1);
+    wire cs1 = wl_s_valid && (layer == L_CONV1);
+    wire cb2 = wl_b_valid && (layer == L_CONV2);
+    wire cm2 = wl_m_valid && (layer == L_CONV2);
+    wire cs2 = wl_s_valid && (layer == L_CONV2);
+    wire cb3 = wl_b_valid && (layer == L_CONV3);
+    wire cm3 = wl_m_valid && (layer == L_CONV3);
+    wire cs3 = wl_s_valid && (layer == L_CONV3);
+    wire cb4 = wl_b_valid && (layer == L_CONV4);
+    wire cm4 = wl_m_valid && (layer == L_CONV4);
+    wire cs4 = wl_s_valid && (layer == L_CONV4);
     wire        wdma_busy;
     wire [3:0]  conv_wready;
     wire [3:0]  conv_grpadv;
@@ -112,6 +130,9 @@ module npu_top (
         .w_data       (w_data),
         .w_ready      (1'b1),
         .grp_start    (grp_start),
+        .b_valid      (wl_b_valid), .bias_s32 (wl_bias),
+        .m_valid      (wl_m_valid), .m_s32    (wl_m),
+        .s_valid      (wl_s_valid), .shift    (wl_shift),
         .busy         (wdma_busy),
         .done         (wdma_done)
     );
@@ -122,9 +143,9 @@ module npu_top (
         .layer_start(conv1_start), .layer_done(conv1_done),
         .x_valid(feat_valid), .x_u8(feat_u8),
         .grp_start(grp_start),
-        .bias_valid(1'b0), .bias_s32(32'sd0),
-        .mult_valid(1'b0), .m_s32(32'sd0),
-        .shft_valid(1'b0), .shift(7'd0),
+        .bias_valid(cb1), .bias_s32(wl_bias),
+        .mult_valid(cm1), .m_s32(wl_m),
+        .shft_valid(cs1), .shift(wl_shift),
         .w_valid(w_valid), .w_data(w_data), .w_ready(conv_wready[0]),
         .y_valid(c1_v), .y_u8(c1_d), .grp_advance(conv_grpadv[0])
     );
@@ -141,9 +162,9 @@ module npu_top (
         .layer_start(conv2_start), .layer_done(conv2_done),
         .x_valid(p1_v), .x_u8(p1_d),
         .grp_start(grp_start),
-        .bias_valid(1'b0), .bias_s32(32'sd0),
-        .mult_valid(1'b0), .m_s32(32'sd0),
-        .shft_valid(1'b0), .shift(7'd0),
+        .bias_valid(cb2), .bias_s32(wl_bias),
+        .mult_valid(cm2), .m_s32(wl_m),
+        .shft_valid(cs2), .shift(wl_shift),
         .w_valid(w_valid), .w_data(w_data), .w_ready(conv_wready[1]),
         .y_valid(c2_v), .y_u8(c2_d), .grp_advance(conv_grpadv[1])
     );
@@ -160,9 +181,9 @@ module npu_top (
         .layer_start(conv3_start), .layer_done(conv3_done),
         .x_valid(p2_v), .x_u8(p2_d),
         .grp_start(grp_start),
-        .bias_valid(1'b0), .bias_s32(32'sd0),
-        .mult_valid(1'b0), .m_s32(32'sd0),
-        .shft_valid(1'b0), .shift(7'd0),
+        .bias_valid(cb3), .bias_s32(wl_bias),
+        .mult_valid(cm3), .m_s32(wl_m),
+        .shft_valid(cs3), .shift(wl_shift),
         .w_valid(w_valid), .w_data(w_data), .w_ready(conv_wready[2]),
         .y_valid(c3_v), .y_u8(c3_d), .grp_advance(conv_grpadv[2])
     );
@@ -179,9 +200,9 @@ module npu_top (
         .layer_start(conv4_start), .layer_done(conv4_done),
         .x_valid(p3_v), .x_u8(p3_d),
         .grp_start(grp_start),
-        .bias_valid(1'b0), .bias_s32(32'sd0),
-        .mult_valid(1'b0), .m_s32(32'sd0),
-        .shft_valid(1'b0), .shift(7'd0),
+        .bias_valid(cb4), .bias_s32(wl_bias),
+        .mult_valid(cm4), .m_s32(wl_m),
+        .shft_valid(cs4), .shift(wl_shift),
         .w_valid(w_valid), .w_data(w_data), .w_ready(conv_wready[3]),
         .y_valid(c4_v), .y_u8(c4_d), .grp_advance(conv_grpadv[3])
     );
