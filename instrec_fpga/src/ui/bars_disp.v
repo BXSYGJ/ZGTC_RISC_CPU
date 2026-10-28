@@ -45,14 +45,19 @@ module bars_disp (
 
     wire in_region = (y >= Y0) && (dy < (PITCH * 8)) && (x >= X0) && (dx < W);
 
-    // Exact slot: dy / (BH+GAP), with dy < 224 so a small divider is fine.
+    // Exact slot = dy / 28 for dy < 224. A descending loop without a break
+    // would be overwritten by the d=0 iteration (measured: slot always 0),
+    // so use an explicit priority chain.
     reg [2:0] slot;
-    integer d;
     always @* begin
-        slot = 3'd0;
-        for (d = 7; d >= 0; d = d - 1) begin
-            if (dy >= d * (BH + GAP)) slot = d[2:0];
-        end
+        if      (dy >= 11'd196) slot = 3'd7;
+        else if (dy >= 11'd168) slot = 3'd6;
+        else if (dy >= 11'd140) slot = 3'd5;
+        else if (dy >= 11'd112) slot = 3'd4;
+        else if (dy >= 11'd84)  slot = 3'd3;
+        else if (dy >= 11'd56)  slot = 3'd2;
+        else if (dy >= 11'd28)  slot = 3'd1;
+        else                    slot = 3'd0;
     end
 
     reg [7:0] pct;

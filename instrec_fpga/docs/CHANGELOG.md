@@ -3,6 +3,12 @@
 > 每次会话结束前追加一条：时间、做了什么、结论、证据路径。倒序，最新在上。
 > 状态汇总见 `docs/STATUS.md`。
 
+## 2026-10-29 10:35 — bars 槽位 bug 修复
+
+- `bars_disp` 的槽位循环无 break，d=0 恒满足，实测 slot 永远 0；改为 if-else 优先链。
+- 新增 `tests/test_ui_model.py`（7 项）：bars 长度/槽位、谱坐标/地址、字库尺寸。
+- 全量 121 passed；构建 WNS +1.616 / WHS +0.245。
+
 ## 2026-10-29 09:15 — 谱图链路接入顶层
 
 - `instrec_top` 串联 `feat_copy_engine` → `feat_page_buf` → `spectrum_disp` → `ui_renderer`；
