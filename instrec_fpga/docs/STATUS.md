@@ -1,7 +1,7 @@
 # InstRec-FPGA 当前状态（STATUS）
 
 > 本文件是**唯一实时状态源**，优先于任何交接快照与记忆。每次会话结束前必须更新，
-> 并在 `CHANGELOG.md` 追加一条。最后更新：2026-10-28 05:15。
+> 并在 `CHANGELOG.md` 追加一条。最后更新：2026-10-28 06:30。
 
 ## 一句话
 
@@ -59,7 +59,10 @@ InstRec 8 类乐器识别（INT8 CNN）正在移植到盘古 100Pro+（PG2L100H-
   组合 round-half-up 除法、top1/percent），单编译通过；`tests/test_softmax_model.py` 5 项通过。
 - `wdma.v` 初版落盘：整层权重按 32B beat 连续读（AXI burst ≤16）、16 深 FIFO 吸收
   2:1 速率差、16B/8B tap 切分、`w_ready` 反压握手、组边界脉冲；PDS 单编译通过。
-  **尚未仿真/板级验证**；bias/M/shift 契约流与 npu_top 接入仍未做。
+  **尚未仿真/板级验证**。
+- `npu_top.v` 整合骨架：conv1→pool1→conv2→pool2→conv3→pool3→conv4→pool4→gap→fc1→fc2→softmax
+  全链例化，层序列、GAP 结果缓存与 fc1 回放、fc2→logits 总线已接；**唯一缺口是 48 拍
+  bias/M/shift 契约流（conv/fc 均 tie-off）**，因此尚不具备端到端功能。PDS 编译通过。
 - 布局事实（`tests/test_wdma_layout.py`、`test_wdma_stream_model.py`，9 项通过）：
   所有层权重区 32B 对齐；conv1 每组 144B（27 tap）尾部仅 1 tap；fc2 tap 为 8B/4 个每 beat。
 
@@ -71,7 +74,7 @@ InstRec 8 类乐器识别（INT8 CNN）正在移植到盘古 100Pro+（PG2L100H-
 
 ## 验证基线
 
-- `python -m pytest -q` → **102 passed**（约 46 s）。
+- `python -m pytest -q` → **102 passed**（约 53 s）。
 - `python scripts/check_rtl.py` → **34 个 .v，0 violation**（hdmi demo 默认排除）。
 - 数值对拍只认 `scripts/golden_pipeline.py`；torch 2.14.1 的 oneDNN 有 21~67 LSB tile 噪声。
 - 本机无 WSL 仿真（Ubuntu 发行版 vhdx 缺失），RTL 行为只能靠 Python 对拍 + 板级实测。

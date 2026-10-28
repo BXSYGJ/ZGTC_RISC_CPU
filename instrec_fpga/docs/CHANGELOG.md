@@ -3,6 +3,14 @@
 > 每次会话结束前追加一条：时间、做了什么、结论、证据路径。倒序，最新在上。
 > 状态汇总见 `docs/STATUS.md`。
 
+## 2026-10-28 06:30 — npu_top 数据通路整合
+
+- `npu_top.v` 全链例化：conv1→pool1→…→conv4→pool4→gap→fc1→fc2→softmax，
+  层序列、GAP 结果缓存/回放、fc2→logits 总线完成；PDS 编译通过。
+- 唯一缺口：48 拍 bias/M/shift 契约流（conv/fc 均 tie-off），端到端功能尚未成立。
+- 修正空端口 `.port()` 与 output reg 连实例输出的两处 SV-2012/PDS 报错。
+- 全量 102 passed；check_rtl 34 个 .v、0 violation。
+
 ## 2026-10-28 05:15 — wdma 初版与镜像布局验证
 
 - 新增 `tests/test_wdma_layout.py`（4 项）与 `tests/test_wdma_stream_model.py`（5 项）：
