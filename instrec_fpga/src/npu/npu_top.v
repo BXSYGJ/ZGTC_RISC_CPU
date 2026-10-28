@@ -264,7 +264,7 @@ module npu_top (
 
     conv_engine #(.CIN(1), .COUT(48), .H_IN(64), .W_IN(258)) u_conv1 (
         .clk(clk), .rst_n(rst_n),
-        .cfg_valid(1'b0), .cfg_zp_in(8'd49), .cfg_zp_out(8'd0),
+        .cfg_valid(1'b1), .cfg_zp_in(8'd49), .cfg_zp_out(8'd0),
         .layer_start(conv1_start), .layer_done(conv1_done),
         .x_valid(feat_dv), .x_u8(feat_rd_data),
         .grp_start(grp_start),
@@ -388,7 +388,7 @@ module npu_top (
         .y_valid(fc1_y_valid), .y_u8(fc1_y), .done(fc1_done)
     );
 
-    fc_engine #(.CIN(128), .COUT(16), .ZP_IN(8'd0), .ZP_OUT(8'd57)) u_fc2 (
+    fc_engine #(.CIN(128), .COUT(8), .ZP_IN(8'd0), .ZP_OUT(8'd57)) u_fc2 (
         .clk(clk), .rst_n(rst_n), .layer_start(fc2_start),
         .x_valid(fc1_y_valid), .x_s16({8'd0, fc1_y}),
         .w_valid(wbuf_rd_valid), .w_data(wbuf_rd_data), .w_ready(fc_wready[1]),

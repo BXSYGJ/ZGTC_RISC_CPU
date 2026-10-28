@@ -109,6 +109,22 @@ module softmax_top #(
     wire signed [31:0] l6 = $signed(logits[223:192]);
     wire signed [31:0] l7 = $signed(logits[255:224]);
 
+    // round_half_even(pq * 100 / 65536)
+    function [7:0] pct_rhe;
+        input [15:0] p;
+        reg [31:0] prod;
+        reg [31:0] q;
+        reg [31:0] rem;
+        begin
+            prod = {16'd0, p} * 32'd100;
+            q    = prod >> 16;
+            rem  = prod & 32'hFFFF;
+            if (rem > 32'd32768 || (rem == 32'd32768 && q[0]))
+                q = q + 32'd1;
+            pct_rhe = (q > 32'd100) ? 8'd100 : q[7:0];
+        end
+    endfunction
+
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
             state     <= S_IDLE;
@@ -172,7 +188,10 @@ module softmax_top #(
                 S_OUT: begin
                     out_valid <= 1'b1;
                     out_q16   <= pq[lane];
-                    out_pct   <= (pq[lane] * 16'd100 + 16'd32768) >> 16;
+                    // Percent uses round-half-to-even to match golden's
+                    // np.rint; a plain +32768 shift is round-half-up and
+                    // differs on exact ties (e.g. pq=8192 -> 12, not 13).
+                    out_pct   <= pct_rhe(pq[lane]);
                     out_idx   <= lane;
                     if (pq[lane] > best_p) begin
                         best_p <= pq[lane];
