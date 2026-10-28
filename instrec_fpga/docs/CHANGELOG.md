@@ -3,6 +3,12 @@
 > 每次会话结束前追加一条：时间、做了什么、结论、证据路径。倒序，最新在上。
 > 状态汇总见 `docs/STATUS.md`。
 
+## 2026-10-28 21:45 — npu_top 顶层例化
+
+- `instrec_top` 例化 `npu_top`（start/feat 置 0），顶层拓扑定型。
+- 全量构建 All Constraints Met，WNS +1.059 / WHS +0.248，sha256 `07062C4E…`；耗时 19 分钟。
+- 待接：mel feat 读口、m1 在 weight_loader/npu 间的仲裁。
+
 ## 2026-10-28 20:35 — NPU 资源实测
 
 - 用只暴露 clk/rst/start/din 的 wrapper 对 `npu_top` 做 synthesize+dev_map（避免 DRC-0018 全端口绑定）：

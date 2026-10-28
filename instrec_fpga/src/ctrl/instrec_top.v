@@ -633,6 +633,40 @@ module instrec_top (
         .digest      (wl_digest_unused)
     );
 
+    // ---- NPU top (T-M2-06): instantiated but gated off until the mel
+    // feat read port and m1 arbitration are finalized. Keeping the instance
+    // here fixes the top-level topology and lets PDS elaborate the chain.
+    wire        npu_busy_u, npu_done_u, npu_timeout_u;
+    wire [31:0] npu_cycles_u;
+    wire        npu_rd_cmd_valid_u;
+    wire [36:0] npu_rd_cmd_u;
+    wire        npu_probs_valid_u;
+    wire [7:0]  npu_probs_pct_u;
+    wire [3:0]  npu_probs_idx_u;
+    wire [3:0]  npu_top1_u;
+
+    npu_top u_npu (
+        .clk          (core_clk),
+        .rst_n        (core_clk_rst_n),
+        .start        (1'b0),
+        .busy         (npu_busy_u),
+        .done         (npu_done_u),
+        .npu_cycles   (npu_cycles_u),
+        .timeout_flag (npu_timeout_u),
+        .feat_valid   (1'b0),
+        .feat_u8      (8'd0),
+        .rd_cmd_valid (npu_rd_cmd_valid_u),
+        .rd_cmd       (npu_rd_cmd_u),
+        .rd_ready     (1'b0),
+        .rd_data      (256'd0),
+        .rd_valid     (1'b0),
+        .rd_done      (1'b0),
+        .probs_valid  (npu_probs_valid_u),
+        .probs_pct    (npu_probs_pct_u),
+        .probs_idx    (npu_probs_idx_u),
+        .top1         (npu_top1_u)
+    );
+
     // ---- Debug line formatter (M0: status lines only, no text writer) ----
     uart_debug u_uart_debug (
         .clk            (core_clk),
