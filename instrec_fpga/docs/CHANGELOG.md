@@ -3,6 +3,13 @@
 > 每次会话结束前追加一条：时间、做了什么、结论、证据路径。倒序，最新在上。
 > 状态汇总见 `docs/STATUS.md`。
 
+## 2026-10-28 23:40 — mel feat 读口接通
+
+- `npu_top` 改为 feat 地址/数据接口（地址 0..16511，数据 1 拍后有效）；
+  `instrec_top` 删除 `mel_feat_rd_addr` 的 tie-off 并连接 mel_engine。
+- 全量构建 All Constraints Met，WNS +1.361 / WHS +0.157，sha256 `895E4F43…`。
+- 待接：m1 在 weight_loader 与 npu 间的仲裁、sys_ctrl 触发 npu.start。
+
 ## 2026-10-28 21:45 — npu_top 顶层例化
 
 - `instrec_top` 例化 `npu_top`（start/feat 置 0），顶层拓扑定型。

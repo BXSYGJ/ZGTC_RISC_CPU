@@ -364,10 +364,8 @@ module instrec_top (
         .busy          (mel_busy)
     );
 
-    // T-M2 alignment point: the NPU will drive feat_rd_addr and consume
-    // npu_start/feat_rd_data; until then the read address is parked at 0
-    // (single-cycle synchronous read, no side effects).
-    assign mel_feat_rd_addr = 15'd0;
+    // The NPU drives mel_feat_rd_addr and consumes the synchronous read
+    // data one cycle later.
 
     // ---- HDMI transmitter front end (GPLL_B + I2C config + pads) ----
     hdmi_tx_if u_hdmi_tx_if (
@@ -644,6 +642,7 @@ module instrec_top (
     wire [7:0]  npu_probs_pct_u;
     wire [3:0]  npu_probs_idx_u;
     wire [3:0]  npu_top1_u;
+    wire        npu_feat_rd_en_u;
 
     npu_top u_npu (
         .clk          (core_clk),
@@ -653,8 +652,9 @@ module instrec_top (
         .done         (npu_done_u),
         .npu_cycles   (npu_cycles_u),
         .timeout_flag (npu_timeout_u),
-        .feat_valid   (1'b0),
-        .feat_u8      (8'd0),
+        .feat_rd_addr (mel_feat_rd_addr),
+        .feat_rd_data (mel_feat_rd_data),
+        .feat_rd_en   (npu_feat_rd_en_u),
         .rd_cmd_valid (npu_rd_cmd_valid_u),
         .rd_cmd       (npu_rd_cmd_u),
         .rd_ready     (1'b0),

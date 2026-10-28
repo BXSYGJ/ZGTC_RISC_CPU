@@ -28,8 +28,11 @@ module npu_top (
     output reg  [31:0] npu_cycles,
     output reg         timeout_flag,
 
-    input  wire        feat_valid,
-    input  wire [7:0]  feat_u8,
+    // Mel feature read port: address now, data next cycle (mel_engine's
+    // bank is a 1-cycle synchronous read).
+    output wire [14:0] feat_rd_addr,
+    input  wire [7:0]  feat_rd_data,
+    output wire        feat_rd_en,
 
     output wire        rd_cmd_valid,
     output wire [36:0] rd_cmd,
@@ -143,11 +146,34 @@ module npu_top (
         .done         (wdma_done)
     );
 
+    // Feature replay: 64x258 uint8 stream read from mel_engine.
+    reg [14:0] feat_addr;
+    reg        feat_run, feat_dv;
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            feat_addr <= 15'd0;
+            feat_run  <= 1'b0;
+            feat_dv   <= 1'b0;
+        end else if (conv1_start) begin
+            feat_addr <= 15'd0;
+            feat_run  <= 1'b1;
+            feat_dv   <= 1'b0;
+        end else if (feat_run) begin
+            feat_dv <= 1'b1;
+            if (feat_addr == 15'd16511) feat_run <= 1'b0;
+            else                        feat_addr <= feat_addr + 15'd1;
+        end else begin
+            feat_dv <= 1'b0;
+        end
+    end
+    assign feat_rd_addr = feat_addr;
+    assign feat_rd_en   = feat_run;
+
     conv_engine #(.CIN(1), .COUT(48), .H_IN(64), .W_IN(258)) u_conv1 (
         .clk(clk), .rst_n(rst_n),
         .cfg_valid(1'b0), .cfg_zp_in(8'd49), .cfg_zp_out(8'd0),
         .layer_start(conv1_start), .layer_done(conv1_done),
-        .x_valid(feat_valid), .x_u8(feat_u8),
+        .x_valid(feat_dv), .x_u8(feat_rd_data),
         .grp_start(grp_start),
         .bias_valid(cb1), .bias_s32(wl_bias),
         .mult_valid(cm1), .m_s32(wl_m),

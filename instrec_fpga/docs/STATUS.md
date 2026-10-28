@@ -1,7 +1,7 @@
 # InstRec-FPGA 当前状态（STATUS）
 
 > 本文件是**唯一实时状态源**，优先于任何交接快照与记忆。每次会话结束前必须更新，
-> 并在 `CHANGELOG.md` 追加一条。最后更新：2026-10-28 21:45。
+> 并在 `CHANGELOG.md` 追加一条。最后更新：2026-10-28 23:40。
 
 ## 一句话
 
@@ -82,7 +82,9 @@ InstRec 8 类乐器识别（INT8 CNN）正在移植到盘古 100Pro+（PG2L100H-
   叠加 M0/M1 现有约 16K LUT，整机预计 ≈55% LUT、≈50% DRM。
 - `instrec_top` 已例化 `npu_top`（`start/feat` 暂置 0，不改变 M1 行为），全量构建
   **All Constraints Met，WNS +1.059 / WHS +0.248**，sha256 `07062C4E…`。
-- 仍缺：mel feat 读口、m1 在 weight_loader 与 npu 间的仲裁、端到端仿真/板级对拍。
+- mel feat 读口已接：`npu_top` 输出 `feat_rd_addr`、消费 `feat_rd_data`（1 拍同步读），
+  顶层删除原 tie-off；全量构建 **WNS +1.361 / WHS +0.157**，sha256 `895E4F43…`。
+- 仍缺：m1 在 `weight_loader` 与 `npu` 间的仲裁、`sys_ctrl` 触发 `npu.start`、端到端对拍。
 - **weight_loader 已接入 `instrec_top`**：UART 字节共用、TX 仲裁（加载优先）、m1 写/读通道、
   `weight_ok/weight_err` 接 `sys_ctrl`；`REQUIRE_WEIGHT=0` 保持 M1 链路不被阻塞。
   全量构建成功（15 分钟，比 M1 多约 3 分钟，资源增加）。
