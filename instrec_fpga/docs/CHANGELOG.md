@@ -3,6 +3,12 @@
 > 每次会话结束前追加一条：时间、做了什么、结论、证据路径。倒序，最新在上。
 > 状态汇总见 `docs/STATUS.md`。
 
+## 2026-10-29 12:40 — grp_advance 回接
+
+- 4 个 conv 的 grp_advance 按层 mux 后送入 wdma；wdma 组切换等待该脉冲（放弃预取）。
+- 全量构建 All Constraints Met，WNS +1.339 / WHS +0.201。
+- 剩余风险：等待可能死锁（脉冲早于 S_NEXT），需板级/仿真确认。
+
 ## 2026-10-29 11:35 — 审查记录：grp_advance 未回接
 
 - 代码审查发现 `conv_engine.grp_advance` 未送入 wdma，组契约预取时机可能与 conv 的组边界错位。

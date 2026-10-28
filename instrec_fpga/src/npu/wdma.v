@@ -37,6 +37,7 @@ module wdma (
     output reg          w_valid,
     output reg  [127:0] w_data,
     input  wire         w_ready,
+    input  wire         grp_advance,   // conv finished the current group
 
     output reg          grp_start,
 
@@ -373,7 +374,7 @@ module wdma (
                 S_NEXT: begin
                     if (grp_cnt + 16'd1 == grp_total) begin
                         state <= S_DONE;
-                    end else begin
+                    end else if (grp_advance) begin
                         grp_cnt    <= grp_cnt + 16'd1;
                         tap_in_grp <= 16'd0;
                         taps_left  <= taps_per_grp;

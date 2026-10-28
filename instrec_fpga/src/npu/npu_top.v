@@ -120,6 +120,10 @@ module npu_top (
     wire fm2 = wl_m_valid && (layer == L_FC2);
     wire fs2 = wl_s_valid && (layer == L_FC2);
     wire        wdma_busy;
+    wire        conv_grp_adv = (layer == L_CONV1) ? conv_grpadv[0] :
+                               (layer == L_CONV2) ? conv_grpadv[1] :
+                               (layer == L_CONV3) ? conv_grpadv[2] :
+                               (layer == L_CONV4) ? conv_grpadv[3] : 1'b0;
     wire [3:0]  conv_wready;
     wire [3:0]  conv_grpadv;
     wire [15:0] gap_unused_rdata;
@@ -138,6 +142,7 @@ module npu_top (
         .w_valid      (w_valid),
         .w_data       (w_data),
         .w_ready      (1'b1),
+        .grp_advance  (conv_grp_adv),
         .grp_start    (grp_start),
         .b_valid      (wl_b_valid), .bias_s32 (wl_bias),
         .m_valid      (wl_m_valid), .m_s32    (wl_m),
