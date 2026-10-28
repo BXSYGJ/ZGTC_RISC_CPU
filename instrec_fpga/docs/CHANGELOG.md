@@ -3,6 +3,11 @@
 > 每次会话结束前追加一条：时间、做了什么、结论、证据路径。倒序，最新在上。
 > 状态汇总见 `docs/STATUS.md`。
 
+## 2026-10-29 05:00 — 概率数据跨域
+
+- 新增 `bars_data.v`：core 域锁存 8 类百分比，pix 域两级同步，
+  3 s 窗口更新率下允许瞬时混值。单编译通过。
+
 ## 2026-10-29 04:25 — ui_overlay 并回 ui_renderer
 
 - `ui_renderer` 例化 `ui_overlay`，de/hs/vs 延迟由 3 拍改为 4 拍；顶层 spec/bars 暂 tie-off。
