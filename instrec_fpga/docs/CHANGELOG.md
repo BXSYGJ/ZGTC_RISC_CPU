@@ -3,6 +3,13 @@
 > 每次会话结束前追加一条：时间、做了什么、结论、证据路径。倒序，最新在上。
 > 状态汇总见 `docs/STATUS.md`。
 
+## 2026-10-29 03:00 — M3 字库
+
+- `scripts/gen_font_hex.py` 用 Consolas 渲染 95 个 ASCII 字符为 8×16 点阵
+  （1520 字节），输出 `src/ui/font8x16.hex`。
+- 新增 `font_rom.v`（同步读），单编译通过；`build_full.tcl` 增加 `src/ui/*.hex` 的
+  work_dir 复制。
+
 ## 2026-10-29 02:25 — M3 谱图模块
 
 - 新增 `spectrum_disp.v`：258x64 Mel 页映射到 512x256 窗口（col=x*258>>9、

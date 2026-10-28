@@ -71,6 +71,11 @@ file mkdir [file join "__BUILD_ROOT__" src mel]
 foreach melhex [lsort [glob -nocomplain [file join "__PROJECT_ROOT__" src mel *.hex]]] {
     file copy -force $melhex [file join "__BUILD_ROOT__" src mel]
 }
+# UI font ROM (M3) uses the same work_dir-relative $readmemh prefix.
+file mkdir [file join "__BUILD_ROOT__" src ui]
+foreach uihex [lsort [glob -nocomplain [file join "__PROJECT_ROOT__" src ui *.hex]]] {
+    file copy -force $uihex [file join "__BUILD_ROOT__" src ui]
+}
 
 # ---- Constraints ----
 add_constraint "__PROJECT_ROOT__/constraints/instrec_top.fdc"
