@@ -3,6 +3,11 @@
 > 每次会话结束前追加一条：时间、做了什么、结论、证据路径。倒序，最新在上。
 > 状态汇总见 `docs/STATUS.md`。
 
+## 2026-10-28 15:30 — M3 概率条模块
+
+- 新增 `src/ui/bars_disp.v`：8 类概率条，pct*4 定长、slot 内偏移、按类取色；
+  单编译通过，尚未并入 `ui_renderer` 的 3 拍流水。
+
 ## 2026-10-28 14:40 — requant 位级判据
 
 - 新增 `tests/test_requant_model.py`（5 项）：正/负 exact-half 归偶、截断反例、
