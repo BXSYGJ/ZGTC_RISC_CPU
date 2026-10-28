@@ -3,6 +3,13 @@
 > 每次会话结束前追加一条：时间、做了什么、结论、证据路径。倒序，最新在上。
 > 状态汇总见 `docs/STATUS.md`。
 
+## 2026-10-28 18:15 — wdma 契约流实现
+
+- `wdma` 新增契约读入（层启动读 bias/M/shift 到片上 RAM）与每组 48 拍输出；
+  fc2 8 通道 pad 到 16 lane；单编译通过。
+- 未接 `npu_top`：4 个 conv 需按层门控契约 valid，避免同时写 shadow bank。
+- check_rtl 35 个 .v、0 violation。
+
 ## 2026-10-28 17:15 — wdma 组流模型
 
 - 新增 `tests/test_wdma_group_model.py`（3 项）：每组 48 拍契约 + 组内 tap 顺序与内容、
