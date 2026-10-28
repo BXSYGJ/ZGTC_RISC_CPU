@@ -3,6 +3,13 @@
 > 每次会话结束前追加一条：时间、做了什么、结论、证据路径。倒序，最新在上。
 > 状态汇总见 `docs/STATUS.md`。
 
+## 2026-10-29 09:15 — 谱图链路接入顶层
+
+- `instrec_top` 串联 `feat_copy_engine` → `feat_page_buf` → `spectrum_disp` → `ui_renderer`；
+  mel feat 口按 `npu_feat_rd_en` 仲裁（NPU 优先）。
+- 全量构建 All Constraints Met，WNS +1.616 / WHS +0.204。
+- 注意：copy 与 NPU 共用 `mel_npu_start` 启动，靠 busy_in 交错，板级需确认。
+
 ## 2026-10-29 08:05 — Mel 特征复制引擎
 
 - 新增 `feat_copy_engine.v`：从 mel 读口复制 16512 字节到双页 RAM，
