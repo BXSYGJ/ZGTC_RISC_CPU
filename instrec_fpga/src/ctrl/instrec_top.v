@@ -416,7 +416,27 @@ module instrec_top (
     );
 
     // ---- DDR3 arbitration + IP contract adaptation ----
-    assign ddr_cmd_valid = {st_cmd_valid, mel_m2_cmd_valid, wl_cmd_valid, m0_cmd_valid};
+    wire        wl_tx_valid, wl_tx_ready;
+    wire [7:0]  wl_tx_data;
+    wire        wl_cmd_valid, wl_done, wl_wready;
+    wire [36:0] wl_cmd;
+    wire [255:0] wl_wdata;
+    wire        wl_rd_ready;
+    wire        weight_ok, weight_err;
+    wire [27:0] wl_err_unused;
+    wire [15:0] wl_cnt_unused;
+    wire [31:0] wl_digest_unused;
+    wire        npu_rd_cmd_valid_u;
+    wire [36:0] npu_rd_cmd_u;
+    wire        npu_rd_ready_u;
+
+    // Master 1 arbitration: weight_loader owns m1 while busy, otherwise the
+    // NPU weight DMA may use it. Both share the same read data bus.
+    wire wl_busy;
+    assign ddr_cmd_valid = {st_cmd_valid, mel_m2_cmd_valid,
+                            (wl_busy ? wl_cmd_valid : npu_rd_cmd_valid_u), m0_cmd_valid};
+    assign m1_cmd   = wl_busy ? wl_cmd : npu_rd_cmd_u;
+    assign m1_wdata = wl_wdata;
     assign m2_cmd        = mel_m2_cmd;
     assign m2_wdata      = mel_m2_wdata;
 
@@ -539,16 +559,6 @@ module instrec_top (
     );
 
     // ---- System controller (boot self-test chain + LED encoding) ----
-    wire        wl_tx_valid, wl_tx_ready;
-    wire [7:0]  wl_tx_data;
-    wire        wl_cmd_valid, wl_done, wl_wready;
-    wire        wl_rd_ready;
-    wire [255:0] wl_wdata;
-    wire        weight_ok, weight_err;
-    wire        wl_busy_unused;
-    wire [27:0] wl_err_unused;
-    wire [15:0] wl_cnt_unused;
-    wire [31:0] wl_digest_unused;
 
     wire weight_start_unused;
 
@@ -616,14 +626,14 @@ module instrec_top (
         .tx_data     (wl_tx_data),
         .tx_ready    (wl_tx_ready),
         .cmd_valid   (wl_cmd_valid),
-        .cmd         (m1_cmd),
-        .wdata       (m1_wdata),
+        .cmd         (wl_cmd),
+        .wdata       (wl_wdata),
         .wready_beat (ddr_wready_beat[1]),
         .done        (ddr_done[1]),
         .rd_ready    (wl_rd_ready),
         .rd_data     (rd_data_1),
         .rd_valid    (ddr_rd_valid[1]),
-        .busy        (wl_busy_unused),
+        .busy        (wl_busy),
         .weight_ok   (weight_ok),
         .weight_err  (weight_err),
         .err_addr    (wl_err_unused),
@@ -636,8 +646,6 @@ module instrec_top (
     // here fixes the top-level topology and lets PDS elaborate the chain.
     wire        npu_busy_u, npu_done_u, npu_timeout_u;
     wire [31:0] npu_cycles_u;
-    wire        npu_rd_cmd_valid_u;
-    wire [36:0] npu_rd_cmd_u;
     wire        npu_probs_valid_u;
     wire [7:0]  npu_probs_pct_u;
     wire [3:0]  npu_probs_idx_u;
@@ -657,10 +665,10 @@ module instrec_top (
         .feat_rd_en   (npu_feat_rd_en_u),
         .rd_cmd_valid (npu_rd_cmd_valid_u),
         .rd_cmd       (npu_rd_cmd_u),
-        .rd_ready     (1'b0),
-        .rd_data      (256'd0),
-        .rd_valid     (1'b0),
-        .rd_done      (1'b0),
+        .rd_ready     (wl_busy ? 1'b0 : npu_rd_ready_u),
+        .rd_data      (rd_data_1),
+        .rd_valid     (wl_busy ? 1'b0 : ddr_rd_valid[1]),
+        .rd_done      (wl_busy ? 1'b0 : ddr_done[1]),
         .probs_valid  (npu_probs_valid_u),
         .probs_pct    (npu_probs_pct_u),
         .probs_idx    (npu_probs_idx_u),

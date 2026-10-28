@@ -3,6 +3,13 @@
 > 每次会话结束前追加一条：时间、做了什么、结论、证据路径。倒序，最新在上。
 > 状态汇总见 `docs/STATUS.md`。
 
+## 2026-10-29 00:55 — m1 仲裁接通
+
+- `instrec_top` m1 仲裁：`weight_loader` busy 时独占，空闲时交给 NPU wdma；
+  `rd_data_1/rd_valid/done` 按 `wl_busy` 门控。
+- 全量构建 All Constraints Met，WNS +1.406 / WHS +0.270，sha256 `90F531C0…`。
+- 待接：sys_ctrl 触发 npu.start。
+
 ## 2026-10-28 23:40 — mel feat 读口接通
 
 - `npu_top` 改为 feat 地址/数据接口（地址 0..16511，数据 1 拍后有效）；
