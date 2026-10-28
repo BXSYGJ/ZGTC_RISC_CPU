@@ -3,6 +3,12 @@
 > 每次会话结束前追加一条：时间、做了什么、结论、证据路径。倒序，最新在上。
 > 状态汇总见 `docs/STATUS.md`。
 
+## 2026-10-28 14:40 — requant 位级判据
+
+- 新增 `tests/test_requant_model.py`（5 项）：正/负 exact-half 归偶、截断反例、
+  u8 双端饱和、随机 512 向量与独立标量实现逐值一致。
+- 全量 111 passed。
+
 ## 2026-10-28 13:55 — sys_ctrl 权重自检环与 M2 接入蓝图
 
 - `sys_ctrl` 新增 `ST_WEIGHT`：等 `weight_ok` 后放行 `sys_run`，`weight_err` 进 SAFE_ERR；
