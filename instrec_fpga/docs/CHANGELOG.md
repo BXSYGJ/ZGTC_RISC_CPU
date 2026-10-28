@@ -3,6 +3,12 @@
 > 每次会话结束前追加一条：时间、做了什么、结论、证据路径。倒序，最新在上。
 > 状态汇总见 `docs/STATUS.md`。
 
+## 2026-10-28 17:15 — wdma 组流模型
+
+- 新增 `tests/test_wdma_group_model.py`（3 项）：每组 48 拍契约 + 组内 tap 顺序与内容、
+  fc2 8 通道 pad、conv1 144B 组距。
+- 全量 114 passed。
+
 ## 2026-10-28 16:50 — weight_loader 接入顶层
 
 - `instrec_top` 例化 `weight_loader`：UART 字节共用、TX 仲裁（加载期优先）、
