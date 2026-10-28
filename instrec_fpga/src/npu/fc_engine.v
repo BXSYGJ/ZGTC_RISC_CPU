@@ -40,9 +40,13 @@ module fc_engine #(
     input  wire [127:0] w_data,
     output wire        w_ready,
 
-    // per-output-channel M/shift contract (COUT beats, before the groups)
-    input  wire        c_valid,
+    // per-output-channel bias/M/shift contract, three independent streams
+    // (COUT beats each, before the groups; design.md 4.3).
+    input  wire        b_valid,
+    input  wire signed [31:0] bias_s32,
+    input  wire        m_valid,
     input  wire signed [31:0] m_s32,
+    input  wire        s_valid,
     input  wire [6:0]  shift,
 
     // requantised result stream (16 beats per group, lane order)
@@ -55,12 +59,15 @@ module fc_engine #(
     localparam [7:0] GRP_LAST = GRP_NUM - 1;
 
     reg signed [15:0] x_buf [0:CIN-1];
+    reg signed [31:0] b_ram [0:GRP_NUM*16-1];
     reg signed [31:0] m_ram [0:GRP_NUM*16-1];
     reg        [6:0]  s_ram [0:GRP_NUM*16-1];
 
     reg signed [31:0] acc [0:15];
     reg [7:0]  x_cnt;
-    reg [7:0]  c_cnt;
+    reg [7:0]  b_cnt;
+    reg [7:0]  m_cnt;
+    reg [7:0]  s_cnt;
     reg [7:0]  grp_cnt;
     reg [7:0]  k_cnt;
     reg [4:0]  rq_cnt;
@@ -110,10 +117,13 @@ module fc_engine #(
 
             always @(posedge clk or negedge rst_n) begin
                 if (!rst_n) acc[g] <= 32'sd0;
-                else if (state == S_MAC && w_valid)
-                    acc[g] <= acc[g] + x_eff * w_lane;
-                else if (state == S_NEXT)
-                    acc[g] <= 32'sd0;
+                else if (state == S_MAC && w_valid) begin
+                    // First beat of a group seeds the accumulator with bias.
+                    if (k_cnt == 8'd0)
+                        acc[g] <= b_ram[grp_cnt * 16 + g] + x_eff * w_lane;
+                    else
+                        acc[g] <= acc[g] + x_eff * w_lane;
+                end
             end
         end
     endgenerate
@@ -122,7 +132,9 @@ module fc_engine #(
         if (!rst_n) begin
             state    <= S_X;
             x_cnt    <= 8'd0;
-            c_cnt    <= 8'd0;
+            b_cnt    <= 8'd0;
+            m_cnt    <= 8'd0;
+            s_cnt    <= 8'd0;
             grp_cnt  <= 8'd0;
             k_cnt    <= 8'd0;
             rq_cnt   <= 5'd0;
@@ -140,7 +152,9 @@ module fc_engine #(
                         x_buf[x_cnt] <= x_s16;
                         if (x_cnt == CIN - 1) begin
                             x_cnt <= 8'd0;
-                            c_cnt <= 8'd0;
+                            b_cnt <= 8'd0;
+                            m_cnt <= 8'd0;
+                            s_cnt <= 8'd0;
                             state <= S_C;
                         end else begin
                             x_cnt <= x_cnt + 8'd1;
@@ -149,17 +163,26 @@ module fc_engine #(
                 end
 
                 S_C: begin
-                    if (c_valid) begin
-                        m_ram[c_cnt] <= m_s32;
-                        s_ram[c_cnt] <= shift;
-                        if (c_cnt == COUT - 1) begin
-                            c_cnt   <= 8'd0;
-                            grp_cnt <= 8'd0;
-                            k_cnt   <= 8'd0;
-                            state   <= S_MAC;
-                        end else begin
-                            c_cnt <= c_cnt + 8'd1;
-                        end
+                    if (b_valid) begin
+                        b_ram[b_cnt] <= bias_s32;
+                        b_cnt <= b_cnt + 8'd1;
+                    end
+                    if (m_valid) begin
+                        m_ram[m_cnt] <= m_s32;
+                        m_cnt <= m_cnt + 8'd1;
+                    end
+                    if (s_valid) begin
+                        s_ram[s_cnt] <= shift;
+                        s_cnt <= s_cnt + 8'd1;
+                    end
+                    if ((b_cnt == COUT - 1) && (m_cnt == COUT - 1) &&
+                        (s_cnt == COUT - 1)) begin
+                        b_cnt   <= 8'd0;
+                        m_cnt   <= 8'd0;
+                        s_cnt   <= 8'd0;
+                        grp_cnt <= 8'd0;
+                        k_cnt   <= 8'd0;
+                        state   <= S_MAC;
                     end
                 end
 

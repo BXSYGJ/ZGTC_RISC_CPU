@@ -237,7 +237,7 @@ module npu_top (
         .clk(clk), .rst_n(rst_n), .layer_start(fc1_start),
         .x_valid(fc1_x_valid), .x_s16(fc1_x_s16),
         .w_valid(w_valid), .w_data(w_data), .w_ready(conv_wready[0]),
-        .c_valid(1'b0), .m_s32(32'sd0), .shift(7'd0),
+        .b_valid(1'b0), .bias_s32(32'sd0), .m_valid(1'b0), .m_s32(32'sd0), .s_valid(1'b0), .shift(7'd0),
         .y_valid(fc1_y_valid), .y_u8(fc1_y), .done(fc1_done)
     );
 
@@ -245,7 +245,7 @@ module npu_top (
         .clk(clk), .rst_n(rst_n), .layer_start(fc2_start),
         .x_valid(fc1_y_valid), .x_s16({8'd0, fc1_y}),
         .w_valid(w_valid), .w_data(w_data), .w_ready(conv_wready[1]),
-        .c_valid(1'b0), .m_s32(32'sd0), .shift(7'd0),
+        .b_valid(1'b0), .bias_s32(32'sd0), .m_valid(1'b0), .m_s32(32'sd0), .s_valid(1'b0), .shift(7'd0),
         .y_valid(fc2_y_valid), .y_u8(fc2_y), .done(fc2_done)
     );
 

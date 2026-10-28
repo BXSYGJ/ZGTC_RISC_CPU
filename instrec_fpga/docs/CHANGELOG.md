@@ -3,6 +3,13 @@
 > 每次会话结束前追加一条：时间、做了什么、结论、证据路径。倒序，最新在上。
 > 状态汇总见 `docs/STATUS.md`。
 
+## 2026-10-28 12:30 — fc_engine 契约接口补齐
+
+- `fc_engine` 新增 bias 输入与独立 b_valid/m_valid/s_valid 三条加载流，
+  bias RAM 在每组首拍（k_cnt==0）初始化累加器，替代原先的“归零后累加”。
+- `npu_top` 例化同步更新，PDS 编译通过；契约流生产者（wdma）仍是唯一缺口。
+- check_rtl 34 个 .v、0 violation。
+
 ## 2026-10-28 12:00 — core_clk 确认与 BOOT 乱码修复
 
 - 烧 `core_probe` 后 COM5 收到 13 个 `C`：**core_clk 已起振，core 域退出复位**。
