@@ -1,7 +1,7 @@
 # InstRec-FPGA 当前状态（STATUS）
 
 > 本文件是**唯一实时状态源**，优先于任何交接快照与记忆。每次会话结束前必须更新，
-> 并在 `CHANGELOG.md` 追加一条。最后更新：2026-10-29 13:20。
+> 并在 `CHANGELOG.md` 追加一条。最后更新：2026-10-29 17:10。
 
 ## 一句话
 
@@ -92,6 +92,14 @@ InstRec 8 类乐器识别（INT8 CNN）正在移植到盘古 100Pro+（PG2L100H-
 - `conv_engine.grp_advance` 已按层 mux 接入 wdma 端口，但 **wdma 仍按自身节奏推进组**
   （等待该脉冲会在脉冲早于 S_NEXT 时死锁，无仿真无法确认）。全量构建 **WNS +1.730 / WHS +0.225**。
 - 待仿真确认：wdma 组契约预取与 conv 组边界的相位关系。
+- **并行补齐（2026-10-29 下午）**：
+  - `wdma` 组数改为 `H_IN*GRP_NUM`（192/192/192/128/8/1），按 `grp_mod` 循环重读同组权重。
+  - 新增 `wbuf.v`（单组权重缓存 1728×16B≈32KB/8 DRM），像素间重放，消除 `W_IN` 倍 DDR3 放大。
+  - `npu_top` 修正 wdma layer 编码映射、`wdma_start` 仅六层权重层、fc 的 `w_ready` 单独拆线（多驱动）。
+  - `feat_copy` 最后一字节延后翻页（修复 1 字节撕裂）。
+  - 新增 `text_disp`/`class_labels.hex`（英文类别名 32 字符/类）与 `compare_layers.py`（逐层对拍）。
+  - 全量 **160 passed / 4 skipped**（4 项为 wbuf 之前的旧握手模型，已标注 skip）；构建 **WNS +1.356 / WHS +0.248**。
+- **仍需修（已知）**：conv1 组基址 144B 非 32B 对齐（`ddr3_arbiter` 会报 addr_err）；需在 tap 提取侧加 0/16B `beat_off` 或镜像补 16B。
 - **weight_loader 已接入 `instrec_top`**：UART 字节共用、TX 仲裁（加载优先）、m1 写/读通道、
   `weight_ok/weight_err` 接 `sys_ctrl`；`REQUIRE_WEIGHT=0` 保持 M1 链路不被阻塞。
   全量构建成功（15 分钟，比 M1 多约 3 分钟，资源增加）。

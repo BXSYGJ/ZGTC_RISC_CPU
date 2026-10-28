@@ -3,6 +3,14 @@
 > 每次会话结束前追加一条：时间、做了什么、结论、证据路径。倒序，最新在上。
 > 状态汇总见 `docs/STATUS.md`。
 
+## 2026-10-29 17:10 — 并补齐 wbuf/文本/对拍并修三处架构缺口
+
+- wdma 组数 H_IN*GRP_NUM；新增 wbuf 单组缓存；npu_top 层编码/门控/多驱动修正；
+  feat_copy 翻页时序修正。
+- 新增 text_disp/class_labels、compare_layers 对拍工具、spectrum/overlay 与握手模型测试。
+- 160 passed / 4 skipped；构建 WNS +1.356 / WHS +0.248。
+- 已知待修：conv1 组基址非 32B 对齐。
+
 ## 2026-10-29 13:20 — 回退 grp_advance 等待
 
 - 等待 grp_advance 在脉冲早于 S_NEXT 时会死锁，无仿真无法排除，改回 wdma 自主组节奏；
