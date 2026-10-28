@@ -372,9 +372,13 @@ module wdma (
                 end
 
                 S_NEXT: begin
+                    // NOTE: grp_advance is sampled by the caller for
+                    // observability, but the DMA keeps its own group rhythm.
+                    // Waiting here can deadlock when the conv pulse arrives
+                    // before S_NEXT; revisit with simulation.
                     if (grp_cnt + 16'd1 == grp_total) begin
                         state <= S_DONE;
-                    end else if (grp_advance) begin
+                    end else begin
                         grp_cnt    <= grp_cnt + 16'd1;
                         tap_in_grp <= 16'd0;
                         taps_left  <= taps_per_grp;

@@ -1,7 +1,7 @@
 # InstRec-FPGA 当前状态（STATUS）
 
 > 本文件是**唯一实时状态源**，优先于任何交接快照与记忆。每次会话结束前必须更新，
-> 并在 `CHANGELOG.md` 追加一条。最后更新：2026-10-29 12:40。
+> 并在 `CHANGELOG.md` 追加一条。最后更新：2026-10-29 13:20。
 
 ## 一句话
 
@@ -89,9 +89,9 @@ InstRec 8 类乐器识别（INT8 CNN）正在移植到盘古 100Pro+（PG2L100H-
 - `npu.start` 已接 mel 的窗口完成脉冲（`NPU_ENABLE` 参数默认 0，置 1 即启用）；
   全量构建 WNS +1.406 / WHS +0.270。
 - **M2 顶层接入完成**：唯一剩余是端到端仿真/板级对拍（USB 恢复后）。
-- `conv_engine.grp_advance` 已按层 mux 回接 wdma，wdma 在组切换时等待该脉冲（无预取，
-  性能让位于正确性）。全量构建 **WNS +1.339 / WHS +0.201**。
-- 剩余风险：wdma 等待 grp_advance 可能死锁（脉冲若在 S_NEXT 之前已过），需板级/仿真确认。
+- `conv_engine.grp_advance` 已按层 mux 接入 wdma 端口，但 **wdma 仍按自身节奏推进组**
+  （等待该脉冲会在脉冲早于 S_NEXT 时死锁，无仿真无法确认）。全量构建 **WNS +1.730 / WHS +0.225**。
+- 待仿真确认：wdma 组契约预取与 conv 组边界的相位关系。
 - **weight_loader 已接入 `instrec_top`**：UART 字节共用、TX 仲裁（加载优先）、m1 写/读通道、
   `weight_ok/weight_err` 接 `sys_ctrl`；`REQUIRE_WEIGHT=0` 保持 M1 链路不被阻塞。
   全量构建成功（15 分钟，比 M1 多约 3 分钟，资源增加）。
