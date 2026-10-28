@@ -1,7 +1,9 @@
 // ---------------------------------------------------------------------------
 // ui_overlay.v -- layer compositor for the InstRec UI (M3)
 //
-// Priority: probability bars > spectrogram > base layer (grid + waveform).
+// Priority: probability bars > class text > spectrogram > base layer
+// (grid + waveform). The text label sits above the spectrogram but below
+// the probability bars so a bar never covers the class name.
 // All inputs are registered by their own modules in the same pix_clk
 // domain and carry an "on" flag aligned with their RGB. The composer adds
 // one register stage so the caller's de/hs/vs delay grows by exactly one.
@@ -18,6 +20,9 @@ module ui_overlay (
     input  wire [23:0] spec_rgb,
     input  wire        spec_on,
 
+    input  wire [23:0] text_rgb,
+    input  wire        text_on,
+
     input  wire [23:0] bars_rgb,
     input  wire        bars_on,
 
@@ -29,6 +34,7 @@ module ui_overlay (
 
     always @* begin
         if (bars_on)      mix = bars_rgb;
+        else if (text_on) mix = text_rgb;
         else if (spec_on) mix = spec_rgb;
         else if (base_on) mix = base_rgb;
         else              mix = 24'h00_00_00;

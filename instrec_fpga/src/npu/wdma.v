@@ -154,6 +154,15 @@ module wdma (
     reg [15:0]  tap_in_grp;
     reg [27:0]  cur_addr;
 
+    // conv1's group stride is 144 B, so odd groups start 16 B into a 32 B
+    // beat. The read address is aligned down and the first beat's low half
+    // is skipped: grp_off marks that half-beat pad, first_chunk makes it
+    // apply to the first weight command of a group only. Every other layer
+    // has a 32 B group stride, so grp_off stays 0 and the beat/tap stream is
+    // bit-identical to the unaligned-free path.
+    reg         grp_off;
+    reg         first_chunk;
+
     wire [255:0] beat_c = fifo[rd_ptr[3:0]];
     wire [31:0]  total_taps  = taps_per_grp * grp_total;
     wire [31:0]  total_bytes = total_taps * tap_bytes;
@@ -161,6 +170,13 @@ module wdma (
     wire [4:0]   chunk = (cfg_beats_left > 16'd16) ? 5'd16 : cfg_beats_left[4:0];
     wire         is_fc = (layer_id >= 4'd4);
     wire [9:0]   cfg_end = is_fc ? ({1'b0, cout} * 10'd3) : 10'd48;
+
+    // Aligned group read: next_base is the unaligned start of the group that
+    // S_NEXT is stepping to. When bit 4 is set the group begins 16 B into a
+    // beat, so one extra beat is needed to cover the last tap.
+    wire [27:0]  next_base     = grp_base + {12'd0, group_bytes};
+    wire [15:0]  grp_beats_alg = next_base[4] ? ((group_bytes + 16'd47) >> 5)
+                                              : grp_beats;
 
     // Contract RAM index: grp_mod * 16 + lane (no modulo, no divider).
     wire [8:0]  ctr_idx  = {grp_mod[3:0], 5'd0} + {5'd0, c_cnt[3:0]};
@@ -220,6 +236,8 @@ module wdma (
             sub            <= 8'd0;
             tap_in_grp     <= 16'd0;
             cur_addr       <= 28'd0;
+            grp_off        <= 1'b0;
+            first_chunk    <= 1'b0;
         end else begin
             w_valid   <= 1'b0;
             grp_start <= 1'b0;
@@ -315,9 +333,12 @@ module wdma (
                             grp_mod   <= 5'd0;
                             grp_base  <= wb;
                             tap_in_grp<= 16'd0;
-                            cur_addr  <= wb;
+                            cur_addr  <= {wb[27:5], 5'd0};
+                            grp_off   <= wb[4];
+                            first_chunk <= 1'b1;
                             taps_left <= taps_per_grp;
-                            beats_left<= grp_beats;
+                            beats_left<= wb[4] ? ((group_bytes + 16'd47) >> 5)
+                                               : grp_beats;
                             wr_ptr    <= 5'd0;
                             rd_ptr    <= 5'd0;
                             fifo_cnt  <= 5'd0;
@@ -382,7 +403,11 @@ module wdma (
                         cur_addr     <= cur_addr + {19'd0, cmd_beats, 5'd0};
                         beats_left   <= beats_left - {11'd0, cmd_beats};
                         emit_beats   <= cmd_beats;
-                        sub          <= 8'd0;
+                        // Offset groups start at the high half of the first
+                        // beat; sub == 1 selects [255:128] and consumes that
+                        // beat after the first tap.
+                        sub          <= (first_chunk && grp_off) ? 8'd1 : 8'd0;
+                        first_chunk  <= 1'b0;
                         state        <= S_TEMIT;
                     end
                 end
@@ -436,15 +461,20 @@ module wdma (
                         if (grp_mod + 5'd1 == grp_num[4:0]) begin
                             grp_mod  <= 5'd0;
                             grp_base <= wb;
-                            cur_addr <= wb;
+                            cur_addr <= {wb[27:5], 5'd0};
+                            grp_off  <= wb[4];
+                            beats_left <= wb[4] ? ((group_bytes + 16'd47) >> 5)
+                                                : grp_beats;
                         end else begin
                             grp_mod  <= grp_mod + 5'd1;
-                            grp_base <= grp_base + group_bytes;
-                            cur_addr <= grp_base + group_bytes;
+                            grp_base <= next_base;
+                            cur_addr <= {next_base[27:5], 5'd0};
+                            grp_off  <= next_base[4];
+                            beats_left <= grp_beats_alg;
                         end
+                        first_chunk <= 1'b1;
                         tap_in_grp <= 16'd0;
                         taps_left  <= taps_per_grp;
-                        beats_left <= grp_beats;
                         // Drop the leftover of a partial last beat (conv1:
                         // 9 taps = 4.5 beats) so the next group's burst starts
                         // with clean FIFO pointers.

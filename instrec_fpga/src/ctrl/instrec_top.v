@@ -155,6 +155,8 @@ module instrec_top #(
     wire        wave_valid;
     wire        mute_flag_sync;
     wire        vsync_pulse;
+    // NPU top-1 class index (core_clk domain, quasi-static per window).
+    wire [3:0]  npu_top1_u;
 
     // ==================================================================
     // DDR3 controller user side (core_clk domain)
@@ -441,6 +443,73 @@ module instrec_top #(
         .bars_on   (bars_on)
     );
 
+    // ---- Class label text overlay (M3): top-1 name + percentage ----
+    // top1 is quasi-static (one result per 3 s window), so a plain 2FF
+    // synchronizer into the pixel domain is adequate (same argument as
+    // bars_data; the frame may briefly mix old/new values, invisible at
+    // 0.33 Hz).
+    reg [3:0] top1_s0;
+    reg [3:0] top1_s1;
+
+    always @(posedge pix_clk or negedge rst_pix_n) begin
+        if (!rst_pix_n) begin
+            top1_s0 <= 4'd0;
+            top1_s1 <= 4'd0;
+        end else begin
+            top1_s0 <= npu_top1_u;
+            top1_s1 <= top1_s0;
+        end
+    end
+
+    // Percentage of the top-1 class, selected from the eight latched bar
+    // values already synchronized into the pixel domain by bars_data.
+    reg [7:0] text_pct;
+    always @* begin
+        case (top1_s1)
+            4'd0:    text_pct = b0;
+            4'd1:    text_pct = b1;
+            4'd2:    text_pct = b2;
+            4'd3:    text_pct = b3;
+            4'd4:    text_pct = b4;
+            4'd5:    text_pct = b5;
+            4'd6:    text_pct = b6;
+            default: text_pct = b7;
+        endcase
+    end
+
+    // One-cycle coordinate delay: text_disp already costs 2 cycles, so the
+    // text layer lands on the same pixel as the 3-cycle waveform base
+    // (ui_renderer samples its layers with de_pipe[2] and adds stage 4).
+    reg [10:0] text_x, text_y;
+    reg        text_de;
+
+    always @(posedge pix_clk or negedge rst_pix_n) begin
+        if (!rst_pix_n) begin
+            text_x  <= 11'd0;
+            text_y  <= 11'd0;
+            text_de <= 1'b0;
+        end else begin
+            text_x  <= pix_x;
+            text_y  <= pix_y;
+            text_de <= pix_de;
+        end
+    end
+
+    wire [23:0] text_rgb;
+    wire        text_on;
+
+    text_disp u_text_disp (
+        .pix_clk   (pix_clk),
+        .rst_pix_n (rst_pix_n),
+        .pix_x     (text_x),
+        .pix_y     (text_y),
+        .de        (text_de),
+        .class_idx ({4'd0, top1_s1}),
+        .pct       (text_pct),
+        .rgb       (text_rgb),
+        .text_on   (text_on)
+    );
+
     wire [14:0] npu_feat_rd_addr;
     wire [10:0] spec_x, spec_y;
     wire        spec_de;
@@ -533,6 +602,8 @@ module instrec_top #(
         .mute_flag_sync(mute_flag_sync),
         .spec_rgb      (spec_rgb),
         .spec_on       (spec_on),
+        .text_rgb      (text_rgb),
+        .text_on       (text_on),
         .bars_rgb      (bars_rgb),
         .bars_on       (bars_on),
         .vsync_pulse   (vsync_pulse),
@@ -776,7 +847,6 @@ module instrec_top #(
     wire        npu_probs_valid_u;
     wire [7:0]  npu_probs_pct_u;
     wire [3:0]  npu_probs_idx_u;
-    wire [3:0]  npu_top1_u;
     wire        npu_feat_rd_en_u;
     wire        npu_start = NPU_ENABLE ? mel_npu_start : 1'b0;
 

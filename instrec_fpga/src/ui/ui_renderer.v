@@ -72,10 +72,12 @@ module ui_renderer #(
     // (single-cycle pulse on the rising edge of pix_vs).
     output wire        vsync_pulse,
 
-    // Overlay layers (M3): spectrogram and probability bars, already
-    // registered in the pix domain by their own modules.
+    // Overlay layers (M3): spectrogram, class text and probability bars,
+    // already registered in the pix domain by their own modules.
     input  wire [23:0] spec_rgb,
     input  wire        spec_on,
+    input  wire [23:0] text_rgb,
+    input  wire        text_on,
     input  wire [23:0] bars_rgb,
     input  wire        bars_on,
 
@@ -108,7 +110,7 @@ module ui_renderer #(
         .rgb            ( wf_rgb         )
     );
 
-    // Layer compositor: bars > spectrum > waveform/grid.
+    // Layer compositor: bars > text > spectrum > waveform/grid.
     ui_overlay u_overlay (
         .pix_clk   (pix_clk),
         .rst_pix_n (rst_pix_n),
@@ -117,6 +119,8 @@ module ui_renderer #(
         .base_on   (de_pipe[2]),
         .spec_rgb  (spec_rgb),
         .spec_on   (spec_on),
+        .text_rgb  (text_rgb),
+        .text_on   (text_on),
         .bars_rgb  (bars_rgb),
         .bars_on   (bars_on),
         .rgb       (rgb),
