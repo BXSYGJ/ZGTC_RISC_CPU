@@ -399,6 +399,48 @@ module instrec_top #(
     );
 
     // ---- UI renderer (waveform region; instantiates waveform_disp) ----
+    // ---- Probability bar overlay (M3) ----
+    wire [10:0] bars_x, bars_y;
+    wire        bars_de;
+    wire [7:0]  b0, b1, b2, b3, b4, b5, b6, b7;
+    wire [23:0] bars_rgb;
+    wire        bars_on;
+
+    ui_coord_delay u_bars_delay (
+        .pix_clk   (pix_clk),
+        .rst_pix_n (rst_pix_n),
+        .x         (pix_x),
+        .y         (pix_y),
+        .de        (pix_de),
+        .x_d       (bars_x),
+        .y_d       (bars_y),
+        .de_d      (bars_de)
+    );
+
+    bars_data u_bars_data (
+        .core_clk    (core_clk),
+        .core_rst_n  (core_clk_rst_n),
+        .probs_valid (npu_probs_valid_u),
+        .probs_pct   (npu_probs_pct_u),
+        .probs_idx   (npu_probs_idx_u),
+        .pix_clk     (pix_clk),
+        .pix_rst_n   (rst_pix_n),
+        .pct0(b0), .pct1(b1), .pct2(b2), .pct3(b3),
+        .pct4(b4), .pct5(b5), .pct6(b6), .pct7(b7)
+    );
+
+    bars_disp u_bars_disp (
+        .pix_clk   (pix_clk),
+        .rst_pix_n (rst_pix_n),
+        .x         (bars_x),
+        .y         (bars_y),
+        .de        (bars_de),
+        .pct0(b0), .pct1(b1), .pct2(b2), .pct3(b3),
+        .pct4(b4), .pct5(b5), .pct6(b6), .pct7(b7),
+        .rgb       (bars_rgb),
+        .bars_on   (bars_on)
+    );
+
     ui_renderer u_ui_renderer (
         .pix_clk       (pix_clk),
         .rst_pix_n     (rst_pix_n),
@@ -414,8 +456,8 @@ module instrec_top #(
         .mute_flag_sync(mute_flag_sync),
         .spec_rgb      (24'd0),
         .spec_on       (1'b0),
-        .bars_rgb      (24'd0),
-        .bars_on       (1'b0),
+        .bars_rgb      (bars_rgb),
+        .bars_on       (bars_on),
         .vsync_pulse   (vsync_pulse),
         .rgb           (ui_rgb),
         .de_out        (ui_de),

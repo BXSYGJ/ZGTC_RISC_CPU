@@ -3,6 +3,12 @@
 > 每次会话结束前追加一条：时间、做了什么、结论、证据路径。倒序，最新在上。
 > 状态汇总见 `docs/STATUS.md`。
 
+## 2026-10-29 06:15 — 概率条链路接入顶层
+
+- `instrec_top` 串联 `ui_coord_delay`（3 拍坐标）→ `bars_data`（8 类 pct）→
+  `bars_disp` → `ui_renderer.bars_*`；spectrum 仍 tie-off。
+- 全量构建 All Constraints Met，WNS +1.443 / WHS +0.201。
+
 ## 2026-10-29 05:00 — 概率数据跨域
 
 - 新增 `bars_data.v`：core 域锁存 8 类百分比，pix 域两级同步，
