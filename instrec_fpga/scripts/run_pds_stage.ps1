@@ -47,10 +47,16 @@ if ($prjText -notmatch 'PG2L100H') {
     throw "project file does not describe PG2L100H (it was overwritten by a default project): $prj"
 }
 
+# PDS replaces the .pds with a default project as soon as the scripted run
+# starts without a successfully opened project, so keep a copy and restore it
+# if the resumed flow fails -- otherwise one typo destroys the netlist state.
+$prjBak = "$prj.bak"
+[System.IO.File]::WriteAllText($prjBak, $prjText)
+
 $stages = @('pnr', 'report_timing', 'gen_bit_stream')
 $startIdx = [array]::IndexOf($stages, $From)
 if ($startIdx -lt 0) { throw "unknown stage '$From'" }
-$body = "open_project -file {$prj}`n" + (($stages[$startIdx..($stages.Count - 1)]) -join "`n")
+$body = "open_project {$prj}`n" + (($stages[$startIdx..($stages.Count - 1)]) -join "`n")
 
 $tclPath = Join-Path $run 'stage.tcl'
 $logPath = Join-Path $run 'stage.log'
@@ -73,7 +79,14 @@ $args = @('-file', ('"' + $tclPath + '"'), '-work_dir', ('"' + $run + '"'), '-pr
 $proc = Start-Process -FilePath $pdsShell -ArgumentList $args -PassThru -WindowStyle Hidden -Wait `
     -RedirectStandardOutput $logPath -RedirectStandardError (Join-Path $run 'stage.stderr.log')
 Write-Output "PDS ExitCode: $($proc.ExitCode)"
-if ($proc.ExitCode -ne 0) { throw "PDS exited with $($proc.ExitCode); see $logPath" }
+if ($proc.ExitCode -ne 0) {
+    [System.IO.File]::WriteAllText($prj, [System.IO.File]::ReadAllText($prjBak))
+    throw "PDS exited with $($proc.ExitCode); project file restored from backup; see $logPath"
+}
+if (-not [System.IO.File]::ReadAllText($prj).Contains('PG2L100H')) {
+    [System.IO.File]::WriteAllText($prj, [System.IO.File]::ReadAllText($prjBak))
+    throw "PDS replaced the project file with a default one; restored from backup (open_project syntax still wrong)"
+}
 
 $bit = Join-Path $run ("generate_bitstream\$TopModule.sbit")
 if (Test-Path -LiteralPath $bit) {
