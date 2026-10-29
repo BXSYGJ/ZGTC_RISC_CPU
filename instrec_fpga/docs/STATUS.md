@@ -36,6 +36,13 @@ InstRec 8 类乐器识别（INT8 CNN）正在移植到盘古 100Pro+（PG2L100H-
 - **首轮 UART 修复版（`191053`）布线停滞**：iteration 148→162 未布网络 7199→7262 基本不动
   （每轮 47 s），判定为布局拥塞边界上的随机性（同 RTL 的 `172919` 曾 886 轮收敛），
   已中止并改用**全量重建 `20261029-212311`**（含 M3 恢复 + UART 握手修复）。
+- **M3 全功能版（`20261029-212311`）布线判为不可接受并中止**：LUT 35912 (53.92%)、
+  DRM 86.0 (55.48%)、FF 49827、Utilization 79%；布线 iteration 27/33 仍未布 31693/29031，
+  且每轮耗时 128→192→250 s 递增（同轮次远差于 M3 关闭版的 m2c，后者 iteration 47 已到 12122）。
+  处置：**先用 M3 关闭版拿到 UART 验证位流**（`20261029-231920`，23:19 启动），
+  待 `INSTREC BOOT` 确认后，再单独一轮加回 M3 并接受其更长的布局时间。
+  `src/ctrl/instrec_top.v` 已临时 checkout 回 `693f1fc` 的关闭状态，**验证后必须用
+  `git checkout HEAD -- src/ctrl/instrec_top.v` 恢复，否则 M3 会丢失**。
 - **板级一键 bring-up `scripts/board_e2e.py`**：`boot → weights → capture → compare` 四阶段链，
   任一步失败即停并给出该阶段的排查提示；`--stage boot|weights|layers` 可单独执行
   （stage 3/4 需要 I2S 有真实音频，否则没有窗口完成事件）。
