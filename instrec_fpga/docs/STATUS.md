@@ -43,6 +43,13 @@ InstRec 8 类乐器识别（INT8 CNN）正在移植到盘古 100Pro+（PG2L100H-
   待 `INSTREC BOOT` 确认后，再单独一轮加回 M3 并接受其更长的布局时间。
   `src/ctrl/instrec_top.v` 已临时 checkout 回 `693f1fc` 的关闭状态，**验证后必须用
   `git checkout HEAD -- src/ctrl/instrec_top.v` 恢复，否则 M3 会丢失**。
+- **UART 修复版第二次全量（`20261030-0012`→`231920`）同样停滞**：iteration 275 剩 5546，
+  与 `191053`（7262）同型；而资源与已布通的 m2c **完全一致**（LUT 35666/53.55%、FF 49690、
+  DRM 79.5），说明停滞是**布局随机性**而非资源超限。已中止，第三次全量 `20261030-021342` 启动。
+- **增量重建路径两次毁工程**：`open_project -file` 报「option not defined」，随后 PDS 自动新建
+  默认 `fab_demo/PGL12G` 工程**覆盖 `.pds`**，`231920` 与 `191053` 的工程状态因此报废。
+  已改为 `open_project {path}` 并在运行前备份、失败时自动恢复；**该路径仍未验证成功，
+  不要当成常规提速手段**。教训：任何「复用已有 run」的脚本都必须先备份工程文件。
 - **板级一键 bring-up `scripts/board_e2e.py`**：`boot → weights → capture → compare` 四阶段链，
   任一步失败即停并给出该阶段的排查提示；`--stage boot|weights|layers` 可单独执行
   （stage 3/4 需要 I2S 有真实音频，否则没有窗口完成事件）。
