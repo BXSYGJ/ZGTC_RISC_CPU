@@ -219,6 +219,20 @@ WNS 稳定落在 -1~-3 ns 区间；按「能跑就行」口径不再逐轮追。
 - 布局事实（`tests/test_wdma_layout.py`、`test_wdma_stream_model.py`，9 项通过）：
   所有层权重区 32B 对齐；conv1 每组 144B（27 tap）尾部仅 1 tap；fc2 tap 为 8B/4 个每 beat。
 
+## M3 分步加回计划（下次带 M3 构建时按此顺序）
+
+一次全加 5 个模块会让 DRM 由 79.5 → 86.0、LUT 53.57% → 53.92%，布局明显变慢（已实测停滞）。
+按「资源类型」分批加回，每批单独构建并记录布通轮次：
+
+1. **纯 LUT 层**：`ui_coord_delay` + `text_disp` + `font_rom`（不含谱数据，占 DRM 0）。
+   目的：把文字层与坐标对齐先验证掉。
+2. **谱图显示层（假数据）**：`spectrum_disp` 接一个固定的 258×64 渐变页（常量生成器），
+   验证热图与地址映射在位流里工作；此时不引入 `feat_page_buf`。
+3. **谱图数据层（DRM 大头）**：`feat_page_buf`（双页 258×64，+6.5 DRM）+ `feat_copy_engine`。
+   这是唯一显著增加 DRM 的一步，若此步布线停滞，则考虑单页 + 撕裂可接受，或把页深减半。
+
+每批都要读 `report_timing` 的 `pix_clk` 域（M3 恢复后像素域余量会变），不能沿用上一批的结论。
+
 ## 下一步（按序）
 
 1. **烧 UART 修复版（构建 `20261029-191053`）**：`python scripts/board_check.py
