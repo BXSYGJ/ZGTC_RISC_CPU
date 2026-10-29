@@ -58,12 +58,30 @@ def run_ps(cmd):
                           capture_output=True, text=True)
 
 
+def jtag_procs():
+    """PIDs of every running jtagserver (cdt_js)."""
+    out = run_ps("Get-Process cdt_js -ErrorAction SilentlyContinue | ForEach-Object { $_.Id }")
+    pids = []
+    for line in out.stdout.splitlines():
+        line = line.strip().lstrip('\ufeff')
+        if line.isdigit():
+            pids.append(int(line))
+    return sorted(pids)
+
+
+def cfg_procs():
+    """PIDs of every running cdt_cfg (programmer UI/console)."""
+    out = run_ps("Get-Process cdt_cfg -ErrorAction SilentlyContinue | ForEach-Object { $_.Id }")
+    pids = []
+    for line in out.stdout.splitlines():
+        line = line.strip().lstrip('\ufeff')
+        if line.isdigit():
+            pids.append(int(line))
+    return sorted(pids)
+
+
 def tools_running():
-    out = run_ps("(Get-Process cdt_js -ErrorAction SilentlyContinue | Measure-Object).Count")
-    try:
-        return int(out.stdout.strip().splitlines()[-1]) > 0
-    except Exception:
-        return False
+    return bool(jtag_procs())
 
 
 def ftdi_present():
@@ -83,24 +101,51 @@ def port_listening(timeout=0.5):
 
 
 def start_server(timeout=15.0):
-    """Start jtagserver detached and wait for its TCP port.
+    """Start the ONE jtagserver instance and wait for its TCP port.
 
-    The process is deliberately not parented to this script's lifetime and
-    is never killed afterwards: jtagserver keeps the FTDI handle valid, and
-    restarting it desynchronises the USB stack.
+    Callers must have already verified that no cdt_js is running; opening a
+    second server means two processes race for the same FTDI handle, which is
+    the second half of the "downloader drops" bug (the first half was killing
+    the process).  The PID is recorded so later runs can prove they reused it.
     """
     flags = 0
     if hasattr(subprocess, 'DETACHED_PROCESS'):
         flags = subprocess.DETACHED_PROCESS
-    subprocess.Popen([str(PDS / 'cdt_js.exe'), '-port', '65420'],
-                     stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
-                     creationflags=flags, close_fds=True)
+    proc = subprocess.Popen([str(PDS / 'cdt_js.exe'), '-port', '65420'],
+                            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                            creationflags=flags, close_fds=True)
+    LOG_DIR.mkdir(parents=True, exist_ok=True)
+    (LOG_DIR / 'jtagserver.pid').write_text(str(proc.pid), encoding='ascii')
     deadline = time.time() + timeout
     while time.time() < deadline:
         if port_listening():
-            return True
+            return proc.pid
         time.sleep(0.5)
-    return False
+    return None
+
+
+def ensure_server(wait_existing=30.0):
+    """Return ('reused'|'started'|'broken', pid).
+
+    Never starts a second instance: if a cdt_js already exists it is reused
+    even when its port is not up yet (it is given time to come up).  Starting
+    a second server is reported as a defect, not "fixed" by spawning another.
+    """
+    pids = jtag_procs()
+    if len(pids) > 1:
+        print(f'!! {len(pids)} jtagserver instances are running {pids}; '
+              f'not starting another (multiple UIs fight over the FTDI handle)')
+    if pids:
+        deadline = time.time() + wait_existing
+        while time.time() < deadline:
+            if port_listening():
+                return 'reused', pids[0]
+            time.sleep(0.5)
+        return 'broken', pids[0]
+    pid = start_server()
+    if pid is None:
+        return 'broken', None
+    return 'started', pid
 
 
 def run_tcl(name, body, timeout=180):
@@ -169,8 +214,12 @@ def main():
     args = ap.parse_args()
 
     present = ftdi_present()
-    print(f'ftdi: {"present" if present else "ABSENT"}  jtagserver: '
-          f'{"running" if tools_running() else "stopped"}  port65420: '
+    js = jtag_procs()
+    cfg = cfg_procs()
+    multi = ' (!! MULTIPLE UIs)' if len(js) > 1 or len(cfg) > 1 else ''
+    print(f'ftdi: {"present" if present else "ABSENT"}  '
+          f'jtagserver: {js if js else "none"}{multi}  '
+          f'cdt_cfg: {cfg if cfg else "none"}  port65420: '
           f'{"open" if port_listening() else "closed"}')
     if args.diag_only:
         return 0 if present else 2
@@ -199,14 +248,19 @@ def main():
             print(f'cannot open {args.port}: {exc}')
             return 2
 
-    # R3: reuse a running jtagserver; only start one if the port is closed.
-    if not port_listening():
-        if not start_server():
-            print('jtagserver did not open port 65420')
-            return 2
-        print('jtagserver started and kept (never killed by this script)')
+    # R3: exactly ONE jtagserver. Reuse whatever is already running (it owns
+    # the FTDI handle); start a server only when no cdt_js exists at all.
+    procs_before = jtag_procs()
+    cfg_before = cfg_procs()
+    state, pid = ensure_server()
+    if state == 'broken':
+        print(f'existing jtagserver (PID {pid}) did not open port 65420; '
+              f'NOT starting a second instance (that is what breaks the FTDI link)')
+        return 2
+    if state == 'started':
+        print(f'jtagserver started once (PID {pid}) and kept; it is never killed by this script')
     else:
-        print('reusing the running jtagserver (no restart)')
+        print(f'reusing the running jtagserver (PID {pid}, not restarted)')
 
     rc = 0
     try:
@@ -219,7 +273,10 @@ def main():
         else:
             print(f'cdt_cfg exit code: {code}')
 
-        print(f'program: {"PROGRAM FLOW DONE" in text}')
+        prog_ok = ('PROGRAM FLOW DONE' in text or
+                   'COMMAND[Program] execute successfully' in text or
+                   'The done bit is 1' in text)
+        print(f'program: {prog_ok}')
         done = parse_done(text)
         if done:
             print(f'status: {done["raw"]} done={done["done"]} crc_err={done["crc_err"]}')
@@ -240,6 +297,18 @@ def main():
     if not ftdi_present():
         print('!! FTDI disappeared during this run (device no longer in PnP).')
         rc = 2
+
+    # Instance hygiene: this run must not have added a second UI/server.
+    procs_after = jtag_procs()
+    cfg_after = cfg_procs()
+    if len(procs_after) > len(procs_before):
+        print(f'!! jtagserver instances grew {procs_before} -> {procs_after} '
+              f'(multiple UIs fight over one FTDI handle)')
+    elif procs_after:
+        print(f'jtagserver instances stable at {procs_after} (single UI, reused)')
+    if len(cfg_after) > len(cfg_before):
+        print(f'note: cdt_cfg instances grew {cfg_before} -> {cfg_after} '
+              f'(leftovers are left running on purpose, never killed)')
 
     raw = b''.join(chunks)
     if raw:

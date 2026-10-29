@@ -59,6 +59,11 @@ python scripts/board_check.py --sbit build/instrec-latest.sbit   # 一键板级�
 - 环境（用户级变量）：`PDS_ROOT=H:\GG\pango\PDS_2022.2-SP6.4`，
   `PANGO_LICENSE_FILE=E:\License\pango\new_pds_F4A80DA47D72.lic`。
 - **一次只能跑一个 `pds_shell.exe`**。`run_pds_full.ps1` 本身不查并发，启动前自己确认。
+- **JTAG 侧的 `cdt_js`（jtagserver，会显示成 UI）只允许一个实例**：它持有 FT2232H 的 D2XX 句柄。
+  强关它、或再开第二个，都会让下载器从 PnP 消失（`CM_PROB_PHANTOM`），只能物理重插恢复。
+  规则：`board_check.py` 一律**复用**已存在的 `cdt_js`（端口没起来就等，绝不新起）；
+  任何脚本都不得 `terminate()`/`Stop-Process` `cdt_js`/`cdt_cfg`；TCL 一律以 `exit` 收尾。
+  `tests/test_board_flash_safety.py` 锁死这三条，改烧录脚本后必须跑它。
 - 本机 **WSL 不可用**（Ubuntu 发行版的 vhdx 缺失，启动报 `ERROR_PATH_NOT_FOUND`），因此没有 iverilog/verilator；
   `cpu/` 的 WSL 仿真与 iverilog 命令在本机跑不了。instrec 的验证只有 Python golden 对拍 + 板级实测。
 - CPU 历史工程的 Windows PDS 路径仍可用：`powershell -File pds_cpu_100h/scripts/run_pds_full.ps1`、

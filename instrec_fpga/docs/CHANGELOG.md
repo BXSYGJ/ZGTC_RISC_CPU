@@ -3,6 +3,22 @@
 > 每次会话结束前追加一条：时间、做了什么、结论、证据路径。倒序，最新在上。
 > 状态汇总见 `docs/STATUS.md`。
 
+## 2026-10-29 19:40 — JTAG UI 单实例守卫（用户补充的关键事实）
+
+用户指出掉线的另一半：烧录/扫描会拉起一个 UI（即 jtagserver），我有时**强行关闭**、有时**多开**。
+
+- `board_check.py` 新增 `jtag_procs()` / `cfg_procs()` / `ensure_server()`：
+  已有 `cdt_js` 就**只等不新起**（等 30 s，仍不通则报 PID 退出，绝不起第二个）；
+  只有「一个实例都没有」时才启动，并把 PID 写入 `build/jtagserver.pid`。
+- 运行前后各统计一次 `cdt_js`/`cdt_cfg`，数量增长直接报警（`!! jtagserver instances grew`）；
+  正常路径打印 `jtagserver instances stable at [pid] (single UI, reused)`。
+- `--diag-only` 现在显示实例 PID 列表与 `(! MULTIPLE UIs)` 标记。
+- 烧录成功判定改为同时接受 `PROGRAM FLOW DONE` / `COMMAND[Program] execute successfully` / `The done bit is 1`。
+- 守卫测试增至 16 项（新增单实例与「hung cdt_cfg 留着不动」两条）。
+- 实测：连续三次调用（diag → status-only → diag），`jtagserver` 恒为 `[9040]`，
+  `cdt_cfg exit code 0`，FTDI 在线，无新增实例、无强关。
+- `AGENTS.md` 增加「JTAG 侧 cdt_js 只允许一个实例」的硬规则。
+
 ## 2026-10-29 19:20 — FTDI 掉线根因彻底修复 + 首次上板；UART 丢字符根因定位并修复
 
 **掉线根因（脚本缺陷，非硬件）**：`board_check.py` 在日志出现 `PROGRAM FLOW DONE` 时

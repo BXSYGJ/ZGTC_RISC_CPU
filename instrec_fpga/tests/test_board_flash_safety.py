@@ -71,9 +71,32 @@ def test_board_check_never_kills_jtag():
 
 
 def test_board_check_reuses_running_server():
-    """R3: an open 127.0.0.1:65420 must be reused, not restarted."""
+    """R3: an existing jtagserver must be reused, never restarted or duplicated."""
     src = (SCRIPTS / 'board_check.py').read_text(encoding='utf-8')
-    assert 'if not port_listening():' in src
-    assert 'reusing the running jtagserver' in src
+    assert 'state, pid = ensure_server()' in src
+    assert 'reusing the running jtagserver (PID' in src
+    # a server that exists but is not listening yet must be waited for,
+    # never replaced by a second instance
+    assert 'NOT starting a second instance' in src
     # the old buggy shape returned failure whenever the port was already open
-    assert re.search(r'if js is None:\s*\n\s*print\(', src) is None
+    assert 'if js is None:' not in src
+
+def test_single_jtagserver_instance():
+    """Starting a second jtagserver is a defect: reuse, never spawn alongside."""
+    src = (SCRIPTS / 'board_check.py').read_text(encoding='utf-8')
+    assert 'def ensure_server(' in src
+    assert 'def jtag_procs(' in src
+    # the spawn path must be guarded by an instance check
+    assert "pids = jtag_procs()" in src
+    assert "pid = start_server()" in src
+    assert "if pid is None:" in src
+    # and multiple instances must be reported, not silently accepted
+    assert 'MULTIPLE UIs' in src
+    assert 'instances grew' in src
+
+
+def test_no_second_cdt_cfg_left_behind():
+    """A hung cdt_cfg is reported and left alone (killing drops the FTDI)."""
+    src = (SCRIPTS / 'board_check.py').read_text(encoding='utf-8')
+    assert 'LEFT RUNNING on purpose' in src
+    assert 'cdt_cfg did not exit within the timeout' in src
