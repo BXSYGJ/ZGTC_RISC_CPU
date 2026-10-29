@@ -263,44 +263,59 @@ module npu_top (
     assign feat_rd_en   = feat_run;
 
     // -----------------------------------------------------------------------
-    // Shared conv cores: conv1+conv2 share one 16-lane MAC/requant core and
-    // conv3+conv4 share the second one. The sequencer is serial, so the two
-    // logical layers of a pair never scan at the same time; each still owns
-    // its own line buffer and ingress counters, because the pool egress of
-    // layer i overlaps the scan of layer i and feeds conv i+1 (see the
-    // conv_engine.v header). Only the compute core is time-shared.
+    // Single shared conv core: conv1..conv4 all time-share one 16-lane
+    // MAC/requant core. The sequencer is serial, so no two layers ever scan
+    // at the same time; every layer still owns its own line buffer and
+    // ingress counters, because the pool egress of layer i overlaps the scan
+    // of layer i and feeds conv i+1 (see the conv_engine.v header). Only the
+    // compute core is time-shared, never the row buffers.
+    // conv_sel picks the layer's compile-time shape set and its own
+    // three-bank row-buffer group; the core latches it at the layer start.
     // The layer-dependent zero point rides the shared cfg port: conv1 is
     // the only layer with a non-zero zp_in, latched at layer_start.
     // -----------------------------------------------------------------------
-    wire       core_a_y_valid;
-    wire [7:0] core_a_y_u8;
-    wire       core_b_y_valid;
-    wire [7:0] core_b_y_u8;
-    wire       core_a_w_ready;
-    wire       core_b_w_ready;
+    wire       core_y_valid;
+    wire [7:0] core_y_u8;
+    wire       core_w_ready;
     wire [7:0] conv_zp_in = (layer == L_CONV1) ? 8'd49 : 8'd0;
+    wire [1:0] conv_sel = (layer == L_CONV1) ? 2'd0 :
+                          (layer == L_CONV2) ? 2'd1 :
+                          (layer == L_CONV3) ? 2'd2 : 2'd3;
 
     conv_engine #(
-        .CIN0(1),   .COUT0(48),  .H0(64),  .W0(258),
-        .CIN1(48),  .COUT1(96),  .H1(32),  .W1(129)
-    ) u_conv12 (
+        .CIN0(1),   .COUT0(48),  .H0(64), .W0(258),
+        .CIN1(48),  .COUT1(96),  .H1(32), .W1(129),
+        .CIN2(96),  .COUT2(192), .H2(16), .W2(64),
+        .CIN3(192), .COUT3(256), .H3(8),  .W3(32)
+    ) u_conv (
         .clk(clk), .rst_n(rst_n),
         .cfg_valid(1'b1), .cfg_zp_in(conv_zp_in), .cfg_zp_out(8'd0),
+        .conv_sel(conv_sel),
         .start0(conv1_start), .start1(conv2_start),
+        .start2(conv3_start), .start3(conv4_start),
         .done0(conv1_done), .done1(conv2_done),
+        .done2(conv3_done), .done3(conv4_done),
         .x0_valid(feat_dv), .x0_u8(feat_rd_data),
         .x1_valid(p1_v), .x1_u8(p1_d),
+        .x2_valid(p2_v), .x2_u8(p2_d),
+        .x3_valid(p3_v), .x3_u8(p3_d),
         .grp_start(grp_start),
-        .bias_valid(cb1 | cb2), .bias_s32(wl_bias),
-        .mult_valid(cm1 | cm2), .m_s32(wl_m),
-        .shft_valid(cs1 | cs2), .shift(wl_shift),
-        .w_valid(wbuf_rd_valid), .w_data(wbuf_rd_data), .w_ready(core_a_w_ready),
-        .y_valid(core_a_y_valid), .y_u8(core_a_y_u8),
-        .adv0(conv_grpadv[0]), .adv1(conv_grpadv[1])
+        .bias_valid(cb1 | cb2 | cb3 | cb4), .bias_s32(wl_bias),
+        .mult_valid(cm1 | cm2 | cm3 | cm4), .m_s32(wl_m),
+        .shft_valid(cs1 | cs2 | cs3 | cs4), .shift(wl_shift),
+        .w_valid(wbuf_rd_valid), .w_data(wbuf_rd_data), .w_ready(core_w_ready),
+        .y_valid(core_y_valid), .y_u8(core_y_u8),
+        .adv0(conv_grpadv[0]), .adv1(conv_grpadv[1]),
+        .adv2(conv_grpadv[2]), .adv3(conv_grpadv[3])
     );
 
-    assign conv_wready[0] = core_a_w_ready;
-    assign conv_wready[1] = core_a_w_ready;
+    // Every conv layer shares the one core's tap window (w_ready is the
+    // MAC issue window of the layer currently scanning, and only one layer
+    // scans at a time).
+    assign conv_wready[0] = core_w_ready;
+    assign conv_wready[1] = core_w_ready;
+    assign conv_wready[2] = core_w_ready;
+    assign conv_wready[3] = core_w_ready;
 
     // -----------------------------------------------------------------------
     // Single shared pool_engine. The sequencer runs exactly one layer at a
@@ -375,39 +390,17 @@ module npu_top (
     assign p4_d       = pool_p_u8;
     assign pool4_done = pool_p_last && pool_sel4;
 
-    conv_engine #(
-        .CIN0(96),  .COUT0(192), .H0(16),  .W0(64),
-        .CIN1(192), .COUT1(256), .H1(8),   .W1(32)
-    ) u_conv34 (
-        .clk(clk), .rst_n(rst_n),
-        .cfg_valid(1'b1), .cfg_zp_in(conv_zp_in), .cfg_zp_out(8'd0),
-        .start0(conv3_start), .start1(conv4_start),
-        .done0(conv3_done), .done1(conv4_done),
-        .x0_valid(p2_v), .x0_u8(p2_d),
-        .x1_valid(p3_v), .x1_u8(p3_d),
-        .grp_start(grp_start),
-        .bias_valid(cb3 | cb4), .bias_s32(wl_bias),
-        .mult_valid(cm3 | cm4), .m_s32(wl_m),
-        .shft_valid(cs3 | cs4), .shift(wl_shift),
-        .w_valid(wbuf_rd_valid), .w_data(wbuf_rd_data), .w_ready(core_b_w_ready),
-        .y_valid(core_b_y_valid), .y_u8(core_b_y_u8),
-        .adv0(conv_grpadv[2]), .adv1(conv_grpadv[3])
-    );
-
-    assign conv_wready[2] = core_b_w_ready;
-    assign conv_wready[3] = core_b_w_ready;
-
-    // The shared core emits its egress while the owning layer's select
-    // window is open, so c1/c2 and c3/c4 alias the two core streams. The
+    // The single shared core emits its egress while the owning layer's
+    // select window is open, so c1..c4 all alias the one core stream. The
     // pool select gates below keep each stage on its own layer window.
-    assign c1_v = core_a_y_valid;
-    assign c1_d = core_a_y_u8;
-    assign c2_v = core_a_y_valid;
-    assign c2_d = core_a_y_u8;
-    assign c3_v = core_b_y_valid;
-    assign c3_d = core_b_y_u8;
-    assign c4_v = core_b_y_valid;
-    assign c4_d = core_b_y_u8;
+    assign c1_v = core_y_valid;
+    assign c1_d = core_y_u8;
+    assign c2_v = core_y_valid;
+    assign c2_d = core_y_u8;
+    assign c3_v = core_y_valid;
+    assign c3_d = core_y_u8;
+    assign c4_v = core_y_valid;
+    assign c4_d = core_y_u8;
 
     wire        gap_we;
     wire [7:0]  gap_waddr;

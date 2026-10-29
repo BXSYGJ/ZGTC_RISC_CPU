@@ -1,24 +1,47 @@
 # InstRec-FPGA 当前状态（STATUS）
 
 > 本文件是**唯一实时状态源**，优先于任何交接快照与记忆。每次会话结束前必须更新，
-> 并在 `CHANGELOG.md` 追加一条。最后更新：2026-10-29 02:10。
+> 并在 `CHANGELOG.md` 追加一条。最后更新：2026-10-29 12:05。
 
 ## 一句话
 
 InstRec 8 类乐器识别（INT8 CNN）正在移植到盘古 100Pro+（PG2L100H-6IFBG676）纯 FPGA 管线。
-**M1 时序收敛并归档；板级已定位到 `done=0` 配置问题并用探针验证了 27 MHz/UART 链路；M2 已交付 conv_engine 修复、weight_loader、pool_engine 与上位机上传协议。**
+**全 NPU 系统已首次布线完全收敛并产出位流（`releases/m2-20261029/`），
+但 core 域仍有 -3.593 ns 违例、谱图/文字层临时关闭、板级仍被 FTDI 掉线阻塞。**
 
 ## 里程碑
 
 | 里程碑 | 状态 | 关键证据 |
 |---|---|---|
-| P0 工具链 + Python 金标准 | 完成 | `pytest -q` 63 passed；`golden_pipeline.py` 位级真值 |
+| P0 工具链 + Python 金标准 | 完成 | `pytest -q` 222 passed / 4 skipped；`golden_pipeline.py` 位级真值 |
 | M0 I2S→DDR3→HDMI 波形 | 完成（未上板） | run `20261027-000612-a71f1451`，sha256 `C517736C…`，WNS +1.757 |
-| M1 Mel 特征引擎 | **构建完成、时序收敛、待板级对拍** | run `20261027-121101-5c24a968`，sha256 `BD40D10A…`，WNS +1.438 / All Constraints Met |
-| M2 INT8 NPU | 约 45% | `requant_unit`/`conv_engine`（编译通过）+ `weight_loader`（写+读回）+ `pool_engine` + `weight_upload.py`；wdma/gap_fc/npu_top 未做 |
-| M3 UI 集成 | 未开始 | `src/ui/` 仅 M0 的网格 + 波形 |
+| M1 Mel 特征引擎 | 构建完成、时序收敛、待板级对拍 | run `20261027-121101-5c24a968`，sha256 `BD40D10A…`，WNS +1.438 / All Constraints Met |
+| M2 INT8 NPU | **全链布线收敛、已出位流、时序未收敛** | run `20261029-110719-01d91e40`，sha256 `E793A792…`，Unrouted 0，`ddrphy_sysclk` -3.593 |
+| M3 UI 集成 | 概率条已接顶层；谱图/文字层因拥塞临时关闭 | `bars_disp`+`ui_renderer` 在位流中；`text_disp`/`spectrum_disp`/`feat_copy`/`feat_page_buf` 待恢复 |
 
 ## 当前状态
+
+### 2026-10-29 上午：全 NPU 系统首次布线收敛（本轮最新）
+
+- run `20261029-110719-01d91e40`：compile→gen_bit_stream 六阶段 OK，48m22s，
+  位流 sha256 `E793A792B72437BEADC77B15CADF7EC5253CFEE63BE2FC72A051486C0B8C23F2`，
+  已归档 `releases/m2-20261029/`（sbit + timing.rtr + manifest + SHA256SUMS + README）。
+- **`Unrouted nets 0` at iteration 278** —— 这是全 NPU 系统第一次布线完全收敛。
+  此前：conv 四核版本 Place-0114 布局失败；conv 双核版本 iteration 59 仍残留 11368 条未布网络。
+- 资源：LUT 35045/66600 (53%)、FF 49478/133200 (37%)、APM 90/240 (38%)、
+  DRM 79.5/155 (51%)、DRAM 1501 (8%)、BKCL 6/6、GPLL 4/6。
+- 时序（`report_timing/instrec_top.rtr`）：**Some Constraints Violated**
+  - `ddrphy_sysclk` WNS **-3.593 ns**，6265 failing endpoints，TNS -5251.8，估计 86.26 MHz（需 125）
+  - `pix_clk` +0.260（转正）、`clk_nco` +1.474、`cfg_clk` +92.288、`rst_clk` +4.509；hold 全部满足
+- 最差路径定位：`u_npu/u_conv/g0_bank1`(DRM CLKB→QB) → `ram_dout` mux → `x_eff` → APM 乘法 →
+  32-bit 累加树 → `acc_a[1][28]`。13 级逻辑、逻辑 4.874 ns、**走线 6.199 ns（56%）**，
+  且 DRM(322,306)/APM(239,522)/加法树(159,414) 三点跨度过大 → 属布局分散，不是逻辑层数问题。
+- 相较 softmax 267 级组合链版本（`ddrphy_sysclk` -42.057 ns），流水化把违例缩小了 38.5 ns。
+- 本轮为腾出布线空间做的**临时让步**（`instrec_top` 中已注释，必须恢复）：
+  `text_disp`、`spectrum_disp`、`feat_copy_engine`、`feat_page_buf`、`ui_coord_delay`。
+  实测它们合计只占 ~0.3% LUT，说明拥塞主因在 NPU 本身。
+- 构建参数：`build_full.tcl` 的 `pnr -fast_router TRUE`（质量低、速度快）；`conv_engine` 已合并为
+  **单共享核**（四组行缓冲/计数器独立，仅 MAC+requant 时分复用）；`softmax_top` 已流水化（约 5 级、340 拍、位级不变）。
 
 ### 板级（2026-10-27 深夜，关键突破）
 
@@ -114,16 +137,25 @@ InstRec 8 类乐器识别（INT8 CNN）正在移植到盘古 100Pro+（PG2L100H-
 
 ## 下一步（按序）
 
-1. FTDI 恢复后：烧 M1 → 读 `done` → 若仍 0 字节，做 `core_clk` 探针（DDR3 IP 的 core_clk 驱动 uart_tx 发 `C`）。
-2. 若 `core_clk` 起振则查 `sys_ctrl`/`uart_debug`；若不起振则查 125 MHz 差分 `ref_clk` 与 IP 时钟配置。
-3. M2：`wdma` → `gap_fc` → `npu_top` → T-M2-07 逐层导出。
+1. **修 `ddrphy_sysclk` -3.593 ns**（唯一阻塞交付的时序项）：最差路径在 `u_conv` 的
+   DRM→APM→32-bit 累加树，走线占 56%。先试去掉 `pnr -fast_router TRUE`（改用默认布线器，
+   质量更好，代价是时间长）与换 seed 重跑；RTL 侧备选是在 APM 输出加一级寄存
+   （需同步推迟 `w_vld_q`/`mac_beat`/`mac_cnt` 一拍以保持 TDM 对齐）。
+2. **恢复 M3 谱图/文字层**：`text_disp`、`spectrum_disp`、`feat_copy_engine`、`feat_page_buf`、
+   `ui_coord_delay` 在 `instrec_top` 中是注释块（残留裸 `;`），恢复后复核 `pix_clk`
+   （本轮 +0.260，余量仅 0.26 ns，恢复后大概率重新变负，需给 UI 路径插流水）。
+3. FTDI 恢复后：烧 `releases/m2-20261029/instrec_top.sbit` → 读状态寄存器确认 `done=1`
+   → `board_check.py` 看 `INSTREC BOOT` → `weight_upload.py` 看 `WOK`
+   → 跑逐层对拍（`compare_layers.py` 对 `reports/golden_ref/`）。
+4. 若板级链接 OK 但仍无音频输出：先查 `core_clk` 域（-3.593 ns 违例很可能让 DDR3 读写不稳）。
 
 ## 验证基线
 
-- `python -m pytest -q` → **114 passed**（约 38 s）。
-- `python scripts/check_rtl.py` → **34 个 .v，0 violation**（hdmi demo 默认排除）。
+- `python -m pytest -q` → **222 passed / 4 skipped**（约 50 s）。
+- `python scripts/check_rtl.py` → **44 个 .v，0 violation**（hdmi demo 默认排除）。
 - 数值对拍只认 `scripts/golden_pipeline.py`；torch 2.14.1 的 oneDNN 有 21~67 LSB tile 噪声。
 - 本机无 WSL 仿真（Ubuntu 发行版 vhdx 缺失），RTL 行为只能靠 Python 对拍 + 板级实测。
+- 全 NPU 构建耗时：compile→gen_bit_stream 约 48 分钟（单线程，`-fast_router`）。
 
 ## 资产位置
 
@@ -137,7 +169,7 @@ InstRec 8 类乐器识别（INT8 CNN）正在移植到盘古 100Pro+（PG2L100H-
 | 金标准 | `scripts/golden_pipeline.py` + `scripts/outputs/golden/*.npy` |
 | SDD | `docs/sdd/{spec,design,tasks}.md`（从 `.codeartsdoer` 复制的可交接副本） |
 | 证据 | `reports/m0-manifest-20261027.json`、`reports/m1-timing-20261027-104218.txt`（修复前时序） |
-| 位流归档 | `releases/m0-20261027/`、`releases/m1-20261027/`（sbit + manifest + SHA256SUMS + 时序报告） |
+| 位流归档 | `releases/m0-20261027/`、`releases/m1-20261027/`、`releases/m2-20261029/`（sbit + manifest + SHA256SUMS + 时序报告） |
 | 交接 | `docs/HANDOFF_SNAPSHOT_20261027.md` + 本文件 |
 | Agent 规则 | 仓库根 `AGENTS.md` |
 
@@ -163,4 +195,5 @@ InstRec 8 类乐器识别（INT8 CNN）正在移植到盘古 100Pro+（PG2L100H-
 - 位流本体不入库（`*.sbit` 全局忽略）；**例外**：`instrec_fpga/releases/**` 与 `pds_cpu_100h/releases/**`
   的里程碑位流已入库并附 `SHA256SUMS`，`.gitattributes` 设 `-text` 防止二进制被换行改写。
 - 里程碑位流：`instrec_fpga/releases/m0-20261027/`（M0）、`instrec_fpga/releases/m1-20261027/`（M1，时序收敛）、
+  `instrec_fpga/releases/m2-20261029/`（全 NPU，布线收敛但 core 域 -3.593 ns）、
   `pds_cpu_100h/releases/120mhz-20261025/`（100H 120 MHz 交付）。

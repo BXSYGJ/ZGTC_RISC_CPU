@@ -3,6 +3,21 @@
 > 每次会话结束前追加一条：时间、做了什么、结论、证据路径。倒序，最新在上。
 > 状态汇总见 `docs/STATUS.md`。
 
+## 2026-10-29 12:05 — 全 NPU 系统首次布线收敛并归档 M2 位流
+
+- `conv_engine` 合并为单共享核（conv1..conv4 复用同一 16-lane MAC/requant，四组行缓冲与计数器保持独立），
+  单核实测 LUT 3247/FF 4261/DRM 19.5/APM 20。
+- `softmax_top` 流水化：267 级组合链拆成约 5 级、340 拍，10002 组输入与旧实现逐位一致（LUT 703/FF 801/APM 1）。
+- 全量构建 run `20261029-110719-01d91e40`：**`Unrouted nets 0` at iteration 278**（此前双核版本 iteration 59
+  仍残留 11368 条未布网络），48m22s 出位流，sha256 `E793A792…`。
+- 资源 LUT 35045 (53%)/FF 49478 (37%)/APM 90 (38%)/DRM 79.5 (51%)；`ddrphy_sysclk` 由 -42.057 ns 收敛到
+  **-3.593 ns**（仍违例，6265 endpoints），`pix_clk` 转正 +0.260。
+- 为腾布线空间的临时让步（必须恢复）：`instrec_top` 中关闭 `text_disp`/`spectrum_disp`/
+  `feat_copy_engine`/`feat_page_buf`/`ui_coord_delay`（合计仅 ~0.3% LUT，拥塞主因在 NPU）。
+- 归档 `releases/m2-20261029/`（sbit + timing.rtr + manifest + SHA256SUMS + README）。
+- 验证：`pytest -q` 222 passed / 4 skipped；`check_rtl.py` 44 个 .v 0 violation。
+- 下一步：修 core 域 -3.593 ns（先试默认布线器/换 seed，再考虑 APM 输出加流水）→ 恢复 M3 层 → 板级对拍。
+
 ## 2026-10-29 02:10 — 完整系统位流产出
 
 - `NPU_ENABLE=1`；为解除布局拥塞把 pool 4→1、conv 4→2 共享核（LUT 44028→38365，APM 166→126）。

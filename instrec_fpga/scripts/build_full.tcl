@@ -106,6 +106,6 @@ compile -system_verilog -top_module instrec_top
 # deliberately NOT enabled. Do not re-add the thread switches.
 synthesize -ads -selected_syn_tool_opt 2
 dev_map
-pnr
+pnr -fast_router TRUE
 report_timing
 gen_bit_stream

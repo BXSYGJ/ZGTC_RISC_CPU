@@ -28,18 +28,21 @@
 // far inside the s32 accumulator (golden tensordot is int64 but the
 // measured contract never leaves s32; requant_unit consumes s32).
 //
-// Architecture (design.md 4.2, 16-MAC option; 2026-10-29 shared-core rev):
-//   - ONE 16-lane INT8 MAC array serves a PAIR of logical conv layers
-//     (group 0 = first layer of the pair, group 1 = second). The layer
-//     sequencer is serial, so the two layers never scan at the same
-//     time; their activation INGRESS streams, however, DO overlap (pool
-//     stage i feeds conv i+1 while conv i is still producing its egress
-//     stream). Each group therefore owns its own three-bank line buffer
-//     and its own ingress counters, while the MAC array, the requant
-//     unit, the accumulator banks, the group-contract bank and the scan
-//     FSM are shared. This removes half of the MAC/requant/accumulator
-//     area (the place-and-route congestion driver) without changing the
-//     scan order, the streaming order or the layer overlap.
+// Architecture (design.md 4.2, 16-MAC option; 2026-10-29 single-core rev):
+//   - ONE 16-lane INT8 MAC array serves ALL FOUR logical conv layers.
+//     The layer sequencer is serial, so no two layers ever scan at the
+//     same time. Their activation INGRESS streams, however, DO overlap:
+//     the pool stage of layer i feeds conv i+1 while conv i is still
+//     producing its egress stream. Every layer therefore owns its own
+//     three-bank line buffer and its own ingress counters, while the
+//     MAC array, the requant unit, the accumulator banks, the group
+//     contract bank and the scan FSM are shared by all four layers.
+//     Merging the four logical layers into one physical core removes
+//     the second copy of the compute datapath (the place-and-route
+//     congestion driver) without changing the scan order, the
+//     streaming order or the layer overlap. The row buffers are NOT
+//     merged: sharing them would collide (conv N scans its window
+//     while the pool egress pre-fills conv N+1's buffer).
 //   - 16 parallel INT8 MAC lanes = the 16 output channels of one
 //     weight group (group_channels = 16 in the layer contract). Every
 //     cycle ONE tap (cin, dy, dx) of the shared input window is
@@ -59,6 +62,10 @@
 //     re-armed per (row, group); the group contract (16 x bias_s32,
 //     16 x M_s32, 16 x shift) is double-buffered so the wdma prefetch
 //     of the next group overlaps the current group computation.
+//   - Layer select: conv_sel (2 bits, layer id 0..3) is latched at the
+//     layer start pulse and drives the compile-time shape muxes and
+//     the line-buffer bank-group muxes. All four shape sets are
+//     parameters, so the address arithmetic stays constant-folded.
 //
 // MAC implementation note (design.md 4.2 selection): int8 x int8
 // products are written as plain signed multiplies so synthesis maps
@@ -82,9 +89,10 @@
 // on the post-pool shapes (114.6M total, 57.5 ms); the true pre-pool
 // count is ~460M, so the 16-MAC array lands at ~234 ms > 200 ms
 // budget. This engine implements the specified 16-MAC architecture;
-// closing the gap (32-MAC option from design.md 4.2 or two engine
-// cores) is a system-level decision. Sharing a core between two layers
-// does NOT change this number (each layer still scans its own taps).
+// closing the gap (32-MAC option from design.md 4.2 or a second
+// engine core) is a system-level decision. Sharing one core across
+// all four layers does NOT change this number (each layer still scans
+// its own taps).
 //
 // Beat plan per output pixel per group (TDM channels 0..15 through
 // requant_unit are hidden inside the next tap scan; conv1 stretches
@@ -120,20 +128,30 @@
 // ---------------------------------------------------------------------------
 
 module conv_engine #(
-    // Two logical layers share one physical core. Group 0 = first layer
-    // of the pair, group 1 = second. Shapes are compile-time per group so
-    // the address arithmetic stays constant-folded (no runtime multiplier
-    // appears on the line-buffer address path).
-    //   pair A (npu_top u_conv12): conv1 = 1/48/64/258, conv2 = 48/96/32/129
-    //   pair B (npu_top u_conv34): conv3 = 96/192/16/64, conv4 = 192/256/8/32
-    parameter CIN0  = 1,      // group 0 input channels
-    parameter COUT0 = 48,     // group 0 output channels (multiple of 16)
-    parameter H0    = 64,     // group 0 input rows (= output rows, pad-1 stride-1)
-    parameter W0    = 258,    // group 0 input cols (= output cols)
-    parameter CIN1  = 48,     // group 1 input channels
-    parameter COUT1 = 96,     // group 1 output channels (multiple of 16)
-    parameter H1    = 32,     // group 1 input rows
-    parameter W1    = 129     // group 1 input cols
+    // Four logical layers share one physical core. Shapes are
+    // compile-time per layer so the address arithmetic stays
+    // constant-folded (no runtime multiplier appears on the
+    // line-buffer address path). Layer ids match npu_top's conv_sel:
+    //   0 = conv1 =   1/48 /64/258
+    //   1 = conv2 =  48/96 /32/129
+    //   2 = conv3 =  96/192/16/64
+    //   3 = conv4 = 192/256/ 8/32
+    parameter CIN0  = 1,      // layer 0 input channels
+    parameter COUT0 = 48,     // layer 0 output channels (multiple of 16)
+    parameter H0    = 64,     // layer 0 input rows (= output rows, pad-1 stride-1)
+    parameter W0    = 258,    // layer 0 input cols (= output cols)
+    parameter CIN1  = 48,     // layer 1 input channels
+    parameter COUT1 = 96,     // layer 1 output channels (multiple of 16)
+    parameter H1    = 32,     // layer 1 input rows
+    parameter W1    = 129,    // layer 1 input cols
+    parameter CIN2  = 96,     // layer 2 input channels
+    parameter COUT2 = 192,    // layer 2 output channels (multiple of 16)
+    parameter H2    = 16,     // layer 2 input rows
+    parameter W2    = 64,     // layer 2 input cols
+    parameter CIN3  = 192,    // layer 3 input channels
+    parameter COUT3 = 256,    // layer 3 output channels (multiple of 16)
+    parameter H3    = 8,      // layer 3 input rows
+    parameter W3    = 32      // layer 3 input cols
 ) (
     // clock / reset (core_clk 125 MHz domain)
     input  wire               clk,
@@ -144,20 +162,32 @@ module conv_engine #(
     input  wire        [7:0]  cfg_zp_in,   // conv1: 49, others 0
     input  wire        [7:0]  cfg_zp_out,  // requant output zero point
 
-    // layer control, one pair per logical layer
-    input  wire               start0,     // pulse: reset group 0 + scan state
-    input  wire               start1,     // pulse: reset group 1 + scan state
-    output wire               done0,      // pulse: group 0 layer drained
-    output wire               done1,      // pulse: group 1 layer drained
+    // layer id (0..3), latched on the layer start pulse. npu_top drives
+    // the id of the conv layer it is about to start.
+    input  wire        [1:0]  conv_sel,
 
-    // [ingress] activation row streams, u8 container domain, one per group.
-    // Raster order: column-major within a row -- col 0 carries
+    // layer control, one pair per logical layer
+    input  wire               start0,     // pulse: reset layer 0 + scan state
+    input  wire               start1,     // pulse: reset layer 1 + scan state
+    input  wire               start2,     // pulse: reset layer 2 + scan state
+    input  wire               start3,     // pulse: reset layer 3 + scan state
+    output wire               done0,      // pulse: layer 0 drained
+    output wire               done1,      // pulse: layer 1 drained
+    output wire               done2,      // pulse: layer 2 drained
+    output wire               done3,      // pulse: layer 3 drained
+
+    // [ingress] activation row streams, u8 container domain, one per
+    // layer. Raster order: column-major within a row -- col 0 carries
     // ch 0..CIN-1, then col 1, etc. One beat per cycle, no backpressure
     // (producer rate <= 1 beat/cycle; row boundaries derived by count).
     input  wire               x0_valid,
     input  wire        [7:0]  x0_u8,
     input  wire               x1_valid,
     input  wire        [7:0]  x1_u8,
+    input  wire               x2_valid,
+    input  wire        [7:0]  x2_u8,
+    input  wire               x3_valid,
+    input  wire        [7:0]  x3_u8,
 
     // [wdma alignment point] group contract stream, 48 beats per group
     // (16 x bias, 16 x M, 16 x shift), loaded into the shadow contract
@@ -184,13 +214,15 @@ module conv_engine #(
 
     // [pool_engine alignment point] egress: requantized u8 stream in
     // scan order (out_row, grp, col, lane 0..15 TDM). Valid only while
-    // the selected group is scanning.
+    // the selected layer is scanning.
     output wire               y_valid,
     output wire        [7:0]  y_u8,
 
     // group boundary strobes, one per logical layer in scan order.
     output wire               adv0,
-    output wire               adv1
+    output wire               adv1,
+    output wire               adv2,
+    output wire               adv3
 );
 
     // -----------------------------------------------------------------------
@@ -209,22 +241,37 @@ module conv_engine #(
         end
     endfunction
 
-    localparam G0_GRP  = COUT0 / 16;           // 16-channel groups, group 0
-    localparam G1_GRP  = COUT1 / 16;           // 16-channel groups, group 1
+    function integer MAXI2;
+        input integer a;
+        input integer b;
+        begin
+            MAXI2 = (a > b) ? a : b;
+        end
+    endfunction
+
+    localparam G0_GRP  = COUT0 / 16;           // 16-channel groups, layer 0
+    localparam G1_GRP  = COUT1 / 16;
+    localparam G2_GRP  = COUT2 / 16;
+    localparam G3_GRP  = COUT3 / 16;
     localparam G0_TAP  = 9 * CIN0;             // taps per pixel per group
     localparam G1_TAP  = 9 * CIN1;
+    localparam G2_TAP  = 9 * CIN2;
+    localparam G3_TAP  = 9 * CIN3;
     localparam G0_LINE = CIN0 * W0;            // u8 words per line bank
     localparam G1_LINE = CIN1 * W1;
+    localparam G2_LINE = CIN2 * W2;
+    localparam G3_LINE = CIN3 * W3;
 
-    localparam CMAX    = (CIN0 > CIN1) ? CIN0 : CIN1;
-    localparam HMAX    = (H0   > H1)   ? H0   : H1;
-    localparam WMAX    = (W0   > W1)   ? W0   : W1;
-    localparam TAPMAX  = (G0_TAP > G1_TAP) ? G0_TAP : G1_TAP;
-    localparam GRPMAX  = (G0_GRP > G1_GRP) ? G0_GRP : G1_GRP;
+    localparam CMAX    = MAXI2(MAXI2(CIN0, CIN1), MAXI2(CIN2, CIN3));
+    localparam HMAX    = MAXI2(MAXI2(H0,   H1),   MAXI2(H2,   H3));
+    localparam WMAX    = MAXI2(MAXI2(W0,   W1),   MAXI2(W2,   W3));
+    localparam TAPMAX  = MAXI2(MAXI2(G0_TAP, G1_TAP), MAXI2(G2_TAP, G3_TAP));
+    localparam GRPMAX  = MAXI2(MAXI2(G0_GRP, G1_GRP), MAXI2(G2_GRP, G3_GRP));
 
-    localparam AW0     = clog2(G0_LINE);        // group 0 line address width
-    localparam AW1     = clog2(G1_LINE);        // group 1 line address width
-    localparam AW      = (AW0 > AW1) ? AW0 : AW1;
+    localparam AW0     = clog2(G0_LINE);        // layer 0 line address width
+    localparam AW1     = clog2(G1_LINE);
+    localparam AW2     = clog2(G2_LINE);
+    localparam AW3     = clog2(G3_LINE);
     localparam RW      = clog2(WMAX);           // column index width
     localparam RC      = clog2(CMAX);           // channel index width
     localparam RR      = clog2(HMAX + 1);       // row counter width (0..HMAX)
@@ -233,10 +280,16 @@ module conv_engine #(
 
     localparam [15:0] W0V = W0;                 // 16-bit stride constants
     localparam [15:0] W1V = W1;
+    localparam [15:0] W2V = W2;
+    localparam [15:0] W3V = W3;
     localparam [RT-1:0] TAP0V = G0_TAP;
     localparam [RT-1:0] TAP1V = G1_TAP;
+    localparam [RT-1:0] TAP2V = G2_TAP;
+    localparam [RT-1:0] TAP3V = G3_TAP;
     localparam [RG-1:0] GRPL0 = G0_GRP - 1;     // last output group index
     localparam [RG-1:0] GRPL1 = G1_GRP - 1;
+    localparam [RG-1:0] GRPL2 = G2_GRP - 1;
+    localparam [RG-1:0] GRPL3 = G3_GRP - 1;
 
     // -----------------------------------------------------------------------
     // Layer configuration registers (shared, latched per layer_start)
@@ -245,7 +298,7 @@ module conv_engine #(
     reg [7:0] zp_out_reg;   // requant zero point
 
     // -----------------------------------------------------------------------
-    // Scan control state (shared core). sel picks the group whose shape
+    // Scan control state (shared core). sel picks the layer whose shape
     // and line buffer the scan FSM currently walks; it is latched at
     // layer_start and stays put until the next start pulse.
     // -----------------------------------------------------------------------
@@ -253,7 +306,7 @@ module conv_engine #(
     localparam PH_SCAN = 2'd1;      // tap scan (TAP_NUM issues + pipe)
     localparam PH_SNAP = 2'd2;      // acc snapshot + bank swap (1 beat)
 
-    reg               sel;            // 0: group 0 layer, 1: group 1 layer
+    reg  [1:0]        sel;            // 0..3: layer being scanned
     reg               run_reg;        // layer in progress
     reg [RR-1:0]      out_row_cnt;    // 0..H-1
     reg [RG-1:0]      grp_cnt;        // 0..GRP_NUM-1
@@ -266,15 +319,22 @@ module conv_engine #(
     reg [1:0]         dx_cnt;         // window col offset 0..2
     reg [RC-1:0]      cin_cnt;        // tap channel 0..CIN-1
 
-    // per-group shape selectors (constants muxed by sel; 16-bit so the
+    // any-start pulse and the layer id it carries into sel
+    wire       any_start  = start0 | start1 | start2 | start3;
+
+    // per-layer shape selectors (constants muxed by sel; 16-bit so the
     // conv1 width of 258 is not truncated)
-    wire [15:0] s_h      = sel ? H1 : H0;
-    wire [15:0] s_w      = sel ? W1 : W0;
-    wire [RT-1:0] s_tap_last = sel ? TAP1V : TAP0V;
-    wire [RG-1:0] s_grp_last = sel ? GRPL1 : GRPL0;
+    wire [15:0] s_h      = (sel == 2'd0) ? H0 : (sel == 2'd1) ? H1 :
+                           (sel == 2'd2) ? H2 : H3;
+    wire [15:0] s_w      = (sel == 2'd0) ? W0 : (sel == 2'd1) ? W1 :
+                           (sel == 2'd2) ? W2 : W3;
+    wire [RT-1:0] s_tap_last = (sel == 2'd0) ? TAP0V : (sel == 2'd1) ? TAP1V :
+                               (sel == 2'd2) ? TAP2V : TAP3V;
+    wire [RG-1:0] s_grp_last = (sel == 2'd0) ? GRPL0 : (sel == 2'd1) ? GRPL1 :
+                               (sel == 2'd2) ? GRPL2 : GRPL3;
 
     // -----------------------------------------------------------------------
-    // Sliding-window line buffers: TWO independent groups of 3 rotating
+    // Sliding-window line buffers: FOUR independent sets of 3 rotating
     // banks (CIN x W_IN u8 words each). Ingress streams overlap between
     // adjacent layers, so the buffers cannot be merged; only the compute
     // core is shared. Bank = row mod 3. Write port: activation ingress.
@@ -283,6 +343,8 @@ module conv_engine #(
     // write and read never hit the same bank in the same cycle.
     // Pad-1 rows/cols are guarded read-side (return 0 in the signed MAC
     // domain) -- the neutral value, see header.
+    // The read port of the three non-selected layers is parked at
+    // address 0, so no bank is ever indexed out of range.
     // -----------------------------------------------------------------------
     reg [7:0] g0_bank0 [0:G0_LINE-1];
     reg [7:0] g0_bank1 [0:G0_LINE-1];
@@ -290,23 +352,45 @@ module conv_engine #(
     reg [7:0] g1_bank0 [0:G1_LINE-1];
     reg [7:0] g1_bank1 [0:G1_LINE-1];
     reg [7:0] g1_bank2 [0:G1_LINE-1];
+    reg [7:0] g2_bank0 [0:G2_LINE-1];
+    reg [7:0] g2_bank1 [0:G2_LINE-1];
+    reg [7:0] g2_bank2 [0:G2_LINE-1];
+    reg [7:0] g3_bank0 [0:G3_LINE-1];
+    reg [7:0] g3_bank1 [0:G3_LINE-1];
+    reg [7:0] g3_bank2 [0:G3_LINE-1];
 
     reg [7:0] g0_dout0, g0_dout1, g0_dout2;   // synchronous read data
     reg [7:0] g1_dout0, g1_dout1, g1_dout2;
+    reg [7:0] g2_dout0, g2_dout1, g2_dout2;
+    reg [7:0] g3_dout0, g3_dout1, g3_dout2;
 
-    // group 0 ingress counters
+    // layer 0 ingress counters
     reg [1:0]        g0_wr_bank;      // bank being written (row mod 3)
     reg [RR-1:0]     g0_row;          // completed-row counter (0..H0)
     reg [RC-1:0]     g0_ch;           // ingress channel index within row
     reg [RW-1:0]     g0_col;          // ingress column index within row
     reg [HMAX-1:0]   g0_row_done;     // per input row completion bitmap
 
-    // group 1 ingress counters
+    // layer 1 ingress counters
     reg [1:0]        g1_wr_bank;
     reg [RR-1:0]     g1_row;
     reg [RC-1:0]     g1_ch;
     reg [RW-1:0]     g1_col;
     reg [HMAX-1:0]   g1_row_done;
+
+    // layer 2 ingress counters
+    reg [1:0]        g2_wr_bank;
+    reg [RR-1:0]     g2_row;
+    reg [RC-1:0]     g2_ch;
+    reg [RW-1:0]     g2_col;
+    reg [HMAX-1:0]   g2_row_done;
+
+    // layer 3 ingress counters
+    reg [1:0]        g3_wr_bank;
+    reg [RR-1:0]     g3_row;
+    reg [RC-1:0]     g3_ch;
+    reg [RW-1:0]     g3_col;
+    reg [HMAX-1:0]   g3_row_done;
 
     // -----------------------------------------------------------------------
     // Group contract registers, double-banked (active/shadow) -- shared.
@@ -409,17 +493,27 @@ module conv_engine #(
     // Beat order is column-major (col 0 carries ch 0..CIN-1, then
     // col 1, ...) -- matches the TDM group ordering of the upstream
     // pool/mel engines. One beat per cycle, no backpressure.
-    // Each group keeps constant stride arithmetic (no runtime multiply).
+    // Each layer keeps its own counters and its own bank group, so the
+    // pre-fill of layer N+1 proceeds while layer N is still scanning;
+    // constant stride arithmetic (no runtime multiply) per layer.
     // -----------------------------------------------------------------------
     wire g0_wr_en = x0_valid && (g0_row != H0);
     wire g1_wr_en = x1_valid && (g1_row != H1);
+    wire g2_wr_en = x2_valid && (g2_row != H2);
+    wire g3_wr_en = x3_valid && (g3_row != H3);
 
     wire [15:0] g0_wr_off = {{(16-RC){1'b0}}, g0_ch} * W0V;
     wire [15:0] g1_wr_off = {{(16-RC){1'b0}}, g1_ch} * W1V;
+    wire [15:0] g2_wr_off = {{(16-RC){1'b0}}, g2_ch} * W2V;
+    wire [15:0] g3_wr_off = {{(16-RC){1'b0}}, g3_ch} * W3V;
     wire [15:0] g0_wr_sum = g0_wr_off + {{(16-RW){1'b0}}, g0_col};
     wire [15:0] g1_wr_sum = g1_wr_off + {{(16-RW){1'b0}}, g1_col};
+    wire [15:0] g2_wr_sum = g2_wr_off + {{(16-RW){1'b0}}, g2_col};
+    wire [15:0] g3_wr_sum = g3_wr_off + {{(16-RW){1'b0}}, g3_col};
     wire [AW0-1:0] g0_wr_addr = g0_wr_sum[AW0-1:0];
     wire [AW1-1:0] g1_wr_addr = g1_wr_sum[AW1-1:0];
+    wire [AW2-1:0] g2_wr_addr = g2_wr_sum[AW2-1:0];
+    wire [AW3-1:0] g3_wr_addr = g3_wr_sum[AW3-1:0];
 
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
@@ -479,13 +573,71 @@ module conv_engine #(
         end
     end
 
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            g2_row      <= {RR{1'b0}};
+            g2_ch       <= {RC{1'b0}};
+            g2_col      <= {RW{1'b0}};
+            g2_wr_bank  <= 2'd0;
+            g2_row_done <= {HMAX{1'b0}};
+        end else if (start2) begin
+            g2_row      <= {RR{1'b0}};
+            g2_ch       <= {RC{1'b0}};
+            g2_col      <= {RW{1'b0}};
+            g2_wr_bank  <= 2'd0;
+            g2_row_done <= {HMAX{1'b0}};
+        end else if (g2_wr_en) begin
+            if ((g2_ch == CIN2 - 1) && (g2_col == W2 - 1)) begin
+                g2_row_done[g2_row & (H2 - 1)] <= 1'b1;   // row complete
+                g2_row     <= g2_row + 1'b1;
+                g2_ch      <= {RC{1'b0}};
+                g2_col     <= {RW{1'b0}};
+                g2_wr_bank <= (g2_wr_bank == 2'd2) ? 2'd0 : g2_wr_bank + 2'd1;
+            end else if (g2_ch == CIN2 - 1) begin
+                g2_ch  <= {RC{1'b0}};
+                g2_col <= g2_col + 1'b1;
+            end else begin
+                g2_ch <= g2_ch + 1'b1;
+            end
+        end
+    end
+
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            g3_row      <= {RR{1'b0}};
+            g3_ch       <= {RC{1'b0}};
+            g3_col      <= {RW{1'b0}};
+            g3_wr_bank  <= 2'd0;
+            g3_row_done <= {HMAX{1'b0}};
+        end else if (start3) begin
+            g3_row      <= {RR{1'b0}};
+            g3_ch       <= {RC{1'b0}};
+            g3_col      <= {RW{1'b0}};
+            g3_wr_bank  <= 2'd0;
+            g3_row_done <= {HMAX{1'b0}};
+        end else if (g3_wr_en) begin
+            if ((g3_ch == CIN3 - 1) && (g3_col == W3 - 1)) begin
+                g3_row_done[g3_row & (H3 - 1)] <= 1'b1;   // row complete
+                g3_row     <= g3_row + 1'b1;
+                g3_ch      <= {RC{1'b0}};
+                g3_col     <= {RW{1'b0}};
+                g3_wr_bank <= (g3_wr_bank == 2'd2) ? 2'd0 : g3_wr_bank + 2'd1;
+            end else if (g3_ch == CIN3 - 1) begin
+                g3_ch  <= {RC{1'b0}};
+                g3_col <= g3_col + 1'b1;
+            end else begin
+                g3_ch <= g3_ch + 1'b1;
+            end
+        end
+    end
+
     // -----------------------------------------------------------------------
     // Tap read-address generation (combinational on the issue beat):
     // window position (out_row + dy - 1, out_col + dx - 1); pad guard
     // returns x_eff = 0 (the signed-domain neutral value). Row/col are
     // computed as unsigned sums so the -1 underflow maps to 0 == pad.
-    // Only the selected group's address is driven (the other one is
-    // parked at 0 so its smaller bank is never out-of-range indexed).
+    // Only the selected layer's address is driven (the other three are
+    // parked at 0 so their smaller banks are never out-of-range indexed).
     // -----------------------------------------------------------------------
     wire [RW+1:0] col_u   = {2'b00, out_col_cnt} + {{RW{1'b0}}, dx_cnt};
     wire          col_pad = (col_u == {(RW+2){1'b0}}) || (col_u > s_w);
@@ -498,10 +650,15 @@ module conv_engine #(
 
     wire [15:0] g0_rd_off = {{(16-RC){1'b0}}, cin_cnt} * W0V;
     wire [15:0] g1_rd_off = {{(16-RC){1'b0}}, cin_cnt} * W1V;
-    wire [15:0] g0_rd_sum = g0_rd_off + {{(16-RW){1'b0}}, rd_col_off};
-    wire [15:0] g1_rd_sum = g1_rd_off + {{(16-RW){1'b0}}, rd_col_off};
-    wire [AW0-1:0] g0_rd_addr = (rd_pad_c || sel) ? {AW0{1'b0}} : g0_rd_sum[AW0-1:0];
-    wire [AW1-1:0] g1_rd_addr = (rd_pad_c || !sel) ? {AW1{1'b0}} : g1_rd_sum[AW1-1:0];
+    wire [15:0] g2_rd_off = {{(16-RC){1'b0}}, cin_cnt} * W2V;
+    wire [15:0] g3_rd_off = {{(16-RC){1'b0}}, cin_cnt} * W3V;
+    wire [15:0] s_rd_off = (sel == 2'd0) ? g0_rd_off : (sel == 2'd1) ? g1_rd_off :
+                           (sel == 2'd2) ? g2_rd_off : g3_rd_off;
+    wire [15:0] s_rd_sum = s_rd_off + {{(16-RW){1'b0}}, rd_col_off};
+    wire [AW0-1:0] g0_rd_addr = (rd_pad_c || (sel != 2'd0)) ? {AW0{1'b0}} : s_rd_sum[AW0-1:0];
+    wire [AW1-1:0] g1_rd_addr = (rd_pad_c || (sel != 2'd1)) ? {AW1{1'b0}} : s_rd_sum[AW1-1:0];
+    wire [AW2-1:0] g2_rd_addr = (rd_pad_c || (sel != 2'd2)) ? {AW2{1'b0}} : s_rd_sum[AW2-1:0];
+    wire [AW3-1:0] g3_rd_addr = (rd_pad_c || (sel != 2'd3)) ? {AW3{1'b0}} : s_rd_sum[AW3-1:0];
 
     // line RAM banks: one write port (ingress) + one synchronous read
     // port (tap scan) each. Write row = scan row + 2, never a window row,
@@ -536,6 +693,36 @@ module conv_engine #(
             g1_bank2[g1_wr_addr] <= x1_u8;
         g1_dout2 <= g1_bank2[g1_rd_addr];
     end
+    always @(posedge clk) begin
+        if (g2_wr_en && (g2_wr_bank == 2'd0))
+            g2_bank0[g2_wr_addr] <= x2_u8;
+        g2_dout0 <= g2_bank0[g2_rd_addr];
+    end
+    always @(posedge clk) begin
+        if (g2_wr_en && (g2_wr_bank == 2'd1))
+            g2_bank1[g2_wr_addr] <= x2_u8;
+        g2_dout1 <= g2_bank1[g2_rd_addr];
+    end
+    always @(posedge clk) begin
+        if (g2_wr_en && (g2_wr_bank == 2'd2))
+            g2_bank2[g2_wr_addr] <= x2_u8;
+        g2_dout2 <= g2_bank2[g2_rd_addr];
+    end
+    always @(posedge clk) begin
+        if (g3_wr_en && (g3_wr_bank == 2'd0))
+            g3_bank0[g3_wr_addr] <= x3_u8;
+        g3_dout0 <= g3_bank0[g3_rd_addr];
+    end
+    always @(posedge clk) begin
+        if (g3_wr_en && (g3_wr_bank == 2'd1))
+            g3_bank1[g3_wr_addr] <= x3_u8;
+        g3_dout1 <= g3_bank1[g3_rd_addr];
+    end
+    always @(posedge clk) begin
+        if (g3_wr_en && (g3_wr_bank == 2'd2))
+            g3_bank2[g3_wr_addr] <= x3_u8;
+        g3_dout2 <= g3_bank2[g3_rd_addr];
+    end
 
     // -----------------------------------------------------------------------
     // Group contract loader. Exactly one valid strobe per beat, fixed
@@ -566,7 +753,7 @@ module conv_engine #(
                 shft_act[i] <= 7'd0;
                 shft_shd[i] <= 7'd0;
             end
-        end else if (start0 || start1) begin
+        end else if (any_start) begin
             cload_cnt  <= 6'd0;
             grp_arm    <= 1'b0;
             shadow_rdy <= 1'b0;
@@ -610,13 +797,18 @@ module conv_engine #(
     // -----------------------------------------------------------------------
     // window row availability: output row r needs input rows r-1..r+1,
     // i.e. row min(r+1, H-1) completed; row r+1 = H is pad (zero).
-    // The index is masked to the group's own bitmap so the unused
+    // The index is masked to the layer's own bitmap so the unused
     // high counter states never address outside the array.
     wire row_rdy0 = (out_row_cnt == H0 - 1) ? g0_row_done[H0 - 1]
                    : g0_row_done[(out_row_cnt + 1'b1) & (H0 - 1)];
     wire row_rdy1 = (out_row_cnt == H1 - 1) ? g1_row_done[H1 - 1]
                    : g1_row_done[(out_row_cnt + 1'b1) & (H1 - 1)];
-    wire row_ready = sel ? row_rdy1 : row_rdy0;
+    wire row_rdy2 = (out_row_cnt == H2 - 1) ? g2_row_done[H2 - 1]
+                   : g2_row_done[(out_row_cnt + 1'b1) & (H2 - 1)];
+    wire row_rdy3 = (out_row_cnt == H3 - 1) ? g3_row_done[H3 - 1]
+                   : g3_row_done[(out_row_cnt + 1'b1) & (H3 - 1)];
+    wire row_ready = (sel == 2'd0) ? row_rdy0 : (sel == 2'd1) ? row_rdy1 :
+                     (sel == 2'd2) ? row_rdy2 : row_rdy3;
 
     // issue window: cycles where a new tap address + weight pair can be
     // consumed (w_ready mirrors this to the wdma tap stream)
@@ -672,11 +864,17 @@ module conv_engine #(
     // MAC operand: live zp_in subtraction in the signed 9-bit domain
     // (u8 container store, see header storage-domain note)
     // -----------------------------------------------------------------------
-    wire [7:0] ram_dout = sel ?
-        ((rd_bank_q == 2'd0) ? g1_dout0 :
-         (rd_bank_q == 2'd1) ? g1_dout1 : g1_dout2) :
-        ((rd_bank_q == 2'd0) ? g0_dout0 :
-         (rd_bank_q == 2'd1) ? g0_dout1 : g0_dout2);
+    wire [7:0] g0_dout = (rd_bank_q == 2'd0) ? g0_dout0 :
+                         (rd_bank_q == 2'd1) ? g0_dout1 : g0_dout2;
+    wire [7:0] g1_dout = (rd_bank_q == 2'd0) ? g1_dout0 :
+                         (rd_bank_q == 2'd1) ? g1_dout1 : g1_dout2;
+    wire [7:0] g2_dout = (rd_bank_q == 2'd0) ? g2_dout0 :
+                         (rd_bank_q == 2'd1) ? g2_dout1 : g2_dout2;
+    wire [7:0] g3_dout = (rd_bank_q == 2'd0) ? g3_dout0 :
+                         (rd_bank_q == 2'd1) ? g3_dout1 : g3_dout2;
+    wire [7:0] ram_dout = (sel == 2'd0) ? g0_dout : (sel == 2'd1) ? g1_dout :
+                          (sel == 2'd2) ? g2_dout : g3_dout;
+
     wire signed [8:0] x_eff = rd_pad_q ? 9'sd0 :
             ($signed({1'b0, ram_dout}) - $signed({1'b0, zp_in_reg}));
 
@@ -721,7 +919,7 @@ module conv_engine #(
         if (!rst_n) begin
             fin_cnt     <= 6'd0;
             fin_latched <= 1'b0;
-        end else if (start0 || start1) begin
+        end else if (any_start) begin
             fin_cnt     <= 6'd0;
             fin_latched <= 1'b0;
         end else if (fin_load) begin
@@ -739,7 +937,7 @@ module conv_engine #(
     // -----------------------------------------------------------------------
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
-            sel          <= 1'b0;
+            sel          <= 2'd0;
             run_reg      <= 1'b0;
             phase_reg    <= PH_LOAD;
             out_row_cnt  <= {RR{1'b0}};
@@ -759,8 +957,8 @@ module conv_engine #(
         end else begin
             advance_q <= advance_now;
             done_q    <= layer_done_comb;
-            if (start0 || start1) begin
-                sel          <= start1;
+            if (any_start) begin
+                sel          <= conv_sel;
                 run_reg      <= 1'b1;
                 phase_reg    <= PH_LOAD;
                 out_row_cnt  <= {RR{1'b0}};
@@ -854,10 +1052,14 @@ module conv_engine #(
 
     assign y_valid     = rq_y_valid;
     assign y_u8        = rq_y_u8;
-    assign done0       = done_q && !sel;
-    assign done1       = done_q && sel;
-    assign adv0        = advance_q && !sel;
-    assign adv1        = advance_q && sel;
+    assign done0       = done_q && (sel == 2'd0);
+    assign done1       = done_q && (sel == 2'd1);
+    assign done2       = done_q && (sel == 2'd2);
+    assign done3       = done_q && (sel == 2'd3);
+    assign adv0        = advance_q && (sel == 2'd0);
+    assign adv1        = advance_q && (sel == 2'd1);
+    assign adv2        = advance_q && (sel == 2'd2);
+    assign adv3        = advance_q && (sel == 2'd3);
     assign w_ready     = issue_window;
 
 endmodule
