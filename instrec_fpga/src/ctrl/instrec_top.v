@@ -498,8 +498,17 @@ module instrec_top #(
     wire [23:0] text_rgb;
     wire        text_on;
 
-        /* disabled for routing congestion: text_disp u_text_disp ( */
-;
+    text_disp u_text_disp (
+        .pix_clk   (pix_clk),
+        .rst_pix_n (rst_pix_n),
+        .pix_x     (text_x),
+        .pix_y     (text_y),
+        .de        (text_de),
+        .class_idx ({4'd0, top1_s1}),
+        .pct       (text_pct),
+        .rgb       (text_rgb),
+        .text_on   (text_on)
+    );
 
     wire [14:0] npu_feat_rd_addr;
     wire [10:0] spec_x, spec_y;
@@ -515,8 +524,20 @@ module instrec_top #(
     wire        copy_dst_page;
     wire        copy_done_u;
 
-        /* disabled for routing congestion: feat_copy_engine u_feat_copy ( */
-;
+    feat_copy_engine u_feat_copy (
+        .core_clk   (core_clk),
+        .core_rst_n (core_clk_rst_n),
+        .start      (mel_npu_start),
+        .busy_in    (npu_feat_rd_en_u),
+        .src_addr   (copy_src_addr),
+        .src_en     (copy_src_en),
+        .src_data   (mel_feat_rd_data),
+        .dst_addr   (copy_dst_addr),
+        .dst_data   (copy_dst_data),
+        .dst_we     (copy_dst_we),
+        .dst_page   (copy_dst_page),
+        .done       (copy_done_u)
+    );
 
     // The NPU has priority on the mel feature port; the copy engine runs
     // only while the NPU is idle.
@@ -525,18 +546,46 @@ module instrec_top #(
     wire [14:0] spec_ram_addr;
     wire [7:0]  spec_ram_data;
 
-        /* disabled for routing congestion: feat_page_buf u_feat_page ( */
-;
+    feat_page_buf u_feat_page (
+        .core_clk   (core_clk),
+        .core_rst_n (core_clk_rst_n),
+        .wr_en      (copy_dst_we),
+        .wr_addr    (copy_dst_addr),
+        .wr_data    (copy_dst_data),
+        .wr_page    (copy_dst_page),
+        .pix_clk    (pix_clk),
+        .pix_rst_n  (rst_pix_n),
+        .rd_addr    (spec_ram_addr),
+        .rd_data    (spec_ram_data)
+    );
 
     wire [23:0] spec_rgb;
     wire        spec_on;
 
-        /* disabled for routing congestion: spectrum_disp u_spectrum ( */
-;
+    spectrum_disp u_spectrum (
+        .pix_clk    (pix_clk),
+        .rst_pix_n  (rst_pix_n),
+        .x          (spec_x),
+        .y          (spec_y),
+        .de         (spec_de),
+        .ram_addr   (spec_ram_addr),
+        .ram_data   (spec_ram_data),
+        .page_ready (1'b1),
+        .rgb        (spec_rgb),
+        .spec_on    (spec_on)
+    );
 
 
-        /* disabled for routing congestion: ui_coord_delay u_spec_delay ( */
-;
+    ui_coord_delay u_spec_delay (
+        .pix_clk   (pix_clk),
+        .rst_pix_n (rst_pix_n),
+        .x         (pix_x),
+        .y         (pix_y),
+        .de        (pix_de),
+        .x_d       (spec_x),
+        .y_d       (spec_y),
+        .de_d      (spec_de)
+    );
 
     ui_renderer u_ui_renderer (
         .pix_clk       (pix_clk),
@@ -551,10 +600,10 @@ module instrec_top #(
         .wave_max      (wave_max),
         .wave_valid    (wave_valid),
         .mute_flag_sync(mute_flag_sync),
-        .spec_rgb      (24'd0),
-        .spec_on       (1'b0),
-        .text_rgb      (24'd0),
-        .text_on       (1'b0),
+        .spec_rgb      (spec_rgb),
+        .spec_on       (spec_on),
+        .text_rgb      (text_rgb),
+        .text_on       (text_on),
         .bars_rgb      (bars_rgb),
         .bars_on       (bars_on),
         .vsync_pulse   (vsync_pulse),
