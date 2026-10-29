@@ -1,25 +1,69 @@
 # InstRec-FPGA 当前状态（STATUS）
 
 > 本文件是**唯一实时状态源**，优先于任何交接快照与记忆。每次会话结束前必须更新，
-> 并在 `CHANGELOG.md` 追加一条。最后更新：2026-10-29 12:05。
+> 并在 `CHANGELOG.md` 追加一条。最后更新：2026-10-29 19:20。
 
 ## 一句话
 
 InstRec 8 类乐器识别（INT8 CNN）正在移植到盘古 100Pro+（PG2L100H-6IFBG676）纯 FPGA 管线。
-**全 NPU 系统已首次布线完全收敛并产出位流（`releases/m2-20261029/`），
-但 core 域仍有 -3.593 ns 违例、谱图/文字层临时关闭、板级仍被 FTDI 掉线阻塞。**
+**FTDI 掉线根因已定位并修复（脚本 terminate 时机），实测连续烧录设备不再消失；
+全 NPU 位流已上板 `done=1`。当前阻塞转为 UART 字符被丢（uart_debug 单拍 strobe
+与 uart_tx 的 ready 相位错位），已改为电平握手，修复版构建中。**
 
 ## 里程碑
 
 | 里程碑 | 状态 | 关键证据 |
 |---|---|---|
-| P0 工具链 + Python 金标准 | 完成 | `pytest -q` 222 passed / 4 skipped；`golden_pipeline.py` 位级真值 |
+| P0 工具链 + Python 金标准 | 完成 | `pytest -q` 239 passed / 4 skipped；`golden_pipeline.py` 位级真值 |
 | M0 I2S→DDR3→HDMI 波形 | 完成（未上板） | run `20261027-000612-a71f1451`，sha256 `C517736C…`，WNS +1.757 |
 | M1 Mel 特征引擎 | 构建完成、时序收敛、待板级对拍 | run `20261027-121101-5c24a968`，sha256 `BD40D10A…`，WNS +1.438 / All Constraints Met |
-| M2 INT8 NPU | **全链布线收敛、已出位流、时序未收敛** | run `20261029-110719-01d91e40`，sha256 `E793A792…`，Unrouted 0，`ddrphy_sysclk` -3.593 |
-| M3 UI 集成 | 概率条已接顶层；谱图/文字层因拥塞临时关闭 | `bars_disp`+`ui_renderer` 在位流中；`text_disp`/`spectrum_disp`/`feat_copy`/`feat_page_buf` 待恢复 |
+| M2 INT8 NPU | 全链布线收敛、已上板 `done=1`、core 域 -2.1 ns 未收敛 | m2/m2b/m2c 三版位流归档；最差路径已非组合深度而是 wdma 远距离 FF |
+| M3 UI 集成 | 概率条与波形已进位流；谱图/文字层因拥塞临时关闭 | 待 core 域稳住后逐个加回 |
+| 板级端到端 | **已通到串口，字符被丢（修复版构建中）** | `done=1`、`crc_err=0`、18 字节 `ITCO\nD3ETT.D3R@FF\n` |
 
 ## 当前状态
+
+### 2026-10-29 傍晚：FTDI 掉线根因彻底修复 + 首次上板（本轮最新，最高优先）
+
+**根因（确定，不是推测）**：`scripts/board_check.py` 的 `run_tcl()` 在日志里一出现
+`PROGRAM FLOW DONE` 就调用 `proc.terminate()`。但该横幅是 TCL 里 `puts` 打出来的，
+**早于 `cfg_disconnect` / `exit`**，所以 terminate 总落在 D2XX 句柄仍打开的时刻。
+被杀的 D2XX 进程不释放句柄 → FT2232H 在 USB 总线上停止响应 → 从 PnP 消失
+（`CM_PROB_PHANTOM`）→ 只有物理重插能恢复。这就是「一碰板子就掉线」。
+
+**同源的另外两处缺陷**：① 动态生成的 TCL 没有 `exit`，正常路径也退不出，必然被迫 terminate；
+② `board_check.py` 里 `if js is None: return 2` 会把「复用已运行的 jtagserver」误判为失败，
+逼着每次新起 server，而重启 server 同样会打乱 USB 状态。
+
+**修复（三条硬规则 + 前后取证）**：
+- R1 所有 TCL（含动态生成）以 `exit` 收尾，`cdt_cfg` 正常 2~4 秒自行退出；
+- R2 任何代码路径都不得 terminate/kill `cdt_cfg`/`cdt_js`；真超时就报告 PID 并**留着不动**；
+- R3 端口 65420 已开则复用，绝不重启 jtagserver；
+- 脚本在运行前后各查一次 `VID_0403` 数量，掉线时直接指出是哪一步导致的。
+
+**实测验证（同日连续三次操作）**：
+- `--status-only`：`cdt_cfg exit code: 0`，设备仍在，`done=1 / crc_err=0`；
+- 烧 `releases/m2b-20261029/`：`COMMAND[Program] execute successfully, takes 3.6 secs`、
+  `The done bit is 1`、状态 `0x081FFCA0`，**FTDI 全程在线**；
+- 再次烧录抓 hex：`cdt_cfg rc 0`、18 字节，设备仍在线。
+→ **掉线问题已闭合**，可用 `python scripts/board_check.py --sbit <x> --seconds 15` 反复上板。
+
+**新暴露的板级 bug（UART 字符被丢）**：串口收到 18 字节
+`49 54 43 4f 0a | 44 33 45 54 54 2e 44 33 52 40 46 46 0a`，即 `ITCO` / `D3ETT.D3R@FF`。
+对照 ROM 表（`INSTREC BOOT\n` 的 idx 0=I,3=T,6=C,9=O）可确认发射的是
+**idx 0,3,6,9…（步长 3）**：`uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比
+`uart_tx` 的 `byte_wready` 晚一拍，于是每帧推进 2~3 次索引却只送出 1 个字节。
+- 修复：把 `tx_byte_valid` 改成**电平握手**（装载后保持，直到 `byte_ready` 才清零并推进索引），
+  `ST_RAM/ST_ROM/ST_HEX/ST_EOL` 四个分支同步改造。
+- 判据：`tests/test_uart_debug_handshake.py` 的周期模型同时跑新旧两版 —— 新版逐字符全对，
+  旧版必丢字符且索引步长 > 1（复现板上现象）。全量 `pytest` 239 passed / 4 skipped。
+- 修复版构建 `20261029-191053` 已启动（19:10）。
+
+**时序现状（本轮不再作为阻塞项）**：`releases/m2c` 的 `ddrphy_sysclk` 为 -2.144 ns，
+但最差路径已是 `u_npu/u_wdma/c_cnt → m_s32`：**逻辑仅 2 级 0.798 ns、走线 8.818 ns（91.7%）**，
+即 FF→FF 被布局拉远，属拥塞散布而非组合深度，插流水无效。三版位流的最差路径
+在 `conv MAC(-3.593)` → `requant 乘法(-1.106)` → `wdma 远距离 FF(-2.144)` 之间随布局漂移，
+WNS 稳定落在 -1~-3 ns 区间；按「能跑就行」口径不再逐轮追。
 
 ### 2026-10-29 上午：全 NPU 系统首次布线收敛（本轮最新）
 
@@ -137,22 +181,25 @@ InstRec 8 类乐器识别（INT8 CNN）正在移植到盘古 100Pro+（PG2L100H-
 
 ## 下一步（按序）
 
-1. **修 `ddrphy_sysclk` -3.593 ns**（唯一阻塞交付的时序项）：最差路径在 `u_conv` 的
-   DRM→APM→32-bit 累加树，走线占 56%。先试去掉 `pnr -fast_router TRUE`（改用默认布线器，
-   质量更好，代价是时间长）与换 seed 重跑；RTL 侧备选是在 APM 输出加一级寄存
-   （需同步推迟 `w_vld_q`/`mac_beat`/`mac_cnt` 一拍以保持 TDM 对齐）。
-2. **恢复 M3 谱图/文字层**：`text_disp`、`spectrum_disp`、`feat_copy_engine`、`feat_page_buf`、
-   `ui_coord_delay` 在 `instrec_top` 中是注释块（残留裸 `;`），恢复后复核 `pix_clk`
-   （本轮 +0.260，余量仅 0.26 ns，恢复后大概率重新变负，需给 UI 路径插流水）。
-3. FTDI 恢复后：烧 `releases/m2-20261029/instrec_top.sbit` → 读状态寄存器确认 `done=1`
-   → `board_check.py` 看 `INSTREC BOOT` → `weight_upload.py` 看 `WOK`
-   → 跑逐层对拍（`compare_layers.py` 对 `reports/golden_ref/`）。
-4. 若板级链接 OK 但仍无音频输出：先查 `core_clk` 域（-3.593 ns 违例很可能让 DDR3 读写不稳）。
+1. **烧 UART 修复版（构建 `20261029-191053`）**：`python scripts/board_check.py
+   --sbit build/instrec-latest.sbit --seconds 15`，确认串口出现完整可读的
+   `INSTREC BOOT` / `PLL LOCK` / `DDR3 SELFTEST...` / `DDROK` / `RUN`。
+   判据：字符数与 ROM 行长度一致（13/17/6/4），不再是 1/3。
+2. **权重上传**：`python scripts/weight_upload.py`（`WOK`），再开逐层对拍
+   `compare_layers.py` 对 `reports/golden_ref/`，定位第一处不一致的层。
+3. **恢复 M3 谱图/文字层**：`text_disp`/`spectrum_disp`/`feat_copy_engine`/`feat_page_buf`/
+   `ui_coord_delay` 在 `instrec_top` 中仍是注释块（残留裸 `;`），恢复后复核 `pix_clk`
+   （m2c 为 -0.061，恢复后需重读）。
+4. **core 域**：目前最差路径是 wdma 的 FF→FF 远距离（走线 91.7%），插流水无效；
+   若要继续压缩，只能做布局/区域约束或降低该段拥塞，优先级低于功能验证。
 
 ## 验证基线
 
-- `python -m pytest -q` → **222 passed / 4 skipped**（约 50 s）。
+- `python -m pytest -q` → **239 passed / 4 skipped**（约 69 s）。
 - `python scripts/check_rtl.py` → **44 个 .v，0 violation**（hdmi demo 默认排除）。
+- 烧录安全：`tests/test_board_flash_safety.py`（14 项）锁死「TCL 必须以 exit 收尾、
+  禁止 terminate/kill cdt_*、必须复用已运行 jtagserver」；
+  `tests/test_uart_debug_handshake.py`（3 项）用周期模型锁死 uart_debug↔uart_tx 握手。
 - 数值对拍只认 `scripts/golden_pipeline.py`；torch 2.14.1 的 oneDNN 有 21~67 LSB tile 噪声。
 - 本机无 WSL 仿真（Ubuntu 发行版 vhdx 缺失），RTL 行为只能靠 Python 对拍 + 板级实测。
 - 全 NPU 构建耗时：compile→gen_bit_stream 约 48 分钟（单线程，`-fast_router`）。
@@ -169,7 +216,7 @@ InstRec 8 类乐器识别（INT8 CNN）正在移植到盘古 100Pro+（PG2L100H-
 | 金标准 | `scripts/golden_pipeline.py` + `scripts/outputs/golden/*.npy` |
 | SDD | `docs/sdd/{spec,design,tasks}.md`（从 `.codeartsdoer` 复制的可交接副本） |
 | 证据 | `reports/m0-manifest-20261027.json`、`reports/m1-timing-20261027-104218.txt`（修复前时序） |
-| 位流归档 | `releases/m0-20261027/`、`releases/m1-20261027/`、`releases/m2-20261029/`（sbit + manifest + SHA256SUMS + 时序报告） |
+| 位流归档 | `releases/m{0,1}-2026102{7}/`、`releases/m2{,b,c}-20261029/`（sbit + manifest + SHA256SUMS + 时序报告） |
 | 交接 | `docs/HANDOFF_SNAPSHOT_20261027.md` + 本文件 |
 | Agent 规则 | 仓库根 `AGENTS.md` |
 

@@ -106,6 +106,13 @@ compile -system_verilog -top_module instrec_top
 # deliberately NOT enabled. Do not re-add the thread switches.
 synthesize -ads -selected_syn_tool_opt 2
 dev_map
-pnr -fast_router TRUE
+# Router: default (no -fast_router). Measured 2026-10-29: fast_router needed
+# 278 iterations to close, the default router 42, and BOTH produced the exact
+# same placement/routing and the same timing table (ddrphy_sysclk -3.593 ns,
+# 22-line diff between the two .rtr files is only the timestamp). Place and
+# route are deterministic for this design, so -fast_router only saves runtime.
+# The -3.593 ns path is not a router artefact; it was fixed in RTL by
+# pipelining the conv MAC (DRM -> dout_q -> APM -> prod_q -> acc).
+pnr
 report_timing
 gen_bit_stream

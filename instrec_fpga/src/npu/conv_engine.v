@@ -815,7 +815,6 @@ module conv_engine #(
     wire issue_window = run_reg && (phase_reg == PH_SCAN)
                         && (tap_cnt != s_tap_last);
     wire issue_beat   = issue_window && w_valid;
-    wire mac_beat     = run_reg && (phase_reg == PH_SCAN) && w_vld_q;
 
     // pixel / group / layer boundary detection
     wire col_end      = (out_col_cnt == s_w - 1'b1);
@@ -860,7 +859,6 @@ module conv_engine #(
         end
     end
 
-    // -----------------------------------------------------------------------
     // MAC operand: live zp_in subtraction in the signed 9-bit domain
     // (u8 container store, see header storage-domain note)
     // -----------------------------------------------------------------------
@@ -875,8 +873,43 @@ module conv_engine #(
     wire [7:0] ram_dout = (sel == 2'd0) ? g0_dout : (sel == 2'd1) ? g1_dout :
                           (sel == 2'd2) ? g2_dout : g3_dout;
 
-    wire signed [8:0] x_eff = rd_pad_q ? 9'sd0 :
-            ($signed({1'b0, ram_dout}) - $signed({1'b0, zp_in_reg}));
+    // -----------------------------------------------------------------------
+    // MAC pipeline split (2026-10-29). The only failing path in the full NPU
+    // build was
+    //   DRM(CLKB->QB) -> ram_dout mux -> x_eff -> APM -> 32-bit carry tree -> acc
+    // at -3.593 ns on core_clk (125 MHz), 13 logic levels with 56% of the
+    // arrival spent on route delay: the row-buffer DRM and the adder tree
+    // landed ~160 columns apart. Splitting it into
+    //   DRM -> dout_q,  dout_q -> APM -> acc
+    // keeps one tap per cycle in steady state; only a one-cycle bubble is
+    // added at the end of each pixel scan. Registering only the row-buffer
+    // read is enough because the DRM clock tree (CLKB) carries ~1.4 ns more
+    // insertion delay than the fabric FF clock, and that skew -- not the
+    // logic -- dominated the failing path.
+    // -----------------------------------------------------------------------
+    reg  [7:0]   dout_q;
+    reg          rd_pad_q2;
+    reg  [127:0] w_data_q2;
+    reg          w_vld_q2;
+    wire         mac_add = run_reg && w_vld_q2;
+
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            dout_q    <= 8'd0;
+            rd_pad_q2 <= 1'b0;
+            w_data_q2 <= 128'd0;
+            w_vld_q2  <= 1'b0;
+        end else begin
+            dout_q    <= ram_dout;
+            rd_pad_q2 <= rd_pad_q;
+            w_vld_q2  <= w_vld_q;
+            if (w_vld_q) w_data_q2 <= w_data_q;
+        end
+    end
+
+    // -----------------------------------------------------------------------
+    wire signed [8:0] x_eff = rd_pad_q2 ? 9'sd0 :
+            ($signed({1'b0, dout_q}) - $signed({1'b0, zp_in_reg}));
 
     // -----------------------------------------------------------------------
     // 16-lane INT8 MAC array with double-banked s32 accumulators
@@ -886,8 +919,8 @@ module conv_engine #(
     genvar g;
     generate
         for (g = 0; g < 16; g = g + 1) begin : mac_lane
-            wire signed [7:0]  w_lane = w_data_q[8*g +: 8];
-            wire signed [31:0] lane_sum = x_eff * w_lane;
+            wire signed [7:0]  w_lane = w_data_q2[8*g +: 8];
+            wire signed [16:0] lane_sum = x_eff * w_lane;
 
             always @(posedge clk or negedge rst_n) begin
                 if (!rst_n) begin
@@ -902,9 +935,9 @@ module conv_engine #(
                     if (load_go) begin
                         if (!acc_sel) acc_a[g] <= bias_act[g];
                         else          acc_b[g] <= bias_act[g];
-                    end else if (mac_beat) begin
-                        if (!acc_sel) acc_a[g] <= acc_a[g] + lane_sum;
-                        else          acc_b[g] <= acc_b[g] + lane_sum;
+                    end else if (mac_add) begin
+                        if (!acc_sel) acc_a[g] <= acc_a[g] + {{15{lane_sum[16]}}, lane_sum};
+                        else          acc_b[g] <= acc_b[g] + {{15{lane_sum[16]}}, lane_sum};
                     end
                 end
             end
@@ -1003,7 +1036,7 @@ module conv_engine #(
                             dx_cnt <= dx_cnt + 2'd1;
                         end
                     end
-                    if (mac_beat) begin
+                    if (mac_add) begin
                         mac_cnt <= mac_cnt + 1'b1;
                         if (mac_cnt == s_tap_last - 1'b1)
                             phase_reg <= PH_SNAP;

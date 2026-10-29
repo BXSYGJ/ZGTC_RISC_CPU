@@ -3,6 +3,37 @@
 > 每次会话结束前追加一条：时间、做了什么、结论、证据路径。倒序，最新在上。
 > 状态汇总见 `docs/STATUS.md`。
 
+## 2026-10-29 19:20 — FTDI 掉线根因彻底修复 + 首次上板；UART 丢字符根因定位并修复
+
+**掉线根因（脚本缺陷，非硬件）**：`board_check.py` 在日志出现 `PROGRAM FLOW DONE` 时
+`proc.terminate()`，而该横幅早于 `cfg_disconnect`/`exit`，D2XX 句柄仍打开 → FT2232H 从
+PnP 消失（`CM_PROB_PHANTOM`），只有物理重插能恢复。同源缺陷另有两条：动态 TCL 无 `exit`；
+`if js is None: return 2` 会把「复用已运行的 jtagserver」误判为失败。
+
+- 修复三规则：所有 TCL（10 个 jtag_*.tcl + 动态生成）以 `exit` 收尾；任何路径不
+  terminate/kill `cdt_*`（超时只报 PID 并留着）；端口 65420 已开则复用不重启。
+- 脚本增加运行前后 `VID_0403` 计数对比，掉线时直接指出是哪一步导致。
+- 实测：连续 3 次 cdt_cfg（status-only / 烧 m2b / 烧录抓 hex）全部 `exit code 0`，
+  FTDI 全程在线；烧录 `Program execute successfully 3.6s` + `done bit 1` + 状态 `0x081FFCA0`。
+- 守卫测试 `tests/test_board_flash_safety.py`（14 项）。
+
+**首次上板暴露的 UART 丢字符**：串口 18 字节 `ITCO
+D3ETT.D3R@FF
+`，即 ROM
+idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_tx 的 `byte_wready`
+晚一拍，每帧推进 2~3 次索引却只送出 1 个字节。
+
+- 修复：`tx_byte_valid` 改电平握手（装载后保持到握手才清零并推进），四个状态分支同步。
+- 判据：`tests/test_uart_debug_handshake.py` 周期模型同时跑新旧两版，新版逐字符全对、
+  旧版必丢字符且步长 > 1；全量 pytest **239 passed / 4 skipped**。
+- 修复版构建 `20261029-191053` 已启动。
+
+**requant 乘法拆分版（m2c）**：32×32 拆 4 个并行 16×16（位级 40 万组 0 mismatch），
+位流 sha256 `23B3FEC6…` 归档 `releases/m2c-20261029/`。时序 `ddrphy_sysclk` -2.144 ns，
+但最差路径已变成 `u_npu/u_wdma` 的 FF→FF：逻辑 2 级 0.798 ns、走线 8.818 ns（91.7%），
+插流水无效；`pix_clk` 由 -0.450 改善到 -0.061。三版位流最差路径在 conv MAC → requant
+乘法 → wdma 远距离 FF 之间随布局漂移，WNS 稳定在 -1~-3 ns，按「能跑就行」不再逐轮追。
+
 ## 2026-10-29 12:05 — 全 NPU 系统首次布线收敛并归档 M2 位流
 
 - `conv_engine` 合并为单共享核（conv1..conv4 复用同一 16-lane MAC/requant，四组行缓冲与计数器保持独立），

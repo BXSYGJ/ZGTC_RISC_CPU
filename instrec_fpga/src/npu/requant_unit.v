@@ -84,8 +84,16 @@ module requant_unit (
     // -----------------------------------------------------------------------
     // Pipeline registers
     // -----------------------------------------------------------------------
-    reg signed [31:0] acc_q;    // S1: latched accumulator
-    reg signed [31:0] m_q;      // S1: latched multiplier
+    // S1 stores four 16x16 partial products instead of the raw operands.
+    // 2026-10-29: a plain 32x32 multiply mapped onto three APM18 tiles in
+    // series (4.495 ns of pure logic plus 4.2 ns route) and was the only
+    // remaining core_clk violation once the conv MAC was pipelined. The
+    // split below keeps the SAME four-stage latency and the SAME bit exact
+    // product; it only moves the 16x16 multiplies into one parallel stage.
+    reg signed [31:0] p11_q;    // S1: a1*b1 (both signed)
+    reg signed [31:0] p10_q;    // S1: a1*b0 (b0 unsigned)
+    reg signed [31:0] p01_q;    // S1: a0*b1 (a0 unsigned)
+    reg        [31:0] p00_q;    // S1: a0*b0 (both unsigned)
     reg        [6:0]  shift_q;  // S1: latched shift amount
     reg        [7:0]  zp_q;     // S1: latched output zero point
     reg               v1_q;     // S1 valid
@@ -97,11 +105,27 @@ module requant_unit (
     reg               v3_q;     // S3 valid
 
     // -----------------------------------------------------------------------
-    // S1 -> S2 combinational: signed 32x32 multiply, exact into 64 bits.
-    // Synthesis maps this onto APM 18x18 tiles (4 blocks with sign
-    // extension) or LUT multipliers, per the resource budget table.
+    // S1 -> S2: signed 32x32 multiply as four 16x16 partial products.
+    //   acc = a1*2^16 + a0   (a1 signed high half, a0 unsigned low half)
+    //   m   = b1*2^16 + b0   (b1 signed high half, b0 unsigned low half)
+    //   prod = a1*b1*2^32 + (a1*b0 + a0*b1)*2^16 + a0*b0
+    // Every term is exact (a0*b0 <= 65535^2 < 2^32, a1*b0 and a0*b1 fit in
+    // s32, their sum fits in s33), so the 64-bit result is identical to the
+    // plain product. The four multiplies are independent, which removes the
+    // three-APM-in-series chain that caused the violation.
     // -----------------------------------------------------------------------
-    wire signed [63:0] prod_c = acc_q * m_q;
+    wire signed [15:0] a1_c = acc_s32[31:16];
+    wire        [15:0] a0_c = acc_s32[15:0];
+    wire signed [15:0] b1_c = m_s32[31:16];
+    wire        [15:0] b0_c = m_s32[15:0];
+    wire signed [16:0] a0s_c = $signed({1'b0, a0_c});
+    wire signed [16:0] b0s_c = $signed({1'b0, b0_c});
+
+    wire signed [32:0] mid_c  = {{1{p10_q[31]}}, p10_q} +
+                                {{1{p01_q[31]}}, p01_q};
+    wire signed [63:0] prod_c = ({{32{p11_q[31]}}, p11_q} << 32) +
+                                ({{31{mid_c[32]}}, mid_c} << 16) +
+                                {{32{1'b0}}, p00_q};
 
     // -----------------------------------------------------------------------
     // S2 -> S3 combinational: bit-level mirror of golden
@@ -153,8 +177,10 @@ module requant_unit (
     // -----------------------------------------------------------------------
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
-            acc_q     <= 32'sd0;
-            m_q       <= 32'sd0;
+            p11_q     <= 32'sd0;
+            p10_q     <= 32'sd0;
+            p01_q     <= 32'sd0;
+            p00_q     <= 32'd0;
             shift_q   <= 7'd0;
             zp_q      <= 8'd0;
             v1_q      <= 1'b0;
@@ -165,9 +191,11 @@ module requant_unit (
             y_u8      <= 8'd0;
             out_valid <= 1'b0;
         end else begin
-            // S1: operand capture
-            acc_q   <= acc_s32;
-            m_q     <= m_s32;
+            // S1: four parallel 16x16 partial products
+            p11_q   <= a1_c * b1_c;
+            p10_q   <= a1_c * b0s_c;
+            p01_q   <= a0s_c * b1_c;
+            p00_q   <= a0_c * b0_c;
             shift_q <= shift;
             zp_q    <= zp_out;
             v1_q    <= in_valid;

@@ -7,3 +7,4 @@ puts "== CONNECT DONE =="
 cfg_scan_chain
 puts "== SCAN DONE =="
 cfg_disconnect
+exit

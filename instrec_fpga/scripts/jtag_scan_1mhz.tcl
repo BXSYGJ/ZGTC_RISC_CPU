@@ -8,3 +8,4 @@ puts "== CABLE PROPERTY SET =="
 cfg_scan_chain
 puts "== SCAN DONE =="
 cfg_disconnect
+exit
