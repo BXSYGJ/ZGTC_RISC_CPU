@@ -1,4 +1,4 @@
-﻿# Re-run only the later PDS stages of an existing build directory.
+# Re-run only the later PDS stages of an existing build directory.
 #
 # Why: a full rebuild of the InstRec system costs 1h20m~1h50m, of which
 # compile + synthesize + dev_map take roughly 20-25 minutes and pnr takes
@@ -33,10 +33,24 @@ foreach ($need in @('device_map', 'synthesize', 'compile')) {
     }
 }
 
+# The project file records the part and the design source list.  PDS creates a
+# DEFAULT (fab_demo / PGL12G) project when a scripted flow starts without
+# open_project, which silently discards the previous state -- that happened on
+# the first use of this script.  Refuse to run against a wrong or missing
+# project file instead of overwriting it.
+$prj = Join-Path $run "$ProjectName.pds"
+if (-not (Test-Path -LiteralPath $prj)) {
+    throw "project file not found: $prj"
+}
+$prjText = [System.IO.File]::ReadAllText($prj)
+if ($prjText -notmatch 'PG2L100H') {
+    throw "project file does not describe PG2L100H (it was overwritten by a default project): $prj"
+}
+
 $stages = @('pnr', 'report_timing', 'gen_bit_stream')
 $startIdx = [array]::IndexOf($stages, $From)
 if ($startIdx -lt 0) { throw "unknown stage '$From'" }
-$body = ($stages[$startIdx..($stages.Count - 1)]) -join "`n"
+$body = "open_project -file {$prj}`n" + (($stages[$startIdx..($stages.Count - 1)]) -join "`n")
 
 $tclPath = Join-Path $run 'stage.tcl'
 $logPath = Join-Path $run 'stage.log'
