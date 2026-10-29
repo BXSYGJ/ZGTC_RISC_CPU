@@ -291,11 +291,12 @@ module uart_debug (
             tx_byte_valid <= 1'b0;
             rx_byte_cnt   <= 16'd0;
         end else begin
-            // tx_byte_valid is a LEVEL handshake, not a strobe: it is cleared
-            // only when uart_tx asserts byte_wready. The old strobe advanced
-            // rom_idx one cycle before uart_tx sampled the byte, so uart_tx
-            // dropped every 2nd/3rd character (board printed 'ITCO' for
-            // 'INSTREC BOOT', i.e. idx 0,3,6,9).
+            tx_byte_valid <= 1'b0;   // single-cycle strobe
+            // The loader is additionally gated by !tx_byte_valid: uart_tx's
+            // byte_wready is a registered ~busy, so it stays high one cycle
+            // after a byte is accepted.  Without this gate uart_debug advanced
+            // rom_idx 3 times per accepted byte (board printed ITCO for
+            // INSTREC BOOT = ROM idx 0,3,6,9).
 
             // -------- RX side: loop counter only (M0) --------
             if (rx_byte_valid) begin
@@ -338,14 +339,12 @@ module uart_debug (
                 end
 
                 ST_RAM: begin
-                    // Load one byte, then hold it until uart_tx accepts it.
-                    if (!tx_byte_valid) begin
+                    // Drain one byte per handshake.
+                    if (tx_byte_ready && !tx_byte_valid) begin
                         tx_byte_data  <= line_ram[ram_rd_idx];
                         tx_byte_valid <= 1'b1;
-                    end else if (tx_byte_ready) begin
-                        tx_byte_valid <= 1'b0;
                         if (ram_rd_idx == ram_len - 7'd1) begin
-                            state       <= ST_IDLE;
+                            state <= ST_IDLE;
                             ram_pending <= 1'b0;
                         end else begin
                             ram_rd_idx <= ram_rd_idx + 7'd1;
@@ -355,19 +354,16 @@ module uart_debug (
 
                 ST_ROM: begin
                     // Emit ROM characters; the parameterized line (id 4)
-                    // diverts to the hex path after its prefix. Index and
-                    // state advance only on the actual handshake.
-                    if (!tx_byte_valid) begin
+                    // diverts to the hex path after its prefix.
+                    if (tx_byte_ready && !tx_byte_valid) begin
                         tx_byte_data  <= rom_char(rom_id, rom_idx);
                         tx_byte_valid <= 1'b1;
-                    end else if (tx_byte_ready) begin
-                        tx_byte_valid <= 1'b0;
                         if (rom_id == LINE_ID_DDRERR &&
                             rom_idx == LINE_LEN_DDRERR - 5'd1) begin
                             hex_left <= 4'd8;
                             state    <= ST_HEX;
                         end else if (rom_idx == rom_len(rom_id) - 5'd1) begin
-                            // Plain line already carries its terminating LF.
+                            // Plain line ends with its own '\n'.
                             state       <= ST_IDLE;
                             rom_pending <= 1'b0;
                         end else begin
@@ -378,11 +374,9 @@ module uart_debug (
 
                 ST_HEX: begin
                     // Emit 8 uppercase hex digits, MSB nibble first.
-                    if (!tx_byte_valid) begin
+                    if (tx_byte_ready && !tx_byte_valid) begin
                         tx_byte_data  <= hex_ascii(hex_shf[31:28]);
                         tx_byte_valid <= 1'b1;
-                    end else if (tx_byte_ready) begin
-                        tx_byte_valid <= 1'b0;
                         hex_shf       <= {hex_shf[27:0], 4'd0};
                         if (hex_left == 4'd1) begin
                             state <= ST_EOL;
@@ -394,11 +388,9 @@ module uart_debug (
 
                 ST_EOL: begin
                     // Terminate the parameterized line.
-                    if (!tx_byte_valid) begin
-                        tx_byte_data  <= 8'h0A;
+                    if (tx_byte_ready && !tx_byte_valid) begin
+                        tx_byte_data  <= 8'h0A;   // '\n'
                         tx_byte_valid <= 1'b1;
-                    end else if (tx_byte_ready) begin
-                        tx_byte_valid <= 1'b0;
                         state         <= ST_IDLE;
                         rom_pending   <= 1'b0;
                     end
