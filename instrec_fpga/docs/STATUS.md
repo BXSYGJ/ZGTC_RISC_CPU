@@ -50,6 +50,20 @@ InstRec 8 类乐器识别（INT8 CNN）正在移植到盘古 100Pro+（PG2L100H-
   默认 `fab_demo/PGL12G` 工程**覆盖 `.pds`**，`231920` 与 `191053` 的工程状态因此报废。
   已改为 `open_project {path}` 并在运行前备份、失败时自动恢复；**该路径仍未验证成功，
   不要当成常规提速手段**。教训：任何「复用已有 run」的脚本都必须先备份工程文件。
+- **`pnr` 选项实测（本轮新增，重要）**：`pnr -help` 实测支持
+  `-gplace_seed` / `-gplace_times` / `-seed_step` / `-parallel`（多 seed 并行）、
+  `-groute_seed` / `-groute_times`、`-plc_decongestion`（布局解拥塞）、
+  `-force_to_run`、`-input_db_file`、`-slack_prior_in_global_router`、
+  `-dump_router_congestion_plot`；`-number_of_router_thread` 仍被器件拒绝。
+  → **布局是确定性而非随机**：三次同 RTL 构建都停在同样量级的未布网络（~5-7k），
+  因为默认 `-gplace_seed` 固定。现已在 `build_full.tcl` 改用 `pnr -gplace_seed 7`
+  作为第一个替代布局（构建 `20261030-054801`）。
+- **增量重跑布线（复用 netlist）实测不可行**：`pnr` 单独执行报
+  `Flow-0044: Device Map hasn't been run`；加 `-force_to_run` 后进入 pnr 但报
+  `Flow-0013: input DB '(null)' should be of phase 'DEVMAP'`；指定
+  `-input_db_file device_map/dmr.db` 仍报同样错误（且版本告警 DB-4001）。
+  结论：PDS 的 phase DB 不能跨会话复用，**每次必须全量走 compile→synthesize→dev_map**。
+  相关文档随后更新；`run_pds_stage.ps1` 保留但标注不可用。
 - **板级一键 bring-up `scripts/board_e2e.py`**：`boot → weights → capture → compare` 四阶段链，
   任一步失败即停并给出该阶段的排查提示；`--stage boot|weights|layers` 可单独执行
   （stage 3/4 需要 I2S 有真实音频，否则没有窗口完成事件）。

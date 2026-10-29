@@ -113,6 +113,10 @@ dev_map
 # route are deterministic for this design, so -fast_router only saves runtime.
 # The -3.593 ns path is not a router artefact; it was fixed in RTL by
 # pipelining the conv MAC (DRM -> dout_q -> APM -> prod_q -> acc).
-pnr
+# Placement seed: PDS 2022.2 + PG2L100H is single-threaded but placement
+# is deterministic for a given seed, and three consecutive builds with
+# the default seed all stalled at the same unrouted count (~5-7k nets).
+# -gplace_seed gives a reproducible alternative layout to try.
+pnr -gplace_seed 7
 report_timing
 gen_bit_stream
