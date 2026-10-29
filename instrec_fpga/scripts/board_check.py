@@ -211,6 +211,9 @@ def main():
     ap.add_argument('--diag-only', action='store_true',
                     help='report FTDI / jtagserver / UART state and exit')
     ap.add_argument('--freq', default='10Mhz')
+    ap.add_argument('--expect', nargs='*', default=None,
+                    help='substrings that must appear in the UART capture, '
+                         'e.g. --expect "INSTREC BOOT" "DDR3 SELFTEST" "DDROK"')
     args = ap.parse_args()
 
     present = ftdi_present()
@@ -312,8 +315,25 @@ def main():
 
     raw = b''.join(chunks)
     if raw:
-        print(f'uart: {len(raw)} bytes')
-        print(raw[:200].decode('ascii', 'replace'))
+        LOG_DIR.mkdir(parents=True, exist_ok=True)
+        (LOG_DIR / 'uart_last.bin').write_bytes(raw)
+        print(f'uart: {len(raw)} bytes (saved build/uart_last.bin)')
+        expect = [x.encode() for x in (args.expect or [])]
+        for line in raw.split(b'\n'):
+            line = line.rstrip(b'\r')
+            if not line:
+                continue
+            mark = ''
+            if expect:
+                mark = '  <-- MISSING' if not any(e in line for e in expect) else '  OK'
+            printable = ''.join(chr(b) if 32 <= b < 127 else f'\\x{b:02x}' for b in line)
+            print(f'  line: {printable}{mark}')
+        if expect:
+            missing = [e for e in expect if e not in raw]
+            if missing:
+                print('boot: FAIL (missing ' + ', '.join(m.decode() for m in missing) + ')')
+            else:
+                print(f'boot: PASS (all {len(expect)} expected lines seen)')
     else:
         print('uart: 0 bytes')
     return rc
