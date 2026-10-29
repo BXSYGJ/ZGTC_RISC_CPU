@@ -3,6 +3,19 @@
 > 每次会话结束前追加一条：时间、做了什么、结论、证据路径。倒序，最新在上。
 > 状态汇总见 `docs/STATUS.md`。
 
+## 2026-10-29 21:30 — M3 接线恢复、板级一键脚本、26 项新判据
+
+- **M3 恢复**（`92d0531`）：`text_disp`/`feat_copy_engine`/`feat_page_buf`/`spectrum_disp`/
+  `ui_coord_delay` 重新例化，`ui_renderer` 的 spec/text 输入从常量改回真信号。
+- **分阶段脚本首用失败并修复**（`6615557`）：缺 `open_project` 时 PDS 新建默认
+  `fab_demo/PGL12G` 工程覆盖原工程 → `Flow-0044`；已加工程文件校验（必须描述 PG2L100H）
+  与 `open_project -file`，并用一次失败换来的教训标注「该路径尚未验证成功」。
+- **`191053` 布线停滞中止**（iteration 148→162 未布 7199→7262 不动），改全量重建
+  `20261029-212311`（M3 + UART 握手修复）。
+- **新增 `scripts/board_e2e.py`**：boot→weights→capture→compare 四阶段链，失败即停。
+- **新增判据 26 项**（pytest 241→267）：UI overlay 优先级/几何/热图/`name_len` 与标签 ROM
+  一致性；feat_copy 翻页周期模型（末尾字节与翻页顺序）；compare_layers 自检；e2e 编排顺序。
+
 ## 2026-10-29 19:40 — JTAG UI 单实例守卫（用户补充的关键事实）
 
 用户指出掉线的另一半：烧录/扫描会拉起一个 UI（即 jtagserver），我有时**强行关闭**、有时**多开**。

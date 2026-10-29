@@ -1,7 +1,7 @@
 # InstRec-FPGA 当前状态（STATUS）
 
 > 本文件是**唯一实时状态源**，优先于任何交接快照与记忆。每次会话结束前必须更新，
-> 并在 `CHANGELOG.md` 追加一条。最后更新：2026-10-29 19:20。
+> 并在 `CHANGELOG.md` 追加一条。最后更新：2026-10-29 21:30。
 
 ## 一句话
 
@@ -18,10 +18,37 @@ InstRec 8 类乐器识别（INT8 CNN）正在移植到盘古 100Pro+（PG2L100H-
 | M0 I2S→DDR3→HDMI 波形 | 完成（未上板） | run `20261027-000612-a71f1451`，sha256 `C517736C…`，WNS +1.757 |
 | M1 Mel 特征引擎 | 构建完成、时序收敛、待板级对拍 | run `20261027-121101-5c24a968`，sha256 `BD40D10A…`，WNS +1.438 / All Constraints Met |
 | M2 INT8 NPU | 全链布线收敛、已上板 `done=1`、core 域 -2.1 ns 未收敛 | m2/m2b/m2c 三版位流归档；最差路径已非组合深度而是 wdma 远距离 FF |
-| M3 UI 集成 | 概率条与波形已进位流；谱图/文字层因拥塞临时关闭 | 待 core 域稳住后逐个加回 |
+| M3 UI 集成 | **五个模块接线已恢复（92d0531），随 `20261029-212311` 重建验证** | text/spectrum/feat_copy/feat_page_buf/ui_coord_delay 全部重新例化 |
 | 板级端到端 | **已通到串口，字符被丢（修复版构建中）** | `done=1`、`crc_err=0`、18 字节 `ITCO\nD3ETT.D3R@FF\n` |
 
 ## 当前状态
+
+### 2026-10-29 夜间：M3 接线恢复 + 板级编排/判据补齐（本轮最新）
+
+- **M3 五个模块接线已恢复**（提交 `92d0531`）：`text_disp` / `feat_copy_engine` /
+  `feat_page_buf` / `spectrum_disp` / `ui_coord_delay` 重新例化，`ui_renderer` 的
+  `spec_rgb/spec_on/text_rgb/text_on` 由常量改回真实信号（此前为缓解拥塞而注释）。
+- **分阶段重建脚本 `run_pds_stage.ps1` 首次使用即失败并已修**：不调 `open_project` 时
+  PDS 会新建默认 `fab_demo/PGL12G` 工程覆盖原工程，随后 `pnr` 报
+  `Flow-0044: Device Map hasn't been run`，使 run `20261029-191053` 报废。
+  已加两道防线：运行前校验 `<run>/<project>.pds` 存在且描述 `PG2L100H`，
+  生成的 `stage.tcl` 首行 `open_project -file {...}`。**该功能未验证成功，暂不作为常规路径。**
+- **首轮 UART 修复版（`191053`）布线停滞**：iteration 148→162 未布网络 7199→7262 基本不动
+  （每轮 47 s），判定为布局拥塞边界上的随机性（同 RTL 的 `172919` 曾 886 轮收敛），
+  已中止并改用**全量重建 `20261029-212311`**（含 M3 恢复 + UART 握手修复）。
+- **板级一键 bring-up `scripts/board_e2e.py`**：`boot → weights → capture → compare` 四阶段链，
+  任一步失败即停并给出该阶段的排查提示；`--stage boot|weights|layers` 可单独执行
+  （stage 3/4 需要 I2S 有真实音频，否则没有窗口完成事件）。
+- **新增判据（本轮 26 项，pytest 由 241 → 267 passed / 4 skipped）**：
+  - `test_ui_overlay_model.py`(11)：overlay 四层优先级穷举 + 单级寄存；频谱 5 档热图阈值、
+    region 边界、`spec_on = de && region && page_ready`；各层矩形不越 1920×1080；
+    **text_disp 的 `name_len` 表与 `class_labels.hex` 实际长度逐类比对一致**（百分比列位置依赖它）。
+  - `test_feat_page_model.py`(6)：`feat_copy_engine` 周期模型 —— 恰好 DEPTH 字节、顺序
+    0..DEPTH-1、**翻页严格晚于最后写入**、读地址恰好 DEPTH 个、读页恒为写页反相、
+    `DEPTH == 258*64`、必须受 npu `busy` 门控。
+  - `test_compare_layers_selfcheck.py`(4)：把 golden 参考喂回 `compare_layers` 必须 100% 一致；
+    篡改单元素只影响该层并报 `max_abs_delta`；形状不符必须抛错。
+  - `test_board_e2e_order.py`(5)：阶段顺序、首败即停、单独 stage 不触发烧录。
 
 ### 2026-10-29 傍晚：FTDI 掉线根因彻底修复 + 首次上板（本轮最新，最高优先）
 
