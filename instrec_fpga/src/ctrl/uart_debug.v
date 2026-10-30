@@ -270,16 +270,6 @@ module uart_debug (
     localparam [2:0] ST_EOL  = 3'd4;
 
     reg [2:0]  state;
-    // Inter-character gap.  uart_tx derives byte_wready from a registered
-    // ~busy, so it stays high for one extra cycle after an accept; a strobe
-    // producer therefore advanced rom_idx three times per delivered byte
-    // (board printed ITCO for INSTREC BOOT = ROM idx 0,3,6,9).  Waiting a
-    // full frame plus margin before the next strobe keeps the handshake
-    // unchanged in structure -- only a 16-bit counter is added -- which
-    // matters because PnP routing is sensitive to any structural change.
-    localparam [15:0] TX_GAP = 16'd12000;   // > one 10-bit frame (10850)
-    reg [15:0] gap_cnt;
-
     reg [4:0]  rom_idx;      // character index within the ROM line
     reg [3:0]  hex_left;     // nibbles still to emit (8 -> 0)
     reg [31:0] hex_shf;      // shifting hex argument
@@ -294,7 +284,6 @@ module uart_debug (
             rom_id      <= 3'd0;
             rom_arg     <= 32'd0;
             state       <= ST_IDLE;
-            gap_cnt     <= 16'd0;
             rom_idx     <= 5'd0;
             hex_left    <= 4'd0;
             hex_shf     <= 32'd0;
@@ -303,7 +292,6 @@ module uart_debug (
             rx_byte_cnt   <= 16'd0;
         end else begin
             tx_byte_valid <= 1'b0;   // single-cycle strobe
-            if (gap_cnt != 16'd0) gap_cnt <= gap_cnt - 16'd1;
 
             // -------- RX side: loop counter only (M0) --------
             if (rx_byte_valid) begin
@@ -347,10 +335,9 @@ module uart_debug (
 
                 ST_RAM: begin
                     // Drain one byte per handshake.
-                    if (tx_byte_ready && gap_cnt == 16'd0) begin
+                    if (tx_byte_ready) begin
                         tx_byte_data  <= line_ram[ram_rd_idx];
                         tx_byte_valid <= 1'b1;
-                        gap_cnt       <= TX_GAP;
                         if (ram_rd_idx == ram_len - 7'd1) begin
                             state <= ST_IDLE;
                             ram_pending <= 1'b0;
@@ -363,10 +350,9 @@ module uart_debug (
                 ST_ROM: begin
                     // Emit ROM characters; the parameterized line (id 4)
                     // diverts to the hex path after its prefix.
-                    if (tx_byte_ready && gap_cnt == 16'd0) begin
+                    if (tx_byte_ready) begin
                         tx_byte_data  <= rom_char(rom_id, rom_idx);
                         tx_byte_valid <= 1'b1;
-                        gap_cnt       <= TX_GAP;
                         if (rom_id == LINE_ID_DDRERR &&
                             rom_idx == LINE_LEN_DDRERR - 5'd1) begin
                             hex_left <= 4'd8;
@@ -383,10 +369,9 @@ module uart_debug (
 
                 ST_HEX: begin
                     // Emit 8 uppercase hex digits, MSB nibble first.
-                    if (tx_byte_ready && gap_cnt == 16'd0) begin
+                    if (tx_byte_ready) begin
                         tx_byte_data  <= hex_ascii(hex_shf[31:28]);
                         tx_byte_valid <= 1'b1;
-                        gap_cnt       <= TX_GAP;
                         hex_shf       <= {hex_shf[27:0], 4'd0};
                         if (hex_left == 4'd1) begin
                             state <= ST_EOL;
@@ -398,10 +383,9 @@ module uart_debug (
 
                 ST_EOL: begin
                     // Terminate the parameterized line.
-                    if (tx_byte_ready && gap_cnt == 16'd0) begin
+                    if (tx_byte_ready) begin
                         tx_byte_data  <= 8'h0A;   // '\n'
                         tx_byte_valid <= 1'b1;
-                        gap_cnt       <= TX_GAP;
                         state         <= ST_IDLE;
                         rom_pending   <= 1'b0;
                     end
