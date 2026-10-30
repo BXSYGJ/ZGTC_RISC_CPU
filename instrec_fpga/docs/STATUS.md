@@ -252,6 +252,21 @@ WNS 稳定落在 -1~-3 ns 区间；按「能跑就行」口径不再逐轮追。
 - 布局事实（`tests/test_wdma_layout.py`、`test_wdma_stream_model.py`，9 项通过）：
   所有层权重区 32B 对齐；conv1 每组 144B（27 tap）尾部仅 1 tap；fc2 tap 为 8B/4 个每 beat。
 
+## 布线监控的两条修正（2026-10-30 15:35，避免误判）
+
+1. **`pnr -timeout 45` 实测未生效**：`1231506` 那次 45 分钟到点后进程仍在
+   `route iteration 162` 继续跑，日志无 timeout/abort 记录。因此**不能靠 timeout 截断**，
+   只能在监控侧按曲线判定并手动中止。
+2. **日志里的 `Unrouted nets 0` 多数来自 global routing，不代表布线完成**：
+   global routing 阶段会打印若干次 `Unrouted nets 0 at iteration N`，随后 detail routing
+   从 3 万条重新开始下降。判断「是否布通」只看两件事：
+   - `Unrouted nets 0` 出现在 **detail routing** 的最后（同时有 `placed and routed successfully`）；
+   - 目录里出现 `report_timing/` 与 `generate_bitstream/*.sbit`。
+
+**停滞判据（本轮实战）**：detail routing 的未布数**回升或原地振荡**即为停滞，例如
+`2353 (it357) → 2606 (it397) → 2574 (it403)`，此时继续等待无意义，必须换配置。
+本轮 `1231506` 在 2468~2606 徘徊，与单 seed 7 的 2472 结论一致，已中止。
+
 ## 布线不收敛的定性结论（2026-10-30，必须记住）
 
 **不是资源不够。** 同一份 RTL 实测 LUT 35665（53.55%）、FF 49690（37.30%）、DRM 79.5（51.29%）、
