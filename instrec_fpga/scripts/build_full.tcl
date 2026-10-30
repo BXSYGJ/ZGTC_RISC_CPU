@@ -140,6 +140,9 @@ dev_map
 #   duplicating cells scattered the logic further, so drop both.
 #   -timeout has no effect on a non-multi-seed run (log shows no abort).
 # Four placement candidates in parallel, then one route pass.
-pnr -parallel 4 -gplace_seed 7 -seed_step 3 -generate_bitstream TRUE
+# Reproduce the only configuration that ever closed on this RTL: plain pnr,
+# no seed override and no multi-seed.  m2c (20261029-172919) closed at
+# iteration 981 with exactly this source set.
+pnr
 report_timing
 gen_bit_stream
