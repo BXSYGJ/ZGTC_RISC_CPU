@@ -64,6 +64,13 @@ InstRec 8 类乐器识别（INT8 CNN）正在移植到盘古 100Pro+（PG2L100H-
   `-input_db_file device_map/dmr.db` 仍报同样错误（且版本告警 DB-4001）。
   结论：PDS 的 phase DB 不能跨会话复用，**每次必须全量走 compile→synthesize→dev_map**。
   相关文档随后更新；`run_pds_stage.ps1` 保留但标注不可用。
+- **多 seed 并行布局是唯一能布通的配置（关键突破）**：`pnr -parallel 4 -gplace_seed 7
+  -seed_step 3 -route_parallel 4 -groute_seed 7 -route_seed_step 3 -generate_bitstream TRUE`
+  使布线在 **iteration 15 就达到未布 0**（单 seed 的默认/种子 7 两次都停在 2400~7200 无法收敛）。
+  代价是耗时：4 seed 跑了 5 小时仍未汇总，已改为 **2 seed**
+  （`pnr -parallel 2 -gplace_seed 7 -seed_step 3 -generate_bitstream TRUE`，构建 `20261030-105655`）。
+  → 「布不通」不是密度问题（同资源 m2c 曾布通），而是**单种子布局落在拥塞解上**；
+  `-parallel` 同时给出多个布局候选，是这台器件上唯一可用的并行加速。
 - **板级一键 bring-up `scripts/board_e2e.py`**：`boot → weights → capture → compare` 四阶段链，
   任一步失败即停并给出该阶段的排查提示；`--stage boot|weights|layers` 可单独执行
   （stage 3/4 需要 I2S 有真实音频，否则没有窗口完成事件）。

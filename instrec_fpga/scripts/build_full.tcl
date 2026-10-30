@@ -117,6 +117,14 @@ dev_map
 # is deterministic for a given seed, and three consecutive builds with
 # the default seed all stalled at the same unrouted count (~5-7k nets).
 # -gplace_seed gives a reproducible alternative layout to try.
-pnr -gplace_seed 7
+# Multi-seed placement: PDS runs the placer for several seeds in parallel
+# (this is the only parallelism the device allows -- -number_of_router_thread
+# is rejected).  Two single-seed runs both stalled (default seed ~5-7k nets,
+# seed 7 ~2.4k nets), so run four seeds and let PDS keep the best.
+# Multi-seed placement is the only parallelism this device allows and it is
+# what finally closed the routing (Unrouted 0 at iteration 15, versus
+# several thousand nets for every single-seed run).  Four seeds took over
+# five hours, so keep two seeds and let PDS pick the better layout.
+pnr -parallel 2 -gplace_seed 7 -seed_step 3 -generate_bitstream TRUE
 report_timing
 gen_bit_stream
