@@ -68,12 +68,8 @@ module uart_tx #(
             byte_wready <= 1'b0;
             uart_txd    <= 1'b1;   // line idles high
         end else begin
-            // Accept a new byte only when completely idle.  byte_wready is also
-            // de-asserted for the cycle right after an accept: with a plain
-            // ~busy it stayed high for one extra cycle (busy is updated by a
-            // non-blocking assignment), which let uart_debug believe it could
-            // hand over the next character and drop it.
-            byte_wready <= ~busy & ~(byte_wvalid & byte_wready);
+            // Accept a new byte only when completely idle.
+            byte_wready <= ~busy;
 
             if (!busy) begin
                 if (byte_wvalid && byte_wready) begin
