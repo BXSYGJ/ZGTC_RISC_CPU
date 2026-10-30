@@ -498,8 +498,21 @@ module instrec_top #(
     wire [23:0] text_rgb;
     wire        text_on;
 
-        /* disabled for routing congestion: text_disp u_text_disp ( */
-;
+    // 2026-10-31: text layer re-enabled.  LUT headroom was recovered by moving
+    // the wdma parameter tables into a synchronous block RAM (53.57% -> 51.1%),
+    // so the LUT-only part of M3 goes back in first; the spectrogram chain
+    // (which costs 6.5 DRAM) follows separately.
+    text_disp u_text_disp (
+        .pix_clk   (pix_clk),
+        .rst_pix_n (rst_pix_n),
+        .pix_x     (text_x),
+        .pix_y     (text_y),
+        .de        (text_de),
+        .class_idx ({4'd0, top1_s1}),
+        .pct       (text_pct),
+        .rgb       (text_rgb),
+        .text_on   (text_on)
+    );
 
     wire [14:0] npu_feat_rd_addr;
     wire [10:0] spec_x, spec_y;
@@ -553,8 +566,8 @@ module instrec_top #(
         .mute_flag_sync(mute_flag_sync),
         .spec_rgb      (24'd0),
         .spec_on       (1'b0),
-        .text_rgb      (24'd0),
-        .text_on       (1'b0),
+        .text_rgb      (text_rgb),
+        .text_on       (text_on),
         .bars_rgb      (bars_rgb),
         .bars_on       (bars_on),
         .vsync_pulse   (vsync_pulse),
