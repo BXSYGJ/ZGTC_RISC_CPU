@@ -129,6 +129,17 @@ dev_map
 # iteration 15) but PDS then keeps routing the second seed for hours.  Cap
 # the action so the finished run is taken: 45 minutes is ~3x the time the
 # first seed needed.
-pnr -parallel 2 -gplace_seed 7 -seed_step 3 -timeout 45 -generate_bitstream TRUE
+# -plc_decongestion: extra placement effort spent on spreading congested
+#   regions (free in area, costs placement time).
+# -dc_duplication TRUE: duplicate high-fanout cells so long nets become
+#   short ones -- this trades AREA for routability, and the design has
+#   FF 37% / LUT 54% to spare.
+# Measured on this design:
+#   -plc_decongestion 2 -dc_duplication TRUE made the route START worse
+#   (47559 unrouted, 82 s/iteration) than plain placement (33302, 19 s) --
+#   duplicating cells scattered the logic further, so drop both.
+#   -timeout has no effect on a non-multi-seed run (log shows no abort).
+# Four placement candidates in parallel, then one route pass.
+pnr -parallel 4 -gplace_seed 7 -seed_step 3 -generate_bitstream TRUE
 report_timing
 gen_bit_stream
