@@ -129,9 +129,20 @@ module wdma (
     localparam [3:0] S_DONE   = 4'd12;
     reg [3:0] state;
 
-    reg signed [31:0] bram [0:255];
-    reg signed [31:0] mram [0:255];
-    reg [7:0]         sram [0:255];
+    // One 768x32 block RAM holds the three per-channel parameter tables:
+    //   [  0..255] bias (s32)
+    //   [256..511] M    (Q0.31, s32)
+    //   [512..767] shift (6-bit value in the low byte)
+    // The old code used three separately-addressed arrays read asynchronously,
+    // so PDS had to build them from LUTRAM/FF: u_wdma measured 8004 LUT /
+    // 18608 FF, which is also where the worst core_clk path lives
+    // (c_cnt -> m_s32: 0.8 ns logic, 8.8 ns route = 92%).
+    // A single synchronous-read port keeps the whole table in one DRAM.
+    // (syn_ramstyle alone was tried first and was ignored for async reads.)
+    (* syn_ramstyle = "block_ram" *) reg [31:0] pram [0:1023];
+
+    reg  [9:0]  pa;          // read address presented this cycle
+    reg  [31:0] pq;          // data returned for the address given last cycle
 
     // contract read bookkeeping
     reg [15:0] cfg_beats_left;
@@ -183,26 +194,53 @@ module wdma (
     wire        ctr_hit  = (ctr_idx < {1'b0, cout});
     wire [7:0]  ctr_addr = ctr_idx[7:0];
 
+    // Address pipeline for the shared parameter table (see pram).  The data
+    // for index i arrives one cycle after pa=i is presented, so S_GRP consumes
+    // pq and issues the address for the NEXT element in the same cycle.
+    // pa presents the address for element t+1 while S_GRP is at element t,
+    // because pq is registered one cycle later.  So the NEXT address to
+    // present is element (t+2), not (t+1).  The table is padded to 1024 words
+    // so the last iteration's look-ahead reads a zeroed slot instead of
+    // running past the end.
+    wire [9:0]  c_cnt_n   = {1'b0, c_cnt} + 10'd2;
+    wire [8:0]  ctr_idx_n = {grp_mod[3:0], 5'd0} + c_cnt_n[3:0];
+    wire [9:0]  pa_fc     = (c_cnt_n < {1'b0, cout}) ? c_cnt_n :
+                            (c_cnt_n < ({2'b0, cout} + {2'b0, cout})) ?
+                                 (10'd256 + c_cnt_n - cout) :
+                                 (10'd512 + c_cnt_n - cout - cout);
+    wire [9:0]  pa_cv     = (c_cnt_n < 10'd16) ? ctr_idx_n :
+                            (c_cnt_n < 10'd32) ? (10'd256 + ctr_idx_n) :
+                                                 (10'd512 + ctr_idx_n);
+    wire [9:0]  pa_next   = is_fc ? pa_fc : pa_cv;
+    wire signed [31:0] pq_s = pq;
+
     // FIFO write (never back-pressured by the IP).
     always @(posedge clk) begin
         if (rd_valid) fifo[wr_ptr[3:0]] <= rd_data;
     end
 
-    // Contract RAM write: 8 x s32 for bias/M, 32 x u8 for shift.
+    // Contract RAM write: 8 x s32 for bias/M, 32 x u8 for shift, all into the
+    // shared 768x32 table (bias @0, M @256, shift @512).
     integer j;
     always @(posedge clk) begin
         if (rd_valid && (state == S_CB_FIL)) begin
             for (j = 0; j < 8; j = j + 1)
-                bram[{cfg_idx[7:3], j[2:0]} + 0] <= rd_data[j*32 +: 32];
+                pram[{cfg_idx[7:3], j[2:0]} + 10'd0] <= rd_data[j*32 +: 32];
         end
         if (rd_valid && (state == S_CM_FIL)) begin
             for (j = 0; j < 8; j = j + 1)
-                mram[{cfg_idx[7:3], j[2:0]}] <= rd_data[j*32 +: 32];
+                pram[{cfg_idx[7:3], j[2:0]} + 10'd256] <= rd_data[j*32 +: 32];
         end
         if (rd_valid && (state == S_CS_FIL)) begin
             for (j = 0; j < 32; j = j + 1)
-                sram[{cfg_idx[7:3], 5'd0} + j] <= rd_data[j*8 +: 8];
+                pram[{cfg_idx[7:3], 5'd0} + j + 10'd512] <= {24'd0, rd_data[j*8 +: 8]};
         end
+    end
+
+    // Single synchronous read port: data for the address presented last cycle.
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) pq <= 32'd0;
+        else        pq <= pram[pa];
     end
 
     always @(posedge clk or negedge rst_n) begin
@@ -319,6 +357,12 @@ module wdma (
                     rd_cmd <= {1'b0, cfg_addr,
                                ((cfg_beats_left > 16'd16) ? 8'd15 : (cfg_beats_left[7:0] - 8'd1))};
                     rd_cmd_valid <= 1'b1;
+                    // Preset the parameter-table read address here, not in
+                    // S_CS_FIL: pq is registered from the address of the
+                    // PREVIOUS cycle, so the address needs one extra cycle of
+                    // settling before S_GRP consumes pq.  Both contract types
+                    // start at index 0 (fc bias[0]; conv grp_mod is still 0).
+                    pa    <= 10'd0;
                     state <= S_CS_FIL;
                 end
                 S_CS_FIL: begin
@@ -342,6 +386,12 @@ module wdma (
                             wr_ptr    <= 5'd0;
                             rd_ptr    <= 5'd0;
                             fifo_cnt  <= 5'd0;
+                            // pq is registered from the PREVIOUS cycle's pa,
+                            // so S_GRP cycle 0 already consumes pram[0] (loaded
+                            // during S_CS_FIL) and pa must already point at the
+                            // SECOND element when S_GRP starts.  Both contract
+                            // shapes index element 1 by 1 (new group: grp_mod=0).
+                            pa        <= 10'd1;
                             state     <= S_GRP;
                         end else begin
                             state <= S_CS_CMD;
@@ -357,13 +407,13 @@ module wdma (
                         // fc contract: COUT beats each of bias, M, shift.
                         if (c_cnt < cout) begin
                             b_valid  <= 1'b1;
-                            bias_s32 <= bram[c_cnt];
+                            bias_s32 <= pq_s;
                         end else if (c_cnt < {1'b0, cout} + {1'b0, cout}) begin
                             m_valid  <= 1'b1;
-                            m_s32    <= mram[c_cnt - cout];
+                            m_s32    <= pq_s;
                         end else begin
                             s_valid  <= 1'b1;
-                            shift    <= sram[c_cnt - cout - cout][6:0];
+                            shift    <= pq_s[6:0];
                         end
                     end else begin
                         // conv contract: 16 bias + 16 M + 16 shift per group,
@@ -371,15 +421,16 @@ module wdma (
                         // (grp_mod), NOT by the (row, group) walk counter.
                         if (c_cnt < 9'd16) begin
                             b_valid  <= 1'b1;
-                            bias_s32 <= ctr_hit ? bram[ctr_addr] : 32'sd0;
+                            bias_s32 <= ctr_hit ? pq_s : 32'sd0;
                         end else if (c_cnt < 9'd32) begin
                             m_valid <= 1'b1;
-                            m_s32   <= ctr_hit ? mram[ctr_addr] : 32'sd0;
+                            m_s32   <= ctr_hit ? pq_s : 32'sd0;
                         end else begin
                             s_valid <= 1'b1;
-                            shift   <= ctr_hit ? sram[ctr_addr][6:0] : 7'd0;
+                            shift   <= ctr_hit ? pq_s[6:0] : 7'd0;
                         end
                     end
+                    pa <= pa_next;
 
                     c_cnt <= c_cnt + 9'd1;
                     if (({1'b0, c_cnt} + 10'd1) == cfg_end) state <= S_TCMD;
