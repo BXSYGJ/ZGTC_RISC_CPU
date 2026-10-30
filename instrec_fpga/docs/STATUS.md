@@ -252,6 +252,46 @@ WNS 稳定落在 -1~-3 ns 区间；按「能跑就行」口径不再逐轮追。
 - 布局事实（`tests/test_wdma_layout.py`、`test_wdma_stream_model.py`，9 项通过）：
   所有层权重区 32B 对齐；conv1 每组 144B（27 tap）尾部仅 1 tap；fc2 tap 为 8B/4 个每 beat。
 
+## 降密度的真正金矿：wdma 的 4 个异步读数组（2026-10-31 02:20 定位）
+
+从 `synthesize/instrec_top.snr` 的 "Device Utilization Summary Of Each Module" 拿到精确分布：
+
+| 模块 | LUT | FF |
+|---|---|---|
+| `u_npu` | 18005 | 34909 |
+| ├ **`u_wdma`** | **8004** | **18608** |
+| ├ `u_conv` | 4251 | 4399 |
+| ├ `u_fc1` | 3334 | 9309 |
+| ├ `u_fc2` | 951 | 1355 |
+| ├ `u_softmax` | 675 | 744 |
+| `u_mel_engine` | 9380 | 5166 |
+| ├ **`u_fft2048_sdf`** | **6194** | 3290 |
+| ├ `u_stft_framer` | 1250 | 147 |
+| ├ `u_mel_filter` | 1011 | 607 |
+| `u_weight_loader` | 1612 | 2533 |
+| `u_ui_renderer` | **202** | 107 |
+
+**`u_wdma` 是第三大模块，且 FF 占全设计 37%**。根因是 4 个数组全部**异步读**，
+PDS 因此推断成 LUTRAM/FF 而不是 DRAM：
+
+```verilog
+reg signed [31:0] bram [0:255];   // 8192 bit
+reg signed [31:0] mram [0:255];   // 8192 bit
+reg        [7:0]  sram [0:255];   // 2048 bit
+reg [255:0]       fifo [0:15];    // 4096 bit
+// 读法（异步）：bias_s32 <= bram[c_cnt];  wire [255:0] beat_c = fifo[rd_ptr];
+```
+
+**改法（明天做）**：把 `bram/mram/sram` 改成「地址寄存 + 输出寄存」的同步读，
+加 `(* syn_ramstyle = "block_ram" *)`。这 3 个数组合计 18432 bit，只需 **1~2 块 DRAM**
+（当前 DRM 只用 79.5/155），预计可省 **4000~6000 LUT 与 ~15000 FF**，
+LUT 由 53.6% 落到 **46% 左右**，彻底离开布线临界点。
+
+**时序要点**：读地址需比 `c_cnt` 提前一拍给出（流水），`bias_s32/m_s32/shift` 与各自
+`*_valid` 仍同拍输出，下游 `fc_engine` 按 valid 接收，**拍数契约不变**。
+S_GRP 进入前需预置读地址为 0，并在该状态多一拍装载首数据（`cfg_end` 计数同步 +1）。
+**没有仿真，改完必须先跑 `test_wdma_stream_model.py` 等 9 项 wdma 判据再构建。**
+
 ## 2026-10-31 01:50 布线临界点结论（最终定性，必须记住）
 
 两天布线问题的**完整答案**：
