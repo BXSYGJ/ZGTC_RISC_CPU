@@ -31,6 +31,7 @@ NL = bytes([10])
 
 BOOT = b'INSTREC BOOT' + NL
 BAUD = 12          # small stand-in for 1085; only the ratio matters
+GAP = 150          # > one 10-bit frame (10*BAUD = 120)
 
 
 class TxCore:
@@ -79,6 +80,7 @@ def _run(mode, line, baud=BAUD, limit=2000000):
     data = 0
     idx = 0            # next character to load
     cur = 0            # character currently presented on the wire
+    gap = 0            # inter-character wait (the shipped 'gap' variant)
     seen = []
     for _ in range(limit):
         accepted = tx.step(valid, data)
@@ -95,6 +97,18 @@ def _run(mode, line, baud=BAUD, limit=2000000):
                 valid = 0
                 if idx >= len(line):
                     break
+        elif mode == 'gap':
+            if gap != 0:
+                gap -= 1
+            if gap == 0 and ready_now and idx < len(line):
+                data, valid = line[idx], 1
+                cur = idx
+                idx += 1
+                gap = GAP
+                if idx >= len(line):
+                    delivered_last = True
+            else:
+                valid = 0
         elif mode == 'gated':
             if ready_now and not valid and idx < len(line):
                 data, valid = line[idx], 1
@@ -153,3 +167,12 @@ def test_gated_never_outruns_the_line():
         _, seen = _run('gated', line)
         assert max(seen) < len(line)
         assert seen == sorted(set(seen)), seen
+
+def test_gap_variant_delivers_every_character():
+    """Shipped fix: keep the single-cycle strobe, wait a full frame between
+    characters.  uart_tx keeps its original registered-ready (no RTL change
+    there), so the routing-sensitive structure is untouched."""
+    for line in LINES:
+        out, seen = _run('gap', line)
+        assert out == line, (line, out, seen)
+        assert seen == list(range(len(line))), (line, seen)

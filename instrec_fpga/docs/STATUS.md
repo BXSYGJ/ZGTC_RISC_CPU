@@ -252,6 +252,24 @@ WNS 稳定落在 -1~-3 ns 区间；按「能跑就行」口径不再逐轮追。
 - 布局事实（`tests/test_wdma_layout.py`、`test_wdma_stream_model.py`，9 项通过）：
   所有层权重区 32B 对齐；conv1 每组 144B（27 tap）尾部仅 1 tap；fc2 tap 为 8B/4 个每 beat。
 
+## 2026-10-30 22:10 布通结论（决定性）
+
+**纯 `pnr`（无任何参数）在 iteration 1001 布通**：`Unrouted nets 0`、
+`Design 'instrec_top' has been placed and routed successfully`，位流
+`46EE227F…`，归档 `releases/m2d-20261030/`。时序与 m2c 逐位相同
+（`ddrphy_sysclk` -2.144、`pix_clk` -0.061），再次印证布局确定性。
+
+**这条把两天的布线问题彻底定性**：
+
+| pnr 参数 | 结果 |
+|---|---|
+| **纯 `pnr`** | **iteration 1001 布通**（m2c 与 m2d 两次都成功） |
+| `-parallel 2/4`、`-gplace_seed 7`、`-plc_decongestion`、`-dc_duplication` | 四次全部停在 2400~7200 |
+
+→ **是我后来「优化」的参数把布局拖进了拥塞解，不是 RTL、不是资源、不是 UART**。
+`-parallel` 虽然在 global routing 阶段很快归零，但会在 detail routing 从 3 万多条重新爬升后
+卡死在 2400 附近。**以后一律用纯 `pnr`，不要再动这些参数。**
+
 ## 2026-10-30 20:35 关键排除：UART 修复不是布线停滞的原因
 
 对照实验 `20261030-191554`（`uart_debug`/`uart_tx` 回退到 `b463740^`、波形恢复，
