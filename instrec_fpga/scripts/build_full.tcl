@@ -125,6 +125,10 @@ dev_map
 # what finally closed the routing (Unrouted 0 at iteration 15, versus
 # several thousand nets for every single-seed run).  Four seeds took over
 # five hours, so keep two seeds and let PDS pick the better layout.
-pnr -parallel 2 -gplace_seed 7 -seed_step 3 -generate_bitstream TRUE
+# Multi-seed placement closes the routing early (seed 1 reached Unrouted 0 at
+# iteration 15) but PDS then keeps routing the second seed for hours.  Cap
+# the action so the finished run is taken: 45 minutes is ~3x the time the
+# first seed needed.
+pnr -parallel 2 -gplace_seed 7 -seed_step 3 -timeout 45 -generate_bitstream TRUE
 report_timing
 gen_bit_stream

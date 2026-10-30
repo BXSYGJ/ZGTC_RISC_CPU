@@ -71,6 +71,11 @@ InstRec 8 类乐器识别（INT8 CNN）正在移植到盘古 100Pro+（PG2L100H-
   （`pnr -parallel 2 -gplace_seed 7 -seed_step 3 -generate_bitstream TRUE`，构建 `20261030-105655`）。
   → 「布不通」不是密度问题（同资源 m2c 曾布通），而是**单种子布局落在拥塞解上**；
   `-parallel` 同时给出多个布局候选，是这台器件上唯一可用的并行加速。
+- **多 seed 模式的耗时问题已定位并加超时**：`-parallel 2` 时第一个 seed 在
+  **iteration 15 即 Unrouted 0**，但 PDS 会继续把第二个 seed 布到数百轮（实测 799 轮
+  仍未结束，整轮已超 2 小时）。处置：`pnr -parallel 2 -gplace_seed 7 -seed_step 3
+  -timeout 45 -generate_bitstream TRUE`（构建 `20261030-135506`），超时后取已完成的最好结果。
+  若该轮仍不产出位流，回退候选是加 `-plc_decongestion`（布局解拥塞）或提高并行数。
 - **板级一键 bring-up `scripts/board_e2e.py`**：`boot → weights → capture → compare` 四阶段链，
   任一步失败即停并给出该阶段的排查提示；`--stage boot|weights|layers` 可单独执行
   （stage 3/4 需要 I2S 有真实音频，否则没有窗口完成事件）。
