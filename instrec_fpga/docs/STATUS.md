@@ -1,26 +1,28 @@
 # InstRec-FPGA 当前状态（STATUS）
 
 > 本文件是**唯一实时状态源**，优先于任何交接快照与记忆。每次会话结束前必须更新，
-> 并在 `CHANGELOG.md` 追加一条。最后更新：2026-10-31 10:55。
+> 并在 `CHANGELOG.md` 追加一条。最后更新：2026-10-31 11:15。
 
 ## 一句话
 
 InstRec 8 类乐器识别（INT8 CNN）正在移植到盘古 100Pro+（PG2L100H-6IFBG676）纯 FPGA 管线。
-**全功能位流已布通并归档 `releases/m3d-20261031/`**（`0B2BE8D4…`）：音频→DDR3→Mel→NPU 全链
-→概率条+波形+文字+谱图四层 UI 全部生效，UART 文本已修复。LUT 34327（52%）、DRM 86（56%）、
-布线仅 510 轮；`ddrphy_sysclk` 改善到 -0.966 ns（仍差 1 ns），`pix_clk` 转正 +0.018。
-**唯一阻塞：FTDI 下载器不在 PnP 中，无法上板验证。**
+**四个位流逐层加回全部布通（m3a→m3b→m3c→m3d），m3d 是功能齐全的全功能版**：
+音频→DDR3→Mel→NPU 全链→概率条+波形+文字+谱图四层 UI，LUT 34327（52%）、DRM 86、
+`pix_clk` 转正 +0.018、`ddrphy_sysclk` -0.966。板级已跑到「配置成功 + 串口可读」。
+**唯一阻塞：DDR3 自检超时 `DDR3 ERR @FFFFFFFF`（不是回归，m2c 同样失败），
+导致 NPU 拿不到权重、识别链路无法闭环。接手先看 `docs/HANDOFF_SNAPSHOT_20261031.md`。**
 
 ## 里程碑
 
 | 里程碑 | 状态 | 关键证据 |
 |---|---|---|
-| P0 工具链 + Python 金标准 | 完成 | `pytest -q` 239 passed / 4 skipped；`golden_pipeline.py` 位级真值 |
+| P0 工具链 + Python 金标准 | 完成 | `pytest -q` **280 passed / 4 skipped**；`golden_pipeline.py` 位级真值 |
 | M0 I2S→DDR3→HDMI 波形 | 完成（未上板） | run `20261027-000612-a71f1451`，sha256 `C517736C…`，WNS +1.757 |
-| M1 Mel 特征引擎 | 构建完成、时序收敛、待板级对拍 | run `20261027-121101-5c24a968`，sha256 `BD40D10A…`，WNS +1.438 / All Constraints Met |
-| M2 INT8 NPU | 全链布线收敛、已上板 `done=1`、core 域 -2.1 ns 未收敛 | m2/m2b/m2c 三版位流归档；最差路径已非组合深度而是 wdma 远距离 FF |
-| M3 UI 集成 | **五个模块接线已恢复（92d0531），随 `20261029-212311` 重建验证** | text/spectrum/feat_copy/feat_page_buf/ui_coord_delay 全部重新例化 |
-| 板级端到端 | **已通到串口，字符被丢（修复版构建中）** | `done=1`、`crc_err=0`、18 字节 `ITCO\nD3ETT.D3R@FF\n` |
+| M1 Mel 特征引擎 | 构建完成、时序收敛、待板级对拍 | run `20261027-121101-5c24a968`，sha256 `BD40D10A…`，WNS +1.438 |
+| M2 INT8 NPU | 全链布通、已上板，**权重通路被 DDR3 自检阻塞** | m2/m2b/m2c/m3a 四版归档；`ddrphy_sysclk` -0.966（最差在 DDR3 IP 内部） |
+| M3 UI 集成 | **完成：四层 UI 全部在 m3d 位流中** | 概率条 + 波形 + 类别文字 + 谱图；`pix_clk` +0.018 |
+| 全功能位流 | **m3d 布通归档** | `releases/m3d-20261031/`，sha256 `0B2BE8D4…`，LUT 52% / DRM 56% |
+| 板级端到端 | **串口可读（3 行正确），卡在 `DDR3 ERR @FFFFFFFF`** | `done=1`/`crc_err=0`；m2c 同样 ERR → 非回归 |
 
 ## 当前状态
 
@@ -492,7 +494,7 @@ APM 90（37.50%），离器件上限很远；而且同一资源量的 `m2c`（35
 | SDD | `docs/sdd/{spec,design,tasks}.md`（从 `.codeartsdoer` 复制的可交接副本） |
 | 证据 | `reports/m0-manifest-20261027.json`、`reports/m1-timing-20261027-104218.txt`（修复前时序） |
 | 位流归档 | `releases/m{0,1}-2026102{7}/`、`releases/m2{,b,c}-20261029/`（sbit + manifest + SHA256SUMS + 时序报告） |
-| 交接 | `docs/HANDOFF_SNAPSHOT_20261027.md` + 本文件 |
+| 交接 | **`docs/HANDOFF_SNAPSHOT_20261031.md`（最新，换人第一入口）** + `docs/HANDOFF_SNAPSHOT_20261027.md`（背景）+ 本文件 |
 | Agent 规则 | 仓库根 `AGENTS.md` |
 
 ## 未纳管 / 已搁置资产（勿误删，也不必入库）

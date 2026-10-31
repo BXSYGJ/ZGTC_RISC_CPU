@@ -3,6 +3,32 @@
 > 每次会话结束前追加一条：时间、做了什么、结论、证据路径。倒序，最新在上。
 > 状态汇总见 `docs/STATUS.md`。
 
+## 2026-10-31 11:15 — 全功能位流 m3d 布通 + 板级首次可读启动日志 + DDR3 自检阻塞
+
+**软件侧完成**：按「一层一轮」把功能逐层加回，四版全部布通并按能力递增归档：
+`m3a`（wdma 参数表块 RAM 化，`152FEC8B`，477 轮）→ `m3b`（+UART 字符间隔修复，`D28C798C`，695 轮）
+→ `m3c`（+文字层，`482CCA1C`，1426 轮）→ **`m3d`（+谱图层 = 四层 UI 全齐，`0B2BE8D4`，510 轮）**。
+m3d 资源 LUT 34327(52%)/DRM 86(56%)/FF 52188/APM 90；`ddrphy_sysclk` -2.144→**-0.966**、`pix_clk` **+0.018 转正**。
+
+**wdma 块 RAM 化是本轮关键**：三个异步读参数表（LUTRAM/FF，8004 LUT / 18608 FF，最差 core 路径在其中）
+合并为单张 1024x32 同步读表，读地址前视两拍（`tests/test_wdma_param_pipeline.py` 7 项固定该配对）。
+LUT -1086、布线 1001→510/477 轮、core 时序同步改善 —— 验证了「布线停滞=余量为零」而非资源不足。
+
+**板级（重插 USB 后）**：烧 m3d → `done=1 / crc_err=0`、串口 **49 字节三行可读**：
+`INSTREC BOOT` / `DDR3 SELFTEST...` / `DDR3 ERR @FFFFFFFF`。UART 握手修复至此上板确认闭环。
+
+**当前唯一阻塞**：`0xFFFFFFFF` 是 `sys_ctrl` 的 100 ms 超时分支（`self_test` 未拉 done/fail）。
+烧 2026-10-29 的 `m2c` **同样 DDR3 ERR** → **不是回归**，DDR3 通路从未验证通过（此前被串口乱码掩盖）。
+已排除：`pll_all` 已含 `ddr_init_s`、四主口仲裁掩码、`self_test` FSM 启动、顶层 m3 接线。
+待查（接手第一顺位）：DDR3 IP 是否真的接受 AXI 写事务（历史记录：IP 无 `axi_wvalid`，自定义控制器会卡死）。
+
+**降频尝试失败并已回退**：改 `ddr3_test.idf` 到 DDR3-800 后用 `ip_generate -i` 重新生成，
+报 `IPCompiler 0014: Failed to open index.xml` —— 本工程 ipcore 无 IP 实例工程文件，**无法命令行重生成**。
+`.idf` 已恢复到 DDR3-1000/8000ps 与已生成 RTL 匹配。真降频需 IP Compiler GUI，或给用户逻辑单独分频（工作量大）。
+
+**新增交接快照** `docs/HANDOFF_SNAPSHOT_20261031.md`：可用位流清单、板级实测原文、DDR3 排查进度、
+复现命令、硬规则、踩坑清单、接手建议顺序。pytest 280 passed / 4 skipped。
+
 ## 2026-10-31 06:45 — 布线临界点突破：wdma 块 RAM 化 + UART 间隔修复，两版位流布通
 
 **根因闭环**：两天「布不通」的真实原因是**余量为零**——m2d 基线 LUT 35677 布通（1001 轮），
