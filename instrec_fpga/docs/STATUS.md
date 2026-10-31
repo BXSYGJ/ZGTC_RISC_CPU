@@ -394,6 +394,31 @@ detail routing 29→19035、69→8023、159→3737、**246→2452**，同样停�
 当前回到纯布局 + 提高候选数：`pnr -parallel 4 -gplace_seed 7 -seed_step 3 -generate_bitstream TRUE`
 （构建 `20261030-162731`）。
 
+## 2026-10-31 11:00 板级首上全功能位流（m3d）——UART 完全恢复，DDR3 自检超时
+
+用户重插 USB 后 FTDI 恢复（`jtagserver` PID 9040 复用成功、单实例稳定），
+烧 `releases/m3d-20261031/instrec_top.sbit`：
+
+```
+program: True   status: 0x081ffca0 done=1 crc_err=0
+uart: 49 bytes
+  INSTREC BOOT
+  DDR3 SELFTEST...
+  DDR3 ERR @FFFFFFFF
+```
+
+**判读**：
+- **UART 握手修复彻底成功**：三行完整、逐字符正确（字符间隔计数器方案生效），
+  这是项目第一次读到可读的启动日志，此前所有「串口乱码」问题闭环。
+- **`done=1 / crc_err=0`**：位流配置成功，设计在跑。
+- **`DDR3 ERR @FFFFFFFF` 是超时不是地址错**（`sys_ctrl` 的 `timeout_cnt >= DDR_TIMEOUT_CYCLES`
+  分支，100 ms @125 MHz，arg 固定填 `0xFFFF_FFFF`）：`self_test` 在 100 ms 内
+  既没拉 `st_done` 也没拉 `st_fail` → 卡在自检流程内部或 AXI 握手没回来。
+
+**这条此前被串口乱码掩盖了整整两天**，属新暴露的真问题，按「慢调试」节奏处理：
+先用 UART 已修好的 m3b（无 M3 层）做同判据对照，确认是否与 M3 链路相关；
+再沿 `self_test → ddr3_ctrl_axi(m3) → DDR3 IP` 逐级查初始化与握手。
+
 ## 布线不收敛的定性结论（2026-10-30，必须记住）
 
 **不是资源不够。** 同一份 RTL 实测 LUT 35665（53.55%）、FF 49690（37.30%）、DRM 79.5（51.29%）、
