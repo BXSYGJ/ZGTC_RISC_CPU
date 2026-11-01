@@ -1,6 +1,14 @@
 # InstRec-FPGA 当前状态（STATUS）
 
-## 2026-11-01 17:30 心跳：参数首项错位已修，conv1 仍有 mismatch，PDS 高拥塞
+## 2026-11-01 18:04 心跳：真实集成 conv1 候选完整对拍通过，层间 DDR 修复继续
+
+- **正式行信用端口候选完整 conv1 PASS**：`build/sim/npu_conv1_step9/run.log`，792576 个输出逐字节与 golden 一致，859229 周期；当前 feat 重新计算 golden 也一致。候选包含参数 beat/通道索引、WDMA 握手、半 beat 末 tap、wbuf 预读/装载屏蔽和特征行信用修复，尚未合入主线或当前 PDS。
+- **背压候选通过**：独立 conv 输出 FIFO 随机背压对拍 792576 项 mismatch0；pool 奇数宽度长背压 128 项通过；pool→激活缓存→DDR→规范顺序重放 128B 逐值一致（4 写4读，DDR write ready 每101拍只开放5拍）。持久资产 `sim/experiments/activation_pipeline/`；真实前两层集成继续，不能扩展为完整 NPU PASS。
+- **真实小几何联合链通过**：`sim/experiments/activation_pipeline/run_conv_pool_store.py`，非零3x3权重、通道bias、整数requant的独立数学golden，384个conv值+96个pool/DDR重放值一致，4写4读且长DDR写暂停；不是只用驱动器模拟conv输出。
+- **wbuf 反例补齐**：持久化 `sim/experiments/wbuf_replay/`，旧 step4 在装载阶段 stale valid 反例失败，新 step8 10797 次握手通过。旧的 10797 次 PASS 没有覆盖此边界，已在报告纠正。
+- **唯一 RV PDS**：`build/pds/20261101-130420-0ed52a5d` 到 iteration240，未布网络6538，仍无时序报告/新位流。继续运行，不并发另一 PDS；当前冻结 run 不含 NPU 候选修复。GitHub 最新已同步700d7fa，后续实验将继续提交。
+
+### 之前的定位记录（保留失败证据，以下 mismatch 已被上面的 conv1 候选覆盖）
 
 - `build/sim/wdma_wide_diff/run.log`：原版与宽口候选在 layer 0..5 各 350000 周期逐拍比较通过；覆盖 `rd_cmd`、权重/参数流、`grp_start`、`busy`、`done` 及随机响应间隙/背压。该结果只证明候选与原版等价，不证明原版功能正确，也未证明资源下降。
 - `build/npu_full/wdma_step3.v` 候选已修复 bias/M 每个 DDR beat 的索引步长（+8）、shift 索引步长（+32）及 `grp_mod * 16` 通道偏移；诊断确认参数 index 0 的 bias=-287、M=1762673006、shift=41 与合同一致。但完整 conv1 首点仍失败：`got=7 exp=4 cycle=535`，因此整链仍不正确。候选仅在 build 目录，主线 RTL 与冻结 PDS manifest 未修改；继续定位权重/激活选择或 MAC/量化数据通路。
@@ -15,7 +23,7 @@
 - WDMA 原候选反例与修复已持久化 `sim/experiments/wdma_handshake/`，现场重跑 baseline 预期 FAIL、fixed 4943 tap PASS，见 `reports/wdma_handshake_validation_20261101.md`。换组 MAC 错误进一步定位到 wbuf 装载首拍旧 valid 穿透：`grp_start` 边沿状态进 LOAD，但 `rd_vld_q` 从旧 RPY 仍保持 1 一拍。此前 10797 次测试仅检查 grp_start 当拍，未覆盖随后整个 LOAD；正在增强反例与状态/valid 修复。
 
 > 本文件是**唯一实时状态源**，优先于任何交接快照与记忆。每次会话结束前必须更新，
-> 并在 `CHANGELOG.md` 追加一条。最后更新：2026-11-01 17:30。
+> 并在 `CHANGELOG.md` 追加一条。最后更新：2026-11-01 18:04。
 
 ## 2026-11-01 17:18 新确认的整链阻塞（优先于组件 PASS）
 

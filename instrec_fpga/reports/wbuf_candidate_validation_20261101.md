@@ -1,5 +1,61 @@
 # WBUF synchronous-read candidate validation (2026-11-01)
 
+## Subsequent counterexample: step4 is not ready for promotion
+
+The original 10,797-check test disabled replay checking and deasserted ready
+during loading. It checked the `grp_start` assertion cycle but did **not**
+check the following cycle, so its PASS did not cover stale valid leaking
+into `S_LOAD`. An enhanced test keeps ready asserted throughout loading and
+asserts that `load_active && rd_valid` must never occur. The same step4
+candidate now fails at the first group reload:
+
+```text
+[2045000] %Fatal: tb_wbuf_probe.sv:18: Assertion failed in tb_wbuf_probe:
+stale replay valid during load tag=1 tap_num=9
+```
+
+Raw counterexample: `build/sim/wbuf_load_guard_step4/run.log`.
+Step4 therefore remains a rejected candidate despite its earlier replay
+sequence PASS. The initial evidence below is retained with its limited scope.
+
+## Step8 enhanced test result
+
+`python build/wbuf_probe/run.py step8 build/npu_full/wbuf_step8.v`
+passed the enhanced test: **10,797 accepted data comparisons**, with ready
+asserted throughout every load and no `load_active && rd_valid` violation.
+Raw log: `build/sim/wbuf_load_guard_step8/run.log`. The reused TB's printed
+PASS line still says "step4"; its invocation and compile log identify the
+actual tested source as `wbuf_step8.v`.
+
+Step8 exact source SHA-256:
+
+```text
+9EA29AB7629D89E7794742260835462930CABCC584DB6E3B86BE80B9CC5032BD
+```
+
+The complete additional repair over the step4 diff preserved below:
+
+```diff
+--- a/wbuf_step4.v
++++ b/wbuf_step8.v
+@@
+-        rd_data_q <= mem[(state == S_RPY && rd_vld_q && rd_ready) ? ((rd_cnt_p1 >= tap_num) ? 11'd0 : rd_cnt_p1) : rd_cnt];
+-        rd_vld_q  <= (state == S_RPY);
++        rd_data_q <= mem[(rd_valid && rd_ready) ? ((rd_cnt_p1 >= tap_num) ? 11'd0 : rd_cnt_p1) : rd_cnt];
++        if (!rst_n || grp_start) rd_vld_q <= 1'b0;
++        else rd_vld_q <= (state == S_RPY);
+@@
+-    assign rd_valid    = rd_vld_q && !(grp_start && (tap_num != 16'd0));
++    assign rd_valid    = rd_vld_q && (state == S_RPY) && !grp_start;
+@@
+-                    if (rd_vld_q && rd_ready) begin
++                    if (rd_valid && rd_ready) begin
+```
+
+This repairs the demonstrated load leakage and unifies the data look-ahead
+and replay pointer on the externally visible handshake. Full-chain and FPGA
+validation remain separate requirements.
+
 ## Result and scope
 
 The build-only `build/npu_full/wbuf_step4.v` candidate passed an independent

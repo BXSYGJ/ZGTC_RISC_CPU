@@ -592,3 +592,10 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 - 新增层间存储审查报告：串行共享卷积核与三行缓存无法保留整帧 pool 输出，且有 start 清 row_done、输入顺序不一致；需要 DDR 激活缓存与受信用重放，build 协议候选继续开发，未改主线。
 - WDMA 组合 valid/data 修复经 4943 个真实 tap 随机背压/半 beat 跨层对拍通过；接入 conv1 后 group1 cache 正确但首输出仍 72/51，剩余为换组 MAC 窗口对齐。激活缓存候选持久化至 `sim/experiments/activation_store/`，Python 真实尺寸和 RTL 小几何通过，未接主线。
 - WDMA 实验已持久化并复跑 baseline FAIL/fixed PASS（4943 taps），报告明确叠加修复边界；wbuf 新确认 LOAD 首拍旧 valid 穿透，10797 次旧测试未覆盖该拍，补反例测试中。
+
+## 2026-11-01 18:04 — 正式行信用端口候选 conv1 全通过；DDR层间修复推进
+
+- step8/step9 集成真实WDMA/wbuf/feature读口后，conv1 792576值 mismatch0，859229周期；step9为正式行信用端口，移除诊断层级引用。仍在候选，不属于当前冻结PDS。
+- wbuf持久反例可复跑：旧step4 LOAD valid穿透FAIL，新step8 10797握手PASS。独立conv输出FIFO随机背压792576项通过；pool奇宽背压128项通过；pool→DDR→canonical重放128B/4写4读通过。
+- 新增 `sim/experiments/activation_pipeline/` 和 `wbuf_replay/` 资产；完整前两层、原生DDR接口、综合与上板仍待验证。唯一PDS到iteration240未布6538，无新位流/时序。
+- 真实小几何conv→pool→DDR→重放联合链也通过：独立非零3x3/通道bias数学golden，384conv+96pool/回读值精确，4写4读，DDR写长暂停可反压。
