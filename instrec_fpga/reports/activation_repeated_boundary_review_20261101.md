@@ -34,15 +34,27 @@ No production interface or fault behavior changes are included in this review.
 3. Recovery: bridge abort enters sticky `FAULT`; row stores have reset but no
    abort input. Reset recovery must be tested, and restart after an error
    without reset must not be claimed. No automatic retry is implemented.
-4. Start sequencing: a row store samples start only in IDLE. Busy-time start,
-   held start, and reset during outstanding abstract read/write transactions
-   need directed tests if those cases become supported integration behavior.
-5. Zero-latency R reaches the row-store implementation, but the full-geometry
-   row-store TB uses delayed responses. Direct immediate-R and duplicate or
-   unexpected-R tests remain distinct from mux immediate-R coverage.
+4. Start sequencing: a row store samples start only in IDLE. The new directed
+   boundary test passes nine busy-time starts across FILL/CREDIT/EMIT (one of
+   each per geometry), with invalid live configuration; the latched frame is
+   unaffected. Held start and reset during outstanding abstract read/write
+   transactions remain untested.
+5. Direct immediate-R coverage now passes all three full geometries, 10816
+   immediate read beats in total. Original/narrow outputs match cycle by cycle,
+   including ready/valid/commands/payloads/status. Two unsolicited/duplicate R
+   pulses in IDLE latch protocol_error, emit no command/data, and remain sticky.
+   Reset clears the error and returns to quiescent IDLE; a fresh valid start
+   waits in CREDIT without issuing reads until row credit. This is a reset
+   contract test, not mid-transaction recovery or automatic retry evidence.
 6. Actual top arbitration with concurrent loader/audio/Mel/self-test traffic,
    physical DDR PHY, CDC, routing/timing and board operation remain outside
    these native compute tests.
+
+Run the direct boundary test with
+`python sim/experiments/activation_store/run_boundaries.py`. Evidence:
+`build/sim/activation_store_boundaries/run.log` and hashed DUT/TB inputs under
+`build/sim/activation_store_boundaries_assets/inputs.json`. The original delayed-R
+and narrow baseline runners/log paths are preserved. No production RTL changed.
 
 ## Resource gate
 

@@ -1,4 +1,4 @@
-// activation_row_store_dynamic -- Frozen candidate; PDS and board validation pending.
+// activation_row_store_dynamic -- Isolated narrow equivalent candidate.
 // Candidate only. Single-row reorder, serialized 32-byte DDR transfers.
 // Native bridge must map addresses to byte-addressed len=0 commands.
 module activation_row_store_dynamic (
@@ -17,16 +17,21 @@ module activation_row_store_dynamic (
     output reg row_done, done, protocol_error
 );
     localparam BEATS=194;
-    reg [15:0] width, channels, height, row_bytes, stride, beats;
+    reg [7:0] width, channels, beats;
+    reg [5:0] height;
+    reg [12:0] row_bytes, stride;
     reg [1:0] geometry;
     reg [31:0] row_base;
-    assign replay_row=row[15:0];
+    assign replay_row={10'd0,row};
     localparam IDLE=0, FILL=1, WCMD=2, WDATA=3, CREDIT=4,
                RCMD=5, RDATA=6, EMIT=7, PREFETCH=8;
     reg [3:0] state;
     wire [255:0] row_q;
-    integer row, grp, col, lane, count, beat;
-    wire [31:0] scatter=(geometry==0 ? col*48 : geometry==1 ? col*96 : col*192)+grp*16+lane;
+    reg [5:0] row;
+    reg [3:0] grp, lane;
+    reg [7:0] col, beat;
+    reg [12:0] count;
+    wire [12:0] scatter=(geometry==0 ? col*48 : geometry==1 ? col*96 : col*192)+grp*16+lane;
     assign in_ready=(state==FILL);
     assign cmd_valid=(state==WCMD)||(state==RCMD);
     assign cmd_write=(state==WCMD);
@@ -34,23 +39,23 @@ module activation_row_store_dynamic (
     assign wr_valid=(state==WDATA);
     assign wr_data=row_q;
     assign out_valid=(state==EMIT);
-    assign out_data=row_q[(count%32)*8 +:8];
+    assign out_data=row_q[{count[4:0],3'b000} +:8];
     wire accept_r=rd_valid && ((state==RDATA) || (state==RCMD && cmd_ready));
-    wire [31:0] scan_next=(state==EMIT && out_ready) ? count+1 : count;
-    wire [31:0] ram_ra=(state==WCMD || state==WDATA) ? beat : scan_next/32;
+    wire [12:0] scan_next=(state==EMIT && out_ready) ? count+1 : count;
+    wire [7:0] ram_ra=(state==WCMD || state==WDATA) ? beat : scan_next[12:5];
     genvar g;
     generate for(g=0;g<32;g=g+1) begin: lane_bank
         (* syn_ramstyle = "block_ram" *) reg [7:0] mem [0:BEATS-1];
         reg [7:0] q;
         assign row_q[g*8 +:8]=q;
+        wire fill_lane=(state==FILL && in_valid && scatter[4:0]==g);
+        wire fill_pad=(state==FILL && in_valid && !fill_lane && row_bytes[4:0]==16 && count==row_bytes-1 && g>=16);
+        wire mem_we=accept_r || fill_lane || fill_pad;
+        wire [7:0] mem_wa=accept_r ? beat : fill_lane ? scatter[12:5] : beats-8'd1;
+        wire [7:0] mem_wd=accept_r ? rd_data[g*8 +:8] : fill_lane ? in_data : 8'd0;
         always @(posedge clk) begin
-            q<=mem[ram_ra<BEATS ? ram_ra : 0];
-            if(accept_r) mem[beat]<=rd_data[g*8 +:8];
-            else if(state==FILL && in_valid) begin
-                if(scatter%32==g) mem[scatter/32]<=in_data;
-                else if(row_bytes%32==16 && count==row_bytes-1 && g>=16)
-                    mem[beats-1]<=8'd0;
-            end
+            q<=mem[ram_ra<BEATS ? ram_ra : 8'd0];
+            if(mem_we) mem[mem_wa]<=mem_wd;
         end
     end endgenerate
     always @(posedge clk or negedge rst_n) begin

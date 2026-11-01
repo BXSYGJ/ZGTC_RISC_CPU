@@ -1,0 +1,30 @@
+{
+  "Result": "compile/synthesize/dev_map PASS; no PnR or bitstream",
+  "Used": {
+    "LUT": 794,
+    "FF": 343,
+    "DRM": 16,
+    "APM": 0
+  },
+  "ElapsedSeconds": 39,
+  "CandidateSourceSha256": "316d4404ab96a6b60994690a20a490e2a4787d1e9fc205c227d8cb888b2eadd0",
+  "OriginalComparison": "Original isolated interrupted at coordinator 22:38 deadline. Baseline single-store resource evidence comes from exact full-topology synthesis hierarchy report, not completed isolated comparison.",
+  "Evidence": [
+    {
+      "path": "manifest.json",
+      "sha256": "8bc36c91801bfeb75f592c8c847d28ff99acf267770db2915df0759a2606f642"
+    },
+    {
+      "path": "activation_store_map_probe.snr",
+      "sha256": "34096cf11b32b21732e54d752ee8a21e14edfe7304ebcf30c9e0911b37d85b87"
+    },
+    {
+      "path": "activation_store_map_probe.dmr",
+      "sha256": "4b4757a3ca370b4a6cb3a6d581468a5e948b9dbc24cdb0748099e2d61da7a760"
+    },
+    {
+      "path": "apm_drm_lutram_utilization.txt",
+      "sha256": "5b8441b0101fad490de2a2ee222fe963811d7fc4a1a66ecbbea93091f9fcb7d6"
+    }
+  ]
+}

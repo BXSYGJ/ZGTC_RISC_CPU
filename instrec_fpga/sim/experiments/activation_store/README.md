@@ -32,3 +32,18 @@ Full real-geometry RTL round trips all passed in one run, with actual pool group
 | pool3 | 49152 | 1536 | 1536 |
 
 The TB changes live configuration to invalid values after start and confirms the active transaction remains latched. It includes command/data stalls, delayed R, output stalls, initial credit withholding and replay_row checks. Log: build/sim/activation_row_store_dynamic/run.log. This remains an abstract DDR protocol test, without native-controller/top integration or synthesis/physical mapping evidence.
+
+`activation_row_store_narrow.v` is an isolated inference candidate with bounded unsigned counters, explicit constant-32 address slices, and one canonical write per RAM bank. `run_narrow.py` passes cycle-by-cycle output comparison against the original while executing all three full-size reorder tests (198144 / 98304 / 49152 bytes). `prepare_narrow.py` reconstructs this candidate from the unchanged original.
+
+`prepare_map_probe.py` prepares frozen original/narrow single-store PDS mapping probes, each with an identical I/O observation wrapper, clock constraint, hashed manifest and serial-only launch. It never launches PDS. These probes stop after dev_map and estimate RAM inference/resource cost only; they do not validate production functionality, routing or board behavior. See `reports/activation_store_resource_review_20261101.md` for evidence and limits.
+
+## Direct immediate-R and start/error boundaries
+
+`python sim/experiments/activation_store/run_boundaries.py` passes all three
+full geometries with 10816 immediate read responses and an original/narrow
+cycle miter. It checks nine busy-time start pulses (FILL/CREDIT/EMIT for each
+geometry), unsolicited/duplicate R sticky error, reset clearing, and a fresh
+post-reset CREDIT wait. Existing delayed-R logs remain separate. Log:
+`build/sim/activation_store_boundaries/run.log`. These are abstract row-store
+checks; reset during an outstanding native transaction and automatic retry
+are not validated. See `reports/activation_repeated_boundary_review_20261101.md`.

@@ -1,0 +1,27 @@
+{
+  "Variant": "narrow",
+  "OriginalSource": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\sim\\experiments\\activation_store\\activation_row_store_narrow.v",
+  "OriginalSourceSha256": "316d4404ab96a6b60994690a20a490e2a4787d1e9fc205c227d8cb888b2eadd0",
+  "Top": "activation_store_map_probe",
+  "StopAfter": "dev_map",
+  "NoBitstream": true,
+  "Files": [
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\resource_gate\\activation-isolated-20261101-221150-865259\\narrow\\activation_store_unit.v",
+      "Sha256": "1788ff87354b40a7479f78e260971022901d217d7be8413f6589c30c4f083397"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\resource_gate\\activation-isolated-20261101-221150-865259\\narrow\\activation_store_map_probe.v",
+      "Sha256": "db4a8e525280d0c3819655d3adae35294daab22d91ef8dd5a53b7d2ec070c33e"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\resource_gate\\activation-isolated-20261101-221150-865259\\narrow\\probe.fdc",
+      "Sha256": "1169f50fa314ca0bcde81ca8f6d4d233e0607442e90fcf3fdcdfb220656fbe4f"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\resource_gate\\activation-isolated-20261101-221150-865259\\narrow\\build.tcl",
+      "Sha256": "ec90a18c0768882d8b2ebdc5341a76ebf9f028f8e802d0915e1c4e2586242995"
+    }
+  ],
+  "Limitations": "Isolated single store plus identical 256-bit input shift register and XOR output observation. No production functionality, timing closure, PnR or board result."
+}

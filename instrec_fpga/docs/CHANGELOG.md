@@ -1,5 +1,12 @@
 # InstRec-FPGA 变更日志
 
+## 2026-11-01 22:42 — 修复激活行缓存RAM推断，启动新完整资源gate
+
+- 将行缓存改为有界无符号计数器、明确地址slice和单写口RAM模板；isolated映射39s通过，794LUT/343FF/16DRM/0APM，32个lane bank均真实映射DRM。旧完整拓扑两个store原占84886LUT/100280FF/0DRM。
+- 新冻结候选三top结构、三geometry逐拍等价及完整native A/B无reset双轮全部PASS，各31141202cycles；据此只推广行缓存一处RTL差异，保留旧失败证据。补齐10816即时R/9次忙期start/异常响应sticky及reset清错定向测试。
+- 超容量gate22:31、original孤立probe22:38按截止安全止损，均无位流；新唯一完整gate224112-909881已启动，止于dev_map，不并发PDS。准备脚本改用snapshot IP/TCL并校验额外构建输入hash。
+- 纳管reports/activation_store_narrow_20261101与npu_narrow_snapshot_validation_20261101.json；无新完整资源/时序/板级结论，下载器未操作。
+
 ## 2026-11-01 22:29 — CPU/native 联合闭环、top1修复与容量阻塞
 
 - 真实CPU ROM启动→CTRL/Mel安全窗→完整native NPU golden→结果MMIO/UART→ACK联合PASS；修复生产固件把最后概率lane误称top1，改为分别输出硬件top1/last_class/last_p。CPU C1–C9与生产默认联合再次PASS；生产ROM两次重建与隔离联合ROM逐字节相同，579words，SHA256前缀24d0b7fd。

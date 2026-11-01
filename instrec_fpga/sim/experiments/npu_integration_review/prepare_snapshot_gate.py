@@ -27,7 +27,10 @@ def main():
     config = json.loads((snapshot / 'scripts/build_sets.json').read_text())['sets'][args.set]
     out = ROOT / 'build/resource_gate' / ('native-' + datetime.now().strftime('%Y%m%d-%H%M%S-%f'))
     out.mkdir(parents=True)
-    shutil.copytree(ROOT / 'ipcore', out / 'ipcore')
+    ip_root = snapshot / 'ipcore'
+    if not ip_root.is_dir():
+        raise SystemExit('Snapshot must include frozen ipcore inputs')
+    shutil.copytree(ip_root, out / 'ipcore')
     sources = []
     for pattern in config['sources']:
         if pattern.startswith('../cpu/rtl/'):
@@ -53,7 +56,7 @@ def main():
             copies += ['file mkdir "' + dest.parent.as_posix() + '"',
                        'file copy -force "' + src.as_posix() + '" "' + dest.as_posix() + '"']
             hexes.append(src)
-    template = (ROOT / 'scripts/build_full.tcl').read_text(encoding='utf-8-sig')
+    template = (snapshot / 'scripts/build_full.tcl').read_text(encoding='utf-8-sig')
     values = {'DESIGN_FILES': lines('add_design', sources), 'IP_FILES': lines('add_design', ips),
               'CONSTRAINT_FILES': lines('add_constraint', constraints),
               'HEX_COPY_BLOCK': '\n'.join(copies), 'PROJECT_ROOT': snapshot.as_posix(),
@@ -65,7 +68,9 @@ def main():
     if re.search(r'__[A-Z_]+__|(?m:^\s*(?:pnr|report_timing|gen_bit_stream)\b)', template):
         raise SystemExit('Unexpanded token or implementation stage in gate')
     (out / 'build.tcl').write_text(template, encoding='utf-8')
-    inputs = list(dict.fromkeys(sources + constraints + hexes + list((out / 'ipcore').rglob('*'))))
+    inputs = list(dict.fromkeys(sources + constraints + hexes + list((out / 'ipcore').rglob('*')) +
+                               [out / 'build.tcl', snapshot / 'scripts/build_sets.json',
+                                snapshot / 'scripts/build_full.tcl', snapshot / 'snapshot.json']))
     rows = [{'path': str(p), 'sha256': digest(p)} for p in inputs if p.is_file()]
     manifest = {'Snapshot': str(snapshot), 'SnapshotManifestSha256': digest(snapshot / 'snapshot.json'),
                 'BuildSet': args.set, 'TopModule': config['top_module'], 'StopAfter': 'dev_map',

@@ -1,5 +1,13 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-01 22:42：RAM推断修复已推广；新完整拓扑gate运行
+
+- 原完整gate容量超限，22:31核验进程/保存报告与manifest后仅结束其synthesize子进程36212，父43724自然退出；无dev_map结果、无位流。原版isolated probe也在22:38截止后保留日志止损，未完成，不当成通过。
+- narrow isolated probe已完整compile/synthesize/dev_map通过：含观测wrapper共**794 LUT / 343 FF / 16 DRM / 0 APM**，用时39秒。32个lane_bank均识别为GTP_DRM18K_E1，真实修复RAM推断；纳管结果见`reports/activation_store_narrow_20261101/`。
+- 新冻结`build/npu_production_candidate/narrow-20261101-223829`直接复制当时生产，仅替换行缓存；三top结构展开、三geometry逐拍miter、完整native A/B无复位两轮golden均PASS（各31141202cycles）。已逐字节推广唯一RTL差异`activation_row_store_dynamic.v`到生产，59.v词法0 violation；证据`reports/npu_narrow_snapshot_validation_20261101.json`。
+- 唯一PDS现为`build/resource_gate/native-20261101-224112-909881`（22:41:58启动，compile→synthesize→dev_map），45 RTL、2约束、89个冻结IP文件及ROM/TCL/manifest launch核验通过。尚无完整资源结果，未启动PNR；isolated结果不能当作完整拓扑已可实现。
+- 即时R/忙期start补测通过：三geometry共10816即时响应、9次忙期start不破坏配置/数值、IDLE异常R置sticky、reset清错后等待credit；中途事务reset和自动retry仍未验证。继续等待新完整资源，达标后才受控布线，不操作下载器。
+
 ## 2026-11-01 22:24：完整拓扑综合超容量；禁止进入 PNR
 
 - exact combined gate `build/resource_gate/native-20261101-215404-522126` 已完成技术综合，资源表为 LUT **115473/66600 (173.38%)**、FF **133439/133200 (100.18%)**、DRM **88.5/155**、APM **92/240**。当前仍保存综合数据库，尚无最终 dev_map 结果；无位流，不能进入布线。

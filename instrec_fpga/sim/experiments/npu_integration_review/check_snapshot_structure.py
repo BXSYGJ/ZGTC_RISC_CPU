@@ -41,7 +41,11 @@ def main():
     cmd=[str(tool),'--lint-only','--timing','-Wno-fatal','--top-module',args.top,'--Mdir',str(work/'obj')]
     for d in [snapshot/'src/mel',snapshot/'src/cpu',snapshot/'cpu_rtl',snapshot/'src/ddr3']:
         cmd+=['-I'+str(d)]
-    cmd += [str(p) for p in sources]
+    # Windows .bat launch has an 8191-character command limit. Keep the exact
+    # frozen source list in a Verilator response file for the complete top.
+    filelist=work/'sources.f'
+    filelist.write_text('\n'.join('"'+p.as_posix()+'"' for p in sources)+'\n',encoding='ascii')
+    cmd += ['-f',str(filelist)]
     r=subprocess.run(cmd,cwd=ROOT,env=run_sim._build_env(),text=True,capture_output=True)
     (work/'elaboration.log').write_text(r.stdout+r.stderr,encoding='utf-8')
     (work/'inputs.json').write_text(json.dumps({'top':args.top,'stubbed':stubbed,'sources':[str(p) for p in sources]},indent=2),encoding='ascii')
