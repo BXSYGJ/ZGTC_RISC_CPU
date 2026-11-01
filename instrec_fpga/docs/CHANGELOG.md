@@ -544,3 +544,8 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 - PDS RV run `20261101-130420-0ed52a5d` 持续 detail route，iteration 112 未布通 8680；尚无位流或板级结论。
 - 新增记录的通过证据：RV CPU C1-C9、weight loader CRC/WOK/读回、Mel 两种 credit 配置、UI render/overlay、NPU chain/completion、DDR3 subsystem/AW timeout、ctrl smoke、self-test、RV top control。
 - UART 临时仿真覆盖 128-byte full line 与 newline short line，均逐字节 PASS；主线 7-bit `ram_len` 修复待当前 PDS 完成后实施。
+
+## 2026-11-01 16:05 — GitHub 状态同步时追加验证
+
+- RV PDS detail route 到 iteration 114，未布通 8452；仍无位流或板级 RV 结论。
+- UART/sys_ctrl/烧录安全回归新增 35 passed；RTL/SV 实时验证结论不变。
