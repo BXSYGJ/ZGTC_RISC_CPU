@@ -1,5 +1,13 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-02：db_norm 候选回归通过；新 PDS 布线停滞并安全结束
+
+- 生产 `src/mel/db_norm.v` 当前候选保留原端口和同步 RAM 节拍，在平方累加前加入寄存/末项 flush；小几何边界对拍、真实 `mel_credit` 16,512 字节 golden、CPU/native frame-major 联合均通过。候选仍需关注 PDS 对乘法表达式位宽的推断，未宣称板级验证。
+- 并行定向验证通过：`python -m pytest tests/test_ddr3_ctrl_model.py tests/test_ddr3_arbiter_model.py tests/test_sys_ctrl_ddr_result_latch.py -q` 为 **49 passed**；`python sim/run_sim.py uart_linebuf --verbose` 和 `python sim/run_sim.py npu_completion --verbose` 均 PASS。全量基线仍 **432 passed / 4 skipped**，RTL 检查 59 个 `.v`、0 violation。
+- 唯一 PDS `build/pds/20261102-013400-e8658663` 已完成 compile/synthesize/dev_map 并进入 detail routing；未布网络从 60995 降至约 717，随后在 iteration 500--560 间约 950--1026 长时间振荡，未出现 `placed and routed successfully`，也没有 `report_timing/` 或 `generate_bitstream/*.sbit`。按止损规则仅结束该 run 的 PDS 父子进程，**无位流、无 timing 结论**。
+- 停止前已保存 `stall-processes-20261102-024125.txt`、`stall-manifest-20261102-024125.txt`、`stall-log-sha256-20261102-024125.txt`；最终 `place_route/run.log` SHA256 为 `44569FD964C92F35C4E2BA15C6DA672E9A3BAEB6D73EB66E3AAEA9D01B06A6BB`。未操作 `cdt_js`/`cdt_cfg`/下载器；`cdt_js` PID 9040 仍在。
+- 板级仍 **NOT_RUN**。reset-mid-read 后同 `axi_rid` 的迟到 `RVALID/RLAST` 误收风险仍开放，不能把 Python/Verilator PASS 写成物理 DDR PHY 或完整顶层复位证明。下一步应先处理 db_norm 关键路径和 PDS 布局候选，再单实例重跑并读取 slow/fast timing。
+
 ## 2026-11-02：修复版 PDS 完成布线并产出候选位流，时序未闭合
 
 ### 心跳补充（2026-11-02）

@@ -59,7 +59,7 @@
 //       around the maximum, mirroring the golden form) maps to 0.
 //   Hence clip(scaled, -20480, 0) equals the golden chain exactly.
 //
-// Architecture (two scans, two cycles per element):
+// Architecture (two scans, two cycles per element plus a final drain):
 //   * Scan 1 (max): read every element, keep the running max of the
 //     signed Q8.8 log2 values.
 //   * Scan 2 (dB + statistics): recompute dB for every element; elements
@@ -145,10 +145,17 @@ module db_norm #(
     localparam [2:0] S_MAX_CALC  = 3'd2;
     localparam [2:0] S_DB_RD     = 3'd3;
     localparam [2:0] S_DB_CALC   = 3'd4;
+    localparam [2:0] S_DB_FLUSH  = 3'd5;
+    localparam [2:0] S_DB_SQ_FLUSH = 3'd6;
+    localparam [2:0] S_DB_SUM_FLUSH = 3'd7;
 
     reg [2:0]        state;
     reg [14:0]       elem_cnt;      // current element address (frame-major)
     reg signed [15:0] max_l2;       // running max of log2_q88 (s16 init min)
+    reg signed [15:0] db_value_pipe;
+    reg               db_value_pipe_valid;
+    reg        [31:0] db_sq_pipe;
+    reg               db_sq_pipe_valid;
 
     // ------------------------------------------------------------------
     // dB datapath (combinational, golden db_convert bit-exact).
@@ -162,9 +169,6 @@ module db_norm #(
         (db_rhu_s27 < $signed({{11{DB_TOP_S[15]}}, DB_TOP_S})) ? DB_TOP_S :
         (db_rhu_s27 > 27'sd0)                                   ? 16'sd0   :
                                                                     db_rhu_s27[15:0];
-
-    // dB^2 for the variance accumulator (s16*s16 -> s32, <= 20480^2)
-    wire signed [31:0] db_sq_s32 = db_s16 * db_s16;
 
     // Kept-frame test: addresses below OUT_FIRST_C belong to the dropped
     // head frame (no dB write, no statistics update).
@@ -193,6 +197,10 @@ module db_norm #(
             sum_db      <= 48'sd0;
             sum_db_sq   <= 48'd0;
             stats_valid <= 1'b0;
+            db_value_pipe <= 16'sd0;
+            db_value_pipe_valid <= 1'b0;
+            db_sq_pipe <= 32'd0;
+            db_sq_pipe_valid <= 1'b0;
         end else begin
             case (state)
                 S_IDLE: begin
@@ -202,6 +210,8 @@ module db_norm #(
                         max_l2    <= -16'sd32768;
                         sum_db    <= 48'sd0;
                         sum_db_sq <= 48'd0;
+                        db_sq_pipe_valid <= 1'b0;
+                        db_value_pipe_valid <= 1'b0;
                         state     <= S_MAX_RD;
                     end
                 end
@@ -223,21 +233,39 @@ module db_norm #(
                 end
                 // -------- scan 2: dB conversion + statistics -----------
                 S_DB_RD: begin
+                    db_sq_pipe <= db_value_pipe * db_value_pipe;
+                    db_sq_pipe_valid <= db_value_pipe_valid;
                     state <= S_DB_CALC;
                 end
                 S_DB_CALC: begin
+                    if (db_sq_pipe_valid) begin
+                        sum_db_sq <= sum_db_sq + {16'd0, db_sq_pipe};
+                    end
+                    db_value_pipe <= db_s16;
+                    db_value_pipe_valid <= is_out_now;
                     if (is_out_now) begin
                         sum_db    <= sum_db + {{32{db_s16[15]}}, db_s16};
-                        sum_db_sq <= sum_db_sq +
-                                    {{16{db_sq_s32[31]}}, db_sq_s32};
                     end
                     if (elem_cnt == SPEC_ELEM_LAST) begin
-                        stats_valid <= 1'b1;  // sums final, bank overwritten
-                        state       <= S_IDLE;
+                        state <= S_DB_FLUSH;
                     end else begin
                         elem_cnt <= elem_cnt + 15'd1;
                         state    <= S_DB_RD;
                     end
+                end
+                S_DB_FLUSH: begin
+                    db_sq_pipe <= db_value_pipe * db_value_pipe;
+                    db_sq_pipe_valid <= db_value_pipe_valid;
+                    state <= S_DB_SUM_FLUSH;
+                end
+                S_DB_SUM_FLUSH: begin
+                    if (db_sq_pipe_valid) begin
+                        sum_db_sq <= sum_db_sq + {16'd0, db_sq_pipe};
+                    end
+                    db_sq_pipe_valid <= 1'b0;
+                    db_value_pipe_valid <= 1'b0;
+                    stats_valid <= 1'b1;
+                    state <= S_IDLE;
                 end
                 default: begin
                     state <= S_IDLE;
@@ -247,3 +275,5 @@ module db_norm #(
     end
 
 endmodule
+
+
