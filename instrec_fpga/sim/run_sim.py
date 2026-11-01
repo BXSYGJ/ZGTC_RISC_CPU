@@ -207,6 +207,14 @@ register(Case(
 ))
 
 register(Case(
+    name="uart_linebuf",
+    tb="tb_uart_linebuf.sv",
+    rtl=["src/ctrl/uart_debug.v"],
+    timeout=120,
+    description="128-byte and newline debug lines, TX backpressure and busy/ready recovery",
+))
+
+register(Case(
     name="npu_chain",
     tb="tb_npu_chain.sv",
     rtl=[

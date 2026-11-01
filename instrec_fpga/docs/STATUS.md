@@ -1,18 +1,19 @@
 # InstRec-FPGA 当前状态（STATUS）
 
 > 本文件是**唯一实时状态源**，优先于任何交接快照与记忆。每次会话结束前必须更新，
-> 并在 `CHANGELOG.md` 追加一条。最后更新：2026-11-01 17:07。
+> 并在 `CHANGELOG.md` 追加一条。最后更新：2026-11-01 17:12。
 
 ## 2026-11-01 15:56 RV 构建持续布线与并行验证
 
-- PDS run `build/pds/20261101-130420-0ed52a5d` 仍在运行，已进入 detail route；最新日志为 iteration 114，未布通网络 8452。当前仍无新版 RV 位流、时序报告或板级证据，不能宣称 PNR 完成。
+- PDS run `build/pds/20261101-130420-0ed52a5d` 仍在运行，已进入 detail route；17:12 检查到 iteration 192，未布通网络 6638。当前仍无新版 RV 位流、时序报告或板级证据，不能宣称 PNR 完成。已核对 manifest 的 62 个输入文件，SHA256 全部一致。
 - 并行 Verilator 回归新增通过：`rv_cpu` C1-C9、`weight_loader` 10 项（WOK/CRC/读回 digest）、`mel` 与 `mel_credit`（16512 特征样本 mismatch 0）、`ui_render`、`ui_overlay`、`npu_chain`、`npu_completion`、`ddr3_subsys`、`ddr3_aw_timeout`、`ctrl_smoke`、`self_test`、`rv_top_ctrl` 均 PASS。
-- UART 临时副本边界仿真已通过：128 字节满行和 4 字节换行行逐字节校验通过。测试台曾因把 `0x0A` 放入满行数据而提前触发换行，已修正测试向量；该证据不替代主线 `uart_debug.ram_len` 7-bit 缺陷修复。
+- **UART 误诊已撤回**：同一增强 TB 对原版与宽度扩展临时版均 PASS；7-bit `ram_len` 将 128 编为 0，而结束比较的 7-bit 减法回绕为 127，未复现发送失败。新增正式 `uart_linebuf` 回归验证原版满 128 字节、短/空换行、TX 背压、ready=0 写丢弃及 busy/ready 恢复；不合入无必要的 RTL 补丁。
 - `python scripts/check_rtl.py`：53 个 `.v` 文件，0 violation。当前主线工作区未修改 PDS 输入；用户预存的 `cpu/`、PCB、PDF 变化保持未提交。
 - UART/sys_ctrl/烧录安全 Python 回归：35 passed。
 - 本次心跳检查：PDS detail route iteration 180，未布通 6949，持续运行；无新位流或时序报告。
 - 后续心跳：PDS detail route iteration 185，未布通 6608，仍在运行；无新位流或时序报告。新增 `rv_cpu`、`rv_top_ctrl`、`npu_completion`、`self_test`、`ctrl_smoke`、`weight_loader` 仿真均通过；全量 Python 回归 429 passed / 4 skipped，RTL 检查 53 个 .v、0 violation。
 - 最新 PDS 监控到 iteration 187，未布通 6600。额外重跑 `npu_chain`、`ddr3_subsys`、`ddr3_aw_timeout` 均 PASS（NPU 数值 bit-exact；DDR3 15/15、AW timeout 6/6 场景）；仍无新位流或时序报告。
+- 本次原 14 项 RTL suite 已分组全部重跑通过，新增 `uart_linebuf` 也 PASS（共 15 项）；conv1 792576 值 mismatch 0，Mel 每配置 16512 值 mismatch 0。CPU ROM/RAM 已映射为 6 块 DRM，CPU 顶层 `ENABLE_M=0`，不能靠再次关闭 M 或简单更改存储推断消除拥塞。当前 map：LUT 35840/66600，DRM 80.5/155；placer 物理利用率 81%，路由耗时无可靠 ETA。
 
 ## 2026-11-01 11:35 RV32 + AI 最小融合（最新，覆盖下文旧架构结论）
 
@@ -26,9 +27,9 @@
 
 上一 run `build/pds/20261101-113509-6927c1bf` 在 detail route iteration 21 后异常结束，没有完成标记、时序报告或位流；恢复脚本验证其 PDS 数据库缺少 post-synthesis design，无法从 `pnr`/`dev_map` 续跑，已保留全部日志，不视为成功。
 
-**当前完整构建**：`build/pds/20261101-130420-0ed52a5d`，`rv_core/top_rv_core` 新 run 已启动，compile/synthesis 前端运行中；一次只允许此 PDS 实例。RTL/FDC 已冻结；manifest 记录输入 SHA256，结束校验不变后才发布 latest。新增 clk_nco 216MHz 约束，最终必须逐域核对时序。当前**没有新版 RV 位流/板级通过证据**。
+**当前完整构建**：`build/pds/20261101-130420-0ed52a5d`，`rv_core/top_rv_core` 已完成 compile/synthesis/map，正在 detail route；一次只允许此 PDS 实例（父子进程属于同一 run）。RTL/FDC 已冻结；manifest 记录输入 SHA256，结束校验不变后才发布 latest。新增 clk_nco 216MHz 约束，最终必须逐域核对时序。当前**没有新版 RV 位流/板级通过证据**。
 
-顶层审查新发现 `uart_debug.ram_len` 为 7 位却在满 128 字节时赋值 128（截为 0），属于真实的最大长度调试行缺陷。当前 RV PDS manifest 已包含该源文件且 build 正在运行，为保证源哈希与正在实现的网表一致，主线修复及复测排到该 run 结束后；临时副本/测试验证正在进行。它不影响 RV core 中被常量关闭的自定义文本输入，但会影响使用 128 字节自定义行的顶层。
+顶层审查曾将 `uart_debug.ram_len` 的 7-bit 宽度告警判断为发送缺陷；17:12 原版/临时版差分回归均通过，已撤回该判断。其隐式模 128 长度编码在原版比较表达式中正确结束，正式回归为 `python sim/run_sim.py uart_linebuf --verbose`。本轮只增加仿真资产，未修改构建输入。
 
 板级：用户已恢复下载器；获准沙箱外 `board_check.py --diag-only` 确认 FTDI present、jtagserver PID9040、port65420 open，原 cdt_cfg PID46156 保留未终止。此前沙箱内 FTDI ABSENT 是设备枚举权限导致，不是物理离线证据。待新位流完成后依次验证 RV32 BOOT/MMIO/ISA、DDROK，再权重上传及真实 CPU 请求推理。
 

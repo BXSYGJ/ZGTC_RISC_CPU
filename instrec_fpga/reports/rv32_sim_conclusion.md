@@ -186,7 +186,7 @@ priority mismatches and zero RGB/DE alignment mismatches; standalone
    compare real NPU output with the golden reference. Synthetic event readback
    does not establish this end-to-end behavior.
 
-### Final rerun (2026-11-01 13:00)
+### Rerun (2026-11-01 13:00)
 
 `python sim/run_sim.py`: **14 PASS / 0 FAIL / 0 SKIP**, 281.0 s. This includes
 the restored UI renderer and standalone overlay cases. `python -m pytest -q`:
@@ -206,3 +206,23 @@ Top-level audit found and repaired an undeclared `dbg_tx_ready` net in
 declaration was also removed. Whole-tree Verilator elaboration reaches vendor
 IP blockers (`pll_audio`, `pll`, `GTP_INBUFDS`, `ips2l_rst_sync_v1_3`,
 `ddr3_test`), so this is not evidence of complete `instrec_top` elaboration.
+
+### Regression and corrected UART diagnosis (2026-11-01 17:12)
+
+All original 14 runner cases passed again in separate batches. Python:
+429 passed / 4 skipped (93.73 s); RTL lexical check: 53 files, 0 violations.
+Conv1: 792576 outputs, 0 mismatches; each Mel configuration: 16512 feature
+outputs, 0 mismatches. These remain component-level checks, not a complete
+CPU-triggered NPU numerical end-to-end proof.
+
+The earlier claim that a 128-byte custom UART line fails to terminate is
+withdrawn. Both the original RTL and a temporary width-expanded copy pass
+the identical differential test. The original encodes 128 as zero and the
+7-bit subtraction in its end-index comparison wraps to 127.
+
+The new permanent `uart_linebuf` case passes against unchanged RTL, checking
+128 non-newline bytes, short/empty newline lines, initial and mid-line TX
+backpressure, discarded writes while not ready, and busy/ready recovery.
+It preserves the actual 12000-cycle output gap and does not force DUT state.
+No UART RTL change is required by this result. Run:
+`python sim/run_sim.py uart_linebuf --verbose`.
