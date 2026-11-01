@@ -1,5 +1,11 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-02：UI 与特征页模型补测通过
+
+- `python sim/run_sim.py ui_render --verbose`：3 项 PASS，64 个 active pixels、层优先级和 RGB/DE 四拍对齐均 0 mismatch。
+- `python -m pytest -q tests/test_feat_page_model.py tests/test_spectrum_overlay_model.py`：19 passed，覆盖特征页翻页、尾拍和谱图 overlay 模型；`run_sim.py` 无 `feat_page` 入口，未将该入口提示视为测试失败。
+- 本轮未启动 PDS，未操作 `cdt_js`、`cdt_cfg` 或下载器；板级仍 NOT_RUN。
+
 ## 2026-11-02：权重加载与 AW timeout 补测通过
 
 - `python sim/run_sim.py weight_loader --verbose`：10 项 PASS，覆盖 4 个 256B chunk、32 拍读回 digest、完整 `WOK`、CRC 拒绝/NAK 与复位后重新接受。

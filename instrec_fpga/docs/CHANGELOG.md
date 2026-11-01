@@ -778,3 +778,8 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 - weight loader 10 项通过，包含完整写入/读回、CRC 拒绝和复位恢复。
 - AW timeout 6/6 场景通过，包含 m0 饱和配额和 STS 归因复现。
 
+## 2026-11-02 — UI 与特征页补测
+
+- UI renderer 3 项通过，64 active pixels、层优先级和四拍 RGB/DE 对齐均无误。
+- 特征页与谱图 overlay 模型 19 项通过；`run_sim.py` 没有 `feat_page` 案例，使用对应 pytest 覆盖。
+
