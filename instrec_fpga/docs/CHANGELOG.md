@@ -1,5 +1,11 @@
 # InstRec-FPGA 变更日志
 
+## 2026-11-02 — DDR 修复版资源门禁与联合回归
+
+- 修复后的 `rv_core` 通过 PDS compile/synthesize/dev_map，资源为 32063 LUT、33300 FF、120.5 DRM、90 APM；未进入 PNR，无新位流/时序/板测结论。
+- 全量回归 432 passed / 4 skipped，RTL 59 文件 0 violation；真实 CPU+native NPU frame-major 及无复位 A/B 双帧联合均 PASS。
+- reset-mid-read 同 ID 迟到响应仍为开放风险，未添加无证据的丢弃逻辑；下载器和 cdt 服务未操作。
+
 ## 2026-11-02：DDR 读超时迟到响应隔离
 
 - 修复 DDR 读 watchdog 超时后的迟到响应误归属问题，增加 `S_R_DRAIN` 隔离状态及周期模型回归。

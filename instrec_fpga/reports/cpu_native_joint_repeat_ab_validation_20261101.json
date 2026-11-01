@@ -1,6 +1,6 @@
 {
   "result": "PASS",
-  "label": "narrow-repeat-ab-20261101-r3",
+  "label": "heartbeat-20261102-repeat-ab",
   "production_rtl": true,
   "production_rom_modified": false,
   "firmware_candidate": "production main.c plus exactly one CTRL[0] after first result ACK",
@@ -47,7 +47,7 @@
     },
     {
       "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\npu\\npu_top.v",
-      "sha256": "73a76c14997cbfac9ad9377940949fbb5663a71f8a0825007dbecd8ce8c7b9ed"
+      "sha256": "710aa8ab86a31ad8dec6ae0e751b521d326bab50389b3efcdfc030830398ee0e"
     },
     {
       "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\npu\\pool_engine.v",
@@ -75,7 +75,7 @@
     },
     {
       "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\ddr3\\ddr3_ctrl_axi.v",
-      "sha256": "39e56ab153b80d67921bea360aaccb0f5bde3ef8152f79489ba745be8f923779"
+      "sha256": "3f1f2e9dacd243ad8a61babb2f32044089420c3eaaee4ebbccdccfc171f9a30f"
     },
     {
       "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\ddr3\\ddr3_arbiter.v",
@@ -115,103 +115,78 @@
     },
     {
       "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\ctrl\\top_rv_core.v",
-      "sha256": "181e5e78a81b6d4dec8f5df7a8a43de236e441991b2ba2c93d2e4d8b6a87acd6"
+      "sha256": "9bbd64f88524813b7c873b4e8798f185047b3f33df1a4df113d040d6f0e023b3"
     },
     {
-      "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\sim\\cpu_native_joint_narrow-repeat-ab-20261101-r3\\firmware\\prog.hex",
+      "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\sim\\cpu_native_joint_heartbeat-20261102-repeat-ab\\firmware\\prog.hex",
       "sha256": "d039da413e478aba5c03243e4a879de2a365371dc35538fb63e3896726c96f90"
     },
     {
-      "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\sim\\cpu_native_joint_narrow-repeat-ab-20261101-r3\\firmware\\main.c",
+      "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\sim\\cpu_native_joint_heartbeat-20261102-repeat-ab\\firmware\\main.c",
       "sha256": "f72f8ab1fc9826caf81cae4356ce23e41a7d18ddcdfc1e82fe8ad01f9cbfb2e4"
     },
     {
-      "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\sim\\cpu_native_joint_narrow-repeat-ab-20261101-r3\\tb_repeat.sv",
-      "sha256": "aeb701969827957e431b5afcf97a2e3012769a5bb0abc65a83b4d1f87e84f0df"
+      "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\sim\\cpu_native_joint_heartbeat-20261102-repeat-ab\\tb_repeat.sv",
+      "sha256": "527ae43b4c2debf4fd50d43e67d795d68e3af6df9cdbc284601e42d49c35dd35"
     },
     {
-      "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\sim\\cpu_native_joint_narrow-repeat-ab-20261101-r3\\frame_b\\conv1.hex",
+      "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\sim\\cpu_native_joint_heartbeat-20261102-repeat-ab\\frame_b\\conv1.hex",
       "sha256": "fae1207616b9fa8653d1e52c1399c93e0feb50ff64978d71cd1ac307241a6907"
     },
     {
-      "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\sim\\cpu_native_joint_narrow-repeat-ab-20261101-r3\\frame_b\\conv2.hex",
+      "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\sim\\cpu_native_joint_heartbeat-20261102-repeat-ab\\frame_b\\conv2.hex",
       "sha256": "99da5871d6aedb2f61826578b3e3f791f1c66e8197b633ae25b1d3a2718b929f"
     },
     {
-      "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\sim\\cpu_native_joint_narrow-repeat-ab-20261101-r3\\frame_b\\conv3.hex",
+      "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\sim\\cpu_native_joint_heartbeat-20261102-repeat-ab\\frame_b\\conv3.hex",
       "sha256": "a4d718aeaab55887e366ac08ba3a29e9cce821535219ea6d8420f3b21d35d748"
     },
     {
-      "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\sim\\cpu_native_joint_narrow-repeat-ab-20261101-r3\\frame_b\\conv4.hex",
+      "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\sim\\cpu_native_joint_heartbeat-20261102-repeat-ab\\frame_b\\conv4.hex",
       "sha256": "cdeb34371b8dd3b77feeb6aa5b3aabdf5a742b4f06cf55cce26b1e08cee0ce96"
     },
     {
-      "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\sim\\cpu_native_joint_narrow-repeat-ab-20261101-r3\\frame_b\\fc1.hex",
+      "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\sim\\cpu_native_joint_heartbeat-20261102-repeat-ab\\frame_b\\fc1.hex",
       "sha256": "43d0e4e84cfb5901d3b33b5173fc4937a8025f240c93cc122972d3512c83e17f"
     },
     {
-      "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\sim\\cpu_native_joint_narrow-repeat-ab-20261101-r3\\frame_b\\fc2_logits.hex",
+      "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\sim\\cpu_native_joint_heartbeat-20261102-repeat-ab\\frame_b\\fc2_logits.hex",
       "sha256": "d902159a910f26433865defa6b64ee0e3c75c057135a0e63ab08642fde06f8b3"
     },
     {
-      "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\sim\\cpu_native_joint_narrow-repeat-ab-20261101-r3\\frame_b\\feat.hex",
+      "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\sim\\cpu_native_joint_heartbeat-20261102-repeat-ab\\frame_b\\feat.hex",
       "sha256": "0e093003dda9c8622ca552ddd86f5fa51d42e74ed8e5401045a99158dd490203"
     },
     {
-      "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\sim\\cpu_native_joint_narrow-repeat-ab-20261101-r3\\frame_b\\gap.hex",
+      "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\sim\\cpu_native_joint_heartbeat-20261102-repeat-ab\\frame_b\\gap.hex",
       "sha256": "3607dc35812e690fade4515ec81bebbf45c0353efb7086329fc472e33fcdbddc"
     },
     {
-      "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\sim\\cpu_native_joint_narrow-repeat-ab-20261101-r3\\frame_b\\pool1.hex",
+      "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\sim\\cpu_native_joint_heartbeat-20261102-repeat-ab\\frame_b\\pool1.hex",
       "sha256": "1284d9f9fecf1111c5d57d4912ba53ec4b3060336a067c8a774270ff3da3a291"
     },
     {
-      "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\sim\\cpu_native_joint_narrow-repeat-ab-20261101-r3\\frame_b\\pool2.hex",
+      "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\sim\\cpu_native_joint_heartbeat-20261102-repeat-ab\\frame_b\\pool2.hex",
       "sha256": "3842851b77394946269b43d47da00bb170db2555091feee87bc12a6add88ba66"
     },
     {
-      "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\sim\\cpu_native_joint_narrow-repeat-ab-20261101-r3\\frame_b\\pool3.hex",
+      "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\sim\\cpu_native_joint_heartbeat-20261102-repeat-ab\\frame_b\\pool3.hex",
       "sha256": "9bb21808786dbc7ac92b3042e5a893c7eec07eb20c78038fdf483c8f0b877c70"
     },
     {
-      "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\sim\\cpu_native_joint_narrow-repeat-ab-20261101-r3\\frame_b\\pool4.hex",
+      "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\sim\\cpu_native_joint_heartbeat-20261102-repeat-ab\\frame_b\\pool4.hex",
       "sha256": "0bca60e9aae9a1d2fb1057d32360ed248e388283d9a45fd4370d9cdfb304dc59"
     },
     {
-      "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\sim\\cpu_native_joint_narrow-repeat-ab-20261101-r3\\frame_b\\probs.hex",
+      "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\sim\\cpu_native_joint_heartbeat-20261102-repeat-ab\\frame_b\\probs.hex",
       "sha256": "16ab41c7a4e7e3fc3cdf76c7beafef54d3568a63086a0ec3f51e9d417a71110b"
     }
   ],
-  "log": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\sim\\cpu_native_joint_narrow-repeat-ab-20261101-r3\\run.log",
-  "log_sha256": "97a7e13039e7c4099dee690fa4abf5cba7420d0970ec9df0674df5c8d94d4133",
+  "log": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\sim\\cpu_native_joint_heartbeat-20261102-repeat-ab\\run.log",
+  "log_sha256": "d1bfa007e1131c913c029be477fc924ac50d3b82069600368cb9d81706481656",
   "limits": [
     "modeled DDR AXI memory, Mel safe window and UART acceptance",
     "physical DDR PHY, CDC, board and timing excluded",
     "production ROM intentionally launches once; repeated launch uses isolated firmware candidate"
-  ],
-  "command": "python sim/experiments/cpu_native_joint/run_repeat.py --run-label narrow-repeat-ab-20261101-r3",
-  "firmware_bytes": 2424,
-  "firmware_words": 606,
-  "mmio_cycles_each": 31141201,
-  "checks": [
-    "real CPU boot/MMIO/ISA",
-    "two real CPU CTRL[0] requests; pending held to two modeled safe windows",
-    "all intermediate conv/pool/GAP/FC/softmax golden outputs and complete counts in both frames",
-    "both actual result UART lines match MMIO snapshots",
-    "two CTRL[1] acknowledgements clear result stickies",
-    "changed B intermediates despite same final top1",
-    "all source hashes rechecked after simulation"
-  ],
-  "preserved_failed_attempts": [
-    {
-      "path": "build/sim/cpu_native_joint_narrow-repeat-ab-20261101/run.log",
-      "sha256": "805c8bdf5682d8dbb8d3ff8bac01944b7eddad94f7daf2e53ca946089b202303",
-      "reason": "testbench filename/top-module mismatch; no DUT execution"
-    },
-    {
-      "path": "build/sim/cpu_native_joint_narrow-repeat-ab-20261101-r2/run.log",
-      "sha256": "c92f14a6928b1e27e6aa3d649443b9c66570aaac21405888c5b4d3db99942278",
-      "reason": "testbench single-run request-count assertion rejected valid second pending CPU request; no production defect"
-    }
   ]
 }

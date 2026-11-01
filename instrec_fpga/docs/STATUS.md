@@ -1,5 +1,13 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-02：DDR 修复版资源门禁完成，未进入布线
+
+- 修复后的 `ddr3_ctrl_axi` 超时迟到响应隔离与 `instrec_top` 初始化门控已通过受控 `rv_core` PDS compile/synthesize/dev_map；本轮 run 为 `build/pds/20261102-001943-d6bfe5cb`，源清单已固定，PDS 正常退出 0。
+- dev_map 资源：LUT **32063/66600 (48%)**、FF **33300/133200 (25%)**、DRM **120.5/155 (78%)**、APM **90/240 (38%)**；无 PNR、report_timing 或新位流，不能把旧 `ED7138…` 候选位流归因于本次修复。
+- 全量回归 **432 passed / 4 skipped**，RTL 词法检查 **59 文件 / 0 violation**。真实 frame-major CPU+native NPU 联合和无复位 A/B 双帧连续推理均 PASS，各 31,141,202 cycles，证据在 `build/sim/cpu_native_joint_heartbeat-20261102-{native-check,repeat-ab}/`。
+- 仍开放：reset-mid-read 后同 `axi_rid` 的旧 `RVALID/RLAST` 无法从当前接口可靠区分；模型可复现误收，未加入猜测性丢弃逻辑。板级仍 NOT_RUN，下载器与 `cdt_js/cdt_cfg` 未操作。
+- 下一步：若确需新位流，必须另行启动单实例 PNR 并设置明确布线止损；板测前先取得修复版完整位流和时序证据。
+
 ## 2026-11-02：DDR 读超时迟到响应已隔离
 
 - `src/ddr3/ddr3_ctrl_axi.v` 新增 `S_R_DRAIN`：读 watchdog 超时后禁止新事务，丢弃迟到 `RVALID` 数据，收到 `RVALID && RLAST` 后才恢复仲裁；普通写/地址阶段超时语义保持不变。
