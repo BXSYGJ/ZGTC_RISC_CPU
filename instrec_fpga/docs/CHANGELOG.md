@@ -539,3 +539,8 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 - conv1 测试台字节/像素计数修正后 mismatch 0/792576；UI 既有未提交端口删除导致展开失败，保留并明确记录。
 - 构建脚本补阶段恢复、StopAfter 不发布位流、单 run 护栏、输入哈希及结束校验；补 clk_nco 216MHz 时序约束。
 - 新 rv_core 全流程 run 20261101-113509-6927c1bf 启动；旧综合仅资源基线，当前尚无新位流或 RV 板级证据。
+## 2026-11-01 15:56 — RV 布线期间并行验证更新
+
+- PDS RV run `20261101-130420-0ed52a5d` 持续 detail route，iteration 112 未布通 8680；尚无位流或板级结论。
+- 新增记录的通过证据：RV CPU C1-C9、weight loader CRC/WOK/读回、Mel 两种 credit 配置、UI render/overlay、NPU chain/completion、DDR3 subsystem/AW timeout、ctrl smoke、self-test、RV top control。
+- UART 临时仿真覆盖 128-byte full line 与 newline short line，均逐字节 PASS；主线 7-bit `ram_len` 修复待当前 PDS 完成后实施。

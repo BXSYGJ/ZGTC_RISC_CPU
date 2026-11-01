@@ -1,7 +1,14 @@
 # InstRec-FPGA 当前状态（STATUS）
 
 > 本文件是**唯一实时状态源**，优先于任何交接快照与记忆。每次会话结束前必须更新，
-> 并在 `CHANGELOG.md` 追加一条。最后更新：2026-11-01 13:12。
+> 并在 `CHANGELOG.md` 追加一条。最后更新：2026-11-01 15:56。
+
+## 2026-11-01 15:56 RV 构建持续布线与并行验证
+
+- PDS run `build/pds/20261101-130420-0ed52a5d` 仍在运行，已进入 detail route；最新日志为 iteration 112，未布通网络 8680。当前仍无新版 RV 位流、时序报告或板级证据，不能宣称 PNR 完成。
+- 并行 Verilator 回归新增通过：`rv_cpu` C1-C9、`weight_loader` 10 项（WOK/CRC/读回 digest）、`mel` 与 `mel_credit`（16512 特征样本 mismatch 0）、`ui_render`、`ui_overlay`、`npu_chain`、`npu_completion`、`ddr3_subsys`、`ddr3_aw_timeout`、`ctrl_smoke`、`self_test`、`rv_top_ctrl` 均 PASS。
+- UART 临时副本边界仿真已通过：128 字节满行和 4 字节换行行逐字节校验通过。测试台曾因把 `0x0A` 放入满行数据而提前触发换行，已修正测试向量；该证据不替代主线 `uart_debug.ram_len` 7-bit 缺陷修复。
+- `python scripts/check_rtl.py`：53 个 `.v` 文件，0 violation。当前主线工作区未修改 PDS 输入；用户预存的 `cpu/`、PCB、PDF 变化保持未提交。
 
 ## 2026-11-01 11:35 RV32 + AI 最小融合（最新，覆盖下文旧架构结论）
 
