@@ -1,5 +1,12 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-01 23:07：发现真实Mel/NPU布局错接，先修复再构建
+
+- Mel标准化和导出接口是frame-major（frame*64+mel），NPU按mel-major（mel*258+time）扫描；三个top原直接相连。已确认`mel_engine`的+64只是内部guard偏移，不做转置：NPU第二字节期望(mel0,time1)，旧地址1实际取(mel1,time0)，应取64。此前使用mel-major行为RAM的完整NPU/CPU联合不覆盖此真实前端错接。
+- 正在利用现有feat_row/feat_col增加明确frame-major读模式，三个生产top启用，并补旧版失败/修复PASS、全部16512地址及完整native golden验证；不添加除法电路。独立审查量化符号/同步读延迟/安全窗。
+- 旧mapped gate的ADF在续跑参数探测误触compile时被PDS清理，不能再复用；资源PASS报告仍完整。新隔离单flow`native-20261101-230237-445245`于23:03:25启动，但因上述真实功能bug，核验后结束其synthesize子42004（当时compile已退出，不操作旧PID6588），父33872自然退出。无PNR、无位流，日志/manifest保留。
+- 待前端契约修复验证通过后重新冻结并单实例构建；PNR实际进入后45分钟上限仍有效。未操作下载器/cdt。
+
 ## 2026-11-01 22:59：完整映射通过，CPU双轮与生产reset补测通过
 
 - 唯一完整gate正常exit0，compile/synthesize/dev_map全部PASS；最终映射**32076 LUT / 33300 FF / 120.5 DRM / 90 APM**。归档`reports/npu_narrow_full_gate_20261101/`含manifest、snr、dmr和日志hash；资源容量阻塞已解除，但尚无新版位流/时序。

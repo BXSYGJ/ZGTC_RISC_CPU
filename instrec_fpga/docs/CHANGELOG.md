@@ -1,5 +1,10 @@
 # InstRec-FPGA 变更日志
 
+## 2026-11-01 23:07 — 阻止带Mel布局缺陷的构建继续
+
+- 发现实际Mel frame-major与NPU mel-major接口直连错接；旧完整NPU/CPU行为RAM测试不能覆盖。正在修复及补真实bank布局回归。
+- 如实记录续跑探测误触compile清理ADF；23:03新隔离单flow因布局缺陷在synthesize核验止损，未进入PNR，无位流，不操作下载器。
+
 ## 2026-11-01 22:59 — 完整映射、CPU双轮及生产行缓存reset验证
 
 - 归档完整gate正常PASS最终32076LUT/33300FF/120.5DRM/90APM证据；续跑入口阶段恢复失败仍在修复，实际PNR未开始、无位流。
