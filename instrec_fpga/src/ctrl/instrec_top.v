@@ -177,6 +177,13 @@ module instrec_top #(
     wire [255:0] rd_data_2;
     wire [255:0] rd_data_3;
     wire [3:0]   ddr_done;
+    // 2026-10-31: m0_done was declared but never driven. PDS only emitted
+    // "Verilog-2036: Net m0_done ... has no driver, tie it to 0" and silently
+    // tied it low, so audio_sink held m0_cmd_valid high forever (its FSM waits
+    // for m0_done before releasing). With fixed-priority arbitration, master 0
+    // then starved master 3: self_test aborted its first write after 4096
+    // cycles and reported DDR3 ERR @00300000 on board.
+    assign m0_done = ddr_done[0];
     // mel_engine master-2 port nets (per-master signals, packed into the
     // shared ctrl_axi buses exactly like audio_sink does for master 0)
     wire         mel_m2_cmd_valid;
@@ -743,6 +750,12 @@ module instrec_top #(
     );
 
     // ---- DDR3 write-read self test (master 3, self-test pattern area) ----
+    // master-3 write-beat pulse (C-SELFTEST@1 F2/S1/S2).  Without this tap
+    // PDS reports "Verilog-2036: Net st_wready_beat ... has no driver, tie
+    // it to 0"; self_test then never sees a beat handshake and the first
+    // write command aborts with st_fail at SELFTEST_BASE.
+    assign st_wready_beat = ddr_wready_beat[3];
+
     self_test u_self_test (
         .clk          (core_clk),
         .rst_n        (core_clk_rst_n),
@@ -781,6 +794,12 @@ module instrec_top #(
         .st_done         (st_done),
         .st_fail         (st_fail),
         .st_fail_addr    (st_fail_addr),
+        // DDR3 AXI diagnostic taps: consumed by sys_ctrl for the
+        // "DDR3 STS <hex8>" line (T21).  These nets were left dangling
+        // (no consumer) until now.
+        .ddr_dbg_to_state(ddr_dbg_to_state),
+        .ddr_to_err      (ddr_to_err),
+        .ddr_cmd_to_err  (ddr_cmd_to_err),
         .dbg_line_id     (dbg_line_id),
         .dbg_line_arg    (dbg_line_arg),
         .dbg_line_fire   (dbg_line_fire),

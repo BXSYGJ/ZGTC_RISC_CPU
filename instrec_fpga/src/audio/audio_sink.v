@@ -63,7 +63,8 @@
 //               page offset, same window roll-over rhythm).
 //   Each 16-frame page -> one 32 B beat: left page first, then the right
 //   mirror page (alternating, "left/right region alternating packing" of
-//   design.md 2.2.4). Page offset = page_no[12:0] << 5, page_no 0..8255.
+//   design.md 2.2.4). Page offset = page_no[13:0] << 5, page_no 0..8255
+//   (8256 pages needs 14 bit: 2^13 = 8192 < 8256).
 //
 // Window beat (REQ-PRF-001 / REQ-MEM-002): every 132096 LEFT-channel
 //   samples (i.e. 132096 accepted frames, 2.995 s at 44.1 kHz) a
@@ -211,7 +212,13 @@ module audio_sink #(
     localparam [27:0] PCM_R_BASE   = 28'h0008_4000;
     localparam [27:0] WIN_BYTES    = 28'h0004_2000;   // 264 KB per window
     // Frames per window (132096) and pages per window (8256 = 132096/16).
-    localparam [16:0] WIN_FRAMES   = 17'd132_096;
+    // WIN_FRAMES needs 18 bit: 2^17 = 131072 < 132096, so a 17-bit
+    // declaration truncated it to 1024 and collapsed the 2.995 s window
+    // into 1023 frames (23.2 ms). Keep the counter and the comparison in
+    // the same 18-bit domain.
+    localparam [17:0] WIN_FRAMES   = 18'd132_096;
+    // Pages per window (8256) needs 14 bit: 2^13 = 8192 < 8256.
+    localparam [13:0] PAGES_PER_WIN = 14'd8256;
 
     // Column scheme: 384 groups x 344 samples = 132096; 5 columns per
     // group with boundaries 69 / 138 / 207 / 276 (69+69+69+69+68).
@@ -331,7 +338,7 @@ module audio_sink #(
     reg [255:0] agg_l_shift;
     reg [255:0] agg_r_shift;
     reg [4:0]   agg_cnt;          // 0..15 frames in current page
-    reg [12:0]  page_no;          // page index inside the window 0..8255
+    reg [13:0]  page_no;          // page index inside the window 0..8255
     reg         page_go;          // page write request pulse
 
     wire page_full = frame_event & (agg_cnt == AGG_FRAMES - 5'd1);
@@ -358,41 +365,62 @@ module audio_sink #(
     end
 
     // Latched page parameters (page number of the page being written).
-    reg [12:0] page_no_wr;
+    // The latch is triggered by page_full (the 16th frame of the page),
+    // one cycle BEFORE page_go rises, because the write FSM samples
+    // addr_left in the cycle it sees page_go: latching on page_go would
+    // hand it the PREVIOUS page number (a one-page address lag).  The
+    // window selector is latched at the same instant so the last page of
+    // a window still lands in the window it belongs to (win_id increments
+    // in the same cycle that page 8255 completes).
+    reg [13:0] page_no_wr;
+    reg        page_win_wr;
 
     always @(posedge clk or negedge rst_n) begin
-        if (!rst_n)
-            page_no_wr <= 13'd0;
-        else if (page_go)
-            page_no_wr <= page_no;
+        if (!rst_n) begin
+            page_no_wr  <= 14'd0;
+            page_win_wr <= 1'b0;
+        end else if (page_full) begin
+            page_no_wr  <= page_no;
+            page_win_wr <= win_id[0];
+        end
     end
 
     // Page byte offset inside the window: page_no x 32 B.
-    wire [27:0] page_off = {page_no_wr[12:0], 5'b00000};
+    wire [27:0] page_off = {page_no_wr[13:0], 5'b00000};
 
     // Window frame counter: counts accepted frames within the window,
     // 0..132095; the frame that reaches 132096 rolls it over, emits
     // win_tick and advances win_id (window = 2.995 s at 44.1 kHz).
-    // The page counter rolls in lockstep (132096 = 8256 x 16 exactly).
-    reg [16:0] win_frame_cnt;
+    // The page counter rolls in lockstep (132096 = 8256 x 16 exactly),
+    // so page_no advances ONCE per completed 16-frame page (page_go),
+    // not once per frame.
+    reg [17:0] win_frame_cnt;
 
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
-            win_frame_cnt <= 17'd0;
+            win_frame_cnt <= 18'd0;
             win_tick      <= 1'b0;
             win_id        <= 16'd0;
-            page_no       <= 13'd0;
+            page_no       <= 14'd0;
         end else begin
             win_tick <= 1'b0;
             if (frame_event) begin
-                if (win_frame_cnt == WIN_FRAMES - 17'd1) begin
-                    win_frame_cnt <= 17'd0;
+                if (win_frame_cnt == WIN_FRAMES - 18'd1) begin
+                    win_frame_cnt <= 18'd0;
                     win_tick      <= 1'b1;
                     win_id        <= win_id + 16'd1;
-                    page_no       <= 13'd0;
+                    page_no       <= 14'd0;
                 end else begin
-                    win_frame_cnt <= win_frame_cnt + 17'd1;
-                    page_no       <= page_no + 13'd1;
+                    win_frame_cnt <= win_frame_cnt + 18'd1;
+                    // page_full marks the 16th frame of the page, so the
+                    // page index advances here (page_go only rises one
+                    // cycle later and would lag the address latch).
+                    if (page_full) begin
+                        if (page_no == PAGES_PER_WIN - 14'd1)
+                            page_no <= 14'd0;
+                        else
+                            page_no <= page_no + 14'd1;
+                    end
                 end
             end
         end
@@ -417,7 +445,7 @@ module audio_sink #(
     // Left address: window selected by the CURRENT win_id bit (the
     // window being filled); right address: mirror page in the archive.
     wire [27:0] addr_left = PCM_L_BASE
-                          + (win_id[0] ? WIN_BYTES : 28'h0)
+                          + (page_win_wr ? WIN_BYTES : 28'h0)
                           + page_off;
     wire [27:0] addr_right = PCM_R_BASE + page_off;
 

@@ -3,6 +3,33 @@
 # report_timing -> gen_bit_stream) through pds_shell.exe, scan the logs for
 # tool errors, verify the sbit, and archive logs to reports/ (REQ-BLD-001).
 #
+# Build sets (C-BUILD-TOKENS@1): the design sources, IP cores, constraints and
+# $readmemh table directories are read from scripts/build_sets.json, so one
+# six-stage TCL drives every build line:
+#   full       instrec_top      the whole SoC (~1.5 h place and route)
+#   ddr3_diag  top_ddr3_diag    DDR3 bring-up scope only (minutes)
+#   ui_demo    top_ui_demo      HDMI + UI scope only (minutes)
+#   conv1_test top_npu_conv1_test  conv1 layer, BRAM weights (minutes)
+#   mel_test   top_mel_test     mel engine, fake PCM source (minutes)
+#   core_only  top_core_only    DDR3 + NPU + Mel + control, no video half
+#                               (the LUT-reduced full top, T36)
+#
+# Parameters:
+#   -BuildSet <full|ddr3_diag|ui_demo|conv1_test|mel_test|core_only>
+#       build set to run (default: full).
+#   -TopModule <name>  explicit override of the set's top_module.  A mismatch
+#       throws, because the artifact name is derived from the top module and a
+#       silent mismatch would publish a bitstream under the wrong name.
+#   -DryRun  read the set, expand the globs, substitute the eight tokens and
+#       write build/pds/<run>/build.tcl, then print a one-line summary and
+#       exit 0.  pds_shell.exe is NEVER started.  This is how the pipeline is
+#       verified without spending the single build slot.
+#
+# Artifact names: "full" keeps the historical build/instrec-latest.sbit and
+# build/instrec-latest.json (backward compatible); every other set writes
+# build/<TopModule>-latest.sbit / build/<TopModule>-latest.json so the three
+# build lines coexist under build/.
+#
 # PowerShell 5.1 compatibility rules (hard constraints):
 #   - Start-Process is ALWAYS called with -Wait: without it $process.ExitCode
 #     stays $null on PS5.1 and the failure check misfires.
@@ -10,27 +37,157 @@
 #     with an explicit BOM-less UTF8 encoding; "Set-Content -Encoding UTF8"
 #     is avoided because it emits a BOM on PS5.1.
 #   - No PS7-only operators (ternary / null-coalescing / chain operators).
+[CmdletBinding()]
+param(
+    [ValidateSet('full', 'ddr3_diag', 'ui_demo', 'conv1_test', 'mel_test', 'core_only')]
+    [string]$BuildSet = 'full',
+
+    [string]$TopModule = '',
+
+    [switch]$DryRun
+)
+
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 $ErrorActionPreference = 'Stop'
 
+# Expand one build-set file list into absolute paths.  Entries containing a
+# wildcard are globbed (a missing directory expands to nothing, so a milestone
+# tree that does not have every directory yet still produces a valid list);
+# entries without a wildcard are kept verbatim even when the file does not
+# exist yet, because the build sets reference assets other tasks deliver in
+# parallel and the -DryRun check only validates the generated path strings.
+# Order is preserved (constraint order is semantic) and duplicates are dropped.
+function Expand-BuildSetFiles {
+    param(
+        [string]$Root,
+        [string[]]$Patterns
+    )
+    $ordered = New-Object System.Collections.Generic.List[string]
+    $comparison = [System.StringComparer]::OrdinalIgnoreCase
+    $seen = New-Object 'System.Collections.Generic.HashSet[string]' -ArgumentList $comparison
+    foreach ($pattern in $Patterns) {
+        if ([string]::IsNullOrWhiteSpace($pattern)) { continue }
+        $relative = $pattern.Replace('/', '\')
+        $expanded = [System.IO.Path]::Combine($Root, $relative)
+        if ($pattern.Contains('*') -or $pattern.Contains('?')) {
+            $hits = @(Get-ChildItem -Path $expanded -File -ErrorAction SilentlyContinue | Sort-Object FullName)
+            foreach ($hit in $hits) {
+                if ($seen.Add($hit.FullName)) { [void]$ordered.Add($hit.FullName) }
+            }
+        } else {
+            $fullPath = [System.IO.Path]::GetFullPath($expanded)
+            if ($seen.Add($fullPath)) { [void]$ordered.Add($fullPath) }
+        }
+    }
+    return ,$ordered.ToArray()
+}
+
+# Join a path list into "add_design "<abs>"" / "add_constraint "<abs>"" TCL
+# lines.  Paths use forward slashes so the generated TCL never needs escaping.
+function ConvertTo-TclLines {
+    param(
+        [string[]]$Files,
+        [string]$Verb
+    )
+    $lines = New-Object System.Collections.Generic.List[string]
+    foreach ($file in $Files) {
+        [void]$lines.Add($Verb + ' "' + $file.Replace('\', '/') + '"')
+    }
+    return (($lines.ToArray()) -join "`n")
+}
+
 try {
     $project = [System.IO.Path]::GetFullPath([System.IO.Path]::Combine($PSScriptRoot, '..'))
-    $topModule = 'instrec_top'
-    $projectName = 'instrec_fpga'
+
+    # 0) resolve the build set before creating any directory, so a bad set name
+    #    or a conflicting -TopModule leaves no empty build/ run behind.
+    $setsPath = [System.IO.Path]::Combine($PSScriptRoot, 'build_sets.json')
+    if (-not (Test-Path -LiteralPath $setsPath -PathType Leaf)) { throw "Build set manifest not found: $setsPath" }
+    $setsDoc = [System.IO.File]::ReadAllText($setsPath) | ConvertFrom-Json
+    if ([int]$setsDoc.schema -ne 1) { throw "Unsupported build_sets.json schema $($setsDoc.schema); expected 1." }
+    if ($null -eq $setsDoc.sets) { throw "build_sets.json has no 'sets' object." }
+    $setProperty = $setsDoc.sets.PSObject.Properties[$BuildSet]
+    if ($null -eq $setProperty) {
+        $knownSets = @($setsDoc.sets.PSObject.Properties.Name)
+        throw "Unknown build set '$BuildSet'; build_sets.json defines: $($knownSets -join ', ')."
+    }
+    $setDef = $setProperty.Value
+    $setTopModule = [string]$setDef.top_module
+    if ([string]::IsNullOrWhiteSpace($setTopModule)) { throw "Build set '$BuildSet' has no top_module." }
+    if ([string]::IsNullOrWhiteSpace($TopModule)) {
+        $topModule = $setTopModule
+    } elseif ($TopModule -ne $setTopModule) {
+        throw "-TopModule '$TopModule' conflicts with build set '$BuildSet' (top_module '$setTopModule')."
+    } else {
+        $topModule = $TopModule
+    }
+    $projectName = $topModule + '_pds'
+
+    # 0b) expand the design / IP / constraint lists of the set
+    $designFiles = Expand-BuildSetFiles -Root $project -Patterns @($setDef.sources)
+    $ipFiles = Expand-BuildSetFiles -Root $project -Patterns @($setDef.ip_cores)
+    $constraintFiles = Expand-BuildSetFiles -Root $project -Patterns @($setDef.constraints)
+    $hexDirs = @($setDef.hex_dirs)
+    if ($designFiles.Count -eq 0) {
+        throw "Build set '$BuildSet' expands to zero design files; check its 'sources' globs in build_sets.json."
+    }
 
     # 1) timestamped build directory (provenance; build/ is git-ignored)
     $runName = (Get-Date -Format 'yyyyMMdd-HHmmss') + '-' + ([guid]::NewGuid().ToString('N').Substring(0, 8))
     $buildRoot = [System.IO.Path]::Combine($project, 'build', 'pds', $runName)
     [void](New-Item -ItemType Directory -Path $buildRoot -Force)
 
-    # 2) expand the PDS TCL template
+    # 2) expand the PDS TCL template (eight tokens, C-BUILD-TOKENS@1)
     $tclTemplatePath = [System.IO.Path]::Combine($PSScriptRoot, 'build_full.tcl')
     if (-not (Test-Path -LiteralPath $tclTemplatePath -PathType Leaf)) { throw "PDS build template not found: $tclTemplatePath" }
     $tclTemplate = [System.IO.File]::ReadAllText($tclTemplatePath)
-    if (-not $tclTemplate.Contains('__PROJECT_ROOT__')) { throw 'build_full.tcl is missing the __PROJECT_ROOT__ token.' }
-    $tcl = $tclTemplate.Replace('__PROJECT_ROOT__', $project.Replace('\', '/')).Replace('__BUILD_ROOT__', $buildRoot.Replace('\', '/'))
+
+    # $readmemh tables: copy every table of each hex_dir into <build>/<hex_dir>
+    # so the work_dir-relative "src/mel/..." / "src/ui/..." prefixes resolve.
+    $hexLines = New-Object System.Collections.Generic.List[string]
+    $hexCount = 0
+    foreach ($hexDir in $hexDirs) {
+        $hexRelative = ([string]$hexDir).Replace('/', '\')
+        $hexSourceDir = [System.IO.Path]::GetFullPath([System.IO.Path]::Combine($project, $hexRelative))
+        $hexTargetDir = [System.IO.Path]::GetFullPath([System.IO.Path]::Combine($buildRoot, $hexRelative))
+        [void]$hexLines.Add('file mkdir "' + $hexTargetDir.Replace('\', '/') + '"')
+        $hexTargetTcl = $hexTargetDir.Replace('\', '/')
+        $hexHits = @(Get-ChildItem -Path ([System.IO.Path]::Combine($hexSourceDir, '*.hex')) -File -ErrorAction SilentlyContinue | Sort-Object FullName)
+        foreach ($hexFile in $hexHits) {
+            [void]$hexLines.Add('file copy -force "' + $hexFile.FullName.Replace('\', '/') + '" "' + $hexTargetTcl + '"')
+            $hexCount = $hexCount + 1
+        }
+    }
+
+    # Block tokens are substituted before the scalar ones so that a block which
+    # happens to reference __BUILD_ROOT__ / __PROJECT_ROOT__ is expanded too.
+    $tokenValues = [ordered]@{
+        '__DESIGN_FILES__'     = (ConvertTo-TclLines -Files $designFiles -Verb 'add_design')
+        '__IP_FILES__'         = (ConvertTo-TclLines -Files $ipFiles -Verb 'add_design')
+        '__CONSTRAINT_FILES__' = (ConvertTo-TclLines -Files $constraintFiles -Verb 'add_constraint')
+        '__HEX_COPY_BLOCK__'   = (($hexLines.ToArray()) -join "`n")
+        '__PROJECT_ROOT__'     = $project.Replace('\', '/')
+        '__BUILD_ROOT__'       = $buildRoot.Replace('\', '/')
+        '__TOP_MODULE__'       = $topModule
+        '__PROJECT_NAME__'     = $projectName
+    }
+    $tcl = $tclTemplate
+    foreach ($token in $tokenValues.Keys) {
+        if (-not $tclTemplate.Contains($token)) { throw "build_full.tcl is missing the $token token." }
+        $tcl = $tcl.Replace($token, $tokenValues[$token])
+    }
+    if ($tcl.Contains('__')) { throw 'build.tcl still contains an unexpanded __TOKEN__ placeholder.' }
     $scriptPath = [System.IO.Path]::Combine($buildRoot, 'build.tcl')
     [System.IO.File]::WriteAllText($scriptPath, $tcl, [System.Text.UTF8Encoding]::new($false))
+
+    # 2b) -DryRun: the tokenisation is proven by build.tcl alone, so stop here
+    #     and never touch pds_shell.exe, the license or the JTAG chain.
+    if ($DryRun) {
+        Write-Output ('DRYRUN top={0} set={1} design={2} ip={3} constraint={4} hex={5}' -f $topModule, $BuildSet, $designFiles.Count, $ipFiles.Count, $constraintFiles.Count, $hexCount)
+        Write-Output ('DRYRUN build.tcl: ' + $scriptPath)
+        Write-Output ('DRYRUN project_name: ' + $projectName)
+        exit 0
+    }
 
     # 3) locate PDS and the license, both hard-checked before the run
     $pdsRoot = [Environment]::GetEnvironmentVariable('PDS_ROOT', 'Process')
@@ -158,7 +315,10 @@ try {
     if ($wns -ne '') { Write-Output "WNS (setup, slow corner): $wns ns" } else { Write-Output 'WNS (setup, slow corner): not found' }
     if ($whs -ne '') { Write-Output "WHS (hold, slow corner): $whs ns" } else { Write-Output 'WHS (hold, slow corner): not found' }
 
-    # 10) archive logs to reports/ (timestamped) + stable bitstream copy
+    # 10) archive logs to reports/ (timestamped) + stable bitstream copy.
+    #     "full" keeps the historical instrec-latest.* names; the other sets
+    #     write <TopModule>-latest.* so the three lines coexist in build/.
+    if ($BuildSet -eq 'full') { $latestBase = 'instrec-latest' } else { $latestBase = $topModule + '-latest' }
     $reportsDir = [System.IO.Path]::Combine($project, 'reports')
     [void](New-Item -ItemType Directory -Path $reportsDir -Force)
     $archivedStdout = [System.IO.Path]::Combine($reportsDir, ('build_' + $runName + '.pds.stdout.log'))
@@ -166,11 +326,12 @@ try {
     if ((Test-Path -LiteralPath $stderr -PathType Leaf)) {
         Copy-Item -LiteralPath $stderr -Destination ([System.IO.Path]::Combine($reportsDir, ('build_' + $runName + '.pds.stderr.log'))) -Force
     }
-    Copy-Item -LiteralPath $bitstream -Destination ([System.IO.Path]::Combine($project, 'build', 'instrec-latest.sbit')) -Force
+    Copy-Item -LiteralPath $bitstream -Destination ([System.IO.Path]::Combine($project, 'build', ($latestBase + '.sbit'))) -Force
 
     # 11) manifest (build provenance, REQ-BLD-001)
     $manifest = [ordered]@{
         Schema = 1
+        BuildSet = $BuildSet
         RunName = $runName
         BuildDirectory = $buildRoot
         Device = 'PG2L100H-6IFBG676'
@@ -188,7 +349,7 @@ try {
     }
     $manifestJson = $manifest | ConvertTo-Json -Depth 6
     [System.IO.File]::WriteAllText([System.IO.Path]::Combine($buildRoot, 'manifest.json'), $manifestJson, [System.Text.UTF8Encoding]::new($false))
-    [System.IO.File]::WriteAllText([System.IO.Path]::Combine($project, 'build', 'instrec-latest.json'), $manifestJson, [System.Text.UTF8Encoding]::new($false))
+    [System.IO.File]::WriteAllText([System.IO.Path]::Combine($project, 'build', ($latestBase + '.json')), $manifestJson, [System.Text.UTF8Encoding]::new($false))
 
     Write-Output "Bitstream: $bitstream"
     Write-Output "SHA-256: $sbitHash"

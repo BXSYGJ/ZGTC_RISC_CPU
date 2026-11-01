@@ -1,104 +1,84 @@
-# PDS batch flow for InstRec-FPGA (top module: instrec_top).
+# PDS batch flow for InstRec-FPGA.
 # Six stages: compile -> synthesize -> dev_map -> pnr -> report_timing ->
 # gen_bit_stream (design doc section 12.2, REQ-BLD-001).
-# Tokens expanded by run_pds_full.ps1:
-#   __PROJECT_ROOT__  this project directory (instrec_fpga)
-#   __BUILD_ROOT__    timestamped build directory (build/pds/<run>)
+# The same template drives every build line: the top module, the design/IP/
+# constraint file lists and the $readmemh table copies are all injected by
+# run_pds_full.ps1 from scripts/build_sets.json (-BuildSet full|ddr3_diag|
+# ui_demo), so a small diagnostic or demo build does not have to carry the
+# 1.5 h full-design place-and-route.
+# PDS project name (also passed on the pds_shell command line): __PROJECT_NAME__
+# Tokens (double-underscore delimited; run_pds_full.ps1 substitutes all eight
+# of them and refuses to run when one is missing from this file).  The token
+# names are written here without their delimiters so that this comment is not
+# rewritten by the substitution itself:
+#   PROJECT_ROOT      this project directory (instrec_fpga)
+#   BUILD_ROOT        timestamped build directory (build/pds/<run>)
+#   PROJECT_NAME      PDS -project_name (<top module>_pds)
+#   TOP_MODULE        top module handed to compile (instrec_top / top_*)
+#   DESIGN_FILES      one add_design line per design source
+#   IP_FILES          one add_design line per .idf IP core
+#   CONSTRAINT_FILES  one add_constraint line; order is semantic
+#   HEX_COPY_BLOCK    file mkdir + file copy -force for $readmemh tables
 # Structure follows pds_cpu_100h/scripts/build_full.tcl.
 
-# ---- Design sources: glob each src/ subdirectory; empty dirs are skipped
-# ---- silently (-nocomplain), so partial milestone trees still build.
-foreach design [lsort [glob -nocomplain [file join "__PROJECT_ROOT__" src *.v]]] {
-    add_design $design
-}
-foreach design [lsort [glob -nocomplain [file join "__PROJECT_ROOT__" src audio *.v]]] {
-    add_design $design
-}
-foreach design [lsort [glob -nocomplain [file join "__PROJECT_ROOT__" src ddr3 *.v]]] {
-    add_design $design
-}
-foreach design [lsort [glob -nocomplain [file join "__PROJECT_ROOT__" src mel *.v]]] {
-    add_design $design
-}
-foreach design [lsort [glob -nocomplain [file join "__PROJECT_ROOT__" src npu *.v]]] {
-    add_design $design
-}
-foreach design [lsort [glob -nocomplain [file join "__PROJECT_ROOT__" src ui *.v]]] {
-    add_design $design
-}
-foreach design [lsort [glob -nocomplain [file join "__PROJECT_ROOT__" src hdmi *.v]]] {
-    # HDMI demo modules copied verbatim (T-M0-07, asset_trace.md); they are
-    # only elaborated once hdmi_tx_if instantiates them.
-    add_design $design
-}
-foreach design [lsort [glob -nocomplain [file join "__PROJECT_ROOT__" src ctrl *.v]]] {
-    add_design $design
-}
-foreach design [lsort [glob -nocomplain [file join "__PROJECT_ROOT__" src ip *.v]]] {
-    add_design $design
-}
+# ---- Design sources: one explicit add_design line per file, generated from
+# ---- the build set's sources (PowerShell expands the globs per pattern, sorts
+# ---- each pattern and drops duplicates). PDS never sees a directory glob, so
+# ---- the build.tcl of a finished run is the literal file set of that run.
+# ---- Empty or not-yet-created directories simply contribute no line, so a
+# ---- partial milestone tree still builds.
+__DESIGN_FILES__
 
-# ---- HDMI GPLL IP (copied from da_ad_HDMI demo, T-M0-07): pll.v wrapper is
-# ---- instantiated by src/hdmi/hdmi_tx_if.v; attach its generated IP core.
-add_design "__PROJECT_ROOT__/ipcore/pll/pll.idf"
+# ---- IP cores: the generated .idf files the source tree instantiates.
+# ---- full attaches the HDMI GPLL (ipcore/pll/pll.idf: the pll.v wrapper is
+# ---- instantiated by src/hdmi/hdmi_tx_if.v), the audio GPLL
+# ---- (ipcore/pll_audio/pll_audio.idf: derived textually from the demo pll
+# ---- core, RATIOM=2 / RATIOF=16.0 / RATIO0=4.0 -> VCO 864 MHz, clkout0
+# ---- 216 MHz exact 8:1, GTP_GPLL instance name u_gpll kept for the fdc
+# ---- generated-clock path; the pll_audio.v wrapper is instantiated by
+# ---- src/ip/audio_pll.v) and the DDR3 core (ipcore/ddr3_test/ddr3_test.idf:
+# ---- src/ddr3/ddr3_wrapper.v wraps it with the hard-kept instance name
+# ---- I_ips_ddr_top). The diagnostic and demo sets attach only the cores they
+# ---- instantiate, which is a large part of why they place and route fast.
+__IP_FILES__
 
-# ---- Audio GPLL IP (T-M0-09 task 3): derived textually from the demo pll
-# ---- core (RATIOM=2 / RATIOF=16.0 / RATIO0=4.0 -> VCO 864 MHz, clkout0
-# ---- 216 MHz exact 8:1; GTP_GPLL instance name u_gpll kept for the fdc
-# ---- generated-clock path); pll_audio.v wrapper is instantiated by
-# ---- src/ip/audio_pll.v.
-add_design "__PROJECT_ROOT__/ipcore/pll_audio/pll_audio.idf"
+# ---- $readmemh tables: PDS resolves $readmemh relative paths against the
+# ---- -work_dir root, NOT the process working directory (probe experiment:
+# ---- "src/mel/x.hex" from the project root and the bare "x.hex" both fail
+# ---- with Verilog-3001 unless the file exists under <work_dir>). Every table
+# ---- of the set's hex_dirs is copied into <work_dir>/<hex_dir>/ so the
+# ---- "src/mel/..." and "src/ui/..." prefixes resolve uniformly: the fft
+# ---- twiddle ROMs hardcode that prefix inside fft2048_sdf.v, the mel_engine
+# ---- HAN/COO/LUT parameters are overridden to the same form at the
+# ---- instrec_top instantiation, and font_rom reads src/ui/font8x16.hex.
+__HEX_COPY_BLOCK__
 
-# ---- DDR3 IP core (enabled in T-M0-04): src/ddr3/ddr3_wrapper.v wraps it
-# ---- with the hard-kept instance name I_ips_ddr_top. Since T-M0-09 the
-# ---- top level instantiates the wrapper (instance name ddr3_wrapper), so
-# ---- the IP is in the synthesized netlist.
-set ddr3_idf "__PROJECT_ROOT__/ipcore/ddr3_test/ddr3_test.idf"
-if {$ddr3_idf ne ""} {
-    add_design $ddr3_idf
-}
+# ---- Constraints: order is semantic, PDS executes each constraint file in
+# ---- load order. full requires
+# ----   instrec_top.fdc -> ddr3_100h.fdc -> clock_groups_async.fdc
+# ---- because the cross-domain asynchronous groups MUST be added after
+# ---- ddr3_100h.fdc so the DDR family clocks they name already exist
+# ---- (SDC-2027 ignores a set_clock_groups that names unknown clocks), and
+# ---- ddr3_100h.fdc needs the hierarchy prefix ddr3_wrapper.I_ips_ddr_top
+# ---- plus the top ref_clk_p / mem_* ports that instrec_top.fdc declares.
+# ---- ddr3_diag uses ddr3_100h.fdc -> top_ddr3_diag.fdc (same reason: the pin
+# ---- and clock constraints come first, the top-level wrapper after them);
+# ---- ui_demo uses top_ui_demo.fdc alone.
+__CONSTRAINT_FILES__
 
-# ---- Mel hex tables (T-M1-06): PDS resolves $readmemh relative paths
-# ---- against the -work_dir root, NOT the process working directory
-# ---- (probe experiment: "src/mel/x.hex" from the project root and the
-# ---- bare "x.hex" both fail with Verilog-3001 unless the file exists
-# ---- under <work_dir>). Copy every table into <work_dir>/src/mel/ so
-# ---- the "src/mel/..." prefix form resolves uniformly - the fft
-# ---- twiddle ROMs hardcode that prefix inside fft2048_sdf.v and the
-# ---- mel_engine HAN/COO/LUT parameters are overridden to the same
-# ---- form at the instrec_top instantiation.
-file mkdir [file join "__BUILD_ROOT__" src mel]
-foreach melhex [lsort [glob -nocomplain [file join "__PROJECT_ROOT__" src mel *.hex]]] {
-    file copy -force $melhex [file join "__BUILD_ROOT__" src mel]
-}
-# UI font ROM (M3) uses the same work_dir-relative $readmemh prefix.
-file mkdir [file join "__BUILD_ROOT__" src ui]
-foreach uihex [lsort [glob -nocomplain [file join "__PROJECT_ROOT__" src ui *.hex]]] {
-    file copy -force $uihex [file join "__BUILD_ROOT__" src ui]
-}
-
-# ---- Constraints ----
-add_constraint "__PROJECT_ROOT__/constraints/instrec_top.fdc"
-
-# DDR3 pin/clock constraints: attached since T-M0-09 (the top level now
-# instantiates ddr3_wrapper, so the hierarchy prefix
-# ddr3_wrapper.I_ips_ddr_top and the top ports ref_clk_p/mem_* exist and
-# the get_pins/get_ports calls in the copied fdc resolve).
-set ddr3_fdc "__PROJECT_ROOT__/constraints/ddr3_100h.fdc"
-if {$ddr3_fdc ne ""} {
-    add_constraint $ddr3_fdc
-}
-
-# Cross-domain asynchronous groups: MUST be added after ddr3_100h.fdc so
-# the DDR family clocks it creates exist when the group statements run
-# (SDC-2027 ignores a set_clock_groups naming unknown clocks).
-add_constraint "__PROJECT_ROOT__/constraints/clock_groups_async.fdc"
+# ---- Flow anchors (substituted by run_pds_full.ps1): the project directory
+# ---- that holds src/ + ipcore/ + constraints/, and this run's work directory
+# ---- (the -work_dir pds_shell was started with). Echoing them keeps the
+# ---- generated build.tcl self-describing in the PDS log.
+set instrec_project_root "__PROJECT_ROOT__"
+set instrec_build_root "__BUILD_ROOT__"
+puts "instrec build: project_root=$instrec_project_root build_root=$instrec_build_root"
 
 # ---- Architecture: Pango Logos2 PG2L100H (100Pro+ MES2L676-100HP board) ----
 set_arch -family Logos2 -device PG2L100H -speedgrade -6 -package FBG676
 
 # ---- Six-stage batch flow ----
-compile -system_verilog -top_module instrec_top
+compile -system_verilog -top_module __TOP_MODULE__
 # Parallelism: PDS 2022.2 on PG2L100H rejects BOTH thread switches
 # (Flow-0182: -max_parallel_jobs and -number_of_router_thread are "not
 # support for the device"). Synthesis and PnR therefore run single-threaded;

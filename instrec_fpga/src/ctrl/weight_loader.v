@@ -97,6 +97,13 @@ module weight_loader #(
     reg [7:0]   tx_line [0:12];
     reg [3:0]   tx_pos;
 
+    // UART reply handshake to uart_tx (see the S_TX branch comment).
+    // tx_pend    : a one-cycle strobe was issued and its frame is not done yet
+    // tx_saw_low : the peer's ready has been seen low, i.e. the frame really
+    //              started; the byte is complete only once ready rises again
+    reg         tx_pend;
+    reg         tx_saw_low;
+
     // CRC-16/CCITT-FALSE single byte step (combinational LUT tree).
     function [15:0] crc16_step;
         input [15:0] crc;
@@ -152,6 +159,8 @@ module weight_loader #(
             tx_valid   <= 1'b0;
             tx_data    <= 8'd0;
             tx_pos     <= 4'd0;
+            tx_pend    <= 1'b0;
+            tx_saw_low <= 1'b0;
             busy       <= 1'b0;
             weight_ok  <= 1'b0;
             weight_err <= 1'b0;
@@ -292,15 +301,40 @@ module weight_loader #(
                 end
 
                 S_ACK: begin
-                    tx_data  <= 8'h4B;   // 'K'
-                    tx_valid <= 1'b1;
-                    if (tx_valid && tx_ready) state <= S_IDLE;
+                    // Single-byte reply 'K' with the same one-shot strobe and
+                    // full ready low/high handshake as S_TX (see that comment).
+                    if (!tx_pend) begin
+                        if (tx_ready) begin
+                            tx_data    <= 8'h4B;   // 'K'
+                            tx_valid   <= 1'b1;
+                            tx_pend    <= 1'b1;
+                            tx_saw_low <= 1'b0;
+                        end
+                    end else if (!tx_ready) begin
+                        tx_saw_low <= 1'b1;
+                    end else if (tx_saw_low) begin
+                        tx_pend    <= 1'b0;
+                        tx_saw_low <= 1'b0;
+                        state      <= S_IDLE;
+                    end
                 end
 
                 S_NAK: begin
-                    tx_data  <= 8'h4E;   // 'N'
-                    tx_valid <= 1'b1;
-                    if (tx_valid && tx_ready) state <= S_IDLE;
+                    // Single-byte reply 'N', same handshake as S_ACK.
+                    if (!tx_pend) begin
+                        if (tx_ready) begin
+                            tx_data    <= 8'h4E;   // 'N'
+                            tx_valid   <= 1'b1;
+                            tx_pend    <= 1'b1;
+                            tx_saw_low <= 1'b0;
+                        end
+                    end else if (!tx_ready) begin
+                        tx_saw_low <= 1'b1;
+                    end else if (tx_saw_low) begin
+                        tx_pend    <= 1'b0;
+                        tx_saw_low <= 1'b0;
+                        state      <= S_IDLE;
+                    end
                 end
 
                 S_RD_SET: begin
@@ -357,13 +391,39 @@ module weight_loader #(
                 end
 
                 S_END: begin
-                    state <= S_TX;
+                    tx_pend    <= 1'b0;
+                    tx_saw_low <= 1'b0;
+                    state      <= S_TX;
                 end
 
                 S_TX: begin
-                    tx_data  <= tx_line[tx_pos];
-                    tx_valid <= 1'b1;
-                    if (tx_valid && tx_ready) begin
+                    // One-shot strobe plus a full ready low-then-high period.
+                    //
+                    // uart_tx.byte_wready is a REGISTERED ~busy (uart_tx.v:72)
+                    // and a byte is taken only on !busy && wvalid && wready
+                    // (uart_tx.v:74-76), so ready still reads high on the cycle
+                    // AFTER an accept.  The old code held tx_valid high and
+                    // advanced tx_pos on every "tx_valid && tx_ready" cycle,
+                    // which stepped tx_pos on that extra ready cycle although
+                    // uart_tx never saw the byte: every other character was
+                    // dropped ("WOK 42851062" reached the PC as "WK4816",
+                    // which is why the board never saw a WOK reply).
+                    //
+                    // Now a strobe is presented for exactly one cycle, and the
+                    // byte counts as sent only after ready was seen LOW (frame
+                    // in flight) and then HIGH again (frame done).
+                    if (!tx_pend) begin
+                        if (tx_ready) begin
+                            tx_data    <= tx_line[tx_pos];
+                            tx_valid   <= 1'b1;     // single-cycle strobe
+                            tx_pend    <= 1'b1;
+                            tx_saw_low <= 1'b0;
+                        end
+                    end else if (!tx_ready) begin
+                        tx_saw_low <= 1'b1;         // frame is being shifted out
+                    end else if (tx_saw_low) begin
+                        tx_pend    <= 1'b0;
+                        tx_saw_low <= 1'b0;
                         if (tx_pos == 4'd12) begin
                             state     <= S_FIN;
                             weight_ok <= 1'b1;

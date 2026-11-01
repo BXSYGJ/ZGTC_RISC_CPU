@@ -1,7 +1,7 @@
 // -----------------------------------------------------------------------------
 // self_test - DDR3 pattern self-test over ddr3_ctrl_axi master port 3
 //             (tasks.md T-M0-09, design.md Sec. 2.2.9 / Sec. 5.1,
-//             REQ-MEM-005)
+//             REQ-MEM-005; contract C-SELFTEST@1 rules F1..F7)
 // -----------------------------------------------------------------------------
 // Writes a 4 KB pattern block into the DDR3 self-test region
 // (base 0x0030_0000, Sec. 5.1 address map) and reads it back for a
@@ -14,7 +14,8 @@
 //   cmd        : m3_cmd = {wr, addr[27:0], len[7:0]} with cmd_valid[3]
 //   write beats: m3_wdata[255:0] accepted on wready_beat[3] pulses
 //   read data  : rd_data_3[255:0] with rd_valid[3], paced by rd_ready[3]
-//   completion : done[3] single-cycle pulse
+//   completion : done[3] single-cycle pulse (write completion, read
+//                completion, or AXI watchdog abort)
 // All bursts are fixed len=15 (16 beats x 32 B = 512 B per command).
 //
 // Dummy-write-before-read (REQ-MEM-003 hard rule) is enforced INSIDE
@@ -30,7 +31,7 @@
 //                 Every 32-bit word w (index 0..1023, big-endian order
 //                 inside each beat) = DDR_PATTERN ^ w, so each word is
 //                 unique by index.
-
+//
 //   read phase  : 8 commands, same addresses/burst shape; every beat
 //                 is compared word-wise against the regenerated
 //                 expected pattern.
@@ -39,6 +40,25 @@
 //   duration    : 16 x 512 B at DDR3 speed -> a few ms at most; the
 //                 sys_ctrl watchdog budget for the whole test is 100 ms
 //                 (2x margin over a worst-case latency-bound run).
+//
+// Robustness rules (root cause of the field symptom "DDR3 ERR
+// @FFFFFFFF", where sys_ctrl timed out because neither st_done nor
+// st_fail was ever raised):
+//   * cmd_valid is a LEVEL held from issue until done (F1/F3). A single
+//     cycle strobe is lost whenever the arbiter cannot grant it on that
+//     exact cycle (a read command requires an empty read fifo, see
+//     C-DDR3-CTRL-SEM@1 S6), which used to wedge the FSM forever.
+//   * ST_WDATA tests wready_beat BEFORE done (F2). A normal write burst
+//     raises the last wready_beat and done on the SAME cycle (S1/S2), so
+//     the order must never be inverted or a healthy burst would be
+//     reported as an abort.
+//   * ST_RDATA tests rd_valid BEFORE done_q (F4). The read fifo count
+//     only reflects a push on the next cycle (S5), hence the beat that
+//     carries rlast is offered with rd_valid exactly one cycle after
+//     done: done_q is that one-cycle delayed copy of done, and a done_q
+//     with no rd_valid can only mean an AXI watchdog abort.
+//   * st_done and st_fail are mutually exclusive and both stick in
+//     ST_END until the next st_start (F6/F7).
 //
 // All logic runs in the core_clk (125 MHz) domain. Pattern generation
 // and comparison are combinational functions of the command/beat
@@ -92,8 +112,10 @@ module self_test #(
     reg [9:0]  exp_idx;    // running word index for compare (0..1023)
 
 
-    // Byte address of the current command: base + cmd_idx*512.
-    wire [27:0] cmd_addr = SELFTEST_BASE + {21'd0, cmd_idx, 9'd0};
+    // Byte address of the current command: base + cmd_idx*512 (F5).
+    // The index is zero-extended to the full 28-bit address width before
+    // the shift so the sum never relies on an implicit width truncation.
+    wire [27:0] cmd_addr = SELFTEST_BASE + ({25'd0, cmd_idx} << 9);
 
     // Expected 256-bit beat during the read phase: 8 words for
     // word indices exp_idx .. exp_idx+7 (big-endian word order inside
@@ -111,7 +133,7 @@ module self_test #(
     // driven combinationally so the beat present on a wready_beat
     // pulse always matches the current beat counter.
     wire [9:0] wr_base = {cmd_idx, wrd_idx};
-    wire [255:0] wdata;
+
 
     assign wdata = {pat_word(wr_base + 10'd7),
                       pat_word(wr_base + 10'd6),
@@ -134,6 +156,7 @@ module self_test #(
     localparam [2:0] ST_END  = 3'd5;
 
     reg [2:0] state;
+    reg       done_q;   // done delayed by one cycle (read abort guard)
 
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
@@ -145,12 +168,15 @@ module self_test #(
             beat_idx     <= 4'd0;
             wrd_idx      <= 7'd0;
             exp_idx      <= 10'd0;
+            done_q       <= 1'b0;
             st_done      <= 1'b0;
             st_fail      <= 1'b0;
             st_fail_addr <= 28'd0;
         end else begin
-            // Command strobe is a single-cycle pulse.
-            cmd_valid <= 1'b0;
+            // One-cycle delayed copy of done (F4). The read fifo count is
+            // updated on the cycle after a push (S5), so the beat carrying
+            // rlast appears with rd_valid exactly one cycle after done.
+            done_q <= done;
 
             case (state)
                 ST_IDLE: begin
@@ -169,6 +195,8 @@ module self_test #(
                 ST_WCMD: begin
                     // Issue write command i: addr base+i*512, len 15.
                     // cmd = {wr, addr[27:0], len[7:0]} = 37 bits exactly.
+                    // cmd_valid is left high here and only cleared by the
+                    // done pulse below (F1: hold the strobe until done).
                     cmd       <= {1'b1, cmd_addr, 8'd15};
                     cmd_valid <= 1'b1;
                     beat_idx  <= 4'd0;
@@ -180,6 +208,8 @@ module self_test #(
                     // wdata is combinational and always presents the
                     // beat selected by beat_idx/wrd_idx; the counter
                     // advances on the wready_beat handshake pulse.
+                    // wready_beat MUST be tested first (F2/S1/S2): the
+                    // completing beat and done arrive on the same cycle.
                     if (wready_beat) begin
                         if (beat_idx == 4'd15) begin
                             if (cmd_idx == 3'd7) begin
@@ -193,12 +223,23 @@ module self_test #(
                             beat_idx <= beat_idx + 4'd1;
                             wrd_idx  <= wrd_idx + 7'd8;
                         end
+                    end else if (done) begin
+                        // done with no beat handshake while the burst is
+                        // still short: the AXI watchdog aborted the write
+                        // (or the address phase never handshook). Report
+                        // the failure instead of waiting forever.
+                        st_done      <= 1'b0;
+                        st_fail      <= 1'b1;
+                        st_fail_addr <= cmd_addr;
+                        state        <= ST_END;
                     end
                 end
 
                 ST_RCMD: begin
                     // Issue read command i (dummy-write handled inside
-                    // ddr3_ctrl_axi per REQ-MEM-003).
+                    // ddr3_ctrl_axi per REQ-MEM-003). cmd_valid is held
+                    // until done (F3): a read grant needs an empty read
+                    // fifo, so a one-cycle strobe can be dropped.
                     cmd       <= {1'b0, cmd_addr, 8'd15};
                     cmd_valid <= 1'b1;
                     exp_idx   <= {cmd_idx, 7'd0};
@@ -210,17 +251,21 @@ module self_test #(
                     // 16 beats of 8 words; the last beat of command i is
                     // recognized by exp_idx[6:0] == 120 (word index
                     // i*128 + 120 .. i*128 + 127).
+                    // rd_valid is tested before done_q (F4): on a normal
+                    // last beat both are high on the same cycle.
                     if (rd_valid) begin
                         if (rd_data != exp_beat) begin
                             // First failing beat: report its byte
                             // address (beat granularity; word position
                             // inside the beat is not resolved further).
+                            st_done      <= 1'b0;
                             st_fail      <= 1'b1;
                             st_fail_addr <= cmd_addr;
                             state        <= ST_END;
                         end else if (exp_idx[6:0] == 7'd120) begin
                             // Last beat of the current command matched.
                             if (cmd_idx == 3'd7) begin
+                                st_fail <= 1'b0;
                                 st_done <= 1'b1;
                                 state   <= ST_END;
                             end else begin
@@ -230,12 +275,22 @@ module self_test #(
                         end else begin
                             exp_idx <= exp_idx + 10'd8;
                         end
+                    end else if (done_q) begin
+                        // done arrived one cycle ago and still no beat is
+                        // available: the read burst was aborted by the
+                        // AXI watchdog (AR/S_R timeout, empty fifo).
+                        st_done      <= 1'b0;
+                        st_fail      <= 1'b1;
+                        st_fail_addr <= cmd_addr;
+                        state        <= ST_END;
                     end
                 end
 
                 ST_END: begin
                     // Terminal state: results held until the next
                     // st_start (KEY1 re-trigger path from sys_ctrl).
+                    // st_done / st_fail are mutually exclusive (F7) and
+                    // both sticky in this state (F6).
                     if (st_start) begin
                         cmd_idx      <= 3'd0;
                         beat_idx     <= 4'd0;
@@ -250,6 +305,14 @@ module self_test #(
 
                 default: state <= ST_IDLE;
             endcase
+
+            // Hold cmd_valid from issue until done (F1/F3), then clear it
+            // on the completion pulse so a finished command can never be
+            // granted a second time. This assignment is last in the block
+            // on purpose: done wins over any issue in the same cycle.
+            if (done) begin
+                cmd_valid <= 1'b0;
+            end
         end
     end
 

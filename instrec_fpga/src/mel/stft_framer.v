@@ -145,6 +145,7 @@ module stft_framer #(
     input  wire        win_start,    // one-cycle window start pulse
     output wire        busy,         // 1 = window in progress
     output wire        all_done,     // pulse: all 259 frames drained
+    input  wire        out_ready,    // 1 = fft idle, next frame may start
     // PCM stream from DDR3 (left channel = low 16 bits)
     input  wire [31:0] pcm_rd_data,
     input  wire        pcm_rd_valid,
@@ -218,8 +219,12 @@ module stft_framer #(
     wire [17:0] frame_th = 18'd2048 + {frame_idx, 9'd0};
     // Anti-overwrite guard: push limit = current frame threshold + HOP.
     wire [17:0] push_limit = frame_th + 18'd512;
-    wire        push_open  = (push_cnt < push_limit);
-    wire        frame_go   = started && !out_run && (push_cnt == frame_th);
+    // The virtual reflect pushes need the same gate as frame_go: without it
+    // push_cnt runs past frame_th (push_limit allows +512), the exact-equality
+    // frame_go test can never match again and the framer parks in PH_VRIGHT.
+    wire        push_open  = (push_cnt < push_limit) && out_ready;
+    wire        frame_go   = started && !out_run && (push_cnt == frame_th)
+                             && out_ready;
 
     // Stream acceptance: head-fill phase, or stream phase under the
     // ring anti-overwrite guard. The frame_go beat keeps ready high
@@ -354,7 +359,7 @@ module stft_framer #(
                         push_cnt  <= push_cnt + 18'd1;
                         push_slot <= next_push_slot;
                         samp_cnt  <= samp_cnt + 18'd1;
-                        if (samp_cnt == 17'd132095) begin
+                        if (samp_cnt == 18'd132095) begin   // F2: was 17'd (truncates to 1023)
                             // Last PCM sample accepted.
                             vright_cnt <= 11'd0;
                             phase      <= PH_VRIGHT;

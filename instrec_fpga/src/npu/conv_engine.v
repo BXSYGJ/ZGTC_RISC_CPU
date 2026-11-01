@@ -430,6 +430,13 @@ module conv_engine #(
     // -----------------------------------------------------------------------
     // requant drain state (16-beat TDM through requant_unit)
     // -----------------------------------------------------------------------
+    // T25 FIX: the group-boundary pixel is snapshotted on the same edge
+    // that promotes the shadow contract, so the 16-beat drain would requant
+    // the last pixel of a group with the NEXT group's M/shift (measured:
+    // all 1300 conv1 residuals were exactly this, channel 32..47 of col 257
+    // included).  Latch the parameters together with acc_snap instead.
+    reg signed [31:0] m_drn    [0:15];
+    reg        [6:0]  shft_drn [0:15];
     reg [4:0]   rhe_busy_cnt;         // 16 -> 0 countdown
     reg [3:0]   rhe_ch;               // drain channel index 0..15
 
@@ -929,8 +936,11 @@ module conv_engine #(
                     acc_snap[g] <= 32'sd0;
                 end else begin
                     // snapshot: drain bank <- active bank, then swap
-                    if (snapshot_go)
+                    if (snapshot_go) begin
                         acc_snap[g] <= acc_sel ? acc_b[g] : acc_a[g];
+                        m_drn[g]    <= m_act[g];
+                        shft_drn[g] <= shft_act[g];
+                    end
                     // pixel start: accumulator <- rebuilt int32 bias
                     if (load_go) begin
                         if (!acc_sel) acc_a[g] <= bias_act[g];
@@ -1078,8 +1088,8 @@ module conv_engine #(
     // requant_unit operand muxes (TDM channel select) and egress wiring
     // -----------------------------------------------------------------------
     assign rq_acc_s32  = acc_snap[rhe_ch];
-    assign rq_m_s32    = m_act[rhe_ch];
-    assign rq_shift    = shft_act[rhe_ch];
+    assign rq_m_s32    = m_drn[rhe_ch];
+    assign rq_shift    = shft_drn[rhe_ch];
     assign rq_zp_out   = zp_out_reg;
     assign rq_in_valid = (rhe_busy_cnt != 5'd0);
 

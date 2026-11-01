@@ -12,13 +12,26 @@
 //
 // Stage line prints via uart_debug predefined lines (Zheng's module,
 // dbg_line_id: 0=BOOT 1=PLL LOCK ERR 2=DDR3 SELFTEST... 3=DDROK
-// 4=DDR3 ERR @<hex32>):
+// 4=DDR3 ERR @<hex32> 6=DDR3 STS <hex8>):
 //   BOOT      : id 0 "INSTREC BOOT\n"
 //   PLL_WAIT  : (silent; timeout -> id 1 "PLL LOCK ERR\n" + SAFE_ERR)
 //   DDR_TEST  : id 2 "DDR3 SELFTEST...\n"
 //   DDR_WAIT  : pass -> id 3 "DDROK\n"; fail -> id 4 with
 //               dbg_line_arg = st_fail_addr (zero-extended)
+//   DDR_REP   : latched result printed once !dbg_busy, then id 6
+//               "DDR3 STS <hex8>\n" (AXI diagnostic byte)
 //   RUN       : sys_run=1 gates the downstream pipeline
+//
+// DDR3 result latching (board bug fixed 2026-10-31): st_done / st_fail /
+// the 100 ms timeout arrive ~33 us after id 2 starts printing, but the
+// "DDR3 SELFTEST...\n" line itself keeps uart_debug busy for ~3 ms. The
+// old code fired the result line unconditionally, so uart_debug dropped
+// it (rom_pending only accepts requests while ST_IDLE) and a passing DDR3
+// was indistinguishable from an aborted one on the 30-byte console dump.
+// The result is now latched into ddr_result / ddr_result_arg with
+// ddr_result_pending, and ST_DDREP only fires once !dbg_busy. The AXI
+// diagnostic byte ({cmd_to_err[3], to_err, dbg_to_state, st_fail,
+// st_done}) is printed once, after the result line, from the same state.
 //
 // Watchdog budgets (2x worst-case margins, REQ-REL-002 subset):
 //   PLL_WAIT  : audio_pll lock (<1 ms typ) + DDR3 PHY lock + init
@@ -79,6 +92,10 @@ module sys_ctrl #(
     input  wire        st_done,          // self-test pass
     input  wire        st_fail,          // self-test fail
     input  wire [27:0] st_fail_addr,     // first failing byte address
+    // DDR3 AXI diagnostic taps (observation only, ddr3_ctrl_axi status)
+    input  wire [2:0]  ddr_dbg_to_state, // FSM state at the last AXI timeout
+    input  wire        ddr_to_err,       // sticky AXI timeout (any master)
+    input  wire [3:0]  ddr_cmd_to_err,   // sticky timeout flag per master
     // uart_debug predefined line channel
     output reg  [2:0]  dbg_line_id,
     output reg  [31:0] dbg_line_arg,
@@ -179,6 +196,32 @@ module sys_ctrl #(
     localparam [2:0] ST_RUN     = 3'd4;
     localparam [2:0] ST_SAFEERR = 3'd5;
     localparam [2:0] ST_WEIGHT  = 3'd6;
+    localparam [2:0] ST_DDREP   = 3'd7;   // latched DDR3 result printer
+
+    // Latched DDR3 self-test conclusion.
+    localparam [1:0] DDR_RES_NONE = 2'd0;
+    localparam [1:0] DDR_RES_PASS = 2'd1;
+    localparam [1:0] DDR_RES_FAIL = 2'd2;
+    localparam [1:0] DDR_RES_TIME = 2'd3;   // 100 ms watchdog fired
+
+    // AXI diagnostic byte for uart_debug line id 6 ("DDR3 STS <hex8>").
+    // 2026-11-01: widened to expose cmd_to_err[3:0] for ALL masters. The old
+    // packing exposed only cmd_to_err[3]; on board STS=0x26 this made the
+    // timeout look like it belonged to master 3 while cmd_to_err[3] was
+    // actually 0 (see reports/multi_master_aw_timeout.md). Without the full
+    // per-master mask the failing master cannot be identified on board.
+    // Packed as {cmd_to_err[3:0], to_err, dbg_to_state[2:0]} in the low 8 bits:
+    //   bit 7:4  : cmd_to_err[3:0] per-master sticky AXI timeout (m0..m3)
+    //   bit 3    : to_err          any-master sticky AXI timeout
+    //   bit 2:0  : dbg_to_state   1=S_AW 2=S_W 4=S_DW_AW 5=S_DW_W
+    //                             6=S_AR 7=S_R
+    // st_done / st_fail remain observable through the DDROK and
+    // "DDR3 ERR @<addr>" lines, so dropping them here loses nothing.
+    wire [7:0] ddr_sts_code;
+
+    assign ddr_sts_code = {ddr_cmd_to_err,
+                           ddr_to_err,
+                           ddr_dbg_to_state};
 
     reg [2:0]  state;
     reg [31:0] timeout_cnt;
@@ -188,11 +231,18 @@ module sys_ctrl #(
                               // KEY1 re-trigger, self_test clears its
                               // flags one cycle after st_start, so the
                               // first ST_DDW cycle is skipped
+    reg [1:0]  ddr_result;     // latched conclusion code
+    reg [31:0] ddr_result_arg; // latched dbg_line_arg for the result line
+    reg        ddr_result_pending;  // result line not handed to uart_debug
+    reg        ddr_result_sent;     // result line already queued
+    reg        ddr_sts_armed;       // result line has occupied the printer
+    reg        ddr_sts_sent;        // "DDR3 STS" line already queued
 
     assign safe_err   = err_latch;
     assign stage_code = (state == ST_BOOT)              ? 2'd00 :
                         (state == ST_PLL)               ? 2'd01 :
                         (state == ST_DDR || state == ST_DDW ||
+                         state == ST_DDREP ||
                          state == ST_WEIGHT)            ? 2'd10 :
                         (state == ST_RUN)               ? 2'd11 : 2'd11;
 
@@ -206,6 +256,12 @@ module sys_ctrl #(
             timeout_cnt  <= 32'd0;
             err_latch    <= 1'b0;
             started      <= 1'b0;
+            ddr_result          <= DDR_RES_NONE;
+            ddr_result_arg      <= 32'd0;
+            ddr_result_pending  <= 1'b0;
+            ddr_result_sent     <= 1'b0;
+            ddr_sts_armed       <= 1'b0;
+            ddr_sts_sent        <= 1'b0;
             st_start     <= 1'b0;
             sys_run      <= 1'b0;
             dbg_line_id  <= 3'd0;
@@ -249,9 +305,15 @@ module sys_ctrl #(
                 end
 
                 ST_DDR: begin
-                    // Kick the DDR self-test.
+                    // Kick the DDR self-test. Clearing the report flags
+                    // here also covers the KEY1 re-trigger path: the new
+                    // round gets exactly one result line and one STS line.
                     if (!dbg_busy) begin
                         dbg_line_id   <= 3'd2;    // "DDR3 SELFTEST...\n"
+                        ddr_result_pending <= 1'b0;
+                        ddr_result_sent    <= 1'b0;
+                        ddr_sts_armed      <= 1'b0;
+                        ddr_sts_sent       <= 1'b0;
                         dbg_line_fire <= 1'b1;
                         st_start      <= 1'b1;
                         timeout_cnt   <= 32'd0;
@@ -261,30 +323,79 @@ module sys_ctrl #(
                 end
 
                 ST_DDW: begin
+                    // Latch the conclusion only; the line itself is
+                    // printed from ST_DDREP once the printer is free
+                    // (id 2 keeps dbg_busy high for ~3 ms).
                     if (!started) begin
                         // Skip one cycle: self_test clears its stale
                         // st_done/st_fail on the st_start edge, visible
                         // to this block one cycle later.
                         started <= 1'b1;
                     end else if (st_done) begin
-                        dbg_line_id   <= 3'd3;    // "DDROK\n"
-                        dbg_line_fire <= 1'b1;
-                        state         <= ST_RUN;
-                        sys_run       <= 1'b1;
+                        ddr_result         <= DDR_RES_PASS;
+                        ddr_result_arg     <= 32'd0;
+                        ddr_result_pending <= 1'b1;
+                        state              <= ST_DDREP;
                     end else if (st_fail) begin
-                        dbg_line_id   <= 3'd4;    // "DDR3 ERR @<hex>\n"
-                        dbg_line_arg  <= {4'd0, st_fail_addr};
-                        dbg_line_fire <= 1'b1;
-                        err_latch     <= 1'b1;
-                        state         <= ST_SAFEERR;
+                        ddr_result         <= DDR_RES_FAIL;
+                        ddr_result_arg     <= {4'd0, st_fail_addr};
+                        ddr_result_pending <= 1'b1;
+                        state              <= ST_DDREP;
                     end else if (timeout_cnt >= DDR_TIMEOUT_CYCLES) begin
-                        dbg_line_id   <= 3'd4;    // timeout reported as err
-                        dbg_line_arg  <= 32'hFFFF_FFFF;
-                        dbg_line_fire <= 1'b1;
-                        err_latch     <= 1'b1;
-                        state         <= ST_SAFEERR;
+                        ddr_result         <= DDR_RES_TIME;
+                        ddr_result_arg     <= 32'hFFFF_FFFF;
+                        ddr_result_pending <= 1'b1;
+                        state              <= ST_DDREP;
                     end else begin
                         timeout_cnt <= timeout_cnt + 32'd1;
+                    end
+                end
+
+                ST_DDREP: begin
+                    // Deferred report: result line first (pass -> id 3,
+                    // fail/timeout -> id 4), then one id 6 diagnostic
+                    // byte. Both are gated by !dbg_busy so uart_debug
+                    // cannot silently drop them. ddr_result_sent keeps the
+                    // STS line from being queued in the same breath as the
+                    // result line: on that cycle dbg_busy is still low
+                    // (rom_pending rises one edge later), and the id 2/id 3
+                    // drain would then swallow the STS request.
+                    if (ddr_result_pending) begin
+                        if (!dbg_busy) begin
+                            ddr_result_pending <= 1'b0;
+                            ddr_result_sent    <= 1'b1;
+                            ddr_sts_armed      <= 1'b0;
+                            dbg_line_fire      <= 1'b1;
+                            if (ddr_result == DDR_RES_PASS) begin
+                                dbg_line_id  <= 3'd3;   // "DDROK\n"
+                                dbg_line_arg <= 32'd0;
+                            end else begin
+                                dbg_line_id  <= 3'd4;   // "DDR3 ERR @<hex>"
+                                dbg_line_arg <= ddr_result_arg;
+                            end
+                        end
+                    end else if (ddr_result_sent && !ddr_sts_sent) begin
+                        // Wait until the result line has actually occupied
+                        // the printer: rom_pending rises one edge after
+                        // the fire, so dbg_busy still reads low on the
+                        // immediately following cycle. Only an observed
+                        // busy window arms the STS line.
+                        if (dbg_busy) begin
+                            ddr_sts_armed <= 1'b1;
+                        end else if (ddr_sts_armed) begin
+                            dbg_line_id   <= 3'd6;   // "DDR3 STS <hex8>"
+                            dbg_line_arg  <= {24'd0, ddr_sts_code};
+                            dbg_line_fire <= 1'b1;
+                            ddr_sts_sent  <= 1'b1;
+                        end
+                    end else if (ddr_result_sent) begin
+                        if (ddr_result == DDR_RES_PASS) begin
+                            state   <= ST_RUN;
+                            sys_run <= 1'b1;
+                        end else begin
+                            err_latch <= 1'b1;
+                            state     <= ST_SAFEERR;
+                        end
                     end
                 end
 

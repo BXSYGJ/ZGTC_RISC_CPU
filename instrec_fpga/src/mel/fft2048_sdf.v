@@ -175,8 +175,6 @@ module fft2048_sdf (
     reg [11:0] ld_cnt;      // LOAD sample counter 0..2047
     reg [11:0] run_cnt;     // RUN/DRAIN beat sample counter (see header)
     reg [1:0]  ph2;         // 4-phase beat, shared by all stages
-    reg [10:0] out_cnt;     // stage-10 valid output counter 0..2047
-    reg        out_done;    // all 2048 valid outputs seen this frame
 
     wire load_active  = (state == ST_LOAD);
     wire run_active   = (state == ST_RUN);
@@ -195,8 +193,6 @@ module fft2048_sdf (
             ld_cnt    <= 12'd0;
             run_cnt   <= 12'd0;
             ph2       <= 2'd0;
-            out_cnt   <= 11'd0;
-            out_done  <= 1'b0;
             frame_fft_done <= 1'b0;
         end else begin
             frame_fft_done <= 1'b0;
@@ -219,18 +215,25 @@ module fft2048_sdf (
                     end
                 end
                 ST_RUN: begin
-                    // 4-phase beat; the beat sample counter advances each
-                    // beat and saturates at 2048 (feed stopped, pipeline
-                    // draining until the valid chain finishes).
+                    // 4-phase beat; the beat counter advances once per beat.
+                    // T31: the leave-ST_RUN decision moved from "run_cnt ==
+                    // 2047 (any phase)" to "ph2 == 3 of beat 2047".  The old
+                    // form dropped the last sample of every frame (samp_vld is
+                    // gated by run_active, so beat 2047 was already looking at
+                    // ST_DRAIN on its phase-3 edge): the SDF delay lines were
+                    // fed 2047 instead of 2048 samples per frame, which shifts
+                    // every stage's pairing phase by one sample per frame and
+                    // makes the whole bin stream wrong.
                     if (ph2 == 2'd3) begin
                         ph2 <= 2'd0;
-                        if (run_cnt != 12'd2048)
+                        if (run_cnt == 12'd2047) begin
+                            run_cnt <= 12'd2048;    // feed stopped: drain
+                            state   <= ST_DRAIN;
+                        end else begin
                             run_cnt <= run_cnt + 12'd1;
+                        end
                     end else begin
                         ph2 <= ph2 + 2'd1;
-                    end
-                    if (out_done) begin
-                        state <= ST_DRAIN;   // valid outputs complete
                     end
                 end
                 ST_DRAIN: begin
@@ -249,15 +252,6 @@ module fft2048_sdf (
                 end
                 default: state <= ST_IDLE;
             endcase
-            // Output sample counting driven by the stage-10 valid beat.
-            if (s_out_vld[10]) begin
-                if (out_cnt == 11'd2047)
-                    out_done <= 1'b1;
-                else
-                    out_cnt <= out_cnt + 11'd1;
-            end
-            if (state == ST_IDLE)
-                out_cnt <= 11'd0;
         end
     end
 
@@ -323,9 +317,14 @@ module fft2048_sdf (
     wire [26:0] s_out_im [0:10];
     wire        s_out_vld [0:10];
 
-    // Stage-0 input sample valid: only live RUN samples are valid; the
-    // DRAIN beats push dummy (valid = 0) samples through the cascade.
-    wire samp_vld = run_active && (run_cnt < 12'd2048);
+    // Stage-0 input sample valid.
+    // T31: ST_DRAIN re-reads the SAME in_buf window (in_rd_addr uses
+    // bitrev(run_cnt[10:0]), which wraps), i.e. the cascade is fed x twice.
+    // Those beats are real samples, not dummies: the cascade group delay is
+    // 2057 beats, so bin 0 of the frame only appears 2057 beats into the
+    // stream, which is inside ST_DRAIN.  They must therefore carry
+    // valid = 1 for the bin export window to be observable at all.
+    wire samp_vld = beat_active;
 
     // -----------------------------------------------------------------
     // SDF stage cascade.
@@ -343,10 +342,21 @@ module fft2048_sdf (
     reg  [16:0] s0_re_r;    // registered output (real)
     reg         s0_vld_r;
 
+    // T31: stage 0 is NOT a pure add/subtract.  The golden stage 1 computes
+    //     prod = rhu_shift(32767 * d, 15)
+    // and 32767*d + 16384 = 32768*d + (16384 - d), so
+    //     prod = d + ((16384 - d) >>> 15)
+    // which equals d only for |d| <= 16384; for |d| > 16384 the Q1.15
+    // twiddle 32767 rounds one LSB away from d (e.g. d = 20629 -> 20628).
+    // The original "prod == d exactly" claim in the module header was wrong
+    // and made every stage-0 output differ by up to 1 LSB from the golden.
+    wire signed [18:0] st0_rnd = 19'sd16384 - {{2{st0_d_r[16]}}, st0_d_r};
+    wire signed [16:0] st0_pr  = st0_d_r + {{13{st0_rnd[18]}}, st0_rnd[18:15]};
+
     // 17-bit sum/difference with one guard bit, truncated back to the
-    // s17 container (values |a +/- d| <= 65534 fit exactly).
-    wire [17:0] st0_sum = {st0_dly[16], st0_dly} + {st0_d_r[16], st0_d_r};
-    wire [17:0] st0_dif = {st0_dly[16], st0_dly} - {st0_d_r[16], st0_d_r};
+    // s17 container (values |a +/- prod| <= 65534 fit exactly).
+    wire [17:0] st0_sum = {st0_dly[16], st0_dly} + {st0_pr[16], st0_pr};
+    wire [17:0] st0_dif = {st0_dly[16], st0_dly} - {st0_pr[16], st0_pr};
 
     always @(posedge clk) begin
         if (ph2 == 2'd1)
@@ -395,11 +405,24 @@ module fft2048_sdf (
         // -----------------------------------------------------------------
         reg [10:0] n_cnt;
 
+        // T31: each stage is one pipeline register behind the previous
+        // one (the input is captured on phase 0 from the stage-k-1 phase-3
+        // output), so the block phase of stage k trails the golden frame
+        // index by
+        //     off(k) = delay(k-1) + 1,   delay(0) = 1,
+        //     delay(k) = off(k) + 2^k   =>   off(k) = 2^k + k - 1.
+        // Starting every counter at 0 (the old code) misaligns the
+        // pass/butterfly halves of stages 2..10 by 1..9 samples, which is
+        // why the whole bin stream was garbage.  The counter is therefore
+        // preloaded with (-off(k)) mod 2048 at the LOAD->RUN boundary.
+        localparam integer OFF_M   = (1 << k) + k - 1;
+        localparam [10:0]  CNT_INIT = 11'd0 - OFF_M[10:0];
+
         always @(posedge clk or negedge rst_n) begin
             if (!rst_n)
-                n_cnt <= 11'd0;
+                n_cnt <= CNT_INIT;
             else if (clr_n)
-                n_cnt <= 11'd0;
+                n_cnt <= CNT_INIT;
             else if (ph2 == 2'd3)
                 n_cnt <= n_cnt + 11'd1;   // wraps mod 2048
         end
@@ -621,14 +644,36 @@ module fft2048_sdf (
 
     // =================================================================
     // Output section: natural-order bins 0..1024 (one-half spectrum).
-    // The DIT cascade with bit-reversed input produces natural-order
-    // bins, so the stage-10 output counter IS the bin index. Bins
-    // 1025..2047 are conjugate mirrors of the real input and are simply
-    // not exported (golden returns re[:, :1025]).
+    //
+    // T32 TIMING MAP (measured on the cycle-accurate RTL dump, six golden
+    // frames, bit-exact):
+    //   * the cascade group delay is delay(10) = 2^11 + 10 - 1 = 2057, so
+    //     stream output y[m] carries bin m (natural order, bit-reversed
+    //     input);
+    //   * y[m] is written into s_out_re[10]/s_out_im[10] on the phase-3
+    //     edge of beat m + 2057 and is therefore the value seen during the
+    //     phases of beat m + 2058 (that is what the export flop samples);
+    //   * hence bin k is exported on run_cnt = 2058 + k.
+    // The frame feeds 2048 live samples in ST_RUN and then re-reads the same
+    // in_buf contents for 2048 more beats in ST_DRAIN (bitrev(run_cnt[10:0])
+    // wraps), i.e. the SDF sees x twice - exactly the "fill, then compute"
+    // stream the group delay requires.  Bins 0..1024 land on
+    // run_cnt 2058..3082, inside the ST_DRAIN window 2048..4095.
+    // Bins 1025..2047 are conjugate mirrors of the real input and are not
+    // exported (golden returns re[:, :1025]).
     // =================================================================
+    // One stage-10 sample stays visible during all four phases of a beat
+    // (the valid register only updates on phase 3), so sample on phase 3
+    // only: 1025 beats -> exactly 1025 bin_valid pulses per frame.
+    localparam [11:0] BIN_FIRST_RUN = 12'd2058;
+    localparam [11:0] BIN_LAST_RUN  = 12'd3082;      // 2058 + 1024
+
     wire [26:0] last_re  = s_out_re[10];
     wire [26:0] last_im  = s_out_im[10];
     wire        last_vld = s_out_vld[10];
+    wire        bin_beat = last_vld && (ph2 == 2'd3)
+                         && (run_cnt >= BIN_FIRST_RUN)
+                         && (run_cnt <= BIN_LAST_RUN);
 
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
@@ -638,9 +683,9 @@ module fft2048_sdf (
             bin_im_s27 <= 27'd0;
         end else begin
             bin_valid <= 1'b0;
-            if (last_vld && (out_cnt <= 11'd1024)) begin
+            if (bin_beat) begin
                 bin_valid  <= 1'b1;
-                bin_idx    <= out_cnt;
+                bin_idx    <= run_cnt - BIN_FIRST_RUN;
                 bin_re_s27 <= last_re;
                 bin_im_s27 <= last_im;
             end

@@ -45,11 +45,22 @@ OUT_DIR = SCRIPT_DIR.parent / "src" / "mel"
 
 def words_from_table() -> np.ndarray:
     tw_re, tw_im = make_twiddle_q15(N_FFT)
-    words = (tw_im.astype(np.uint32) << 16) | tw_re.astype(np.uint32)
+    # Pack {im[15:0], re[15:0]}.  Both halves must be masked to 16 bits
+    # FIRST: astype(uint32) sign-extends int16, so a negative tw_re would
+    # otherwise OR 0xFFFF into the high (im) half and destroy it -- the
+    # pre-T32 files had exactly that defect (511/1024 words, i.e. every
+    # word with cos(j*w) < 0, carried im = 0xFFFF instead of the real
+    # value), which broke every non-trivial butterfly of stages s >= 3.
+    re_u = tw_re.astype(np.uint32) & np.uint32(0xFFFF)
+    im_u = tw_im.astype(np.uint32) & np.uint32(0xFFFF)
+    words = (im_u << np.uint32(16)) | re_u
     assert words.size == N_FFT // 2
     # Bit-identity anchors (must hold for the golden table by construction).
     assert np.int32(tw_re[0]) == 32767 and np.int32(tw_im[0]) == 0
     assert np.int32(tw_re[512]) == 0 and np.int32(tw_im[512]) == -32768
+    # Field round-trip: the packed word must decode back to the table.
+    assert np.all(words & 0xFFFF == re_u), "re field corrupted"
+    assert np.all(words >> 16 == im_u), "im field corrupted"
     return words
 
 

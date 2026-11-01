@@ -1,0 +1,345 @@
+{
+  "verdict": "FAIL",
+  "expected": 3072,
+  "observed": 3072,
+  "mismatch_count": 2471,
+  "first_mismatch": [
+    {
+      "sample": 0,
+      "row": 0,
+      "group": 0,
+      "col": 0,
+      "channel": 0,
+      "expected": 4,
+      "observed": 2
+    },
+    {
+      "sample": 1,
+      "row": 0,
+      "group": 0,
+      "col": 0,
+      "channel": 1,
+      "expected": 22,
+      "observed": 2
+    },
+    {
+      "sample": 2,
+      "row": 0,
+      "group": 0,
+      "col": 0,
+      "channel": 2,
+      "expected": 0,
+      "observed": 255
+    },
+    {
+      "sample": 3,
+      "row": 0,
+      "group": 0,
+      "col": 0,
+      "channel": 3,
+      "expected": 0,
+      "observed": 1
+    },
+    {
+      "sample": 4,
+      "row": 0,
+      "group": 0,
+      "col": 0,
+      "channel": 4,
+      "expected": 32,
+      "observed": 0
+    },
+    {
+      "sample": 5,
+      "row": 0,
+      "group": 0,
+      "col": 0,
+      "channel": 5,
+      "expected": 0,
+      "observed": 1
+    },
+    {
+      "sample": 6,
+      "row": 0,
+      "group": 0,
+      "col": 0,
+      "channel": 6,
+      "expected": 19,
+      "observed": 0
+    },
+    {
+      "sample": 7,
+      "row": 0,
+      "group": 0,
+      "col": 0,
+      "channel": 7,
+      "expected": 71,
+      "observed": 1
+    },
+    {
+      "sample": 8,
+      "row": 0,
+      "group": 0,
+      "col": 0,
+      "channel": 8,
+      "expected": 8,
+      "observed": 0
+    },
+    {
+      "sample": 9,
+      "row": 0,
+      "group": 0,
+      "col": 0,
+      "channel": 9,
+      "expected": 0,
+      "observed": 1
+    },
+    {
+      "sample": 10,
+      "row": 0,
+      "group": 0,
+      "col": 0,
+      "channel": 10,
+      "expected": 0,
+      "observed": 255
+    },
+    {
+      "sample": 11,
+      "row": 0,
+      "group": 0,
+      "col": 0,
+      "channel": 11,
+      "expected": 0,
+      "observed": 1
+    },
+    {
+      "sample": 12,
+      "row": 0,
+      "group": 0,
+      "col": 0,
+      "channel": 12,
+      "expected": 3,
+      "observed": 255
+    },
+    {
+      "sample": 13,
+      "row": 0,
+      "group": 0,
+      "col": 0,
+      "channel": 13,
+      "expected": 0,
+      "observed": 1
+    },
+    {
+      "sample": 14,
+      "row": 0,
+      "group": 0,
+      "col": 0,
+      "channel": 14,
+      "expected": 247,
+      "observed": 0
+    },
+    {
+      "sample": 15,
+      "row": 0,
+      "group": 0,
+      "col": 0,
+      "channel": 15,
+      "expected": 19,
+      "observed": 0
+    },
+    {
+      "sample": 17,
+      "row": 0,
+      "group": 0,
+      "col": 1,
+      "channel": 1,
+      "expected": 7,
+      "observed": 0
+    },
+    {
+      "sample": 18,
+      "row": 0,
+      "group": 0,
+      "col": 1,
+      "channel": 2,
+      "expected": 0,
+      "observed": 255
+    },
+    {
+      "sample": 19,
+      "row": 0,
+      "group": 0,
+      "col": 1,
+      "channel": 3,
+      "expected": 102,
+      "observed": 0
+    },
+    {
+      "sample": 21,
+      "row": 0,
+      "group": 0,
+      "col": 1,
+      "channel": 5,
+      "expected": 45,
+      "observed": 1
+    },
+    {
+      "sample": 22,
+      "row": 0,
+      "group": 0,
+      "col": 1,
+      "channel": 6,
+      "expected": 8,
+      "observed": 0
+    },
+    {
+      "sample": 23,
+      "row": 0,
+      "group": 0,
+      "col": 1,
+      "channel": 7,
+      "expected": 40,
+      "observed": 1
+    },
+    {
+      "sample": 24,
+      "row": 0,
+      "group": 0,
+      "col": 1,
+      "channel": 8,
+      "expected": 0,
+      "observed": 2
+    },
+    {
+      "sample": 25,
+      "row": 0,
+      "group": 0,
+      "col": 1,
+      "channel": 9,
+      "expected": 0,
+      "observed": 2
+    },
+    {
+      "sample": 27,
+      "row": 0,
+      "group": 0,
+      "col": 1,
+      "channel": 11,
+      "expected": 0,
+      "observed": 1
+    },
+    {
+      "sample": 29,
+      "row": 0,
+      "group": 0,
+      "col": 1,
+      "channel": 13,
+      "expected": 0,
+      "observed": 1
+    },
+    {
+      "sample": 31,
+      "row": 0,
+      "group": 0,
+      "col": 1,
+      "channel": 15,
+      "expected": 0,
+      "observed": 1
+    },
+    {
+      "sample": 33,
+      "row": 0,
+      "group": 0,
+      "col": 2,
+      "channel": 1,
+      "expected": 0,
+      "observed": 1
+    },
+    {
+      "sample": 34,
+      "row": 0,
+      "group": 0,
+      "col": 2,
+      "channel": 2,
+      "expected": 15,
+      "observed": 255
+    },
+    {
+      "sample": 35,
+      "row": 0,
+      "group": 0,
+      "col": 2,
+      "channel": 3,
+      "expected": 0,
+      "observed": 1
+    },
+    {
+      "sample": 36,
+      "row": 0,
+      "group": 0,
+      "col": 2,
+      "channel": 4,
+      "expected": 0,
+      "observed": 255
+    },
+    {
+      "sample": 37,
+      "row": 0,
+      "group": 0,
+      "col": 2,
+      "channel": 5,
+      "expected": 25,
+      "observed": 1
+    }
+  ],
+  "per_window": [
+    {
+      "start": 0,
+      "span": 512,
+      "mismatch": 389
+    },
+    {
+      "start": 4128,
+      "span": 512,
+      "mismatch": 503
+    },
+    {
+      "start": 8256,
+      "span": 512,
+      "mismatch": 332
+    },
+    {
+      "start": 402464,
+      "span": 512,
+      "mismatch": 473
+    },
+    {
+      "start": 780192,
+      "span": 512,
+      "mismatch": 390
+    },
+    {
+      "start": 792064,
+      "span": 512,
+      "mismatch": 384
+    }
+  ],
+  "expected_sum": 26685,
+  "observed_sum": 184223,
+  "frames": {
+    "parsed": 625,
+    "status": 1,
+    "data": 128,
+    "missing_data_indices": [],
+    "ignored": 493
+  },
+  "status_frame": {
+    "done_flag": 1,
+    "sample_count": 3072,
+    "sample_sum": 184269,
+    "stream_samples": 792576,
+    "window_count": 6,
+    "tail": 165
+  }
+}

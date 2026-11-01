@@ -36,11 +36,21 @@ Usage:
   python scripts/board_check.py --sbit build/instrec-latest.sbit --port COM5 --seconds 12
   python scripts/board_check.py --sbit releases/m1-20261027/instrec_top.sbit --status-only
   python scripts/board_check.py --diag-only
+  python scripts/board_check.py --sbit build/top_ddr3_diag-latest.sbit --seconds 12
+      --expect "DDR3DIAG" "DDR3SW" "DDR3RS" --json reports/board_check.json
 
-Exit codes: 0 ok, 2 no downloader / port, 3 program failed, 4 cdt_cfg hung.
+Exit codes: 0 ok, 2 no downloader / port, 3 program failed, 4 cdt_cfg hung,
+            5 one or more --expect tokens were not seen in the UART capture.
+            A code of 2/3/4 is never downgraded to 5: the more severe state
+            wins, so a missing token cannot hide a programming failure.
+
+The --json record is UTF-8 without a BOM and always uses the same twelve keys
+(see EVIDENCE_KEYS), so downstream build and board tasks can decide pass/fail
+from the file alone instead of parsing stdout (C-BOARD-CHECK@1).
 """
 
 import argparse
+import json
 import re
 import socket
 import subprocess
@@ -51,6 +61,47 @@ from pathlib import Path
 PDS = Path(r'H:/GG/pango/PDS_2022.2-SP6.4/bin')
 ROOT = Path(__file__).resolve().parents[1]
 LOG_DIR = ROOT / 'build'
+
+# C-BOARD-CHECK@1 exit codes.  EXIT_EXPECT_FAIL (5) is only reported from a
+# clean run; 2/3/4 already describe a more severe failure (see run_check).
+EXIT_OK = 0
+EXIT_NO_HW = 2
+EXIT_PROGRAM_FAIL = 3
+EXIT_CFG_HUNG = 4
+EXIT_EXPECT_FAIL = 5
+
+# Exact key set of the --json evidence record (C-BOARD-CHECK@1 B2).  The tuple
+# order is the contract order; write_evidence_json never adds or drops a key.
+EVIDENCE_KEYS = (
+    'ftdi_present',
+    'jtagserver_pids',
+    'cdt_cfg_pids',
+    'program_ok',
+    'status_raw',
+    'done',
+    'crc_err',
+    'uart_bytes',
+    'uart_file',
+    'expect',
+    'expect_missing',
+    'verdict',
+)
+
+# Fallback values used when a key is absent from an evidence record.
+EVIDENCE_DEFAULTS = {
+    'ftdi_present': False,
+    'jtagserver_pids': [],
+    'cdt_cfg_pids': [],
+    'program_ok': False,
+    'status_raw': None,
+    'done': None,
+    'crc_err': None,
+    'uart_bytes': 0,
+    'uart_file': '',
+    'expect': [],
+    'expect_missing': [],
+    'verdict': 'FAIL',
+}
 
 
 def run_ps(cmd):
@@ -202,43 +253,87 @@ def parse_done(text):
     return {'raw': m.group(1), 'done': (val >> 12) & 1, 'crc_err': (val >> 1) & 1}
 
 
-def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument('--sbit')
-    ap.add_argument('--port', default='COM5')
-    ap.add_argument('--seconds', type=float, default=12.0)
-    ap.add_argument('--status-only', action='store_true')
-    ap.add_argument('--diag-only', action='store_true',
-                    help='report FTDI / jtagserver / UART state and exit')
-    ap.add_argument('--freq', default='10Mhz')
-    ap.add_argument('--expect', nargs='*', default=None,
-                    help='substrings that must appear in the UART capture, '
-                         'e.g. --expect "INSTREC BOOT" "DDR3 SELFTEST" "DDROK"')
-    args = ap.parse_args()
+def uart_file_path():
+    """Absolute POSIX path of the UART capture this script writes.
+
+    Resolved at call time (not at import time) so the path follows LOG_DIR
+    when a caller or a test redirects it.
+    """
+    return (LOG_DIR / 'uart_last.bin').resolve().as_posix()
+
+
+def initial_evidence(args):
+    """Baseline evidence record holding every C-BOARD-CHECK@1 key."""
+    record = {}
+    for key in EVIDENCE_KEYS:
+        value = EVIDENCE_DEFAULTS[key]
+        record[key] = list(value) if isinstance(value, list) else value
+    record['uart_file'] = uart_file_path()
+    record['expect'] = list(args.expect or [])
+    return record
+
+
+def verdict_for(rc, missing):
+    """Machine-readable verdict: PASS only for a clean run with no misses."""
+    return 'PASS' if rc == EXIT_OK and not missing else 'FAIL'
+
+
+def write_evidence_json(path, evidence):
+    """Write the evidence record as UTF-8 JSON without a BOM.
+
+    Relative paths are resolved against the project root (same convention as
+    --sbit).  Missing keys fall back to EVIDENCE_DEFAULTS and unknown keys are
+    dropped, so the written file always matches the contract key set exactly.
+    """
+    target = Path(path)
+    if not target.is_absolute():
+        target = ROOT / target
+    target.parent.mkdir(parents=True, exist_ok=True)
+    record = {}
+    for key in EVIDENCE_KEYS:
+        value = EVIDENCE_DEFAULTS[key]
+        record[key] = evidence.get(key, list(value) if isinstance(value, list) else value)
+    # encoding='utf-8' writes no BOM; newline='\n' keeps the file diffable.
+    with open(target, 'w', encoding='utf-8', newline='\n') as fh:
+        fh.write(json.dumps(record, indent=2) + '\n')
+    return target
+
+
+def run_check(args):
+    """Run the FTDI -> program -> status -> UART sequence.
+
+    Returns ``(exit_code, evidence)``.  The evidence record is updated on every
+    exit path, including the early hardware checks, so --json can always be
+    written even when nothing was programmed.
+    """
+    evidence = initial_evidence(args)
 
     present = ftdi_present()
     js = jtag_procs()
     cfg = cfg_procs()
+    evidence['ftdi_present'] = present
+    evidence['jtagserver_pids'] = js
+    evidence['cdt_cfg_pids'] = cfg
     multi = ' (!! MULTIPLE UIs)' if len(js) > 1 or len(cfg) > 1 else ''
     print(f'ftdi: {"present" if present else "ABSENT"}  '
           f'jtagserver: {js if js else "none"}{multi}  '
           f'cdt_cfg: {cfg if cfg else "none"}  port65420: '
           f'{"open" if port_listening() else "closed"}')
     if args.diag_only:
-        return 0 if present else 2
+        return (EXIT_OK if present else EXIT_NO_HW), evidence
 
     if not present:
         print('FTDI downloader (VID_0403) is not present in PnP; programming is impossible.')
-        return 2
+        return EXIT_NO_HW, evidence
 
     if not args.status_only and not args.sbit:
         print('--sbit is required unless --status-only is used')
-        return 2
+        return EXIT_NO_HW, evidence
 
     sbit = (ROOT / args.sbit).resolve().as_posix() if args.sbit else None
     if sbit and not Path(sbit).is_file():
         print(f'sbit not found: {sbit}')
-        return 2
+        return EXIT_NO_HW, evidence
 
     ser = None
     chunks = []
@@ -249,7 +344,7 @@ def main():
             print(f'UART {args.port} opened before programming')
         except Exception as exc:
             print(f'cannot open {args.port}: {exc}')
-            return 2
+            return EXIT_NO_HW, evidence
 
     # R3: exactly ONE jtagserver. Reuse whatever is already running (it owns
     # the FTDI handle); start a server only when no cdt_js exists at all.
@@ -259,30 +354,36 @@ def main():
     if state == 'broken':
         print(f'existing jtagserver (PID {pid}) did not open port 65420; '
               f'NOT starting a second instance (that is what breaks the FTDI link)')
-        return 2
+        return EXIT_NO_HW, evidence
     if state == 'started':
         print(f'jtagserver started once (PID {pid}) and kept; it is never killed by this script')
     else:
         print(f'reusing the running jtagserver (PID {pid}, not restarted)')
 
-    rc = 0
+    rc = EXIT_OK
     try:
         body = status_body(sbit, args.freq) if sbit else status_body(None, args.freq)
         text, code = run_tcl('program', body)
         if code is None:
             print('cdt_cfg did not exit within the timeout; it was LEFT RUNNING on purpose '
                   '(killing it is what drops the FTDI device).')
-            rc = 4
+            rc = EXIT_CFG_HUNG
         else:
             print(f'cdt_cfg exit code: {code}')
+            if code != 0:
+                rc = EXIT_PROGRAM_FAIL
 
         prog_ok = ('PROGRAM FLOW DONE' in text or
                    'COMMAND[Program] execute successfully' in text or
                    'The done bit is 1' in text)
+        evidence['program_ok'] = prog_ok
         print(f'program: {prog_ok}')
         done = parse_done(text)
         if done:
             print(f'status: {done["raw"]} done={done["done"]} crc_err={done["crc_err"]}')
+            evidence['status_raw'] = done['raw']
+            evidence['done'] = done['done']
+            evidence['crc_err'] = done['crc_err']
         else:
             print('status: not available')
 
@@ -297,13 +398,17 @@ def main():
             ser.close()
 
     # R2 evidence: name the step if the downloader vanished during the run.
-    if not ftdi_present():
+    present_after = ftdi_present()
+    evidence['ftdi_present'] = present_after
+    if not present_after:
         print('!! FTDI disappeared during this run (device no longer in PnP).')
-        rc = 2
+        rc = EXIT_NO_HW
 
     # Instance hygiene: this run must not have added a second UI/server.
     procs_after = jtag_procs()
     cfg_after = cfg_procs()
+    evidence['jtagserver_pids'] = procs_after
+    evidence['cdt_cfg_pids'] = cfg_after
     if len(procs_after) > len(procs_before):
         print(f'!! jtagserver instances grew {procs_before} -> {procs_after} '
               f'(multiple UIs fight over one FTDI handle)')
@@ -314,9 +419,11 @@ def main():
               f'(leftovers are left running on purpose, never killed)')
 
     raw = b''.join(chunks)
+    evidence['uart_bytes'] = len(raw)
     if raw:
         LOG_DIR.mkdir(parents=True, exist_ok=True)
         (LOG_DIR / 'uart_last.bin').write_bytes(raw)
+        evidence['uart_file'] = uart_file_path()
         print(f'uart: {len(raw)} bytes (saved build/uart_last.bin)')
         expect = [x.encode() for x in (args.expect or [])]
         for line in raw.split(b'\n'):
@@ -328,14 +435,56 @@ def main():
                 mark = '  <-- MISSING' if not any(e in line for e in expect) else '  OK'
             printable = ''.join(chr(b) if 32 <= b < 127 else f'\\x{b:02x}' for b in line)
             print(f'  line: {printable}{mark}')
-        if expect:
-            missing = [e for e in expect if e not in raw]
-            if missing:
-                print('boot: FAIL (missing ' + ', '.join(m.decode() for m in missing) + ')')
-            else:
-                print(f'boot: PASS (all {len(expect)} expected lines seen)')
     else:
         print('uart: 0 bytes')
+
+    # B1/B5: a missing token reports 5 only from an otherwise clean run.  An
+    # expected token that is absent from a zero-byte capture counts as missing,
+    # so "the board printed nothing" can never look like success.
+    expect_tokens = list(args.expect or [])
+    evidence['expect'] = expect_tokens
+    evidence['expect_missing'] = []
+    if expect_tokens:
+        missing = [token for token in expect_tokens if token.encode() not in raw]
+        evidence['expect_missing'] = missing
+        if missing:
+            print('boot: FAIL (missing ' + ', '.join(missing) + ')')
+            if rc == EXIT_OK:
+                rc = EXIT_EXPECT_FAIL
+        else:
+            print(f'boot: PASS (all {len(expect_tokens)} expected lines seen)')
+
+    return rc, evidence
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument('--sbit')
+    ap.add_argument('--port', default='COM5')
+    ap.add_argument('--seconds', type=float, default=12.0)
+    ap.add_argument('--status-only', action='store_true')
+    ap.add_argument('--diag-only', action='store_true',
+                    help='report FTDI / jtagserver / UART state and exit')
+    ap.add_argument('--freq', default='10Mhz')
+    ap.add_argument('--expect', nargs='*', default=None,
+                    help='substrings that must appear in the UART capture, '
+                         'e.g. --expect "INSTREC BOOT" "DDR3 SELFTEST" "DDROK"')
+    ap.add_argument('--json', dest='json_path', default=None,
+                    help='write a UTF-8 (no BOM) evidence file with the fixed '
+                         'C-BOARD-CHECK@1 key set')
+    args = ap.parse_args()
+
+    rc, evidence = run_check(args)
+    evidence['verdict'] = verdict_for(rc, evidence['expect_missing'])
+    if args.json_path:
+        # A bad --json target must not hide the hardware result: report the
+        # write failure and keep the exit code that the board state produced.
+        try:
+            target = write_evidence_json(args.json_path, evidence)
+        except OSError as exc:
+            print(f'!! cannot write json evidence: {exc}')
+        else:
+            print(f'json: {target.as_posix()} verdict={evidence["verdict"]}')
     return rc
 
 

@@ -35,6 +35,8 @@
 //                           2 "DDR3 SELFTEST...\n" 3 "DDROK\n"
 //                           4 "DDR3 ERR @" <hex32> "\n"  (uses dbg_line_arg)
 //                           5 "RUN\n"
+//                           6 "DDR3 STS " <hex8> "\n"   (uses dbg_line_arg
+//                             bits [7:0]; AXI diagnostic byte from sys_ctrl)
 //      dbg_line_arg [31:0]  hex argument, only used by line 4
 //      dbg_line_fire        one-cycle request strobe
 //      dbg_busy             1 = engine busy (line out or buffered lines
@@ -78,7 +80,7 @@ module uart_debug (
 );
 
     // ------------------------------------------------------------------
-    // Predefined ASCII line ROM (M0 minimal set, 6 lines).
+    // Predefined ASCII line ROM (M0 minimal set + id 6 diag line, 7 lines).
     // Each localparam is a plain string; rom_char() indexes it. Line 4
     // is split: 10-byte prefix "DDR3 ERR @" + 8 hex nibbles of
     // dbg_line_arg + "\n" (the "\n" is appended by the hex path).
@@ -89,6 +91,7 @@ module uart_debug (
     localparam LINE_DDROK   = "DDROK\n";            // id 3,  6 bytes
     localparam LINE_DDRERR  = "DDR3 ERR @";         // id 4, 10-byte prefix
     localparam LINE_RUN     = "RUN\n";              // id 5,  4 bytes
+    localparam LINE_DDRSTS  = "DDR3 STS ";          // id 6,  9-byte prefix
 
     localparam integer LINE_MAX = 24;   // slot width, longest line is 16
 
@@ -100,8 +103,10 @@ module uart_debug (
     localparam [4:0] LINE_LEN_DDROK   = 5'd6;
     localparam [4:0] LINE_LEN_DDRERR  = 5'd10;
     localparam [4:0] LINE_LEN_RUN     = 5'd4;
+    localparam [4:0] LINE_LEN_DDRSTS  = 5'd9;
 
     localparam [2:0] LINE_ID_DDRERR = 3'd4;
+    localparam [2:0] LINE_ID_DDRSTS = 3'd6;
 
     // ROM lookup: character idx of line id. Strings are zero-extended
     // into a LINE_MAX-wide word. Measured on PDS 2022.2: the string is
@@ -207,6 +212,21 @@ module uart_debug (
                         default: rom_char = 8'h20;
                     endcase
                 end
+                3'd6: begin
+                    // "DDR3 STS " prefix; 2 hex digits + '\n' follow.
+                    case (idx)
+                        5'd0: rom_char = 8'h44;
+                        5'd1: rom_char = 8'h44;
+                        5'd2: rom_char = 8'h52;
+                        5'd3: rom_char = 8'h33;
+                        5'd4: rom_char = 8'h20;
+                        5'd5: rom_char = 8'h53;
+                        5'd6: rom_char = 8'h54;
+                        5'd7: rom_char = 8'h53;
+                        5'd8: rom_char = 8'h20;
+                        default: rom_char = 8'h20;
+                    endcase
+                end
                 default: rom_char = 8'h20;
             endcase
         end
@@ -221,6 +241,8 @@ module uart_debug (
                 3'd2:    rom_len = LINE_LEN_DDRTEST;
                 3'd3:    rom_len = LINE_LEN_DDROK;
                 3'd4:    rom_len = LINE_LEN_DDRERR;
+                3'd5:    rom_len = LINE_LEN_RUN;
+                3'd6:    rom_len = LINE_LEN_DDRSTS;
                 default: rom_len = LINE_LEN_RUN;
             endcase
         end
@@ -329,7 +351,12 @@ module uart_debug (
                 (state == ST_IDLE)) begin
                 rom_pending <= 1'b1;
                 rom_id      <= dbg_line_id;
-                rom_arg     <= dbg_line_arg;
+                // id 6 carries its 8-bit diagnostic code right-aligned in
+                // dbg_line_arg; shift it into the top nibble pair so the
+                // shared shifter prints exactly 2 hex digits via ST_HEX.
+                rom_arg     <= (dbg_line_id == LINE_ID_DDRSTS)
+                               ? {dbg_line_arg[7:0], 24'd0}
+                               : dbg_line_arg;
             end
 
             // -------- TX engine --------
@@ -371,6 +398,11 @@ module uart_debug (
                             rom_idx == LINE_LEN_DDRERR - 5'd1) begin
                             hex_left <= 4'd8;
                             state    <= ST_HEX;
+                        end else if (rom_id == LINE_ID_DDRSTS &&
+                                     rom_idx == LINE_LEN_DDRSTS - 5'd1) begin
+                            // 2 hex digits, then ST_EOL appends '\n'.
+                            hex_left <= 4'd2;
+                            state    <= ST_HEX;
                         end else if (rom_idx == rom_len(rom_id) - 5'd1) begin
                             // Plain line ends with its own '\n'.
                             state       <= ST_IDLE;
@@ -382,7 +414,8 @@ module uart_debug (
                 end
 
                 ST_HEX: begin
-                    // Emit 8 uppercase hex digits, MSB nibble first.
+                    // Emit uppercase hex digits, MSB nibble first: 8 for
+                    // id 4, 2 for id 6 (AXI diagnostic byte).
                     if (tx_byte_ready && gap_cnt == 16'd0) begin
                         tx_byte_data  <= hex_ascii(hex_shf[31:28]);
                         tx_byte_valid <= 1'b1;

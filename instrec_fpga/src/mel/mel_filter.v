@@ -240,10 +240,25 @@ module mel_filter #(
     //   sq_hi_sum <= 2*(2^17-1)^2 < 2^35  (36-bit signed container),
     //   cross_sum in +/- 2*(2^17-1)*(2^9-1), |.| < 2^27 exactly
     //     (28-bit signed container, signed because hi may be negative),
-    //   sq_lo_sum <= 2*(2^9-1)^2 < 2^19   (19-bit signed container).
+    //   sq_lo_sum <= 2*(2^9-1)^2 = 522242          (20-bit unsigned bound,
+    //      carried in an s20 container: the old "s19" note was wrong, an
+    //      19-bit signed word stops at 262143 - see the T35 note below).
+    // T35: the lo^2 pair sums up to 522242, which needs 20 UNSIGNED bits.
+    // The old s19 container tops out at 2^18-1 = 262143, so every bin whose
+    // low parts were large wrapped negative: the power came out 2^19 too
+    // small (512 in the >>10 domain) or, with hi == 0 and cross == 0, went
+    // negative and saturated the 44-bit window to 2^44-1.
     wire signed [35:0] sq_hi_sum = sq_hi_re_r + sq_hi_im_r;
     wire signed [27:0] cross_sum = cross_re_r + cross_im_r;
-    wire signed [18:0] sq_lo_sum = sq_lo_re_r + sq_lo_im_r;
+    wire signed [19:0] sq_lo_sum = sq_lo_re_r + sq_lo_im_r;
+    // T35: the three terms are summed directly. Verilog sizes the shift
+    // left operand from the ASSIGNMENT CONTEXT (the 54-bit sum container
+    // below), not from the operand's own width, so `sq_hi_sum <<< 18`
+    // already shifts inside 54 bits - no sign-extension glue is needed.
+    // Measured: extending each term to s54 first and summing the bare
+    // forms give bit-identical power spectra on all 12288 probed bins
+    // (12 frames x 1024) and a byte-exact feature output. T34's
+    // "self-determined width truncation" note was wrong.
     wire signed [53:0] pwr_sum_s =
         (sq_hi_sum <<< 18) + (cross_sum <<< 10) + sq_lo_sum;
     wire signed [53:0] pwr_rnd = pwr_sum_s + 54'sd512;  // + 2^9 (rhu)
@@ -320,38 +335,56 @@ module mel_filter #(
     // Stage B: mel COO MAC pipeline (5 stages, one entry per cycle).
     // -----------------------------------------------------------------
     // F0: issue the COO ROM read (address 65 + e_idx).
-    // F1: entry word available; issue the power RAM read.
-    // F2: power available; steer the two APMs (see operand mux above).
-    // F3: APM results available; CLB lo product; combine into prod.
-    // F4: accumulate prod into the channel accumulator.
+    // F1: entry word available; lock the weight and the RAM read address.
+    // F2: power RAM data valid (registered read of bin(e_idx)); lock q_p/q_w.
+    // F3: q_p/q_w aligned; steer the two APMs + CLB lo product.
+    // F4: APM / lo results available; combine into prod.
+    // F5: accumulate prod into the channel accumulator.
+    //
+    // T35: this used to be a 4-deep chain (q_p latched on the F1 edge). The
+    // power RAM read is registered too, so on the F1 cycle pwr_q still held
+    // power[bin(previous entry)] - every MAC entry was multiplied by its
+    // PREDECESSOR's bin power. Measured against golden: 16249/16576 channel
+    // sums were wrong, and re-accumulating with bin(i-1) reproduced 96.9%
+    // of the RTL values bit-exactly (515/16576 residual). The extra stage
+    // below aligns q_p/q_w on the cycle the RAM data actually lands.
     // -----------------------------------------------------------------
     reg [26:0] q_ent;      // F1: entry word {bin[26:16], w[15:0]}
-    reg [47:0] q_p;        // F2/F3: power value (stable through F3)
-    reg signed [15:0] q_w; // F2/F3: weight (stable through F3)
-    reg        f1_v, f2_v, f3_v, f4_v;   // stage-valid chain
+    reg signed [15:0] q_w; // F2: weight of the current entry
+    reg signed [15:0] q_w_d; // F3: weight aligned with q_p
+    reg [47:0] q_p;        // F3: power value of the current entry
+    reg        f1_v, f2_v, f3_v, f4_v, f5_v;   // stage-valid chain
     reg [65:0] acc;        // channel accumulator (unsigned, < 2^65)
-    reg [59:0] prod_r;     // F3: combined entry product
+    reg [59:0] prod_r;     // F4: combined entry product
 
     // ROM read address: offsets during ST_ROFF, entries during ST_MAC.
     // Single read port for the whole ROM (one address expression).
+    // T35: the offset index must be 7 bits. `ch + 6'd1` is a 6-bit sum, so
+    // for the last channel (ch == 63) it wrapped to 0 and offsets[0] (= 0)
+    // was read as the segment end: channel 63 issued no MAC entry at all and
+    // its log2 came out as log2(0) = -14336 for every frame. The dB stage
+    // clamped both the golden and the broken value to the -80 dB floor, so
+    // the feature bytes hid the defect.
+    wire [6:0]  rom_ch = {1'b0, ch} + ((roff_ph == 2'd0) ? 7'd0 : 7'd1);
     wire [10:0] rom_ra = (state == ST_ROFF)
-                       ? {5'b0, roff_ph == 2'd0 ? ch : ch + 6'd1}
+                       ? {4'b0, rom_ch}
                        : (COO_E_OFF + e_idx[10:0]);
     wire [26:0] rom_q = coo_rom[rom_ra];
 
-    // Power RAM read port (registered, MAC side). The entry bin is
-    // 1..1022 (table-fixed), so the 10-bit slice is an exact address.
+    // Power RAM read port (registered, MAC side). The read address is the
+    // bin of the entry sitting in q_ent during F1, so pwr_q carries that
+    // entry's power on the F2 cycle (T35 pipeline note above).
     wire [9:0] ram_ra = q_ent[25:16];
     reg [47:0] pwr_q;
     always @(posedge clk) begin
         pwr_q <= pwr_ram[ram_ra];
     end
 
-    // Weight sign-extended to the 18-bit APM operand width.
-    wire signed [17:0] w_sext18 = {{2{q_w[15]}}, q_w};
+    // Weight sign-extended to the 18-bit APM operand width (F3 alignment).
+    wire signed [17:0] w_sext18 = {{2{q_w_d[15]}}, q_w_d};
 
-    // MAC F2 steering flag for the shared APM operand mux.
-    wire mac_pipe_f2 = (mac_active || flush_active) && f2_v;
+    // MAC F3 steering flag for the shared APM operand mux.
+    wire mac_pipe_f3 = (mac_active || flush_active) && f3_v;
 
     // Shared APM operand steering (the only always @* driver of the
     // four operand registers; block moved here because it reads the
@@ -380,8 +413,8 @@ module mel_filter #(
             apm_b = {9'b0, re_r[8:0]};
             apm_c = {9'b0, im_r[8:0]};
             apm_d = {9'b0, im_r[8:0]};
-        end else if (mac_pipe_f2) begin
-            // MAC F2: p segments x weight. The 17-bit segments are
+        end else if (mac_pipe_f3) begin
+            // MAC F3: p segments x weight. The 17-bit segments are
             // zero-extended into non-negative signed 18-bit operands.
             apm_a = {1'b0, q_p[42:26]};
             apm_b = w_sext18;
@@ -392,8 +425,8 @@ module mel_filter #(
 
     // CLB shift-add for the 9-bit low segment: p_lo x w (signed 16 x
     // unsigned 9 -> signed 25), the fft2048_sdf mul_lo idiom. Evaluated
-    // during F2 (q_w / q_p stable from the F1 edge) and registered at
-    // the F2 edge, because q_w / q_p are overwritten by the next entry
+    // during F3 (q_w_d / q_p stable from the F2 edge) and registered at
+    // the F3 edge, because q_w_d / q_p are overwritten by the next entry
     // one cycle later (back-to-back streaming, one entry per cycle).
     function signed [24:0] mul_lo9x16;
         input signed [15:0] a;
@@ -409,10 +442,10 @@ module mel_filter #(
         end
     endfunction
 
-    wire signed [24:0] lo_prod = mul_lo9x16(q_w, q_p[8:0]);
-    reg  signed [24:0] lo_r;    // F2-registered lo product (non-negative)
+    wire signed [24:0] lo_prod = mul_lo9x16(q_w_d, q_p[8:0]);
+    reg  signed [24:0] lo_r;    // F3-registered lo product (non-negative)
 
-    // F3 combine: prod = (p_hi*w)<<26 + (p_mid*w)<<9 + p_lo*w.
+    // F4 combine: prod = (p_hi*w)<<26 + (p_mid*w)<<9 + p_lo*w.
     // p_hi/p_mid products are non-negative (p >= 0, w > 0), the APM
     // 36-bit signed containers hold values < 2^32, so the unsigned
     // slices below are exact; lo_r likewise non-negative.
@@ -421,19 +454,24 @@ module mel_filter #(
     wire [59:0] prod_comb = {ya_u, 26'b0}
                           + {27'b0, yc_u, 9'b0}
                           + {35'b0, lo_r};
-    reg  [59:0] prod_r;     // F3: combined entry product
+    // F6 (T26): duplicate declaration of prod_r removed (identical to the
+    // declaration at the top of Stage B; no netlist change).
 
     // -----------------------------------------------------------------
     // Stage B sequencing: MAC pipeline registers + channel accumulator.
     // -----------------------------------------------------------------
     // Pipeline map (one entry per cycle, back-to-back):
     //   F0 (issue): rom_ra = 65 + e_idx, edge latches q_ent, e_idx++.
-    //   F1:         q_ent valid, edge latches q_p (RAM read) and q_w.
-    //   F2:         APM operands steered (mux above), edge latches the
+    //   F1:         q_ent valid, edge latches q_w.
+    //   F2:         pwr_q carries power(bin), edge latches q_p and q_w_d.
+    //   F3:         APM operands steered (mux above), edge latches the
     //               APM products and lo_r.
-    //   F3:         prod_comb combine, edge latches prod_r.
-    //   F4:         acc <= acc + prod_r.
-    // e_idx stops at off_hi; the valid chain drains during ST_FLUSH.
+    //   F4:         prod_comb combine, edge latches prod_r.
+    //   F5:         acc <= acc + prod_r.
+    // e_idx stops at off_hi; the valid chain drains during ST_FLUSH, which
+    // spans fl_cnt 0..4: the last entry occupies F2..F5 on fl_cnt 0..3
+    // (it entered F1 on the ST_MAC -> ST_FLUSH edge), so fl_cnt == 4 is
+    // the clear cycle and carries no f5_v - the two never collide.
     // -----------------------------------------------------------------
     wire f0_issue = mac_active && (e_idx < off_hi);
     wire flush_clear = flush_active && (fl_cnt == 3'd4);
@@ -443,12 +481,14 @@ module mel_filter #(
             q_ent <= 27'd0;
             q_p   <= 48'd0;
             q_w   <= 16'sd0;
+            q_w_d <= 16'sd0;
             lo_r  <= 25'sd0;
             prod_r<= 60'd0;
             f1_v  <= 1'b0;
             f2_v  <= 1'b0;
             f3_v  <= 1'b0;
             f4_v  <= 1'b0;
+            f5_v  <= 1'b0;
             acc   <= 66'd0;
         end else begin
             // F0 -> F1: entry word from the single ROM read port.
@@ -459,30 +499,38 @@ module mel_filter #(
             end
             f1_v <= f0_issue;
 
-            // F1 -> F2: power and weight from the RAM read port.
+            // F1 -> F2: lock the entry weight (q_ent is only guaranteed on
+            // this cycle; the RAM address is combinational from it).
             if (f1_v) begin
-                q_p <= pwr_q;
                 q_w <= q_ent[15:0];
             end
             f2_v <= f1_v;
 
-            // F2 -> F3: CLB lo product (APM results register themselves).
+            // F2 -> F3: the registered RAM read of bin(entry) lands here,
+            // so q_p and the weight copy are aligned with the APMs.
             if (f2_v) begin
-                lo_r <= lo_prod;
+                q_p   <= pwr_q;
+                q_w_d <= q_w;
             end
             f3_v <= f2_v;
 
-            // F3 -> F4: combined entry product.
+            // F3 -> F4: CLB lo product (APM results register themselves).
             if (f3_v) begin
-                prod_r <= prod_comb;
+                lo_r <= lo_prod;
             end
             f4_v <= f3_v;
 
-            // F4: accumulate. The flush_clear cycle is always at least
-            // one cycle after the last F4 (drain proof: ST_FLUSH spans
-            // fl_cnt 0..4 = the five pipeline stages F1..F4 plus one
-            // settle cycle), so the two assignments never collide.
+            // F4 -> F5: combined entry product.
             if (f4_v) begin
+                prod_r <= prod_comb;
+            end
+            f5_v <= f4_v;
+
+            // F5: accumulate. The flush_clear cycle is one cycle after the
+            // last F5 (drain proof: ST_FLUSH spans fl_cnt 0..4 = the five
+            // stages F1..F5 of the last entry plus one settle cycle), so the
+            // two assignments never collide.
+            if (f5_v) begin
                 acc <= acc + prod_r;
             end else if (flush_clear) begin
                 acc <= 66'd0;    // fresh dot product, golden parity

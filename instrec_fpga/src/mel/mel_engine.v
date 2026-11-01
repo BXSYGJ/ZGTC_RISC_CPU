@@ -79,18 +79,29 @@
 //
 // This module therefore paces the PCM feed with a sample credit that is
 // REFILLED ON FFT FRAME COMPLETION:
-//   * window start: credit = 1025 (the framer PH_FILL requirement: head
-//     ram pcm[0..1023] plus the head_extra sample pcm[1024]);
+//   * window start: credit = FILL_CREDIT = 1280 = 5 x 256 (the framer PH_FILL
+//     requirement is 1025 = head ram pcm[0..1023] plus the head_extra sample
+//     pcm[1024], but a read command is all-or-nothing 256 samples, so the
+//     grant must be rounded UP to a whole number of commands);
+//     T26 NOTE: the original value was the bare 1025.  1025 // 256 = 4
+//     commands = 1024 samples, one sample short of PH_FILL, so the framer
+//     could never finish frame 0 and frame_fft_done (the only refill) could
+//     never arrive: the engine deadlocked at exactly 4 read commands
+//     (board STATUS C=4 / D=1024, reproduced cycle-exactly by the
+//     build/sim_mel testbench, see build/mel_resp_model.py);
 //   * every frame_fft_done: credit += 512 (exactly one hop - the next
-//     frame only needs 512 NEW samples; the window overlap comes from
-//     the ring);
+//     frame only needs 512 NEW samples; the window overlap comes from the
+//     ring);
 //   * the PCM reader only issues a 256-sample read command when
 //     credit >= 256, and decrements per fed sample.
+//
 // Induction: after frame t-1 completes, total credit granted is
-// 1025 + t*512, and frame t needs pcm[0 .. t*512+1023] = t*512+1024
-// samples - granted supply always covers demand by exactly 1 sample
-// (the PH_FILL extra). The framer ring guard (pcm_rd_ready) is the
-// second safety net; it only ever pauses the feed, never the frames.
+// 1280 + t*512, and frame t needs pcm[0 .. t*512+1023] = t*512+1024
+// samples - granted supply exceeds demand by 256 samples at every step,
+// and because 1280 and 512 are both multiples of 256 the issue granularity
+// never strands a remainder (this is exactly what 1025 violated). The
+// framer ring guard (pcm_rd_ready) is the second safety net; it only ever
+// pauses the feed, never the frames.
 // Cost: ~600 idle cycles per frame while 2 read commands land (~1.2 ms
 // over 259 frames) - folded into the timing budget below.
 //
@@ -237,7 +248,7 @@ module mel_engine #(
     localparam integer PCM_CMD_SAMPLES = 256;    // 512 B len=15 command
     localparam integer PCM_CMD_COUNT   = 516;    // 132096/256 exact
     localparam [27:0]  PCM_WIN_STRIDE = 28'h0008_4000; // 264 KB ping-pong
-    localparam integer FILL_CREDIT    = 1025;    // PH_FILL requirement
+    localparam integer FILL_CREDIT    = 1280;    // PH_FILL rounded up to 256
     localparam integer HOP_CREDIT     = 512;     // per completed frame
     localparam integer SPEC_ELEMS     = 16512;   // 64 x 258 dB/feat words
     localparam integer SPEC_PHYS_BASE = 64;      // frame-0 head drop
@@ -286,6 +297,7 @@ module mel_engine #(
         .win_start     (win_start_pulse),
         .busy          (fr_busy),
         .all_done      (fr_all_done),
+        .out_ready     (fft_idle),
         .pcm_rd_data   (pcm_feed_data),
         .pcm_rd_valid  (pcm_feed_valid),
         .pcm_rd_ready  (pcm_feed_ready),
@@ -302,6 +314,18 @@ module mel_engine #(
     wire [10:0] bin_idx;
     wire [26:0] bin_re_s27, bin_im_s27;
     wire        frame_fft_done;
+
+    // F5 (T26): the framer may only start a frame while the fft is idle.
+    // Two virtual PH_VRIGHT frames used to be pushed while the fft was still
+    // draining the previous frame; the fft drops frame_start outside ST_IDLE
+    // and both frames were lost (259 exported, 257 accepted, no mel_done).
+    reg fft_busy;
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n)              fft_busy <= 1'b0;
+        else if (frame_fft_done) fft_busy <= 1'b0;
+        else if (fr_frame_start) fft_busy <= 1'b1;
+    end
+    wire fft_idle = !fft_busy;
 
     // One-beat input alignment shim: the framer asserts frame_start
     // ALIGNED with its first win_valid beat (framer header contract),

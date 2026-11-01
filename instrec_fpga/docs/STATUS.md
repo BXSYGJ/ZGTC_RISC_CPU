@@ -1,16 +1,31 @@
 # InstRec-FPGA 当前状态（STATUS）
 
 > 本文件是**唯一实时状态源**，优先于任何交接快照与记忆。每次会话结束前必须更新，
-> 并在 `CHANGELOG.md` 追加一条。最后更新：2026-10-31 11:15。
+> 并在 `CHANGELOG.md` 追加一条。最后更新：2026-11-01 05:50。
+
+## 一句话
+
+**2026-11-01 05:38 — R1 达成：DDR3 已 board-proven。** 精简顶层 `top_core_only`
+（裁掉 UI/HDMI，保留 DDR3+NPU+Mel+权重）布通并两次烧录，串口完整输出
+`INSTREC BOOT` → `DDR3 SELFTEST...` → **`DDROK`** → `DDR3 STS 01`；`board_core_only.json`
+`verdict=PASS`、`expect_missing=[]`、`status_raw=0x081ffca0`、`uart_bytes=48`；
+`DDR3 STS 01` 的低两位 `st_done=1`、无超时位 ⇒ self_test 的 16 段写 + 读回全部通过。
+位流 SHA-256 `D375A43DBA3D5DB68285CDBA3C5158413379510EA53D29EA8BAEC17F4C4E18A8`。
+该位流的 `APM=0` 是常量传播把 NPU/Mel 删掉的取舍结果，**只能证 DDR3，不能证 NPU/Mel**；
+正在恢复音频前端后重出。`DDR3 PHY` 专用硬核确在网表（`DDR_PHY 7/24`、`PPLL 2/6`、
+`TSERDES 14/48`），`DRM=0` 与 PHY 无关（DRM 是通用分布式 RAM）。
 
 ## 一句话
 
 InstRec 8 类乐器识别（INT8 CNN）正在移植到盘古 100Pro+（PG2L100H-6IFBG676）纯 FPGA 管线。
-**四个位流逐层加回全部布通（m3a→m3b→m3c→m3d），m3d 是功能齐全的全功能版**：
-音频→DDR3→Mel→NPU 全链→概率条+波形+文字+谱图四层 UI，LUT 34327（52%）、DRM 86、
-`pix_clk` 转正 +0.018、`ddrphy_sysclk` -0.966。板级已跑到「配置成功 + 串口可读」。
-**唯一阻塞：DDR3 自检超时 `DDR3 ERR @FFFFFFFF`（不是回归，m2c 同样失败），
-导致 NPU 拿不到权重、识别链路无法闭环。接手先看 `docs/HANDOFF_SNAPSHOT_20261031.md`。**
+**全功能位流 m3d（音频→DDR3→Mel→NPU 全链→概率条+波形+文字+谱图四层 UI）已布通归档**：
+LUT 34327（52%）、DRM 86、`pix_clk` +0.018、`ddrphy_sysclk` -0.966。
+**`DDR3 ERR @FFFFFFFF` 的阻塞已在 2026-10-31 解除**：根因是 `self_test` 的 `done` 端口从未被
+使用（AXI watchdog abort 后永久卡在 `ST_WDATA`），已修；`ddr3_diag` 诊断位流实测
+**design 配置（`AXI_USER_AP=1` / masked strobe）PASS，16-beat 真实写/读通路首次被真正激励**。
+全量侧接线与参数已逐项核对等价于 design 配置，**T10 全量构建进行中，尚未产出位流**。
+接手先看 `docs/HANDOFF_SNAPSHOT_20261031.md`，再读本文「当前状态」最新一节与
+`reports/ddr3_diag_conclusion.md`（第 10 节为第二轮结论）。
 
 ## 里程碑
 
@@ -19,14 +34,112 @@ InstRec 8 类乐器识别（INT8 CNN）正在移植到盘古 100Pro+（PG2L100H-
 | P0 工具链 + Python 金标准 | 完成 | `pytest -q` **280 passed / 4 skipped**；`golden_pipeline.py` 位级真值 |
 | M0 I2S→DDR3→HDMI 波形 | 完成（未上板） | run `20261027-000612-a71f1451`，sha256 `C517736C…`，WNS +1.757 |
 | M1 Mel 特征引擎 | 构建完成、时序收敛、待板级对拍 | run `20261027-121101-5c24a968`，sha256 `BD40D10A…`，WNS +1.438 |
-| M2 INT8 NPU | 全链布通、已上板，**权重通路被 DDR3 自检阻塞** | m2/m2b/m2c/m3a 四版归档；`ddrphy_sysclk` -0.966（最差在 DDR3 IP 内部） |
-| M3 UI 集成 | **完成：四层 UI 全部在 m3d 位流中** | 概率条 + 波形 + 类别文字 + 谱图；`pix_clk` +0.018 |
-| 全功能位流 | **m3d 布通归档** | `releases/m3d-20261031/`，sha256 `0B2BE8D4…`，LUT 52% / DRM 56% |
-| 板级端到端 | **串口可读（3 行正确），卡在 `DDR3 ERR @FFFFFFFF`** | `done=1`/`crc_err=0`；m2c 同样 ERR → 非回归 |
+| M2 INT8 NPU | 全链布通、已上板；**DDR3 真实读写通路已由诊断位流验证 PASS** | m2/m2b/m2c/m3a 四版归档；`ddr3_diag` design 配置 `result_a=PASS`（`F749A417…`）；m3d `ddrphy_sysclk` -0.966（最差在 DDR3 IP 内部） |
+| M3 UI 集成 | **完成：四层 UI 全部在 m3d 位流中**，并已从 DDR3 解耦出独立演示顶层（待上板） | 概率条 + 波形 + 类别文字 + 谱图；`pix_clk` +0.018；`top_ui_demo` 已就绪，UI 位流排在 T10 之后 |
+| 全功能位流 | **m3d 布通归档**；**新一轮全量（T10）构建进行中，尚无位流** | `releases/m3d-20261031/`，sha256 `0B2BE8D4…`，LUT 52% / DRM 56% |
+| 板级端到端 | **DDR3 自检阻塞已解除（诊断位流证据）；全量 `DDROK` / `WOK` 待 T11** | 诊断两轮：首轮两 cfg TIMEOUT（端点接错）→ 修复后 design PASS（A/B/C/D=16/136/16/128） |
 
 ## 当前状态
 
-### 2026-10-29 夜间：M3 接线恢复 + 板级编排/判据补齐（本轮最新）
+### 2026-10-31 13:56：DDR3 阻塞根因解除（诊断位流两轮）+ T10 全量构建进行中（本轮最新）
+
+> 证据全在 `reports/ddr3_diag_conclusion.md`（**第 10 节是第二轮结论**）、
+> `reports/board_ddr3diag_20261031T053011Z.json`（首轮）、
+> `reports/board_ddr3diag2_20261031T054946Z.json`（修复后）。两条 `verdict` 均为 `PASS`，
+> `expect_missing=[]`、`jtagserver_pids=[9040]`（全程复用，未新开、未 terminate）。
+
+#### 一、根因与修复（`self_test.done` 端口从未被使用）
+
+- **现象**：`DDR3 ERR @FFFFFFFF` 是 `sys_ctrl` 的 100 ms 看门狗分支，不是地址错。
+- **根因**：`self_test` 的 FSM **从未监听 `done`**。AXI watchdog abort 后 `ddr3_ctrl_axi`
+  不再推进，`self_test` 就**永久卡在 `ST_WDATA`** 等一个永远不来的 `wready_beat`，
+  最后由顶层看门狗判超时。
+- **修复**（`src/ctrl/self_test.v`，**端口不变**，只改 FSM）：
+  1. 写阶段改为 `if (wready_beat) … else if (done)` —— `wready_beat` **必须先判**：
+     正常完成时 `done` 与**第 16 拍 `wready_beat` 同拍**拉起，先判 `done` 会丢掉末拍数据；
+  2. 读阶段用**延迟 1 拍的 `done_q`**，且 `rd_valid` 先于 `done_q` 判定；
+  3. `cmd_valid` 改为**电平 hold 到 `done`**（F1/F3），只在真正完成时清零。
+- 判据：`tests/test_self_test_model.py`（14 项）把三类向量（正常完成 / abort 后 done /
+  读通路 done）锁死；`tests/test_plan_contract_guards.py` 防止端口与下标再漂移。
+
+#### 二、诊断方法论（本轮最大收获）
+
+把 PDS 流水**参数化成构建集**，让「一次上板同时回答两个问题」成为常规手段：
+
+- `scripts/build_sets.json` 定义 `full` / `ddr3_diag` / `ui_demo` 三套（top module、设计源、
+  IP、约束、hex 复制目录各自独立）；
+- `scripts/build_full.tcl` token 化（**8 个 token**，含 `__TOP_MODULE__` / `__DESIGN_FILES__` /
+  `__IP_FILES__` / `__CONSTRAINT_FILES__` / `__HEX_COPY_BLOCK__`），六阶段逻辑未改写；
+- `scripts/run_pds_full.ps1` 新增 `-BuildSet` / `-DryRun`（dry-run 只打印展开结果，不启动 PDS）。
+- `ddr3_diag` 是**最小诊断位流**：7 个设计源 + 1 个 IDF + 2 个约束，资源 LUT 4954（7%），
+  离 53.6% 布线临界点极远，因此构建快。
+- **实测成本（务必记住）**：`ddr3_diag` 单轮 **4 m 37 s ~ 5 m 13 s**；全量 `full` **约 1.5 h**。
+- 一套位流内**同时例化两份不同 AXI bring-up 参数的 `ddr3_ctrl_axi`**：
+  `u_ctrl_design`（`AXI_USER_AP=1`、`DUMMY_WSTRB_ALL1=0`，masked strobe）与
+  `u_ctrl_demo`（`AXI_USER_AP=0`、`DUMMY_WSTRB_ALL1=1`，all-1 strobe），
+  外围 12 条 mux 在轮次间切换 ⇒ **一次上板拿到两套配置的独立结论**，不用两次构建两块板。
+- 诊断帧经 `src/diag/diag_uart_report.v` 输出：**91 字节固定 ASCII 帧、显式 case 表、
+  无字符串字面量**（规避 PDS 字符串字节序不可预测的老坑），
+  `scripts/diag_frames.py` 负责 `parse_frame`/`parse_all` 与位段解码。
+
+#### 三、两轮板级结果
+
+| 轮次 | 位流 SHA-256（前 8） | 配置 | `result` | A `aw_hit` | B `wready` | C `done[3]` | D `rvalid` | `wlast_miss` | `to_err` |
+|---|---|---|---|---|---|---|---|---|---|
+| 首轮（D-01 未修） | `82095667` | design | **TIMEOUT** | 250 778 | 250 778 | **0** | 250 777 | 0 | 0 |
+| 首轮（D-01 未修） | `82095667` | demo | **TIMEOUT** | 261 369 | 261 369 | **0** | 261 369 | 0 | 0 |
+| **第二轮（修复后）** | **`F749A417`** | **design** | **PASS(1)** | **16** | **136** | **16** | **128** | **8** | **0** |
+| 第二轮（修复后） | `F749A417` | demo | **FAIL(2)** | 9 | 129 | 8 | 3 | 8 | 0 |
+
+- **首轮**：两套 cfg 均 TIMEOUT，特征 **`A==B==D≈25 万、C(done_cnt)=0`**。根因是
+  `src/diag/top_ddr3_diag.v` 的 `st_cmd_valid` 写成 `{3'b000, st_cv}`（`self_test` 挂到
+  **master 0**），而 `done`/`wready_beat`/`rd_valid` 全取 `[3]` ⇒ 控制器一直在跑
+  m0 的 `cmd=0` 空读（读前 dummy-write 恰好 1 拍，故 `A==B==D`）。**该缺陷只存在于诊断顶层**；
+  契约 `plan.md §2.2.4` 的示例代码本身也写错（注释说 master 3，代码却是 bit0），**已修正**。
+- **第二轮**：`result_a`（design）= **PASS**，`A/B/C/D = 16/136/16/128`、`wlast_miss_cnt=8`、
+  `to_err=0`、`st_fail_addr=0`。逐项自洽：`A=16`=8 写 AW + 8 读 dummy-write AW；
+  `B=136`=8×16 写拍 + 8 次 dummy 拍；`C=16`=8 写 done + 8 读 done；`D=128`=8×16 读拍；
+  `wlast_miss=8`=`S_WLAST` epilogue 首次被进入 8 次。**16-beat 真实写/读通路首次被真正激励。**
+- `result_b`（demo）= FAIL 属**预期代价**：`DUMMY_WSTRB_ALL1=1` 的 dummy-write 用全 1 strobe
+  覆写被读区域首拍（`F=0x0030_0000` = 首条读命令），与 design PASS 不矛盾，反而互相印证
+  **masked strobe 才是正确策略**。
+- `wlast_miss_cnt=8` 只是观察项：它不参与完成判定
+  （`write_cmpl = (state==S_W) && axi_wready && beat_cnt==cur_len`），无功能影响；修它要动
+  `ddr3_ctrl_axi` 时序，**T10 不动**。
+
+#### 四、对全量 `instrec_top` 的含义
+
+`src/ctrl/instrec_top.v:638` 的 m3 拼接本就在 **bit3**（`{st_cmd_valid, …}`），
+`ddr3_ctrl_axi` 例化**无参数覆盖**即默认 design 配置（`AXI_USER_AP=1`/masked strobe）。
+⇒ **T10 全量收敛预期 0 行 RTL 改动**，diff 只应包含 T2 交付的 `src/ctrl/self_test.v`。
+但**仍不能据此宣称全量会 `DDROK`**：全量走的是 m0/m1/m2/m3 四口仲裁 + 真实权重写，
+必须由 T10 位流 + T11 板级实测确认。
+
+#### 五、UI 通路已从 DDR3 解耦（尚未上板）
+
+- 新增 `src/diag/top_ui_demo.v` 小顶层：HDMI + `ui_renderer` 四层全接通 + pix 域统计计数器
+  （`hdmi_init_over` / `de_nonzero_cnt` / `bars_on` / `text_on` / `spec_on` 等）+ 诊断帧。
+- 新增片内假数据源 `src/ui/demo_wave_source.v`、`src/ui/demo_spec_source.v`
+  （不依赖 DDR3 / Mel / NPU）。
+- 新增 `constraints/top_ui_demo.fdc`：**42 个引脚与 `instrec_top.fdc` 逐项一致**。
+- UI 位流构建（`-BuildSet ui_demo`）**排在 T10 之后**（唯一 `pds_shell` 串行），代码已就绪但
+  **未构建、未上板**。
+
+#### 六、T10 状态
+
+**进行中（2026-10-31 13:52 启动，纯 `pnr`，预期约 1.5 h），尚未产出位流。**
+`build/instrec-latest.{sbit,json}` 仍是 2026-10-31 10:46 的 m3d 产物（3 791 112 B / 2393 B），
+**未被覆盖**。判读以 `build/pds/<最新时间戳>/`、`build/instrec-latest.json` 的 `Wns`
+与 `reports/full_build_conclusion.md` 为准，**不要**把本文件当成「全量已成功」。
+
+#### 七、已知限制（照实记录）
+
+- 本机**无 Verilog 仿真器**（WSL 不可用，Ubuntu vhdx 缺失），所有时序正确性只能靠
+  **Python 周期模型 + 源码静态断言**（`tests/*_model.py`）+ 板级实测，没有波形级证据。
+- **UI 画面内容无法脚本化判读**（无摄像头）：只能以 `hdmi_init_over`、`de_nonzero_cnt`、
+  各层 `*_on` 计数 + `pix_clk` 域 WNS 作为证据，不能证明画出来的内容"好看/正确"。
+
+### 2026-10-29 夜间：M3 接线恢复 + 板级编排/判据补齐
 
 - **M3 五个模块接线已恢复**（提交 `92d0531`）：`text_disp` / `feat_copy_engine` /
   `feat_page_buf` / `spectrum_disp` / `ui_coord_delay` 重新例化，`ui_renderer` 的
@@ -93,7 +206,7 @@ InstRec 8 类乐器识别（INT8 CNN）正在移植到盘古 100Pro+（PG2L100H-
     篡改单元素只影响该层并报 `max_abs_delta`；形状不符必须抛错。
   - `test_board_e2e_order.py`(5)：阶段顺序、首败即停、单独 stage 不触发烧录。
 
-### 2026-10-29 傍晚：FTDI 掉线根因彻底修复 + 首次上板（本轮最新，最高优先）
+### 2026-10-29 傍晚：FTDI 掉线根因彻底修复 + 首次上板
 
 **根因（确定，不是推测）**：`scripts/board_check.py` 的 `run_tcl()` 在日志里一出现
 `PROGRAM FLOW DONE` 就调用 `proc.terminate()`。但该横幅是 TCL 里 `puts` 打出来的，
@@ -141,7 +254,7 @@ InstRec 8 类乐器识别（INT8 CNN）正在移植到盘古 100Pro+（PG2L100H-
 在 `conv MAC(-3.593)` → `requant 乘法(-1.106)` → `wdma 远距离 FF(-2.144)` 之间随布局漂移，
 WNS 稳定落在 -1~-3 ns 区间；按「能跑就行」口径不再逐轮追。
 
-### 2026-10-29 上午：全 NPU 系统首次布线收敛（本轮最新）
+### 2026-10-29 上午：全 NPU 系统首次布线收敛
 
 - run `20261029-110719-01d91e40`：compile→gen_bit_stream 六阶段 OK，48m22s，
   位流 sha256 `E793A792B72437BEADC77B15CADF7EC5253CFEE63BE2FC72A051486C0B8C23F2`，
@@ -458,42 +571,70 @@ APM 90（37.50%），离器件上限很远；而且同一资源量的 `m2c`（35
 
 ## 下一步（按序）
 
-1. **烧 UART 修复版（构建 `20261029-191053`）**：`python scripts/board_check.py
-   --sbit build/instrec-latest.sbit --seconds 15`，确认串口出现完整可读的
-   `INSTREC BOOT` / `PLL LOCK` / `DDR3 SELFTEST...` / `DDROK` / `RUN`。
-   判据：字符数与 ROM 行长度一致（13/17/6/4），不再是 1/3。
-2. **权重上传**：`python scripts/weight_upload.py`（`WOK`），再开逐层对拍
-   `compare_layers.py` 对 `reports/golden_ref/`，定位第一处不一致的层。
-3. **恢复 M3 谱图/文字层**：`text_disp`/`spectrum_disp`/`feat_copy_engine`/`feat_page_buf`/
-   `ui_coord_delay` 在 `instrec_top` 中仍是注释块（残留裸 `;`），恢复后复核 `pix_clk`
-   （m2c 为 -0.061，恢复后需重读）。
-4. **core 域**：目前最差路径是 wdma 的 FF→FF 远距离（走线 91.7%），插流水无效；
-   若要继续压缩，只能做布局/区域约束或降低该段拥塞，优先级低于功能验证。
+1. **T10 全量构建出结果**：读 `build/instrec-latest.json`（`Wns`）与
+   `report_timing/*.rtr` 的 `Design Summary`，**逐时钟域**判布通与时序
+   （`ddrphy_sysclk` / `pix_clk` / `clk_nco` / `cfg_clk`）；归档 `releases/m4-<date>/`，
+   写 `reports/full_build_conclusion.md`。全量位流**尚未产出**，不要预判成功。
+2. **T11 板级端到端**：`board_e2e.py --sbit build/instrec-latest.sbit`，判据 token 用
+   `"INSTREC BOOT"` / `"DDR3 SELFTEST"` / `"DDROK"`（**不要用 `"RUN"`**：`uart_debug.v` 定义了该行，
+   但 `sys_ctrl` 从不置 `dbg_line_id=5`，`--expect "RUN"` 永不命中，会得到 exit 5）
+   → `weight_upload.py` 拿到 `WOK`（m1 真实 16-beat 写）→ 有真实 I2S 输入时用
+   `compare_layers.py` 逐层对拍，定位第一处不一致的层。
+   **注意**：RTL 目前没有逐层 UART 导出（顶层只有 weight/debug 复用 TX），故逐层对拍现阶段
+   只能标 `DEFERRED`；注意默认 golden feat 是 int8 全零静音，须显式 `--golden-feat` 指向
+   `reports/golden_ref/sine_440_full/feat.npy`。详见 `reports/e2e_runbook.md`。
+3. **T9 UI 独立位流上板验证 M3**：`run_pds_full.ps1 -BuildSet ui_demo` →
+   `board_check.py --expect "UIDEMO"`，判 `hdmi_init_over`/`de_nonzero_cnt`/各层 `*_on`
+   与 `pix_clk` 域 WNS。**必须等 T10 的 `pds_shell` 退出后再启动**（一次只能一个）。
+4. **若 T10 布不通**：按「一层一轮」回退（先撤 UI 层，再撤 NPU 层），每次只改一个变量，
+   布通并归档后才继续。判死解看 detail routing 未布网络是否回升/振荡，不要等满时间。
+5. **core 域时序（可选，低优先）**：`ddrphy_sysclk` 最差路径多在 DDR3 IP 内部
+   （`ddrphy_reset_ctrl` / `ddrphy_data_slice_wrlvl`），用户逻辑改不动，只能靠布局；
+   按「能跑就行」口径可暂放。
+
+## 验证入口（本轮新增，改动前必跑）
+
+```powershell
+python scripts/check_rtl.py     # 49 个 .v，0 violation
+python -m pytest -q             # 398 passed / 4 skipped，约 67 s
+```
+
+- **跨边界契约护栏** `tests/test_plan_contract_guards.py`（8 条）：防 model / RTL / 脚本三方漂移，
+  已做变异敏感性验证（改错一处必红）。
+- **周期级模型**：`tests/ddr3_ctrl_model.py`（DDR3 控制器/仲裁，24 项）、
+  `tests/test_self_test_model.py`（14 项）、`tests/test_diag_uart_report.py`（26 项）、
+  `tests/test_build_tokens.py`（24 项）、`tests/test_board_check_expect.py`（22 项）。
+- **板级证据文件**：`board_check.py` 新增 `--json <path>`（UTF-8 无 BOM 证据记录）与
+  **退出码 5**（`--expect` 未全部命中）；`--json` 在早期硬件检查失败时也会落盘。
 
 ## 验证基线
 
-- `python -m pytest -q` → **239 passed / 4 skipped**（约 69 s）。
-- `python scripts/check_rtl.py` → **44 个 .v，0 violation**（hdmi demo 默认排除）。
+- `python -m pytest -q` → **398 passed / 4 skipped**（约 67 s，实测 66.91 s）。
+- `python scripts/check_rtl.py` → **49 个 .v，0 violation**（hdmi demo 默认排除）。
+- 构建集成本实测：`ddr3_diag` 单轮 **4 m 37 s ~ 5 m 13 s**；全量 `full` **约 1.5 h**
+  （compile→gen_bit_stream，纯 `pnr`，单线程）。
 - 烧录安全：`tests/test_board_flash_safety.py`（14 项）锁死「TCL 必须以 exit 收尾、
   禁止 terminate/kill cdt_*、必须复用已运行 jtagserver」；
   `tests/test_uart_debug_handshake.py`（3 项）用周期模型锁死 uart_debug↔uart_tx 握手。
 - 数值对拍只认 `scripts/golden_pipeline.py`；torch 2.14.1 的 oneDNN 有 21~67 LSB tile 噪声。
-- 本机无 WSL 仿真（Ubuntu 发行版 vhdx 缺失），RTL 行为只能靠 Python 对拍 + 板级实测。
-- 全 NPU 构建耗时：compile→gen_bit_stream 约 48 分钟（单线程，`-fast_router`）。
+- 本机无 WSL 仿真（Ubuntu 发行版 vhdx 缺失），RTL 行为只能靠 Python 周期模型 + 板级实测。
+- 全 NPU 构建耗时：compile→gen_bit_stream 约 48 分钟（单线程，`-fast_router`；历史数据）。
 
 ## 资产位置
 
 | 类别 | 路径 |
 |---|---|
-| RTL | `src/{audio,ddr3,mel,npu,ui,ctrl,ip,hdmi}/*.v` |
-| 顶层 | `src/ctrl/instrec_top.v`（mel_engine 接 DDR3 m2 口） |
-| 约束 | `constraints/instrec_top.fdc`、`ddr3_100h.fdc`、`clock_groups_async.fdc`（顺序敏感） |
+| RTL | `src/{audio,ddr3,mel,npu,ui,ctrl,ip,hdmi}/*.v`、`src/diag/*.v`（诊断/UI 小顶层） |
+| 顶层 | `src/ctrl/instrec_top.v`（mel_engine 接 DDR3 m2 口）；`src/diag/top_ddr3_diag.v`、`src/diag/top_ui_demo.v`（诊断专用） |
+| 约束 | `constraints/instrec_top.fdc`、`ddr3_100h.fdc`、`clock_groups_async.fdc`（顺序敏感）；`constraints/top_ddr3_diag.fdc`、`constraints/top_ui_demo.fdc` |
+| 构建集 | `scripts/build_sets.json`（full / ddr3_diag / ui_demo）+ `scripts/build_full.tcl`（8 token）+ `run_pds_full.ps1 -BuildSet/-DryRun` |
 | IP | `ipcore/{ddr3_test,pll,pll_audio}/`（重建必需，已入库） |
 | 数值真源 | `scripts/outputs/layer_contract.json`、`weights_image.bin`、`mel_tables.*` |
 | 金标准 | `scripts/golden_pipeline.py` + `scripts/outputs/golden/*.npy` |
 | SDD | `docs/sdd/{spec,design,tasks}.md`（从 `.codeartsdoer` 复制的可交接副本） |
 | 证据 | `reports/m0-manifest-20261027.json`、`reports/m1-timing-20261027-104218.txt`（修复前时序） |
-| 位流归档 | `releases/m{0,1}-2026102{7}/`、`releases/m2{,b,c}-20261029/`（sbit + manifest + SHA256SUMS + 时序报告） |
+| DDR3 诊断证据 | `reports/ddr3_diag_conclusion.md`（两轮全文）、`reports/board_ddr3diag_20261031T053011Z.json`（首轮）、`reports/board_ddr3diag2_20261031T054946Z.json`（修复后） |
+| 位流归档 | `releases/m{0,1}-2026102{7}/`、`releases/m2{,b,c}-20261029/`、`releases/m2d-20261030/`、`releases/m3{a,b,c,d}-20261031/`（sbit + manifest + SHA256SUMS + 时序报告） |
 | 交接 | **`docs/HANDOFF_SNAPSHOT_20261031.md`（最新，换人第一入口）** + `docs/HANDOFF_SNAPSHOT_20261027.md`（背景）+ 本文件 |
 | Agent 规则 | 仓库根 `AGENTS.md` |
 

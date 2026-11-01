@@ -3,6 +3,78 @@
 > 每次会话结束前追加一条：时间、做了什么、结论、证据路径。倒序，最新在上。
 > 状态汇总见 `docs/STATUS.md`。
 
+## 2026-11-01 07:45 — R1 达成（DDR3 board-proven）；全模块仿真闭环；多 master AW 污染根因定位
+
+**R1 达成（board-proven）**：精简顶层 `top_core_only` 布通并两次烧录，串口
+`INSTREC BOOT` → `DDR3 SELFTEST...` → **`DDROK`** → `DDR3 STS 01`；`board_core_only.json`
+`verdict=PASS`、`expect_missing=[]`、`status_raw=0x081ffca0`。位流 SHA-256
+`d375a43d…4c4e18a8`，归档 `releases/m5-ddrok-20261101/`（含 SHA256SUMS 与 README）。
+`STS 01` 低两位 `st_done=1`、无超时位 ⇒ self_test 的 16 段写 + 读回全部通过。
+
+**全模块 Verilator 仿真闭环**（`sim/run_sim.py`，全套 44 s，替代 15 min/轮的构建+烧板）：
+conv1~conv4 与 golden 逐值全对（658,432 字节）；Mel 全链 `feat 16512 mismatch 0`；
+`gap→fc1→fc2→softmax` bit-exact；`ui_render` PASS；DDR3 子系统 15/15 PASS；
+`weight_loader` 修好 `S_TX` 与 `uart_tx` 相位不匹配（每隔一个字符丢一个，
+`WOK 42851062` 曾退化成 `WK4816`）——这是板级 `WOK` 零回复的真因，与 DDR3 无关。
+
+**9 个真 RTL 缺陷已修**：位宽截断 4 例（`WIN_FRAMES` 17→18、`DB_NUM_S` 10→11、
+`sq_lo_sum` 19→20、COO offset `ch+6'd1` 6 位溢出）、contract 6 位基址、ROM/tap 滞后 2 拍、
+tap 只 2 bank、`requant_unit` 的 `shift_q` 只锁存到 S1、`conv_engine` drain 跨 contract
+promote、`weight_loader` 串口相位。不修这些，此前所有板级结论都不可沿用。
+
+**多 master 并发是新缺口**：接通 audio/mel 的 core_only（APM 89、LUT 32615）板级
+`DDROK` FAIL、`DDR3 STS 26`。修正判读：`STS 26` 的 `cmd_to_err[3]=0` 与「m3 自身超时」
+互斥，实际是某个非 m3 写 master 在 S_AW 超时 + m3 数据比较失败；根因是 **IP 侧写通道
+污染**（一次写数据阶段被中止后未完成写突发永不闭合，之后所有 AW 永久被拒；仿真 A1 实测
+13103 拍内 `awready` 一次都没出现）。仲裁不是瓶颈（m3 排队仅 5 拍）。
+见 `reports/multi_master_aw_timeout.md`。
+
+**观测位段改进**：`DDR3 STS` 字节改为 `{cmd_to_err[3:0], to_err, dbg_to_state}`，
+暴露每个 master 的超时位——若早这样，本轮就不会把 m0 的超时误判成 m3 的。
+
+**全量布通结论**：LUT 34960（52.49%）停滞（未布数 4400~4600 震荡 6.7 小时，
+证据 `build/stall_evidence/`）；裁 UI 后 LUT 32615（49.1%）一次布通，只差 1.9 个百分点
+即从永久停滞回到可行解 ⇒ 该器件是「余量为零」而非资源不足。`DRM=0` 曾被误读为 PHY
+缺失，实为通用分布式 RAM；DDR3 PHY 走专用硬核（`DDR_PHY 7/24`、`PPLL 2/6`、`TSERDES 14/48`）。
+
+## 2026-10-31 13:56 — DDR3 阻塞解除：两轮诊断位流定位并修复 `self_test` 端点错挂，design 配置 PASS；T10 全量构建进行中
+
+**根因（已修）**：`src/ctrl/self_test.v` 的 `done` 端口**从未被使用**——AXI watchdog abort 后
+`ddr3_ctrl_axi` 不再推进，`self_test` 就永久卡在 `ST_WDATA`，100 ms 后由 `sys_ctrl` 报
+`DDR3 ERR @FFFFFFFF`。修复（端口不变，只改 FSM）：写阶段 `if (wready_beat) … else if (done)`
+（正常完成时 `done` 与第 16 拍 `wready_beat` 同拍，必须先判 `wready_beat`）；读阶段用延迟 1 拍的
+`done_q` 且 `rd_valid` 先判；`cmd_valid` 改为电平 hold 到 `done`。判据 `test_self_test_model.py`(14)。
+
+**方法论（本轮最大收获）**：PDS 流水参数化为构建集——`scripts/build_sets.json`（full / ddr3_diag /
+ui_demo）、`build_full.tcl` 8 token、`run_pds_full.ps1 -BuildSet/-DryRun`。新增 `ddr3_diag` 最小诊断
+位流（7 源 + 1 IDF + 2 约束），**单轮实测 4 m 37 s ~ 5 m 13 s，全量约 1.5 h**。一套位流内同时例化
+两份不同 AXI bring-up 参数的 `ddr3_ctrl_axi`（`AXI_USER_AP=1`/masked strobe 与 `AXI_USER_AP=0`/
+all-1 strobe）+ 12 条 mux，**一次上板拿到两套配置的独立结论**；帧经 `diag_uart_report`（91 字节
+固定 ASCII、显式 case 表）走 UART，`scripts/diag_frames.py` 解析。
+
+**两轮板级**：① 首轮（D-01 未修）两套 cfg 均 TIMEOUT，`A==B==D≈25 万、C(done_cnt)=0`，根因是
+`top_ddr3_diag.v` 的 `st_cmd_valid = {3'b000, st_cv}` 把 `self_test` 挂到 master 0，而
+`done/wready/rd_valid` 全取 `[3]` ⇒ 控制器一直跑 m0 的 `cmd=0` 空读；契约 `plan.md §2.2.4` 的示例
+本身写错，**已修正**。② 第二轮 `result_a`（design）**PASS**，`A/B/C/D = 16/136/16/128`、
+`wlast_miss_cnt=8`、`to_err=0`；`result_b` FAIL 属预期代价（全 1 strobe 的 dummy-write 覆写读区首拍）。
+位流 SHA-256 `F749A41768C31AE57AFC2ACE0B1C075CB35110056BB6A863408B5CFF2402266F`，WNS +4.405、
+LUT 4954（7%）。**16-beat 真实写/读通路首次被真正激励**。全量 `instrec_top.v:638` 的 m3 本就在 bit3、
+`ddr3_ctrl_axi` 用默认参数即 design 配置 ⇒ **T10 预期 0 行 RTL 改动**。
+
+**新增验证资产**：`check_rtl.py` 49 个 `.v` / 0 violation；`pytest -q` **398 passed / 4 skipped**；
+`tests/test_plan_contract_guards.py`(8，跨 model/RTL/脚本契约护栏，已做变异敏感性验证)；
+`tests/ddr3_ctrl_model.py`(24)、`test_self_test_model.py`(14)、`test_diag_uart_report.py`(26)、
+`test_build_tokens.py`(24)、`test_board_check_expect.py`(22)；
+`board_check.py` 新增 `--json` 证据文件与退出码 5（`--expect` 未命中）。
+
+**UI 解耦**：新增 `top_ui_demo` 小顶层 + `demo_wave_source`/`demo_spec_source` 片内假数据源 +
+`top_ui_demo.fdc`（42 引脚与 `instrec_top.fdc` 逐项一致），UI 位流（`-BuildSet ui_demo`）排在 T10 之后，
+**尚未构建、未上板**。
+
+**T10 状态**：全量构建**进行中**（纯 `pnr`，约 1.5 h），**全量位流尚未产出**；
+`build/instrec-latest.{sbit,json}` 仍为 10:46 的 m3d 产物。已知限制：本机无 Verilog 仿真器，
+时序正确性靠 Python 周期模型 + 静态断言；UI 画面内容无法脚本化判读（无摄像头）。
+
 ## 2026-10-31 11:15 — 全功能位流 m3d 布通 + 板级首次可读启动日志 + DDR3 自检阻塞
 
 **软件侧完成**：按「一层一轮」把功能逐层加回，四版全部布通并按能力递增归档：

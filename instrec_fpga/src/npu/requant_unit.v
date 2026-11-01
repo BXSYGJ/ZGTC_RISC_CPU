@@ -96,6 +96,9 @@ module requant_unit (
     reg        [31:0] p00_q;    // S1: a0*b0 (both unsigned)
     reg        [6:0]  shift_q;  // S1: latched shift amount
     reg        [7:0]  zp_q;     // S1: latched output zero point
+    reg        [6:0]  shift_q2; // S2: shift aligned with prod_q  (T25 FIX)
+    reg        [7:0]  zp_q2;    // S2: zp aligned with prod_q
+    reg        [7:0]  zp_q3;    // S3: zp aligned with rhe_q
     reg               v1_q;     // S1 valid
 
     reg signed [63:0] prod_q;   // S2: acc * M, exact in s64
@@ -132,17 +135,17 @@ module requant_unit (
     // round_half_even_shift(). shift == 0 guard: q0 passes prod through
     // and inc is forced to 0 (identity; golden itself requires k >= 1).
     // -----------------------------------------------------------------------
-    wire shift_zero = (shift_q == 7'd0);
+    wire shift_zero = (shift_q2 == 7'd0);
 
     // q0 = floor(prod / 2^shift): arithmetic barrel shift
-    wire signed [63:0] q0 = shift_zero ? prod_q : (prod_q >>> shift_q);
+    wire signed [63:0] q0 = shift_zero ? prod_q : (prod_q >>> shift_q2);
 
     // rem = prod & (2^shift - 1): low shift bits, unsigned 0..2^shift-1
-    wire [63:0] rem_mask = ~(~64'd0 << shift_q);
+    wire [63:0] rem_mask = ~(~64'd0 << shift_q2);
     wire [63:0] rem      = prod_q & rem_mask;
 
     // half = 2^(shift-1): one-hot barrel shift (tie donor bit)
-    wire [63:0] half     = 64'd1 << (shift_q - 7'd1);
+    wire [63:0] half     = 64'd1 << (shift_q2 - 7'd1);
 
     // three-way compare via a single 64-bit subtract:
     //   rem - half -> borrow = rem < half, zero = rem == half
@@ -163,7 +166,7 @@ module requant_unit (
     // (golden: np.clip(round_half_even(...) + zp_out, 0, 255))
     // -----------------------------------------------------------------------
     wire signed [64:0] y_sum  = {rhe_q[63], rhe_q} +
-                                $signed({{57{1'b0}}, zp_q});
+                                $signed({{57{1'b0}}, zp_q3});
 
     wire y_lt0   = y_sum[64];                       // negative rail
     wire y_gt255 = (~y_sum[64]) & (|y_sum[62:8]);   // >= 256 upper rail
@@ -183,6 +186,9 @@ module requant_unit (
             p00_q     <= 32'd0;
             shift_q   <= 7'd0;
             zp_q      <= 8'd0;
+            shift_q2  <= 7'd0;
+            zp_q2     <= 8'd0;
+            zp_q3     <= 8'd0;
             v1_q      <= 1'b0;
             prod_q    <= 64'sd0;
             v2_q      <= 1'b0;
@@ -199,8 +205,13 @@ module requant_unit (
             shift_q <= shift;
             zp_q    <= zp_out;
             v1_q    <= in_valid;
-            // S2: multiply
+            // S2: multiply + carry the requant parameters one stage so
+            // they stay aligned with prod_q (T25 FIX: without this the
+            // S3 barrel shifter used the NEXT channel's shift)
             prod_q  <= prod_c;
+            shift_q2 <= shift_q;
+            zp_q2   <= zp_q;
+            zp_q3   <= zp_q2;
             v2_q    <= v1_q;
             // S3: round-half-even shift
             rhe_q   <= rhe_c;
