@@ -753,4 +753,5 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 - Added Verilator evidence for `rv_top_ctrl`, `mel_credit`, and `ui_render`; all passed with zero mismatches in their stated checks.
 - Added Verilator evidence for `ddr3_subsys` (15/15 scenarios), `ctrl_smoke`, and `npu_chain`; all passed. The DDR watchdog blind spot remains explicitly recorded as a known limitation.
 - Added Verilator evidence for `self_test`, `weight_loader`, and `ddr3_aw_timeout`; all checks passed, including abort/recovery, CRC rejection, write/read digest, and multi-master timeout attribution.
+- Added Verilator evidence for `rv_cpu`, `conv1`, and `mel`; CPU checks passed and conv1/mel streams matched golden with zero mismatches.
 
