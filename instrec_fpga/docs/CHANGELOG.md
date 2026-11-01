@@ -1,5 +1,13 @@
 # InstRec-FPGA 变更日志
 
+## 2026-11-01 20:44 — 停止停滞 RV 路由并启动串行资源 gate
+
+- RV 构建 `20261101-130420-0ed52a5d` 在 iteration 370 仍有 7156 条未布网络，按观察规则结束该 run；62 项 manifest 零漂移，未产出位流/时序报告，日志保留。
+- 保持 `cdt_js`/`cdt_cfg` 与下载器不变；启动 corrected-scalar `dev_map` gate，完成后才运行 corrected-wide，禁止并发 PDS。
+- 记录完整 native NPU 自然推理 PASS（31,115,245 cycles）及全量回归 `429 passed, 4 skipped`。
+- scalar `dev_map` gate 完成：LUT 40206、FF 53718、DRM 80.5、APM 90；未进入 PNR。wide gate 随后串行启动，当前在 compile。
+- wide `dev_map` gate 完成：LUT 29409、FF 33211、DRM 88.5、APM 90；未进入 PNR。wide 的 LUT/FF 优势伴随 DRM 增长，暂不启动新 PNR。
+
 ## 2026-11-01 18:54 — 原生 DDR 联合 harness 激活写握手失败证据
 
 - 新增真实 `ddr3_ctrl_axi` + AXI model + bridge 联合测试；权重 16-beat 完成，激活写阶段卡死，保留失败实验并继续修复，未修改生产 RTL、未宣称 native 集成通过。

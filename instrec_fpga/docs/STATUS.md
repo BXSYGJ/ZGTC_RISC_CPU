@@ -1,5 +1,15 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-01 20:44：RV PDS 路由按时止损；scalar 资源 gate 运行中
+
+- 唯一 RV 构建 `build/pds/20261101-130420-0ed52a5d` 在观察截止后仍无收敛：iteration 370，未布 7156；62 项 source manifest SHA256 全部一致，无 `.sbit`、时序报告或可发布位流。
+- 已仅结束该 run 的 PDS 子进程，随后确认 PDS 进程归零；未触碰 `cdt_js` PID 9040、`cdt_cfg` PID 46156 或下载器。失败/中断日志仍保留在原 run 目录。
+- 已串行启动 `build/resource_gate/20261101-202028-476220` 的 corrected-scalar gate，严格止于 `dev_map`；当前仍在 PDS compile/synthesis，未启动 wide、PNR 或新位流构建。完成后再读取 LUT/FF/DRM 与 gate 日志。
+- scalar gate 已完成：LUT 40,206/66,600（61%）、FF 53,718/133,200（41%）、DRM 80.5/155（52%）、APM 90/240（38%）；未进入 PNR。该变体没有降低 DRM，LUT 高于当前约 35,840 基线。已串行启动 wide gate `build/resource_gate/20261101-202029-216909`，当前在 compile。
+- wide gate 已完成：LUT 29,409/66,600（45%）、FF 33,211/133,200（25%）、DRM 88.5/155（58%）、APM 90/240（38%）；同样未进入 PNR。wide 显著降低 LUT/FF，但增加 DRM，不能据此宣称能解决当前布线停滞；两个 gate 均无位流。
+- 验证更新：完整 native NPU 自然推理 PASS（31,115,245 cycles，全层 golden exact，证据 `build/sim/npu_full_native/run.log`）；抽象 DDR 全链 PASS（30,757,679 cycles）；全量 Python `429 passed, 4 skipped`，`check_rtl.py` 为 53 个 `.v`、0 violation。
+- 生产 WDMA 的 0 基址/16-byte 未对齐契约仍未合入；native PASS 使用实验 `weight_read_aligner`，不能外推为生产 RTL、PDS、PHY/CDC 或上板 PASS。下一步读取 scalar gate 资源后串行运行 wide gate，并据资源差异决定是否值得重新布线。
+
 ## 2026-11-01 20:34：完整native控制器NPU自然推理通过；布线截止20:43
 
 - `sim/experiments/npu_full_native/run.py` 实际PASS，自然done=31115245周期：conv1..4、pool1..4、GAP256、FC1 128、FC2首8语义logits/16输出握手、softmax8全部golden及最终计数一致。
