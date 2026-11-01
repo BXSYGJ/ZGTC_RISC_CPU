@@ -13,9 +13,10 @@
 #   mel_test   top_mel_test     mel engine, fake PCM source (minutes)
 #   core_only  top_core_only    DDR3 + NPU + Mel + control, no video half
 #                               (the LUT-reduced full top, T36)
+#   rv_core    top_rv_core      core_only plus RV32IM control firmware/CPU
 #
 # Parameters:
-#   -BuildSet <full|ddr3_diag|ui_demo|conv1_test|mel_test|core_only>
+#   -BuildSet <full|ddr3_diag|ui_demo|conv1_test|mel_test|core_only|rv_core>
 #       build set to run (default: full).
 #   -TopModule <name>  explicit override of the set's top_module.  A mismatch
 #       throws, because the artifact name is derived from the top module and a
@@ -39,10 +40,16 @@
 #   - No PS7-only operators (ternary / null-coalescing / chain operators).
 [CmdletBinding()]
 param(
-    [ValidateSet('full', 'ddr3_diag', 'ui_demo', 'conv1_test', 'mel_test', 'core_only')]
+    [ValidateSet('full', 'ddr3_diag', 'ui_demo', 'conv1_test', 'mel_test', 'core_only', 'rv_core')]
     [string]$BuildSet = 'full',
 
     [string]$TopModule = '',
+
+    # Stop after one stage and skip the bitstream checks.  Used for the
+    # resource gate (synthesize): the LUT total decides whether a two-hour
+    # place-and-route is worth starting, and synth+dev_map cost ~20 minutes.
+    [ValidateSet('', 'compile', 'synthesize', 'dev_map')]
+    [string]$StopAfter = '',
 
     [switch]$DryRun
 )
@@ -177,6 +184,25 @@ try {
         $tcl = $tcl.Replace($token, $tokenValues[$token])
     }
     if ($tcl.Contains('__')) { throw 'build.tcl still contains an unexpanded __TOKEN__ placeholder.' }
+
+    # -StopAfter: insert an 'exit' line in front of the next stage instead of
+    # editing build_full.tcl (the template stays the single six-stage source).
+    if ($StopAfter -ne '') {
+        $nextStage = @{ compile = 'synthesize'; synthesize = 'dev_map'; dev_map = 'pnr' }[$StopAfter]
+        $lines = $tcl -split "`r?`n"
+        $idx = -1
+        for ($li = 0; $li -lt $lines.Count; $li++) {
+            if ($lines[$li].Trim() -eq $nextStage) { $idx = $li; break }
+        }
+        if ($idx -lt 0) { throw "StopAfter: stage '$nextStage' not found in build.tcl" }
+        $head = @()
+        if ($idx -gt 0) { $head = $lines[0..($idx - 1)] }
+        $tail = @()
+        if ($idx -lt $lines.Count) { $tail = $lines[$idx..($lines.Count - 1)] }
+        $tcl = (@($head) + @('exit') + @($tail)) -join "`n"
+        Write-Output ("StopAfter={0}: build.tcl will exit before '{1}'." -f $StopAfter, $nextStage)
+    }
+
     $scriptPath = [System.IO.Path]::Combine($buildRoot, 'build.tcl')
     [System.IO.File]::WriteAllText($scriptPath, $tcl, [System.Text.UTF8Encoding]::new($false))
 
@@ -243,16 +269,21 @@ try {
 
     # 7) verify the bitstream (fresh file + sha256, REQ-BLD-001)
     $bitstream = [System.IO.Path]::Combine($buildRoot, 'generate_bitstream', ($topModule + '.sbit'))
-    if (-not (Test-Path -LiteralPath $bitstream -PathType Leaf)) { throw "PDS did not produce the expected bitstream: $bitstream" }
-    if ((Get-Item -LiteralPath $bitstream).LastWriteTimeUtc -lt $started.AddSeconds(-1)) { throw 'Bitstream is stale (older than this run).' }
-    # Get-FileHash is not available in every PS 5.1 installation; use .NET.
-    $sha256 = [System.Security.Cryptography.SHA256]::Create()
-    $shaStream = [System.IO.File]::OpenRead($bitstream)
-    try {
-        $sbitHash = ([System.BitConverter]::ToString($sha256.ComputeHash($shaStream)) -replace '-', '')
-    } finally {
-        $shaStream.Dispose()
-        $sha256.Dispose()
+    $sbitHash = ''
+    if ($StopAfter -eq '') {
+        if (-not (Test-Path -LiteralPath $bitstream -PathType Leaf)) { throw "PDS did not produce the expected bitstream: $bitstream" }
+        if ((Get-Item -LiteralPath $bitstream).LastWriteTimeUtc -lt $started.AddSeconds(-1)) { throw 'Bitstream is stale (older than this run).' }
+        # Get-FileHash is not available in every PS 5.1 installation; use .NET.
+        $sha256 = [System.Security.Cryptography.SHA256]::Create()
+        $shaStream = [System.IO.File]::OpenRead($bitstream)
+        try {
+            $sbitHash = ([System.BitConverter]::ToString($sha256.ComputeHash($shaStream)) -replace '-', '')
+        } finally {
+            $shaStream.Dispose()
+            $sha256.Dispose()
+        }
+    } else {
+        Write-Output ("StopAfter={0}: no bitstream expected." -f $StopAfter)
     }
 
     # 8) extract the post-PnR device utilization summary from the log.

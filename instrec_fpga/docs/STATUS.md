@@ -1,7 +1,15 @@
 # InstRec-FPGA 当前状态（STATUS）
 
 > 本文件是**唯一实时状态源**，优先于任何交接快照与记忆。每次会话结束前必须更新，
-> 并在 `CHANGELOG.md` 追加一条。最后更新：2026-11-01 05:50。
+> 并在 `CHANGELOG.md` 追加一条。最后更新：2026-11-01 10:34。
+
+## 2026-11-01 RV32 + AI 最小融合（本轮新增）
+
+工作区已加入独立 `rv_core` 构建集：`top_rv_core` 在 DDR3/core_clk 域例化 `rv32_cpu_subsys`，CPU 运行 8 KiB ROM 固件和 8 KiB 数据 RAM，通过 MMIO 观察 NPU busy/done/probs/top1/cycles 与 DDR 状态，并向 `CTRL[0]` 写入一次性 soft-start；该请求与 Mel 自动启动请求合并后送入 `npu_top.start`。CPU 还可经共享 UART FIFO 输出启动和推理结果，LED 写入由 CPU 置位 `cpu_alive`。
+
+仿真证据：`python sim/run_sim.py rv_cpu --verbose` 已 PASS（C1-C6），日志包含 `RV32 BOOT`、`RV32 MMIO OK`、`RV32 ISA OK`、`RV32 BENCH cycles=460012 inst=180008`、`NPU GO`、`NPU t=3 p=87 c=12345`。本轮修复了固件未写 NPU_CTRL、概率字段位移、TB NBA 同拍采样，以及 CPU 子系统 STATUS/PROBS 位宽和 RAM 地址译码问题。
+
+PDS `rv_core` 资源门槛构建已通过 RTL 分析并进入综合优化（run `build/pds/20261101-102333-c9e3d804`，使用 `-StopAfter synthesize`）；最后日志仍停在 `Saving design to DB`（10:26:43），未产生 synth 摘要。当前未得到 dev_map/PNR、位流、时序或板级证据。不要启动第二个 PDS run；待当前实例自然退出并确认资源后再决定是否 PNR。全量 pytest 本轮在 PDS 高负载期间未完成，不得计为通过。板级验证必须等 PDS 退出且新位流生成后再进行。
 
 ## 一句话
 

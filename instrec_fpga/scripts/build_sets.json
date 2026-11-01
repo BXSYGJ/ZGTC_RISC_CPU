@@ -126,6 +126,42 @@
       "hex_dirs": [
         "src/mel"
       ]
+    },
+    "rv_core": {
+      "top_module": "top_rv_core",
+      "sources": [
+        "src/audio/*.v",
+        "src/ddr3/*.v",
+        "src/mel/*.v",
+        "src/npu/*.v",
+        "src/ip/*.v",
+        "src/ctrl/self_test.v",
+        "src/ctrl/sys_ctrl.v",
+        "src/ctrl/uart_debug.v",
+        "src/ctrl/uart_rx.v",
+        "src/ctrl/uart_tx.v",
+        "src/ctrl/weight_loader.v",
+        "src/ctrl/top_rv_core.v",
+        "src/cpu/rv32_cpu_subsys.sv",
+        "../cpu/rtl/rv32_core.sv",
+        "../cpu/rtl/rv32_decode.sv",
+        "../cpu/rtl/rv32_alu.sv",
+        "../cpu/rtl/rv32_muldiv.sv",
+        "../cpu/rtl/rv32_btb.sv",
+        "../cpu/rtl/rv32_machine.sv"
+      ],
+      "ip_cores": [
+        "ipcore/pll_audio/pll_audio.idf",
+        "ipcore/ddr3_test/ddr3_test.idf"
+      ],
+      "constraints": [
+        "constraints/ddr3_100h.fdc",
+        "constraints/top_core_only.fdc"
+      ],
+      "hex_dirs": [
+        "src/mel",
+        "src/cpu"
+      ]
     }
   }
 }

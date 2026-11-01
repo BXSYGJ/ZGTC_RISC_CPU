@@ -221,6 +221,22 @@ register(Case(
 ))
 
 register(Case(
+    name="rv_cpu",
+    tb="tb_rv_cpu.sv",
+    rtl=[
+        "src/cpu/rv32_cpu_subsys.sv",
+        "../cpu/rtl/rv32_core.sv",
+        "../cpu/rtl/rv32_decode.sv",
+        "../cpu/rtl/rv32_alu.sv",
+        "../cpu/rtl/rv32_muldiv.sv",
+        "../cpu/rtl/rv32_btb.sv",
+        "../cpu/rtl/rv32_machine.sv",
+    ],
+    timeout=300,
+    description="RV32 control core: firmware boot/ISA/bench + MMIO NPU report",
+))
+
+register(Case(
     name="ui_render",
     tb="tb_ui_render.sv",
     rtl=list(UI_RTL),

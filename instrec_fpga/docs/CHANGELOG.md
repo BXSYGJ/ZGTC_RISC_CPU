@@ -508,3 +508,10 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 - run `20261027-000612-a71f1451`，六阶段 OK，All Constraints Met，WNS +1.757。
 - sbit sha256 `C517736C7E61937521BC1776DDA4ACAC66F0373DF7E0FACDD86AEC017DD2EDAC`。
 - 资源 LUT 6201 (9%) / FF 6743 (5%) / BKCL 6/6。尚未上板。
+## 2026-11-01 — RV32 控制核与 NPU 最小融合
+
+- 新增 `rv_core` 构建集和 `top_rv_core`：将 `rv32_cpu_subsys` 例化到 InstRec DDR3/core_clk 域，以 MMIO 控制/观察 `npu_top`，保留 Mel 自动启动路径和共享 UART。
+- 新增 8 KiB 固件 ROM、8 KiB 数据 RAM、UART FIFO、LED/DDR/NPU 状态寄存器；CPU 固件执行启动、ISA/计数器自检并写 `NPU_CTRL` 触发一次推理。
+- `sim/run_sim.py rv_cpu --verbose`：C1-C6 全部 PASS，验证 CPU 启动、MMIO、soft-start、NPU 结果回读。
+- PDS 资源门槛 run 已通过 RTL 分析并进入综合，但日志停在 `Saving design to DB`，尚无综合资源摘要、新位流、PNR 或板级验证。
+

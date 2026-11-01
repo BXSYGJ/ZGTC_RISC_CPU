@@ -46,7 +46,7 @@ TOKENS = (
     '__CONSTRAINT_FILES__',
     '__HEX_COPY_BLOCK__',
 )
-SET_NAMES = ('full', 'ddr3_diag', 'ui_demo', 'conv1_test', 'mel_test', 'core_only')
+SET_NAMES = ('full', 'ddr3_diag', 'ui_demo', 'conv1_test', 'mel_test', 'core_only', 'rv_core')
 SET_KEYS = ('top_module', 'sources', 'ip_cores', 'constraints', 'hex_dirs')
 TOP_MODULES = {
     'full': 'instrec_top',
@@ -55,6 +55,7 @@ TOP_MODULES = {
     'conv1_test': 'top_npu_conv1_test',
     'mel_test': 'top_mel_test',
     'core_only': 'top_core_only',
+    'rv_core': 'top_rv_core',
 }
 FULL_CONSTRAINTS = ('instrec_top.fdc', 'ddr3_100h.fdc', 'clock_groups_async.fdc')
 DIAG_CONSTRAINTS = ('ddr3_100h.fdc', 'top_ddr3_diag.fdc')
@@ -340,9 +341,11 @@ def test_ui_demo_scope(dry_runs):
 
 def test_all_generated_paths_are_absolute_under_the_project(dry_runs):
     prefix = ROOT.as_posix().lower() + '/'
+    repo_prefix = ROOT.parent.as_posix().lower() + '/'
     for name, run in dry_runs.items():
         for path in tcl_lines(run['tcl'], ADD_DESIGN_RE) + tcl_lines(run['tcl'], ADD_CONSTRAINT_RE):
-            assert path.lower().startswith(prefix), \
+            allowed = path.lower().startswith(prefix) or (name == 'rv_core' and path.lower().startswith(repo_prefix))
+            assert allowed, \
                 '{0}: {1} is not under the project root'.format(name, path)
             assert '\\' not in path, 'build.tcl must use forward slashes'
 
