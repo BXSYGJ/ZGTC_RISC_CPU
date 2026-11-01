@@ -1,5 +1,13 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-01 23:11：Mel布局修复验证通过，正确冻结版本已重新构建
+
+- `npu_top`新增显式`FEATURE_FRAME_MAJOR`读口模式，使用已有time/mel计数器拼接地址；三个生产top均设1。默认0只保留独立mel-major模型兼容，不增加除法电路；Mel内部+64偏移保持唯一。
+- 抽取实际NPU replay/Mel同步bank切片：旧直连16446/16512字节错，修复后0错、全地址双射，含8252个>=128字节。进一步使用frame-major RAM完成真实CPU/完整native NPU联合：全部各层golden exact，31141202cycles，UART/MMIO/ACK正确。uint8[0,255]/zp49契约核验正确。报告`reports/mel_feature_handoff_validation_20261101.json`；不等同完整音频/Mel计算或板级验证。
+- 修复后全量Python **429 passed / 4 skipped**（83.22s），59.v词法0 violation。续跑脚本增加真实ADF门槛、ADF备份与独立driver工程名；PS5.1解析与缺ADF提前拒绝PASS，完整成功续跑尚未验证，当前构建不用续跑。
+- 新唯一完整flow `build/resource_gate/native-20261101-230932-136199`于23:09:47启动，父32412/compile26456；snapshot `frame-major-20261101-230923`，manifest SHA`c2f3f1f4c5dccbd55fdde54a6a970f78c032c0d6e8e44eb5cd67a6e853c3581e`。45RTL/约束/ROM与生产逐字节一致，完整IP冻结核验通过，同一TCL直达PNR/timing/bit。实际PNR尚未开始，45分钟上限从进入PNR计时。
+- 并行发现UI copy在NPU占口后恢复会误收一拍，且末尾多写一次；仅影响UI路径，`feat_copy_engine`独立修复/边界回归中，不在当前rv_core源集合。无新版位流/时序/上板结论，下载器未操作。
+
 ## 2026-11-01 23:07：发现真实Mel/NPU布局错接，先修复再构建
 
 - Mel标准化和导出接口是frame-major（frame*64+mel），NPU按mel-major（mel*258+time）扫描；三个top原直接相连。已确认`mel_engine`的+64只是内部guard偏移，不做转置：NPU第二字节期望(mel0,time1)，旧地址1实际取(mel1,time0)，应取64。此前使用mel-major行为RAM的完整NPU/CPU联合不覆盖此真实前端错接。

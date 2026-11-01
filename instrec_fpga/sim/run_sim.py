@@ -539,7 +539,7 @@ def prepare_rv_top_ctrl(work: Path) -> None:
     uart_inst = "    uart_tx u_uart_tx (" + section(
         "    uart_tx u_uart_tx (", "    uart_rx u_uart_rx (")
     launch = "    reg cpu_npu_pending;" + section(
-        "    reg cpu_npu_pending;", "    npu_top u_npu (")
+        "    reg cpu_npu_pending;", "    npu_top ")
     header = """module rv_top_ctrl_slice #(parameter NPU_ENABLE = 0) (
     input wire core_clk, core_clk_rst_n,
     input wire wl_tx_valid, dbg_tx_valid, cpu_tx_valid,

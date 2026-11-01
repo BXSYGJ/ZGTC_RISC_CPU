@@ -688,7 +688,7 @@ module top_core_only #(
     wire        npu_feat_rd_en_u;
     wire npu_start = NPU_ENABLE && mel_npu_start && ddr_init_done && weight_ok && !weight_err && !wl_busy && !npu_busy_u && native_owner_idle && !native_fault;
 
-    npu_top u_npu (
+    npu_top #(.FEATURE_FRAME_MAJOR(1)) u_npu (
         .clk          (core_clk),
         .rst_n        (core_clk_rst_n),
         .start        (npu_start),

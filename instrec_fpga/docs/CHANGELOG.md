@@ -1,5 +1,11 @@
 # InstRec-FPGA 变更日志
 
+## 2026-11-01 23:11 — 修复真实Mel/NPU读口布局，启动正确冻结单flow
+
+- NPU增加显式frame-major参数，三top启用，利用现有行列拼接地址；真实bank切片旧16446错/新0错，16512地址双射。frame-major完整CPU/native全层golden、结果/ACK通过；uint8/zp49正确。
+- 全量429 passed/4 skipped（83.22s）、59.v词法0违规；修复stage续跑driver/真实ADF门槛与备份，成功续跑尚未证明。
+- 23:09:47启动唯一native-20261101-230932-136199精确冻结单flow，当前前置阶段，实际PNR进入后限45min；UI copy占口恢复缺陷独立修复中，下载器未操作。
+
 ## 2026-11-01 23:07 — 阻止带Mel布局缺陷的构建继续
 
 - 发现实际Mel frame-major与NPU mel-major接口直连错接；旧完整NPU/CPU行为RAM测试不能覆盖。正在修复及补真实bank布局回归。

@@ -16,7 +16,10 @@
 // 2x that (REQ-REL-002).
 // ---------------------------------------------------------------------------
 
-module npu_top (
+module npu_top #(
+    // 0: mel-major fixture RAM; 1: mel_engine frame-major feature bank.
+    parameter FEATURE_FRAME_MAJOR = 0
+) (
     input  wire        clk,
     input  wire        rst_n,
 
@@ -279,7 +282,9 @@ module npu_top (
             feat_dv <= 1'b0;
         end
     end
-    assign feat_rd_addr = feat_addr;
+    // Conv ingress remains mel-major. Mel stores time*64+mel, with its
+    // physical +64 head-frame offset applied internally by mel_engine.
+    assign feat_rd_addr = FEATURE_FRAME_MAJOR ? {feat_col, feat_row[5:0]} : feat_addr;
     assign feat_rd_en   = feat_run && feat_safe;
 
     // -----------------------------------------------------------------------

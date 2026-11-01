@@ -19,6 +19,7 @@ def once(text,old,new):
 def main():
     ap=argparse.ArgumentParser();ap.add_argument('--top1-firmware',action='store_true')
     ap.add_argument('--run-label',default='',help='Separate evidence directory; preserve previous runs')
+    ap.add_argument('--frame-major',action='store_true',help='Use real Mel frame-major bank layout')
     opts=ap.parse_args()
     name='cpu_native_joint_top1' if opts.top1_firmware else 'cpu_native_joint'
     if opts.run_label:
@@ -29,7 +30,7 @@ def main():
     assets=work/'assets';assets.mkdir(parents=True,exist_ok=True)
     feat=np.frombuffer((HERE.parent/'npu_conv1/feat_u8.bin').read_bytes(),dtype=np.uint8).reshape(64,258)
     result=golden.npu_forward(feat,golden.load_layer_contract(),golden.load_mel_tables()['exp_lut'])
-    values={'weights':(ROOT/'scripts/outputs/weights_image.bin').read_bytes(),'feat':feat.reshape(-1),
+    values={'weights':(ROOT/'scripts/outputs/weights_image.bin').read_bytes(),'feat':(feat.T if opts.frame_major else feat).reshape(-1),
             'gap':result['gap'],'fc1':result['fc1'],'fc2_logits':result['fc2'],'probs':result['probs_q16']}
     for layer_name in ('conv1','conv2','conv3','conv4','pool1','pool2','pool3','pool4'):
         a=result[layer_name];c,h,w=a.shape
@@ -37,6 +38,8 @@ def main():
     for asset_name,data in values.items():
         (assets/(asset_name+'.hex')).write_text(''.join(f'{int(v):08x}\n' for v in data),encoding='ascii')
     text=(HERE.parent/'npu_full_native/tb_npu_full_native.sv').read_text(encoding='ascii')
+    if opts.frame_major:
+        text=once(text,'npu_top dut(', 'npu_top #(.FEATURE_FRAME_MAJOR(1)) dut(')
     text=text.replace('build/npu_full/',assets.relative_to(ROOT).as_posix()+'/')
     text=once(text,'reg rst_n=0,start=0;','reg rst_n=0;wire start=npu_start;')
     text=once(text,'weight_read_aligner aligner(','weight_read_aligner_hardened aligner(')
@@ -69,7 +72,7 @@ def main():
  $display("RESULT: PASS real CPU ROM MMIO launch, full native golden NPU, real result report and acknowledgement");
  $finish;""")
     top=(ROOT/'src/ctrl/top_rv_core.v').read_text(encoding='ascii')
-    launch='    reg cpu_npu_pending;'+top.split('    reg cpu_npu_pending;',1)[1].split('    npu_top u_npu (',1)[0]
+    launch='    reg cpu_npu_pending;'+top.split('    reg cpu_npu_pending;',1)[1].split('    npu_top ',1)[0]
     extra=(HERE/'native_owner.vh').read_text(encoding='ascii')+'\nwire aligner_error,aligner_failed;\n'+(HERE/'cpu_joint.vh').read_text(encoding='ascii')+'\n'+launch
     if opts.top1_firmware:
         rom=ROOT/'build/sim/cpu_native_joint_top1/firmware/prog.hex'

@@ -730,7 +730,7 @@ module top_rv_core #(
         else if (cpu_npu_start) cpu_npu_pending <= 1'b1;
     end
 
-    npu_top u_npu (
+    npu_top #(.FEATURE_FRAME_MAJOR(1)) u_npu (
         .clk          (core_clk),
         .rst_n        (core_clk_rst_n),
         .start        (npu_start),

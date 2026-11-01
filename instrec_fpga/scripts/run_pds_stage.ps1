@@ -26,6 +26,9 @@ param(
 $ErrorActionPreference = 'Stop'
 $project = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
 $run = (Resolve-Path $RunDir).Path
+if (@(Get-Process -Name pds_shell -ErrorAction SilentlyContinue).Count -gt 0) {
+    throw 'A pds_shell process already exists; only one PDS build is allowed.'
+}
 
 $requiredDirs = @('synthesize', 'compile')
 if ($From -ne 'dev_map') { $requiredDirs += 'device_map' }
@@ -49,18 +52,34 @@ if ($prjText -notmatch 'PG2L100H') {
     throw "project file does not describe PG2L100H (it was overwritten by a default project): $prj"
 }
 
+# A report directory alone cannot resume a stage. A restarted compile removes
+# downstream ADF databases while leaving reports behind; reject that case.
+switch ($From) {
+    'dev_map' { $inputAdf = Join-Path $run "synthesize\${TopModule}_syn.adf" }
+    'pnr' { $inputAdf = Join-Path $run "device_map\${TopModule}_map.adf" }
+    default { $inputAdf = Join-Path $run "place_route\${TopModule}_pnr.adf" }
+}
+if (-not (Test-Path -LiteralPath $inputAdf -PathType Leaf)) {
+    throw "required input database missing: $inputAdf; reports alone are insufficient"
+}
+
 # PDS replaces the .pds with a default project as soon as the scripted run
 # starts without a successfully opened project, so keep a copy and restore it
 # if the resumed flow fails -- otherwise one typo destroys the netlist state.
 $stamp = (Get-Date -Format 'yyyyMMdd-HHmmss') + '-' + ([guid]::NewGuid().ToString('N').Substring(0, 8))
 $prjBak = "$prj.$stamp.bak"
 [System.IO.File]::WriteAllText($prjBak, $prjText, [System.Text.UTF8Encoding]::new($false))
+$adfBackup = "$inputAdf.$stamp.bak"
+Copy-Item -LiteralPath $inputAdf -Destination $adfBackup
 
 $stages = @('dev_map', 'pnr', 'report_timing', 'gen_bit_stream')
 $startIdx = [array]::IndexOf($stages, $From)
 if ($startIdx -lt 0) { throw "unknown stage '$From'" }
 $prjTcl = $prj.Replace('\', '/')
-$body = "open_project {$prjTcl}`n" + (($stages[$startIdx..($stages.Count - 1)]) -join "`n") + "`nexit"
+# The script pre-parser does not expose open_project. The execution pass does.
+# Use a distinct driver project name: -file initializes its named project before
+# executing TCL, so using the target name destroys the saved stage state.
+$body = 'if {[llength [info commands open_project]]} {open_project {' + $prjTcl + '}}' + "`n" + (($stages[$startIdx..($stages.Count - 1)]) -join "`n") + "`nexit"
 
 $tclPath = Join-Path $run ("stage-$stamp.tcl")
 $logPath = Join-Path $run ("stage-$stamp.log")
@@ -79,7 +98,8 @@ $env:PANGO_LICENSE_FILE = $licenseFile
 Write-Output "resume: $From -> gen_bit_stream"
 Write-Output "run dir: $run"
 $started = [datetime]::UtcNow
-$args = @('-file', ('"' + $tclPath + '"'), '-work_dir', ('"' + $run + '"'), '-project_name', $ProjectName)
+$driverProjectName = 'resume_driver_' + $stamp
+$args = @('-file', ('"' + $tclPath + '"'), '-work_dir', ('"' + $run + '"'), '-project_name', $driverProjectName)
 if (@(Get-Process -Name pds_shell -ErrorAction SilentlyContinue).Count -gt 0) {
     throw 'A pds_shell process already exists; only one PDS build is allowed.'
 }

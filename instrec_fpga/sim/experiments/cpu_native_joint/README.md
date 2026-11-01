@@ -34,3 +34,32 @@ DDR AXI memory, Mel safe windows and UART byte acceptance are modeled. Physical
 DDR PHY, full audio/Mel frontend, board UART/JTAG, CDC and timing are excluded.
 This establishes repeated control with the isolated firmware candidate; it
 does not claim the current production ROM automatically requests twice.
+
+## Real Mel feature layout
+
+`python sim/experiments/cpu_native_joint/check_mel_handoff.py` extracts the
+actual NPU feature replay and actual Mel bank read mux/RAM. A known
+frame-major pattern reproduces the old missing-transpose bug: at NPU stream
+index 1, the old direct address reads mel1/time0 (13) rather than mel0/time1
+(7). The new address concat `{feat_col,feat_row[5:0]}` passes all 16512 bytes
+and all addresses form a bijection; Mel adds its physical +64 internally.
+
+`npu_top.FEATURE_FRAME_MAJOR` defaults to 0 for existing mel-major fixture
+RAMs. All three production tops set 1 for the real frame-major Mel bank.
+The conv ingress order stays mel-major and its read-valid latency is unchanged.
+
+Run the complete CPU/native inference in this mode with:
+
+    python sim/experiments/cpu_native_joint/run.py --frame-major --run-label unique-frame-major-label
+
+This stores the golden features as `feat.T` in the simulated RAM and sets
+the real NPU parameter to 1. The production ROM/current RTL run passes all
+intermediate and final golden checks in 31141202 cycles. Evidence:
+`reports/mel_feature_handoff_validation_20261101.json`.
+
+Features are unsigned bytes with zero point 49 throughout standardize, Mel
+bank and NPU ingress. Conv uses signed 9-bit `(uint8-49)`; no signed-byte
+reinterpretation or second zero-point addition is needed. Normal audio
+cadence protects the single Mel bank in practice, but there is no explicit
+NPU-busy lock against an arbitrarily early next window. Physical and complete
+audio/Mel tests are separate from these bank-layout and native compute tests.
