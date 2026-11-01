@@ -68,6 +68,7 @@ S_DW_AW = 4
 S_DW_W = 5
 S_AR = 6
 S_R = 7
+S_R_DRAIN = 8
 
 STATE_NAME = {
     S_IDLE: 'S_IDLE',
@@ -78,6 +79,7 @@ STATE_NAME = {
     S_DW_W: 'S_DW_W',
     S_AR: 'S_AR',
     S_R: 'S_R',
+    S_R_DRAIN: 'S_R_DRAIN',
 }
 
 AXI_TO_LIMIT = 4096                 # ddr3_ctrl_axi.v:64
@@ -397,7 +399,7 @@ class Ddr3CtrlAxiModel:
                       self.beat_cnt == (self.cur_len & 0xF))
         read_cmpl = (st == S_R and bool(sig.rvalid) and bool(sig.rlast))
         to_abort = (self.axi_to_cnt >= self.axi_to_limit and
-                    st not in (S_IDLE, S_WLAST))
+                    st not in (S_IDLE, S_WLAST, S_R_DRAIN))
         done_pulse = write_cmpl or read_cmpl or to_abort
         done = (1 << self.cur_master) if done_pulse else 0
 
@@ -544,6 +546,12 @@ class Ddr3CtrlAxiModel:
                 to_err = 1
                 cmd_to_err[cur_master] = 1
                 dbg_to_state = S_R
+                # Keep the AXI port quarantined so a late response cannot be
+                # mistaken for the next read transaction.
+                state = S_R_DRAIN
+        elif st == S_R_DRAIN:
+            # Late beats are discarded; RLAST releases the quarantine.
+            if sig.rvalid and sig.rlast:
                 state = S_IDLE
         elif st == S_WLAST:
             if self.wlast_window == 3:

@@ -1,5 +1,10 @@
 # InstRec-FPGA 变更日志
 
+## 2026-11-02：DDR 读超时迟到响应隔离
+
+- 修复 DDR 读 watchdog 超时后的迟到响应误归属问题，增加 `S_R_DRAIN` 隔离状态及周期模型回归。
+- 验证：DDR/仲裁/自检定向 48 passed；全量回归 430 passed / 4 skipped；RTL 词法检查 59 文件 0 violation。未启动 PDS、未操作下载器；修复后的 RTL 尚未重新生成位流。
+
 ## 2026-11-01 23:49 — 复核 frame-major PDS 产物并校正实时状态
 
 - 冻结 gate-manifest SHA256 `C2F3F1F4C5DCCBD55FDDE54A6A970F78C032C0D6E8E44EB5CD67A6E853C3581E`；最终 run.log SHA256 `69F3EFDAA5047F261FFE859FF2003F40096673EBAF5B973285D67767581481E`；timing报告 SHA256 `C1C1D8B19EA696E0968563A313621A03F97E51D1027397448DFBD3628B825853`。

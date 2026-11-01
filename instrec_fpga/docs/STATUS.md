@@ -1,5 +1,11 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-02：DDR 读超时迟到响应已隔离
+
+- `src/ddr3/ddr3_ctrl_axi.v` 新增 `S_R_DRAIN`：读 watchdog 超时后禁止新事务，丢弃迟到 `RVALID` 数据，收到 `RVALID && RLAST` 后才恢复仲裁；普通写/地址阶段超时语义保持不变。
+- 周期模型与回归同步更新，新增 timeout → late `RLAST` → queued read 场景，验证迟到数据不进入 FIFO、不会误完成下一笔读；DDR/仲裁/自检定向 48 项通过，全量 Python 回归 **430 passed / 4 skipped**，RTL 词法检查 59 文件 0 violation。
+- 该修复尚未重新综合、布线或上板；当前候选位流仍对应修复前 RTL，不能宣称硬件已验证。若 DDR 永久不返回 `RLAST`，控制器会保持隔离并需外部复位恢复。
+
 ## 2026-11-01 23:43：frame-major CPU+NPU 候选已完成布线并生成位流
 
 - 冻结快照 `build/npu_production_candidate/frame-major-20261101-230923` 的完整 flow `build/resource_gate/native-20261101-230932-136199` 已完成 compile/synthesize/dev_map/PNR/report_timing/gen_bit_stream；PDS 父进程32412于23:09:47启动，PNR子进程33836于23:21:27启动。详细布线第105轮未布网络0，日志确认 `Design 'top_rv_core' has been placed and routed successfully`。

@@ -139,13 +139,16 @@ def _run_watchdog_vector(wr, never, expected_phase, master=3,
     assert done_out.to_err == 1
     assert done_out.cmd_to_err[master] == 1
     assert done_out.dbg_to_state == expected_phase
-    assert done_out.state == dm.S_IDLE
+    expected_state = dm.S_R_DRAIN if expected_phase == dm.S_R else dm.S_IDLE
+    assert done_out.state == expected_state
     # single-cycle pulse: drop the request and confirm no repeat
     valid[master] = 0
     for _ in range(6):
         out = model.cycle(valid, cmds, (0, 0, 0, 0), FAST, ip)
         assert out.done == 0
-        assert out.state == dm.S_IDLE
+        expected_idle_or_drain = (dm.S_R_DRAIN if expected_phase == dm.S_R
+                                  else dm.S_IDLE)
+        assert out.state == expected_idle_or_drain
     assert model.to_err == 1 and model.dbg_to_state == expected_phase
     return model, done_out
 
@@ -246,6 +249,62 @@ def test_s3_r_phase_watchdog_aborts_after_4096_stalled_cycles():
     _, done = _run_watchdog_vector(wr=0, never=('r',),
                                        expected_phase=dm.S_R)
     assert done.rd_valid == 0
+
+
+def test_read_timeout_quarantines_late_rlast_before_accepting_next_read():
+    model = dm.Ddr3CtrlAxiModel(axi_to_limit=3)
+
+    class LateResponseIp:
+        def signals(self, current):
+            st = current.state
+            if st in (dm.S_AW, dm.S_DW_AW):
+                return dm.IpSignals(awready=1)
+            if st in (dm.S_W, dm.S_DW_W):
+                return dm.IpSignals(wready=1)
+            if st == dm.S_AR:
+                return dm.IpSignals(arready=1)
+            if st == dm.S_R and len(current.ar_handshakes) == 2:
+                return dm.IpSignals(rvalid=1, rdata=0x2222, rlast=1)
+            return dm.IpSignals()
+
+    ip = LateResponseIp()
+    first_cmds = [0, 0, dm.pack_cmd(0, RD_ADDR, 0), 0]
+    first_valid = [0, 0, 1, 0]
+    timeout = None
+    for _ in range(32):
+        out = model.cycle(first_valid, first_cmds, (0, 0, 0, 0), SLOW, ip)
+        if out.to_abort:
+            timeout = out
+            break
+    assert timeout is not None
+    assert timeout.state == dm.S_R_DRAIN
+    assert timeout.to_err == 1 and timeout.dbg_to_state == dm.S_R
+    assert len(model.ar_handshakes) == 1
+
+    # Keep a competing read queued while the first transaction's late RLAST
+    # arrives. The late data must be discarded, and that cycle cannot grant.
+    next_cmds = [dm.pack_cmd(0, WG_ADDR, 0), 0, 0, 0]
+    next_valid = [1, 0, 0, 0]
+    drain = model.cycle(next_valid, next_cmds, (0, 0, 0, 0), SLOW,
+                        lambda _m: dm.IpSignals(rvalid=1,
+                                                rdata=0xDEADBEEF,
+                                                rlast=1))
+    assert drain.state_before == dm.S_R_DRAIN
+    assert drain.state == dm.S_IDLE
+    assert drain.grant == 0 and drain.done == 0
+    assert model.rd_fifo_count == 0
+    assert model.r_beats == []
+
+    # The next cycle may grant the queued read; its own terminal response is
+    # then captured as the only beat of that transaction.
+    grant = model.cycle(next_valid, next_cmds, (0, 0, 0, 0), SLOW, ip)
+    assert grant.state == dm.S_DW_AW and grant.grant == 1
+    for _ in range(12):
+        out = model.cycle(next_valid, next_cmds, (0, 0, 0, 0), SLOW, ip)
+        if out.done:
+            break
+    assert out.read_cmpl is True
+    assert model.r_beats[-1][1] == 0x2222
 
 
 def test_s3_rvalid_stream_without_rlast_is_not_guarded_by_the_watchdog():
@@ -443,10 +502,21 @@ def test_s7_read_abort_keeps_leftover_beats_routed_to_the_old_read_master():
     assert done.to_abort is True and done.to_err == 1
     assert done.cmd_to_err[2] == 1
     assert done.dbg_to_state == dm.S_R
-    assert done.state == dm.S_IDLE
+    assert done.state == dm.S_R_DRAIN
     assert done.rd_fifo_count == 4        # beats captured before the stall
     assert done.rd_valid == 1 << 2        # still routed to the old owner
     assert done.cur_rd_master == 2
+
+    # A late terminal response is quarantined and discarded before the
+    # arbiter can accept another read.
+    late = model.cycle([0, 0, 0, 0], [0, 0, 0, 0], (0, 0, 0, 0),
+                        SLOW,
+                        lambda _model: dm.IpSignals(rvalid=1,
+                                                    rdata=0xDEADBEEF,
+                                                    rlast=1))
+    assert late.state == dm.S_IDLE
+    assert late.done == 0
+    assert model.rd_fifo_count == 4
 
     # a competing read request cannot steal the fifo while it is non-empty
     cmds = [0, dm.pack_cmd(0, WG_ADDR, dm.BURST_LEN), 0, 0]

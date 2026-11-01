@@ -122,19 +122,20 @@ module ddr3_ctrl_axi #(
     // ------------------------------------------------------------------
     // FSM states
     // ------------------------------------------------------------------
-    localparam [2:0] S_IDLE    = 3'd0;  // arbitrate next command
-    localparam [2:0] S_AW      = 3'd1;  // real write: address handshake
-    localparam [2:0] S_W       = 3'd2;  // real write: data beats
-    localparam [2:0] S_WLAST   = 3'd3;  // real write: wusero_last epilogue
-    localparam [2:0] S_DW_AW   = 3'd4;  // dummy write: address handshake
-    localparam [2:0] S_DW_W    = 3'd5;  // dummy write: single masked beat
-    localparam [2:0] S_AR      = 3'd6;  // read: address handshake
-    localparam [2:0] S_R       = 3'd7;  // read: capture beats into fifo
+    localparam [3:0] S_IDLE    = 4'd0;  // arbitrate next command
+    localparam [3:0] S_AW      = 4'd1;  // real write: address handshake
+    localparam [3:0] S_W       = 4'd2;  // real write: data beats
+    localparam [3:0] S_WLAST   = 4'd3;  // real write: wusero_last epilogue
+    localparam [3:0] S_DW_AW   = 4'd4;  // dummy write: address handshake
+    localparam [3:0] S_DW_W    = 4'd5;  // dummy write: single masked beat
+    localparam [3:0] S_AR      = 4'd6;  // read: address handshake
+    localparam [3:0] S_R       = 4'd7;  // read: capture beats into fifo
+    localparam [3:0] S_R_DRAIN = 4'd8;  // discard a timed-out read response
 
     // ------------------------------------------------------------------
     // Command registers (latched at grant) and read fifo control
     // ------------------------------------------------------------------
-    reg [2:0]  state;
+    reg [3:0]  state;
     reg        cur_wr;
     reg [27:0] cur_addr;
     reg [7:0]  cur_len;
@@ -247,7 +248,8 @@ module ddr3_ctrl_axi #(
     wire write_cmpl = (state == S_W) && axi_wready && (beat_cnt == cur_len[3:0]);
     wire read_cmpl  = (state == S_R) && axi_rvalid && axi_rlast;
     wire to_abort   = (axi_to_cnt >= AXI_TO_LIMIT[12:0]) &&
-                      (state != S_IDLE) && (state != S_WLAST);
+                      (state != S_IDLE) && (state != S_WLAST) &&
+                      (state != S_R_DRAIN);
     wire done_pulse = write_cmpl || read_cmpl || to_abort;
     assign done = done_pulse ? (4'b0001 << cur_master) : 4'b0000;
 
@@ -435,7 +437,19 @@ module ddr3_ctrl_axi #(
                         to_err_r       <= 1'b1;
                         cmd_to_err_r[cur_master] <= 1'b1;
                         dbg_to_state_r <= S_R;
-                        state          <= S_IDLE;
+                        // Keep the AXI port quarantined.  The slave may
+                        // still return this timed-out burst; accepting a new
+                        // read before RLAST would misattribute its data.
+                        state          <= S_R_DRAIN;
+                    end
+                end
+
+                S_R_DRAIN: begin
+                    // Discard all late beats.  Only the terminating RLAST
+                    // releases the quarantine; reset remains the recovery
+                    // path when the slave never completes the burst.
+                    if (axi_rvalid && axi_rlast) begin
+                        state <= S_IDLE;
                     end
                 end
 
