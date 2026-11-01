@@ -10,6 +10,7 @@
 - 并行只读验证新增全部通过：DDR 控制器模型 26 passed；DDR/自检/契约组 49 passed；板级烧录安全/串口握手 43 passed；权重/NPU/Mel/特征页 78 passed（2 条 torch FutureWarning，无失败）。
 - loader/native 读超时 fail-closed/reset、owner early-done/CRC/复位恢复路径均通过，证据位于 `build/sim/loader_native_read_timeout/` 与 `build/sim/loader_owner/`。reset-mid-read 后同 `axi_rid` 的旧 `RVALID/RLAST` 误收仍是开放风险，未加入猜测性丢弃逻辑。
 - 板级仍 NOT_RUN；后续优先处理 DDR PHY 时序/SCBV 配置，再另行生成可上板候选。reset-mid-read 后同 `axi_rid` 的旧响应风险仍开放。
+- 本次心跳重新执行 `python -m pytest -q`：**432 passed / 4 skipped**，仅 2 条 PyTorch FutureWarning；未启动 PDS、未操作下载器。
 
 ## 2026-11-02：DDR 修复版资源门禁完成，未进入布线
 

@@ -737,3 +737,4 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 - `build/pds/20261102-003406-7af1bf17` detail routing 迭代149达到0，确认 placed/routed；完成 report_timing 和 gen_bit_stream，候选 `.sbit` 3,791,112 bytes，SHA256 `605C234FA2B14BB174C304B0B99FB7E5E7768643F999A97BEC70FA328B488CFB`。
 - 资源 LUT 32063、FF 33300、DRM 120.5、APM 90；slow ddrphy_sysclk WNS -4.462 ns/TNS -4036.195 ns，fast WNS -0.793 ns，仍有 setup 失败。bitstream 报告 SCBV 未设置警告，板级保持 NOT_RUN。
 - 未操作下载器、`cdt_js` 或 `cdt_cfg`；reset-mid-read 同 RID 旧响应风险仍开放。
+- 心跳复核全量 Python 回归为 432 passed / 4 skipped（2 条 PyTorch FutureWarning），无源代码变更。
