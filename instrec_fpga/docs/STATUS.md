@@ -1,5 +1,13 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-01 23:43：frame-major CPU+NPU 候选已完成布线并生成位流
+
+- 冻结快照 `build/npu_production_candidate/frame-major-20261101-230923` 的完整 flow `build/resource_gate/native-20261101-230932-136199` 已完成 compile/synthesize/dev_map/PNR/report_timing/gen_bit_stream；PDS 父进程32412于23:09:47启动，PNR子进程33836于23:21:27启动。详细布线第105轮未布网络0，日志确认 `Design 'top_rv_core' has been placed and routed successfully`。
+- 映射资源 LUT 32075/66600、FF 33300/133200、DRM 120.5/155、APM 90/240；最终路由逻辑 LUT 31968、FF 33300、DRM 120.5、APM 90。DRM占78%，余量有限。
+- 位流 `build/resource_gate/native-20261101-230932-136199/generate_bitstream/top_rv_core.sbit`，3,791,112 bytes，SHA256 `ED713818EFE9E5A616437D302A994B69984F66FCE9E8D43A8EE2AA8BF8509163`。不得覆盖既有release；此为新候选，尚未板测。
+- 时序不是全约束达标：slow-corner `ddrphy_sysclk` 125MHz estimated 75.6029MHz，WNS -5.227ns、TNS -8567.538ns、10261/112147 setup endpoints failing；`clk_nco` WNS +2.220ns、`rst_clk` +3.954ns，所有列出的hold WHS为正。主要负裕量路径位于DDR PHY sysclk域，路由成功不能表述为时序收敛。
+- 报告在该run的 `report_timing/top_rv_core.rtr`，详细布线和完整日志在该run目录。下一步先确认PDS父子进程正常退出并计算manifest/日志hash；不操作下载器。用户需知板测包已准备，但板级状态仍NOT_RUN。
+
 ## 2026-11-01 23:15：UI特征拷贝占口恢复与末尾重复写已修复
 
 - `feat_copy_engine`改为区分当前获准读请求与上一拍pending同步RAM响应：本拍NPU抢占时仍消费属于copy的旧响应，恢复时不会误收NPU数据；末尾最后字节只写一次，随后翻页，idle/tail地址夹到0。

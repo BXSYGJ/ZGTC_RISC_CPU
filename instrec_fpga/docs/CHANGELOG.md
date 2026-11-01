@@ -1,5 +1,11 @@
 # InstRec-FPGA 变更日志
 
+## 2026-11-01 23:43 — frame-major RV/NPU 位流候选完成布线
+
+- 完整冻结flow完成至位流生成，详细布线第105轮未布0；映射资源32075 LUT / 33300 FF / 120.5 DRM / 90 APM。
+- 位流SHA256 `ED713818EFE9E5A616437D302A994B69984F66FCE9E8D43A8EE2AA8BF8509163`。时序报告显示ddrphy_sysclk WNS -5.227ns、TNS -8567.538ns；clk_nco +2.220ns、rst_clk +3.954ns，hold均正。该候选已布通但未满足ddrphy_sysclk时序，板测NOT_RUN。
+- 构建产物留在gitignored build目录；未操作下载器或cdt服务。
+
 ## 2026-11-01 23:15 — 修复UI特征copy暂停污染与末尾重复写
 
 - 真实共享同步RAM反例复现后修复pending响应追踪，四场景每轮16512写且0错误、页翻转正确；19定向测试通过。
