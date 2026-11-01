@@ -16,3 +16,19 @@ One row RAM blocks input while flushing DDR, so producer MUST honor in_ready. Th
 Memory is expressed as 32 independent 8-bit lane banks with synchronous reads and one write per lane/cycle; the read port is shared between DDR output prefetch and canonical replay. This removes the original wide asynchronous RAM read structure but DOES NOT prove physical DRM inference or efficient packing. That requires compile/synthesis after the current unique PDS process finishes. Geometry requires CHANNELS a multiple of 16, HEIGHT/WIDTH positive, 32-byte aligned BASE, and a valid reserved DDR range.
 
 TB checks command/data stalls, delayed R, output stalls, no read before credit, padded row boundary, transaction counts and exact canonical bytes. It does not prove integration, large-geometry RTL, zero-latency R, arbitrary DDR fault response, or repeated inference sequencing.
+
+## Dynamic shared-row candidate
+
+    python sim/experiments/activation_store/run_dynamic.py
+
+`activation_row_store_dynamic` adds cfg_layer[1:0], cfg_base[31:0] and replay_row[15:0]. Configuration is sampled only on start. cfg_layer 0 selects pool1 W129/C48/H32, 1 pool2 W64/C96/H16, 2 pool3 W32/C192/H8. Invalid layer3 or unaligned base latches protocol_error and does not begin a transfer. replay_row is the row awaiting credit or being fetched/emitted; the next consumer supplies row_credit from its actual row-bank ownership. A granted row may finish even if credit later deasserts. The memory is shared at maximum194 packed beats and rows use padded strides6208/6144/6144 bytes respectively. Addresses advance from the latched base by stride without a runtime row multiplication.
+
+Full real-geometry RTL round trips all passed in one run, with actual pool group/column/lane ingress and canonical column/channel replay:
+
+| Layer | Frame bytes checked | Write commands | Read commands |
+|---|---:|---:|---:|
+| pool1 | 198144 | 6208 | 6208 |
+| pool2 | 98304 | 3072 | 3072 |
+| pool3 | 49152 | 1536 | 1536 |
+
+The TB changes live configuration to invalid values after start and confirms the active transaction remains latched. It includes command/data stalls, delayed R, output stalls, initial credit withholding and replay_row checks. Log: build/sim/activation_row_store_dynamic/run.log. This remains an abstract DDR protocol test, without native-controller/top integration or synthesis/physical mapping evidence.

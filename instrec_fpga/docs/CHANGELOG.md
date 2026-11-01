@@ -599,3 +599,9 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 - wbuf持久反例可复跑：旧step4 LOAD valid穿透FAIL，新step8 10797握手PASS。独立conv输出FIFO随机背压792576项通过；pool奇宽背压128项通过；pool→DDR→canonical重放128B/4写4读通过。
 - 新增 `sim/experiments/activation_pipeline/` 和 `wbuf_replay/` 资产；完整前两层、原生DDR接口、综合与上板仍待验证。唯一PDS到iteration240未布6538，无新位流/时序。
 - 真实小几何conv→pool→DDR→重放联合链也通过：独立非零3x3/通道bias数学golden，384conv+96pool/回读值精确，4写4读，DDR写长暂停可反压。
+
+## 2026-11-01 18:09 — 动态激活缓存与修复版宽口WDMA证据
+
+- 保存三层真实尺寸动态共享行缓存RTL/TB/runner，逐值回读共345600B通过；六层修复版WDMA宽口差分通过，无资源收益承诺。
+- 记录真实前两层链conv2 index24808失配，native bridge与地址隔离继续；完整NPU尚未通过。
+- 交接快照加最新验证范围纠正；PDS iteration244未布6643、无新位流，manifest62项一致。

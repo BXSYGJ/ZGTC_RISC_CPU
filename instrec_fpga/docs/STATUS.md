@@ -1,5 +1,14 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-01 18:09 心跳：激活缓存真实尺寸通过，conv2 回放失配修复中
+
+- 动态共享行缓存候选 `sim/experiments/activation_store/` 三层真实尺寸 RTL 逐字节回读 PASS：198144/98304/49152B，分别6208/3072/1536次写和读。尚未综合、尚未证明原生 DDR 端到端。
+- 修复版 WDMA 宽口参数 RAM 持久 runner `python sim/experiments/wdma_parameter_ram/run.py` 六层各350000周期逐拍差分 PASS；日志 `build/sim/wdma_parameter_ram_experiment/run.log`。未综合，不宣称资源收益；完整conv1宽口复测继续。
+- 真实 conv1→pool1→DDR→conv2 首轮在 conv2 index24808（row2/group0/col2/lane8）失配 got17/exp28；证据 `build/sim/npu_activation/run.log`。代理继续对照canonical回放逐字节定位，不能宣称完整NPU通过。
+- 原生 m1 bridge 候选70事务独立模型通过（480权重读beat、20激活写+20读），将持久化并接顶层；激活DDR候选地址与spectrum重叠也已发现，正在按内存图选择合法双区与白名单。
+- 唯一 PDS run `20261101-130420-0ed52a5d` iteration244，未布网络6643，仍无新位流；62项manifest哈希全部一致。原JTAG进程保持，未另起PDS、未烧录。当前布线不含上述候选修复。
+- GitHub已同步至 `3d71932`。本轮补充持久实验、纠正交接文档的历史“全链”措辞；下一步继续修conv2、接native bridge、验证二次推理。
+
 ## 2026-11-01 18:04 心跳：真实集成 conv1 候选完整对拍通过，层间 DDR 修复继续
 
 - **正式行信用端口候选完整 conv1 PASS**：`build/sim/npu_conv1_step9/run.log`，792576 个输出逐字节与 golden 一致，859229 周期；当前 feat 重新计算 golden 也一致。候选包含参数 beat/通道索引、WDMA 握手、半 beat 末 tap、wbuf 预读/装载屏蔽和特征行信用修复，尚未合入主线或当前 PDS。
@@ -23,7 +32,7 @@
 - WDMA 原候选反例与修复已持久化 `sim/experiments/wdma_handshake/`，现场重跑 baseline 预期 FAIL、fixed 4943 tap PASS，见 `reports/wdma_handshake_validation_20261101.md`。换组 MAC 错误进一步定位到 wbuf 装载首拍旧 valid 穿透：`grp_start` 边沿状态进 LOAD，但 `rd_vld_q` 从旧 RPY 仍保持 1 一拍。此前 10797 次测试仅检查 grp_start 当拍，未覆盖随后整个 LOAD；正在增强反例与状态/valid 修复。
 
 > 本文件是**唯一实时状态源**，优先于任何交接快照与记忆。每次会话结束前必须更新，
-> 并在 `CHANGELOG.md` 追加一条。最后更新：2026-11-01 18:04。
+> 并在 `CHANGELOG.md` 追加一条。最后更新：2026-11-01 18:09。
 
 ## 2026-11-01 17:18 新确认的整链阻塞（优先于组件 PASS）
 
