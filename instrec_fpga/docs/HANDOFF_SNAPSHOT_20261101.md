@@ -13,6 +13,12 @@
 本轮最重要的认知转变：**此前所有板级失败结论都不可沿用**——修掉 9 个真 RTL 缺陷后，
 DDR3、conv1~4、Mel、fc/softmax 的正确性才第一次被真正验证。
 
+> **交接时的构建状态（必须如实告知接手人）**：`core_only` 第三次构建（含 `cmd_to_err[3:0]` 观测改进）
+> **在布线中途中止，未收口、无新位流**（中止时未布 3270 个网络）。本次交接**不新增任何位流**，
+> 可引用的位流全部是表 5.1 中已归档的那几份。日志留档
+> `build/stall_evidence/flow_core_only_v3_interrupted_20261101.log`。
+> 接手后若要继续，先从「六、未完成项」第 1 条开始，**不要试图续跑那个被中止的 run**（PDS 无增量布线）。
+
 ---
 
 ## 二、需求达成矩阵
@@ -121,6 +127,30 @@ sim/tb_*.sv             11 个 TB：conv1 / mel / mel_credit / self_test / weigh
 sim/ddr3_axi_model.sv   行为级 DDR3 IP 模型（可注入 awready 延迟 / 永不 ready / WSTRB_IGNORE）
 ```
 Verilator 5.050 在 `H:\GG\bin\verilator.bat`（不在 PATH），g++ 16.2.0 就绪。
+
+### 5.4 配套软件齐备度（PC 侧上位机 / 权重上传 / 判读脚本）
+
+| 脚本 | 用途 | 状态 | 说明 |
+|---|---|---|---|
+| `scripts/board_check.py` | **烧录 + 串口判读一体化** | ✅ 可用 | `--sbit/--port/--seconds/--expect/--json`；退出码 0/2/3/4/**5**；自动复用已有 `cdt_js`；22 项离线测试 |
+| `scripts/weight_upload.py` | 权重镜像上传（CRC-16/CCITT + 分块回执） | ⚠️ **脚本就绪、链路未通** | 脚本本身无缺陷（RTL 侧仿真 `WOK 42851062` 完整）；板上 **PC→FPGA 零字节**，属硬件通路问题，非软件问题 |
+| `scripts/uart_capture.py` | 裸串口抓包 | ✅ 可用 | 配合 `build/uart_last.bin` |
+| `scripts/compare_conv1.py` | conv1 逐字节对拍 | ✅ 可用 | 多模：`--golden-only/--self-check/--emit-hex/--uart-file/--json`；板上实测 `mismatch 0/3072` |
+| `scripts/compare_mel.py` | Mel `feat` 逐字节对拍 | ✅ 可用（仿真侧已验） | 自带转置（golden 是 `mel*258+frame`）；板上未验 |
+| `scripts/compare_layers.py` | 逐层对拍 | ⚠️ **缺 RTL 导出** | RTL 无逐层 UART 输出，恒返回 rc=1；需先做 `layer_export` |
+| `scripts/diag_frames.py` | 91 字节诊断帧解析 | ✅ 可用 | `parse_frame/parse_all/DDR3_E_BITS` |
+| `scripts/golden_pipeline.py` | **位级真值**（与浮点精确数学 0 LSB） | ✅ 权威 | 对拍只认它，不认 torch（torch 有 21~67 LSB tile 噪声） |
+| `scripts/gen_weight_image.py` | 从 `layer_contract.json` 生成权重镜像 | ✅ 可用 | 691040 B，sha `19a74dbe…5d7a`，2700+1 帧 |
+| `scripts/run_pds_full.ps1` + `build_full.tcl` + `build_sets.json` | 构建流水（6 个 set） | ✅ 可用 | 支持 `-BuildSet`/`-TopModule`/`-DryRun` |
+| `sim/run_sim.py` + 11 个 TB | **Verilator 仿真基建** | ✅ 可用 | `all --jobs 8` 全套 **44 秒** |
+| `scripts/check_rtl.py` | SV-2005 词法检查 | ✅ 必跑 | 52 个 `.v`，必须 0 violation |
+
+**软件侧唯一真实缺口**：`layer_export`（逐层 UART 导出）尚未实现——这是「逐层对拍」的必要条件，与硬件无关。
+
+**硬件侧依赖（脚本无法替代）**：
+- 真实 I2S 音频输入（否则全链只能用 `conv1_test`/`mel_test` 的 golden 预置激励）
+- CP2102 串口 TX→B24 通路（WOK 的 PC→FPGA 方向依赖它）
+- FT2232H 下载器（`cdt_js` 单实例）
 
 ---
 
