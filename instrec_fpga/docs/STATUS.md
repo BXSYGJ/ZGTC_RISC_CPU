@@ -1,7 +1,16 @@
 # InstRec-FPGA 当前状态（STATUS）
 
 > 本文件是**唯一实时状态源**，优先于任何交接快照与记忆。每次会话结束前必须更新，
-> 并在 `CHANGELOG.md` 追加一条。最后更新：2026-11-01 17:12。
+> 并在 `CHANGELOG.md` 追加一条。最后更新：2026-11-01 17:18。
+
+## 2026-11-01 17:18 新确认的整链阻塞（优先于组件 PASS）
+
+- 原版完整 `npu_top` 实验不跳层、不注入完成，50000000 周期停在 layer0 并超时。进一步诊断：conv1 输出 0，参数计数 47/48，WDMA `taps_left=0/emit_beats=1`。
+- 已确认半 beat 末 tap 控制缺陷：`wdma.S_TEMIT` 只有耗尽整个 beat 才进入下一组，conv1 的第 9 tap 落在低半 beat 后无法退出。build 副本最小修复后 WDMA 从 grp0 推进到 grp1；卷积仍被独立的参数起始问题阻断。
+- 参数起始问题：`grp_start` 与首个 `b_valid` 同拍，卷积参数计数被重置，最终只计入 47/48 拍。正在 build 副本提前起始脉冲并复测；另审查逐 DDR beat 参数索引和通道组索引，尚不宣称整链正确。
+- 当前 PDS 输入保持冻结。这些修复在 build 候选中验证，当前 run 即使产出位流也不能证明 NPU 整链推理通过。
+- `wdma` 参数表在当前综合中展开为 20480 个存储 FF，未推断为 DRM；资源证据与宽写口候选见 `reports/rv_route_resource_review_20261101.md`。候选尚未综合，不宣称已降低 LUT。
+- 只读板卡检查：COM5 存在，原 jtagserver PID9040 / cdt_cfg PID46156 与端口65420保持；FTDI 当前枚举为 ABSENT。未重启/终止下载器，未尝试烧录。诊断 JSON：`build/board_diag_20261101_1714.json`。
 
 ## 2026-11-01 15:56 RV 构建持续布线与并行验证
 

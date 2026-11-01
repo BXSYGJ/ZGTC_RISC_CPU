@@ -566,3 +566,9 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 - 新增 `sim/tb_uart_linebuf.sv` 与 runner case：原版满行、短/空换行、起始/中途 TX 背压、未 ready 写丢弃、busy/ready 恢复全部 PASS。原 14 项 RTL suite 本次分组重跑也全部 PASS。
 - PDS detail route iteration 192、未布通 6638，62 个 manifest 输入 SHA256 全一致；尚无新版 RV 位流或板级结论。
 - CPU 存储推断复核：6 块 DRM；顶层覆盖 `ENABLE_M=0`。当前 LUT 35840，placer 物理利用率 81%，无可靠路由完成 ETA。
+
+## 2026-11-01 17:18 — 完整 NPU 实验发现集成阻塞
+
+- 原版真实 npu_top 自然跑层在 layer0 超时；诊断 WDMA 半 beat 末 tap 死锁、conv 参数计数 47/48。build 副本修末 tap 后 WDMA 推进到下一组；参数起始脉冲修复及后续逐层对拍继续，未改冻结 PDS 源输入。
+- 新增 WDMA 综合资源审查：参数表未推 DRM，而是 20480 存储 FF；宽口候选只在 build，尚待等价仿真/综合。
+- 只读板卡诊断显示 FTDI ABSENT（COM5、原JTAG进程和监听端口仍在），未操作下载器或烧录。
