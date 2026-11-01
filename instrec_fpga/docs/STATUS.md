@@ -6,6 +6,7 @@
 - 映射资源 LUT 32075/66600、FF 33300/133200、DRM 120.5/155、APM 90/240；最终路由逻辑 LUT 31968、FF 33300、DRM 120.5、APM 90。DRM占78%，余量有限。
 - 位流 `build/resource_gate/native-20261101-230932-136199/generate_bitstream/top_rv_core.sbit`，3,791,112 bytes，SHA256 `ED713818EFE9E5A616437D302A994B69984F66FCE9E8D43A8EE2AA8BF8509163`。不得覆盖既有release；此为新候选，尚未板测。
 - 时序不是全约束达标：slow-corner `ddrphy_sysclk` 125MHz estimated 75.6029MHz，WNS -5.227ns、TNS -8567.538ns、10261/112147 setup endpoints failing；`clk_nco` WNS +2.220ns、`rst_clk` +3.954ns，所有列出的hold WHS为正。主要负裕量路径位于DDR PHY sysclk域，路由成功不能表述为时序收敛。
+- 快角复核同样未闭合：`ddrphy_sysclk` WNS -1.305ns，96 个 setup endpoint 失败；激活行缓存 reset 回归只覆盖模型主动取消未完成 DDR 事务，迟到上游 R 和完整顶层物理复位恢复仍未验证。
 - 报告在该run的 `report_timing/top_rv_core.rtr`，详细布线和完整日志在该run目录；进程退出与manifest/日志hash已于23:49复核。下一步是处理负时序并在合适窗口执行板级 smoke；当前板级仍NOT_RUN，不操作下载器。
 
 ## 2026-11-01 23:49：最新 PDS 产物与自动化状态复核
