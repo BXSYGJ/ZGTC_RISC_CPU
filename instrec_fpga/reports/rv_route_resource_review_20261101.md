@@ -60,8 +60,18 @@ Only a candidate copy and diff exist in
 - Coincident read/write returns the old value under nonblocking assignment
   semantics, as before. Reads remain active during reset, but pq is masked
   to zero by an asynchronous-reset valid flag, preserving its external behavior.
-- A candidate simulation and synthesis gate are still required. No LUT savings,
-  block-RAM inference or timing improvement is claimed until measured.
+- The Verilator cycle-differential run at
+  `build/sim/wdma_wide_diff/run.log` compared original and candidate for 350,000
+  cycles each on layer IDs 0..5. It used actual `rd_cmd` output to request
+  variable-length bursts and returned distinguishable address/beat-derived data
+  with randomized response gaps; `w_ready` was randomized. Every cycle compared
+  command valid/data, contract valid/data, weight valid/data, group start, busy,
+  and done. Result: PASS, no divergence. Original reached `done` for layers 1, 4,
+  and 5 before the fixed horizon; layers 0, 2, and 3 remained active in states
+  10/9/9. Those bounded cases demonstrate equivalence only, not completion
+  correctness. No force or hierarchical state injection was used.
+- The candidate has not been synthesized. No LUT savings, block-RAM inference
+  or timing improvement is claimed until a synthesis gate measures them.
 
 The candidate deliberately preserves cfg_idx update behavior: it changes on
 rd_done, not every rd_valid beat. A burst therefore overwrites the same indexed
@@ -70,10 +80,10 @@ functionality and must not be mixed into an equivalence-only memory conversion.
 
 ## Follow-up
 
-First compare original/candidate beat-by-beat under concurrent writes, reads,
-reset and all parameter address/lane boundaries, then run existing conv1,
-npu_chain and weight-loader regressions. A candidate-only synthesis gate must
-prove DRM inference and actual resource reduction before adoption.
+The cycle-differential test is an equivalence check, not a functional pass for
+the original's incomplete layer cases. Run the existing conv1, npu_chain and
+weight-loader regressions on the candidate. A candidate-only synthesis gate
+must prove DRM inference and actual resource reduction before adoption.
 
 Historical handoff 20261031 records a narrow routing margin around 53.57% LUT
 and repeated failures with seed/parallel/decongestion/duplication changes.

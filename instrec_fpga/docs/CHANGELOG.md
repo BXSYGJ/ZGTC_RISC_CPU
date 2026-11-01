@@ -572,3 +572,9 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 - 原版真实 npu_top 自然跑层在 layer0 超时；诊断 WDMA 半 beat 末 tap 死锁、conv 参数计数 47/48。build 副本修末 tap 后 WDMA 推进到下一组；参数起始脉冲修复及后续逐层对拍继续，未改冻结 PDS 源输入。
 - 新增 WDMA 综合资源审查：参数表未推 DRM，而是 20480 存储 FF；宽口候选只在 build，尚待等价仿真/综合。
 - 只读板卡诊断显示 FTDI ABSENT（COM5、原JTAG进程和监听端口仍在），未操作下载器或烧录。
+## 2026-11-01 17:30 — WDMA 等价回归与完整 NPU 数值阻塞更新
+
+- 宽口 WDMA 候选与原版在 6 个 layer、每层 350000 周期的逐拍差分通过，覆盖真实 DDR beat、随机响应间隙和写回背压；仅为等价证据，未宣称功能修复或资源收益。
+- 半 beat 末 tap 候选已越过原先 WDMA 死锁，但完整 NPU 仿真仍在 conv1 第 0 项 `got=16 exp=4` 失败；继续定位参数起始、索引与通道组契约。
+- PDS 唯一路由 run 继续 iteration 200，未布网络 6851；无位流、时序或板级 RV 证据。
+
