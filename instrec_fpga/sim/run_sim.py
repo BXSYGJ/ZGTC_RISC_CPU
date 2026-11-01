@@ -237,11 +237,36 @@ register(Case(
 ))
 
 register(Case(
+    name="npu_completion",
+    tb="tb_npu_completion.sv",
+    rtl=[str(p.relative_to(ROOT)).replace("\\", "/") for p in sorted((ROOT / "src/npu").glob("*.v"))],
+    timeout=300,
+    description="real npu_top completion and result drain protocol",
+))
+
+register(Case(
+    name="rv_top_ctrl",
+    tb="tb_rv_top_ctrl.sv",
+    rtl=["build/sim/rv_top_ctrl/rv_top_ctrl_slice.sv", "src/ctrl/uart_tx.v"],
+    prepare="rv_top_ctrl",
+    timeout=180,
+    description="exact top_rv_core UART arbitration and NPU launch control slice",
+))
+
+register(Case(
     name="ui_render",
     tb="tb_ui_render.sv",
     rtl=list(UI_RTL),
     timeout=180,
     description="ui_renderer four-layer compositing priority",
+))
+
+register(Case(
+    name="ui_overlay",
+    tb="tb_ui_overlay.sv",
+    rtl=["src/ui/ui_overlay.v"],
+    timeout=120,
+    description="standalone ui_overlay priority, blanking, and one-cycle latency",
 ))
 
 # T28: direct-drive the DDR3 subsystem against the behavioural IP model.
@@ -483,11 +508,42 @@ def prepare_weight_loader(work: Path) -> None:
     (work / "digest.txt").write_text("%08X\n" % digest, encoding="ascii")
 
 
+def prepare_rv_top_ctrl(work: Path) -> None:
+    """Extract actual top-level control logic, never a reimplementation."""
+    source = (ROOT / "src/ctrl/top_rv_core.v").read_text(encoding="utf-8")
+
+    def section(start: str, end: str) -> str:
+        return source.split(start, 1)[1].split(end, 1)[0]
+
+    uart_gate = "    reg tx_accept_hold;" + section(
+        "    reg tx_accept_hold;", "    // ---- RV32 control core")
+    uart_inst = "    uart_tx u_uart_tx (" + section(
+        "    uart_tx u_uart_tx (", "    uart_rx u_uart_rx (")
+    launch = "    reg cpu_npu_pending;" + section(
+        "    reg cpu_npu_pending;", "    npu_top u_npu (")
+    header = """module rv_top_ctrl_slice #(parameter NPU_ENABLE = 0) (
+    input wire core_clk, core_clk_rst_n,
+    input wire wl_tx_valid, dbg_tx_valid, cpu_tx_valid,
+    input wire [7:0] wl_tx_data, dbg_tx_data, cpu_tx_data,
+    output wire wl_tx_ready, dbg_tx_ready, cpu_tx_ready, uart_tx,
+    input wire sys_run, st_done, st_fail, safe_err, ddr_init_done,
+    input wire weight_ok, weight_err, wl_busy, npu_busy_u,
+    input wire mel_npu_start, cpu_npu_start,
+    output wire launch_out, pending_out
+);
+    wire tx_byte_ready;
+"""
+    body = header + uart_gate + uart_inst + launch
+    body += "assign launch_out = npu_start;\nassign pending_out = cpu_npu_pending;\nendmodule\n"
+    (work / "rv_top_ctrl_slice.sv").write_text(body, encoding="ascii", newline="\n")
+
+
 PREPARERS = {
     "conv1": prepare_conv1,
     "mel": prepare_mel,
     "npu_chain": prepare_npu_chain,
     "weight_loader": prepare_weight_loader,
+    "rv_top_ctrl": prepare_rv_top_ctrl,
 }
 
 

@@ -3,6 +3,22 @@
 > 每次会话结束前追加一条：时间、做了什么、结论、证据路径。倒序，最新在上。
 > 状态汇总见 `docs/STATUS.md`。
 
+## 2026-11-01 13:02 — 修复顶层隐式网并完成全回归
+
+- 修复 `instrec_top.dbg_tx_ready` 未声明和 HDMI 旧控制器 `init_over_rx` 重复声明。
+- 修复 UI overlay 接口后完整 RTL 集合 **14/14 PASS**（281.0 s）；Python **429 passed / 4 skipped**；RTL 词法检查 0 violation。
+- 音频 CDC FIFO 临时双时钟仿真通过。全树 Verilator 展开仍因 Pango/DDR IP stub 不足受阻，不宣称全顶层展开成功。
+- RV PDS run `20261101-113509-6927c1bf` 在 iteration 21 后异常消失（尚余 27603 unrouted nets），恢复因 PDS project 未保留 post-synthesis design 失败；未产生位流。已启动新 run `20261101-130420-0ed52a5d`，正在重新 compile/synthesize；禁止把旧 run 当成功。
+- 顶层审查另发现 `uart_debug.ram_len` 7 位无法表示满 128 字节（截为 0）；因新 PDS manifest 正在消费该 RTL，本轮先锁住源哈希，待构建终态后修复并针对 128 字节边界补仿真，避免发布与网表源不一致的产物。
+- 并行补齐 I2S 联合仿真：`i2s_clk_gen` + `i2s_rx` 解码 24 字并观察到正确 BCK/LRCK 相位，左右样本 `A53C`/`5AC3`；测试位于 gitignored `build/sim`，未改 RTL。
+
+## 2026-11-01 12:53 — 修复 UI overlay 接口漂移并补齐仿真
+
+恢复 `ui_renderer` 的六个 overlay 端口和 `ui_overlay` 级联，保持四级 RGB/DE 对齐。
+`ui_render` 通过 64 个有效像素、优先级 0 mismatch、对齐 0 mismatch；新增独立
+`ui_overlay` 用例通过 6/6；受影响 Python 合约测试 32 passed。当前 RV PDS 构建继续
+独占运行，UI 修复不在 `top_rv_core` 构建集内。
+
 ## 2026-11-01 07:45 — R1 达成（DDR3 board-proven）；全模块仿真闭环；多 master AW 污染根因定位
 
 **R1 达成（board-proven）**：精简顶层 `top_core_only` 布通并两次烧录，串口
@@ -515,3 +531,11 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 - `sim/run_sim.py rv_cpu --verbose`：C1-C6 全部 PASS，验证 CPU 启动、MMIO、soft-start、NPU 结果回读。
 - PDS 资源门槛 run 已通过 RTL 分析并进入综合，但日志停在 `Saving design to DB`，尚无综合资源摘要、新位流、PNR 或板级验证。
 
+
+## 2026-11-01 11:35 — RV 真实控制路径与完成握手修复、启动新版构建
+
+- RV 默认由固件请求启动；门控 DDR/权重/完整特征窗口，修共享 UART ready 和 CPU FIFO 背压、DDR 位布局、结果快照/清除竞争。
+- npu_top 补 softmax 完成分支；新增真实 softmax 双轮完成仿真。RV C1-C9 PASS；Python 429 passed/4 skipped。
+- conv1 测试台字节/像素计数修正后 mismatch 0/792576；UI 既有未提交端口删除导致展开失败，保留并明确记录。
+- 构建脚本补阶段恢复、StopAfter 不发布位流、单 run 护栏、输入哈希及结束校验；补 clk_nco 216MHz 时序约束。
+- 新 rv_core 全流程 run 20261101-113509-6927c1bf 启动；旧综合仅资源基线，当前尚无新位流或 RV 板级证据。

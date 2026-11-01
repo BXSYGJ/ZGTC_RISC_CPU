@@ -12,6 +12,10 @@
 //   C3  the RV32I self-test prints "RV32 ISA OK"
 //   C4  mcycle/minstret measurement prints "RV32 BENCH cycles=..."
 //   C5  an injected probs event prints "NPU t=3 p=87"
+//   C6  firmware issues a real MMIO NPU start write
+//   C7  DDR OK is decoded from the real status register
+//   C8  firmware acknowledges and clears the sticky NPU event
+//   C9  result cycle count remains associated with the captured event
 // Self-validation: change a token in main.c (or drop the injected event) and
 // the matching check must fail.
 // ---------------------------------------------------------------------------
@@ -43,6 +47,7 @@ module tb_rv_cpu;
     reg         npu_probs_valid = 1'b0;
     reg  [7:0]  npu_probs_pct = 8'd0;
     reg  [3:0]  npu_probs_idx = 4'd0;
+    reg  [31:0] npu_cycles = 32'd12345;
 
     rv32_cpu_subsys #(
         .ENABLE_M         (0),
@@ -58,7 +63,7 @@ module tb_rv_cpu;
         .npu_probs_pct   (npu_probs_pct),
         .npu_probs_idx   (npu_probs_idx),
         .npu_top1        (npu_probs_idx),
-        .npu_cycles      (32'd12345),
+        .npu_cycles      (npu_cycles),
         .ddr_ok          (1'b1),
         .ddr_err         (1'b0),
         .ddr_sts         (32'h0000_0001),
@@ -118,6 +123,11 @@ module tb_rv_cpu;
 
     integer nfail = 0;
     reg cpu_triggered = 1'b0;
+    reg cpu_acknowledged = 1'b0;
+
+    always @(posedge clk) begin
+        if (rst_n && dut.ctrl_clear) cpu_acknowledged <= 1'b1;
+    end
 
     // bring-up trace (cheap, only every 250k cycles)
     always @(posedge clk) begin
@@ -155,8 +165,12 @@ module tb_rv_cpu;
         repeat (2) @(posedge clk);
         npu_done <= 1'b0;
         npu_probs_valid <= 1'b0;
+        // An accelerator counter may change after completion; software must
+        // still read the cycle count belonging to the captured result.
+        npu_cycles <= 32'd99999;
 
         wait (nline >= 8);      // + "NPU GO" + the NPU report
+        wait (cpu_acknowledged);
         repeat (50) @(posedge clk);
 
         $display("---- UART log (%0d lines) ----", nline);
@@ -175,6 +189,13 @@ module tb_rv_cpu;
         else $display("CHECK PASS C5 NPU event surfaced through MMIO");
         if (!cpu_triggered) begin $display("CHECK FAIL C6 firmware never pulsed CTRL[0]"); nfail = nfail + 1; end
         else $display("CHECK PASS C6 CPU-triggered NPU start (CTRL[0])");
+        if (!has_prefix("DDR OK STS 0x00000001")) begin $display("CHECK FAIL C7 DDR status read-back"); nfail = nfail + 1; end
+        else $display("CHECK PASS C7 DDR status read-back");
+        if (!cpu_acknowledged || dut.npu_done_st || dut.npu_probs_st || dut.npu_timeout_st) begin
+            $display("CHECK FAIL C8 NPU event acknowledgement/clear"); nfail = nfail + 1;
+        end else $display("CHECK PASS C8 firmware acknowledged and cleared NPU event");
+        if (!has_prefix("NPU t=3 p=87 c=12345")) begin $display("CHECK FAIL C9 result cycle snapshot"); nfail = nfail + 1; end
+        else $display("CHECK PASS C9 result cycle snapshot survives live counter change");
 
         if (cpu_trap) begin
             $display("CHECK FAIL CPU trap, cause=%08x", cpu_trap_cause);

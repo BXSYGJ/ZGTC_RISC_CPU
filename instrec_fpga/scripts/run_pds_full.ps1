@@ -13,7 +13,7 @@
 #   mel_test   top_mel_test     mel engine, fake PCM source (minutes)
 #   core_only  top_core_only    DDR3 + NPU + Mel + control, no video half
 #                               (the LUT-reduced full top, T36)
-#   rv_core    top_rv_core      core_only plus RV32IM control firmware/CPU
+#   rv_core    top_rv_core      core_only plus RV32I control firmware/CPU
 #
 # Parameters:
 #   -BuildSet <full|ddr3_diag|ui_demo|conv1_test|mel_test|core_only|rv_core>
@@ -103,6 +103,18 @@ function ConvertTo-TclLines {
     return (($lines.ToArray()) -join "`n")
 }
 
+function Get-SourceDigest {
+    param([string]$Path)
+    $hash = [System.Security.Cryptography.SHA256]::Create()
+    $stream = [System.IO.File]::OpenRead($Path)
+    try {
+        return ([System.BitConverter]::ToString($hash.ComputeHash($stream)) -replace '-', '')
+    } finally {
+        $stream.Dispose()
+        $hash.Dispose()
+    }
+}
+
 try {
     $project = [System.IO.Path]::GetFullPath([System.IO.Path]::Combine($PSScriptRoot, '..'))
 
@@ -152,6 +164,7 @@ try {
     # $readmemh tables: copy every table of each hex_dir into <build>/<hex_dir>
     # so the work_dir-relative "src/mel/..." / "src/ui/..." prefixes resolve.
     $hexLines = New-Object System.Collections.Generic.List[string]
+    $hexSourceFiles = New-Object System.Collections.Generic.List[string]
     $hexCount = 0
     foreach ($hexDir in $hexDirs) {
         $hexRelative = ([string]$hexDir).Replace('/', '\')
@@ -161,6 +174,7 @@ try {
         $hexTargetTcl = $hexTargetDir.Replace('\', '/')
         $hexHits = @(Get-ChildItem -Path ([System.IO.Path]::Combine($hexSourceDir, '*.hex')) -File -ErrorAction SilentlyContinue | Sort-Object FullName)
         foreach ($hexFile in $hexHits) {
+            [void]$hexSourceFiles.Add($hexFile.FullName)
             [void]$hexLines.Add('file copy -force "' + $hexFile.FullName.Replace('\', '/') + '" "' + $hexTargetTcl + '"')
             $hexCount = $hexCount + 1
         }
@@ -215,6 +229,26 @@ try {
         exit 0
     }
 
+    if (@(Get-Process -Name pds_shell -ErrorAction SilentlyContinue).Count -gt 0) {
+        throw 'A pds_shell process already exists; only one PDS build is allowed.'
+    }
+
+    # Record inputs before PDS reads live source paths. A later change makes
+    # this run unsuitable for publication even if PDS produces a bitstream.
+    $sourceRecords = @()
+    $sourcePaths = @($designFiles) + @($ipFiles) + @($constraintFiles) + @($hexSourceFiles.ToArray()) + @($setsPath, $tclTemplatePath, $PSCommandPath)
+    foreach ($sourcePath in @($sourcePaths | Sort-Object -Unique)) {
+        if (-not (Test-Path -LiteralPath $sourcePath -PathType Leaf)) { throw "Build input not found: $sourcePath" }
+        $sourceRecords += [ordered]@{
+            Path = $sourcePath
+            Sha256 = (Get-SourceDigest -Path $sourcePath)
+            LastWriteUtc = (Get-Item -LiteralPath $sourcePath).LastWriteTimeUtc.ToString('o')
+        }
+    }
+    $sourceManifestPath = [System.IO.Path]::Combine($buildRoot, 'source-manifest.json')
+    $sourceManifest = [ordered]@{ Schema = 1; BuildSet = $BuildSet; CapturedUtc = [datetime]::UtcNow.ToString('o'); Files = $sourceRecords }
+    [System.IO.File]::WriteAllText($sourceManifestPath, ($sourceManifest | ConvertTo-Json -Depth 5), [System.Text.UTF8Encoding]::new($false))
+
     # 3) locate PDS and the license, both hard-checked before the run
     $pdsRoot = [Environment]::GetEnvironmentVariable('PDS_ROOT', 'Process')
     if ([string]::IsNullOrWhiteSpace($pdsRoot)) { $pdsRoot = 'H:\GG\pango\PDS_2022.2-SP6.4' }
@@ -230,6 +264,11 @@ try {
     $stdout = [System.IO.Path]::Combine($buildRoot, 'pds.stdout.log')
     $stderr = [System.IO.Path]::Combine($buildRoot, 'pds.stderr.log')
     $arguments = @('-file', ('"' + $scriptPath + '"'), '-work_dir', ('"' + $buildRoot + '"'), '-project_name', $projectName)
+    if (@(Get-Process -Name pds_shell -ErrorAction SilentlyContinue).Count -gt 0) {
+        throw 'A pds_shell process appeared before launch; only one PDS build is allowed.'
+    }
+    Write-Output "PDS build directory: $buildRoot"
+    Write-Output "PDS source manifest: $sourceManifestPath"
     $started = [datetime]::UtcNow
     $process = Start-Process -FilePath $pdsShell -ArgumentList $arguments -PassThru -WindowStyle Hidden -Wait -RedirectStandardOutput $stdout -RedirectStandardError $stderr
     Write-Output "PDS PID: $($process.Id)"
@@ -237,6 +276,20 @@ try {
     $outputText = [System.IO.File]::ReadAllText($stdout)
     if ((Test-Path -LiteralPath $stderr -PathType Leaf)) { $outputText = $outputText + [System.IO.File]::ReadAllText($stderr) }
     Write-Output "PDS ExitCode: $($process.ExitCode)"
+
+    $changedSources = @()
+    foreach ($record in $sourceRecords) {
+        if (-not (Test-Path -LiteralPath $record.Path -PathType Leaf)) {
+            $changedSources += $record.Path
+        } elseif ((Get-SourceDigest -Path $record.Path) -ne $record.Sha256) {
+            $changedSources += $record.Path
+        }
+    }
+    $sourceValidation = [ordered]@{ CheckedUtc = [datetime]::UtcNow.ToString('o'); Unchanged = ($changedSources.Count -eq 0); ChangedFiles = $changedSources }
+    [System.IO.File]::WriteAllText([System.IO.Path]::Combine($buildRoot, 'source-validation.json'), ($sourceValidation | ConvertTo-Json -Depth 4), [System.Text.UTF8Encoding]::new($false))
+    if ($changedSources.Count -gt 0) {
+        throw ("Build inputs changed during PDS; refusing publication: " + ($changedSources -join ', '))
+    }
 
     # 5) scan for tool errors; "SCBV has not been set" / Bitstream-2001 is a
     #    known benign notice on boards without PCB SCBV data, not an error.
@@ -357,13 +410,18 @@ try {
     if ((Test-Path -LiteralPath $stderr -PathType Leaf)) {
         Copy-Item -LiteralPath $stderr -Destination ([System.IO.Path]::Combine($reportsDir, ('build_' + $runName + '.pds.stderr.log'))) -Force
     }
-    Copy-Item -LiteralPath $bitstream -Destination ([System.IO.Path]::Combine($project, 'build', ($latestBase + '.sbit'))) -Force
+    if ($StopAfter -eq '') {
+        Copy-Item -LiteralPath $bitstream -Destination ([System.IO.Path]::Combine($project, 'build', ($latestBase + '.sbit'))) -Force
+    }
 
     # 11) manifest (build provenance, REQ-BLD-001)
     $manifest = [ordered]@{
         Schema = 1
         BuildSet = $BuildSet
         RunName = $runName
+        StopAfter = $StopAfter
+        SourceManifest = $sourceManifestPath
+        SourcesUnchanged = $true
         BuildDirectory = $buildRoot
         Device = 'PG2L100H-6IFBG676'
         TopModule = $topModule
@@ -380,7 +438,9 @@ try {
     }
     $manifestJson = $manifest | ConvertTo-Json -Depth 6
     [System.IO.File]::WriteAllText([System.IO.Path]::Combine($buildRoot, 'manifest.json'), $manifestJson, [System.Text.UTF8Encoding]::new($false))
-    [System.IO.File]::WriteAllText([System.IO.Path]::Combine($project, 'build', ($latestBase + '.json')), $manifestJson, [System.Text.UTF8Encoding]::new($false))
+    if ($StopAfter -eq '') {
+        [System.IO.File]::WriteAllText([System.IO.Path]::Combine($project, 'build', ($latestBase + '.json')), $manifestJson, [System.Text.UTF8Encoding]::new($false))
+    }
 
     Write-Output "Bitstream: $bitstream"
     Write-Output "SHA-256: $sbitHash"

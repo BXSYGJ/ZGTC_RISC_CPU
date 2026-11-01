@@ -40,7 +40,7 @@
 //                              [11:8] npu_top1   [15:12] probs_idx
 //                              [23:16] probs_pct
 //   0x8000_0008 R  PROBS       {8'h0, pct[7:0], 4'h0, idx[3:0]}
-//   0x8000_000C W  UART_TX     byte to transmit (dropped if the FIFO is full)
+//   0x8000_000C W  UART_TX     byte to transmit (stalls if the FIFO is full)
 //   0x8000_0010 R  UART_ST     [0] tx_ready, [5:1] FIFO occupancy
 //   0x8000_0014 W  LED         [7:0] board LEDs
 //   0x8000_0018 R  CYCLE_LO    mcycle[31:0]
@@ -200,6 +200,7 @@ module rv32_cpu_subsys #(
     reg        npu_done_st, npu_probs_st, npu_timeout_st;
     reg [7:0]  probs_pct_q;
     reg [3:0]  probs_idx_q;
+    reg [31:0] result_cycles_q;
 
     wire ctrl_write = d_req_valid && d_req_ready && d_req_write &&
                       (d_req_address == 32'h8000_0024);
@@ -213,6 +214,7 @@ module rv32_cpu_subsys #(
             npu_timeout_st <= 1'b0;
             probs_pct_q    <= 8'd0;
             probs_idx_q    <= 4'd0;
+            result_cycles_q <= 32'd0;
             npu_soft_start <= 1'b0;
         end else begin
             npu_soft_start <= ctrl_start;
@@ -220,14 +222,15 @@ module rv32_cpu_subsys #(
                 npu_done_st    <= 1'b0;
                 npu_probs_st   <= 1'b0;
                 npu_timeout_st <= 1'b0;
-            end else begin
-                if (npu_done)          npu_done_st    <= 1'b1;
-                if (npu_timeout)       npu_timeout_st <= 1'b1;
-                if (npu_probs_valid) begin
-                    npu_probs_st <= 1'b1;
-                    probs_pct_q  <= npu_probs_pct;
-                    probs_idx_q  <= npu_probs_idx;
-                end
+            end
+            // A simultaneous new event wins over software acknowledgement.
+            if (npu_done)          npu_done_st    <= 1'b1;
+            if (npu_timeout)       npu_timeout_st <= 1'b1;
+            if (npu_probs_valid) begin
+                npu_probs_st <= 1'b1;
+                probs_pct_q  <= npu_probs_pct;
+                probs_idx_q  <= npu_probs_idx;
+                result_cycles_q <= npu_cycles;
             end
         end
     end
@@ -286,15 +289,15 @@ module rv32_cpu_subsys #(
         case (d_req_address)
             32'h8000_0000: mmio_rdata = CPU_ID;
             32'h8000_0004: mmio_rdata = {8'h00, probs_pct_q, probs_idx_q,
-                                         npu_top1, 2'b00, ddr_err, ddr_ok,
-                                         npu_probs_st, npu_timeout_st,
+                                         npu_top1, 1'b0, ddr_err, ddr_ok,
+                                         1'b0, npu_probs_st, npu_timeout_st,
                                          npu_done_st, npu_busy};
             32'h8000_0008: mmio_rdata = {8'h00, 8'h00, probs_pct_q, 4'h0, probs_idx_q};
             32'h8000_0010: mmio_rdata = {26'h0, tx_count, tx_ready};
             32'h8000_0018: mmio_rdata = cycle_count[31:0];
             32'h8000_001C: mmio_rdata = retired_count[31:0];
             32'h8000_0020: mmio_rdata = ddr_sts;
-            32'h8000_0028: mmio_rdata = npu_cycles;
+            32'h8000_0028: mmio_rdata = result_cycles_q;
             default:       mmio_rdata = 32'h0000_0000;
         endcase
     end
@@ -362,7 +365,10 @@ module rv32_cpu_subsys #(
     wire [DAW-1:0] d_word = d_req_address[DAW+1:2];
     wire [IAW-1:0] d_rom_word = d_req_address[IAW+1:2];
 
-    assign d_req_ready = !d_pend;
+    // Preserve UART stores under backpressure, even for firmware which does
+    // not poll UART_ST before every write.
+    assign d_req_ready = !d_pend &&
+                         !(d_req_write && d_req_address == 32'h8000_000C && !tx_ready);
 
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin

@@ -22,19 +22,18 @@
 ### therefore re-issued below, after {clk} has been created, so the 27 MHz
 ### board clock is once again asynchronous to every DDR3 family clock.
 ###
-### clk_nco: the audio PLL is instantiated (sys_ctrl's pll_locked gate stays a
-### real lock signal), but nothing in this build set consumes clk_nco anymore,
-### so no create_generated_clock is declared for it.  A generated clock on an
-### unloaded GPLL output would only add a constraint that the optimiser can
-### prune away.
+### clk_nco: the audio PLL drives I2S cadence and the audio FIFO write side,
+### including when SD is tied low. Both core_only and rv_core retain this
+### domain. Declare its 216 MHz generated clock and isolate it from DDR3.
 
 # ---- 27 MHz board clock (same period as the full build) ----
 create_clock -name {clk} [get_ports {clk}] -period {37.037} -waveform {0.000 18.519}
+create_generated_clock -name {clk_nco} -source [get_ports {clk}] [get_pins {u_audio_pll/u_pll_audio/u_gpll/CLKOUT0}] -multiply_by {8} -divide_by {1}
 
 # ---- board clock is asynchronous to the whole DDR3 clock family ----
 # Every clock named here already exists: ref_clk and the generated DDR3
 # clocks come from ddr3_100h.fdc (loaded first), clk is created above.
-set_clock_groups -asynchronous -group [get_clocks {clk}] -group [get_clocks {ref_clk}] -group [get_clocks {rst_clk}] -group [get_clocks {ddrphy_sysclk}] -group [get_clocks {phy_dq_clk_0}] -group [get_clocks {phy_dq_sysclk_0}] -group [get_clocks {phy_dq_clk_1}] -group [get_clocks {phy_dq_sysclk_1}]
+set_clock_groups -asynchronous -group [get_clocks {clk}] -group [get_clocks {clk_nco}] -group [get_clocks {ref_clk}] -group [get_clocks {rst_clk}] -group [get_clocks {ddrphy_sysclk}] -group [get_clocks {phy_dq_clk_0}] -group [get_clocks {phy_dq_sysclk_0}] -group [get_clocks {phy_dq_clk_1}] -group [get_clocks {phy_dq_sysclk_1}]
 
 # ---- 27 MHz input clock ----
 define_attribute {p:clk} {PAP_IO_DIRECTION} {INPUT}

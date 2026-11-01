@@ -233,7 +233,9 @@ module tb_conv_engine;
                 // 3-bank safety: row k may only be written once the scan has
                 // passed row k-2 (row_done_cnt >= k-1 in T22 terms).
                 if (row >= 1) begin
-                    while (pix_done < (row - 1) * PIX_PER_ROW)
+                    // pix_done counts y_valid bytes, including all 16
+                    // output lanes, rather than spatial/group pixels.
+                    while (pix_done < (row - 1) * PIX_PER_ROW * LANES)
                         @(posedge clk);
                 end
                 // Blocking drive: the ingress beat is sampled by the engine

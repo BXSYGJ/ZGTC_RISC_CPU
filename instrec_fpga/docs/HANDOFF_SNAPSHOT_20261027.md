@@ -1,11 +1,5 @@
 # InstRec-FPGA 工作快照（交接文档）
 
-> **2026-10-27 11:15 状态更新（先读这段）**：本文第 4.1 节记录的“3 处语法错误”已全部修复
-> （含 `fft2048_sdf.v` 嵌套 generate）。最新构建 `20261027-104218-acb7a788` 已走通
-> compile→synthesize→dev_map→pnr→report_timing，新阻塞是 `db_norm` 组合时序
-> （`ddrphy_sysclk` WNS -4.401 ns）。**实时状态以 `docs/STATUS.md` 为准**，逐次变更见
-> `docs/CHANGELOG.md`；以下原文保留为 10:50 交接时刻的历史记录。
-
 **日期**：2026-10-27 10:50
 **撰写**：团队长（本会话）
 **用途**：跨会话交接——恢复开发时以本文档为起点，配合 `.codeartsdoer/specs/instrec_fpga/{spec,design,tasks}.md` 三份 SDD 文档与团队任务板（12 项）。

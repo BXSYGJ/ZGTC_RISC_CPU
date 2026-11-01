@@ -44,7 +44,6 @@ module ms72xx_ctl(
     	rstn <= rstn_temp2;
     end
     
-    wire         init_over_rx;
 assign init_over_rx=1'b1;
     wire   [7:0] device_id_rx;
     wire         iic_trig_rx ;

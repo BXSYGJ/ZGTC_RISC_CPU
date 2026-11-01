@@ -18,7 +18,7 @@
 
 param(
     [Parameter(Mandatory = $true)][string]$RunDir,
-    [ValidateSet('pnr', 'report_timing', 'gen_bit_stream')][string]$From = 'pnr',
+    [ValidateSet('dev_map', 'pnr', 'report_timing', 'gen_bit_stream')][string]$From = 'pnr',
     [string]$TopModule = 'instrec_top',
     [string]$ProjectName = 'instrec_fpga'
 )
@@ -27,7 +27,9 @@ $ErrorActionPreference = 'Stop'
 $project = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
 $run = (Resolve-Path $RunDir).Path
 
-foreach ($need in @('device_map', 'synthesize', 'compile')) {
+$requiredDirs = @('synthesize', 'compile')
+if ($From -ne 'dev_map') { $requiredDirs += 'device_map' }
+foreach ($need in $requiredDirs) {
     if (-not (Test-Path -LiteralPath (Join-Path $run $need))) {
         throw "stage directory '$need' is missing under $run; this run cannot be resumed"
     }
@@ -50,16 +52,18 @@ if ($prjText -notmatch 'PG2L100H') {
 # PDS replaces the .pds with a default project as soon as the scripted run
 # starts without a successfully opened project, so keep a copy and restore it
 # if the resumed flow fails -- otherwise one typo destroys the netlist state.
-$prjBak = "$prj.bak"
-[System.IO.File]::WriteAllText($prjBak, $prjText)
+$stamp = (Get-Date -Format 'yyyyMMdd-HHmmss') + '-' + ([guid]::NewGuid().ToString('N').Substring(0, 8))
+$prjBak = "$prj.$stamp.bak"
+[System.IO.File]::WriteAllText($prjBak, $prjText, [System.Text.UTF8Encoding]::new($false))
 
-$stages = @('pnr', 'report_timing', 'gen_bit_stream')
+$stages = @('dev_map', 'pnr', 'report_timing', 'gen_bit_stream')
 $startIdx = [array]::IndexOf($stages, $From)
 if ($startIdx -lt 0) { throw "unknown stage '$From'" }
-$body = "open_project {$prj}`n" + (($stages[$startIdx..($stages.Count - 1)]) -join "`n")
+$prjTcl = $prj.Replace('\', '/')
+$body = "open_project {$prjTcl}`n" + (($stages[$startIdx..($stages.Count - 1)]) -join "`n") + "`nexit"
 
-$tclPath = Join-Path $run 'stage.tcl'
-$logPath = Join-Path $run 'stage.log'
+$tclPath = Join-Path $run ("stage-$stamp.tcl")
+$logPath = Join-Path $run ("stage-$stamp.log")
 $text = "# Resumed stage flow: $From -> gen_bit_stream (run $([System.IO.Path]::GetFileName($run)))`n$body`n"
 [System.IO.File]::WriteAllText($tclPath, $text, [System.Text.UTF8Encoding]::new($false))
 
@@ -76,16 +80,24 @@ Write-Output "resume: $From -> gen_bit_stream"
 Write-Output "run dir: $run"
 $started = [datetime]::UtcNow
 $args = @('-file', ('"' + $tclPath + '"'), '-work_dir', ('"' + $run + '"'), '-project_name', $ProjectName)
+if (@(Get-Process -Name pds_shell -ErrorAction SilentlyContinue).Count -gt 0) {
+    throw 'A pds_shell process already exists; only one PDS build is allowed.'
+}
 $proc = Start-Process -FilePath $pdsShell -ArgumentList $args -PassThru -WindowStyle Hidden -Wait `
-    -RedirectStandardOutput $logPath -RedirectStandardError (Join-Path $run 'stage.stderr.log')
+    -RedirectStandardOutput $logPath -RedirectStandardError (Join-Path $run ("stage-$stamp.stderr.log"))
 Write-Output "PDS ExitCode: $($proc.ExitCode)"
 if ($proc.ExitCode -ne 0) {
-    [System.IO.File]::WriteAllText($prj, [System.IO.File]::ReadAllText($prjBak))
+    [System.IO.File]::WriteAllText($prj, [System.IO.File]::ReadAllText($prjBak), [System.Text.UTF8Encoding]::new($false))
     throw "PDS exited with $($proc.ExitCode); project file restored from backup; see $logPath"
 }
 if (-not [System.IO.File]::ReadAllText($prj).Contains('PG2L100H')) {
-    [System.IO.File]::WriteAllText($prj, [System.IO.File]::ReadAllText($prjBak))
+    [System.IO.File]::WriteAllText($prj, [System.IO.File]::ReadAllText($prjBak), [System.Text.UTF8Encoding]::new($false))
     throw "PDS replaced the project file with a default one; restored from backup (open_project syntax still wrong)"
+}
+
+$stageOutput = [System.IO.File]::ReadAllText($logPath)
+if ([regex]::IsMatch($stageOutput, '(?m)^E:')) {
+    throw "PDS reported a tool error despite exit code 0; inspect $logPath"
 }
 
 $bit = Join-Path $run ("generate_bitstream\$TopModule.sbit")

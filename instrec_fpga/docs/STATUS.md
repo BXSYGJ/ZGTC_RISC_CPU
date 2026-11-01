@@ -1,15 +1,25 @@
 # InstRec-FPGA 当前状态（STATUS）
 
 > 本文件是**唯一实时状态源**，优先于任何交接快照与记忆。每次会话结束前必须更新，
-> 并在 `CHANGELOG.md` 追加一条。最后更新：2026-11-01 10:34。
+> 并在 `CHANGELOG.md` 追加一条。最后更新：2026-11-01 13:12。
 
-## 2026-11-01 RV32 + AI 最小融合（本轮新增）
+## 2026-11-01 11:35 RV32 + AI 最小融合（最新，覆盖下文旧架构结论）
 
-工作区已加入独立 `rv_core` 构建集：`top_rv_core` 在 DDR3/core_clk 域例化 `rv32_cpu_subsys`，CPU 运行 8 KiB ROM 固件和 8 KiB 数据 RAM，通过 MMIO 观察 NPU busy/done/probs/top1/cycles 与 DDR 状态，并向 `CTRL[0]` 写入一次性 soft-start；该请求与 Mel 自动启动请求合并后送入 `npu_top.start`。CPU 还可经共享 UART FIFO 输出启动和推理结果，LED 写入由 CPU 置位 `cpu_alive`。
+已提交初始集成 `9d0acf1`，新增 `rv_core` / `top_rv_core`，复用 `cpu/rtl` 的 CPU，配置为 RV32I（M/分支预测关闭），8 KiB ROM + 8 KiB RAM。CPU 经 MMIO 请求一次 NPU 推理、读取 DDR/NPU 状态与结果、输出共享 UART、控制 LED。默认 `NPU_ENABLE=0`：CPU 请求是启动必要条件，请求挂起到 DDR 自检通过、权重就绪、完整 Mel 窗口完成且 NPU 空闲才启动。I2S SD 仍接 0、无视频引脚；该顶层不代表真实音频/UI 全功能融合。
 
-仿真证据：`python sim/run_sim.py rv_cpu --verbose` 已 PASS（C1-C6），日志包含 `RV32 BOOT`、`RV32 MMIO OK`、`RV32 ISA OK`、`RV32 BENCH cycles=460012 inst=180008`、`NPU GO`、`NPU t=3 p=87 c=12345`。本轮修复了固件未写 NPU_CTRL、概率字段位移、TB NBA 同拍采样，以及 CPU 子系统 STATUS/PROBS 位宽和 RAM 地址译码问题。
+本轮补修：STATUS DDR 位布局；UART 满 FIFO 背压与共享串口 stale-ready；结果周期快照；新事件与软件清除竞争；`npu_top.layer_finished` 缺失 `L_SM -> sm_done`（否则 busy 不释放、done 不产生）。真实 npu_top/softmax 的两轮完成与重启仿真已 PASS，前层在 TB 中跳过，不能据此声称整链数值通过。
 
-PDS `rv_core` 资源门槛构建已通过 RTL 分析并进入综合优化（run `build/pds/20261101-102333-c9e3d804`，使用 `-StopAfter synthesize`）；最后日志仍停在 `Saving design to DB`（10:26:43），未产生 synth 摘要。当前未得到 dev_map/PNR、位流、时序或板级证据。不要启动第二个 PDS run；待当前实例自然退出并确认资源后再决定是否 PNR。全量 pytest 本轮在 PDS 高负载期间未完成，不得计为通过。板级验证必须等 PDS 退出且新位流生成后再进行。
+验证：全量 Python **429 passed / 4 skipped**；RTL 词法检查 53 个 .v、0 violation（不覆盖 .sv CPU，CPU 另经 Verilator/PDS）；RV CPU/固件/MMIO 仿真 C1-C9 PASS，包括真实固件请求、DDR_OK、sticky 清除、周期快照，NPU 完成结果由 TB 注入。conv1 TB 字节/像素计数单位修正后 **792576 值 mismatch 0**。本轮完整 RTL 集合 **14 PASS / 0 FAIL / 0 SKIP，281.0 s**（含真实 UART 控制 slice 15 项、真实 NPU 完成/重启、UI renderer 64 像素和 overlay 6 项、DDR3 子系统）。`audio_cdc_fifo` 独立双时钟、`i2s_rx` bit-level 临时仿真通过；`i2s_clk_gen`+`i2s_rx` 联合仿真也通过（769 ticks、24 LRCK 边沿、24 字，L/R=`A53C`/`5AC3`，NCO 步长为加速值）。详细结论 `reports/rv32_sim_conclusion.md`。发现并修复 `instrec_top` 的 `dbg_tx_ready` 隐式网络；修复旧 `ms72xx_ctl.init_over_rx` 重复声明以便解析。使用 build/sim 临时厂商黑盒 stub 后，Verilator `instrec_top` 结构展开退出码 0、无 IMPLICIT/MODMISSING/Error；stub 仅证明端口/层级结构，不是 IP 功能或时序证据。全量 Python 回归 **429 passed / 4 skipped**。
+
+旧资源 gate `build/pds/20261101-102333-c9e3d804` 于 10:47:22 完成综合：LUT 35804/66600、FF 53813/133200、DRM 80.5/155、APM 90/240。但解析早于 MMIO 修正，且不含本轮完成/启动/UART修复，**不得当作当前 RTL 位流**；无 PNR/位流。详见 `reports/rv_core_synth_gate_20261101.md`。
+
+上一 run `build/pds/20261101-113509-6927c1bf` 在 detail route iteration 21 后异常结束，没有完成标记、时序报告或位流；恢复脚本验证其 PDS 数据库缺少 post-synthesis design，无法从 `pnr`/`dev_map` 续跑，已保留全部日志，不视为成功。
+
+**当前完整构建**：`build/pds/20261101-130420-0ed52a5d`，`rv_core/top_rv_core` 新 run 已启动，compile/synthesis 前端运行中；一次只允许此 PDS 实例。RTL/FDC 已冻结；manifest 记录输入 SHA256，结束校验不变后才发布 latest。新增 clk_nco 216MHz 约束，最终必须逐域核对时序。当前**没有新版 RV 位流/板级通过证据**。
+
+顶层审查新发现 `uart_debug.ram_len` 为 7 位却在满 128 字节时赋值 128（截为 0），属于真实的最大长度调试行缺陷。当前 RV PDS manifest 已包含该源文件且 build 正在运行，为保证源哈希与正在实现的网表一致，主线修复及复测排到该 run 结束后；临时副本/测试验证正在进行。它不影响 RV core 中被常量关闭的自定义文本输入，但会影响使用 128 字节自定义行的顶层。
+
+板级：用户已恢复下载器；获准沙箱外 `board_check.py --diag-only` 确认 FTDI present、jtagserver PID9040、port65420 open，原 cdt_cfg PID46156 保留未终止。此前沙箱内 FTDI ABSENT 是设备枚举权限导致，不是物理离线证据。待新位流完成后依次验证 RV32 BOOT/MMIO/ISA、DDROK，再权重上传及真实 CPU 请求推理。
 
 ## 一句话
 

@@ -66,10 +66,9 @@
 `timescale 1ns / 1ps
 
 module top_rv_core #(
-    // 1 = the NPU starts on the mel window pulse (kept for parity with
-    // instrec_top).  Do NOT re-tie this to 0: a constant start lets the
-    // optimiser delete the conv / pool / gap / fc / softmax chain.
-    parameter NPU_ENABLE = 1
+    // 0 = the CPU must request inference; 1 = automatic Mel-window launch.
+    // The default retains the real CPU-to-NPU control path in the netlist.
+    parameter NPU_ENABLE = 0
 ) (
     // ---- board pins ----
     input  wire        clk,          // 27 MHz crystal (D18), audio PLL ref
@@ -591,8 +590,19 @@ module top_rv_core #(
     wire [7:0] dbg_tx_data;
     wire       dbg_tx_valid;
 
-    assign wl_tx_ready   = tx_byte_ready;
-    assign dbg_tx_ready  = tx_byte_ready & ~wl_tx_valid;
+    // uart_tx registers ready, leaving it high one cycle after acceptance.
+    // Suppress that stale-ready cycle for every producer, including the CPU
+    // FIFO which otherwise pops two bytes for one serialized character.
+    reg tx_accept_hold;
+    wire tx_accept_ready = tx_byte_ready & ~tx_accept_hold;
+    always @(posedge core_clk or negedge core_clk_rst_n) begin
+        if (!core_clk_rst_n) tx_accept_hold <= 1'b0;
+        else if (!tx_byte_ready) tx_accept_hold <= 1'b0;
+        else if (tx_accept_ready && (wl_tx_valid | dbg_tx_valid | cpu_tx_valid))
+            tx_accept_hold <= 1'b1;
+    end
+    assign wl_tx_ready   = tx_accept_ready;
+    assign dbg_tx_ready  = tx_accept_ready & ~wl_tx_valid;
 
     // ---- RV32 control core (lowest-priority UART source) ----
     wire        cpu_tx_valid;
@@ -609,14 +619,14 @@ module top_rv_core #(
         .rst_n       (core_clk_rst_n),
         .byte_wdata  (wl_tx_valid ? wl_tx_data :
                       (dbg_tx_valid ? dbg_tx_data : cpu_tx_data)),
-        .byte_wvalid (wl_tx_valid | dbg_tx_valid | cpu_tx_valid),
+        .byte_wvalid ((wl_tx_valid | dbg_tx_valid | cpu_tx_valid) & ~tx_accept_hold),
         .byte_wready (tx_byte_ready),
         .uart_txd    (uart_tx)
     );
 
     // The CPU may only pop its FIFO when the multiplexer actually selects it,
     // otherwise a byte would be consumed while wl/dbg data goes out instead.
-    assign cpu_tx_ready = tx_byte_ready & ~wl_tx_valid & ~dbg_tx_valid;
+    assign cpu_tx_ready = tx_accept_ready & ~wl_tx_valid & ~dbg_tx_valid;
 
     uart_rx u_uart_rx (
         .clk         (core_clk),
@@ -661,10 +671,21 @@ module top_rv_core #(
     wire [7:0]  npu_probs_pct_u;
     wire [3:0]  npu_probs_idx_u;
     wire        npu_feat_rd_en_u;
-    // The mel window pulse keeps ownership of the accelerator; the CPU can
-    // additionally request one inference through CTRL[0] (npu_start is a
-    // level OR of two one-cycle pulses).
-    wire        npu_start = (NPU_ENABLE ? mel_npu_start : 1'b0) | cpu_npu_start;
+    // Queue the firmware request until a complete Mel feature window exists.
+    // The one-cycle Mel completion pulse is the safe boundary: starting on
+    // an arbitrary CPU write could read uninitialized or partially rewritten
+    // features. Weight upload, DDR self-test and an active NPU block launch.
+    reg cpu_npu_pending;
+    wire npu_launch_ready = sys_run && st_done && !st_fail && !safe_err &&
+                            ddr_init_done && weight_ok && !weight_err &&
+                            !wl_busy && !npu_busy_u;
+    wire npu_start = mel_npu_start && npu_launch_ready &&
+                     (NPU_ENABLE || cpu_npu_pending || cpu_npu_start);
+    always @(posedge core_clk or negedge core_clk_rst_n) begin
+        if (!core_clk_rst_n) cpu_npu_pending <= 1'b0;
+        else if (npu_start) cpu_npu_pending <= 1'b0;
+        else if (cpu_npu_start) cpu_npu_pending <= 1'b1;
+    end
 
     npu_top u_npu (
         .clk          (core_clk),
@@ -733,7 +754,7 @@ module top_rv_core #(
         .npu_probs_idx   (npu_probs_idx_u),
         .npu_top1        (npu_top1),
         .npu_cycles      (npu_cycles_u),
-        .ddr_ok          (ddr_init_done & ~safe_err),
+        .ddr_ok          (ddr_init_done & st_done & ~st_fail & ~safe_err),
         .ddr_err         (safe_err),
         .ddr_sts         ({8'h00, 8'h00, ddr_cmd_to_err, ddr_to_err,
                            ddr_dbg_to_state, st_fail, st_done, 6'h00}),

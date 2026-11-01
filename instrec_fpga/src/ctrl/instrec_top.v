@@ -815,6 +815,7 @@ module instrec_top #(
     // ---- UART physical byte layer ----
     wire [7:0] dbg_tx_data;
     wire       dbg_tx_valid;
+    wire       dbg_tx_ready;
 
     assign wl_tx_ready   = tx_byte_ready;
     assign dbg_tx_ready  = tx_byte_ready & ~wl_tx_valid;

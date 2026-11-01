@@ -504,7 +504,8 @@ module npu_top (
         (layer == L_POOL4) ? pool4_done :
         (layer == L_GAP)   ? gap_done  :
         (layer == L_FC1)   ? fc1_done  :
-        (layer == L_FC2)   ? fc2_done  : 1'b0;
+        (layer == L_FC2)   ? fc2_done  :
+        (layer == L_SM)    ? sm_done   : 1'b0;
 
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin

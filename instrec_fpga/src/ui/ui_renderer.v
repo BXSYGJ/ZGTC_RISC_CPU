@@ -72,8 +72,7 @@ module ui_renderer #(
     // (single-cycle pulse on the rising edge of pix_vs).
     output wire        vsync_pulse,
 
-    // Overlay layers (M3): spectrogram, class text and probability bars,
-    // already registered in the pix domain by their own modules.
+    // Overlay layers, already registered in the pix domain.
     input  wire [23:0] spec_rgb,
     input  wire        spec_on,
     input  wire [23:0] text_rgb,
@@ -81,8 +80,7 @@ module ui_renderer #(
     input  wire [23:0] bars_rgb,
     input  wire        bars_on,
 
-    // Rendered video towards hdmi_tx_if. rgb/de/hs/vs now correspond to
-    // the pixel seen 4 cycles earlier (3 from waveform + 1 from overlay).
+    // Rendered video towards hdmi_tx_if.
     output wire [23:0] rgb,
     output wire        de_out,
     output wire        hs_out,
@@ -110,26 +108,9 @@ module ui_renderer #(
         .rgb            ( wf_rgb         )
     );
 
-    // Layer compositor: bars > text > spectrum > waveform/grid.
-    ui_overlay u_overlay (
-        .pix_clk   (pix_clk),
-        .rst_pix_n (rst_pix_n),
-        .de        (de_pipe[2]),
-        .base_rgb  (wf_rgb),
-        .base_on   (de_pipe[2]),
-        .spec_rgb  (spec_rgb),
-        .spec_on   (spec_on),
-        .text_rgb  (text_rgb),
-        .text_on   (text_on),
-        .bars_rgb  (bars_rgb),
-        .bars_on   (bars_on),
-        .rgb       (rgb),
-        .de_out    (de_out)
-    );
-
     // -----------------------------------------------------------------
-    // Control-signal pipeline: 3-cycle delay to match the waveform
-    // pixel pipeline (lookup reg + geometry reg + output reg).
+    // Control-signal pipeline: 3-cycle waveform delay, followed by the
+    // overlay output register.
     // -----------------------------------------------------------------
     reg [3:0] de_pipe;
     reg [3:0] hs_pipe;
@@ -147,7 +128,22 @@ module ui_renderer #(
         end
     end
 
-    // de_out comes from the overlay (4th stage); hs/vs use pipe[3].
+    ui_overlay u_overlay (
+        .pix_clk   (pix_clk),
+        .rst_pix_n (rst_pix_n),
+        .de        (de_pipe[2]),
+        .base_rgb  (wf_rgb),
+        .base_on   (de_pipe[2]),
+        .spec_rgb  (spec_rgb),
+        .spec_on   (spec_on),
+        .text_rgb  (text_rgb),
+        .text_on   (text_on),
+        .bars_rgb  (bars_rgb),
+        .bars_on   (bars_on),
+        .rgb       (rgb),
+        .de_out    (de_out)
+    );
+
     assign hs_out = hs_pipe[3];
     assign vs_out = vs_pipe[3];
 
