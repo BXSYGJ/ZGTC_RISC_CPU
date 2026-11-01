@@ -10,6 +10,7 @@
 - 本次心跳重新执行全量 `python -m pytest -q`：**432 passed / 4 skipped**，仅 2 条既有 PyTorch FutureWarning；未启动 PDS，未操作下载器或 JTAG 服务。
 - 本次继续补跑 Verilator：`rv_top_ctrl` PASS（CPU 请求排队、安全 Mel 窗、DDR/NPU/故障门控）；`mel_credit` PASS（132096 命令、16512 特征、0 mismatch）；`ui_render` PASS（64 active pixels、层优先级和 RGB/DE 对齐 0 mismatch）。
 - 继续补跑 `ddr3_subsys`：15/15 场景 PASS，覆盖 self-test、四主仲裁、读命令保持、各状态 watchdog 与 abort recovery；测试同时明确复现并记录 watchdog blind spot。`ctrl_smoke` 和 `npu_chain` 也 PASS，NPU GAP/FC1/FC2/softmax 均 0 mismatch。
+- 继续补跑 `self_test`、`weight_loader`、`ddr3_aw_timeout`：分别 8、10、6 项检查全部 PASS，覆盖 self-test 中止/恢复、权重 CRC 与写回读 digest、m0 饱和下 m3 AW 超时归因；watchdog blind spot 与 reset-mid-read 风险仍按已知限制保留。
 
 ## 2026-11-02：修复版 PDS 完成布线并产出候选位流，时序未闭合
 
