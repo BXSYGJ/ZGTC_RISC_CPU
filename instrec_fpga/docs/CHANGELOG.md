@@ -549,3 +549,7 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 
 - RV PDS detail route 到 iteration 114，未布通 8452；仍无位流或板级 RV 结论。
 - UART/sys_ctrl/烧录安全回归新增 35 passed；RTL/SV 实时验证结论不变。
+
+## 2026-11-01 16:59 — RV PDS 路由进度
+
+- PDS detail route 到 iteration 180，未布通网络 6949，构建仍在运行，无位流、时序或板级新结论。
