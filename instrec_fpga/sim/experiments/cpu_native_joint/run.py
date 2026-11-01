@@ -17,8 +17,14 @@ def once(text,old,new):
     return text.replace(old,new)
 
 def main():
-    ap=argparse.ArgumentParser();ap.add_argument('--top1-firmware',action='store_true');opts=ap.parse_args()
+    ap=argparse.ArgumentParser();ap.add_argument('--top1-firmware',action='store_true')
+    ap.add_argument('--run-label',default='',help='Separate evidence directory; preserve previous runs')
+    opts=ap.parse_args()
     name='cpu_native_joint_top1' if opts.top1_firmware else 'cpu_native_joint'
+    if opts.run_label:
+        if not opts.run_label.replace('-','').replace('_','').isalnum():
+            raise ValueError('run-label must contain only letters, digits, hyphen or underscore')
+        name+='_'+opts.run_label
     work=ROOT/'build/sim'/name
     assets=work/'assets';assets.mkdir(parents=True,exist_ok=True)
     feat=np.frombuffer((HERE.parent/'npu_conv1/feat_u8.bin').read_bytes(),dtype=np.uint8).reshape(64,258)
@@ -66,7 +72,7 @@ def main():
     launch='    reg cpu_npu_pending;'+top.split('    reg cpu_npu_pending;',1)[1].split('    npu_top u_npu (',1)[0]
     extra=(HERE/'native_owner.vh').read_text(encoding='ascii')+'\nwire aligner_error,aligner_failed;\n'+(HERE/'cpu_joint.vh').read_text(encoding='ascii')+'\n'+launch
     if opts.top1_firmware:
-        rom=work/'firmware/prog.hex'
+        rom=ROOT/'build/sim/cpu_native_joint_top1/firmware/prog.hex'
         if not rom.is_file(): raise RuntimeError('Run build_firmware.py first')
         extra=extra.replace('src/cpu/prog.hex',rom.as_posix())
         text=text.replace('$sformatf("NPU t=%0d p=%0d c=%0d",last_idx,last_pct,last_cycles)',

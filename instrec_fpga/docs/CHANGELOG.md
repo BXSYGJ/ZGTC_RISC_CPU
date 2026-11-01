@@ -1,5 +1,11 @@
 # InstRec-FPGA 变更日志
 
+## 2026-11-01 22:52 — 生产新ROM+narrow联合证据与全量回归
+
+- 保存生产CPU/native联合PASS报告，27项输入hash均核验；完整各层golden、MMIO/UART与ACK通过，保留物理DDR/音频/Mel边界。
+- runner增加独立run-label保留历史证据；Python429 passed/4 skipped，102.03s。
+- 记录新完整拓扑技术综合32077LUT/33311FF/120.5DRM/90APM，仍保存DB，等待最终map再受控PNR；无新位流，不操作下载器。继续CPU连续推理补测。
+
 ## 2026-11-01 22:42 — 修复激活行缓存RAM推断，启动新完整资源gate
 
 - 将行缓存改为有界无符号计数器、明确地址slice和单写口RAM模板；isolated映射39s通过，794LUT/343FF/16DRM/0APM，32个lane bank均真实映射DRM。旧完整拓扑两个store原占84886LUT/100280FF/0DRM。

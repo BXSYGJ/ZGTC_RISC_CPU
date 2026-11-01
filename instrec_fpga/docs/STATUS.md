@@ -1,5 +1,13 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-01 22:52：生产 CPU+narrow NPU 联合通过；全量回归完成
+
+- 新ROM与narrow行缓存同时在生产路径联合仿真PASS：真实CPU启动、CTRL请求等待模拟Mel安全窗、完整native各层golden exact、结果MMIO/UART、CTRL[1] ACK；31141202观测周期。27项输入SHA256复核与当前文件一致，证据`reports/cpu_native_joint_narrow_validation_20261101.json`。DDR PHY、完整音频/Mel前端及真实UART电气不在此仿真范围。
+- Python全量回归完成：**429 passed / 4 skipped**，102.03s。新增独立run-label避免联合仿真覆盖历史日志。
+- 唯一gate `native-20261101-224112-909881`技术综合表为**LUT 32077/66600、FF 33311/133200、DRM 120.5/155、APM 90/240**，已低于资源上限；22:50仍保存综合数据库，尚未最终dev_map，不当成布线成功。
+- map正常完成并核验manifest后才串行复用映射进入受控PNR：总上限45分钟；detail route至少观察15分钟，连续20轮未布数无明显下降则留证止损，仅结束本run的PNR子进程。下载器与cdt进程保持不动。
+- 并行补CPU驱动连续两次无复位推理；已有双轮native A/B通过，但不能替代CPU连续两次联合验证。当前仍无新版RV位流/时序/板级证据。
+
 ## 2026-11-01 22:42：RAM推断修复已推广；新完整拓扑gate运行
 
 - 原完整gate容量超限，22:31核验进程/保存报告与manifest后仅结束其synthesize子进程36212，父43724自然退出；无dev_map结果、无位流。原版isolated probe也在22:38截止后保留日志止损，未完成，不当成通过。

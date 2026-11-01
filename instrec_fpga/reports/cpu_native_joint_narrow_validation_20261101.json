@@ -1,0 +1,166 @@
+{
+  "date": "2026-11-01",
+  "tested_commit": "f0970cf",
+  "result": "PASS",
+  "command": "python sim/experiments/cpu_native_joint/run.py --run-label production-narrow-f0970cf",
+  "current_production_src": true,
+  "production_rom_and_narrow_row_store_simultaneous": true,
+  "no_source_drift_after_simulation": true,
+  "observed_cycles": 31141202,
+  "mmio_result_cycles": 31141201,
+  "top1": 0,
+  "last_class": 7,
+  "last_probability_pct": 0,
+  "checks": [
+    "real CPU ROM boot, MMIO and ISA",
+    "pending CTRL[0] waits for modeled Mel safe window",
+    "all conv/pool/GAP/FC/softmax outputs golden exact",
+    "real result UART report",
+    "CTRL[1] acknowledgement and sticky clear"
+  ],
+  "inputs": [
+    {
+      "path": "instrec_fpga/src/npu/activation_row_store_dynamic.v",
+      "sha256": "05321eb0df369350a9198e50fb7f9bdbf804ce6ee655c184255af5e8530cb290"
+    },
+    {
+      "path": "instrec_fpga/src/npu/activation_store_mux.v",
+      "sha256": "c02117dc8345a6aa132e63ade9544d1c00cabd45296dc5686f1ede7b1cdc96f9"
+    },
+    {
+      "path": "instrec_fpga/src/npu/conv_engine.v",
+      "sha256": "da1e4e913ab8eb9ccff9bc057ef1489807e69e47f909670a4b4ad6144f24dea4"
+    },
+    {
+      "path": "instrec_fpga/src/npu/fc_engine.v",
+      "sha256": "bf24dca55d48ab81fd4ce61a6c0f9c4bc41f2fa7f28937972b4cf36294f448ae"
+    },
+    {
+      "path": "instrec_fpga/src/npu/gap_unit.v",
+      "sha256": "51831e5f4ee8ac3f162785f91777d54d2aca3e2fc657762f4adb5c3d071fba90"
+    },
+    {
+      "path": "instrec_fpga/src/npu/npu_m1_bridge.v",
+      "sha256": "7510a232de647efa232a5bb11b2bc7229f9571d5f4b13fa57684bea2e2f3cab6"
+    },
+    {
+      "path": "instrec_fpga/src/npu/npu_m1_owner.v",
+      "sha256": "ce99ef8e780b72d9205da8c9ef8762cb891ce1d8bbf4295fd38372755a3157ca"
+    },
+    {
+      "path": "instrec_fpga/src/npu/npu_stage_lifecycle.v",
+      "sha256": "8ed6d69866c1bd7d60951a25722c77006941d774420170811e636fe0c1bfca11"
+    },
+    {
+      "path": "instrec_fpga/src/npu/npu_top.v",
+      "sha256": "73a76c14997cbfac9ad9377940949fbb5663a71f8a0825007dbecd8ce8c7b9ed"
+    },
+    {
+      "path": "instrec_fpga/src/npu/pool_engine.v",
+      "sha256": "fa2b81e0336f58b74d19f6e3ee1ad891a5881aecf056240ab00da7746e7025ea"
+    },
+    {
+      "path": "instrec_fpga/src/npu/requant_unit.v",
+      "sha256": "265547a25eadb8af5eeccc0b2158bacfaa0626156bee118915e1485a2e557ee5"
+    },
+    {
+      "path": "instrec_fpga/src/npu/softmax_top.v",
+      "sha256": "9c51eb0ce2b3b96b0936c3f037acde2a9a28fbdb10e518be2f1091c8f396eef9"
+    },
+    {
+      "path": "instrec_fpga/src/npu/wbuf.v",
+      "sha256": "9ea29ab7629d89e7794742260835462930cabcc584db6e3b86be80b9cc5032bd"
+    },
+    {
+      "path": "instrec_fpga/src/npu/wdma.v",
+      "sha256": "983c5e6cc76c0b26a8650810fe662efe8382558222caca85f163ba5f52211353"
+    },
+    {
+      "path": "instrec_fpga/src/npu/weight_read_aligner_hardened.v",
+      "sha256": "54ae62714044ae28676e00d40e8e78d420eba1e9b366cf6da9e8b6487df385cd"
+    },
+    {
+      "path": "instrec_fpga/src/ddr3/ddr3_ctrl_axi.v",
+      "sha256": "39e56ab153b80d67921bea360aaccb0f5bde3ef8152f79489ba745be8f923779"
+    },
+    {
+      "path": "instrec_fpga/src/ddr3/ddr3_arbiter.v",
+      "sha256": "059e0e1dbc581dab3a45a9773dd56d72c3e38eb97718e5e8f1208e3801ba7d81"
+    },
+    {
+      "path": "instrec_fpga/sim/experiments/npu_pingpong_native/ddr3_axi_model_full.sv",
+      "sha256": "ab52c1ef1f8a9ba8fd5367640c46bedc55d2331cbe4715979c31c55d1704cda2"
+    },
+    {
+      "path": "instrec_fpga/src/cpu/rv32_cpu_subsys.sv",
+      "sha256": "be33b7c296bc52778a7428200a2faf3e6cff69c7d3ffb2c521ece135320a40ec"
+    },
+    {
+      "path": "cpu/rtl/rv32_core.sv",
+      "sha256": "55b04c7971c2cfc039b8b7c2266be720e3d553166cd5197279c858a6c22c066e"
+    },
+    {
+      "path": "cpu/rtl/rv32_decode.sv",
+      "sha256": "8b28bb62fdec586ece047627cb9e0593cdf541fcf0793e166e73824d8a6fc1cc"
+    },
+    {
+      "path": "cpu/rtl/rv32_alu.sv",
+      "sha256": "f462cb16e30e6bc2143dea6319cb768a33875fd40b1588c5fd74f8284ccd1e66"
+    },
+    {
+      "path": "cpu/rtl/rv32_muldiv.sv",
+      "sha256": "4f13da11d528bff2edcd561401d17b46b65bc92ccda09907294ef9317a35dea6"
+    },
+    {
+      "path": "cpu/rtl/rv32_btb.sv",
+      "sha256": "188e78886bdaa8b16b1b298b511efa04985aec946214639a9e60d783d034ac77"
+    },
+    {
+      "path": "cpu/rtl/rv32_machine.sv",
+      "sha256": "3af396762b415330f55dbd0ec747c4b55482f6ae729efb59ebf052be0c2a1900"
+    },
+    {
+      "path": "instrec_fpga/src/cpu/prog.hex",
+      "sha256": "24d0b7fd4cb3e37f08cdfe4e3ab361321ba43f21ea6ec5367c3b2703b2dec294"
+    },
+    {
+      "path": "instrec_fpga/src/ctrl/top_rv_core.v",
+      "sha256": "181e5e78a81b6d4dec8f5df7a8a43de236e441991b2ba2c93d2e4d8b6a87acd6"
+    }
+  ],
+  "evidence": {
+    "log": {
+      "path": "build/sim/cpu_native_joint_production-narrow-f0970cf/run.log",
+      "sha256": "fa47c5857a9b51ac337390adf59399d3a6231e2e0d9556020dded1807177fc74"
+    },
+    "inputs": {
+      "path": "build/sim/cpu_native_joint_production-narrow-f0970cf/inputs.json",
+      "sha256": "a2435423a14e47fe180bcd07aec21eb7bbcbe458d3e5b1a0f5ac92721ff3eff7"
+    },
+    "testbench": {
+      "path": "build/sim/cpu_native_joint_production-narrow-f0970cf/tb_npu_full_native.sv",
+      "sha256": "e69285bb3d9d88624634823d3499686b643c9b425a58d2be0951463796ef9a8a"
+    }
+  },
+  "historical_evidence_overwritten": false,
+  "simulation_boundary": {
+    "real": [
+      "RV32 core and subsystem",
+      "current production NPU including narrow RAM row store",
+      "native DDR controller, arbiter, bridge, owner, hardened aligner"
+    ],
+    "modeled": [
+      "DDR AXI memory",
+      "Mel safe window",
+      "DDR ready status",
+      "UART byte acceptance"
+    ],
+    "excluded": [
+      "physical DDR PHY",
+      "full audio/Mel frontend",
+      "board UART/JTAG",
+      "routing and timing closure",
+      "multiple consecutive CPU-driven inferences"
+    ]
+  }
+}
