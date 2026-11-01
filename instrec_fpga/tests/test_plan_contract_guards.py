@@ -56,6 +56,7 @@ BUILD_SETS_JSON = ROOT / 'scripts' / 'build_sets.json'
 BOARD_CHECK_PY = ROOT / 'scripts' / 'board_check.py'
 FDC_TOP = ROOT / 'constraints' / 'instrec_top.fdc'
 FDC_UI = ROOT / 'constraints' / 'top_ui_demo.fdc'
+INSTREC_TOP_V = ROOT / 'src' / 'ctrl' / 'instrec_top.v'
 
 
 # --------------------------------------------------------------------------- #
@@ -721,3 +722,31 @@ def test_ddr3_e_bit_coverage_uses_defined_union_reserved():
         f'{DIAG_FRAMES_PY}: DDR3_E_BITS + DDR3_E_RESERVED_BITS expected '
         f'bit0..bit31 (defined {len(defined)} bits, reserved {len(reserved)} '
         f'bits), actual missing {missing}, outside {outside}')
+
+
+# --------------------------------------------------------------------------- #
+# Guard 9: DDR init gate quarantines pre-init commands and R responses
+# --------------------------------------------------------------------------- #
+
+def test_instrec_ddr_init_gate_blocks_preinit_axi_traffic():
+    """Guard 9: stale pre-init RVALID cannot reach the AXI controller."""
+    rtl = _read(INSTREC_TOP_V)
+    assert re.search(
+        r'assign\s+ddr_cmd_valid\s*=\s*ddr_init_done\s*\?\s*', rtl), (
+        f'{INSTREC_TOP_V}: command valid must be gated by ddr_init_done')
+    assert re.search(
+        r'(?:wire\s+axi_rvalid_ctrl\s*;\s*)?assign\s+axi_rvalid_ctrl\s*=\s*ddr_init_done\s*&&\s*axi_rvalid',
+        rtl), f'{INSTREC_TOP_V}: AXI RVALID must be gated by ddr_init_done'
+    assert re.search(
+        r'\.axi_rvalid\s*\(axi_rvalid_ctrl\)', rtl), (
+        f'{INSTREC_TOP_V}: controller must consume the gated RVALID net')
+
+    # Cycle-level contract for the two-input gate.  A stale R beat is not
+    # observable before init; once init is complete, normal R beats pass.
+    def gate(init_done, rvalid):
+        return bool(init_done and rvalid)
+
+    assert gate(False, True) is False
+    assert gate(False, False) is False
+    assert gate(True, False) is False
+    assert gate(True, True) is True

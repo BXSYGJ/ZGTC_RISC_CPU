@@ -307,6 +307,46 @@ def test_read_timeout_quarantines_late_rlast_before_accepting_next_read():
     assert model.r_beats[-1][1] == 0x2222
 
 
+def test_init_gate_masks_stale_r_before_init_then_allows_normal_read():
+    model = dm.Ddr3CtrlAxiModel(axi_to_limit=32)
+
+    class InitGatedIp:
+        init_done = False
+
+        def signals(self, current):
+            if not self.init_done:
+                return dm.IpSignals(rvalid=1, rdata=0xDEADBEEF, rlast=1)
+            if current.state in (dm.S_AW, dm.S_DW_AW):
+                return dm.IpSignals(awready=1)
+            if current.state in (dm.S_W, dm.S_DW_W):
+                return dm.IpSignals(wready=1)
+            if current.state == dm.S_AR:
+                return dm.IpSignals(arready=1)
+            if current.state == dm.S_R:
+                return dm.IpSignals(rvalid=1, rdata=0x12345678, rlast=1)
+            return dm.IpSignals()
+
+    ip = InitGatedIp()
+    source_valid = [0, 1, 0, 0]
+    command = [0, dm.pack_cmd(0, WG_ADDR, 0), 0, 0]
+    for _ in range(3):
+        valid = source_valid if ip.init_done else (0, 0, 0, 0)
+        out = model.cycle(valid, command, (0, 0, 0, 0), SLOW, ip)
+        assert out.state == dm.S_IDLE and out.grant == 0 and out.done == 0
+        assert model.rd_fifo_count == 0 and model.r_beats == []
+
+    ip.init_done = True
+    completed = None
+    for _ in range(16):
+        out = model.cycle(source_valid, command, (0, 0, 0, 0), SLOW, ip)
+        if out.done:
+            completed = out
+            break
+    assert completed is not None and completed.read_cmpl
+    assert model.r_beats[-1][1] == 0x12345678
+    assert model.rd_fifo_count == 1
+
+
 def test_s3_rvalid_stream_without_rlast_is_not_guarded_by_the_watchdog():
     """Documented contract fact (not a model deviation): the watchdog only
     accumulates while `S_R && !rvalid` (ddr3_ctrl_axi.v:317-323), so a

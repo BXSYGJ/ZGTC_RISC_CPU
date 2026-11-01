@@ -212,6 +212,7 @@ module instrec_top #(
     wire [3:0]   axi_rid;
     wire         axi_rlast;
     wire         axi_rvalid;
+    wire         axi_rvalid_ctrl;
     // observation taps (M0: unconsumed, T-M2-07 UART exporter)
     wire [31:0]  wait_cnt_0;
     wire [31:0]  wait_cnt_1;
@@ -663,7 +664,9 @@ module instrec_top #(
     assign npu_probs_valid_u=npu_probs_valid_raw && !native_fault;
     assign native_fault=native_owner_error || bridge_error || aligner_error || ddr_addr_err[1] || ddr_cmd_to_err[1];
     assign npu_rd_ready_u=1'b1;
-    assign ddr_cmd_valid={st_cmd_valid,mel_m2_cmd_valid,native_m1_valid,m0_cmd_valid};
+    assign ddr_cmd_valid = ddr_init_done ?
+                           {st_cmd_valid,mel_m2_cmd_valid,native_m1_valid,m0_cmd_valid} :
+                           4'b0000;
     assign m1_cmd=native_m1_cmd;
     assign m1_wdata=native_m1_wdata;
     weight_read_aligner_hardened u_weight_read_aligner(
@@ -690,6 +693,7 @@ module instrec_top #(
         .idle(native_owner_idle),.protocol_error(native_owner_error));
     assign m2_cmd        = mel_m2_cmd;
     assign m2_wdata      = mel_m2_wdata;
+    assign axi_rvalid_ctrl = ddr_init_done && axi_rvalid;
 
     ddr3_ctrl_axi u_ddr3_ctrl_axi (
         .clk            (core_clk),
@@ -740,7 +744,7 @@ module instrec_top #(
         .axi_rdata      (axi_rdata),
         .axi_rid        (axi_rid),
         .axi_rlast      (axi_rlast),
-        .axi_rvalid     (axi_rvalid)
+        .axi_rvalid     (axi_rvalid_ctrl)
     );
 
     // ---- DDR3 IP shell (instance hierarchy: ddr3_wrapper.I_ips_ddr_top) ----

@@ -3,7 +3,11 @@
 ## 2026-11-02：DDR 读超时迟到响应隔离
 
 - 修复 DDR 读 watchdog 超时后的迟到响应误归属问题，增加 `S_R_DRAIN` 隔离状态及周期模型回归。
-- 验证：DDR/仲裁/自检定向 48 passed；全量回归 430 passed / 4 skipped；RTL 词法检查 59 文件 0 violation。未启动 PDS、未操作下载器；修复后的 RTL 尚未重新生成位流。
+- 验证：DDR/仲裁/自检定向 48 passed；全量回归 432 passed / 4 skipped；RTL 词法检查 59 文件 0 violation。未启动 PDS、未操作下载器；修复后的 RTL 尚未重新生成位流。
+
+## 2026-11-02：增加 DDR 初始化门控
+
+- `instrec_top` 用 `ddr_init_done` 门控 DDR command valid 和控制器侧 `axi_rvalid`，补充初始化前 stale R 屏蔽契约测试（9 passed）。该缓解依赖 IP 在初始化完成前清空旧事务，不能替代初始化完成后的响应 ID/epoch 过滤；尚未重新生成位流。
 - 复位静态审查发现 DDR3 IP 旧事务是否跨复位释放仍无源码证据；新增“reset-mid-read + stale RVALID”模型场景待验证，不把当前 timeout drain 修复外推为完整 reset recovery。
 - directed 模型已确认 reset-mid-read + stale `RVALID/RLAST` 可被新读误收，作为开放问题记录；未启动 PDS 或下载器操作。
 
