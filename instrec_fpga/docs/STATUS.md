@@ -1,5 +1,12 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-01 23:15：UI特征拷贝占口恢复与末尾重复写已修复
+
+- `feat_copy_engine`改为区分当前获准读请求与上一拍pending同步RAM响应：本拍NPU抢占时仍消费属于copy的旧响应，恢复时不会误收NPU数据；末尾最后字节只写一次，随后翻页，idle/tail地址夹到0。
+- 旧反例addr9应66却170且多写16513次；生产修复后连续/7拍抢占/随机暂停/末尾暂停四场景均0 mismatch，每轮严格0..16511各写一次，最后写完才flip。定向Python19 passed（0.36s），词法59.v零违规。证据`reports/mel_npu_interface_audit_20261101.json`，旧失败日志保留。
+- 独立审查量化与同步读延迟正确。正常3s窗口节奏下Mel后idle约2.95488s，大于实测NPU0.24913s；异常长时停顿跨下一窗时，单feature bank仍无硬件锁页，不宣称该错误恢复支持。
+- UI修复不在当前rv_core冻结源列表，不影响唯一`native-20261101-230932-136199`完整flow；当前synthesize正常推进，尚未进入PNR/无位流，不操作下载器。
+
 ## 2026-11-01 23:11：Mel布局修复验证通过，正确冻结版本已重新构建
 
 - `npu_top`新增显式`FEATURE_FRAME_MAJOR`读口模式，使用已有time/mel计数器拼接地址；三个生产top均设1。默认0只保留独立mel-major模型兼容，不增加除法电路；Mel内部+64偏移保持唯一。

@@ -1,5 +1,10 @@
 # InstRec-FPGA 变更日志
 
+## 2026-11-01 23:15 — 修复UI特征copy暂停污染与末尾重复写
+
+- 真实共享同步RAM反例复现后修复pending响应追踪，四场景每轮16512写且0错误、页翻转正确；19定向测试通过。
+- 记录uint8/zp49、同步读延迟及单bank异常跨窗缺锁页边界；UI不在当前rv_core冻结flow，综合继续，无位流，不操作下载器。
+
 ## 2026-11-01 23:11 — 修复真实Mel/NPU读口布局，启动正确冻结单flow
 
 - NPU增加显式frame-major参数，三top启用，利用现有行列拼接地址；真实bank切片旧16446错/新0错，16512地址双射。frame-major完整CPU/native全层golden、结果/ACK通过；uint8/zp49正确。

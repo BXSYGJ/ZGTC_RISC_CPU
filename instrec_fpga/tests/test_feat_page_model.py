@@ -10,8 +10,9 @@ in lint or PDS compile checks that ordering.  This cycle model pins it:
   * the flip happens strictly after the last byte is written;
   * the pixel read port always reads the page that is *not* being written.
 
-The model is a direct transcription of the RTL register updates, evaluated
-with pre-edge values (Verilog non-blocking semantics).
+The model specifies an unstalled page-copy schedule. The production RTL is
+also exercised against synchronous shared RAM with pause/resume in
+sim/experiments/activation_store/run_feature_mux_audit.py.
 """
 
 from __future__ import annotations
@@ -23,7 +24,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def copy_engine(depth, src, limit=None):
-    """Direct transcription of feat_copy_engine's register updates."""
+    """Reference schedule for the unstalled copy and delayed page flip."""
     if limit is None:
         limit = 4 * depth + 64
     idx = 0
@@ -117,4 +118,5 @@ def test_copy_engine_gates_on_npu_busy():
     """The share engine must not steal the mel read port from the NPU."""
     src = (ROOT / 'src/ui/feat_copy_engine.v').read_text(encoding='utf-8')
     assert 'start && !busy_in' in src
-    assert 'else if (!busy_in)' in src
+    assert 'src_en = run && !busy_in' in src
+    assert 'if (rd_pending)' in src

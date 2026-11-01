@@ -275,6 +275,8 @@ class FeatCopySim:
         self.dst_page = 0
         self.done = False
         self.prev_src_addr = 0
+        self.rd_pending = False
+        self.fin = False
 
     def step(self, start=False):
         # value the mel port presents this beat (registered one beat earlier).
@@ -292,7 +294,8 @@ class FeatCopySim:
         }
 
         n_idx, n_idx_q, n_run = self.idx, self.idx_q, self.run
-        n_src_addr, n_src_en = self.src_addr, False
+        n_pending = self.src_en
+        n_fin = self.fin
         n_dst_addr, n_dst_data, n_dst_we = self.dst_addr, self.dst_data, False
         n_dst_page, n_done = self.dst_page, False
 
@@ -301,26 +304,28 @@ class FeatCopySim:
                 n_run = True
                 n_idx = 0
                 n_idx_q = 0
-                n_src_addr = 0
-                n_src_en = True
+                n_fin = False
         else:
-            n_idx_q = self.idx
-            if self.idx != 0:
+            if self.src_en:
+                n_idx_q = self.idx
+                n_idx = self.idx + 1
+            if self.rd_pending:
                 n_dst_addr = self.idx_q
                 n_dst_data = src_data
                 n_dst_we = True
-            if self.idx == DEPTH:
+                if self.idx_q == DEPTH - 1:
+                    n_fin = True
+            if self.fin:
                 n_run = False
+                n_fin = False
                 n_dst_page = self.dst_page ^ 1
                 n_done = True
-            else:
-                n_idx = self.idx + 1
-                n_src_addr = self.idx + 1
-                n_src_en = (self.idx + 1) < DEPTH
 
         self.prev_src_addr = self.src_addr
         self.idx, self.idx_q, self.run = n_idx, n_idx_q, n_run
-        self.src_addr, self.src_en = n_src_addr, n_src_en
+        self.src_addr = n_idx if n_idx < DEPTH else 0
+        self.src_en = n_run and n_idx < DEPTH
+        self.rd_pending, self.fin = n_pending, n_fin
         self.dst_addr, self.dst_data, self.dst_we = n_dst_addr, n_dst_data, n_dst_we
         self.dst_page, self.done = n_dst_page, n_done
         return obs
@@ -362,32 +367,19 @@ def test_feat_copy_page_flip_at_end():
     writes = [b for b in beats if b['dst_we']]
     done_beats = [b for b in beats if b['done']]
     assert len(done_beats) == 1
-    # the flip lands on the same output beat as the last (16512th) write
-    # (feat_copy_engine.v:71-75 set dst_we<=1 and dst_page<=~dst_page together),
-    # so the final byte is written to the NEW page.  See
-    # test_feat_copy_last_byte_lands_on_flipped_page.
-    assert writes[-1]['dst_page'] == 1
-    assert all(w['dst_page'] == 0 for w in writes[:-1])
+    assert all(w['dst_page'] == 0 for w in writes)
     assert done_beats[0]['dst_page'] == 1
-    assert done_beats[0] is writes[-1]
+    assert beats.index(done_beats[0]) > beats.index(writes[-1])
 
 
-def test_feat_copy_last_byte_lands_on_flipped_page():
-    """Pinned finding: the page counter flips with the final write beat.
-
-    feat_page_buf.v:34-39 samples wr_page in the same beat as wr_en, so the
-    16512th byte is stored into the freshly flipped page while bytes 0..16510
-    stay in the old one.  Harmless only because the next window rewrites
-    byte 16511 before the read side can select the new page; recorded here so
-    the decision is explicit.
-    """
+def test_feat_copy_last_byte_lands_before_page_flip():
+    """The final byte must land in the same page as every preceding byte."""
     mem = list(range(DEPTH))
     beats = run_copy(mem)
     writes = [b for b in beats if b['dst_we']]
     last = writes[-1]
     assert last['dst_addr'] == 16511
-    assert last['dst_page'] == 1
-    # the writer port of feat_page_buf would use wr_page=1 for this beat
+    assert last['dst_page'] == 0
     page_of_byte = {w['dst_addr']: w['dst_page'] for w in writes}
     assert page_of_byte[16510] == 0
-    assert page_of_byte[16511] == 1
+    assert page_of_byte[16511] == 0

@@ -35,6 +35,15 @@ module feat_copy_engine (
     reg [14:0] idx_q;
     reg        run;
     reg        fin;       // last byte written; flip page on the next beat
+    reg        rd_pending;
+
+    // The address is sampled by the shared synchronous RAM on this edge.
+    // Its response belongs to us on the following edge even if the NPU
+    // takes the port then. A stalled request is never marked as pending.
+    always @* begin
+        src_addr = (idx < DEPTH) ? idx : 15'd0;
+        src_en = run && !busy_in && (idx < DEPTH);
+    end
 
     always @(posedge core_clk or negedge core_rst_n) begin
         if (!core_rst_n) begin
@@ -42,46 +51,36 @@ module feat_copy_engine (
             idx_q    <= 15'd0;
             run      <= 1'b0;
             fin      <= 1'b0;
-            src_addr <= 15'd0;
-            src_en   <= 1'b0;
+            rd_pending <= 1'b0;
             dst_addr <= 15'd0;
             dst_data <= 8'd0;
             dst_we   <= 1'b0;
             dst_page <= 1'b0;
             done     <= 1'b0;
         end else begin
-            src_en <= 1'b0;
             dst_we <= 1'b0;
             done   <= 1'b0;
+            rd_pending <= src_en;
 
             if (!run) begin
                 if (start && !busy_in) begin
                     run      <= 1'b1;
                     idx      <= 15'd0;
                     idx_q    <= 15'd0;
-                    src_addr <= 15'd0;
-                    src_en   <= 1'b1;
+                    fin      <= 1'b0;
                 end
-            end else if (!busy_in) begin
-                idx_q <= idx;
-                if (idx != 15'd0) begin
+            end else begin
+                if (src_en) begin
+                    idx_q <= idx;
+                    idx <= idx + 15'd1;
+                end
+                if (rd_pending) begin
                     dst_addr <= idx_q;
                     dst_data <= src_data;
                     dst_we   <= 1'b1;
+                    if (idx_q == DEPTH - 1) fin <= 1'b1;
                 end
-
-                if (idx == DEPTH) begin
-                    // The final byte is written on THIS beat; flip the page
-                    // one beat later so it lands in the completed page.
-                    fin    <= 1'b1;
-                    src_en <= 1'b0;
-                end else begin
-                    idx      <= idx + 15'd1;
-                    src_addr <= idx + 15'd1;
-                    src_en   <= ((idx + 15'd1) < DEPTH);
-                end
-
-                if (fin && idx == DEPTH) begin
+                if (fin) begin
                     run      <= 1'b0;
                     fin      <= 1'b0;
                     dst_page <= ~dst_page;
