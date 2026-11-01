@@ -1,5 +1,14 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-01 18:17：真实前两层 DDR 激活链候选通过
+
+- 修复store行切换与顶层计数错一拍的信用漏洞：CREDIT曾使用上一行号提前回放未来行，覆盖conv仍读取的bank。改用动态store直接输出replay_row后通过。
+- `build/sim/npu_activation_dynamic/run.log` 实际运行：conv1 792576项、conv2 396288项完整golden逐值一致，pool1写出及canonical回读逐字节一致，共12242761周期。使用宽口WDMA与抽象DDR模型；BASE=0x00400000。持久化成功基线与扩展conv3/4继续，尚非原生DDR/完整NPU/板级通过。
+- 宽口WDMA完整conv1也通过：`build/sim/npu_conv1_wide/run.log`，792576项、859229周期；尚无综合资源收益实测。
+- native bridge首轮70事务模型覆盖不足：真实controller的done可能早于读FIFO排空。代理正补early-done反例和读beat计数保留owner，同时审查watchdog abort显式失败，首版不得视为原生接入已通过。
+- 独立激活地址候选A=0x00400000..0x0043ffff、B=0x00440000..0x0045ffff，与原五区不重叠；候选arbiter白名单与长度/越界测试正在补齐，主线尚未改。
+- PDS iteration247未布6653，仍无位流；只读板卡诊断 `build/board_diag_20261101_1813.json` FTDI未枚举，PnP仅COM5 CP2102在线，既有JTAG进程/端口保持。未终止或重启设备服务。GitHub已推送 `01ca299`。
+
 ## 2026-11-01 18:09 心跳：激活缓存真实尺寸通过，conv2 回放失配修复中
 
 - 动态共享行缓存候选 `sim/experiments/activation_store/` 三层真实尺寸 RTL 逐字节回读 PASS：198144/98304/49152B，分别6208/3072/1536次写和读。尚未综合、尚未证明原生 DDR 端到端。
@@ -32,7 +41,7 @@
 - WDMA 原候选反例与修复已持久化 `sim/experiments/wdma_handshake/`，现场重跑 baseline 预期 FAIL、fixed 4943 tap PASS，见 `reports/wdma_handshake_validation_20261101.md`。换组 MAC 错误进一步定位到 wbuf 装载首拍旧 valid 穿透：`grp_start` 边沿状态进 LOAD，但 `rd_vld_q` 从旧 RPY 仍保持 1 一拍。此前 10797 次测试仅检查 grp_start 当拍，未覆盖随后整个 LOAD；正在增强反例与状态/valid 修复。
 
 > 本文件是**唯一实时状态源**，优先于任何交接快照与记忆。每次会话结束前必须更新，
-> 并在 `CHANGELOG.md` 追加一条。最后更新：2026-11-01 18:09。
+> 并在 `CHANGELOG.md` 追加一条。最后更新：2026-11-01 18:17。
 
 ## 2026-11-01 17:18 新确认的整链阻塞（优先于组件 PASS）
 

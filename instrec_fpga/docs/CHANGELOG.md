@@ -605,3 +605,8 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 - 保存三层真实尺寸动态共享行缓存RTL/TB/runner，逐值回读共345600B通过；六层修复版WDMA宽口差分通过，无资源收益承诺。
 - 记录真实前两层链conv2 index24808失配，native bridge与地址隔离继续；完整NPU尚未通过。
 - 交接快照加最新验证范围纠正；PDS iteration244未布6643、无新位流，manifest62项一致。
+
+## 2026-11-01 18:17 — 前两层真实激活链候选PASS
+
+- direct replay_row修复行信用旧计数，conv1/pool1/DDR/conv2共12242761周期，conv1 792576和conv2 396288项golden exact；抽象DDR，不扩展为全NPU或板级结论。
+- native bridge新增done早于FIFO排空契约审查，继续修复并补异常测试；PDS iteration247未布6653、无新位流。

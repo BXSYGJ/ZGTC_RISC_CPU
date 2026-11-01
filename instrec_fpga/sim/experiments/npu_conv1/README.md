@@ -11,6 +11,9 @@ conv1 with `golden_pipeline.conv2d_int8`, then transposes NCHW to the actual
 row/group/column/lane output scan. Every output byte is compared.
 
 Validated 2026-11-01: **792576 output bytes exact**, **859229 cycles**.
+The `--wide` variant using `wdma_parameter_ram/wdma_wide_fixed.v` also passes
+the full 792576-byte comparison at 859229 cycles; evidence is
+`build/sim/npu_conv1_wide/run.log`.
 Evidence: `build/sim/npu_conv1/run.log` (reproducible, ignored build output),
 with independent pre-persistence logs `build/sim/npu_conv1_step8/run.log` and
 `build/sim/npu_conv1_step9/run.log`.
@@ -25,3 +28,9 @@ from being overwritten. Feature issue and its delayed valid are gated together.
 These are isolated candidates, not the current synthesis source set. Success
 proves conv1 with this fixture and weight model. It does not prove later-layer
 activation buffering, native DDR arbitration, timing, resource use or hardware.
+
+An initial experimental conv1->pool1->DDR->conv2 integration was run on the
+same candidate set. Conv1 and the pool stream passed until the first replayed
+conv2 frame mismatch at output index 24808 (row-credit / activation replay
+ordering remains unresolved); this is retained as a failure artifact in
+`build/sim/npu_activation/run.log` and is not presented as a full-chain pass.
