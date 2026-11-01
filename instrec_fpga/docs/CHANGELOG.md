@@ -797,3 +797,9 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 - UART line buffer 边界、背压和恢复场景通过。
 - NPU completion 两次 softmax 完成、busy 清除和重启场景通过。
 
+## 2026-11-02 — RV 集成收尾核对
+
+- 并行复核确认 `top_rv_core`/`rv32_cpu_subsys` 的 CPU→MMIO→NPU 控制、结果和 UART 路径已接通，`rv_core` 构建集包含 CPU RTL 与固件；未发现需要追加的 SV-2005/PDS 修复。
+- `rv_cpu` C1-C9、`rv_top_ctrl` 17 项、构建护栏 pytest 45 项和 59 个 Verilog 的词法检查均通过。
+- 最新 RV 位流虽已布线完成，但 DDR PHY 时序未闭合（slow WNS -4.462 ns、fast WNS -0.793 ns，SCBV 警告），继续保持板级 `NOT_RUN`，未触碰下载器。
+

@@ -1,5 +1,12 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-02：收尾核对与 RV 轻量集成确认
+
+- 按 `HANDOFF_SNAPSHOT_20261101.md` 复核当前主线：`top_rv_core` 已真实例化 `rv32_cpu_subsys`，CPU 通过 MMIO 发起 NPU 请求、读取 DDR/NPU 状态与结果，并复用共享 UART；`rv_core` 构建集包含 CPU RTL 与 `src/cpu/prog.hex`。
+- 并行审查确认无需新增 RTL 改动：`python sim/run_sim.py rv_cpu --verbose` C1-C9 全部 PASS；`python sim/run_sim.py rv_top_ctrl --verbose` 17 项 PASS；`python scripts/check_rtl.py` 检查 59 个 `.v`、0 violation；构建护栏定向 pytest 45 passed。
+- 最新候选 `build/pds/20261102-003406-7af1bf17/generate_bitstream/top_rv_core.sbit` 已完成布线并可复核（SHA256 `605C234FA2B14BB174C304B0B99FB7E5E7768643F999A97BEC70FA328B488CFB`），但 `ddrphy_sysclk` slow WNS `-4.462 ns`、fast WNS `-0.793 ns`，报告为 `Some Constraints Violated`，且有 `SCBV has not been set` 警告；不作为板级候选，板级仍 `NOT_RUN`。
+- 本轮未启动新的 PDS、未操作 `cdt_js`/`cdt_cfg`/下载器。用户已有的 `cpu/`、PCB、PDF 和 `obj_dir` 工作区改动保持原样。
+
 ## 2026-11-02：控制冒烟与真实 RV CPU 回归通过
 
 - `python sim/run_sim.py ctrl_smoke --verbose`：6 项 PASS，覆盖 BOOT、DDR3 SELFTEST、DDROK、STS=00、RUN 及控制状态收敛。
