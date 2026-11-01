@@ -1,5 +1,11 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-02：UART line buffer 与 NPU completion 补测通过
+
+- `python sim/run_sim.py uart_linebuf --verbose`：PASS，覆盖满 128 字节/无换行、短行/空行、blocked-write 丢弃、TX backpressure 及 busy/ready 恢复。
+- `python sim/run_sim.py npu_completion --verbose`：PASS，覆盖两次真实 softmax completion、busy 清除和重新启动。
+- 本轮未启动 PDS，未操作 `cdt_js`、`cdt_cfg` 或下载器；板级仍 NOT_RUN。
+
 ## 2026-11-02：UI 与特征页模型补测通过
 
 - `python sim/run_sim.py ui_render --verbose`：3 项 PASS，64 个 active pixels、层优先级和 RGB/DE 四拍对齐均 0 mismatch。

@@ -783,3 +783,8 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 - UI renderer 3 项通过，64 active pixels、层优先级和四拍 RGB/DE 对齐均无误。
 - 特征页与谱图 overlay 模型 19 项通过；`run_sim.py` 没有 `feat_page` 案例，使用对应 pytest 覆盖。
 
+## 2026-11-02 — UART/NPU completion 补测
+
+- UART line buffer 边界、背压和恢复场景通过。
+- NPU completion 两次 softmax 完成、busy 清除和重启场景通过。
+
