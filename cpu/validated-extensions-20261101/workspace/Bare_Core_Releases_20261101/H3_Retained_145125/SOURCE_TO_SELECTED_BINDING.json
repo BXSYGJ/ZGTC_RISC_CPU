@@ -1,0 +1,64 @@
+﻿{
+  "schema": "h3-bare-source-selected-binding/v1",
+  "release": "H3_Retained_145125",
+  "source_manifest": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\SOURCE_MANIFEST.json",
+  "source_manifest_sha256": "a5a5c7ed0f2df4710ea0d26871eae429436fa285fc7a1465640491fa3b526078",
+  "selected_build": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\physical\\builds\\20261101-015628-ffa262ba",
+  "selected_manifest": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\physical\\builds\\20261101-015628-ffa262ba\\manifest.json",
+  "selected_manifest_sha256": "d43c4830c3157b4d3bc3c360f91f25770f88683809cee6e6652d88683e603481",
+  "eight_frozen_sources": [
+    {
+      "source": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\source\\rtl\\rv32_core.sv",
+      "selected_input": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\physical\\builds\\20261101-015628-ffa262ba\\inputs\\rtl\\rv32_core.sv",
+      "sha256": "af9aeb1ef431c860e108b2fd3ce09d596757d2dba4a92a065b3ad616483d0748"
+    },
+    {
+      "source": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\source\\rtl\\rv32_rvc_frontend.sv",
+      "selected_input": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\physical\\builds\\20261101-015628-ffa262ba\\inputs\\rtl\\rv32_rvc_frontend.sv",
+      "sha256": "210b5ba9280c3840aafc27e7c3e35616085efde310793dc1661cc72f50984128"
+    },
+    {
+      "source": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\source\\rtl\\rv32_rvc_expand.sv",
+      "selected_input": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\physical\\builds\\20261101-015628-ffa262ba\\inputs\\rtl\\rv32_rvc_expand.sv",
+      "sha256": "308ac8a65c9e29aeec27b38417483d0f43fd7c54487c26e89a3fa54b4647951b"
+    },
+    {
+      "source": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\source\\rtl\\rv32_decode.sv",
+      "selected_input": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\physical\\builds\\20261101-015628-ffa262ba\\inputs\\rtl\\rv32_decode.sv",
+      "sha256": "9cb2b57b46ed775d85b6e70a3eebe92c2d5e49e9a6483993109e2c096d9a3ff3"
+    },
+    {
+      "source": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\source\\rtl\\rv32_alu.sv",
+      "selected_input": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\physical\\builds\\20261101-015628-ffa262ba\\inputs\\rtl\\rv32_alu.sv",
+      "sha256": "125647d90b98f294743127637406d19479eebda82dccfaaba7acaf59d5ae38b1"
+    },
+    {
+      "source": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\source\\rtl\\rv32_muldiv.sv",
+      "selected_input": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\physical\\builds\\20261101-015628-ffa262ba\\inputs\\rtl\\rv32_muldiv.sv",
+      "sha256": "5306ad46b57db551cc83df20dc4c9d2f09aa7077e6289037abfc4fcd8fa3db0e"
+    },
+    {
+      "source": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\source\\rtl\\rv32_btb.sv",
+      "selected_input": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\physical\\builds\\20261101-015628-ffa262ba\\inputs\\rtl\\rv32_btb.sv",
+      "sha256": "b1b3481343a2e1275cfd984c4eab05c5f9d92cb72dab652010463073eb86eb4f"
+    },
+    {
+      "source": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\source\\rtl\\rv32_machine.sv",
+      "selected_input": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\physical\\builds\\20261101-015628-ffa262ba\\inputs\\rtl\\rv32_machine.sv",
+      "sha256": "56b542e419c58216a08b0a5c83322506e42e2721fa28db50a6454ebe29607abd"
+    }
+  ],
+  "core_wrapper_sha256": "4f777d97020457a02ea57e1579b10dd97baaac5e50033e8ce6b9bb7a28d3a468",
+  "changed_field": "Build-local physical scan fixture only",
+  "fixture_profile": "SlowScanStaged",
+  "fixture_sha256": "00c5563b130a9b935a8eb04082bb83f9eee398354af1c9f5d0e79acee2fcbb6c",
+  "fixture_test": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\physical\\builds\\20261101-015628-ffa262ba\\SCAN_FIXTURE_TEST.json",
+  "fixture_test_sha256": "d69d579296413e2dd5f3581f4b5643a374c3fd6b4d0bbae2aa99e133ba03dbc6",
+  "extraction_miter": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\H3_Retained_145125-EXTRACTION_QUALIFICATION.json",
+  "extraction_miter_sha256": "fa0d883ae8f8d0504311fc9aa1b1e242db397d68c5e48ee5ee7e943a83120fb4",
+  "full_reference": "D:/AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\qualification\\full_reference\\RESULT.json",
+  "full_reference_sha256": "7fb7e4af07239e1fb8431cb8795a2a120319c582bf8a66e0668aa45f8c48f743",
+  "native_area_report": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\physical-attribution\\H3_Retained_145125-20261101-015628-ffa262ba-PHYSICAL_PRIMITIVE_INVENTORY.json",
+  "native_area_report_sha256": "ce48c29036c06c58edf821dbad820a26795984a10150496059594bbc5201ccb7",
+  "hardware_validated": false
+}

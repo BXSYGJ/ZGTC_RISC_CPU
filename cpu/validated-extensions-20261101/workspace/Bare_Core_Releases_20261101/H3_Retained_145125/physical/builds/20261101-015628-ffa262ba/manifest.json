@@ -1,0 +1,928 @@
+﻿{
+  "schema": "bare-core-physical/v1",
+  "release": "H3_Retained_145125",
+  "status": "timing_passed",
+  "stage": "implemented",
+  "created_utc": "2026-10-31T17:56:28.3609912Z",
+  "updated_utc": "2026-10-31T18:09:04.3691239Z",
+  "clock_hz": 145125000,
+  "setup_uncertainty_ns": 0.15,
+  "hold_uncertainty_ns": 0.15,
+  "placement_seed": 1,
+  "fixture_profile": "SlowScanStaged",
+  "source_manifest": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\SOURCE_MANIFEST.json",
+  "source_manifest_sha256": "a5a5c7ed0f2df4710ea0d26871eae429436fa285fc7a1465640491fa3b526078",
+  "frozen_rtl": [
+    {
+      "name": "rv32_core.sv",
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\source\\rtl\\rv32_core.sv",
+      "source": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-004707-430d2073\\inputs\\rtl\\rv32_core.sv",
+      "sha256": "af9aeb1ef431c860e108b2fd3ce09d596757d2dba4a92a065b3ad616483d0748"
+    },
+    {
+      "name": "rv32_rvc_frontend.sv",
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\source\\rtl\\rv32_rvc_frontend.sv",
+      "source": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-004707-430d2073\\inputs\\rtl\\rv32_rvc_frontend.sv",
+      "sha256": "210b5ba9280c3840aafc27e7c3e35616085efde310793dc1661cc72f50984128"
+    },
+    {
+      "name": "rv32_rvc_expand.sv",
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\source\\rtl\\rv32_rvc_expand.sv",
+      "source": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-004707-430d2073\\inputs\\rtl\\rv32_rvc_expand.sv",
+      "sha256": "308ac8a65c9e29aeec27b38417483d0f43fd7c54487c26e89a3fa54b4647951b"
+    },
+    {
+      "name": "rv32_decode.sv",
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\source\\rtl\\rv32_decode.sv",
+      "source": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-004707-430d2073\\inputs\\rtl\\rv32_decode.sv",
+      "sha256": "9cb2b57b46ed775d85b6e70a3eebe92c2d5e49e9a6483993109e2c096d9a3ff3"
+    },
+    {
+      "name": "rv32_alu.sv",
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\source\\rtl\\rv32_alu.sv",
+      "source": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-004707-430d2073\\inputs\\rtl\\rv32_alu.sv",
+      "sha256": "125647d90b98f294743127637406d19479eebda82dccfaaba7acaf59d5ae38b1"
+    },
+    {
+      "name": "rv32_muldiv.sv",
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\source\\rtl\\rv32_muldiv.sv",
+      "source": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-004707-430d2073\\inputs\\rtl\\rv32_muldiv.sv",
+      "sha256": "5306ad46b57db551cc83df20dc4c9d2f09aa7077e6289037abfc4fcd8fa3db0e"
+    },
+    {
+      "name": "rv32_btb.sv",
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\source\\rtl\\rv32_btb.sv",
+      "source": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-004707-430d2073\\inputs\\rtl\\rv32_btb.sv",
+      "sha256": "b1b3481343a2e1275cfd984c4eab05c5f9d92cb72dab652010463073eb86eb4f"
+    },
+    {
+      "name": "rv32_machine.sv",
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\source\\rtl\\rv32_machine.sv",
+      "source": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-004707-430d2073\\inputs\\rtl\\rv32_machine.sv",
+      "sha256": "56b542e419c58216a08b0a5c83322506e42e2721fa28db50a6454ebe29607abd"
+    }
+  ],
+  "parameters": {
+    "RESET_VECTOR": 0,
+    "ENABLE_PREDICTOR": 1,
+    "ENABLE_M": 1,
+    "ENABLE_C": 1,
+    "FETCH_ADDRESS_BITS": 16,
+    "FETCH_OVERLAP": 1,
+    "EARLY_D_REQUEST": 1,
+    "BTB_INDEX_BITS": 8,
+    "BTB_ADDRESS_BITS": 16,
+    "LOAD_USE_BUBBLE": 1,
+    "RETAIN_MUL_ELIGIBILITY": 1
+  },
+  "boundary": {
+    "module": "rv32_bare_core",
+    "dut": "rv32_core",
+    "dut_hierarchy": "core_boundary/dut",
+    "physical_top": "bare_core_scan_top",
+    "all_port_bits": 648.0,
+    "core_input_bits_including_clk": 177,
+    "scan_controlled_input_bits": 176,
+    "individually_captured_output_bits": 471,
+    "input_mapping": [
+      {
+        "port": "rst_n",
+        "width": 1,
+        "lsb": 0,
+        "msb": 0,
+        "connection": "active_inputs[0]"
+      },
+      {
+        "port": "i_req_ready",
+        "width": 1,
+        "lsb": 1,
+        "msb": 1,
+        "connection": "active_inputs[1]"
+      },
+      {
+        "port": "i_rsp_valid",
+        "width": 1,
+        "lsb": 2,
+        "msb": 2,
+        "connection": "active_inputs[2]"
+      },
+      {
+        "port": "i_rsp_data",
+        "width": 32,
+        "lsb": 3,
+        "msb": 34,
+        "connection": "active_inputs[34:3]"
+      },
+      {
+        "port": "i_rsp_pair_data",
+        "width": 32,
+        "lsb": 35,
+        "msb": 66,
+        "connection": "active_inputs[66:35]"
+      },
+      {
+        "port": "i_rsp_is_c",
+        "width": 2,
+        "lsb": 67,
+        "msb": 68,
+        "connection": "active_inputs[68:67]"
+      },
+      {
+        "port": "i_rsp_pair_is_c",
+        "width": 2,
+        "lsb": 69,
+        "msb": 70,
+        "connection": "active_inputs[70:69]"
+      },
+      {
+        "port": "i_rsp_pair_valid",
+        "width": 1,
+        "lsb": 71,
+        "msb": 71,
+        "connection": "active_inputs[71]"
+      },
+      {
+        "port": "i_rsp_error",
+        "width": 1,
+        "lsb": 72,
+        "msb": 72,
+        "connection": "active_inputs[72]"
+      },
+      {
+        "port": "d_req_ready",
+        "width": 1,
+        "lsb": 73,
+        "msb": 73,
+        "connection": "active_inputs[73]"
+      },
+      {
+        "port": "d_rsp_valid",
+        "width": 1,
+        "lsb": 74,
+        "msb": 74,
+        "connection": "active_inputs[74]"
+      },
+      {
+        "port": "d_rsp_data",
+        "width": 32,
+        "lsb": 75,
+        "msb": 106,
+        "connection": "active_inputs[106:75]"
+      },
+      {
+        "port": "d_rsp_error",
+        "width": 1,
+        "lsb": 107,
+        "msb": 107,
+        "connection": "active_inputs[107]"
+      },
+      {
+        "port": "maintenance_ready",
+        "width": 1,
+        "lsb": 108,
+        "msb": 108,
+        "connection": "active_inputs[108]"
+      },
+      {
+        "port": "timer_value",
+        "width": 64,
+        "lsb": 109,
+        "msb": 172,
+        "connection": "active_inputs[172:109]"
+      },
+      {
+        "port": "irq_external",
+        "width": 1,
+        "lsb": 173,
+        "msb": 173,
+        "connection": "active_inputs[173]"
+      },
+      {
+        "port": "irq_software",
+        "width": 1,
+        "lsb": 174,
+        "msb": 174,
+        "connection": "active_inputs[174]"
+      },
+      {
+        "port": "irq_timer",
+        "width": 1,
+        "lsb": 175,
+        "msb": 175,
+        "connection": "active_inputs[175]"
+      }
+    ],
+    "output_mapping": [
+      {
+        "port": "i_req_valid",
+        "width": 1,
+        "lsb": 0,
+        "msb": 0,
+        "connection": "core_outputs[0]"
+      },
+      {
+        "port": "i_req_address",
+        "width": 32,
+        "lsb": 1,
+        "msb": 32,
+        "connection": "core_outputs[32:1]"
+      },
+      {
+        "port": "i_req_pair_address",
+        "width": 32,
+        "lsb": 33,
+        "msb": 64,
+        "connection": "core_outputs[64:33]"
+      },
+      {
+        "port": "i_rsp_ready",
+        "width": 1,
+        "lsb": 65,
+        "msb": 65,
+        "connection": "core_outputs[65]"
+      },
+      {
+        "port": "d_req_valid",
+        "width": 1,
+        "lsb": 66,
+        "msb": 66,
+        "connection": "core_outputs[66]"
+      },
+      {
+        "port": "d_req_address",
+        "width": 32,
+        "lsb": 67,
+        "msb": 98,
+        "connection": "core_outputs[98:67]"
+      },
+      {
+        "port": "d_req_data",
+        "width": 32,
+        "lsb": 99,
+        "msb": 130,
+        "connection": "core_outputs[130:99]"
+      },
+      {
+        "port": "d_req_strobe",
+        "width": 4,
+        "lsb": 131,
+        "msb": 134,
+        "connection": "core_outputs[134:131]"
+      },
+      {
+        "port": "d_req_write",
+        "width": 1,
+        "lsb": 135,
+        "msb": 135,
+        "connection": "core_outputs[135]"
+      },
+      {
+        "port": "d_rsp_ready",
+        "width": 1,
+        "lsb": 136,
+        "msb": 136,
+        "connection": "core_outputs[136]"
+      },
+      {
+        "port": "maintenance_valid",
+        "width": 1,
+        "lsb": 137,
+        "msb": 137,
+        "connection": "core_outputs[137]"
+      },
+      {
+        "port": "trace_valid",
+        "width": 1,
+        "lsb": 138,
+        "msb": 138,
+        "connection": "core_outputs[138]"
+      },
+      {
+        "port": "trace_pc",
+        "width": 32,
+        "lsb": 139,
+        "msb": 170,
+        "connection": "core_outputs[170:139]"
+      },
+      {
+        "port": "trace_instruction",
+        "width": 32,
+        "lsb": 171,
+        "msb": 202,
+        "connection": "core_outputs[202:171]"
+      },
+      {
+        "port": "trace_write",
+        "width": 1,
+        "lsb": 203,
+        "msb": 203,
+        "connection": "core_outputs[203]"
+      },
+      {
+        "port": "trace_rd",
+        "width": 5,
+        "lsb": 204,
+        "msb": 208,
+        "connection": "core_outputs[208:204]"
+      },
+      {
+        "port": "trace_data",
+        "width": 32,
+        "lsb": 209,
+        "msb": 240,
+        "connection": "core_outputs[240:209]"
+      },
+      {
+        "port": "trap_valid",
+        "width": 1,
+        "lsb": 241,
+        "msb": 241,
+        "connection": "core_outputs[241]"
+      },
+      {
+        "port": "trap_pc",
+        "width": 32,
+        "lsb": 242,
+        "msb": 273,
+        "connection": "core_outputs[273:242]"
+      },
+      {
+        "port": "trap_cause",
+        "width": 32,
+        "lsb": 274,
+        "msb": 305,
+        "connection": "core_outputs[305:274]"
+      },
+      {
+        "port": "trap_value",
+        "width": 32,
+        "lsb": 306,
+        "msb": 337,
+        "connection": "core_outputs[337:306]"
+      },
+      {
+        "port": "pipeline_valid",
+        "width": 5,
+        "lsb": 338,
+        "msb": 342,
+        "connection": "core_outputs[342:338]"
+      },
+      {
+        "port": "cycle_count",
+        "width": 64,
+        "lsb": 343,
+        "msb": 406,
+        "connection": "core_outputs[406:343]"
+      },
+      {
+        "port": "retired_count",
+        "width": 64,
+        "lsb": 407,
+        "msb": 470,
+        "connection": "core_outputs[470:407]"
+      }
+    ],
+    "ports": [
+      {
+        "direction": "input",
+        "name": "clk",
+        "width": 1,
+        "range": "",
+        "connection": "clk"
+      },
+      {
+        "direction": "input",
+        "name": "rst_n",
+        "width": 1,
+        "range": "",
+        "connection": "active_inputs[0]"
+      },
+      {
+        "direction": "output",
+        "name": "i_req_valid",
+        "width": 1,
+        "range": "",
+        "connection": "core_outputs[0]"
+      },
+      {
+        "direction": "input",
+        "name": "i_req_ready",
+        "width": 1,
+        "range": "",
+        "connection": "active_inputs[1]"
+      },
+      {
+        "direction": "output",
+        "name": "i_req_address",
+        "width": 32,
+        "range": "[31:0]",
+        "connection": "core_outputs[32:1]"
+      },
+      {
+        "direction": "output",
+        "name": "i_req_pair_address",
+        "width": 32,
+        "range": "[31:0]",
+        "connection": "core_outputs[64:33]"
+      },
+      {
+        "direction": "input",
+        "name": "i_rsp_valid",
+        "width": 1,
+        "range": "",
+        "connection": "active_inputs[2]"
+      },
+      {
+        "direction": "output",
+        "name": "i_rsp_ready",
+        "width": 1,
+        "range": "",
+        "connection": "core_outputs[65]"
+      },
+      {
+        "direction": "input",
+        "name": "i_rsp_data",
+        "width": 32,
+        "range": "[31:0]",
+        "connection": "active_inputs[34:3]"
+      },
+      {
+        "direction": "input",
+        "name": "i_rsp_pair_data",
+        "width": 32,
+        "range": "[31:0]",
+        "connection": "active_inputs[66:35]"
+      },
+      {
+        "direction": "input",
+        "name": "i_rsp_is_c",
+        "width": 2,
+        "range": "[1:0]",
+        "connection": "active_inputs[68:67]"
+      },
+      {
+        "direction": "input",
+        "name": "i_rsp_pair_is_c",
+        "width": 2,
+        "range": "[1:0]",
+        "connection": "active_inputs[70:69]"
+      },
+      {
+        "direction": "input",
+        "name": "i_rsp_pair_valid",
+        "width": 1,
+        "range": "",
+        "connection": "active_inputs[71]"
+      },
+      {
+        "direction": "input",
+        "name": "i_rsp_error",
+        "width": 1,
+        "range": "",
+        "connection": "active_inputs[72]"
+      },
+      {
+        "direction": "output",
+        "name": "d_req_valid",
+        "width": 1,
+        "range": "",
+        "connection": "core_outputs[66]"
+      },
+      {
+        "direction": "input",
+        "name": "d_req_ready",
+        "width": 1,
+        "range": "",
+        "connection": "active_inputs[73]"
+      },
+      {
+        "direction": "output",
+        "name": "d_req_address",
+        "width": 32,
+        "range": "[31:0]",
+        "connection": "core_outputs[98:67]"
+      },
+      {
+        "direction": "output",
+        "name": "d_req_data",
+        "width": 32,
+        "range": "[31:0]",
+        "connection": "core_outputs[130:99]"
+      },
+      {
+        "direction": "output",
+        "name": "d_req_strobe",
+        "width": 4,
+        "range": "[3:0]",
+        "connection": "core_outputs[134:131]"
+      },
+      {
+        "direction": "output",
+        "name": "d_req_write",
+        "width": 1,
+        "range": "",
+        "connection": "core_outputs[135]"
+      },
+      {
+        "direction": "input",
+        "name": "d_rsp_valid",
+        "width": 1,
+        "range": "",
+        "connection": "active_inputs[74]"
+      },
+      {
+        "direction": "output",
+        "name": "d_rsp_ready",
+        "width": 1,
+        "range": "",
+        "connection": "core_outputs[136]"
+      },
+      {
+        "direction": "input",
+        "name": "d_rsp_data",
+        "width": 32,
+        "range": "[31:0]",
+        "connection": "active_inputs[106:75]"
+      },
+      {
+        "direction": "input",
+        "name": "d_rsp_error",
+        "width": 1,
+        "range": "",
+        "connection": "active_inputs[107]"
+      },
+      {
+        "direction": "output",
+        "name": "maintenance_valid",
+        "width": 1,
+        "range": "",
+        "connection": "core_outputs[137]"
+      },
+      {
+        "direction": "input",
+        "name": "maintenance_ready",
+        "width": 1,
+        "range": "",
+        "connection": "active_inputs[108]"
+      },
+      {
+        "direction": "input",
+        "name": "timer_value",
+        "width": 64,
+        "range": "[63:0]",
+        "connection": "active_inputs[172:109]"
+      },
+      {
+        "direction": "input",
+        "name": "irq_external",
+        "width": 1,
+        "range": "",
+        "connection": "active_inputs[173]"
+      },
+      {
+        "direction": "input",
+        "name": "irq_software",
+        "width": 1,
+        "range": "",
+        "connection": "active_inputs[174]"
+      },
+      {
+        "direction": "input",
+        "name": "irq_timer",
+        "width": 1,
+        "range": "",
+        "connection": "active_inputs[175]"
+      },
+      {
+        "direction": "output",
+        "name": "trace_valid",
+        "width": 1,
+        "range": "",
+        "connection": "core_outputs[138]"
+      },
+      {
+        "direction": "output",
+        "name": "trace_pc",
+        "width": 32,
+        "range": "[31:0]",
+        "connection": "core_outputs[170:139]"
+      },
+      {
+        "direction": "output",
+        "name": "trace_instruction",
+        "width": 32,
+        "range": "[31:0]",
+        "connection": "core_outputs[202:171]"
+      },
+      {
+        "direction": "output",
+        "name": "trace_write",
+        "width": 1,
+        "range": "",
+        "connection": "core_outputs[203]"
+      },
+      {
+        "direction": "output",
+        "name": "trace_rd",
+        "width": 5,
+        "range": "[4:0]",
+        "connection": "core_outputs[208:204]"
+      },
+      {
+        "direction": "output",
+        "name": "trace_data",
+        "width": 32,
+        "range": "[31:0]",
+        "connection": "core_outputs[240:209]"
+      },
+      {
+        "direction": "output",
+        "name": "trap_valid",
+        "width": 1,
+        "range": "",
+        "connection": "core_outputs[241]"
+      },
+      {
+        "direction": "output",
+        "name": "trap_pc",
+        "width": 32,
+        "range": "[31:0]",
+        "connection": "core_outputs[273:242]"
+      },
+      {
+        "direction": "output",
+        "name": "trap_cause",
+        "width": 32,
+        "range": "[31:0]",
+        "connection": "core_outputs[305:274]"
+      },
+      {
+        "direction": "output",
+        "name": "trap_value",
+        "width": 32,
+        "range": "[31:0]",
+        "connection": "core_outputs[337:306]"
+      },
+      {
+        "direction": "output",
+        "name": "pipeline_valid",
+        "width": 5,
+        "range": "[4:0]",
+        "connection": "core_outputs[342:338]"
+      },
+      {
+        "direction": "output",
+        "name": "cycle_count",
+        "width": 64,
+        "range": "[63:0]",
+        "connection": "core_outputs[406:343]"
+      },
+      {
+        "direction": "output",
+        "name": "retired_count",
+        "width": 64,
+        "range": "[63:0]",
+        "connection": "core_outputs[470:407]"
+      }
+    ],
+    "parameters": {
+      "RESET_VECTOR": 0,
+      "ENABLE_PREDICTOR": 1,
+      "ENABLE_M": 1,
+      "ENABLE_C": 1,
+      "FETCH_ADDRESS_BITS": 16,
+      "FETCH_OVERLAP": 1,
+      "EARLY_D_REQUEST": 1,
+      "BTB_INDEX_BITS": 8,
+      "BTB_ADDRESS_BITS": 16,
+      "LOAD_USE_BUBBLE": 1,
+      "RETAIN_MUL_ELIGIBILITY": 1
+    },
+    "hierarchy_policy": "syn_hier=fixed on rv32_bare_core and rv32_core",
+    "input_update": "All core input bits except clk are scan-controlled active registers, atomically updated from input_shift. No core input is tied to a constant.",
+    "output_observation": "Every output bit is captured separately and shifted out. There is no XOR/signature compression.",
+    "physical_clock": "Direct external clk; no PLL, clock gating, or ILA.",
+    "fixture_profile": "SlowScanStaged",
+    "output_snapshot_latency_core_edges": 1,
+    "minimum_serial_shift_interval_core_edges": 2,
+    "scan_phase_reset": 0,
+    "scan_operations_acceptance": "scan_shift, scan_update, and scan_capture act only when the pre-edge scan_phase is zero. output_snapshot captures every core edge."
+  },
+  "input_hashes": {
+    "bare_core_scan_top.sv": "00c5563b130a9b935a8eb04082bb83f9eee398354af1c9f5d0e79acee2fcbb6c",
+    "BOUNDARY.json": "281955e8b17778a168032ee6f7cb6a720724bf90bd45944815c62b3b5d4cf6a9",
+    "parameters.json": "7fb781be52c463e761f3f7e7f9c2a0ab76723581246c2a8b8a2e161668e4511c",
+    "rtl/rv32_alu.sv": "125647d90b98f294743127637406d19479eebda82dccfaaba7acaf59d5ae38b1",
+    "rtl/rv32_btb.sv": "b1b3481343a2e1275cfd984c4eab05c5f9d92cb72dab652010463073eb86eb4f",
+    "rtl/rv32_core.sv": "af9aeb1ef431c860e108b2fd3ce09d596757d2dba4a92a065b3ad616483d0748",
+    "rtl/rv32_decode.sv": "9cb2b57b46ed775d85b6e70a3eebe92c2d5e49e9a6483993109e2c096d9a3ff3",
+    "rtl/rv32_machine.sv": "56b542e419c58216a08b0a5c83322506e42e2721fa28db50a6454ebe29607abd",
+    "rtl/rv32_muldiv.sv": "5306ad46b57db551cc83df20dc4c9d2f09aa7077e6289037abfc4fcd8fa3db0e",
+    "rtl/rv32_rvc_expand.sv": "308ac8a65c9e29aeec27b38417483d0f43fd7c54487c26e89a3fa54b4647951b",
+    "rtl/rv32_rvc_frontend.sv": "210b5ba9280c3840aafc27e7c3e35616085efde310793dc1661cc72f50984128",
+    "rv32_bare_core.sv": "4f777d97020457a02ea57e1579b10dd97baaac5e50033e8ce6b9bb7a28d3a468"
+  },
+  "rollback_test": {
+    "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\physical\\builds\\20261101-015628-ffa262ba\\rollback_test",
+    "restored_eight_frozen_hashes": true
+  },
+  "functional_rtl_changes": 0,
+  "clocking": "Direct physical clock pin, no PLL",
+  "timing_scope": "Physical scan fixture with fixed core boundary. No virtual I/O.",
+  "hardware_validated": false,
+  "physical_input_hashes": {
+    "fdc": "9e70f341628f008ad9a8fb6340122c94dc663db519dcbd25bcbde50a18901e85",
+    "tcl": "beb381650b2d012bb8d6a33eb53fcb261fcb29588bfcbad47c4c134175c7d99a"
+  },
+  "report": {
+    "clock_hz": 145125000,
+    "clock_period_ns": 6.890612,
+    "requested_minimum_setup_uncertainty_ns": 0.15,
+    "requested_setup_uncertainty_ns": 0.15,
+    "observed_setup_uncertainties_ns": [
+      0.2
+    ],
+    "setup_uncertainty_matches_request": false,
+    "setup_uncertainty_exact_match": false,
+    "setup_uncertainty_satisfies_minimum": true,
+    "setup_uncertainty_note": "Actual deductions are read from the native report. A passing route at a larger setup uncertainty satisfies the requested minimum budget; it is not relabeled as an exact match.",
+    "setup_uncertainty_paths_checked": 6,
+    "clock_loads": 2411,
+    "setup_wns_ns": 0.019,
+    "timing_summary": "All Constraints Met.",
+    "constraints_met": true,
+    "all_corner_audit": {
+      "all_corners_passed": true,
+      "summary_tables_checked": 10,
+      "tables": [
+        {
+          "check": "Setup",
+          "corner": "Slow Corner",
+          "rows": [
+            {
+              "clock_columns": "core_clk               core_clk",
+              "slack_ns": 0.019,
+              "total_negative_slack_ns": 0.0,
+              "failing_endpoints": 0,
+              "total_endpoints": 11081,
+              "passed": true
+            }
+          ]
+        },
+        {
+          "check": "Hold",
+          "corner": "Slow Corner",
+          "rows": [
+            {
+              "clock_columns": "core_clk               core_clk",
+              "slack_ns": 0.109,
+              "total_negative_slack_ns": 0.0,
+              "failing_endpoints": 0,
+              "total_endpoints": 11081,
+              "passed": true
+            }
+          ]
+        },
+        {
+          "check": "Recovery",
+          "corner": "Slow Corner",
+          "rows": [
+            {
+              "clock_columns": "core_clk               core_clk",
+              "slack_ns": 2.441,
+              "total_negative_slack_ns": 0.0,
+              "failing_endpoints": 0,
+              "total_endpoints": 2201,
+              "passed": true
+            }
+          ]
+        },
+        {
+          "check": "Removal",
+          "corner": "Slow Corner",
+          "rows": [
+            {
+              "clock_columns": "core_clk               core_clk",
+              "slack_ns": 0.127,
+              "total_negative_slack_ns": 0.0,
+              "failing_endpoints": 0,
+              "total_endpoints": 2201,
+              "passed": true
+            }
+          ]
+        },
+        {
+          "check": "Minimum Pulse Width",
+          "corner": "Slow Corner",
+          "rows": [
+            {
+              "clock_columns": "core_clk",
+              "slack_ns": 2.791,
+              "total_negative_slack_ns": 0.0,
+              "failing_endpoints": 0,
+              "total_endpoints": 2411,
+              "passed": true
+            }
+          ]
+        },
+        {
+          "check": "Setup",
+          "corner": "Fast Corner",
+          "rows": [
+            {
+              "clock_columns": "core_clk               core_clk",
+              "slack_ns": 1.634,
+              "total_negative_slack_ns": 0.0,
+              "failing_endpoints": 0,
+              "total_endpoints": 11081,
+              "passed": true
+            }
+          ]
+        },
+        {
+          "check": "Hold",
+          "corner": "Fast Corner",
+          "rows": [
+            {
+              "clock_columns": "core_clk               core_clk",
+              "slack_ns": 0.018,
+              "total_negative_slack_ns": 0.0,
+              "failing_endpoints": 0,
+              "total_endpoints": 11081,
+              "passed": true
+            }
+          ]
+        },
+        {
+          "check": "Recovery",
+          "corner": "Fast Corner",
+          "rows": [
+            {
+              "clock_columns": "core_clk               core_clk",
+              "slack_ns": 2.434,
+              "total_negative_slack_ns": 0.0,
+              "failing_endpoints": 0,
+              "total_endpoints": 2201,
+              "passed": true
+            }
+          ]
+        },
+        {
+          "check": "Removal",
+          "corner": "Fast Corner",
+          "rows": [
+            {
+              "clock_columns": "core_clk               core_clk",
+              "slack_ns": 0.114,
+              "total_negative_slack_ns": 0.0,
+              "failing_endpoints": 0,
+              "total_endpoints": 2201,
+              "passed": true
+            }
+          ]
+        },
+        {
+          "check": "Minimum Pulse Width",
+          "corner": "Fast Corner",
+          "rows": [
+            {
+              "clock_columns": "core_clk",
+              "slack_ns": 2.79,
+              "total_negative_slack_ns": 0.0,
+              "failing_endpoints": 0,
+              "total_endpoints": 2411,
+              "passed": true
+            }
+          ]
+        }
+      ]
+    },
+    "resources": {
+      "CLMA": {
+        "ff": 2163,
+        "lut": 3400
+      },
+      "CLMS": {
+        "ff": 687,
+        "lut": 1150
+      },
+      "APM": 4.0,
+      "DRM": 0.0,
+      "GPLL": 0.0,
+      "IO": 7.0,
+      "lut": 4550,
+      "ff": 2850
+    },
+    "routed_primitive_inventory": {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\physical\\builds\\20261101-015628-ffa262ba\\implementation\\routed-primitive-inventory.json",
+      "sha256": "2707cd64b43989610bf1ad949e321f35c74e1f68a15bdeebc31b0cf71bf0e76f",
+      "primitive_instances": 6046,
+      "all_primitive_instances_reconciled": true
+    },
+    "area_attribution_status": "Packed primitive inventory is complete. The separately hashed independent native export attribution is linked from the release SELECTED_BUILD.json.",
+    "timing_report": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\physical\\builds\\20261101-015628-ffa262ba\\implementation\\report_timing\\bare_core_scan_top.rtr",
+    "timing_report_sha256": "190f17c63081415b0ac63b8e85942e38f4fee5e16b120bebe4638fa15cae5d37",
+    "functional_rtl_changes": 0,
+    "hardware_validated": false
+  }
+}

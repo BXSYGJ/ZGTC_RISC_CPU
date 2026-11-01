@@ -1,0 +1,10 @@
+﻿CHANGED FIELD: Added standalone rv32_bare_core passthrough and bare_core_scan_top physical scan fixture.
+Unchanged functional RTL: all eight frozen source file SHA256 values.
+DUT hierarchy: core_boundary/dut; no cache, memory system, RAM service, peripheral, PLL, or ILA.
+Scan-controlled core input bits excluding clock: 176
+Individually captured core output bits: 439
+CHANGED PHYSICAL FIELD: fixture_profile=SlowScanStaged; unchanged rv32_bare_core and all eight RTL files.
+Added output_snapshot captures all439 output bits every edge. Serial capture selects the previous edge snapshot.
+Added scan_phase enforces shift/update/capture acceptance once every2 core edges.
+External scan inputs launch at the falling edge. Receiver samples scan_out at the second rising edge before shift. Only scan_out receives setup2/hold1 multicycle.
+One set_clock_uncertainty0.150 command; physical-only duplication enabled for final seed1 trial.

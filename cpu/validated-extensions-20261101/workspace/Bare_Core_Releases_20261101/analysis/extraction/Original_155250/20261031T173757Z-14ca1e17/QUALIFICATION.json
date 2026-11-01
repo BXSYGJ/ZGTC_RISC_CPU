@@ -1,0 +1,102 @@
+{
+  "schema": 1,
+  "status": "PASS",
+  "release": "Original_155250",
+  "origin": "LOCAL RTL SIMULATION",
+  "scope": "Fresh finite extraction miter; exact core wrapper versus independent original SoC with external cached-system service",
+  "full_coremark_run": false,
+  "hardware_measurement": false,
+  "standalone_cacheless_memory_service_score": false,
+  "area_efficiency_denominator": "Core-only implementation area with explicitly external cached-system services",
+  "preparation": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173757Z-14ca1e17\\PREPARATION.json",
+  "preparation_sha256": "3e5af0a304b6d47392f5b9d2b225774145cf761b3dd1a564859ca35c6326dcd9",
+  "baseline": {
+    "executable": "wsl.exe",
+    "arguments": [
+      "--cd",
+      "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17",
+      "--exec",
+      "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/objects/Vbare_extraction_miter",
+      "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/baseline.json",
+      "2000000",
+      "0"
+    ],
+    "exit_code": 0,
+    "started_utc": "2026-10-31T17:38:14.052299+00:00",
+    "finished_utc": "2026-10-31T17:38:16.844669+00:00",
+    "stdout": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173757Z-14ca1e17\\baseline.stdout.log",
+    "stderr": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173757Z-14ca1e17\\baseline.stderr.log",
+    "stdout_raw": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173757Z-14ca1e17\\baseline.stdout.raw",
+    "stderr_raw": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173757Z-14ca1e17\\baseline.stderr.raw"
+  },
+  "modified_negative_control": {
+    "executable": "wsl.exe",
+    "arguments": [
+      "--cd",
+      "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17",
+      "--exec",
+      "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/objects/Vbare_extraction_miter",
+      "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/rejected.json",
+      "2000000",
+      "10000"
+    ],
+    "exit_code": 1,
+    "started_utc": "2026-10-31T17:38:16.846646+00:00",
+    "finished_utc": "2026-10-31T17:38:17.002945+00:00",
+    "stdout": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173757Z-14ca1e17\\modified-negative-control.stdout.log",
+    "stderr": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173757Z-14ca1e17\\modified-negative-control.stderr.log",
+    "stdout_raw": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173757Z-14ca1e17\\modified-negative-control.stdout.raw",
+    "stderr_raw": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173757Z-14ca1e17\\modified-negative-control.stderr.raw"
+  },
+  "rollback": {
+    "executable": "wsl.exe",
+    "arguments": [
+      "--cd",
+      "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17",
+      "--exec",
+      "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/objects/Vbare_extraction_miter",
+      "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/rollback.json",
+      "2000000",
+      "0"
+    ],
+    "exit_code": 0,
+    "started_utc": "2026-10-31T17:38:17.007031+00:00",
+    "finished_utc": "2026-10-31T17:38:19.761835+00:00",
+    "stdout": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173757Z-14ca1e17\\rollback.stdout.log",
+    "stderr": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173757Z-14ca1e17\\rollback.stderr.log",
+    "stdout_raw": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173757Z-14ca1e17\\rollback.stdout.raw",
+    "stderr_raw": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173757Z-14ca1e17\\rollback.stderr.raw"
+  },
+  "result": {
+    "status": "PASS",
+    "cpu_edges": 2000000,
+    "port_frame_comparisons": 4000000,
+    "frame_bits": 614,
+    "reference_frame_fnv1a64": "cbcd7a3d93db2dce",
+    "bare_frame_fnv1a64": "cbcd7a3d93db2dce",
+    "cycle_count": 2000000,
+    "retired_count": 1834318,
+    "retired_events": 1834318,
+    "register_writes": 1357405,
+    "i_requests": 1124375,
+    "i_responses": 1124375,
+    "d_requests": 458192,
+    "d_responses": 458192,
+    "maintenance_completions": 0,
+    "kernel_entry_retirements": {
+      "core_bench_list": 13,
+      "core_bench_matrix": 27,
+      "core_bench_state": 27
+    },
+    "full_coremark_run": false,
+    "hardware_measurement": false
+  },
+  "controlled_fault": "XOR32 into only bare DUT d_rsp_data input at edge10000; environment and reference unchanged",
+  "restored_behavior_equal": true,
+  "simulator_executable": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173757Z-14ca1e17\\objects\\Vbare_extraction_miter",
+  "simulator_executable_sha256": "5a51815d0134cd28ba27d069c53abbe833fbe2c7c5926814fcfbe03ebe0ad61e",
+  "raw_result_sha256": "31041f11606bbbc3d9652ca7ce43bd663645adf7a90b9524a7c8b89a8eb6388b",
+  "rollback_result_sha256": "31041f11606bbbc3d9652ca7ce43bd663645adf7a90b9524a7c8b89a8eb6388b",
+  "uart_sha256": "6066edfd9d90cada90a8340d9aec084a64b2e9143a8f1779f7a91158fcdc16ff",
+  "completed_utc": "2026-10-31T17:38:19.789244+00:00"
+}

@@ -1,0 +1,20 @@
+﻿{
+  "executable": "D:/PDS_2022.2-SP6.4\\bin\\pds_shell.exe",
+  "executable_sha256": "631FFD8F14D6246872873C72025CBC2734C9F8C388075B7AFB0B042F3A684E6F",
+  "argv": [
+    "-file",
+    "D:/AAAFPGA/ILA_Core_Releases_20261101/H3_Retained_145125/builds/20261101-013613-bbd7e86b/synthesis/build.tcl",
+    "-work_dir",
+    "D:/AAAFPGA/ILA_Core_Releases_20261101/H3_Retained_145125/builds/20261101-013613-bbd7e86b/synthesis",
+    "-project_name",
+    "cpu_ila_synthesis"
+  ],
+  "working_directory": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-013613-bbd7e86b\\synthesis",
+  "started_utc": "2026-10-31T17:40:49.8246054Z",
+  "pid": 42448,
+  "exit_code": 0,
+  "stdout": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-013613-bbd7e86b\\synthesis\\pds.stdout.log",
+  "stderr": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-013613-bbd7e86b\\synthesis\\pds.stderr.log",
+  "status": "finished",
+  "finished_utc": "2026-10-31T17:41:27.9539208Z"
+}

@@ -1,0 +1,8 @@
+﻿ZGTC COREMARK READY send G; clock=145125000 Hz
+ZGTC COREMARK START iterations=6000 validation=0
+CAPTURE_WINDOW_PASS function=core_bench_list samples=1024 trigger_sample=256 trigger_pc=0x942
+CAPTURE_WINDOW_PASS function=core_bench_matrix samples=1024 trigger_sample=256 trigger_pc=0x2604
+CAPTURE_WINDOW_PASS function=core_bench_state samples=1024 trigger_sample=256 trigger_pc=0x2e18
+EX_PRESELECT_PROFILE idle_candidates=19 older_load_wait=0 irq_cycles=0
+ID_ZERO_PROFILE resolved=73514 redirects=15841
+LOCAL_RTL_CAPTURE_PASS cycles=2000000 cycle_count=2000000 retired=1875199

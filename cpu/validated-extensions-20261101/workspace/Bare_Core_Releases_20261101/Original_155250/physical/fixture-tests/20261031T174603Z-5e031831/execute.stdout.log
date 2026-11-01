@@ -1,0 +1,5 @@
+﻿SCAN_FIXTURE_PASS patterns=179 input_bits=176 output_bits=439
+- /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/Original_155250/physical/fixture-tests/20261031T174603Z-5e031831/scan_fixture_tb.sv:57: Verilog $finish
+- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01
+- Verilator: $finish at 1ms; walltime 0.068 s; speed 16.318 ms/s
+- Verilator: cpu 0.068 s on 1 threads; alloced 185 MB

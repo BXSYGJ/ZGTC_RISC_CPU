@@ -1,0 +1,243 @@
+﻿{
+  "clock": "cpu_clk",
+  "depth": 1024,
+  "profile": "Lean24",
+  "data_channels": 24,
+  "trigger_channels": 17,
+  "data_equals_trigger": false,
+  "expanded_observation_channels": 42,
+  "expanded_observation_source_indices": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    41
+  ],
+  "expanded_observation_relationship": "The local 42-bit RTL waveform is a superset. This physical core captures the selected 24 native signals only.",
+  "data": [
+    {
+      "channel": 0,
+      "meaning": "ex_pc[0]",
+      "native": "board/soc/core/ex_pc[0]",
+      "source_expanded_channel": 0
+    },
+    {
+      "channel": 1,
+      "meaning": "ex_pc[1]",
+      "native": "board/soc/core/ex_pc[1]",
+      "source_expanded_channel": 1
+    },
+    {
+      "channel": 2,
+      "meaning": "ex_pc[2]",
+      "native": "board/soc/core/ex_pc[2]",
+      "source_expanded_channel": 2
+    },
+    {
+      "channel": 3,
+      "meaning": "ex_pc[3]",
+      "native": "board/soc/core/ex_pc[3]",
+      "source_expanded_channel": 3
+    },
+    {
+      "channel": 4,
+      "meaning": "ex_pc[4]",
+      "native": "board/soc/core/ex_pc[4]",
+      "source_expanded_channel": 4
+    },
+    {
+      "channel": 5,
+      "meaning": "ex_pc[5]",
+      "native": "board/soc/core/ex_pc[5]",
+      "source_expanded_channel": 5
+    },
+    {
+      "channel": 6,
+      "meaning": "ex_pc[6]",
+      "native": "board/soc/core/ex_pc[6]",
+      "source_expanded_channel": 6
+    },
+    {
+      "channel": 7,
+      "meaning": "ex_pc[7]",
+      "native": "board/soc/core/ex_pc[7]",
+      "source_expanded_channel": 7
+    },
+    {
+      "channel": 8,
+      "meaning": "ex_pc[8]",
+      "native": "board/soc/core/ex_pc[8]",
+      "source_expanded_channel": 8
+    },
+    {
+      "channel": 9,
+      "meaning": "ex_pc[9]",
+      "native": "board/soc/core/ex_pc[9]",
+      "source_expanded_channel": 9
+    },
+    {
+      "channel": 10,
+      "meaning": "ex_pc[10]",
+      "native": "board/soc/core/ex_pc[10]",
+      "source_expanded_channel": 10
+    },
+    {
+      "channel": 11,
+      "meaning": "ex_pc[11]",
+      "native": "board/soc/core/ex_pc[11]",
+      "source_expanded_channel": 11
+    },
+    {
+      "channel": 12,
+      "meaning": "ex_pc[12]",
+      "native": "board/soc/core/ex_pc[12]",
+      "source_expanded_channel": 12
+    },
+    {
+      "channel": 13,
+      "meaning": "ex_pc[13]",
+      "native": "board/soc/core/ex_pc[13]",
+      "source_expanded_channel": 13
+    },
+    {
+      "channel": 14,
+      "meaning": "ex_pc[14]",
+      "native": "board/soc/core/ex_pc[14]",
+      "source_expanded_channel": 14
+    },
+    {
+      "channel": 15,
+      "meaning": "ex_pc[15]",
+      "native": "board/soc/core/ex_pc[15]",
+      "source_expanded_channel": 15
+    },
+    {
+      "channel": 16,
+      "meaning": "if_valid",
+      "native": "board/soc/core/pipeline_valid[0]",
+      "source_expanded_channel": 32
+    },
+    {
+      "channel": 17,
+      "meaning": "id_valid",
+      "native": "board/soc/core/pipeline_valid[1]",
+      "source_expanded_channel": 33
+    },
+    {
+      "channel": 18,
+      "meaning": "ex_valid",
+      "native": "board/soc/core/pipeline_valid[2]",
+      "source_expanded_channel": 34
+    },
+    {
+      "channel": 19,
+      "meaning": "mem_valid",
+      "native": "board/soc/core/pipeline_valid[3]",
+      "source_expanded_channel": 35
+    },
+    {
+      "channel": 20,
+      "meaning": "wb_valid",
+      "native": "board/soc/core/board/unused_trace_valid",
+      "source_expanded_channel": 36
+    },
+    {
+      "channel": 21,
+      "meaning": "id_fire",
+      "native": "board/soc/core/id_fire",
+      "source_expanded_channel": 37
+    },
+    {
+      "channel": 22,
+      "meaning": "ex_fire",
+      "native": "board/soc/core/ex_fire",
+      "source_expanded_channel": 38
+    },
+    {
+      "channel": 23,
+      "meaning": "mem_fire",
+      "native": "board/soc/core/mem_fire",
+      "source_expanded_channel": 41
+    }
+  ],
+  "trigger": [
+    "board/soc/core/ex_pc[0]",
+    "board/soc/core/ex_pc[1]",
+    "board/soc/core/ex_pc[2]",
+    "board/soc/core/ex_pc[3]",
+    "board/soc/core/ex_pc[4]",
+    "board/soc/core/ex_pc[5]",
+    "board/soc/core/ex_pc[6]",
+    "board/soc/core/ex_pc[7]",
+    "board/soc/core/ex_pc[8]",
+    "board/soc/core/ex_pc[9]",
+    "board/soc/core/ex_pc[10]",
+    "board/soc/core/ex_pc[11]",
+    "board/soc/core/ex_pc[12]",
+    "board/soc/core/ex_pc[13]",
+    "board/soc/core/ex_pc[14]",
+    "board/soc/core/ex_pc[15]",
+    "board/soc/core/ex_fire"
+  ],
+  "native_net_inventory_count": 7264,
+  "pipeline_driver_proof": [
+    {
+      "meaning": "if_valid",
+      "primitive": "GTP_DFF_C",
+      "instance": "if_valid",
+      "q": "pipeline_valid[0]",
+      "native": "board/soc/core/pipeline_valid[0]"
+    },
+    {
+      "meaning": "id_valid",
+      "primitive": "GTP_DFF_C",
+      "instance": "id_valid",
+      "q": "pipeline_valid[1]",
+      "native": "board/soc/core/pipeline_valid[1]"
+    },
+    {
+      "meaning": "ex_valid",
+      "primitive": "GTP_DFF_C",
+      "instance": "ex_valid",
+      "q": "pipeline_valid[2]",
+      "native": "board/soc/core/pipeline_valid[2]"
+    },
+    {
+      "meaning": "mem_valid",
+      "primitive": "GTP_DFF_C",
+      "instance": "mem_valid",
+      "q": "pipeline_valid[3]",
+      "native": "board/soc/core/pipeline_valid[3]"
+    },
+    {
+      "meaning": "wb_valid",
+      "primitive": "GTP_DFF_C",
+      "instance": "wb_valid",
+      "q": "board/unused_trace_valid",
+      "native": "board/soc/core/board/unused_trace_valid"
+    }
+  ],
+  "source_netlist_sha256": "3839F9087FD46C61A939A445B98E6A6456DC8CAE1560E161EB0FA793DB701FED",
+  "fic_sha256": "D593352CB791C31183E254B7FF3AB5FC40A3052F6F07CE3BA38BEC185B6A2761",
+  "verified_by": "cdt_ins ins_list_nets + ins_core_info + canonical FIC + synthesized pipeline register Q drivers",
+  "sample_alignment": "Native signals at the same rising cpu_clk edge; zero extra probe registers; no functional feedback."
+}

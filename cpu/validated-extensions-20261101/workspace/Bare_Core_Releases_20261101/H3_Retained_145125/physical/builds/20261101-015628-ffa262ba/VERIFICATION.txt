@@ -1,0 +1,60 @@
+﻿RELEASE: H3_Retained_145125
+CHANGED FIELD: fixture_profile=SlowScanStaged; build-local physical fixture adds an every-edge output snapshot, one-edge snapshot latency, and a minimum two-edge serial shift interval. Functional core RTL changes=0.
+MODIFIED_FILE: D:\AAAFPGA\Bare_Core_Releases_20261101\H3_Retained_145125\physical\builds\20261101-015628-ffa262ba\inputs\bare_core_scan_top.sv
+DIFF_FILE: D:\AAAFPGA\Bare_Core_Releases_20261101\H3_Retained_145125\physical\builds\20261101-015628-ffa262ba\DIFF_FILE.txt
+VERIFICATION: D:\AAAFPGA\Bare_Core_Releases_20261101\H3_Retained_145125\physical\builds\20261101-015628-ffa262ba\VERIFICATION.txt
+ROLLBACK: D:\AAAFPGA\Bare_Core_Releases_20261101\H3_Retained_145125\physical\builds\20261101-015628-ffa262ba\ROLLBACK.ps1
+ORIGINAL FIXTURE SHA256: 501b180d798e7e979765e7207a68169a05d3cf0790ebc35e1cf79d2a39cc9be4
+MODIFIED FIXTURE SHA256: 00c5563b130a9b935a8eb04082bb83f9eee398354af1c9f5d0e79acee2fcbb6c
+SOURCE MANIFEST: D:\AAAFPGA\Bare_Core_Releases_20261101\H3_Retained_145125\SOURCE_MANIFEST.json SHA256=a5a5c7ed0f2df4710ea0d26871eae429436fa285fc7a1465640491fa3b526078
+
+BASELINE: actual finite bare-wrapper extraction comparison against independent frozen SoC reference and equivalent external services.
+BASELINE exact command: wsl.exe --cd /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Retained_145125/20261031T173933Z-790c2731 --exec /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Retained_145125/20261031T173933Z-790c2731/objects/Vbare_extraction_miter /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Retained_145125/20261031T173933Z-790c2731/baseline.json 2000000 0
+BASELINE input: original unchanged 6000-iteration firmware; requested CPU edges=2000000; fault edge=0; preparation=D:\AAAFPGA\Bare_Core_Releases_20261101\analysis\extraction\H3_Retained_145125\20261031T173933Z-790c2731\PREPARATION.json
+BASELINE literal output/result: EXTRACTION_PASS edges=2000000 comparisons=4000000 retired=1875199 kernels=13,28,28 digest=dcae4a8359c9a932
+BASELINE exit_status=0
+
+MODIFIED PHYSICAL exact command: D:/PDS_2022.2-SP6.4\bin\pds_shell.exe -file D:/AAAFPGA/Bare_Core_Releases_20261101/H3_Retained_145125/physical/builds/20261101-015628-ffa262ba/implementation/build.tcl -work_dir D:/AAAFPGA/Bare_Core_Releases_20261101/H3_Retained_145125/physical/builds/20261101-015628-ffa262ba/implementation -project_name bare_core
+MODIFIED PHYSICAL input: D:\AAAFPGA\Bare_Core_Releases_20261101\H3_Retained_145125\physical\builds\20261101-015628-ffa262ba; fixture_profile=SlowScanStaged; direct clock=145125000 Hz; seed=1; dc_duplication=true.
+MODIFIED PHYSICAL native literal output tail: Action from compile to gen_netlist: Total Process CPU Time elapsed is 0h:5m:53s | Process "Generate Netlist" done. | Executing : gen_netlist successfully.
+MODIFIED PHYSICAL native exit_status=0
+MODIFIED FINAL AUDIT exact command: pwsh -NoProfile -File D:\AAAFPGA\Bare_Core_Releases_20261101\scripts\Build-BareCore.ps1 -Release H3_Retained_145125 -Action Audit -BuildDirectory D:\AAAFPGA\Bare_Core_Releases_20261101\H3_Retained_145125\physical\builds\20261101-015628-ffa262ba -PlacementSeed 1 -FixtureProfile SlowScanStaged
+MODIFIED FINAL AUDIT literal output/result: BARE_BUILD_RESULT timing_passed WNS=0.019 LUT=4550 FF=2850 BUILD=D:\AAAFPGA\Bare_Core_Releases_20261101\H3_Retained_145125\physical\builds\20261101-015628-ffa262ba
+MODIFIED FINAL AUDIT exit_status=0; final status=timing_passed; all ten corner/check rows have no failing endpoints or negative slack.
+MODIFIED FINAL timing budget: actual setup uncertainty=0.2 ns; requested minimum=0.150 ns; exact match=false; minimum satisfied=true; worst setup slack=0.019 ns.
+MODIFIED FIXTURE exact command: wsl.exe --cd /tmp --exec /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/H3_Retained_145125/physical/fixture-tests/20261031T175735Z-3ecae30a/objects/Vscan_fixture_tb
+MODIFIED FIXTURE input: D:\AAAFPGA\Bare_Core_Releases_20261101\H3_Retained_145125\physical\fixture-tests\20261031T175735Z-3ecae30a\scan_fixture_tb.sv; exact selected fixture SHA256=00c5563b130a9b935a8eb04082bb83f9eee398354af1c9f5d0e79acee2fcbb6c
+MODIFIED FIXTURE literal output/result: SCAN_FIXTURE_PASS patterns=179 input_bits=176 output_bits=471
+- /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/H3_Retained_145125/physical/fixture-tests/20261031T175735Z-3ecae30a/scan_fixture_tb.sv:57: Verilog $finish
+- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01
+- Verilator: $finish at 2ms; walltime 0.182 s; speed 12.791 ms/s
+- Verilator: cpu 0.182 s on 1 threads; alloced 185 MB
+MODIFIED FIXTURE exit_status=0
+MODIFIED FIXTURE checked: 179 patterns; 176 input bits; 471 individually captured output bits; atomic update; one-edge snapshot; two-edge serial hold.
+
+NEGATIVE CONTROL exact command: wsl.exe --cd /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Retained_145125/20261031T173933Z-790c2731 --exec /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Retained_145125/20261031T173933Z-790c2731/objects/Vbare_extraction_miter /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Retained_145125/20261031T173933Z-790c2731/rejected.json 2000000 10000
+NEGATIVE CONTROL input: XOR32 into only bare DUT d_rsp_data input at edge10000; environment and reference unchanged
+NEGATIVE CONTROL literal output/result: EXTRACTION_MISMATCH edge=10000 phase=preedge mask=0x100000; EXTRACTION_FAIL Bare DUT and independent reference port frames differ.
+NEGATIVE CONTROL exit_status=1
+
+ROLLBACK SOURCE exact command: pwsh -NoProfile -File D:\AAAFPGA\Bare_Core_Releases_20261101\H3_Retained_145125\physical\builds\20261101-015628-ffa262ba\ROLLBACK.ps1 -BuildDirectory D:\AAAFPGA\Bare_Core_Releases_20261101\H3_Retained_145125\physical\builds\20261101-015628-ffa262ba -DestinationDirectory D:\AAAFPGA\Bare_Core_Releases_20261101\H3_Retained_145125\physical\builds\20261101-015628-ffa262ba\rollback_final_review
+ROLLBACK SOURCE input: D:\AAAFPGA\Bare_Core_Releases_20261101\H3_Retained_145125\physical\builds\20261101-015628-ffa262ba\frozen_inputs; eight exact original RTL files.
+ROLLBACK SOURCE literal output/result: ROLLBACK_PASS restored_files=8; exit_status=0.
+ROLLBACK BEHAVIOR exact command: wsl.exe --cd /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Retained_145125/20261031T173933Z-790c2731 --exec /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Retained_145125/20261031T173933Z-790c2731/objects/Vbare_extraction_miter /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Retained_145125/20261031T173933Z-790c2731/rollback.json 2000000 0
+ROLLBACK BEHAVIOR input: requested CPU edges=2000000; fault edge=0; same original firmware and independent reference.
+ROLLBACK BEHAVIOR literal output/result: EXTRACTION_PASS edges=2000000 comparisons=4000000 retired=1875199 kernels=13,28,28 digest=dcae4a8359c9a932
+ROLLBACK BEHAVIOR exit_status=0
+RESTORED STATUS: eight separate-copy source hashes match frozen inputs; behavior equals baseline=True; raw baseline result SHA256=00a22d5433329fadc4124765933461891025f143b7f9ad1ca3d2c6fd861e5791; rollback result SHA256=00a22d5433329fadc4124765933461891025f143b7f9ad1ca3d2c6fd861e5791. Selected modified fixture remains changed.
+
+FULL SOURCE REFERENCE: completed original SoC 6000-iteration local RTL run; cycles=1743134699; retired=1649428429; native exit_status=0; exact frozen UART/CRC/counter equality=True. This is joined source performance, not a fresh full bare-wrapper execution.
+NATIVE RESOURCE RECONCILIATION: 4550 = 4143 core-exclusive + 403 fixture-exclusive + 1 shared + 3 unexported/unattributed slots
+EVIDENCE: D:\AAAFPGA\Bare_Core_Releases_20261101\analysis\H3_Retained_145125-EXTRACTION_QUALIFICATION.json; D:\AAAFPGA\Bare_Core_Releases_20261101\H3_Retained_145125\physical\builds\20261101-015628-ffa262ba\SCAN_FIXTURE_TEST.json; D:\AAAFPGA\Bare_Core_Releases_20261101\H3_Retained_145125\physical\builds\20261101-015628-ffa262ba\implementation\resource-timing-summary.json; D:\AAAFPGA\Bare_Core_Releases_20261101\analysis\physical-attribution\H3_Retained_145125-20261101-015628-ffa262ba-PHYSICAL_PRIMITIVE_INVENTORY.json
+History: actual native invocations, audit history and first attempt records remain in their original files; this receipt states the selected final result.
+RESTORED FILE: D:\AAAFPGA\Bare_Core_Releases_20261101\H3_Retained_145125\physical\builds\20261101-015628-ffa262ba\rollback_final_review\rv32_core.sv SHA256=af9aeb1ef431c860e108b2fd3ce09d596757d2dba4a92a065b3ad616483d0748
+RESTORED FILE: D:\AAAFPGA\Bare_Core_Releases_20261101\H3_Retained_145125\physical\builds\20261101-015628-ffa262ba\rollback_final_review\rv32_rvc_frontend.sv SHA256=210b5ba9280c3840aafc27e7c3e35616085efde310793dc1661cc72f50984128
+RESTORED FILE: D:\AAAFPGA\Bare_Core_Releases_20261101\H3_Retained_145125\physical\builds\20261101-015628-ffa262ba\rollback_final_review\rv32_rvc_expand.sv SHA256=308ac8a65c9e29aeec27b38417483d0f43fd7c54487c26e89a3fa54b4647951b
+RESTORED FILE: D:\AAAFPGA\Bare_Core_Releases_20261101\H3_Retained_145125\physical\builds\20261101-015628-ffa262ba\rollback_final_review\rv32_decode.sv SHA256=9cb2b57b46ed775d85b6e70a3eebe92c2d5e49e9a6483993109e2c096d9a3ff3
+RESTORED FILE: D:\AAAFPGA\Bare_Core_Releases_20261101\H3_Retained_145125\physical\builds\20261101-015628-ffa262ba\rollback_final_review\rv32_alu.sv SHA256=125647d90b98f294743127637406d19479eebda82dccfaaba7acaf59d5ae38b1
+RESTORED FILE: D:\AAAFPGA\Bare_Core_Releases_20261101\H3_Retained_145125\physical\builds\20261101-015628-ffa262ba\rollback_final_review\rv32_muldiv.sv SHA256=5306ad46b57db551cc83df20dc4c9d2f09aa7077e6289037abfc4fcd8fa3db0e
+RESTORED FILE: D:\AAAFPGA\Bare_Core_Releases_20261101\H3_Retained_145125\physical\builds\20261101-015628-ffa262ba\rollback_final_review\rv32_btb.sv SHA256=b1b3481343a2e1275cfd984c4eab05c5f9d92cb72dab652010463073eb86eb4f
+RESTORED FILE: D:\AAAFPGA\Bare_Core_Releases_20261101\H3_Retained_145125\physical\builds\20261101-015628-ffa262ba\rollback_final_review\rv32_machine.sv SHA256=56b542e419c58216a08b0a5c83322506e42e2721fa28db50a6454ebe29607abd

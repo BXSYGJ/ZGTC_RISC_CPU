@@ -1,0 +1,105 @@
+﻿{
+  "schema": "bare-core-source/v1",
+  "release": "H3_Retained_145125",
+  "configured_clock_hz": 145125000,
+  "clock_uncertainty_ns": 0.15,
+  "source_waveform_manifest": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\waveforms\\WAVEFORM_MANIFEST.json",
+  "source_waveform_manifest_sha256": "6e9c10114b68fe5ac4fcc430e04bccc69c5eb93c809bf89cb58febf8b7101f0e",
+  "rtl": [
+    {
+      "name": "rv32_core.sv",
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\source\\rtl\\rv32_core.sv",
+      "source": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-004707-430d2073\\inputs\\rtl\\rv32_core.sv",
+      "sha256": "af9aeb1ef431c860e108b2fd3ce09d596757d2dba4a92a065b3ad616483d0748"
+    },
+    {
+      "name": "rv32_rvc_frontend.sv",
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\source\\rtl\\rv32_rvc_frontend.sv",
+      "source": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-004707-430d2073\\inputs\\rtl\\rv32_rvc_frontend.sv",
+      "sha256": "210b5ba9280c3840aafc27e7c3e35616085efde310793dc1661cc72f50984128"
+    },
+    {
+      "name": "rv32_rvc_expand.sv",
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\source\\rtl\\rv32_rvc_expand.sv",
+      "source": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-004707-430d2073\\inputs\\rtl\\rv32_rvc_expand.sv",
+      "sha256": "308ac8a65c9e29aeec27b38417483d0f43fd7c54487c26e89a3fa54b4647951b"
+    },
+    {
+      "name": "rv32_decode.sv",
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\source\\rtl\\rv32_decode.sv",
+      "source": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-004707-430d2073\\inputs\\rtl\\rv32_decode.sv",
+      "sha256": "9cb2b57b46ed775d85b6e70a3eebe92c2d5e49e9a6483993109e2c096d9a3ff3"
+    },
+    {
+      "name": "rv32_alu.sv",
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\source\\rtl\\rv32_alu.sv",
+      "source": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-004707-430d2073\\inputs\\rtl\\rv32_alu.sv",
+      "sha256": "125647d90b98f294743127637406d19479eebda82dccfaaba7acaf59d5ae38b1"
+    },
+    {
+      "name": "rv32_muldiv.sv",
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\source\\rtl\\rv32_muldiv.sv",
+      "source": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-004707-430d2073\\inputs\\rtl\\rv32_muldiv.sv",
+      "sha256": "5306ad46b57db551cc83df20dc4c9d2f09aa7077e6289037abfc4fcd8fa3db0e"
+    },
+    {
+      "name": "rv32_btb.sv",
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\source\\rtl\\rv32_btb.sv",
+      "source": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-004707-430d2073\\inputs\\rtl\\rv32_btb.sv",
+      "sha256": "b1b3481343a2e1275cfd984c4eab05c5f9d92cb72dab652010463073eb86eb4f"
+    },
+    {
+      "name": "rv32_machine.sv",
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\source\\rtl\\rv32_machine.sv",
+      "source": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-004707-430d2073\\inputs\\rtl\\rv32_machine.sv",
+      "sha256": "56b542e419c58216a08b0a5c83322506e42e2721fa28db50a6454ebe29607abd"
+    }
+  ],
+  "parameters": {
+    "RESET_VECTOR": 0,
+    "ENABLE_PREDICTOR": 1,
+    "ENABLE_M": 1,
+    "ENABLE_C": 1,
+    "FETCH_ADDRESS_BITS": 16,
+    "FETCH_OVERLAP": 1,
+    "EARLY_D_REQUEST": 1,
+    "BTB_INDEX_BITS": 8,
+    "BTB_ADDRESS_BITS": 16,
+    "LOAD_USE_BUBBLE": 1,
+    "RETAIN_MUL_ELIGIBILITY": 1
+  },
+  "wrapper": {
+    "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\source\\rv32_bare_core.sv",
+    "sha256": "4f777d97020457a02ea57e1579b10dd97baaac5e50033e8ce6b9bb7a28d3a468"
+  },
+  "physical_fixture": {
+    "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\source\\bare_core_scan_top.sv",
+    "sha256": "501b180d798e7e979765e7207a68169a05d3cf0790ebc35e1cf79d2a39cc9be4"
+  },
+  "boundary": {
+    "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\source\\BOUNDARY.json",
+    "sha256": "0b30438feff5926efa19fc5d98723e608bc6266d3ed51ee1974924833908439c"
+  },
+  "functional_rtl_changes": 0,
+  "included_modules": [
+    "rv32_core.sv",
+    "rv32_rvc_frontend.sv",
+    "rv32_rvc_expand.sv",
+    "rv32_decode.sv",
+    "rv32_alu.sv",
+    "rv32_muldiv.sv",
+    "rv32_btb.sv",
+    "rv32_machine.sv"
+  ],
+  "excluded_from_dut": [
+    "cache",
+    "memory_system",
+    "burst_ram",
+    "peripherals",
+    "uart",
+    "pll",
+    "ila"
+  ],
+  "status": "prepared_no_physical_build_started",
+  "generated_utc": "2026-10-31T17:35:25.6394565Z"
+}

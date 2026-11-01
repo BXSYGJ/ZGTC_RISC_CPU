@@ -1,0 +1,16 @@
+﻿{
+  "executable": "wsl.exe",
+  "arguments": [
+    "--cd",
+    "/mnt/d/AAAFPGA/ILA_Core_Releases_20261101/Original_155250/qualification/dynamic/BASELINE",
+    "--exec",
+    "/mnt/d/AAAFPGA/ILA_Core_Releases_20261101/Original_155250/qualification/dynamic/BASELINE/objects/Vrv32_observed_soc",
+    "/mnt/d/AAAFPGA/ILA_Core_Releases_20261101/Original_155250/qualification/dynamic/BASELINE/uart.log",
+    "2000000"
+  ],
+  "actual_exit_code": 0,
+  "started_utc": "2026-10-31T16:53:48.7353841Z",
+  "finished_utc": "2026-10-31T16:53:50.0140393Z",
+  "stdout": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\qualification\\dynamic\\BASELINE\\run.stdout.log",
+  "stderr": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\qualification\\dynamic\\BASELINE\\run.stderr.log"
+}

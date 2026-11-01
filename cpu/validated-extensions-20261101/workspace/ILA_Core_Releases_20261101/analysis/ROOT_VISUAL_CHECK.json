@@ -1,0 +1,16 @@
+﻿{
+  "origin": "LOCAL RTL SIMULATION",
+  "checked_utc": "2026-10-31T17:32:50.6097561Z",
+  "contact_sheet": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\analysis\\LOCAL_WAVEFORM_CONTACT_SHEET.png",
+  "contact_sheet_sha256": "9671e860b6ac3c481258cf89db510da631264ad72df0c4fc98ad9f627d8b63c3",
+  "windows_reviewed": 9,
+  "view": "function-entry trigger zooms across all three releases",
+  "checks": [
+    "All waveform rows have distinct labels and baselines.",
+    "Function and EX-PC lanes align with the trigger.",
+    "No signal label, axis label or timing annotation overlap is visible.",
+    "All panels prominently identify LOCAL RTL SIMULATION.",
+    "Configured implementation frequency is separate from simulation timebase."
+  ],
+  "hardware_capture": false
+}

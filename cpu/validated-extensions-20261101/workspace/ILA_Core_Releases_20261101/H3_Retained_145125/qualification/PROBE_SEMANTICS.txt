@@ -1,0 +1,12 @@
+﻿H3 source qualification: H3_Retained_145125
+Firmware V0 SHA256: 3a3aff510511ed4cd7fe304a6354861adae30531102446a24438e43f3e2a2884
+Frozen completed CoreMark: cycles=1743134699; retired=1649428429
+Data and trigger each use 42 bits with identical ordering; dataEqualsTrigger=true; depth=1024; sampling clock=cpu_clk.
+Channels 0..31=EX PC; 32=IF valid; 33=ID valid; 34=EX valid; 35=MEM valid; 36=WB valid; 37=id_fire; 38=ex_fire; 39=mem_flush; 40=frontend_fire; 41=mem_fire.
+Trigger each function with its exact ELF entry PC and ex_fire=1. Wildcard all remaining trigger bits.
+pipeline_valid[4:0]={WB,MEM,EX,ID,IF}. Stage validity measures occupancy; the fire signals distinguish held instructions from transfers.
+frontend_fire is frontend_out_valid && frontend_out_ready. It marks instruction delivery to IF, not a raw cache response. A simultaneous frontend_flush or frontend_barrier cancels the IF update.
+mem_flush covers MEM faults, MRET, FENCE.I, and unresolved prediction miss. Earlier ID/EX redirects are observable indirectly through validity changes, but the minimal map does not identify their cause.
+EX PC has meaning for this map only with EX valid; ex_fire makes a function-entry trigger a transfer event and avoids repeated hits during a stall.
+The map supports occupancy, transfer cadence, EX hold time, MEM completion, and MEM flush timing. It does not uniquely classify all stall causes or reconstruct all stage PCs.
+Only passive synthesis-preservation attributes and ILA insertion are intended. Each release must retain its own UART/cycle reference; Base and Retained intentionally have different cycle totals.

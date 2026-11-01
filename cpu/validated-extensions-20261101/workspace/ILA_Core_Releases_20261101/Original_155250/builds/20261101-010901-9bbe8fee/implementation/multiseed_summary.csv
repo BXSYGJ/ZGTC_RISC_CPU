@@ -1,0 +1,37 @@
+version,2022.2-SP6.4<build 146967>
+project name,cpu_ila.pds
+
+Single Seed:
+Seed,State,Convergence,Setup(Slow),Setup(Fast),Hold(Slow),Hold(Fast),Recovery(Slow),Recovery(Fast),Removal(Slow),Removal(Fast),PBM-GP,PBM-PreGP,PBM-PostGP,LP,Total Placement Cpu Time,Detailed routing,Total Routing Cpu Time,Wire Length After Post-GP,Wire Length After LP,Wire Length After DP,Routing Arc Length,Worst Slack After GP Timing,Worst Slack After LP Timing,Worst Slack Before RP,Worst Slack Before DP,Worst Slack After DP,Worst Slack After Placement,Worst Slack After TA By Preroute,TNS After DP,TNS Before Route,Setup(Slow) Total Failing TNS,Setup(Slow) Total Failing Endpoints,Hold(Slow) Total Failing THS,Hold(Slow) Total Failing Endpoints,Power
+single,OK,OK,0.119,2.478,0.145,0.100,1.930,3.637,0.574,0.389,2.09,NA,0.00,0.36,48.12,48.74,74.61,NA,NA,NA,108281,NA,NA,NA,-918,226,231,NA,0,NA,0.000,0,0.000,0,NA
+Pass Rate/Convergence Rate,100.00%,100.00%
+
+Synthesize:
+control_set,NA
+Synthesize Performance Summary:
+slack category,Synthesize Setup WNS,Synthesize Setup TNS,Synthesize Recovery WNS,Synthesize Recovery TNS
+slack value,NA,NA,NA,NA
+Synthesize Process Cpu Time,NA
+
+Device Map:
+Device Map Resource Usage Summary:
+Logic Utilization,LUT,FF,DRM,APM,Distributed RAM,HSSTHP,USCM,HCKB,RCKB
+Used,6178,3573,22.5,4,437,NA,2,0,0
+Available,159800,319600,415,740,39500,NA,32,120,40
+Utilization(%),4%,2%,6%,1%,2%,NA,7%,0%,0%
+Device Map Process Cpu Time,0h:0m:12s
+
+Project Configurations:
+top module,pds_soc_top
+compile," -top_module {pds_soc_top} 
+ -system_verilog "
+synthesize,
+device map," -input_db_file {D:/AAAFPGA/ILA_Core_Releases_20261101/Original_155250/builds/20261101-010901-9bbe8fee/implementation/source.adf} "
+place & route," -dc_duplication false 
+ -plc_decongestion 0 
+ -gplace_seed 1 
+ -logic_optimize_lut6d_combing_strategy 3 "
+
+Test Parameters Configurations:
+testparam,
+

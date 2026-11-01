@@ -1,0 +1,16 @@
+﻿{
+  "executable": "wsl.exe",
+  "arguments": [
+    "--cd",
+    "/mnt/d/AAAFPGA/ILA_Core_Releases_20261101/Original_155250/qualification/dynamic/ROLLBACK",
+    "--exec",
+    "/mnt/d/AAAFPGA/ILA_Core_Releases_20261101/Original_155250/qualification/dynamic/ROLLBACK/objects/Vrv32_observed_soc",
+    "/mnt/d/AAAFPGA/ILA_Core_Releases_20261101/Original_155250/qualification/dynamic/ROLLBACK/uart.log",
+    "2000000"
+  ],
+  "actual_exit_code": 0,
+  "started_utc": "2026-10-31T16:57:14.0209206Z",
+  "finished_utc": "2026-10-31T16:57:15.2996478Z",
+  "stdout": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\qualification\\dynamic\\ROLLBACK\\run.stdout.log",
+  "stderr": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\qualification\\dynamic\\ROLLBACK\\run.stderr.log"
+}

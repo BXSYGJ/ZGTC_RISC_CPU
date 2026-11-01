@@ -1,0 +1,2 @@
+SCAN_FIXTURE_PASS patterns=179 input_bits=176 output_bits=471
+RESULT=D:\AAAFPGA\Bare_Core_Releases_20261101\H3_Base_145125\physical\SCAN_FIXTURE_TEST.json

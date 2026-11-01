@@ -1,0 +1,45 @@
+﻿{
+  "release": "Original_155250",
+  "status": "internal_timing_passed",
+  "build_directory": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\builds\\20261101-010901-9bbe8fee",
+  "build_manifest": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\builds\\20261101-010901-9bbe8fee\\manifest.json",
+  "build_manifest_sha256": "664D9E137A94786FB0AB89F3397B81865D18733B312F874F13E3211B74E594B1",
+  "ila_profile": "NativeMinimal",
+  "clock_hz": 155250000,
+  "placement_seed": 1,
+  "setup_uncertainty_ns": 0.15,
+  "cpu_setup_wns_ns": 0.119,
+  "all_corner_timing_passed": true,
+  "resources": {
+    "CLMA": {
+      "ff": 2636,
+      "lut": 4892
+    },
+    "CLMS": {
+      "ff": 937,
+      "lut": 1717
+    },
+    "DRM": 22.5,
+    "GPLL": 1.0,
+    "APM": 4.0,
+    "post_route_luts": 6609,
+    "post_route_ffs": 3573
+  },
+  "bitstream": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\builds\\20261101-010901-9bbe8fee\\implementation\\generate_bitstream\\pds_soc_top.sbit",
+  "bitstream_sha256": "2FFE2C094CC143A38A73CE3D507E9E25BB53950DAF266E71710A0D964606B868",
+  "fic": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\builds\\20261101-010901-9bbe8fee\\implementation\\cpu.fic",
+  "fic_sha256": "AE1B3531271756A8768D84D3559C7FDEA333D2317C4D94DD9C984FA9C6E9B3C3",
+  "firmware_sha256": "1D66BDD8919951E18C191B82EA271C84BD156EA14F2CA9FCF5C4B56216069949",
+  "hardware_validated": false,
+  "waveform_origin": "LOCAL RTL SIMULATION",
+  "waveform_manifest": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\waveforms\\WAVEFORM_MANIFEST.json",
+  "full_simulation_status": "passed",
+  "full_simulation_directory": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\qualification\\full-runs\\20261031T170813Z-21000bdf",
+  "selected_utc": "2026-10-31T17:19:27.65925Z",
+  "full_simulation_result": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\qualification\\full-runs\\20261031T170813Z-21000bdf\\RESULT.json",
+  "full_simulation_result_sha256": "8036B6A83AA5BF89240CE0E402DDF64BCC9C89D7A23BD2263720DC300EE5C8BB",
+  "full_simulation_measured_cycles": 1782669419,
+  "full_simulation_measured_retired": 1649428429,
+  "full_simulation_measured_ipc": 0.9252576004390414,
+  "full_simulation_uart_byte_identical": true
+}

@@ -1,0 +1,48 @@
+﻿{
+  "release": "H3_Retained_145125",
+  "status": "internal_timing_passed",
+  "build_directory": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-013613-bbd7e86b",
+  "build_manifest": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-013613-bbd7e86b\\manifest.json",
+  "build_manifest_sha256": "ec3f66e487d7441d5ec9d61e7bae4745e732caa5640ca563678107adb3782980",
+  "ila_profile": "Lean24",
+  "clock_hz": 145125000,
+  "placement_seed": 1,
+  "setup_uncertainty_ns": 0.15,
+  "cpu_setup_wns_ns": 0.0,
+  "all_corner_timing_passed": true,
+  "independent_multicorner_audit": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-013613-bbd7e86b\\INDEPENDENT_MULTICORNER_AUDIT.json",
+  "resources": {
+    "CLMA": {
+      "ff": 2444,
+      "lut": 4984
+    },
+    "CLMS": {
+      "ff": 580,
+      "lut": 1472
+    },
+    "DRM": 26.0,
+    "GPLL": 1.0,
+    "APM": 4.0,
+    "post_route_luts": 6456,
+    "post_route_ffs": 3024
+  },
+  "bitstream": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-013613-bbd7e86b\\implementation\\generate_bitstream\\pds_soc_top.sbit",
+  "bitstream_sha256": "1E771D004C9AC1EAD7FC4B6CD6BDCA26C749309619E4C4410777A1D44982ADDE",
+  "fic": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-013613-bbd7e86b\\implementation\\cpu.fic",
+  "fic_sha256": "D593352CB791C31183E254B7FF3AB5FC40A3052F6F07CE3BA38BEC185B6A2761",
+  "firmware_sha256": "3a3aff510511ed4cd7fe304a6354861adae30531102446a24438e43f3e2a2884",
+  "hardware_validated": false,
+  "waveform_origin": "LOCAL RTL SIMULATION",
+  "waveform_manifest": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\waveforms\\WAVEFORM_MANIFEST.json",
+  "waveform_observation_width": 42,
+  "selected_capture_data_width": 24,
+  "selected_trigger_width": 17,
+  "waveform_is_superset_of_selected": true,
+  "selected_meanings_match_explicit_waveform_subset": true,
+  "source_to_selected_binding": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\SOURCE_TO_SELECTED_BINDING.json",
+  "full_simulation_status": "completed_exact_reference_pass",
+  "full_simulation_directory": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\qualification\\full_reference",
+  "full_simulation_result": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\qualification\\full_reference\\RESULT.json",
+  "all_attempts": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\PHYSICAL_ATTEMPTS.json",
+  "selected_utc": "2026-10-31T17:47:22.1458998Z"
+}

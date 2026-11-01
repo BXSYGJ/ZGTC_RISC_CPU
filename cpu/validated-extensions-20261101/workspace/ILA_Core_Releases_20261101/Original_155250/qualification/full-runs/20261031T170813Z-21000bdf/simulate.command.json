@@ -1,0 +1,16 @@
+﻿{
+  "executable": "wsl.exe",
+  "arguments": [
+    "--cd",
+    "/mnt/d/AAAFPGA/ILA_Core_Releases_20261101/Original_155250/qualification/full-runs/20261031T170813Z-21000bdf",
+    "--exec",
+    "/mnt/d/AAAFPGA/ILA_Core_Releases_20261101/Original_155250/qualification/full-runs/20261031T170813Z-21000bdf/objects/Vrv32_observed_soc",
+    "/mnt/d/AAAFPGA/ILA_Core_Releases_20261101/Original_155250/qualification/full-runs/20261031T170813Z-21000bdf/uart.log",
+    "2100000000"
+  ],
+  "exit_code": 0,
+  "started_utc": "2026-10-31T17:08:23.5412539Z",
+  "finished_utc": "2026-10-31T17:26:37.7737010Z",
+  "stdout": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\qualification\\full-runs\\20261031T170813Z-21000bdf\\simulate.stdout.log",
+  "stderr": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\qualification\\full-runs\\20261031T170813Z-21000bdf\\simulate.stderr.log"
+}

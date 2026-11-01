@@ -1,0 +1,18 @@
+﻿{
+  "release": "H3_Retained_145125",
+  "build_directory": "D:/AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\physical\\builds\\20261101-015628-ffa262ba",
+  "fixture_profile": "SlowScanStaged",
+  "pid": 39408,
+  "arguments": [
+    "-NoProfile",
+    "-File",
+    "D:/AAAFPGA\\Bare_Core_Releases_20261101\\scripts\\Test-ScanFixture.ps1",
+    "-Release",
+    "H3_Retained_145125",
+    "-BuildDirectory",
+    "D:/AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\physical\\builds\\20261101-015628-ffa262ba"
+  ],
+  "stdout": "D:/AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\physical\\builds\\20261101-015628-ffa262ba\\scan-fixture.stdout.log",
+  "stderr": "D:/AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\physical\\builds\\20261101-015628-ffa262ba\\scan-fixture.stderr.log",
+  "started_utc": "2026-10-31T17:56:38.1607056Z"
+}

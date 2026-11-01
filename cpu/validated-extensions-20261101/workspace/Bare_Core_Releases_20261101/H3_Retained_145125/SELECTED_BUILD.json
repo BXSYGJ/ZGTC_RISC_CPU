@@ -1,0 +1,128 @@
+﻿{
+  "schema": "selected-bare-core-build/v1",
+  "release": "H3_Retained_145125",
+  "status": "physical_timing_passed",
+  "build_directory": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\physical\\builds\\20261101-015628-ffa262ba",
+  "manifest": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\physical\\builds\\20261101-015628-ffa262ba\\manifest.json",
+  "manifest_sha256": "d43c4830c3157b4d3bc3c360f91f25770f88683809cee6e6652d88683e603481",
+  "resource_timing_report": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\physical\\builds\\20261101-015628-ffa262ba\\implementation\\resource-timing-summary.json",
+  "resource_timing_report_sha256": "67c4b69495cd2fa711ca9da11f7fed4fb168df1e8263543e42b2ea4a251a2eed",
+  "clock_hz": 145125000,
+  "setup_wns_ns": 0.019,
+  "all_corner_timing_passed": true,
+  "all_corner_violations": [],
+  "actual_setup_uncertainty_ns": 0.2,
+  "requested_minimum_setup_uncertainty_ns": 0.15,
+  "setup_uncertainty_exact_match": false,
+  "setup_uncertainty_satisfies_minimum": true,
+  "fixture_profile": "SlowScanStaged",
+  "placement_seed": 1,
+  "fixture_test": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\physical\\builds\\20261101-015628-ffa262ba\\SCAN_FIXTURE_TEST.json",
+  "fixture_test_sha256": "d69d579296413e2dd5f3581f4b5643a374c3fd6b4d0bbae2aa99e133ba03dbc6",
+  "physical_duplication_enabled": true,
+  "physical_fixture": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\physical\\builds\\20261101-015628-ffa262ba\\inputs\\bare_core_scan_top.sv",
+  "physical_fixture_sha256": "00c5563b130a9b935a8eb04082bb83f9eee398354af1c9f5d0e79acee2fcbb6c",
+  "output_snapshot_latency_core_edges": 1,
+  "minimum_serial_shift_interval_core_edges": 2,
+  "resources_total": {
+    "CLMA": {
+      "ff": 2163,
+      "lut": 3400
+    },
+    "CLMS": {
+      "ff": 687,
+      "lut": 1150
+    },
+    "APM": 4.0,
+    "DRM": 0.0,
+    "GPLL": 0.0,
+    "IO": 7.0,
+    "lut": 4550,
+    "ff": 2850
+  },
+  "core_attribution_report": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\physical-attribution\\H3_Retained_145125-20261101-015628-ffa262ba-PHYSICAL_PRIMITIVE_INVENTORY.json",
+  "core_attribution_report_sha256": "ce48c29036c06c58edf821dbad820a26795984a10150496059594bbc5201ccb7",
+  "feature_preservation_report": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\physical-attribution\\H3_Retained_145125-20261101-015628-ffa262ba-FEATURE_PRESERVATION.json",
+  "feature_preservation_report_sha256": "b5c03857be5daf179eb97425d3c6be915d2733218d7cc1d384f3f9204f9458ea",
+  "native_export_reconciliation": {
+    "hierarchy_attributed_core_lut_including_ram": 3923,
+    "hierarchy_attributed_fixture_lut_including_ram": 378,
+    "exported_provenance_core_lut_including_ram": 3925,
+    "exported_provenance_fixture_lut_including_ram": 378,
+    "export_minus_native_hierarchy_core_lut": 2,
+    "export_minus_native_hierarchy_top_lut": 2,
+    "exported_tool_constant_lut_sites": 244,
+    "exported_other_lut_sites": 0,
+    "global_lut_slots_not_present_in_export": 3,
+    "global_lut_slot_residue_by_site_class": {
+      "CLMA": 3,
+      "CLMS": 0
+    },
+    "native_only_ff_by_site_class": {
+      "CLMA": 1,
+      "CLMS": 0
+    },
+    "native_only_ff_by_region": {
+      "core": 1
+    },
+    "global_lut_count": 4550,
+    "exported_lut_and_ram_sites": 4547,
+    "ff_exact": true,
+    "native_hierarchy_exact": false,
+    "native_hierarchy_reconciled_with_explicit_differences": true,
+    "exported_ff_matches_native": false,
+    "core_lut_with_generated_overhead_lower_bound": 4143,
+    "core_lut_with_generated_overhead_upper_bound": 4147,
+    "bounds_interpretation": "Bounds use actual unique exported core LUT/RAM sites, preserving any difference from the native hierarchy convention. Lower adds constants with exclusively core consumers. Upper assigns all shared/unresolved/unexported LUT overhead to core. Native-only FFs retain their exact packed owners."
+  },
+  "core_resources": {
+    "native_hierarchy_lut_including_distributed_ram": 3923,
+    "physical_exclusive_lut": 4143,
+    "physical_lut_lower_bound": 4143,
+    "physical_lut_upper_bound": 4147,
+    "ff": 1554,
+    "distributed_ram_lut_sites": 246,
+    "APM": 4,
+    "DRM": 0,
+    "GPLL": 0
+  },
+  "fixture_resources": {
+    "native_hierarchy_lut": 378,
+    "physical_exclusive_lut": 403,
+    "ff": 1296
+  },
+  "shared_lut_sites": 1,
+  "unattributed_lut_slots": 3,
+  "global_lut_reconciliation": "4550 = 4143 core-exclusive + 403 fixture-exclusive + 1 shared + 3 unexported/unattributed slots",
+  "core_resources_native_hierarchy": {
+    "LUT": 3923,
+    "FF": 1554,
+    "Distributed RAM": 246,
+    "APM": 4
+  },
+  "fixture_resources_native_hierarchy": {
+    "lut": 378,
+    "ff": 1296
+  },
+  "core_lut_including_generated_overhead_lower_bound": 4143,
+  "core_lut_including_generated_overhead_upper_bound": 4147,
+  "unexported_global_lut_slots": 3,
+  "source_manifest": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\SOURCE_MANIFEST.json",
+  "source_manifest_sha256": "a5a5c7ed0f2df4710ea0d26871eae429436fa285fc7a1465640491fa3b526078",
+  "functional_rtl_changes": 0,
+  "independent_multicorner_audit": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\physical\\builds\\20261101-015628-ffa262ba\\INDEPENDENT_MULTICORNER_AUDIT.json",
+  "independent_multicorner_audit_sha256": "a8eb57c6dd8eee4f7f0cc3e96b25e6b9e9220e4d3acdf1c815a8658be93c4416",
+  "extraction_qualification": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\H3_Retained_145125-EXTRACTION_QUALIFICATION.json",
+  "extraction_qualification_sha256": "fa0d883ae8f8d0504311fc9aa1b1e242db397d68c5e48ee5ee7e943a83120fb4",
+  "full_reference_result": "D:/AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\qualification\\full_reference\\RESULT.json",
+  "full_reference_result_sha256": "7fb7e4af07239e1fb8431cb8795a2a120319c582bf8a66e0668aa45f8c48f743",
+  "full_reference_cycles": 1743134699,
+  "full_reference_retired": 1649428429,
+  "performance_scope": "Finite fresh bare-wrapper extraction miter plus exact source/configuration/firmware join to completed original SoC 6000-iteration local RTL simulation; execution service remains explicitly external cached-system services.",
+  "verification": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\physical\\builds\\20261101-015628-ffa262ba\\VERIFICATION.txt",
+  "verification_sha256": "380f5c242f115ba9ee2744a368efb168af00f69068e7ea4f508e08eb49bc01a3",
+  "rollback_final_review": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\physical\\builds\\20261101-015628-ffa262ba\\rollback_final_review",
+  "rollback_restored_eight_frozen_hashes": true,
+  "hardware_validated": false,
+  "selected_utc": "2026-10-31T18:14:48.1638736Z"
+}

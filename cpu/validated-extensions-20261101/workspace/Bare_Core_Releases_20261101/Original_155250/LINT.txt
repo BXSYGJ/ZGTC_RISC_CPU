@@ -1,0 +1,38 @@
+﻿wsl: 检测到 localhost 代理配置，但未镜像到 WSL。NAT 模式下的 WSL 不支持 localhost 代理。
+%Warning-UNUSED: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/Original_155250/source/rtl/rv32_core.sv:100:18: Signal is not used: 'wb_writes'
+                                                                                                          : ... In instance bare_core_scan_top.core_boundary.dut
+  100 |     reg wb_valid,wb_writes;
+      |                  ^~~~~~~~~
+                 ... Use "/* verilator lint_off UNUSED */" and lint_on around source to disable this message.
+%Warning-UNUSED: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/Original_155250/source/rtl/rv32_core.sv:127:10: Signal is not used: 'muldiv_valid'
+                                                                                                          : ... In instance bare_core_scan_top.core_boundary.dut
+  127 |     wire muldiv_valid,muldiv_ready,muldiv_available;
+      |          ^~~~~~~~~~~~
+%Warning-UNUSED: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/Original_155250/source/rtl/rv32_core.sv:161:26: Signal is not used: 'prediction_hit'
+                                                                                                          : ... In instance bare_core_scan_top.core_boundary.dut
+  161 |     wire predicted_taken,prediction_hit;
+      |                          ^~~~~~~~~~~~~~
+%Warning-UNUSED: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/Original_155250/source/rtl/rv32_core.sv:343:10: Signal is not used: 'execute_prediction_miss'
+                                                                                                          : ... In instance bare_core_scan_top.core_boundary.dut
+  343 |     wire execute_prediction_miss=branch_taken ?
+      |          ^~~~~~~~~~~~~~~~~~~~~~~
+%Warning-UNUSED: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/Original_155250/source/rtl/rv32_btb.sv:59:25: Signal is not used: 'pattern_prediction'
+                                                                                                        : ... In instance bare_core_scan_top.core_boundary.dut.predictor
+   59 |     wire [PATTERNS-1:0] pattern_prediction;
+      |                         ^~~~~~~~~~~~~~~~~~
+%Warning-UNUSED: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/Original_155250/source/rtl/rv32_rvc_expand.sv:16:16: Bits of signal are not used: 'branch_immediate'[0]
+                                                                                                               : ... In instance bare_core_scan_top.core_boundary.dut.expand
+   16 |     reg [12:0] branch_immediate;
+      |                ^~~~~~~~~~~~~~~~
+%Warning-UNUSED: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/Original_155250/source/rtl/rv32_rvc_expand.sv:17:16: Bits of signal are not used: 'jump_immediate'[0]
+                                                                                                               : ... In instance bare_core_scan_top.core_boundary.dut.expand
+   17 |     reg [20:0] jump_immediate;
+      |                ^~~~~~~~~~~~~~
+%Warning-UNUSED: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/Original_155250/source/rtl/rv32_rvc_frontend.sv:60:17: Bits of signal are not used: 'following_data'[31:16]
+                                                                                                                 : ... In instance bare_core_scan_top.core_boundary.dut.frontend
+   60 |     wire [31:0] following_data=following_buffer_valid ? (pc[2] ? word0_data : word1_data) : following_pair ? i_rsp_pair_data : i_rsp_data;
+      |                 ^~~~~~~~~~~~~~
+%Warning-UNUSED: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/Original_155250/source/rtl/rv32_rvc_frontend.sv:90:17: Bits of signal are not used: 'redirect_address'[31:16]
+                                                                                                                 : ... In instance bare_core_scan_top.core_boundary.dut.frontend
+   90 |     wire [31:0] redirect_address={redirect_pc[31:2],2'b0};
+      |                 ^~~~~~~~~~~~~~~~

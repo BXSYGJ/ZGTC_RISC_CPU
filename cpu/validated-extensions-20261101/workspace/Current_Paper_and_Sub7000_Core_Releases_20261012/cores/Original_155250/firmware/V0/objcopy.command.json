@@ -1,0 +1,25 @@
+{
+  "argv": [
+    "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\ccfa-workfiles\\reviewer3-current-report\\experiments\\r15525\\simulation\\frozen\\toolchain\\bin\\riscv-none-embed-objcopy",
+    "-O",
+    "binary",
+    "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\ccfa-workfiles\\reviewer3-current-report\\experiments\\r15525\\simulation\\firmware\\V0\\firmware.elf",
+    "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\ccfa-workfiles\\reviewer3-current-report\\experiments\\r15525\\simulation\\firmware\\V0\\firmware.bin"
+  ],
+  "actual_argv": [
+    "wsl",
+    "--cd",
+    "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/ccfa-workfiles/reviewer3-current-report/experiments/r15525/simulation/firmware/V0",
+    "--exec",
+    "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/ccfa-workfiles/reviewer3-current-report/experiments/r15525/simulation/frozen/toolchain/bin/riscv-none-embed-objcopy",
+    "-O",
+    "binary",
+    "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/ccfa-workfiles/reviewer3-current-report/experiments/r15525/simulation/firmware/V0/firmware.elf",
+    "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/ccfa-workfiles/reviewer3-current-report/experiments/r15525/simulation/firmware/V0/firmware.bin"
+  ],
+  "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\cpu_paper\\ccfa-workfiles\\reviewer3-current-report\\experiments\\r15525\\simulation\\firmware\\V0",
+  "started_utc": "2026-10-08T14:37:40.840438+00:00",
+  "shell": false,
+  "returncode": 0,
+  "finished_utc": "2026-10-08T14:37:40.992915+00:00"
+}

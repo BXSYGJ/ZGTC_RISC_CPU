@@ -1,0 +1,51 @@
+﻿{
+  "release": "Original_155250",
+  "origin": "LOCAL RTL SIMULATION",
+  "changed_field": "pds_soc_top.board.INIT_FILE path relocation only",
+  "functional_rtl_changes": 0,
+  "firmware_changes": 0,
+  "baseline_modified_rollback_equal": true,
+  "windows_manifest": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\waveforms\\WAVEFORM_MANIFEST.json",
+  "dynamic_window_tests": {
+    "BASELINE": {
+      "result": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\qualification\\dynamic\\BASELINE\\RESULT.json",
+      "exit_code": 0,
+      "firmware_sha256": "1d66bdd8919951e18c191b82ea271c84bd156ea14f2ca9fcf5c4b56216069949",
+      "uart_sha256": "6066edfd9d90cada90a8340d9aec084a64b2e9143a8f1779f7a91158fcdc16ff",
+      "exact_stdout": "ZGTC COREMARK READY send G; clock=155250000 Hz\nZGTC COREMARK START iterations=6000 validation=0\nPARTIAL_WINDOW_PASS cycle_limit=2000000 cycle_count=2000000 retired=1834318 snapshots=1 status_code=0xc0100002 ila_hash=0x89731e09f38ea293 trace_hash=0xd447d06ddf3d9bf9\nSIGNAL_CYCLES 1927664 1893089 1861007 1847685 1834318 1835787 1834320 1497 1903138 1834319\nFUNCTION_ENTRIES iterate=1 list=13 matrix=27 state=27\n",
+      "cycles": 2000000,
+      "full_coremark_completed": false
+    },
+    "MODIFIED": {
+      "result": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\qualification\\dynamic\\MODIFIED\\RESULT.json",
+      "exit_code": 0,
+      "firmware_sha256": "1d66bdd8919951e18c191b82ea271c84bd156ea14f2ca9fcf5c4b56216069949",
+      "uart_sha256": "6066edfd9d90cada90a8340d9aec084a64b2e9143a8f1779f7a91158fcdc16ff",
+      "exact_stdout": "ZGTC COREMARK READY send G; clock=155250000 Hz\nZGTC COREMARK START iterations=6000 validation=0\nPARTIAL_WINDOW_PASS cycle_limit=2000000 cycle_count=2000000 retired=1834318 snapshots=1 status_code=0xc0100002 ila_hash=0x89731e09f38ea293 trace_hash=0xd447d06ddf3d9bf9\nSIGNAL_CYCLES 1927664 1893089 1861007 1847685 1834318 1835787 1834320 1497 1903138 1834319\nFUNCTION_ENTRIES iterate=1 list=13 matrix=27 state=27\n",
+      "cycles": 2000000,
+      "full_coremark_completed": false
+    },
+    "ROLLBACK": {
+      "result": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\qualification\\dynamic\\ROLLBACK\\RESULT.json",
+      "exit_code": 0,
+      "firmware_sha256": "1d66bdd8919951e18c191b82ea271c84bd156ea14f2ca9fcf5c4b56216069949",
+      "uart_sha256": "6066edfd9d90cada90a8340d9aec084a64b2e9143a8f1779f7a91158fcdc16ff",
+      "exact_stdout": "ZGTC COREMARK READY send G; clock=155250000 Hz\nZGTC COREMARK START iterations=6000 validation=0\nPARTIAL_WINDOW_PASS cycle_limit=2000000 cycle_count=2000000 retired=1834318 snapshots=1 status_code=0xc0100002 ila_hash=0x89731e09f38ea293 trace_hash=0xd447d06ddf3d9bf9\nSIGNAL_CYCLES 1927664 1893089 1861007 1847685 1834318 1835787 1834320 1497 1903138 1834319\nFUNCTION_ENTRIES iterate=1 list=13 matrix=27 state=27\n",
+      "cycles": 2000000,
+      "full_coremark_completed": false
+    }
+  },
+  "full_run_status": "running",
+  "full_run_directory": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\qualification\\full-runs\\20261031T170813Z-21000bdf",
+  "hardware_validated": false,
+  "selected_build": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\builds\\20261101-010901-9bbe8fee",
+  "selected_functional_inputs_equal_tested_modified_copy": true,
+  "selected_top_equivalence": "Exact top wrapper bytes equal after normalizing only its INIT_FILE path; all other frozen input files SHA256 equal.",
+  "full_simulation_status": "passed",
+  "full_simulation_result": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\qualification\\full-runs\\20261031T170813Z-21000bdf\\RESULT.json",
+  "full_simulation_result_sha256": "8036B6A83AA5BF89240CE0E402DDF64BCC9C89D7A23BD2263720DC300EE5C8BB",
+  "full_simulation_measured_cycles": 1782669419,
+  "full_simulation_measured_retired": 1649428429,
+  "full_simulation_measured_ipc": 0.9252576004390414,
+  "full_simulation_uart_byte_identical": true
+}

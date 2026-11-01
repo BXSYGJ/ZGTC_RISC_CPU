@@ -1,0 +1,20 @@
+{
+  "status": "PASS",
+  "cpu_edges": 2000000,
+  "port_frame_comparisons": 4000000,
+  "frame_bits": 646,
+  "reference_frame_fnv1a64": "31cacc7862e90ed8",
+  "bare_frame_fnv1a64": "31cacc7862e90ed8",
+  "cycle_count": 2000000,
+  "retired_count": 1875092,
+  "retired_events": 1875092,
+  "register_writes": 1390057,
+  "i_requests": 1069156,
+  "i_responses": 1069155,
+  "d_requests": 465628,
+  "d_responses": 465627,
+  "maintenance_completions": 0,
+  "kernel_entry_retirements": {"core_bench_list": 13, "core_bench_matrix": 28, "core_bench_state": 28},
+  "full_coremark_run": false,
+  "hardware_measurement": false
+}

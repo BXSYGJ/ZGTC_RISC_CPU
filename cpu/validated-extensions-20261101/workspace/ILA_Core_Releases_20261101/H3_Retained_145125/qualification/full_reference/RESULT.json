@@ -1,0 +1,22 @@
+﻿{
+  "schema": "h3-full-reference-comparison/v1",
+  "release": "H3_Retained_145125",
+  "origin": "LOCAL RTL SIMULATION",
+  "completed_6000_iterations": true,
+  "native_exit_code": 0,
+  "exact_reference_uart_equal": true,
+  "uart": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\qualification\\full_reference\\uart.log",
+  "uart_sha256": "f07a9b92e47237fc974f0e9aceefc2551f965f8c1e1e8c08d68420b93ed5053a",
+  "reference_uart_sha256": "f07a9b92e47237fc974f0e9aceefc2551f965f8c1e1e8c08d68420b93ed5053a",
+  "cycles_hex": "0000000067e61feb",
+  "cycles": 1743134699,
+  "retired_hex": "00000000625047cd",
+  "retired": 1649428429,
+  "clock_hz": 145125000,
+  "firmware_sha256": "3a3aff510511ed4cd7fe304a6354861adae30531102446a24438e43f3e2a2884",
+  "all_crc_fields_equal_by_exact_uart": true,
+  "literal_stdout": "ZGTC COREMARK READY send G; clock=145125000 Hz\nZGTC COREMARK START iterations=6000 validation=0\n2K performance run parameters for coremark.\nCoreMark Size    : 666\nTotal ticks      : 12011\nTotal time (secs): 12\nIterations/Sec   : 500\nIterations       : 6000\nCompiler version : GCC 10.2.0\nCompiler flags   : -march=rv32imc -mabi=ilp32 -mcmodel=medany -msmall-data-limit=0 -std=c11 -O3 -funroll-loops -ffreestanding -fno-builtin -ffunction-sections -fdata-sections -Wall -Wextra -DTOTAL_DATA_SIZE=2000 -DITERATIONS=6000 -DVALIDATION_RUN=0 -DPERFORMANCE_RUN=1 -DCPU_CLOCK_HZ=145125000u -DCONSOLE_DELAY_CYCLES=0\nMemory location  : 64KiB on-chip RAM; cache mode/geometry in ZGTC config\nseedcrc          : 0xe9f5\n[0]crclist       : 0xe714\n[0]crcmatrix     : 0x1fd7\n[0]crcstate      : 0x8e3a\n[0]crcfinal      : 0xa14c\nCorrect operation validated. See README.md for run and reporting rules.\nZGTC cycles_hex=0000000067e61feb retired_hex=00000000625047cd clock_hz=145125000\nZGTC config=1e8e96fd ihit=937179909 imiss=519 dhit=410438109 dmiss=366362 writebacks=222359\nZGTC COREMARK FINISHED\nEX_PRESELECT_PROFILE idle_candidates=19 older_load_wait=0 irq_cycles=0\nID_ZERO_PROFILE resolved=66496573 redirects=14457250\nPASS RTL CoreMark smoke total_cycles=1743494280 total_retired=1649640866\nOBSERVER cycles=1743134699 retired=1649428429 minimum_sp=65152\nEVENTS redirects=31892730,156006,60005,0,0,0,0 eligible=31892730,156006,60005,0,0,0,0 request_stalls=0 response_waits=4184 barrier_cycles=0\n",
+  "run_receipt": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\qualification\\full_reference\\NATIVE_PROCESS.json",
+  "hardware_validated": false,
+  "comparison_utc": "2026-10-31T17:33:06.5806591Z"
+}

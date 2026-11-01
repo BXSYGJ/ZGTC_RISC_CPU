@@ -1,0 +1,177 @@
+﻿{
+  "schema": "h3-bare-independent-multicorner-audit/v1",
+  "release": "H3_Base_145125",
+  "build_directory": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Base_145125\\physical\\builds\\20261101-015628-87641d51",
+  "qualified": true,
+  "timing_analysis_mode": "multi corner",
+  "design_summary": "All Constraints Met.",
+  "clock_hz": 145125000,
+  "configured_setup_uncertainty_ns": 0.15,
+  "reported_effective_setup_uncertainty_ns": 0.2,
+  "uncertainty_scope": "Every detailed setup path matches the explicit audit expectation; actual effective uncertainty remains explicit and is compared with the requested minimum separately.",
+  "clocks": [
+    {
+      "name": "core_clk",
+      "period_ns": 6.89,
+      "waveform": "0.0000 3.4450",
+      "type": "Declared",
+      "clock_loads": 2393,
+      "non_clock_loads": 151,
+      "source": "clk"
+    }
+  ],
+  "summary_rows": [
+    {
+      "check": "Setup",
+      "corner": "Slow",
+      "launch_clock": "core_clk",
+      "capture_clock": "core_clk",
+      "worst_slack_ns": 0.047,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "total_endpoints": 11042
+    },
+    {
+      "check": "Hold",
+      "corner": "Slow",
+      "launch_clock": "core_clk",
+      "capture_clock": "core_clk",
+      "worst_slack_ns": 0.197,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "total_endpoints": 11042
+    },
+    {
+      "check": "Recovery",
+      "corner": "Slow",
+      "launch_clock": "core_clk",
+      "capture_clock": "core_clk",
+      "worst_slack_ns": 2.964,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "total_endpoints": 2183
+    },
+    {
+      "check": "Removal",
+      "corner": "Slow",
+      "launch_clock": "core_clk",
+      "capture_clock": "core_clk",
+      "worst_slack_ns": 0.102,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "total_endpoints": 2183
+    },
+    {
+      "check": "Minimum Pulse Width",
+      "corner": "Slow",
+      "launch_clock": "core_clk",
+      "capture_clock": "core_clk",
+      "worst_slack_ns": 2.791,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "total_endpoints": 2393
+    },
+    {
+      "check": "Setup",
+      "corner": "Fast",
+      "launch_clock": "core_clk",
+      "capture_clock": "core_clk",
+      "worst_slack_ns": 1.657,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "total_endpoints": 11042
+    },
+    {
+      "check": "Hold",
+      "corner": "Fast",
+      "launch_clock": "core_clk",
+      "capture_clock": "core_clk",
+      "worst_slack_ns": 0.069,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "total_endpoints": 11042
+    },
+    {
+      "check": "Recovery",
+      "corner": "Fast",
+      "launch_clock": "core_clk",
+      "capture_clock": "core_clk",
+      "worst_slack_ns": 2.733,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "total_endpoints": 2183
+    },
+    {
+      "check": "Removal",
+      "corner": "Fast",
+      "launch_clock": "core_clk",
+      "capture_clock": "core_clk",
+      "worst_slack_ns": 0.14,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "total_endpoints": 2183
+    },
+    {
+      "check": "Minimum Pulse Width",
+      "corner": "Fast",
+      "launch_clock": "core_clk",
+      "capture_clock": "core_clk",
+      "worst_slack_ns": 2.79,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "total_endpoints": 2393
+    }
+  ],
+  "violations": [],
+  "setup_uncertainty_paths": [
+    {
+      "group": "core_clk",
+      "corner": "slow",
+      "uncertainty_ns": -0.2
+    },
+    {
+      "group": "core_clk",
+      "corner": "slow",
+      "uncertainty_ns": -0.2
+    },
+    {
+      "group": "core_clk",
+      "corner": "slow",
+      "uncertainty_ns": -0.2
+    },
+    {
+      "group": "core_clk",
+      "corner": "fast",
+      "uncertainty_ns": -0.2
+    },
+    {
+      "group": "core_clk",
+      "corner": "fast",
+      "uncertainty_ns": -0.2
+    },
+    {
+      "group": "core_clk",
+      "corner": "fast",
+      "uncertainty_ns": -0.2
+    }
+  ],
+  "resources": {
+    "CLMA": {
+      "ff": 2114,
+      "lut": 3238
+    },
+    "CLMS": {
+      "ff": 712,
+      "lut": 1260
+    },
+    "DRM": 0.0,
+    "GPLL": 0.0,
+    "APM": 4.0,
+    "post_route_luts": 4498,
+    "post_route_ffs": 2826
+  },
+  "report": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Base_145125\\physical\\builds\\20261101-015628-87641d51\\implementation\\report_timing\\bare_core_scan_top.rtr",
+  "report_sha256": "770f0a13b7dc55fa4f0688203a1706a1fe8e52110109d85b6f020714620c95b5",
+  "hardware_validated": false,
+  "audited_utc": "2026-10-31T18:13:43.7212734Z"
+}

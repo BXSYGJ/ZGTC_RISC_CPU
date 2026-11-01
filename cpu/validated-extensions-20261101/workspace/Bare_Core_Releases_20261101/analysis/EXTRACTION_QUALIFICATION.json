@@ -1,0 +1,1623 @@
+{
+  "schema": "bare-core-extraction-qualification/v1",
+  "status": "PASS",
+  "origin": "LOCAL RTL SIMULATION",
+  "hardware_measurement": false,
+  "scope": "Finite extraction miter plus exact source/configuration/firmware join to completed original 6000-iteration SoC simulations",
+  "fresh_full_bare_wrapper_run": false,
+  "standalone_cacheless_service_result": false,
+  "area_metric_label": "Core-only area with explicitly external cached-system services",
+  "baseline_cpu_edges_total": 6000000,
+  "rollback_cpu_edges_total": 6000000,
+  "direct_port_frame_comparisons_total_including_rollback": 24000000,
+  "negative_controls": 3,
+  "releases": [
+    {
+      "release": "Original_155250",
+      "status": "PASS",
+      "qualification": {
+        "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\Original_155250-EXTRACTION_QUALIFICATION.json",
+        "sha256": "b03404d67297d2b30c7cc21feb4663cd1f404a3ab7cb3e5b2dfc27d5abbfc9df",
+        "bytes": 6045
+      },
+      "preparation": {
+        "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173757Z-14ca1e17\\PREPARATION.json",
+        "sha256": "3e5af0a304b6d47392f5b9d2b225774145cf761b3dd1a564859ca35c6326dcd9",
+        "bytes": 23350
+      },
+      "source_manifest": {
+        "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\Original_155250\\SOURCE_MANIFEST.json",
+        "sha256": "065d766d105c2dd96d62ccda073ad5c70b8bf0fcc0fa8b0b1dce7b7bc9fd6dba",
+        "bytes": 4819
+      },
+      "all_port_bits": 616,
+      "compared_port_bits": 614,
+      "compared_port_groups": 40,
+      "shared_identical_clock_reset": [
+        "clk",
+        "rst_n"
+      ],
+      "complete_core_closure_hash_joins": [
+        {
+          "name": "rv32_core.sv",
+          "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\Original_155250\\source\\rtl\\rv32_core.sv",
+          "reference_original": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\builds\\20261101-004552-4cce580e\\inputs\\rtl\\rv32_core.sv",
+          "sha256": "11c2d7175afbc0753178c6d992f4d7497ab197a7ac1b3f1cba8a2952935a056a",
+          "exact_bytes_equal": true,
+          "reference_transform": "Only module-type identifiers gain reference_ prefix"
+        },
+        {
+          "name": "rv32_rvc_frontend.sv",
+          "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\Original_155250\\source\\rtl\\rv32_rvc_frontend.sv",
+          "reference_original": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\builds\\20261101-004552-4cce580e\\inputs\\rtl\\rv32_rvc_frontend.sv",
+          "sha256": "77d7f21f153570b83d156a7b2fb3485f08da1225719a22d11074e8fa886708c7",
+          "exact_bytes_equal": true,
+          "reference_transform": "Only module-type identifiers gain reference_ prefix"
+        },
+        {
+          "name": "rv32_rvc_expand.sv",
+          "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\Original_155250\\source\\rtl\\rv32_rvc_expand.sv",
+          "reference_original": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\builds\\20261101-004552-4cce580e\\inputs\\rtl\\rv32_rvc_expand.sv",
+          "sha256": "308ac8a65c9e29aeec27b38417483d0f43fd7c54487c26e89a3fa54b4647951b",
+          "exact_bytes_equal": true,
+          "reference_transform": "Only module-type identifiers gain reference_ prefix"
+        },
+        {
+          "name": "rv32_decode.sv",
+          "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\Original_155250\\source\\rtl\\rv32_decode.sv",
+          "reference_original": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\builds\\20261101-004552-4cce580e\\inputs\\rtl\\rv32_decode.sv",
+          "sha256": "9cb2b57b46ed775d85b6e70a3eebe92c2d5e49e9a6483993109e2c096d9a3ff3",
+          "exact_bytes_equal": true,
+          "reference_transform": "Only module-type identifiers gain reference_ prefix"
+        },
+        {
+          "name": "rv32_alu.sv",
+          "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\Original_155250\\source\\rtl\\rv32_alu.sv",
+          "reference_original": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\builds\\20261101-004552-4cce580e\\inputs\\rtl\\rv32_alu.sv",
+          "sha256": "125647d90b98f294743127637406d19479eebda82dccfaaba7acaf59d5ae38b1",
+          "exact_bytes_equal": true,
+          "reference_transform": "Only module-type identifiers gain reference_ prefix"
+        },
+        {
+          "name": "rv32_muldiv.sv",
+          "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\Original_155250\\source\\rtl\\rv32_muldiv.sv",
+          "reference_original": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\builds\\20261101-004552-4cce580e\\inputs\\rtl\\rv32_muldiv.sv",
+          "sha256": "ea669ef9701bba4b2adbf6ff40c9e4e805620ec79de6cbdb323bbebeeac4fe59",
+          "exact_bytes_equal": true,
+          "reference_transform": "Only module-type identifiers gain reference_ prefix"
+        },
+        {
+          "name": "rv32_btb.sv",
+          "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\Original_155250\\source\\rtl\\rv32_btb.sv",
+          "reference_original": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\builds\\20261101-004552-4cce580e\\inputs\\rtl\\rv32_btb.sv",
+          "sha256": "4e7c61716c3e3f3156e8a1006824354b3428bbbc98a37369e43bae12f0170a3c",
+          "exact_bytes_equal": true,
+          "reference_transform": "Only module-type identifiers gain reference_ prefix"
+        },
+        {
+          "name": "rv32_machine.sv",
+          "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\Original_155250\\source\\rtl\\rv32_machine.sv",
+          "reference_original": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\builds\\20261101-004552-4cce580e\\inputs\\rtl\\rv32_machine.sv",
+          "sha256": "56b542e419c58216a08b0a5c83322506e42e2721fa28db50a6454ebe29607abd",
+          "exact_bytes_equal": true,
+          "reference_transform": "Only module-type identifiers gain reference_ prefix"
+        }
+      ],
+      "parameters": {
+        "RESET_VECTOR": 0,
+        "ENABLE_PREDICTOR": 1,
+        "ENABLE_M": 1,
+        "ENABLE_C": 1,
+        "FETCH_ADDRESS_BITS": 16,
+        "FETCH_OVERLAP": 1,
+        "EARLY_D_REQUEST": 1,
+        "BTB_INDEX_BITS": 8,
+        "BTB_ADDRESS_BITS": 16,
+        "LOAD_USE_BUBBLE": 1
+      },
+      "result": {
+        "status": "PASS",
+        "cpu_edges": 2000000,
+        "port_frame_comparisons": 4000000,
+        "frame_bits": 614,
+        "reference_frame_fnv1a64": "cbcd7a3d93db2dce",
+        "bare_frame_fnv1a64": "cbcd7a3d93db2dce",
+        "cycle_count": 2000000,
+        "retired_count": 1834318,
+        "retired_events": 1834318,
+        "register_writes": 1357405,
+        "i_requests": 1124375,
+        "i_responses": 1124375,
+        "d_requests": 458192,
+        "d_responses": 458192,
+        "maintenance_completions": 0,
+        "kernel_entry_retirements": {
+          "core_bench_list": 13,
+          "core_bench_matrix": 27,
+          "core_bench_state": 27
+        },
+        "full_coremark_run": false,
+        "hardware_measurement": false
+      },
+      "commands": {
+        "baseline": {
+          "executable": "wsl.exe",
+          "arguments": [
+            "--cd",
+            "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17",
+            "--exec",
+            "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/objects/Vbare_extraction_miter",
+            "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/baseline.json",
+            "2000000",
+            "0"
+          ],
+          "exit_code": 0,
+          "stdout_literal": "EXTRACTION_PASS edges=2000000 comparisons=4000000 retired=1834318 kernels=13,27,27 digest=cbcd7a3d93db2dce\n",
+          "stderr_literal": "wsl: \u68c0\u6d4b\u5230 localhost \u4ee3\u7406\u914d\u7f6e\uff0c\u4f46\u672a\u955c\u50cf\u5230 WSL\u3002NAT \u6a21\u5f0f\u4e0b\u7684 WSL \u4e0d\u652f\u6301 localhost \u4ee3\u7406\u3002\n\n",
+          "logs": [
+            {
+              "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173757Z-14ca1e17\\baseline.stdout.log",
+              "sha256": "66387dc39ad1a5e6bca653f56c46a03e83f0c5696b8174add05cfdc925c9b300",
+              "bytes": 108
+            },
+            {
+              "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173757Z-14ca1e17\\baseline.stderr.log",
+              "sha256": "6eb98b1b91680feffeead990541ad60e53953b859dd11b3e8e09e0f9beb2c70d",
+              "bytes": 115
+            },
+            {
+              "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173757Z-14ca1e17\\baseline.stdout.raw",
+              "sha256": "10e26321be10dbb98f4aafca0b4511820a34b64daf64172b598eab6645cfb8aa",
+              "bytes": 107
+            },
+            {
+              "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173757Z-14ca1e17\\baseline.stderr.raw",
+              "sha256": "b280c454d6f559e56eb3f5ed39f3ba084b8d1744a3ff7fe016b21ff86dea1aca",
+              "bytes": 132
+            }
+          ]
+        },
+        "modified_negative_control": {
+          "executable": "wsl.exe",
+          "arguments": [
+            "--cd",
+            "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17",
+            "--exec",
+            "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/objects/Vbare_extraction_miter",
+            "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/rejected.json",
+            "2000000",
+            "10000"
+          ],
+          "exit_code": 1,
+          "stdout_literal": "",
+          "stderr_literal": "wsl: \u68c0\u6d4b\u5230 localhost \u4ee3\u7406\u914d\u7f6e\uff0c\u4f46\u672a\u955c\u50cf\u5230 WSL\u3002NAT \u6a21\u5f0f\u4e0b\u7684 WSL \u4e0d\u652f\u6301 localhost \u4ee3\u7406\u3002\n\nEXTRACTION_MISMATCH edge=10000 phase=preedge mask=0x80000\nEXTRACTION_FAIL Bare DUT and independent reference port frames differ\n",
+          "logs": [
+            {
+              "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173757Z-14ca1e17\\modified-negative-control.stdout.log",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "bytes": 0
+            },
+            {
+              "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173757Z-14ca1e17\\modified-negative-control.stderr.log",
+              "sha256": "f9d9078688faa30622c71ffa7729a82b2a0db8f4cd3e97d1209860d40cad1c12",
+              "bytes": 245
+            },
+            {
+              "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173757Z-14ca1e17\\modified-negative-control.stdout.raw",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "bytes": 0
+            },
+            {
+              "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173757Z-14ca1e17\\modified-negative-control.stderr.raw",
+              "sha256": "d6be9d49ee27bf669281351dbb12c33f84b8363f549b03a6d8c9ea2de3cec9d1",
+              "bytes": 260
+            }
+          ]
+        },
+        "rollback": {
+          "executable": "wsl.exe",
+          "arguments": [
+            "--cd",
+            "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17",
+            "--exec",
+            "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/objects/Vbare_extraction_miter",
+            "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/rollback.json",
+            "2000000",
+            "0"
+          ],
+          "exit_code": 0,
+          "stdout_literal": "EXTRACTION_PASS edges=2000000 comparisons=4000000 retired=1834318 kernels=13,27,27 digest=cbcd7a3d93db2dce\n",
+          "stderr_literal": "wsl: \u68c0\u6d4b\u5230 localhost \u4ee3\u7406\u914d\u7f6e\uff0c\u4f46\u672a\u955c\u50cf\u5230 WSL\u3002NAT \u6a21\u5f0f\u4e0b\u7684 WSL \u4e0d\u652f\u6301 localhost \u4ee3\u7406\u3002\n\n",
+          "logs": [
+            {
+              "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173757Z-14ca1e17\\rollback.stdout.log",
+              "sha256": "66387dc39ad1a5e6bca653f56c46a03e83f0c5696b8174add05cfdc925c9b300",
+              "bytes": 108
+            },
+            {
+              "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173757Z-14ca1e17\\rollback.stderr.log",
+              "sha256": "6eb98b1b91680feffeead990541ad60e53953b859dd11b3e8e09e0f9beb2c70d",
+              "bytes": 115
+            },
+            {
+              "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173757Z-14ca1e17\\rollback.stdout.raw",
+              "sha256": "10e26321be10dbb98f4aafca0b4511820a34b64daf64172b598eab6645cfb8aa",
+              "bytes": 107
+            },
+            {
+              "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173757Z-14ca1e17\\rollback.stderr.raw",
+              "sha256": "b280c454d6f559e56eb3f5ed39f3ba084b8d1744a3ff7fe016b21ff86dea1aca",
+              "bytes": 132
+            }
+          ]
+        }
+      },
+      "restored_behavior_equal": true,
+      "source_reference_6000_join": {
+        "status": "PASS",
+        "result": {
+          "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\qualification\\full-runs\\20261031T170813Z-21000bdf\\RESULT.json",
+          "sha256": "8036b6a83aa5bf89240ce0e402ddf64bcc9c89d7a23bd2263720dc300ee5c8bb",
+          "bytes": 2577
+        },
+        "run_receipt": {
+          "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\qualification\\full-runs\\20261031T170813Z-21000bdf\\simulate.command.json",
+          "sha256": "4ec7fcb3bbf984daca24d34771f2049ea15ae561dd7c8400686f10b58f15f08a",
+          "bytes": 902
+        },
+        "source_identity": {
+          "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\qualification\\full-runs\\20261031T170813Z-21000bdf\\SOURCE_IDENTITY.json",
+          "sha256": "4ce87ff85ae85eb0d35ed4c77da735d45bfd39d806b9078e2f6bfde9c3d3222f",
+          "bytes": 2330
+        },
+        "compile_receipt": {
+          "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\qualification\\full-runs\\20261031T170813Z-21000bdf\\compile.command.json",
+          "sha256": "0e2e79f4f7e69864afd763cce822a41fbb61d531c3f42383436fb4739c05505b",
+          "bytes": 4104
+        },
+        "compiled_sources": [
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\qualification\\full-runs\\20261031T170813Z-21000bdf\\inputs\\rtl\\rv32_alu.sv",
+            "sha256": "125647d90b98f294743127637406d19479eebda82dccfaaba7acaf59d5ae38b1",
+            "bytes": 1848
+          },
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\qualification\\full-runs\\20261031T170813Z-21000bdf\\inputs\\rtl\\rv32_btb.sv",
+            "sha256": "4e7c61716c3e3f3156e8a1006824354b3428bbbc98a37369e43bae12f0170a3c",
+            "bytes": 7517
+          },
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\qualification\\full-runs\\20261031T170813Z-21000bdf\\inputs\\rtl\\rv32_burst_arbiter.sv",
+            "sha256": "82104b39f85d2942e3d0a6780f79099062cc5a4f71fdf87491191de2f632c8af",
+            "bytes": 3738
+          },
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\qualification\\full-runs\\20261031T170813Z-21000bdf\\inputs\\rtl\\rv32_burst_ram.sv",
+            "sha256": "089b3788fa87d3176a4e0b09e40382e1349cc33e8f9d2227d567ad0788672417",
+            "bytes": 3690
+          },
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\qualification\\full-runs\\20261031T170813Z-21000bdf\\inputs\\rtl\\rv32_cache.sv",
+            "sha256": "80391f660c030764864a1c6acb10dfbe0a755f13f2cb1f2eaf831a2db7d10f46",
+            "bytes": 35285
+          },
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\qualification\\full-runs\\20261031T170813Z-21000bdf\\inputs\\rtl\\rv32_core.sv",
+            "sha256": "11c2d7175afbc0753178c6d992f4d7497ab197a7ac1b3f1cba8a2952935a056a",
+            "bytes": 42435
+          },
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\qualification\\full-runs\\20261031T170813Z-21000bdf\\inputs\\rtl\\rv32_decode.sv",
+            "sha256": "9cb2b57b46ed775d85b6e70a3eebe92c2d5e49e9a6483993109e2c096d9a3ff3",
+            "bytes": 4765
+          },
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\qualification\\full-runs\\20261031T170813Z-21000bdf\\inputs\\rtl\\rv32_fifo.sv",
+            "sha256": "20bb573cdbae386a8b44df780eefc11b85323cf2bbaa4fb2073a5e87e626b2eb",
+            "bytes": 1292
+          },
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\qualification\\full-runs\\20261031T170813Z-21000bdf\\inputs\\rtl\\rv32_machine.sv",
+            "sha256": "56b542e419c58216a08b0a5c83322506e42e2721fa28db50a6454ebe29607abd",
+            "bytes": 4464
+          },
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\qualification\\full-runs\\20261031T170813Z-21000bdf\\inputs\\rtl\\rv32_memory_system.sv",
+            "sha256": "0f408d7b59d45bec6623eb62baebdc259197a6e10b4d92556b4c3494a5441537",
+            "bytes": 13584
+          },
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\qualification\\full-runs\\20261031T170813Z-21000bdf\\inputs\\rtl\\rv32_muldiv.sv",
+            "sha256": "ea669ef9701bba4b2adbf6ff40c9e4e805620ec79de6cbdb323bbebeeac4fe59",
+            "bytes": 5618
+          },
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\qualification\\full-runs\\20261031T170813Z-21000bdf\\inputs\\rtl\\rv32_peripherals.sv",
+            "sha256": "9659d60e06662b367d533eb58cba036746f1bb151fab92929894b9f3dfd9d3c3",
+            "bytes": 9040
+          },
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\qualification\\full-runs\\20261031T170813Z-21000bdf\\inputs\\rtl\\rv32_rvc_expand.sv",
+            "sha256": "308ac8a65c9e29aeec27b38417483d0f43fd7c54487c26e89a3fa54b4647951b",
+            "bytes": 7540
+          },
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\qualification\\full-runs\\20261031T170813Z-21000bdf\\inputs\\rtl\\rv32_rvc_frontend.sv",
+            "sha256": "77d7f21f153570b83d156a7b2fb3485f08da1225719a22d11074e8fa886708c7",
+            "bytes": 8608
+          },
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\qualification\\full-runs\\20261031T170813Z-21000bdf\\inputs\\rtl\\rv32_soc.sv",
+            "sha256": "4a9b81a7ce52b2239b77db16e21e32cf7fe208db0a918009cf922a54b13a6be5",
+            "bytes": 7053
+          },
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\qualification\\full-runs\\20261031T170813Z-21000bdf\\inputs\\rtl\\rv32_uart.sv",
+            "sha256": "b83f5d6055bd794ca49e3781e673a00749249eaeaf1f2e908398dd5ce54ab8a2",
+            "bytes": 3248
+          },
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\qualification\\full-runs\\20261031T170813Z-21000bdf\\inputs\\rtl\\rv32_uncached.sv",
+            "sha256": "d276e6b38ddb05117f52e054367f7f3d4503ba76f8f49025973197943ef50907",
+            "bytes": 4025
+          },
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\qualification\\full-runs\\20261031T170813Z-21000bdf\\inputs\\sim\\rv32_observed_soc.sv",
+            "sha256": "a063b686ed7878f510c49426a0b9d4b16e48beafc1c62b9720030c3230f5a8c5",
+            "bytes": 10712
+          },
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\qualification\\full-runs\\20261031T170813Z-21000bdf\\inputs\\sim\\driver.cpp",
+            "sha256": "808598f016f257ed9d06d654245bd5015040b211aef5db4d1ed881e65d259298",
+            "bytes": 7808
+          }
+        ],
+        "simulator": {
+          "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\qualification\\full-runs\\20261031T170813Z-21000bdf\\objects\\Vrv32_observed_soc",
+          "sha256": "c254c0afee1f594bb55a80bd905e95f1210df7948dd6e60f23b8e22b30c6f528",
+          "bytes": 239368
+        },
+        "uart": {
+          "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\qualification\\full-runs\\20261031T170813Z-21000bdf\\uart.log",
+          "sha256": "a8cb3ce6b7eff3082c970cf1a23f79524b8abe4229a0e560fa2f8e96130f5e10",
+          "bytes": 1079
+        },
+        "stdout": {
+          "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\qualification\\full-runs\\20261031T170813Z-21000bdf\\simulate.stdout.log",
+          "sha256": "62e8b4b2d1d1fd42cd91113c966e1fb27b565347beb3c814adc4cd032f31cfc1",
+          "bytes": 1358
+        },
+        "firmware": {
+          "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\qualification\\full-runs\\20261031T170813Z-21000bdf\\firmware.hex",
+          "sha256": "1d66bdd8919951e18c191b82ea271c84bd156ea14f2ca9fcf5c4b56216069949",
+          "bytes": 147456
+        },
+        "core_source_joins": [
+          {
+            "name": "rv32_core.sv",
+            "sha256": "11c2d7175afbc0753178c6d992f4d7497ab197a7ac1b3f1cba8a2952935a056a",
+            "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\Original_155250\\source\\rtl\\rv32_core.sv",
+            "full_reference_compiled_source": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\qualification\\full-runs\\20261031T170813Z-21000bdf\\inputs\\rtl\\rv32_core.sv",
+            "exact_source_match": true
+          },
+          {
+            "name": "rv32_rvc_frontend.sv",
+            "sha256": "77d7f21f153570b83d156a7b2fb3485f08da1225719a22d11074e8fa886708c7",
+            "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\Original_155250\\source\\rtl\\rv32_rvc_frontend.sv",
+            "full_reference_compiled_source": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\qualification\\full-runs\\20261031T170813Z-21000bdf\\inputs\\rtl\\rv32_rvc_frontend.sv",
+            "exact_source_match": true
+          },
+          {
+            "name": "rv32_rvc_expand.sv",
+            "sha256": "308ac8a65c9e29aeec27b38417483d0f43fd7c54487c26e89a3fa54b4647951b",
+            "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\Original_155250\\source\\rtl\\rv32_rvc_expand.sv",
+            "full_reference_compiled_source": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\qualification\\full-runs\\20261031T170813Z-21000bdf\\inputs\\rtl\\rv32_rvc_expand.sv",
+            "exact_source_match": true
+          },
+          {
+            "name": "rv32_decode.sv",
+            "sha256": "9cb2b57b46ed775d85b6e70a3eebe92c2d5e49e9a6483993109e2c096d9a3ff3",
+            "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\Original_155250\\source\\rtl\\rv32_decode.sv",
+            "full_reference_compiled_source": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\qualification\\full-runs\\20261031T170813Z-21000bdf\\inputs\\rtl\\rv32_decode.sv",
+            "exact_source_match": true
+          },
+          {
+            "name": "rv32_alu.sv",
+            "sha256": "125647d90b98f294743127637406d19479eebda82dccfaaba7acaf59d5ae38b1",
+            "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\Original_155250\\source\\rtl\\rv32_alu.sv",
+            "full_reference_compiled_source": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\qualification\\full-runs\\20261031T170813Z-21000bdf\\inputs\\rtl\\rv32_alu.sv",
+            "exact_source_match": true
+          },
+          {
+            "name": "rv32_muldiv.sv",
+            "sha256": "ea669ef9701bba4b2adbf6ff40c9e4e805620ec79de6cbdb323bbebeeac4fe59",
+            "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\Original_155250\\source\\rtl\\rv32_muldiv.sv",
+            "full_reference_compiled_source": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\qualification\\full-runs\\20261031T170813Z-21000bdf\\inputs\\rtl\\rv32_muldiv.sv",
+            "exact_source_match": true
+          },
+          {
+            "name": "rv32_btb.sv",
+            "sha256": "4e7c61716c3e3f3156e8a1006824354b3428bbbc98a37369e43bae12f0170a3c",
+            "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\Original_155250\\source\\rtl\\rv32_btb.sv",
+            "full_reference_compiled_source": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\qualification\\full-runs\\20261031T170813Z-21000bdf\\inputs\\rtl\\rv32_btb.sv",
+            "exact_source_match": true
+          },
+          {
+            "name": "rv32_machine.sv",
+            "sha256": "56b542e419c58216a08b0a5c83322506e42e2721fa28db50a6454ebe29607abd",
+            "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\Original_155250\\source\\rtl\\rv32_machine.sv",
+            "full_reference_compiled_source": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\qualification\\full-runs\\20261031T170813Z-21000bdf\\inputs\\rtl\\rv32_machine.sv",
+            "exact_source_match": true
+          }
+        ],
+        "environment_source_joins": [
+          {
+            "name": "rv32_alu.sv",
+            "sha256": "125647d90b98f294743127637406d19479eebda82dccfaaba7acaf59d5ae38b1"
+          },
+          {
+            "name": "rv32_btb.sv",
+            "sha256": "4e7c61716c3e3f3156e8a1006824354b3428bbbc98a37369e43bae12f0170a3c"
+          },
+          {
+            "name": "rv32_burst_arbiter.sv",
+            "sha256": "82104b39f85d2942e3d0a6780f79099062cc5a4f71fdf87491191de2f632c8af"
+          },
+          {
+            "name": "rv32_burst_ram.sv",
+            "sha256": "089b3788fa87d3176a4e0b09e40382e1349cc33e8f9d2227d567ad0788672417"
+          },
+          {
+            "name": "rv32_cache.sv",
+            "sha256": "80391f660c030764864a1c6acb10dfbe0a755f13f2cb1f2eaf831a2db7d10f46"
+          },
+          {
+            "name": "rv32_core.sv",
+            "sha256": "11c2d7175afbc0753178c6d992f4d7497ab197a7ac1b3f1cba8a2952935a056a"
+          },
+          {
+            "name": "rv32_decode.sv",
+            "sha256": "9cb2b57b46ed775d85b6e70a3eebe92c2d5e49e9a6483993109e2c096d9a3ff3"
+          },
+          {
+            "name": "rv32_fifo.sv",
+            "sha256": "20bb573cdbae386a8b44df780eefc11b85323cf2bbaa4fb2073a5e87e626b2eb"
+          },
+          {
+            "name": "rv32_machine.sv",
+            "sha256": "56b542e419c58216a08b0a5c83322506e42e2721fa28db50a6454ebe29607abd"
+          },
+          {
+            "name": "rv32_memory_system.sv",
+            "sha256": "0f408d7b59d45bec6623eb62baebdc259197a6e10b4d92556b4c3494a5441537"
+          },
+          {
+            "name": "rv32_muldiv.sv",
+            "sha256": "ea669ef9701bba4b2adbf6ff40c9e4e805620ec79de6cbdb323bbebeeac4fe59"
+          },
+          {
+            "name": "rv32_peripherals.sv",
+            "sha256": "9659d60e06662b367d533eb58cba036746f1bb151fab92929894b9f3dfd9d3c3"
+          },
+          {
+            "name": "rv32_rvc_expand.sv",
+            "sha256": "308ac8a65c9e29aeec27b38417483d0f43fd7c54487c26e89a3fa54b4647951b"
+          },
+          {
+            "name": "rv32_rvc_frontend.sv",
+            "sha256": "77d7f21f153570b83d156a7b2fb3485f08da1225719a22d11074e8fa886708c7"
+          },
+          {
+            "name": "rv32_soc.sv",
+            "sha256": "4a9b81a7ce52b2239b77db16e21e32cf7fe208db0a918009cf922a54b13a6be5"
+          },
+          {
+            "name": "rv32_uart.sv",
+            "sha256": "b83f5d6055bd794ca49e3781e673a00749249eaeaf1f2e908398dd5ce54ab8a2"
+          },
+          {
+            "name": "rv32_uncached.sv",
+            "sha256": "d276e6b38ddb05117f52e054367f7f3d4503ba76f8f49025973197943ef50907"
+          }
+        ],
+        "iterations": 6000,
+        "cycles": 1782669419,
+        "retired": 1649428429,
+        "measured_ipc": 0.9252576004390414,
+        "scope": "Completed original full SoC source simulation; source identity joined to the new bare wrapper by the finite extraction miter",
+        "fresh_full_bare_wrapper_run": false,
+        "hardware_measurement": false
+      },
+      "external_service": {
+        "kind": "Unmodified selected rv32_memory_system and rv32_peripherals outside DUT",
+        "cache_enabled": true,
+        "i_cache_set_bits": 9,
+        "d_cache_set_bits": 6,
+        "ram_bytes": 65536,
+        "two_independent_service_instances": true,
+        "native_vendor_memory_model": false,
+        "excluded_from_dut_synthesis": true
+      },
+      "configured_core_clock_hz": 155250000
+    },
+    {
+      "release": "H3_Base_145125",
+      "status": "PASS",
+      "qualification": {
+        "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\H3_Base_145125-EXTRACTION_QUALIFICATION.json",
+        "sha256": "d9695e97faf4944de18643f2b64d496cc1a238e415e0b1464d8f08e96cfdf0f5",
+        "bytes": 6021
+      },
+      "preparation": {
+        "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Base_145125\\20261031T173837Z-8164c608\\PREPARATION.json",
+        "sha256": "2adb6f2122f31202b9c1e82eb10bdf43df06faef089d0630ba177a0446fe0e28",
+        "bytes": 24590
+      },
+      "source_manifest": {
+        "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Base_145125\\SOURCE_MANIFEST.json",
+        "sha256": "f076d0a305bba6cad4c5910fa21245ac9cbd9eab7ad8f87178e905da2e62cfae",
+        "bytes": 4798
+      },
+      "all_port_bits": 648,
+      "compared_port_bits": 646,
+      "compared_port_groups": 41,
+      "shared_identical_clock_reset": [
+        "clk",
+        "rst_n"
+      ],
+      "complete_core_closure_hash_joins": [
+        {
+          "name": "rv32_core.sv",
+          "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Base_145125\\source\\rtl\\rv32_core.sv",
+          "reference_original": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\builds\\20261101-004705-33276f27\\inputs\\rtl\\rv32_core.sv",
+          "sha256": "15f86ba74e955ce93c3937106c7650d367b0b6249ed8799e3b373f34f31da404",
+          "exact_bytes_equal": true,
+          "reference_transform": "Only module-type identifiers gain reference_ prefix"
+        },
+        {
+          "name": "rv32_rvc_frontend.sv",
+          "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Base_145125\\source\\rtl\\rv32_rvc_frontend.sv",
+          "reference_original": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\builds\\20261101-004705-33276f27\\inputs\\rtl\\rv32_rvc_frontend.sv",
+          "sha256": "210b5ba9280c3840aafc27e7c3e35616085efde310793dc1661cc72f50984128",
+          "exact_bytes_equal": true,
+          "reference_transform": "Only module-type identifiers gain reference_ prefix"
+        },
+        {
+          "name": "rv32_rvc_expand.sv",
+          "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Base_145125\\source\\rtl\\rv32_rvc_expand.sv",
+          "reference_original": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\builds\\20261101-004705-33276f27\\inputs\\rtl\\rv32_rvc_expand.sv",
+          "sha256": "308ac8a65c9e29aeec27b38417483d0f43fd7c54487c26e89a3fa54b4647951b",
+          "exact_bytes_equal": true,
+          "reference_transform": "Only module-type identifiers gain reference_ prefix"
+        },
+        {
+          "name": "rv32_decode.sv",
+          "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Base_145125\\source\\rtl\\rv32_decode.sv",
+          "reference_original": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\builds\\20261101-004705-33276f27\\inputs\\rtl\\rv32_decode.sv",
+          "sha256": "9cb2b57b46ed775d85b6e70a3eebe92c2d5e49e9a6483993109e2c096d9a3ff3",
+          "exact_bytes_equal": true,
+          "reference_transform": "Only module-type identifiers gain reference_ prefix"
+        },
+        {
+          "name": "rv32_alu.sv",
+          "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Base_145125\\source\\rtl\\rv32_alu.sv",
+          "reference_original": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\builds\\20261101-004705-33276f27\\inputs\\rtl\\rv32_alu.sv",
+          "sha256": "125647d90b98f294743127637406d19479eebda82dccfaaba7acaf59d5ae38b1",
+          "exact_bytes_equal": true,
+          "reference_transform": "Only module-type identifiers gain reference_ prefix"
+        },
+        {
+          "name": "rv32_muldiv.sv",
+          "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Base_145125\\source\\rtl\\rv32_muldiv.sv",
+          "reference_original": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\builds\\20261101-004705-33276f27\\inputs\\rtl\\rv32_muldiv.sv",
+          "sha256": "64df4940f2d309fa68e8183f5ed1825e8843046703bf5f34ec8b885b03532246",
+          "exact_bytes_equal": true,
+          "reference_transform": "Only module-type identifiers gain reference_ prefix"
+        },
+        {
+          "name": "rv32_btb.sv",
+          "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Base_145125\\source\\rtl\\rv32_btb.sv",
+          "reference_original": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\builds\\20261101-004705-33276f27\\inputs\\rtl\\rv32_btb.sv",
+          "sha256": "b1b3481343a2e1275cfd984c4eab05c5f9d92cb72dab652010463073eb86eb4f",
+          "exact_bytes_equal": true,
+          "reference_transform": "Only module-type identifiers gain reference_ prefix"
+        },
+        {
+          "name": "rv32_machine.sv",
+          "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Base_145125\\source\\rtl\\rv32_machine.sv",
+          "reference_original": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\builds\\20261101-004705-33276f27\\inputs\\rtl\\rv32_machine.sv",
+          "sha256": "56b542e419c58216a08b0a5c83322506e42e2721fa28db50a6454ebe29607abd",
+          "exact_bytes_equal": true,
+          "reference_transform": "Only module-type identifiers gain reference_ prefix"
+        }
+      ],
+      "parameters": {
+        "RESET_VECTOR": 0,
+        "ENABLE_PREDICTOR": 1,
+        "ENABLE_M": 1,
+        "ENABLE_C": 1,
+        "FETCH_ADDRESS_BITS": 16,
+        "FETCH_OVERLAP": 1,
+        "EARLY_D_REQUEST": 1,
+        "BTB_INDEX_BITS": 8,
+        "BTB_ADDRESS_BITS": 16,
+        "LOAD_USE_BUBBLE": 1
+      },
+      "result": {
+        "status": "PASS",
+        "cpu_edges": 2000000,
+        "port_frame_comparisons": 4000000,
+        "frame_bits": 646,
+        "reference_frame_fnv1a64": "31cacc7862e90ed8",
+        "bare_frame_fnv1a64": "31cacc7862e90ed8",
+        "cycle_count": 2000000,
+        "retired_count": 1875092,
+        "retired_events": 1875092,
+        "register_writes": 1390057,
+        "i_requests": 1069156,
+        "i_responses": 1069155,
+        "d_requests": 465628,
+        "d_responses": 465627,
+        "maintenance_completions": 0,
+        "kernel_entry_retirements": {
+          "core_bench_list": 13,
+          "core_bench_matrix": 28,
+          "core_bench_state": 28
+        },
+        "full_coremark_run": false,
+        "hardware_measurement": false
+      },
+      "commands": {
+        "baseline": {
+          "executable": "wsl.exe",
+          "arguments": [
+            "--cd",
+            "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Base_145125/20261031T173837Z-8164c608",
+            "--exec",
+            "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Base_145125/20261031T173837Z-8164c608/objects/Vbare_extraction_miter",
+            "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Base_145125/20261031T173837Z-8164c608/baseline.json",
+            "2000000",
+            "0"
+          ],
+          "exit_code": 0,
+          "stdout_literal": "EXTRACTION_PASS edges=2000000 comparisons=4000000 retired=1875092 kernels=13,28,28 digest=31cacc7862e90ed8\n",
+          "stderr_literal": "wsl: \u68c0\u6d4b\u5230 localhost \u4ee3\u7406\u914d\u7f6e\uff0c\u4f46\u672a\u955c\u50cf\u5230 WSL\u3002NAT \u6a21\u5f0f\u4e0b\u7684 WSL \u4e0d\u652f\u6301 localhost \u4ee3\u7406\u3002\n\n",
+          "logs": [
+            {
+              "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Base_145125\\20261031T173837Z-8164c608\\baseline.stdout.log",
+              "sha256": "3531edee3f83f9a97de7cacc0bd9eaf67d74c6f47edd3fab25c0516f7f25adbb",
+              "bytes": 108
+            },
+            {
+              "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Base_145125\\20261031T173837Z-8164c608\\baseline.stderr.log",
+              "sha256": "6eb98b1b91680feffeead990541ad60e53953b859dd11b3e8e09e0f9beb2c70d",
+              "bytes": 115
+            },
+            {
+              "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Base_145125\\20261031T173837Z-8164c608\\baseline.stdout.raw",
+              "sha256": "fe57609e71e871d1f96f8334e98476f49ebd08acbe219fd226bacd984d11c8b0",
+              "bytes": 107
+            },
+            {
+              "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Base_145125\\20261031T173837Z-8164c608\\baseline.stderr.raw",
+              "sha256": "b280c454d6f559e56eb3f5ed39f3ba084b8d1744a3ff7fe016b21ff86dea1aca",
+              "bytes": 132
+            }
+          ]
+        },
+        "modified_negative_control": {
+          "executable": "wsl.exe",
+          "arguments": [
+            "--cd",
+            "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Base_145125/20261031T173837Z-8164c608",
+            "--exec",
+            "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Base_145125/20261031T173837Z-8164c608/objects/Vbare_extraction_miter",
+            "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Base_145125/20261031T173837Z-8164c608/rejected.json",
+            "2000000",
+            "10000"
+          ],
+          "exit_code": 1,
+          "stdout_literal": "",
+          "stderr_literal": "wsl: \u68c0\u6d4b\u5230 localhost \u4ee3\u7406\u914d\u7f6e\uff0c\u4f46\u672a\u955c\u50cf\u5230 WSL\u3002NAT \u6a21\u5f0f\u4e0b\u7684 WSL \u4e0d\u652f\u6301 localhost \u4ee3\u7406\u3002\n\nEXTRACTION_MISMATCH edge=10000 phase=preedge mask=0x100000\nEXTRACTION_FAIL Bare DUT and independent reference port frames differ\n",
+          "logs": [
+            {
+              "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Base_145125\\20261031T173837Z-8164c608\\modified-negative-control.stdout.log",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "bytes": 0
+            },
+            {
+              "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Base_145125\\20261031T173837Z-8164c608\\modified-negative-control.stderr.log",
+              "sha256": "cc0c2d01cb07da40a41821ddd73daf87ba5d9de5c956621711cefe84df35ef8e",
+              "bytes": 246
+            },
+            {
+              "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Base_145125\\20261031T173837Z-8164c608\\modified-negative-control.stdout.raw",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "bytes": 0
+            },
+            {
+              "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Base_145125\\20261031T173837Z-8164c608\\modified-negative-control.stderr.raw",
+              "sha256": "d7e86f96a6b87d061cc74e8dee697c5848d4a69b5b64e9b8b6c7b4782efb624c",
+              "bytes": 261
+            }
+          ]
+        },
+        "rollback": {
+          "executable": "wsl.exe",
+          "arguments": [
+            "--cd",
+            "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Base_145125/20261031T173837Z-8164c608",
+            "--exec",
+            "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Base_145125/20261031T173837Z-8164c608/objects/Vbare_extraction_miter",
+            "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Base_145125/20261031T173837Z-8164c608/rollback.json",
+            "2000000",
+            "0"
+          ],
+          "exit_code": 0,
+          "stdout_literal": "EXTRACTION_PASS edges=2000000 comparisons=4000000 retired=1875092 kernels=13,28,28 digest=31cacc7862e90ed8\n",
+          "stderr_literal": "wsl: \u68c0\u6d4b\u5230 localhost \u4ee3\u7406\u914d\u7f6e\uff0c\u4f46\u672a\u955c\u50cf\u5230 WSL\u3002NAT \u6a21\u5f0f\u4e0b\u7684 WSL \u4e0d\u652f\u6301 localhost \u4ee3\u7406\u3002\n\n",
+          "logs": [
+            {
+              "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Base_145125\\20261031T173837Z-8164c608\\rollback.stdout.log",
+              "sha256": "3531edee3f83f9a97de7cacc0bd9eaf67d74c6f47edd3fab25c0516f7f25adbb",
+              "bytes": 108
+            },
+            {
+              "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Base_145125\\20261031T173837Z-8164c608\\rollback.stderr.log",
+              "sha256": "6eb98b1b91680feffeead990541ad60e53953b859dd11b3e8e09e0f9beb2c70d",
+              "bytes": 115
+            },
+            {
+              "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Base_145125\\20261031T173837Z-8164c608\\rollback.stdout.raw",
+              "sha256": "fe57609e71e871d1f96f8334e98476f49ebd08acbe219fd226bacd984d11c8b0",
+              "bytes": 107
+            },
+            {
+              "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Base_145125\\20261031T173837Z-8164c608\\rollback.stderr.raw",
+              "sha256": "b280c454d6f559e56eb3f5ed39f3ba084b8d1744a3ff7fe016b21ff86dea1aca",
+              "bytes": 132
+            }
+          ]
+        }
+      },
+      "restored_behavior_equal": true,
+      "source_reference_6000_join": {
+        "status": "PASS",
+        "result": {
+          "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\qualification\\full_reference\\RESULT.json",
+          "sha256": "e2b53478514a7a22eb3cf77c25e5141bfb0e812042992cf3ccfebf361bea4b7f",
+          "bytes": 2550
+        },
+        "run_receipt": {
+          "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\qualification\\full_reference\\NATIVE_PROCESS.json",
+          "sha256": "d70323e57e1235abd6461ce58330012127821b04f72e43b81962a1e4c96479d3",
+          "bytes": 1906
+        },
+        "source_identity": {
+          "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\qualification\\dynamic\\MODIFIED\\SOURCE_IDENTITY.json",
+          "sha256": "ad217d60590e1d77a140076d410e51e62c5d20f2b6c6ca6db69ae99a06690031",
+          "bytes": 3000
+        },
+        "compile_receipt": {
+          "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\qualification\\dynamic\\MODIFIED\\compile.command.json",
+          "sha256": "b3b043c190f0ca4e52792d8b5100691ef9dce41a7c6f89139fa74085bf77264e",
+          "bytes": 4049
+        },
+        "compiled_sources": [
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\qualification\\dynamic\\MODIFIED\\inputs\\rtl\\rv32_alu.sv",
+            "sha256": "125647d90b98f294743127637406d19479eebda82dccfaaba7acaf59d5ae38b1",
+            "bytes": 1848
+          },
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\qualification\\dynamic\\MODIFIED\\inputs\\rtl\\rv32_btb.sv",
+            "sha256": "b1b3481343a2e1275cfd984c4eab05c5f9d92cb72dab652010463073eb86eb4f",
+            "bytes": 9248
+          },
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\qualification\\dynamic\\MODIFIED\\inputs\\rtl\\rv32_burst_arbiter.sv",
+            "sha256": "82104b39f85d2942e3d0a6780f79099062cc5a4f71fdf87491191de2f632c8af",
+            "bytes": 3738
+          },
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\qualification\\dynamic\\MODIFIED\\inputs\\rtl\\rv32_burst_ram.sv",
+            "sha256": "089b3788fa87d3176a4e0b09e40382e1349cc33e8f9d2227d567ad0788672417",
+            "bytes": 3690
+          },
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\qualification\\dynamic\\MODIFIED\\inputs\\rtl\\rv32_cache.sv",
+            "sha256": "c9d73d59e80a70399df214dfbbe3316083e6df0d33974e1564795a4ae875d6c1",
+            "bytes": 39830
+          },
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\qualification\\dynamic\\MODIFIED\\inputs\\rtl\\rv32_core.sv",
+            "sha256": "15f86ba74e955ce93c3937106c7650d367b0b6249ed8799e3b373f34f31da404",
+            "bytes": 45852
+          },
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\qualification\\dynamic\\MODIFIED\\inputs\\rtl\\rv32_decode.sv",
+            "sha256": "9cb2b57b46ed775d85b6e70a3eebe92c2d5e49e9a6483993109e2c096d9a3ff3",
+            "bytes": 4765
+          },
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\qualification\\dynamic\\MODIFIED\\inputs\\rtl\\rv32_fifo.sv",
+            "sha256": "20bb573cdbae386a8b44df780eefc11b85323cf2bbaa4fb2073a5e87e626b2eb",
+            "bytes": 1292
+          },
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\qualification\\dynamic\\MODIFIED\\inputs\\rtl\\rv32_machine.sv",
+            "sha256": "56b542e419c58216a08b0a5c83322506e42e2721fa28db50a6454ebe29607abd",
+            "bytes": 4464
+          },
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\qualification\\dynamic\\MODIFIED\\inputs\\rtl\\rv32_memory_system.sv",
+            "sha256": "39833ea3b440e8c4d8f2e54f3382280b32456744f394f317c2c9ca17235acd39",
+            "bytes": 13956
+          },
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\qualification\\dynamic\\MODIFIED\\inputs\\rtl\\rv32_muldiv.sv",
+            "sha256": "64df4940f2d309fa68e8183f5ed1825e8843046703bf5f34ec8b885b03532246",
+            "bytes": 5815
+          },
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\qualification\\dynamic\\MODIFIED\\inputs\\rtl\\rv32_peripherals.sv",
+            "sha256": "d4acd7818f67cf5466e04e94307da420fa3bd004225a0633b7be35a1babeae8e",
+            "bytes": 12500
+          },
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\qualification\\dynamic\\MODIFIED\\inputs\\rtl\\rv32_rvc_expand.sv",
+            "sha256": "308ac8a65c9e29aeec27b38417483d0f43fd7c54487c26e89a3fa54b4647951b",
+            "bytes": 7540
+          },
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\qualification\\dynamic\\MODIFIED\\inputs\\rtl\\rv32_rvc_frontend.sv",
+            "sha256": "210b5ba9280c3840aafc27e7c3e35616085efde310793dc1661cc72f50984128",
+            "bytes": 12738
+          },
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\qualification\\dynamic\\MODIFIED\\inputs\\rtl\\rv32_soc.sv",
+            "sha256": "cf5817f06eb68f923c965f51e60f6dde76462f0a6dbf2023ecd78cabad8e2fe9",
+            "bytes": 7689
+          },
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\qualification\\dynamic\\MODIFIED\\inputs\\rtl\\rv32_uart.sv",
+            "sha256": "b83f5d6055bd794ca49e3781e673a00749249eaeaf1f2e908398dd5ce54ab8a2",
+            "bytes": 3248
+          },
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\qualification\\dynamic\\MODIFIED\\inputs\\rtl\\rv32_uncached.sv",
+            "sha256": "d276e6b38ddb05117f52e054367f7f3d4503ba76f8f49025973197943ef50907",
+            "bytes": 4025
+          },
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\qualification\\dynamic\\MODIFIED\\inputs\\sim\\native_selected_observer.sv",
+            "sha256": "08b202ba6a777600349b7954292e1d6cc2085653b8e8783bd5c4f60a67473efa",
+            "bytes": 19899
+          },
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\qualification\\dynamic\\MODIFIED\\inputs\\sim\\vendor\\GTP_DRM36K_E1.v",
+            "sha256": "3e372cd60025a439eb7435d770930260e22c40f148ae83c4bdf7398fb65ddb66",
+            "bytes": 75646
+          },
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\qualification\\dynamic\\MODIFIED\\inputs\\sim\\vendor\\GTP_GRS.v",
+            "sha256": "dae720bcc467ddb4ff99f2753368934e2649b87f6ac63b8a0d7219699bac1dec",
+            "bytes": 2472
+          },
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\qualification\\dynamic\\MODIFIED\\inputs\\sim\\native_driver.cpp",
+            "sha256": "b6cf57878470ec9fa70a968eb6f9e89c9ccb72dedc25ad14d7573b9f94bdbd53",
+            "bytes": 9208
+          }
+        ],
+        "simulator": {
+          "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\qualification\\dynamic\\MODIFIED\\objects\\Vrv32_observed_soc",
+          "sha256": "03ef06e64a8c342516a377efd69811bcb5f1c79bfc9c32aa7003dba05201e197",
+          "bytes": 496352
+        },
+        "uart": {
+          "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\qualification\\full_reference\\uart.log",
+          "sha256": "1c9f93a53d018f363654d79a82e297ac4b128f3a692e98a40f9b8484306f9f90",
+          "bytes": 1078
+        },
+        "stdout": {
+          "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\qualification\\full_reference\\run.stdout.log",
+          "sha256": "f29071bf8f75dfca8899c2fd9ff7ee9aedae8d927677bde2be6c35ab37f6437d",
+          "bytes": 1478
+        },
+        "firmware": {
+          "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\qualification\\full_reference\\firmware.hex",
+          "sha256": "3a3aff510511ed4cd7fe304a6354861adae30531102446a24438e43f3e2a2884",
+          "bytes": 147456
+        },
+        "core_source_joins": [
+          {
+            "name": "rv32_core.sv",
+            "sha256": "15f86ba74e955ce93c3937106c7650d367b0b6249ed8799e3b373f34f31da404",
+            "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Base_145125\\source\\rtl\\rv32_core.sv",
+            "full_reference_compiled_source": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\qualification\\dynamic\\MODIFIED\\inputs\\rtl\\rv32_core.sv",
+            "exact_source_match": true
+          },
+          {
+            "name": "rv32_rvc_frontend.sv",
+            "sha256": "210b5ba9280c3840aafc27e7c3e35616085efde310793dc1661cc72f50984128",
+            "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Base_145125\\source\\rtl\\rv32_rvc_frontend.sv",
+            "full_reference_compiled_source": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\qualification\\dynamic\\MODIFIED\\inputs\\rtl\\rv32_rvc_frontend.sv",
+            "exact_source_match": true
+          },
+          {
+            "name": "rv32_rvc_expand.sv",
+            "sha256": "308ac8a65c9e29aeec27b38417483d0f43fd7c54487c26e89a3fa54b4647951b",
+            "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Base_145125\\source\\rtl\\rv32_rvc_expand.sv",
+            "full_reference_compiled_source": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\qualification\\dynamic\\MODIFIED\\inputs\\rtl\\rv32_rvc_expand.sv",
+            "exact_source_match": true
+          },
+          {
+            "name": "rv32_decode.sv",
+            "sha256": "9cb2b57b46ed775d85b6e70a3eebe92c2d5e49e9a6483993109e2c096d9a3ff3",
+            "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Base_145125\\source\\rtl\\rv32_decode.sv",
+            "full_reference_compiled_source": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\qualification\\dynamic\\MODIFIED\\inputs\\rtl\\rv32_decode.sv",
+            "exact_source_match": true
+          },
+          {
+            "name": "rv32_alu.sv",
+            "sha256": "125647d90b98f294743127637406d19479eebda82dccfaaba7acaf59d5ae38b1",
+            "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Base_145125\\source\\rtl\\rv32_alu.sv",
+            "full_reference_compiled_source": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\qualification\\dynamic\\MODIFIED\\inputs\\rtl\\rv32_alu.sv",
+            "exact_source_match": true
+          },
+          {
+            "name": "rv32_muldiv.sv",
+            "sha256": "64df4940f2d309fa68e8183f5ed1825e8843046703bf5f34ec8b885b03532246",
+            "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Base_145125\\source\\rtl\\rv32_muldiv.sv",
+            "full_reference_compiled_source": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\qualification\\dynamic\\MODIFIED\\inputs\\rtl\\rv32_muldiv.sv",
+            "exact_source_match": true
+          },
+          {
+            "name": "rv32_btb.sv",
+            "sha256": "b1b3481343a2e1275cfd984c4eab05c5f9d92cb72dab652010463073eb86eb4f",
+            "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Base_145125\\source\\rtl\\rv32_btb.sv",
+            "full_reference_compiled_source": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\qualification\\dynamic\\MODIFIED\\inputs\\rtl\\rv32_btb.sv",
+            "exact_source_match": true
+          },
+          {
+            "name": "rv32_machine.sv",
+            "sha256": "56b542e419c58216a08b0a5c83322506e42e2721fa28db50a6454ebe29607abd",
+            "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Base_145125\\source\\rtl\\rv32_machine.sv",
+            "full_reference_compiled_source": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\qualification\\dynamic\\MODIFIED\\inputs\\rtl\\rv32_machine.sv",
+            "exact_source_match": true
+          }
+        ],
+        "environment_source_joins": [
+          {
+            "name": "rv32_alu.sv",
+            "sha256": "125647d90b98f294743127637406d19479eebda82dccfaaba7acaf59d5ae38b1"
+          },
+          {
+            "name": "rv32_btb.sv",
+            "sha256": "b1b3481343a2e1275cfd984c4eab05c5f9d92cb72dab652010463073eb86eb4f"
+          },
+          {
+            "name": "rv32_burst_arbiter.sv",
+            "sha256": "82104b39f85d2942e3d0a6780f79099062cc5a4f71fdf87491191de2f632c8af"
+          },
+          {
+            "name": "rv32_burst_ram.sv",
+            "sha256": "089b3788fa87d3176a4e0b09e40382e1349cc33e8f9d2227d567ad0788672417"
+          },
+          {
+            "name": "rv32_cache.sv",
+            "sha256": "c9d73d59e80a70399df214dfbbe3316083e6df0d33974e1564795a4ae875d6c1"
+          },
+          {
+            "name": "rv32_core.sv",
+            "sha256": "15f86ba74e955ce93c3937106c7650d367b0b6249ed8799e3b373f34f31da404"
+          },
+          {
+            "name": "rv32_decode.sv",
+            "sha256": "9cb2b57b46ed775d85b6e70a3eebe92c2d5e49e9a6483993109e2c096d9a3ff3"
+          },
+          {
+            "name": "rv32_fifo.sv",
+            "sha256": "20bb573cdbae386a8b44df780eefc11b85323cf2bbaa4fb2073a5e87e626b2eb"
+          },
+          {
+            "name": "rv32_machine.sv",
+            "sha256": "56b542e419c58216a08b0a5c83322506e42e2721fa28db50a6454ebe29607abd"
+          },
+          {
+            "name": "rv32_memory_system.sv",
+            "sha256": "39833ea3b440e8c4d8f2e54f3382280b32456744f394f317c2c9ca17235acd39"
+          },
+          {
+            "name": "rv32_muldiv.sv",
+            "sha256": "64df4940f2d309fa68e8183f5ed1825e8843046703bf5f34ec8b885b03532246"
+          },
+          {
+            "name": "rv32_peripherals.sv",
+            "sha256": "d4acd7818f67cf5466e04e94307da420fa3bd004225a0633b7be35a1babeae8e"
+          },
+          {
+            "name": "rv32_rvc_expand.sv",
+            "sha256": "308ac8a65c9e29aeec27b38417483d0f43fd7c54487c26e89a3fa54b4647951b"
+          },
+          {
+            "name": "rv32_rvc_frontend.sv",
+            "sha256": "210b5ba9280c3840aafc27e7c3e35616085efde310793dc1661cc72f50984128"
+          },
+          {
+            "name": "rv32_soc.sv",
+            "sha256": "cf5817f06eb68f923c965f51e60f6dde76462f0a6dbf2023ecd78cabad8e2fe9"
+          },
+          {
+            "name": "rv32_uart.sv",
+            "sha256": "b83f5d6055bd794ca49e3781e673a00749249eaeaf1f2e908398dd5ce54ab8a2"
+          },
+          {
+            "name": "rv32_uncached.sv",
+            "sha256": "d276e6b38ddb05117f52e054367f7f3d4503ba76f8f49025973197943ef50907"
+          }
+        ],
+        "iterations": 6000,
+        "cycles": 1743221870,
+        "retired": 1649428429,
+        "measured_ipc": 0.9461953509107822,
+        "scope": "Completed original full SoC source simulation; source identity joined to the new bare wrapper by the finite extraction miter",
+        "fresh_full_bare_wrapper_run": false,
+        "hardware_measurement": false
+      },
+      "external_service": {
+        "kind": "Unmodified selected rv32_memory_system and rv32_peripherals outside DUT",
+        "cache_enabled": true,
+        "i_cache_set_bits": 9,
+        "d_cache_set_bits": 6,
+        "ram_bytes": 65536,
+        "two_independent_service_instances": true,
+        "native_vendor_memory_model": true,
+        "excluded_from_dut_synthesis": true
+      },
+      "configured_core_clock_hz": 145125000
+    },
+    {
+      "release": "H3_Retained_145125",
+      "status": "PASS",
+      "qualification": {
+        "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\H3_Retained_145125-EXTRACTION_QUALIFICATION.json",
+        "sha256": "fa0d883ae8f8d0504311fc9aa1b1e242db397d68c5e48ee5ee7e943a83120fb4",
+        "bytes": 6117
+      },
+      "preparation": {
+        "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Retained_145125\\20261031T173933Z-790c2731\\PREPARATION.json",
+        "sha256": "0d7d041d46a4c5048c7b13964238766ecb6619e399a393b1ab0d98bd2c75ed4d",
+        "bytes": 24960
+      },
+      "source_manifest": {
+        "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\SOURCE_MANIFEST.json",
+        "sha256": "a5a5c7ed0f2df4710ea0d26871eae429436fa285fc7a1465640491fa3b526078",
+        "bytes": 4916
+      },
+      "all_port_bits": 648,
+      "compared_port_bits": 646,
+      "compared_port_groups": 41,
+      "shared_identical_clock_reset": [
+        "clk",
+        "rst_n"
+      ],
+      "complete_core_closure_hash_joins": [
+        {
+          "name": "rv32_core.sv",
+          "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\source\\rtl\\rv32_core.sv",
+          "reference_original": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-004707-430d2073\\inputs\\rtl\\rv32_core.sv",
+          "sha256": "af9aeb1ef431c860e108b2fd3ce09d596757d2dba4a92a065b3ad616483d0748",
+          "exact_bytes_equal": true,
+          "reference_transform": "Only module-type identifiers gain reference_ prefix"
+        },
+        {
+          "name": "rv32_rvc_frontend.sv",
+          "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\source\\rtl\\rv32_rvc_frontend.sv",
+          "reference_original": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-004707-430d2073\\inputs\\rtl\\rv32_rvc_frontend.sv",
+          "sha256": "210b5ba9280c3840aafc27e7c3e35616085efde310793dc1661cc72f50984128",
+          "exact_bytes_equal": true,
+          "reference_transform": "Only module-type identifiers gain reference_ prefix"
+        },
+        {
+          "name": "rv32_rvc_expand.sv",
+          "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\source\\rtl\\rv32_rvc_expand.sv",
+          "reference_original": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-004707-430d2073\\inputs\\rtl\\rv32_rvc_expand.sv",
+          "sha256": "308ac8a65c9e29aeec27b38417483d0f43fd7c54487c26e89a3fa54b4647951b",
+          "exact_bytes_equal": true,
+          "reference_transform": "Only module-type identifiers gain reference_ prefix"
+        },
+        {
+          "name": "rv32_decode.sv",
+          "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\source\\rtl\\rv32_decode.sv",
+          "reference_original": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-004707-430d2073\\inputs\\rtl\\rv32_decode.sv",
+          "sha256": "9cb2b57b46ed775d85b6e70a3eebe92c2d5e49e9a6483993109e2c096d9a3ff3",
+          "exact_bytes_equal": true,
+          "reference_transform": "Only module-type identifiers gain reference_ prefix"
+        },
+        {
+          "name": "rv32_alu.sv",
+          "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\source\\rtl\\rv32_alu.sv",
+          "reference_original": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-004707-430d2073\\inputs\\rtl\\rv32_alu.sv",
+          "sha256": "125647d90b98f294743127637406d19479eebda82dccfaaba7acaf59d5ae38b1",
+          "exact_bytes_equal": true,
+          "reference_transform": "Only module-type identifiers gain reference_ prefix"
+        },
+        {
+          "name": "rv32_muldiv.sv",
+          "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\source\\rtl\\rv32_muldiv.sv",
+          "reference_original": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-004707-430d2073\\inputs\\rtl\\rv32_muldiv.sv",
+          "sha256": "5306ad46b57db551cc83df20dc4c9d2f09aa7077e6289037abfc4fcd8fa3db0e",
+          "exact_bytes_equal": true,
+          "reference_transform": "Only module-type identifiers gain reference_ prefix"
+        },
+        {
+          "name": "rv32_btb.sv",
+          "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\source\\rtl\\rv32_btb.sv",
+          "reference_original": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-004707-430d2073\\inputs\\rtl\\rv32_btb.sv",
+          "sha256": "b1b3481343a2e1275cfd984c4eab05c5f9d92cb72dab652010463073eb86eb4f",
+          "exact_bytes_equal": true,
+          "reference_transform": "Only module-type identifiers gain reference_ prefix"
+        },
+        {
+          "name": "rv32_machine.sv",
+          "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\source\\rtl\\rv32_machine.sv",
+          "reference_original": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-004707-430d2073\\inputs\\rtl\\rv32_machine.sv",
+          "sha256": "56b542e419c58216a08b0a5c83322506e42e2721fa28db50a6454ebe29607abd",
+          "exact_bytes_equal": true,
+          "reference_transform": "Only module-type identifiers gain reference_ prefix"
+        }
+      ],
+      "parameters": {
+        "RESET_VECTOR": 0,
+        "ENABLE_PREDICTOR": 1,
+        "ENABLE_M": 1,
+        "ENABLE_C": 1,
+        "FETCH_ADDRESS_BITS": 16,
+        "FETCH_OVERLAP": 1,
+        "EARLY_D_REQUEST": 1,
+        "BTB_INDEX_BITS": 8,
+        "BTB_ADDRESS_BITS": 16,
+        "LOAD_USE_BUBBLE": 1,
+        "RETAIN_MUL_ELIGIBILITY": 1
+      },
+      "result": {
+        "status": "PASS",
+        "cpu_edges": 2000000,
+        "port_frame_comparisons": 4000000,
+        "frame_bits": 646,
+        "reference_frame_fnv1a64": "dcae4a8359c9a932",
+        "bare_frame_fnv1a64": "dcae4a8359c9a932",
+        "cycle_count": 2000000,
+        "retired_count": 1875199,
+        "retired_events": 1875199,
+        "register_writes": 1390126,
+        "i_requests": 1069215,
+        "i_responses": 1069214,
+        "d_requests": 465647,
+        "d_responses": 465647,
+        "maintenance_completions": 0,
+        "kernel_entry_retirements": {
+          "core_bench_list": 13,
+          "core_bench_matrix": 28,
+          "core_bench_state": 28
+        },
+        "full_coremark_run": false,
+        "hardware_measurement": false
+      },
+      "commands": {
+        "baseline": {
+          "executable": "wsl.exe",
+          "arguments": [
+            "--cd",
+            "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Retained_145125/20261031T173933Z-790c2731",
+            "--exec",
+            "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Retained_145125/20261031T173933Z-790c2731/objects/Vbare_extraction_miter",
+            "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Retained_145125/20261031T173933Z-790c2731/baseline.json",
+            "2000000",
+            "0"
+          ],
+          "exit_code": 0,
+          "stdout_literal": "EXTRACTION_PASS edges=2000000 comparisons=4000000 retired=1875199 kernels=13,28,28 digest=dcae4a8359c9a932\n",
+          "stderr_literal": "wsl: \u68c0\u6d4b\u5230 localhost \u4ee3\u7406\u914d\u7f6e\uff0c\u4f46\u672a\u955c\u50cf\u5230 WSL\u3002NAT \u6a21\u5f0f\u4e0b\u7684 WSL \u4e0d\u652f\u6301 localhost \u4ee3\u7406\u3002\n\n",
+          "logs": [
+            {
+              "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Retained_145125\\20261031T173933Z-790c2731\\baseline.stdout.log",
+              "sha256": "ed9450e67cb1d2b3b1e3cef5893fc63a79f1444229babb6b598845bf1f01406b",
+              "bytes": 108
+            },
+            {
+              "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Retained_145125\\20261031T173933Z-790c2731\\baseline.stderr.log",
+              "sha256": "6eb98b1b91680feffeead990541ad60e53953b859dd11b3e8e09e0f9beb2c70d",
+              "bytes": 115
+            },
+            {
+              "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Retained_145125\\20261031T173933Z-790c2731\\baseline.stdout.raw",
+              "sha256": "2c29e594a480262c529fdd810ffde05cc58c717916d1ecc4545809ce252a3bbd",
+              "bytes": 107
+            },
+            {
+              "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Retained_145125\\20261031T173933Z-790c2731\\baseline.stderr.raw",
+              "sha256": "b280c454d6f559e56eb3f5ed39f3ba084b8d1744a3ff7fe016b21ff86dea1aca",
+              "bytes": 132
+            }
+          ]
+        },
+        "modified_negative_control": {
+          "executable": "wsl.exe",
+          "arguments": [
+            "--cd",
+            "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Retained_145125/20261031T173933Z-790c2731",
+            "--exec",
+            "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Retained_145125/20261031T173933Z-790c2731/objects/Vbare_extraction_miter",
+            "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Retained_145125/20261031T173933Z-790c2731/rejected.json",
+            "2000000",
+            "10000"
+          ],
+          "exit_code": 1,
+          "stdout_literal": "",
+          "stderr_literal": "wsl: \u68c0\u6d4b\u5230 localhost \u4ee3\u7406\u914d\u7f6e\uff0c\u4f46\u672a\u955c\u50cf\u5230 WSL\u3002NAT \u6a21\u5f0f\u4e0b\u7684 WSL \u4e0d\u652f\u6301 localhost \u4ee3\u7406\u3002\n\nEXTRACTION_MISMATCH edge=10000 phase=preedge mask=0x100000\nEXTRACTION_FAIL Bare DUT and independent reference port frames differ\n",
+          "logs": [
+            {
+              "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Retained_145125\\20261031T173933Z-790c2731\\modified-negative-control.stdout.log",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "bytes": 0
+            },
+            {
+              "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Retained_145125\\20261031T173933Z-790c2731\\modified-negative-control.stderr.log",
+              "sha256": "cc0c2d01cb07da40a41821ddd73daf87ba5d9de5c956621711cefe84df35ef8e",
+              "bytes": 246
+            },
+            {
+              "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Retained_145125\\20261031T173933Z-790c2731\\modified-negative-control.stdout.raw",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "bytes": 0
+            },
+            {
+              "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Retained_145125\\20261031T173933Z-790c2731\\modified-negative-control.stderr.raw",
+              "sha256": "d7e86f96a6b87d061cc74e8dee697c5848d4a69b5b64e9b8b6c7b4782efb624c",
+              "bytes": 261
+            }
+          ]
+        },
+        "rollback": {
+          "executable": "wsl.exe",
+          "arguments": [
+            "--cd",
+            "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Retained_145125/20261031T173933Z-790c2731",
+            "--exec",
+            "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Retained_145125/20261031T173933Z-790c2731/objects/Vbare_extraction_miter",
+            "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Retained_145125/20261031T173933Z-790c2731/rollback.json",
+            "2000000",
+            "0"
+          ],
+          "exit_code": 0,
+          "stdout_literal": "EXTRACTION_PASS edges=2000000 comparisons=4000000 retired=1875199 kernels=13,28,28 digest=dcae4a8359c9a932\n",
+          "stderr_literal": "wsl: \u68c0\u6d4b\u5230 localhost \u4ee3\u7406\u914d\u7f6e\uff0c\u4f46\u672a\u955c\u50cf\u5230 WSL\u3002NAT \u6a21\u5f0f\u4e0b\u7684 WSL \u4e0d\u652f\u6301 localhost \u4ee3\u7406\u3002\n\n",
+          "logs": [
+            {
+              "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Retained_145125\\20261031T173933Z-790c2731\\rollback.stdout.log",
+              "sha256": "ed9450e67cb1d2b3b1e3cef5893fc63a79f1444229babb6b598845bf1f01406b",
+              "bytes": 108
+            },
+            {
+              "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Retained_145125\\20261031T173933Z-790c2731\\rollback.stderr.log",
+              "sha256": "6eb98b1b91680feffeead990541ad60e53953b859dd11b3e8e09e0f9beb2c70d",
+              "bytes": 115
+            },
+            {
+              "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Retained_145125\\20261031T173933Z-790c2731\\rollback.stdout.raw",
+              "sha256": "2c29e594a480262c529fdd810ffde05cc58c717916d1ecc4545809ce252a3bbd",
+              "bytes": 107
+            },
+            {
+              "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Retained_145125\\20261031T173933Z-790c2731\\rollback.stderr.raw",
+              "sha256": "b280c454d6f559e56eb3f5ed39f3ba084b8d1744a3ff7fe016b21ff86dea1aca",
+              "bytes": 132
+            }
+          ]
+        }
+      },
+      "restored_behavior_equal": true,
+      "source_reference_6000_join": {
+        "status": "PASS",
+        "result": {
+          "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\qualification\\full_reference\\RESULT.json",
+          "sha256": "7fb7e4af07239e1fb8431cb8795a2a120319c582bf8a66e0668aa45f8c48f743",
+          "bytes": 2562
+        },
+        "run_receipt": {
+          "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\qualification\\full_reference\\NATIVE_PROCESS.json",
+          "sha256": "39a366f74c7d92529146181a90b48bc83725694d5748a10511951a7628b7d1f7",
+          "bytes": 1947
+        },
+        "source_identity": {
+          "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\qualification\\dynamic\\MODIFIED\\SOURCE_IDENTITY.json",
+          "sha256": "adfbe8f365dacf7f5eaa8103ca9f81995eaf1dab65a5197735a7aa8c2089ab05",
+          "bytes": 3008
+        },
+        "compile_receipt": {
+          "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\qualification\\dynamic\\MODIFIED\\compile.command.json",
+          "sha256": "d34c6a927777d6225e789e3a534574de572a52df167ae5bcdd4d6500d9e89d21",
+          "bytes": 4145
+        },
+        "compiled_sources": [
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\qualification\\dynamic\\MODIFIED\\inputs\\rtl\\rv32_alu.sv",
+            "sha256": "125647d90b98f294743127637406d19479eebda82dccfaaba7acaf59d5ae38b1",
+            "bytes": 1848
+          },
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\qualification\\dynamic\\MODIFIED\\inputs\\rtl\\rv32_btb.sv",
+            "sha256": "b1b3481343a2e1275cfd984c4eab05c5f9d92cb72dab652010463073eb86eb4f",
+            "bytes": 9248
+          },
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\qualification\\dynamic\\MODIFIED\\inputs\\rtl\\rv32_burst_arbiter.sv",
+            "sha256": "82104b39f85d2942e3d0a6780f79099062cc5a4f71fdf87491191de2f632c8af",
+            "bytes": 3738
+          },
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\qualification\\dynamic\\MODIFIED\\inputs\\rtl\\rv32_burst_ram.sv",
+            "sha256": "089b3788fa87d3176a4e0b09e40382e1349cc33e8f9d2227d567ad0788672417",
+            "bytes": 3690
+          },
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\qualification\\dynamic\\MODIFIED\\inputs\\rtl\\rv32_cache.sv",
+            "sha256": "c9d73d59e80a70399df214dfbbe3316083e6df0d33974e1564795a4ae875d6c1",
+            "bytes": 39830
+          },
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\qualification\\dynamic\\MODIFIED\\inputs\\rtl\\rv32_core.sv",
+            "sha256": "af9aeb1ef431c860e108b2fd3ce09d596757d2dba4a92a065b3ad616483d0748",
+            "bytes": 46623
+          },
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\qualification\\dynamic\\MODIFIED\\inputs\\rtl\\rv32_decode.sv",
+            "sha256": "9cb2b57b46ed775d85b6e70a3eebe92c2d5e49e9a6483993109e2c096d9a3ff3",
+            "bytes": 4765
+          },
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\qualification\\dynamic\\MODIFIED\\inputs\\rtl\\rv32_fifo.sv",
+            "sha256": "20bb573cdbae386a8b44df780eefc11b85323cf2bbaa4fb2073a5e87e626b2eb",
+            "bytes": 1292
+          },
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\qualification\\dynamic\\MODIFIED\\inputs\\rtl\\rv32_machine.sv",
+            "sha256": "56b542e419c58216a08b0a5c83322506e42e2721fa28db50a6454ebe29607abd",
+            "bytes": 4464
+          },
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\qualification\\dynamic\\MODIFIED\\inputs\\rtl\\rv32_memory_system.sv",
+            "sha256": "39833ea3b440e8c4d8f2e54f3382280b32456744f394f317c2c9ca17235acd39",
+            "bytes": 13956
+          },
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\qualification\\dynamic\\MODIFIED\\inputs\\rtl\\rv32_muldiv.sv",
+            "sha256": "5306ad46b57db551cc83df20dc4c9d2f09aa7077e6289037abfc4fcd8fa3db0e",
+            "bytes": 6000
+          },
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\qualification\\dynamic\\MODIFIED\\inputs\\rtl\\rv32_peripherals.sv",
+            "sha256": "d4acd7818f67cf5466e04e94307da420fa3bd004225a0633b7be35a1babeae8e",
+            "bytes": 12500
+          },
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\qualification\\dynamic\\MODIFIED\\inputs\\rtl\\rv32_rvc_expand.sv",
+            "sha256": "308ac8a65c9e29aeec27b38417483d0f43fd7c54487c26e89a3fa54b4647951b",
+            "bytes": 7540
+          },
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\qualification\\dynamic\\MODIFIED\\inputs\\rtl\\rv32_rvc_frontend.sv",
+            "sha256": "210b5ba9280c3840aafc27e7c3e35616085efde310793dc1661cc72f50984128",
+            "bytes": 12738
+          },
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\qualification\\dynamic\\MODIFIED\\inputs\\rtl\\rv32_soc.sv",
+            "sha256": "cf5817f06eb68f923c965f51e60f6dde76462f0a6dbf2023ecd78cabad8e2fe9",
+            "bytes": 7689
+          },
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\qualification\\dynamic\\MODIFIED\\inputs\\rtl\\rv32_uart.sv",
+            "sha256": "b83f5d6055bd794ca49e3781e673a00749249eaeaf1f2e908398dd5ce54ab8a2",
+            "bytes": 3248
+          },
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\qualification\\dynamic\\MODIFIED\\inputs\\rtl\\rv32_uncached.sv",
+            "sha256": "d276e6b38ddb05117f52e054367f7f3d4503ba76f8f49025973197943ef50907",
+            "bytes": 4025
+          },
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\qualification\\dynamic\\MODIFIED\\inputs\\sim\\native_selected_observer.sv",
+            "sha256": "08b202ba6a777600349b7954292e1d6cc2085653b8e8783bd5c4f60a67473efa",
+            "bytes": 19899
+          },
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\qualification\\dynamic\\MODIFIED\\inputs\\sim\\vendor\\GTP_DRM36K_E1.v",
+            "sha256": "3e372cd60025a439eb7435d770930260e22c40f148ae83c4bdf7398fb65ddb66",
+            "bytes": 75646
+          },
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\qualification\\dynamic\\MODIFIED\\inputs\\sim\\vendor\\GTP_GRS.v",
+            "sha256": "dae720bcc467ddb4ff99f2753368934e2649b87f6ac63b8a0d7219699bac1dec",
+            "bytes": 2472
+          },
+          {
+            "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\qualification\\dynamic\\MODIFIED\\inputs\\sim\\native_driver.cpp",
+            "sha256": "b6cf57878470ec9fa70a968eb6f9e89c9ccb72dedc25ad14d7573b9f94bdbd53",
+            "bytes": 9208
+          }
+        ],
+        "simulator": {
+          "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\qualification\\dynamic\\MODIFIED\\objects\\Vrv32_observed_soc",
+          "sha256": "12e9a8b85e3b3887a45db4e9880093b16b37239f9e763eb53c45392e8e04d1e1",
+          "bytes": 492256
+        },
+        "uart": {
+          "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\qualification\\full_reference\\uart.log",
+          "sha256": "f07a9b92e47237fc974f0e9aceefc2551f965f8c1e1e8c08d68420b93ed5053a",
+          "bytes": 1078
+        },
+        "stdout": {
+          "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\qualification\\full_reference\\run.stdout.log",
+          "sha256": "cd1bef35d8aba59508911f9cbc8e71e75fd8782e06e70af7f11795e9222cba87",
+          "bytes": 1478
+        },
+        "firmware": {
+          "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\qualification\\full_reference\\firmware.hex",
+          "sha256": "3a3aff510511ed4cd7fe304a6354861adae30531102446a24438e43f3e2a2884",
+          "bytes": 147456
+        },
+        "core_source_joins": [
+          {
+            "name": "rv32_core.sv",
+            "sha256": "af9aeb1ef431c860e108b2fd3ce09d596757d2dba4a92a065b3ad616483d0748",
+            "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\source\\rtl\\rv32_core.sv",
+            "full_reference_compiled_source": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\qualification\\dynamic\\MODIFIED\\inputs\\rtl\\rv32_core.sv",
+            "exact_source_match": true
+          },
+          {
+            "name": "rv32_rvc_frontend.sv",
+            "sha256": "210b5ba9280c3840aafc27e7c3e35616085efde310793dc1661cc72f50984128",
+            "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\source\\rtl\\rv32_rvc_frontend.sv",
+            "full_reference_compiled_source": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\qualification\\dynamic\\MODIFIED\\inputs\\rtl\\rv32_rvc_frontend.sv",
+            "exact_source_match": true
+          },
+          {
+            "name": "rv32_rvc_expand.sv",
+            "sha256": "308ac8a65c9e29aeec27b38417483d0f43fd7c54487c26e89a3fa54b4647951b",
+            "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\source\\rtl\\rv32_rvc_expand.sv",
+            "full_reference_compiled_source": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\qualification\\dynamic\\MODIFIED\\inputs\\rtl\\rv32_rvc_expand.sv",
+            "exact_source_match": true
+          },
+          {
+            "name": "rv32_decode.sv",
+            "sha256": "9cb2b57b46ed775d85b6e70a3eebe92c2d5e49e9a6483993109e2c096d9a3ff3",
+            "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\source\\rtl\\rv32_decode.sv",
+            "full_reference_compiled_source": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\qualification\\dynamic\\MODIFIED\\inputs\\rtl\\rv32_decode.sv",
+            "exact_source_match": true
+          },
+          {
+            "name": "rv32_alu.sv",
+            "sha256": "125647d90b98f294743127637406d19479eebda82dccfaaba7acaf59d5ae38b1",
+            "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\source\\rtl\\rv32_alu.sv",
+            "full_reference_compiled_source": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\qualification\\dynamic\\MODIFIED\\inputs\\rtl\\rv32_alu.sv",
+            "exact_source_match": true
+          },
+          {
+            "name": "rv32_muldiv.sv",
+            "sha256": "5306ad46b57db551cc83df20dc4c9d2f09aa7077e6289037abfc4fcd8fa3db0e",
+            "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\source\\rtl\\rv32_muldiv.sv",
+            "full_reference_compiled_source": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\qualification\\dynamic\\MODIFIED\\inputs\\rtl\\rv32_muldiv.sv",
+            "exact_source_match": true
+          },
+          {
+            "name": "rv32_btb.sv",
+            "sha256": "b1b3481343a2e1275cfd984c4eab05c5f9d92cb72dab652010463073eb86eb4f",
+            "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\source\\rtl\\rv32_btb.sv",
+            "full_reference_compiled_source": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\qualification\\dynamic\\MODIFIED\\inputs\\rtl\\rv32_btb.sv",
+            "exact_source_match": true
+          },
+          {
+            "name": "rv32_machine.sv",
+            "sha256": "56b542e419c58216a08b0a5c83322506e42e2721fa28db50a6454ebe29607abd",
+            "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\source\\rtl\\rv32_machine.sv",
+            "full_reference_compiled_source": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\qualification\\dynamic\\MODIFIED\\inputs\\rtl\\rv32_machine.sv",
+            "exact_source_match": true
+          }
+        ],
+        "environment_source_joins": [
+          {
+            "name": "rv32_alu.sv",
+            "sha256": "125647d90b98f294743127637406d19479eebda82dccfaaba7acaf59d5ae38b1"
+          },
+          {
+            "name": "rv32_btb.sv",
+            "sha256": "b1b3481343a2e1275cfd984c4eab05c5f9d92cb72dab652010463073eb86eb4f"
+          },
+          {
+            "name": "rv32_burst_arbiter.sv",
+            "sha256": "82104b39f85d2942e3d0a6780f79099062cc5a4f71fdf87491191de2f632c8af"
+          },
+          {
+            "name": "rv32_burst_ram.sv",
+            "sha256": "089b3788fa87d3176a4e0b09e40382e1349cc33e8f9d2227d567ad0788672417"
+          },
+          {
+            "name": "rv32_cache.sv",
+            "sha256": "c9d73d59e80a70399df214dfbbe3316083e6df0d33974e1564795a4ae875d6c1"
+          },
+          {
+            "name": "rv32_core.sv",
+            "sha256": "af9aeb1ef431c860e108b2fd3ce09d596757d2dba4a92a065b3ad616483d0748"
+          },
+          {
+            "name": "rv32_decode.sv",
+            "sha256": "9cb2b57b46ed775d85b6e70a3eebe92c2d5e49e9a6483993109e2c096d9a3ff3"
+          },
+          {
+            "name": "rv32_fifo.sv",
+            "sha256": "20bb573cdbae386a8b44df780eefc11b85323cf2bbaa4fb2073a5e87e626b2eb"
+          },
+          {
+            "name": "rv32_machine.sv",
+            "sha256": "56b542e419c58216a08b0a5c83322506e42e2721fa28db50a6454ebe29607abd"
+          },
+          {
+            "name": "rv32_memory_system.sv",
+            "sha256": "39833ea3b440e8c4d8f2e54f3382280b32456744f394f317c2c9ca17235acd39"
+          },
+          {
+            "name": "rv32_muldiv.sv",
+            "sha256": "5306ad46b57db551cc83df20dc4c9d2f09aa7077e6289037abfc4fcd8fa3db0e"
+          },
+          {
+            "name": "rv32_peripherals.sv",
+            "sha256": "d4acd7818f67cf5466e04e94307da420fa3bd004225a0633b7be35a1babeae8e"
+          },
+          {
+            "name": "rv32_rvc_expand.sv",
+            "sha256": "308ac8a65c9e29aeec27b38417483d0f43fd7c54487c26e89a3fa54b4647951b"
+          },
+          {
+            "name": "rv32_rvc_frontend.sv",
+            "sha256": "210b5ba9280c3840aafc27e7c3e35616085efde310793dc1661cc72f50984128"
+          },
+          {
+            "name": "rv32_soc.sv",
+            "sha256": "cf5817f06eb68f923c965f51e60f6dde76462f0a6dbf2023ecd78cabad8e2fe9"
+          },
+          {
+            "name": "rv32_uart.sv",
+            "sha256": "b83f5d6055bd794ca49e3781e673a00749249eaeaf1f2e908398dd5ce54ab8a2"
+          },
+          {
+            "name": "rv32_uncached.sv",
+            "sha256": "d276e6b38ddb05117f52e054367f7f3d4503ba76f8f49025973197943ef50907"
+          }
+        ],
+        "iterations": 6000,
+        "cycles": 1743134699,
+        "retired": 1649428429,
+        "measured_ipc": 0.9462426684215756,
+        "scope": "Completed original full SoC source simulation; source identity joined to the new bare wrapper by the finite extraction miter",
+        "fresh_full_bare_wrapper_run": false,
+        "hardware_measurement": false
+      },
+      "external_service": {
+        "kind": "Unmodified selected rv32_memory_system and rv32_peripherals outside DUT",
+        "cache_enabled": true,
+        "i_cache_set_bits": 9,
+        "d_cache_set_bits": 6,
+        "ram_bytes": 65536,
+        "two_independent_service_instances": true,
+        "native_vendor_memory_model": true,
+        "excluded_from_dut_synthesis": true
+      },
+      "configured_core_clock_hz": 145125000
+    }
+  ],
+  "audit_generator_sha256": "edc3d5536f81531d24ed29a9f5fd6fd4c65eddea3ce7865cce648fb8257aecf3",
+  "audited_utc": "2026-10-31T17:49:01.064670+00:00"
+}

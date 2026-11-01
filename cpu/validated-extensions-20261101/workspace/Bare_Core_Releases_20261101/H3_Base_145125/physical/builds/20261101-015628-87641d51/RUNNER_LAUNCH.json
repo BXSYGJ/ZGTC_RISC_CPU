@@ -1,0 +1,28 @@
+﻿{
+  "release": "H3_Base_145125",
+  "build_directory": "D:/AAAFPGA\\Bare_Core_Releases_20261101\\H3_Base_145125\\physical\\builds\\20261101-015628-87641d51",
+  "fixture_profile": "SlowScanStaged",
+  "pid": 51480,
+  "executable": "C:\\Users\\dxlgy\\AppData\\Local\\Microsoft\\WindowsApps\\Microsoft.PowerShell_8wekyb3d8bbwe\\pwsh.exe",
+  "arguments": [
+    "-NoProfile",
+    "-File",
+    "D:/AAAFPGA\\Bare_Core_Releases_20261101\\scripts\\Build-BareCore.ps1",
+    "-Release",
+    "H3_Base_145125",
+    "-Action",
+    "Build",
+    "-BuildDirectory",
+    "D:/AAAFPGA\\Bare_Core_Releases_20261101\\H3_Base_145125\\physical\\builds\\20261101-015628-87641d51",
+    "-PlacementSeed",
+    "1",
+    "-FixtureProfile",
+    "SlowScanStaged"
+  ],
+  "stdout": "D:/AAAFPGA\\Bare_Core_Releases_20261101\\H3_Base_145125\\physical\\builds\\20261101-015628-87641d51\\runner.stdout.log",
+  "stderr": "D:/AAAFPGA\\Bare_Core_Releases_20261101\\H3_Base_145125\\physical\\builds\\20261101-015628-87641d51\\runner.stderr.log",
+  "started_utc": "2026-10-31T17:58:40.8821875Z",
+  "shared_mutex": "AAAFPGA_PDS2022_MinimalILA",
+  "bounded_final_attempt": true,
+  "scan_fixture_receipt": "D:/AAAFPGA\\Bare_Core_Releases_20261101\\H3_Base_145125\\physical\\builds\\20261101-015628-87641d51\\SCAN_FIXTURE_TEST.json"
+}

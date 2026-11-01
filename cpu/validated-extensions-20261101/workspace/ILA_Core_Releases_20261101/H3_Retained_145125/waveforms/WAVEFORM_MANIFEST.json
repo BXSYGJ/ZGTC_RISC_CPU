@@ -1,0 +1,259 @@
+﻿{
+  "schema": "local-rtl-pipeline-windows/v1",
+  "release": "H3_Retained_145125",
+  "origin": "LOCAL RTL SIMULATION",
+  "clock_hz": 145125000,
+  "configured_fpga_clock_hz": 145125000,
+  "simulation_clock_hz": 3200,
+  "uart_baud": 100,
+  "simulation_driver_clock_period_ps": 10000,
+  "simulation_driver_timestamp_basis": "Native VerilatedContext time in ps; native_tick raises the clock before advancing 5000 ps",
+  "axis": "sampled CPU edge index",
+  "hardware_validated": false,
+  "complete_coremark_run": false,
+  "firmware_iterations": 6000,
+  "firmware_sha256": "3a3aff510511ed4cd7fe304a6354861adae30531102446a24438e43f3e2a2884",
+  "elf": {
+    "path": "D:\\AAAFPGA\\Current_Paper_and_Sub7000_Core_Releases_20261012\\cores\\H3_Retained_145125\\firmware\\V0\\firmware.elf",
+    "sha256": "64e1ba2532154356c4819bb0e7e05d481321f1afbb474cbf2fa6c67b0d243ed3"
+  },
+  "mapping_audit": {
+    "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-004707-430d2073\\implementation\\mapping-audit.json",
+    "sha256": "5e08210c735476bc9f9d5d6228675ce0cc5f6f3ea2a375ef66555686a37a307f"
+  },
+  "source_inputs": [
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-004707-430d2073\\inputs\\constraints\\board.fdc",
+      "sha256": "7e248a5022603d4b78b3758d4d552d8efd34c50e34d7d27b0a79ac71ec30e5d0"
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-004707-430d2073\\inputs\\constraints\\uart_board.fdc",
+      "sha256": "e1dfd8ad373d6b73fd2505efd67076989c6f46e9c9eaf175b439ce00f5f596b5"
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-004707-430d2073\\inputs\\constraints\\uart_remotelab.fdc",
+      "sha256": "1660f87805fe18229114bc941a06c322dd6307e0c22b360cd2740eaf3b8ea9ad"
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-004707-430d2073\\inputs\\firmware.hex",
+      "sha256": "3a3aff510511ed4cd7fe304a6354861adae30531102446a24438e43f3e2a2884"
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-004707-430d2073\\inputs\\fpga\\rv32_pll.sv",
+      "sha256": "edd8a3a04c0ce1a72944ca4d01e37f7fba38f924cf04a1136f9583baf1eecfd1"
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-004707-430d2073\\inputs\\pds_soc_top.v",
+      "sha256": "d3672927e1b48fa96dbfeaba49cdec9aecdf860f9c9c03103d9a02d82775e16d"
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-004707-430d2073\\inputs\\rtl\\rv32_alu.sv",
+      "sha256": "125647d90b98f294743127637406d19479eebda82dccfaaba7acaf59d5ae38b1"
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-004707-430d2073\\inputs\\rtl\\rv32_board_top.sv",
+      "sha256": "183a9672618f5a82ba98fed1b77314abc21d52741c4c82442bda0a2ddcd39629"
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-004707-430d2073\\inputs\\rtl\\rv32_btb.sv",
+      "sha256": "b1b3481343a2e1275cfd984c4eab05c5f9d92cb72dab652010463073eb86eb4f"
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-004707-430d2073\\inputs\\rtl\\rv32_burst_arbiter.sv",
+      "sha256": "82104b39f85d2942e3d0a6780f79099062cc5a4f71fdf87491191de2f632c8af"
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-004707-430d2073\\inputs\\rtl\\rv32_burst_ram.sv",
+      "sha256": "089b3788fa87d3176a4e0b09e40382e1349cc33e8f9d2227d567ad0788672417"
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-004707-430d2073\\inputs\\rtl\\rv32_cache.sv",
+      "sha256": "c9d73d59e80a70399df214dfbbe3316083e6df0d33974e1564795a4ae875d6c1"
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-004707-430d2073\\inputs\\rtl\\rv32_core.sv",
+      "sha256": "af9aeb1ef431c860e108b2fd3ce09d596757d2dba4a92a065b3ad616483d0748"
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-004707-430d2073\\inputs\\rtl\\rv32_decode.sv",
+      "sha256": "9cb2b57b46ed775d85b6e70a3eebe92c2d5e49e9a6483993109e2c096d9a3ff3"
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-004707-430d2073\\inputs\\rtl\\rv32_fifo.sv",
+      "sha256": "20bb573cdbae386a8b44df780eefc11b85323cf2bbaa4fb2073a5e87e626b2eb"
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-004707-430d2073\\inputs\\rtl\\rv32_machine.sv",
+      "sha256": "56b542e419c58216a08b0a5c83322506e42e2721fa28db50a6454ebe29607abd"
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-004707-430d2073\\inputs\\rtl\\rv32_memory_system.sv",
+      "sha256": "39833ea3b440e8c4d8f2e54f3382280b32456744f394f317c2c9ca17235acd39"
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-004707-430d2073\\inputs\\rtl\\rv32_muldiv.sv",
+      "sha256": "5306ad46b57db551cc83df20dc4c9d2f09aa7077e6289037abfc4fcd8fa3db0e"
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-004707-430d2073\\inputs\\rtl\\rv32_peripherals.sv",
+      "sha256": "d4acd7818f67cf5466e04e94307da420fa3bd004225a0633b7be35a1babeae8e"
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-004707-430d2073\\inputs\\rtl\\rv32_rvc_expand.sv",
+      "sha256": "308ac8a65c9e29aeec27b38417483d0f43fd7c54487c26e89a3fa54b4647951b"
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-004707-430d2073\\inputs\\rtl\\rv32_rvc_frontend.sv",
+      "sha256": "210b5ba9280c3840aafc27e7c3e35616085efde310793dc1661cc72f50984128"
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-004707-430d2073\\inputs\\rtl\\rv32_soc.sv",
+      "sha256": "cf5817f06eb68f923c965f51e60f6dde76462f0a6dbf2023ecd78cabad8e2fe9"
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-004707-430d2073\\inputs\\rtl\\rv32_uart.sv",
+      "sha256": "b83f5d6055bd794ca49e3781e673a00749249eaeaf1f2e908398dd5ce54ab8a2"
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-004707-430d2073\\inputs\\rtl\\rv32_uncached.sv",
+      "sha256": "d276e6b38ddb05117f52e054367f7f3d4503ba76f8f49025973197943ef50907"
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-004707-430d2073\\inputs\\runner.py",
+      "sha256": "03beffe700ed09a8e5fd4ffc5c338b780df8c439a840282e9055a6ab54244208"
+    }
+  ],
+  "simulation_observer": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\waveforms\\runs\\20261031T170447Z-87ad7af7\\inputs\\sim\\native_selected_observer.sv",
+  "simulation_driver": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\waveforms\\runs\\20261031T170447Z-87ad7af7\\inputs\\sim\\native_driver.cpp",
+  "simulation_run_directory": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\waveforms\\runs\\20261031T170447Z-87ad7af7",
+  "simulation_exit_code": 0,
+  "cycle_limit": 2000000,
+  "trigger_predicate": "EX_PC equals the exact ELF function entry and ex_fire equals 1; Trigger is a derived annotation, not an extra hardware probe",
+  "capture_shape": "256 preceding observed edges, trigger at Sample 256, 767 following edges",
+  "windows": [
+    {
+      "function": "core_bench_list",
+      "csv": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\waveforms\\core_bench_list.csv",
+      "vcd": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\waveforms\\core_bench_list.vcd",
+      "decoded_csv": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\waveforms\\core_bench_list.decoded.csv",
+      "csv_sha256": "682ea0d6265e1d0186d9dcf40c49222176c829618f413b6bed2f3da01420ad92",
+      "vcd_sha256": "fcff63eb25808d1b8601230a8deb40d423e80273ca310d24b47082a6be33fb06",
+      "decoded_csv_sha256": "447a440edf1ff715fc066e522ded982bbafc7390c32ec6e4001506a6315c5c80",
+      "raw_csv": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\waveforms\\runs\\20261031T170447Z-87ad7af7\\core_bench_list.raw.csv",
+      "raw_csv_sha256": "5ca614ab3265d6a9db08959f3138edbb3f4add85bccd6fa656068705b1ab585b",
+      "trigger_pc": "0x00000942",
+      "trigger_sample": 256,
+      "observed_trigger_matches": 1,
+      "samples": 1024,
+      "first_cycle": 43109,
+      "last_cycle": 44132,
+      "first_sim_time_ps": 431120000,
+      "last_sim_time_ps": 441350000,
+      "statistics": {
+        "scope": "This recorded 1024-edge function-entry window",
+        "signal_asserted_samples": {
+          "if_valid": 782,
+          "id_valid": 774,
+          "ex_valid": 764,
+          "mem_valid": 763,
+          "wb_valid": 604,
+          "id_fire": 611,
+          "ex_fire": 605,
+          "mem_flush": 5,
+          "frontend_fire": 634,
+          "mem_fire": 605
+        },
+        "ex_transfer_fraction": 0.5908203125,
+        "id_transfer_fraction": 0.5966796875,
+        "mem_transfer_fraction": 0.5908203125,
+        "mean_valid_stage_fraction": 0.7201171875,
+        "ex_valid_without_transfer_samples": 159,
+        "mem_valid_without_transfer_samples": 158,
+        "distinct_ex_transfer_pcs": 140
+      }
+    },
+    {
+      "function": "core_bench_matrix",
+      "csv": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\waveforms\\core_bench_matrix.csv",
+      "vcd": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\waveforms\\core_bench_matrix.vcd",
+      "decoded_csv": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\waveforms\\core_bench_matrix.decoded.csv",
+      "csv_sha256": "7244cc3f9e6aa9df1a737786c50436a7026c4806b7988a74ea0063bd7c8430f8",
+      "vcd_sha256": "1c789a8aa33fedc2d926f377113f8c45a823a33d3a094573e33e12a24e4cd0bf",
+      "decoded_csv_sha256": "a8299ecc250dddb5793363a2b51d0e31e5b13497f9078d9503e60d681a742213",
+      "raw_csv": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\waveforms\\runs\\20261031T170447Z-87ad7af7\\core_bench_matrix.raw.csv",
+      "raw_csv_sha256": "4094fed0a699ca4ce6e771e9b6f3b68fd825ca265897c2072e455ed7f41ad013",
+      "trigger_pc": "0x00002604",
+      "trigger_sample": 256,
+      "observed_trigger_matches": 1,
+      "samples": 1024,
+      "first_cycle": 79433,
+      "last_cycle": 80456,
+      "first_sim_time_ps": 794360000,
+      "last_sim_time_ps": 804590000,
+      "statistics": {
+        "scope": "This recorded 1024-edge function-entry window",
+        "signal_asserted_samples": {
+          "if_valid": 804,
+          "id_valid": 796,
+          "ex_valid": 790,
+          "mem_valid": 791,
+          "wb_valid": 675,
+          "id_fire": 673,
+          "ex_fire": 673,
+          "mem_flush": 0,
+          "frontend_fire": 699,
+          "mem_fire": 674
+        },
+        "ex_transfer_fraction": 0.6572265625,
+        "id_transfer_fraction": 0.6572265625,
+        "mem_transfer_fraction": 0.658203125,
+        "mean_valid_stage_fraction": 0.753125,
+        "ex_valid_without_transfer_samples": 117,
+        "mem_valid_without_transfer_samples": 117,
+        "distinct_ex_transfer_pcs": 302
+      }
+    },
+    {
+      "function": "core_bench_state",
+      "csv": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\waveforms\\core_bench_state.csv",
+      "vcd": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\waveforms\\core_bench_state.vcd",
+      "decoded_csv": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\waveforms\\core_bench_state.decoded.csv",
+      "csv_sha256": "a41cecd9c4f5ed35f820e8b14e1b1b1e48ea2134708fed8a57921e4fa6678569",
+      "vcd_sha256": "0529a480688acbfac18c31d59ecdceb960811dcdcfc9daa90a4df11e0b029298",
+      "decoded_csv_sha256": "f630267db5491e3275628f9dc3eaf65c9e279ce880fa7ec0a0001a0d403e82ce",
+      "raw_csv": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\waveforms\\runs\\20261031T170447Z-87ad7af7\\core_bench_state.raw.csv",
+      "raw_csv_sha256": "01a2c8c8ad5cddea99afbc6451758f89dffd5c33c5062b83cf1e6a9fd4334ba0",
+      "trigger_pc": "0x00002e18",
+      "trigger_sample": 256,
+      "observed_trigger_matches": 1,
+      "samples": 1024,
+      "first_cycle": 142360,
+      "last_cycle": 143383,
+      "first_sim_time_ps": 1423630000,
+      "last_sim_time_ps": 1433860000,
+      "statistics": {
+        "scope": "This recorded 1024-edge function-entry window",
+        "signal_asserted_samples": {
+          "if_valid": 793,
+          "id_valid": 778,
+          "ex_valid": 768,
+          "mem_valid": 767,
+          "wb_valid": 674,
+          "id_fire": 672,
+          "ex_fire": 672,
+          "mem_flush": 1,
+          "frontend_fire": 697,
+          "mem_fire": 673
+        },
+        "ex_transfer_fraction": 0.65625,
+        "id_transfer_fraction": 0.65625,
+        "mem_transfer_fraction": 0.6572265625,
+        "mean_valid_stage_fraction": 0.73828125,
+        "ex_valid_without_transfer_samples": 96,
+        "mem_valid_without_transfer_samples": 94,
+        "distinct_ex_transfer_pcs": 286
+      }
+    }
+  ],
+  "generated_utc": "2026-10-31T17:07:01.4904289Z"
+}

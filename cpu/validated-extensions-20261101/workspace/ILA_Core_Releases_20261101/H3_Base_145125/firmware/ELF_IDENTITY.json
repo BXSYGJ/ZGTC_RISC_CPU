@@ -1,0 +1,7 @@
+﻿{
+  "release": "H3_Base_145125",
+  "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\firmware\\firmware.elf",
+  "sha256": "64e1ba2532154356c4819bb0e7e05d481321f1afbb474cbf2fa6c67b0d243ed3",
+  "source": "D:\\AAAFPGA\\Current_Paper_and_Sub7000_Core_Releases_20261012\\cores\\H3_Base_145125\\firmware\\V0\\firmware.elf",
+  "purpose": "Exact V0 ELF used for named algorithm triggers and symbol ranges."
+}

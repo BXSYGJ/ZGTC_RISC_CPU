@@ -1,0 +1,40 @@
+##### Written on 2026/11/01 01:41:07 ###############################
+
+
+##### INFO ##################################################
+
+Current device : 
+	PG2L200H-6FBB676
+
+Top Module : 
+	pds_soc_top
+
+Constraint File(s) : 
+	D:/AAAFPGA/ILA_Core_Releases_20261101/H3_Retained_145125/builds/20261101-013613-bbd7e86b/inputs/constraints/board.fdc
+	D:/AAAFPGA/ILA_Core_Releases_20261101/H3_Retained_145125/builds/20261101-013613-bbd7e86b/inputs/constraints/uart_remotelab.fdc
+
+##### SUMMARY ######################################################
+
+Found 0 error(s), 0 critical warning(s), 0 warning(s), out of 85 constraint(s)
+
+
+Inapplicable constraints(except overwritten constraints):
+********************************************
+
+
+Constraints with issues:
+********************************************
+
+
+Issues without commands:
+********************************************
+
+
+Unconstrained ports:
+********************************************
+
+
+Constraints with matching wildcard expressions:
+********************************************
+
+

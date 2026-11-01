@@ -1,0 +1,40 @@
+{
+  "schema": "github-cpu-extension-index/v1",
+  "release_date": "2026-11-01",
+  "groups": {
+    "ILA_Core_Releases_20261101": [
+      {
+        "release": "Original_155250",
+        "directory": "workspace/ILA_Core_Releases_20261101/Original_155250",
+        "selection": "workspace/ILA_Core_Releases_20261101/Original_155250/SELECTED_BUILD.json"
+      },
+      {
+        "release": "H3_Retained_145125",
+        "directory": "workspace/ILA_Core_Releases_20261101/H3_Retained_145125",
+        "selection": "workspace/ILA_Core_Releases_20261101/H3_Retained_145125/SELECTED_BUILD.json"
+      },
+      {
+        "release": "H3_Base_145125",
+        "directory": "workspace/ILA_Core_Releases_20261101/H3_Base_145125",
+        "selection": "workspace/ILA_Core_Releases_20261101/H3_Base_145125/SELECTED_BUILD.json"
+      }
+    ],
+    "Bare_Core_Releases_20261101": [
+      {
+        "release": "Original_155250",
+        "directory": "workspace/Bare_Core_Releases_20261101/Original_155250",
+        "selection": "workspace/Bare_Core_Releases_20261101/Original_155250/SELECTED_BUILD.json"
+      },
+      {
+        "release": "H3_Retained_145125",
+        "directory": "workspace/Bare_Core_Releases_20261101/H3_Retained_145125",
+        "selection": "workspace/Bare_Core_Releases_20261101/H3_Retained_145125/SELECTED_BUILD.json"
+      },
+      {
+        "release": "H3_Base_145125",
+        "directory": "workspace/Bare_Core_Releases_20261101/H3_Base_145125",
+        "selection": "workspace/Bare_Core_Releases_20261101/H3_Base_145125/SELECTED_BUILD.json"
+      }
+    ]
+  }
+}

@@ -1,0 +1,539 @@
+{
+  "schema": 1,
+  "release": "Original_155250",
+  "origin": "LOCAL RTL SIMULATION",
+  "bare_source_manifest": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\Original_155250\\SOURCE_MANIFEST.json",
+  "bare_source_manifest_sha256": "065d766d105c2dd96d62ccda073ad5c70b8bf0fcc0fa8b0b1dce7b7bc9fd6dba",
+  "parent_waveform_manifest": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\waveforms\\WAVEFORM_MANIFEST.json",
+  "parent_waveform_manifest_sha256": "1701f6f5942e2c3eb9f7ada8d73622945c49d8a3162739fb885ec8448076e060",
+  "core_closure": [
+    {
+      "name": "rv32_core.sv",
+      "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\Original_155250\\source\\rtl\\rv32_core.sv",
+      "reference_original": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\builds\\20261101-004552-4cce580e\\inputs\\rtl\\rv32_core.sv",
+      "sha256": "11c2d7175afbc0753178c6d992f4d7497ab197a7ac1b3f1cba8a2952935a056a",
+      "exact_bytes_equal": true,
+      "reference_transform": "Only module-type identifiers gain reference_ prefix"
+    },
+    {
+      "name": "rv32_rvc_frontend.sv",
+      "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\Original_155250\\source\\rtl\\rv32_rvc_frontend.sv",
+      "reference_original": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\builds\\20261101-004552-4cce580e\\inputs\\rtl\\rv32_rvc_frontend.sv",
+      "sha256": "77d7f21f153570b83d156a7b2fb3485f08da1225719a22d11074e8fa886708c7",
+      "exact_bytes_equal": true,
+      "reference_transform": "Only module-type identifiers gain reference_ prefix"
+    },
+    {
+      "name": "rv32_rvc_expand.sv",
+      "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\Original_155250\\source\\rtl\\rv32_rvc_expand.sv",
+      "reference_original": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\builds\\20261101-004552-4cce580e\\inputs\\rtl\\rv32_rvc_expand.sv",
+      "sha256": "308ac8a65c9e29aeec27b38417483d0f43fd7c54487c26e89a3fa54b4647951b",
+      "exact_bytes_equal": true,
+      "reference_transform": "Only module-type identifiers gain reference_ prefix"
+    },
+    {
+      "name": "rv32_decode.sv",
+      "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\Original_155250\\source\\rtl\\rv32_decode.sv",
+      "reference_original": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\builds\\20261101-004552-4cce580e\\inputs\\rtl\\rv32_decode.sv",
+      "sha256": "9cb2b57b46ed775d85b6e70a3eebe92c2d5e49e9a6483993109e2c096d9a3ff3",
+      "exact_bytes_equal": true,
+      "reference_transform": "Only module-type identifiers gain reference_ prefix"
+    },
+    {
+      "name": "rv32_alu.sv",
+      "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\Original_155250\\source\\rtl\\rv32_alu.sv",
+      "reference_original": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\builds\\20261101-004552-4cce580e\\inputs\\rtl\\rv32_alu.sv",
+      "sha256": "125647d90b98f294743127637406d19479eebda82dccfaaba7acaf59d5ae38b1",
+      "exact_bytes_equal": true,
+      "reference_transform": "Only module-type identifiers gain reference_ prefix"
+    },
+    {
+      "name": "rv32_muldiv.sv",
+      "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\Original_155250\\source\\rtl\\rv32_muldiv.sv",
+      "reference_original": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\builds\\20261101-004552-4cce580e\\inputs\\rtl\\rv32_muldiv.sv",
+      "sha256": "ea669ef9701bba4b2adbf6ff40c9e4e805620ec79de6cbdb323bbebeeac4fe59",
+      "exact_bytes_equal": true,
+      "reference_transform": "Only module-type identifiers gain reference_ prefix"
+    },
+    {
+      "name": "rv32_btb.sv",
+      "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\Original_155250\\source\\rtl\\rv32_btb.sv",
+      "reference_original": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\builds\\20261101-004552-4cce580e\\inputs\\rtl\\rv32_btb.sv",
+      "sha256": "4e7c61716c3e3f3156e8a1006824354b3428bbbc98a37369e43bae12f0170a3c",
+      "exact_bytes_equal": true,
+      "reference_transform": "Only module-type identifiers gain reference_ prefix"
+    },
+    {
+      "name": "rv32_machine.sv",
+      "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\Original_155250\\source\\rtl\\rv32_machine.sv",
+      "reference_original": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\builds\\20261101-004552-4cce580e\\inputs\\rtl\\rv32_machine.sv",
+      "sha256": "56b542e419c58216a08b0a5c83322506e42e2721fa28db50a6454ebe29607abd",
+      "exact_bytes_equal": true,
+      "reference_transform": "Only module-type identifiers gain reference_ prefix"
+    }
+  ],
+  "parameters": {
+    "RESET_VECTOR": 0,
+    "ENABLE_PREDICTOR": 1,
+    "ENABLE_M": 1,
+    "ENABLE_C": 1,
+    "FETCH_ADDRESS_BITS": 16,
+    "FETCH_OVERLAP": 1,
+    "EARLY_D_REQUEST": 1,
+    "BTB_INDEX_BITS": 8,
+    "BTB_ADDRESS_BITS": 16,
+    "LOAD_USE_BUBBLE": 1
+  },
+  "ports": [
+    {
+      "name": "clk",
+      "direction": "input",
+      "width": 1
+    },
+    {
+      "name": "rst_n",
+      "direction": "input",
+      "width": 1
+    },
+    {
+      "name": "i_req_valid",
+      "direction": "output",
+      "width": 1
+    },
+    {
+      "name": "i_req_ready",
+      "direction": "input",
+      "width": 1
+    },
+    {
+      "name": "i_req_address",
+      "direction": "output",
+      "width": 32
+    },
+    {
+      "name": "i_rsp_valid",
+      "direction": "input",
+      "width": 1
+    },
+    {
+      "name": "i_rsp_ready",
+      "direction": "output",
+      "width": 1
+    },
+    {
+      "name": "i_rsp_data",
+      "direction": "input",
+      "width": 32
+    },
+    {
+      "name": "i_rsp_pair_data",
+      "direction": "input",
+      "width": 32
+    },
+    {
+      "name": "i_rsp_is_c",
+      "direction": "input",
+      "width": 2
+    },
+    {
+      "name": "i_rsp_pair_is_c",
+      "direction": "input",
+      "width": 2
+    },
+    {
+      "name": "i_rsp_pair_valid",
+      "direction": "input",
+      "width": 1
+    },
+    {
+      "name": "i_rsp_error",
+      "direction": "input",
+      "width": 1
+    },
+    {
+      "name": "d_req_valid",
+      "direction": "output",
+      "width": 1
+    },
+    {
+      "name": "d_req_ready",
+      "direction": "input",
+      "width": 1
+    },
+    {
+      "name": "d_req_address",
+      "direction": "output",
+      "width": 32
+    },
+    {
+      "name": "d_req_data",
+      "direction": "output",
+      "width": 32
+    },
+    {
+      "name": "d_req_strobe",
+      "direction": "output",
+      "width": 4
+    },
+    {
+      "name": "d_req_write",
+      "direction": "output",
+      "width": 1
+    },
+    {
+      "name": "d_rsp_valid",
+      "direction": "input",
+      "width": 1
+    },
+    {
+      "name": "d_rsp_ready",
+      "direction": "output",
+      "width": 1
+    },
+    {
+      "name": "d_rsp_data",
+      "direction": "input",
+      "width": 32
+    },
+    {
+      "name": "d_rsp_error",
+      "direction": "input",
+      "width": 1
+    },
+    {
+      "name": "maintenance_valid",
+      "direction": "output",
+      "width": 1
+    },
+    {
+      "name": "maintenance_ready",
+      "direction": "input",
+      "width": 1
+    },
+    {
+      "name": "timer_value",
+      "direction": "input",
+      "width": 64
+    },
+    {
+      "name": "irq_external",
+      "direction": "input",
+      "width": 1
+    },
+    {
+      "name": "irq_software",
+      "direction": "input",
+      "width": 1
+    },
+    {
+      "name": "irq_timer",
+      "direction": "input",
+      "width": 1
+    },
+    {
+      "name": "trace_valid",
+      "direction": "output",
+      "width": 1
+    },
+    {
+      "name": "trace_pc",
+      "direction": "output",
+      "width": 32
+    },
+    {
+      "name": "trace_instruction",
+      "direction": "output",
+      "width": 32
+    },
+    {
+      "name": "trace_write",
+      "direction": "output",
+      "width": 1
+    },
+    {
+      "name": "trace_rd",
+      "direction": "output",
+      "width": 5
+    },
+    {
+      "name": "trace_data",
+      "direction": "output",
+      "width": 32
+    },
+    {
+      "name": "trap_valid",
+      "direction": "output",
+      "width": 1
+    },
+    {
+      "name": "trap_pc",
+      "direction": "output",
+      "width": 32
+    },
+    {
+      "name": "trap_cause",
+      "direction": "output",
+      "width": 32
+    },
+    {
+      "name": "trap_value",
+      "direction": "output",
+      "width": 32
+    },
+    {
+      "name": "pipeline_valid",
+      "direction": "output",
+      "width": 5
+    },
+    {
+      "name": "cycle_count",
+      "direction": "output",
+      "width": 64
+    },
+    {
+      "name": "retired_count",
+      "direction": "output",
+      "width": 64
+    }
+  ],
+  "frame_bits": 614,
+  "mismatch_groups": [
+    "core.i_req_valid",
+    "core.i_req_ready",
+    "core.i_req_address",
+    "core.i_rsp_valid",
+    "core.i_rsp_ready",
+    "core.i_rsp_data",
+    "core.i_rsp_pair_data",
+    "core.i_rsp_is_c",
+    "core.i_rsp_pair_is_c",
+    "core.i_rsp_pair_valid",
+    "core.i_rsp_error",
+    "core.d_req_valid",
+    "core.d_req_ready",
+    "core.d_req_address",
+    "core.d_req_data",
+    "core.d_req_strobe",
+    "core.d_req_write",
+    "core.d_rsp_valid",
+    "core.d_rsp_ready",
+    "core.d_rsp_data",
+    "core.d_rsp_error",
+    "core.maintenance_valid",
+    "core.maintenance_ready",
+    "core.timer_value",
+    "core.irq_external",
+    "core.irq_software",
+    "core.irq_timer",
+    "core.trace_valid",
+    "core.trace_pc",
+    "core.trace_instruction",
+    "core.trace_write",
+    "core.trace_rd",
+    "core.trace_data",
+    "core.trap_valid",
+    "core.trap_pc",
+    "core.trap_cause",
+    "core.trap_value",
+    "core.pipeline_valid",
+    "core.cycle_count",
+    "core.retired_count",
+    "serial_tx",
+    "gpio_output",
+    "status_code",
+    "maintenance_fault",
+    "mmio_req_valid",
+    "mmio_req_ready",
+    "mmio_rsp_valid",
+    "mmio_rsp_ready",
+    "mmio_rsp_data",
+    "mmio_rsp_error"
+  ],
+  "wrapper": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\Original_155250\\source\\rv32_bare_core.sv",
+  "wrapper_sha256": "97bd07d5935c84f9df163f3ccc14de06163de79a47c4f53bf61b946701b43c53",
+  "configured_core_clock_hz": 155250000,
+  "simulation_clock_hz": 3200,
+  "uart_baud": 100,
+  "external_service": {
+    "kind": "Unmodified selected rv32_memory_system and rv32_peripherals outside DUT",
+    "cache_enabled": true,
+    "i_cache_set_bits": 9,
+    "d_cache_set_bits": 6,
+    "ram_bytes": 65536,
+    "two_independent_service_instances": true,
+    "native_vendor_memory_model": false,
+    "excluded_from_dut_synthesis": true
+  },
+  "firmware_sha256": "1d66bdd8919951e18c191b82ea271c84bd156ea14f2ca9fcf5c4b56216069949",
+  "tool": "/usr/bin/verilator",
+  "compile_arguments": [
+    "--cd",
+    "/tmp",
+    "--exec",
+    "/usr/bin/verilator",
+    "--cc",
+    "--exe",
+    "--build",
+    "--Wall",
+    "-Wno-fatal",
+    "-j",
+    "1",
+    "-MAKEFLAGS",
+    "OPT_FAST=-O3",
+    "--top-module",
+    "bare_extraction_miter",
+    "--Mdir",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173626Z-101a414e/objects",
+    "-CFLAGS",
+    "-O3 -std=c++14 -DMITER_NATIVE=0 -DMITER_FRAME_BITS=614 -DMITER_FRAME_WORDS=20",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173626Z-101a414e/inputs/bare/rv32_alu.sv",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173626Z-101a414e/inputs/bare/rv32_bare_core.sv",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173626Z-101a414e/inputs/bare/rv32_btb.sv",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173626Z-101a414e/inputs/bare/rv32_core.sv",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173626Z-101a414e/inputs/bare/rv32_decode.sv",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173626Z-101a414e/inputs/bare/rv32_machine.sv",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173626Z-101a414e/inputs/bare/rv32_muldiv.sv",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173626Z-101a414e/inputs/bare/rv32_rvc_expand.sv",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173626Z-101a414e/inputs/bare/rv32_rvc_frontend.sv",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173626Z-101a414e/inputs/reference/reference_soc.sv",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173626Z-101a414e/inputs/reference/rv32_alu.sv",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173626Z-101a414e/inputs/reference/rv32_btb.sv",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173626Z-101a414e/inputs/reference/rv32_core.sv",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173626Z-101a414e/inputs/reference/rv32_decode.sv",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173626Z-101a414e/inputs/reference/rv32_machine.sv",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173626Z-101a414e/inputs/reference/rv32_muldiv.sv",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173626Z-101a414e/inputs/reference/rv32_rvc_expand.sv",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173626Z-101a414e/inputs/reference/rv32_rvc_frontend.sv",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173626Z-101a414e/inputs/environment/bare_environment.sv",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173626Z-101a414e/inputs/environment/rv32_burst_arbiter.sv",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173626Z-101a414e/inputs/environment/rv32_burst_ram.sv",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173626Z-101a414e/inputs/environment/rv32_cache.sv",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173626Z-101a414e/inputs/environment/rv32_fifo.sv",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173626Z-101a414e/inputs/environment/rv32_memory_system.sv",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173626Z-101a414e/inputs/environment/rv32_peripherals.sv",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173626Z-101a414e/inputs/environment/rv32_uart.sv",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173626Z-101a414e/inputs/environment/rv32_uncached.sv",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173626Z-101a414e/inputs/bare_extraction_miter.sv",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173626Z-101a414e/inputs/driver.cpp"
+  ],
+  "miter_driver_template_sha256": "13b3664d9a63399cfe2a9e63948282041b64f1900a56c8286a5880ac9237abc6",
+  "generator_sha256": "d5153d83aab0b8ca7084db50d63baa6ce256abdd5be861fe6c5cacc726adbf63",
+  "inputs": [
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173626Z-101a414e\\inputs\\bare\\rv32_alu.sv",
+      "sha256": "125647d90b98f294743127637406d19479eebda82dccfaaba7acaf59d5ae38b1"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173626Z-101a414e\\inputs\\bare\\rv32_bare_core.sv",
+      "sha256": "97bd07d5935c84f9df163f3ccc14de06163de79a47c4f53bf61b946701b43c53"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173626Z-101a414e\\inputs\\bare\\rv32_btb.sv",
+      "sha256": "4e7c61716c3e3f3156e8a1006824354b3428bbbc98a37369e43bae12f0170a3c"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173626Z-101a414e\\inputs\\bare\\rv32_core.sv",
+      "sha256": "11c2d7175afbc0753178c6d992f4d7497ab197a7ac1b3f1cba8a2952935a056a"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173626Z-101a414e\\inputs\\bare\\rv32_decode.sv",
+      "sha256": "9cb2b57b46ed775d85b6e70a3eebe92c2d5e49e9a6483993109e2c096d9a3ff3"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173626Z-101a414e\\inputs\\bare\\rv32_machine.sv",
+      "sha256": "56b542e419c58216a08b0a5c83322506e42e2721fa28db50a6454ebe29607abd"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173626Z-101a414e\\inputs\\bare\\rv32_muldiv.sv",
+      "sha256": "ea669ef9701bba4b2adbf6ff40c9e4e805620ec79de6cbdb323bbebeeac4fe59"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173626Z-101a414e\\inputs\\bare\\rv32_rvc_expand.sv",
+      "sha256": "308ac8a65c9e29aeec27b38417483d0f43fd7c54487c26e89a3fa54b4647951b"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173626Z-101a414e\\inputs\\bare\\rv32_rvc_frontend.sv",
+      "sha256": "77d7f21f153570b83d156a7b2fb3485f08da1225719a22d11074e8fa886708c7"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173626Z-101a414e\\inputs\\bare_extraction_miter.sv",
+      "sha256": "a00e45252514f3a66197e89c8e341673d904dcb8f50fc36c920977eb3e066b00"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173626Z-101a414e\\inputs\\driver.cpp",
+      "sha256": "13b3664d9a63399cfe2a9e63948282041b64f1900a56c8286a5880ac9237abc6"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173626Z-101a414e\\inputs\\environment\\bare_environment.sv",
+      "sha256": "b7e6efd1fcfb8c5fc5ff988dc452b8fa871d1b24acea59a016ed32cde95fd8cf"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173626Z-101a414e\\inputs\\environment\\rv32_burst_arbiter.sv",
+      "sha256": "82104b39f85d2942e3d0a6780f79099062cc5a4f71fdf87491191de2f632c8af"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173626Z-101a414e\\inputs\\environment\\rv32_burst_ram.sv",
+      "sha256": "089b3788fa87d3176a4e0b09e40382e1349cc33e8f9d2227d567ad0788672417"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173626Z-101a414e\\inputs\\environment\\rv32_cache.sv",
+      "sha256": "80391f660c030764864a1c6acb10dfbe0a755f13f2cb1f2eaf831a2db7d10f46"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173626Z-101a414e\\inputs\\environment\\rv32_fifo.sv",
+      "sha256": "20bb573cdbae386a8b44df780eefc11b85323cf2bbaa4fb2073a5e87e626b2eb"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173626Z-101a414e\\inputs\\environment\\rv32_memory_system.sv",
+      "sha256": "0f408d7b59d45bec6623eb62baebdc259197a6e10b4d92556b4c3494a5441537"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173626Z-101a414e\\inputs\\environment\\rv32_peripherals.sv",
+      "sha256": "9659d60e06662b367d533eb58cba036746f1bb151fab92929894b9f3dfd9d3c3"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173626Z-101a414e\\inputs\\environment\\rv32_uart.sv",
+      "sha256": "b83f5d6055bd794ca49e3781e673a00749249eaeaf1f2e908398dd5ce54ab8a2"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173626Z-101a414e\\inputs\\environment\\rv32_uncached.sv",
+      "sha256": "d276e6b38ddb05117f52e054367f7f3d4503ba76f8f49025973197943ef50907"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173626Z-101a414e\\inputs\\reference\\reference_soc.sv",
+      "sha256": "a3f486b99e11102a73079aaa366a0381ef0d95d362ba3e9486ced60a11d33306"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173626Z-101a414e\\inputs\\reference\\rv32_alu.sv",
+      "sha256": "19be23911d701fb0c35f0c88e97ce6ec4497cdbc581c1f03716c83f95c1e2a3f"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173626Z-101a414e\\inputs\\reference\\rv32_btb.sv",
+      "sha256": "d6709f4fb4a5efc217ab7f4246a812848deca1794c6a1981334b33f15790d869"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173626Z-101a414e\\inputs\\reference\\rv32_core.sv",
+      "sha256": "19427adb054b3fd4fdd028bbbf76a71741588a967ed185fedaa6316da5716762"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173626Z-101a414e\\inputs\\reference\\rv32_decode.sv",
+      "sha256": "ae0d29f0865e4cf209e94b3b8f9a43366db353188cbd4a5a98d91377220b9b1e"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173626Z-101a414e\\inputs\\reference\\rv32_machine.sv",
+      "sha256": "e52f0209613c89b891f8d698449864ed71d15b8e93391ada990417dcb3d92b67"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173626Z-101a414e\\inputs\\reference\\rv32_muldiv.sv",
+      "sha256": "e535fb92861e5a31eab1c957be9ab5a8bfb10ce468d0f78f5a66b0255904a1f8"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173626Z-101a414e\\inputs\\reference\\rv32_rvc_expand.sv",
+      "sha256": "79e72dcfd8116ffc5d3665880d3d2821227a05e9e91b735c095bea50f143a9e3"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173626Z-101a414e\\inputs\\reference\\rv32_rvc_frontend.sv",
+      "sha256": "31c575dcc76360f1c74be6ce5d6f5d9385160e85c9e00d72a31442d64c6bc9b1"
+    }
+  ]
+}

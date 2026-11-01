@@ -1,0 +1,15 @@
+﻿{
+  "release": "H3_Retained_145125",
+  "pid": 51660,
+  "executable": "C:\\Users\\dxlgy\\AppData\\Local\\Microsoft\\WindowsApps\\Microsoft.PowerShell_8wekyb3d8bbwe\\pwsh.exe",
+  "arguments": [
+    "-NoProfile",
+    "-File",
+    "D:/AAAFPGA\\Bare_Core_Releases_20261101\\scripts\\Test-ScanFixture.ps1",
+    "-Release",
+    "H3_Retained_145125"
+  ],
+  "stdout": "D:/AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\physical\\scan-fixture.stdout.log",
+  "stderr": "D:/AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\physical\\scan-fixture.stderr.log",
+  "started_utc": "2026-10-31T17:48:16.7195417Z"
+}

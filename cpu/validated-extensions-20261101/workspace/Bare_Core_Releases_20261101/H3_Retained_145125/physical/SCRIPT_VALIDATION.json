@@ -1,0 +1,25 @@
+﻿{
+  "release": "H3_Retained_145125",
+  "status": "PASS",
+  "scripts": [
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\physical\\Audit-H3BareTiming.ps1",
+      "sha256": "8f64d7470fb861b12ebd4156cc04beebbf1ec41ee366ba63ccbc211b8d858767",
+      "parse_errors": 0,
+      "utf8_bom": true
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\physical\\Canonicalize-H3Verification.ps1",
+      "sha256": "d61cf6897eaf95f9b03e5232df49d265e709b2990bd6fb6d02d98ab49498cde2",
+      "parse_errors": 0,
+      "utf8_bom": true
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\physical\\Finalize-H3Bare.ps1",
+      "sha256": "96769f85fd63ccaa1970af22210eba9a94ad09156588856e5cac4caa06161244",
+      "parse_errors": 0,
+      "utf8_bom": true
+    }
+  ],
+  "checked_utc": "2026-10-31T18:18:38.7954358Z"
+}

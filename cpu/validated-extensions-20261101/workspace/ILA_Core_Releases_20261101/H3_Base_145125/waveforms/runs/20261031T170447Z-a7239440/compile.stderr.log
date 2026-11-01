@@ -1,0 +1,849 @@
+﻿wsl: 检测到 localhost 代理配置，但未镜像到 WSL。NAT 模式下的 WSL 不支持 localhost 代理。
+%Warning-PINCONNECTEMPTY: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/rtl/rv32_peripherals.sv:65:14: Cell pin connected by name with empty reference: 'DOA'
+   65 |             .DOA(),.DOB(native_output),.DIA(native_input_low),.DIB(native_input_high),
+      |              ^~~
+                          ... For warning description see https://verilator.org/warn/PINCONNECTEMPTY?v=5.032
+                          ... Use "/* verilator lint_off PINCONNECTEMPTY */" and lint_on around source to disable this message.
+%Warning-PINCONNECTEMPTY: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/rtl/rv32_peripherals.sv:71:58: Cell pin connected by name with empty reference: 'ECC_SBITERR'
+   71 |             .INJECT_SBITERR(1'b0),.INJECT_DBITERR(1'b0),.ECC_SBITERR(),.ECC_DBITERR(),
+      |                                                          ^~~~~~~~~~~
+%Warning-PINCONNECTEMPTY: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/rtl/rv32_peripherals.sv:71:73: Cell pin connected by name with empty reference: 'ECC_DBITERR'
+   71 |             .INJECT_SBITERR(1'b0),.INJECT_DBITERR(1'b0),.ECC_SBITERR(),.ECC_DBITERR(),
+      |                                                                         ^~~~~~~~~~~
+%Warning-PINCONNECTEMPTY: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/rtl/rv32_peripherals.sv:72:14: Cell pin connected by name with empty reference: 'ECC_RDADDR'
+   72 |             .ECC_RDADDR(),.ECC_PARITY(),.COUTA(),.COUTB());
+      |              ^~~~~~~~~~
+%Warning-PINCONNECTEMPTY: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/rtl/rv32_peripherals.sv:72:28: Cell pin connected by name with empty reference: 'ECC_PARITY'
+   72 |             .ECC_RDADDR(),.ECC_PARITY(),.COUTA(),.COUTB());
+      |                            ^~~~~~~~~~
+%Warning-PINCONNECTEMPTY: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/rtl/rv32_peripherals.sv:72:42: Cell pin connected by name with empty reference: 'COUTA'
+   72 |             .ECC_RDADDR(),.ECC_PARITY(),.COUTA(),.COUTB());
+      |                                          ^~~~~
+%Warning-PINCONNECTEMPTY: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/rtl/rv32_peripherals.sv:72:51: Cell pin connected by name with empty reference: 'COUTB'
+   72 |             .ECC_RDADDR(),.ECC_PARITY(),.COUTA(),.COUTB());
+      |                                                   ^~~~~
+%Warning-DECLFILENAME: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/native_selected_observer.sv:2:8: Filename 'native_selected_observer' does not match MODULE name: 'rv32_observed_soc'
+    2 | module rv32_observed_soc #(
+      |        ^~~~~~~~~~~~~~~~~
+%Warning-GENUNNAMED: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:1029:49: Unnamed generate block 'genblk1' (IEEE 1800-2023 27.6)
+                                                                                                                                                                : ... Suggest assign a label with 'begin : gen_<label_name>'
+ 1029 |     if (DATA_WIDTH_A > 36 || DATA_WIDTH_B > 36) begin
+      |                                                 ^~~~~
+%Warning-GENUNNAMED: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:1056:11: Unnamed generate block 'genblk1' (IEEE 1800-2023 27.6)
+                                                                                                                                                                : ... Suggest assign a label with 'begin : gen_<label_name>'
+ 1056 |     else  begin    
+      |           ^~~~~
+%Warning-GENUNNAMED: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:1181:32: Unnamed generate block 'genblk1' (IEEE 1800-2023 27.6)
+                                                                                                                                                                : ... Suggest assign a label with 'begin : gen_<label_name>'
+ 1181 |         if(DATA_WIDTH_B <= 36) begin
+      |                                ^~~~~
+%Warning-IMPLICIT: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:1426:8: Signal definition not found, creating implicitly: 'grsn'
+                                                                                                                                                             : ... Suggested alternative: 'grs'
+ 1426 | assign grsn =  (GRS_EN == "TRUE") ? GRS_INST.GRSNET : 1'b1;
+      |        ^~~~
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/rtl/rv32_cache.sv:53:24: Operator VAR 'DIRECT_READ_RESPONSE' expects 32 bits on the Initial value, but Initial value's LOGAND generates 1 bits.
+                                                                                                                                                      : ... note: In instance 'rv32_observed_soc.soc.memory_system.caches[0].enabled.cache'
+   53 |     localparam integer DIRECT_READ_RESPONSE=READ_ONLY!=0 && FAST_READ_HIT!=0;
+      |                        ^~~~~~~~~~~~~~~~~~~~
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:352:9: Operator CASE expects 136 bits on the Case expression, but Case expression's VARREF 'WRITE_MODE_A' generates 96 bits.
+                                                                                                                                                               : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  352 |         case (WRITE_MODE_A)
+      |         ^~~~
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:362:9: Operator CASE expects 136 bits on the Case expression, but Case expression's VARREF 'WRITE_MODE_B' generates 96 bits.
+                                                                                                                                                               : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  362 |         case (WRITE_MODE_B)
+      |         ^~~~
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:445:9: Operator CASE expects 40 bits on the Case expression, but Case expression's VARREF 'RAM_CASCADE' generates 32 bits.
+                                                                                                                                                               : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  445 |         case (RAM_CASCADE)
+      |         ^~~~
+%Warning-SELRANGE: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:641:79: Extracting 64 bits from only 18 bit number
+                                                                                                                                                             : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  641 |                        mem[cnt][7:0] = {ini_mem[BLOCK_Y*BLOCK_DEPTH + cnt*8+7][BLOCK_X*BLOCK_WIDTH +:BLOCK_WIDTH],
+      |                                                                               ^
+%Warning-SELRANGE: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:641:79: Selection index out of range: 63:0 outside 17:0
+                                                                                                                                                             : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  641 |                        mem[cnt][7:0] = {ini_mem[BLOCK_Y*BLOCK_DEPTH + cnt*8+7][BLOCK_X*BLOCK_WIDTH +:BLOCK_WIDTH],
+      |                                                                               ^
+%Warning-SELRANGE: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:642:79: Extracting 64 bits from only 18 bit number
+                                                                                                                                                             : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  642 |                                         ini_mem[BLOCK_Y*BLOCK_DEPTH + cnt*8+6][BLOCK_X*BLOCK_WIDTH +:BLOCK_WIDTH],
+      |                                                                               ^
+%Warning-SELRANGE: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:642:79: Selection index out of range: 63:0 outside 17:0
+                                                                                                                                                             : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  642 |                                         ini_mem[BLOCK_Y*BLOCK_DEPTH + cnt*8+6][BLOCK_X*BLOCK_WIDTH +:BLOCK_WIDTH],
+      |                                                                               ^
+%Warning-SELRANGE: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:643:79: Extracting 64 bits from only 18 bit number
+                                                                                                                                                             : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  643 |                                         ini_mem[BLOCK_Y*BLOCK_DEPTH + cnt*8+5][BLOCK_X*BLOCK_WIDTH +:BLOCK_WIDTH],
+      |                                                                               ^
+%Warning-SELRANGE: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:643:79: Selection index out of range: 63:0 outside 17:0
+                                                                                                                                                             : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  643 |                                         ini_mem[BLOCK_Y*BLOCK_DEPTH + cnt*8+5][BLOCK_X*BLOCK_WIDTH +:BLOCK_WIDTH],
+      |                                                                               ^
+%Warning-SELRANGE: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:644:79: Extracting 64 bits from only 18 bit number
+                                                                                                                                                             : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  644 |                                         ini_mem[BLOCK_Y*BLOCK_DEPTH + cnt*8+4][BLOCK_X*BLOCK_WIDTH +:BLOCK_WIDTH],
+      |                                                                               ^
+%Warning-SELRANGE: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:644:79: Selection index out of range: 63:0 outside 17:0
+                                                                                                                                                             : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  644 |                                         ini_mem[BLOCK_Y*BLOCK_DEPTH + cnt*8+4][BLOCK_X*BLOCK_WIDTH +:BLOCK_WIDTH],
+      |                                                                               ^
+%Warning-SELRANGE: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:645:79: Extracting 64 bits from only 18 bit number
+                                                                                                                                                             : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  645 |                                         ini_mem[BLOCK_Y*BLOCK_DEPTH + cnt*8+3][BLOCK_X*BLOCK_WIDTH +:BLOCK_WIDTH],
+      |                                                                               ^
+%Warning-SELRANGE: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:645:79: Selection index out of range: 63:0 outside 17:0
+                                                                                                                                                             : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  645 |                                         ini_mem[BLOCK_Y*BLOCK_DEPTH + cnt*8+3][BLOCK_X*BLOCK_WIDTH +:BLOCK_WIDTH],
+      |                                                                               ^
+%Warning-SELRANGE: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:646:79: Extracting 64 bits from only 18 bit number
+                                                                                                                                                             : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  646 |                                         ini_mem[BLOCK_Y*BLOCK_DEPTH + cnt*8+2][BLOCK_X*BLOCK_WIDTH +:BLOCK_WIDTH],
+      |                                                                               ^
+%Warning-SELRANGE: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:646:79: Selection index out of range: 63:0 outside 17:0
+                                                                                                                                                             : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  646 |                                         ini_mem[BLOCK_Y*BLOCK_DEPTH + cnt*8+2][BLOCK_X*BLOCK_WIDTH +:BLOCK_WIDTH],
+      |                                                                               ^
+%Warning-SELRANGE: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:647:79: Extracting 64 bits from only 18 bit number
+                                                                                                                                                             : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  647 |                                         ini_mem[BLOCK_Y*BLOCK_DEPTH + cnt*8+1][BLOCK_X*BLOCK_WIDTH +:BLOCK_WIDTH],
+      |                                                                               ^
+%Warning-SELRANGE: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:647:79: Selection index out of range: 63:0 outside 17:0
+                                                                                                                                                             : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  647 |                                         ini_mem[BLOCK_Y*BLOCK_DEPTH + cnt*8+1][BLOCK_X*BLOCK_WIDTH +:BLOCK_WIDTH],
+      |                                                                               ^
+%Warning-SELRANGE: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:648:77: Extracting 64 bits from only 18 bit number
+                                                                                                                                                             : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  648 |                                         ini_mem[BLOCK_Y*BLOCK_DEPTH + cnt*8][BLOCK_X*BLOCK_WIDTH +:BLOCK_WIDTH]};
+      |                                                                             ^
+%Warning-SELRANGE: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:648:77: Selection index out of range: 63:0 outside 17:0
+                                                                                                                                                             : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  648 |                                         ini_mem[BLOCK_Y*BLOCK_DEPTH + cnt*8][BLOCK_X*BLOCK_WIDTH +:BLOCK_WIDTH]};
+      |                                                                             ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:641:38: Operator ASSIGN expects 8 bits on the Assign RHS, but Assign RHS's REPLICATE generates 512 bits.
+                                                                                                                                                               : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  641 |                        mem[cnt][7:0] = {ini_mem[BLOCK_Y*BLOCK_DEPTH + cnt*8+7][BLOCK_X*BLOCK_WIDTH +:BLOCK_WIDTH],
+      |                                      ^
+%Warning-SELRANGE: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:652:79: Extracting 64 bits from only 18 bit number
+                                                                                                                                                             : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  652 |                        mem[cnt][7:0] = {ini_mem[BLOCK_Y*BLOCK_DEPTH + cnt*4+3][BLOCK_X*BLOCK_WIDTH +:BLOCK_WIDTH],
+      |                                                                               ^
+%Warning-SELRANGE: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:652:79: Selection index out of range: 63:0 outside 17:0
+                                                                                                                                                             : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  652 |                        mem[cnt][7:0] = {ini_mem[BLOCK_Y*BLOCK_DEPTH + cnt*4+3][BLOCK_X*BLOCK_WIDTH +:BLOCK_WIDTH],
+      |                                                                               ^
+%Warning-SELRANGE: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:653:79: Extracting 64 bits from only 18 bit number
+                                                                                                                                                             : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  653 |                                         ini_mem[BLOCK_Y*BLOCK_DEPTH + cnt*4+2][BLOCK_X*BLOCK_WIDTH +:BLOCK_WIDTH],
+      |                                                                               ^
+%Warning-SELRANGE: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:653:79: Selection index out of range: 63:0 outside 17:0
+                                                                                                                                                             : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  653 |                                         ini_mem[BLOCK_Y*BLOCK_DEPTH + cnt*4+2][BLOCK_X*BLOCK_WIDTH +:BLOCK_WIDTH],
+      |                                                                               ^
+%Warning-SELRANGE: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:654:79: Extracting 64 bits from only 18 bit number
+                                                                                                                                                             : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  654 |                                         ini_mem[BLOCK_Y*BLOCK_DEPTH + cnt*4+1][BLOCK_X*BLOCK_WIDTH +:BLOCK_WIDTH],
+      |                                                                               ^
+%Warning-SELRANGE: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:654:79: Selection index out of range: 63:0 outside 17:0
+                                                                                                                                                             : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  654 |                                         ini_mem[BLOCK_Y*BLOCK_DEPTH + cnt*4+1][BLOCK_X*BLOCK_WIDTH +:BLOCK_WIDTH],
+      |                                                                               ^
+%Warning-SELRANGE: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:655:77: Extracting 64 bits from only 18 bit number
+                                                                                                                                                             : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  655 |                                         ini_mem[BLOCK_Y*BLOCK_DEPTH + cnt*4][BLOCK_X*BLOCK_WIDTH +:BLOCK_WIDTH]};
+      |                                                                             ^
+%Warning-SELRANGE: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:655:77: Selection index out of range: 63:0 outside 17:0
+                                                                                                                                                             : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  655 |                                         ini_mem[BLOCK_Y*BLOCK_DEPTH + cnt*4][BLOCK_X*BLOCK_WIDTH +:BLOCK_WIDTH]};
+      |                                                                             ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:652:38: Operator ASSIGN expects 8 bits on the Assign RHS, but Assign RHS's REPLICATE generates 256 bits.
+                                                                                                                                                               : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  652 |                        mem[cnt][7:0] = {ini_mem[BLOCK_Y*BLOCK_DEPTH + cnt*4+3][BLOCK_X*BLOCK_WIDTH +:BLOCK_WIDTH],
+      |                                      ^
+%Warning-SELRANGE: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:659:81: Extracting 64 bits from only 18 bit number
+                                                                                                                                                             : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  659 |                        {mem[cnt][7:0]} = {ini_mem[BLOCK_Y*BLOCK_DEPTH + cnt*2+1][BLOCK_X*BLOCK_WIDTH +:BLOCK_WIDTH],
+      |                                                                                 ^
+%Warning-SELRANGE: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:659:81: Selection index out of range: 63:0 outside 17:0
+                                                                                                                                                             : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  659 |                        {mem[cnt][7:0]} = {ini_mem[BLOCK_Y*BLOCK_DEPTH + cnt*2+1][BLOCK_X*BLOCK_WIDTH +:BLOCK_WIDTH],
+      |                                                                                 ^
+%Warning-SELRANGE: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:660:79: Extracting 64 bits from only 18 bit number
+                                                                                                                                                             : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  660 |                                           ini_mem[BLOCK_Y*BLOCK_DEPTH + cnt*2][BLOCK_X*BLOCK_WIDTH +:BLOCK_WIDTH]};
+      |                                                                               ^
+%Warning-SELRANGE: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:660:79: Selection index out of range: 63:0 outside 17:0
+                                                                                                                                                             : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  660 |                                           ini_mem[BLOCK_Y*BLOCK_DEPTH + cnt*2][BLOCK_X*BLOCK_WIDTH +:BLOCK_WIDTH]};
+      |                                                                               ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:659:40: Operator ASSIGN expects 8 bits on the Assign RHS, but Assign RHS's REPLICATE generates 128 bits.
+                                                                                                                                                               : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  659 |                        {mem[cnt][7:0]} = {ini_mem[BLOCK_Y*BLOCK_DEPTH + cnt*2+1][BLOCK_X*BLOCK_WIDTH +:BLOCK_WIDTH],
+      |                                        ^
+%Warning-SELRANGE: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:664:74: Extracting 64 bits from only 18 bit number
+                                                                                                                                                             : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  664 |                        mem[cnt][7:0] = ini_mem[BLOCK_Y*BLOCK_DEPTH + cnt][BLOCK_X*BLOCK_WIDTH +:BLOCK_WIDTH];
+      |                                                                          ^
+%Warning-SELRANGE: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:664:74: Selection index out of range: 63:0 outside 17:0
+                                                                                                                                                             : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  664 |                        mem[cnt][7:0] = ini_mem[BLOCK_Y*BLOCK_DEPTH + cnt][BLOCK_X*BLOCK_WIDTH +:BLOCK_WIDTH];
+      |                                                                          ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:664:38: Operator ASSIGN expects 8 bits on the Assign RHS, but Assign RHS's SEL generates 64 bits.
+                                                                                                                                                               : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  664 |                        mem[cnt][7:0] = ini_mem[BLOCK_Y*BLOCK_DEPTH + cnt][BLOCK_X*BLOCK_WIDTH +:BLOCK_WIDTH];
+      |                                      ^
+%Warning-SELRANGE: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:668:69: Extracting 64 bits from only 18 bit number
+                                                                                                                                                             : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  668 |                        mem[cnt] = ini_mem[BLOCK_Y*BLOCK_DEPTH + cnt][BLOCK_X*BLOCK_WIDTH +:BLOCK_WIDTH];
+      |                                                                     ^
+%Warning-SELRANGE: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:668:69: Selection index out of range: 63:0 outside 17:0
+                                                                                                                                                             : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  668 |                        mem[cnt] = ini_mem[BLOCK_Y*BLOCK_DEPTH + cnt][BLOCK_X*BLOCK_WIDTH +:BLOCK_WIDTH];
+      |                                                                     ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:668:33: Operator ASSIGN expects 9 bits on the Assign RHS, but Assign RHS's SEL generates 64 bits.
+                                                                                                                                                               : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  668 |                        mem[cnt] = ini_mem[BLOCK_Y*BLOCK_DEPTH + cnt][BLOCK_X*BLOCK_WIDTH +:BLOCK_WIDTH];
+      |                                 ^
+%Warning-SELRANGE: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:672:97: Extracting 64 bits from only 18 bit number
+                                                                                                                                                             : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  672 |                        {mem[cnt*2+1][7:0], mem[cnt*2][7:0]} = ini_mem[BLOCK_Y*BLOCK_DEPTH + cnt][BLOCK_X*BLOCK_WIDTH +:BLOCK_WIDTH];
+      |                                                                                                 ^
+%Warning-SELRANGE: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:672:97: Selection index out of range: 63:0 outside 17:0
+                                                                                                                                                             : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  672 |                        {mem[cnt*2+1][7:0], mem[cnt*2][7:0]} = ini_mem[BLOCK_Y*BLOCK_DEPTH + cnt][BLOCK_X*BLOCK_WIDTH +:BLOCK_WIDTH];
+      |                                                                                                 ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:672:61: Operator ASSIGN expects 16 bits on the Assign RHS, but Assign RHS's SEL generates 64 bits.
+                                                                                                                                                               : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  672 |                        {mem[cnt*2+1][7:0], mem[cnt*2][7:0]} = ini_mem[BLOCK_Y*BLOCK_DEPTH + cnt][BLOCK_X*BLOCK_WIDTH +:BLOCK_WIDTH];
+      |                                                             ^
+%Warning-SELRANGE: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:676:87: Extracting 64 bits from only 18 bit number
+                                                                                                                                                             : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  676 |                        {mem[cnt*2+1], mem[cnt*2]} = ini_mem[BLOCK_Y*BLOCK_DEPTH + cnt][BLOCK_X*BLOCK_WIDTH +:BLOCK_WIDTH];
+      |                                                                                       ^
+%Warning-SELRANGE: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:676:87: Selection index out of range: 63:0 outside 17:0
+                                                                                                                                                             : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  676 |                        {mem[cnt*2+1], mem[cnt*2]} = ini_mem[BLOCK_Y*BLOCK_DEPTH + cnt][BLOCK_X*BLOCK_WIDTH +:BLOCK_WIDTH];
+      |                                                                                       ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:676:51: Operator ASSIGN expects 18 bits on the Assign RHS, but Assign RHS's SEL generates 64 bits.
+                                                                                                                                                               : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  676 |                        {mem[cnt*2+1], mem[cnt*2]} = ini_mem[BLOCK_Y*BLOCK_DEPTH + cnt][BLOCK_X*BLOCK_WIDTH +:BLOCK_WIDTH];
+      |                                                   ^
+%Warning-SELRANGE: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:680:132: Extracting 64 bits from only 18 bit number
+                                                                                                                                                              : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  680 |                        {mem[cnt*4+3][7:0],mem[cnt*4+2][7:0],mem[cnt*4+1][7:0],mem[cnt*4][7:0]} = ini_mem[BLOCK_Y*BLOCK_DEPTH + cnt][BLOCK_X*BLOCK_WIDTH +:BLOCK_WIDTH];
+      |                                                                                                                                    ^
+%Warning-SELRANGE: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:680:132: Selection index out of range: 63:0 outside 17:0
+                                                                                                                                                              : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  680 |                        {mem[cnt*4+3][7:0],mem[cnt*4+2][7:0],mem[cnt*4+1][7:0],mem[cnt*4][7:0]} = ini_mem[BLOCK_Y*BLOCK_DEPTH + cnt][BLOCK_X*BLOCK_WIDTH +:BLOCK_WIDTH];
+      |                                                                                                                                    ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:680:96: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's SEL generates 64 bits.
+                                                                                                                                                               : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  680 |                        {mem[cnt*4+3][7:0],mem[cnt*4+2][7:0],mem[cnt*4+1][7:0],mem[cnt*4][7:0]} = ini_mem[BLOCK_Y*BLOCK_DEPTH + cnt][BLOCK_X*BLOCK_WIDTH +:BLOCK_WIDTH];
+      |                                                                                                ^
+%Warning-SELRANGE: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:684:112: Extracting 64 bits from only 18 bit number
+                                                                                                                                                              : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  684 |                        {mem[cnt*4+3],mem[cnt*4+2],mem[cnt*4+1],mem[cnt*4]} = ini_mem[BLOCK_Y*BLOCK_DEPTH + cnt][BLOCK_X*BLOCK_WIDTH +:BLOCK_WIDTH];
+      |                                                                                                                ^
+%Warning-SELRANGE: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:684:112: Selection index out of range: 63:0 outside 17:0
+                                                                                                                                                              : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  684 |                        {mem[cnt*4+3],mem[cnt*4+2],mem[cnt*4+1],mem[cnt*4]} = ini_mem[BLOCK_Y*BLOCK_DEPTH + cnt][BLOCK_X*BLOCK_WIDTH +:BLOCK_WIDTH];
+      |                                                                                                                ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:684:76: Operator ASSIGN expects 36 bits on the Assign RHS, but Assign RHS's SEL generates 64 bits.
+                                                                                                                                                               : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  684 |                        {mem[cnt*4+3],mem[cnt*4+2],mem[cnt*4+1],mem[cnt*4]} = ini_mem[BLOCK_Y*BLOCK_DEPTH + cnt][BLOCK_X*BLOCK_WIDTH +:BLOCK_WIDTH];
+      |                                                                            ^
+%Warning-SELRANGE: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:689:132: Extracting 64 bits from only 18 bit number
+                                                                                                                                                              : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  689 |                         mem[cnt*8+3][7:0],mem[cnt*8+2][7:0],mem[cnt*8+1][7:0],mem[cnt*8][7:0]} = ini_mem[BLOCK_Y*BLOCK_DEPTH + cnt][BLOCK_X*BLOCK_WIDTH +:BLOCK_WIDTH];
+      |                                                                                                                                    ^
+%Warning-SELRANGE: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:689:132: Selection index out of range: 63:0 outside 17:0
+                                                                                                                                                              : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  689 |                         mem[cnt*8+3][7:0],mem[cnt*8+2][7:0],mem[cnt*8+1][7:0],mem[cnt*8][7:0]} = ini_mem[BLOCK_Y*BLOCK_DEPTH + cnt][BLOCK_X*BLOCK_WIDTH +:BLOCK_WIDTH];
+      |                                                                                                                                    ^
+%Warning-SELRANGE: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:694:112: Extracting 64 bits from only 18 bit number
+                                                                                                                                                              : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  694 |                         mem[cnt*8+3],mem[cnt*8+2],mem[cnt*8+1],mem[cnt*8]} = ini_mem[BLOCK_Y*BLOCK_DEPTH + cnt][BLOCK_X*BLOCK_WIDTH +:BLOCK_WIDTH];
+      |                                                                                                                ^
+%Warning-SELRANGE: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:694:112: Selection index out of range: 63:0 outside 17:0
+                                                                                                                                                              : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  694 |                         mem[cnt*8+3],mem[cnt*8+2],mem[cnt*8+1],mem[cnt*8]} = ini_mem[BLOCK_Y*BLOCK_DEPTH + cnt][BLOCK_X*BLOCK_WIDTH +:BLOCK_WIDTH];
+      |                                                                                                                ^
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:694:76: Operator ASSIGN expects 72 bits on the Assign RHS, but Assign RHS's SEL generates 64 bits.
+                                                                                                                                                                : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  694 |                         mem[cnt*8+3],mem[cnt*8+2],mem[cnt*8+1],mem[cnt*8]} = ini_mem[BLOCK_Y*BLOCK_DEPTH + cnt][BLOCK_X*BLOCK_WIDTH +:BLOCK_WIDTH];
+      |                                                                            ^
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:750:44: Bit extraction of var[8:0] requires 4 bit index, not 3 bits.
+                                                                                                                                                                : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  750 |             1: mem_read_a = mem[addr[14:3]][addr[2:0]];
+      |                                            ^
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:750:27: Operator ASSIGN expects 64 bits on the Assign RHS, but Assign RHS's SEL generates 1 bits.
+                                                                                                                                                                : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  750 |             1: mem_read_a = mem[addr[14:3]][addr[2:0]];
+      |                           ^
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:751:27: Operator ASSIGN expects 64 bits on the Assign RHS, but Assign RHS's SEL generates 2 bits.
+                                                                                                                                                                : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  751 |             2: mem_read_a = mem[addr[14:3]][addr[2:1]*2 +: 2];
+      |                           ^
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:752:27: Operator ASSIGN expects 64 bits on the Assign RHS, but Assign RHS's SEL generates 4 bits.
+                                                                                                                                                                : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  752 |             4: mem_read_a = mem[addr[14:3]][addr[2]*4 +: 4];
+      |                           ^
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:753:27: Operator ASSIGN expects 64 bits on the Assign RHS, but Assign RHS's SEL generates 8 bits.
+                                                                                                                                                                : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  753 |             8: mem_read_a = mem[addr[14:3]][7:0];
+      |                           ^
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:754:27: Operator ASSIGN expects 64 bits on the Assign RHS, but Assign RHS's ARRAYSEL generates 9 bits.
+                                                                                                                                                                : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  754 |             9: mem_read_a = mem[addr[14:3]];
+      |                           ^
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:755:28: Operator ASSIGN expects 64 bits on the Assign RHS, but Assign RHS's REPLICATE generates 16 bits.
+                                                                                                                                                                : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  755 |             16: mem_read_a = {mem[addr[14:4]*2+1][7:0], mem[addr[14:4]*2][7:0]};
+      |                            ^
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:756:28: Operator ASSIGN expects 64 bits on the Assign RHS, but Assign RHS's REPLICATE generates 18 bits.
+                                                                                                                                                                : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  756 |             18: mem_read_a = {mem[addr[14:4]*2+1]     , mem[addr[14:4]*2]};
+      |                            ^
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:757:28: Operator ASSIGN expects 64 bits on the Assign RHS, but Assign RHS's REPLICATE generates 32 bits.
+                                                                                                                                                                : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  757 |             32: mem_read_a = {mem[addr[14:5]*4+3][7:0], mem[addr[14:5]*4+2][7:0], mem[addr[14:5]*4+1][7:0], mem[addr[14:5]*4][7:0]};
+      |                            ^
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:758:28: Operator ASSIGN expects 64 bits on the Assign RHS, but Assign RHS's REPLICATE generates 36 bits.
+                                                                                                                                                                : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  758 |             36: mem_read_a = {mem[addr[14:5]*4+3]     , mem[addr[14:5]*4+2]     , mem[addr[14:5]*4+1]     , mem[addr[14:5]*4]};
+      |                            ^
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:768:44: Bit extraction of var[8:0] requires 4 bit index, not 3 bits.
+                                                                                                                                                                : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  768 |             1: mem_read_b = mem[addr[14:3]][addr[2:0]];
+      |                                            ^
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:768:27: Operator ASSIGN expects 8 bits on the Assign RHS, but Assign RHS's SEL generates 1 bits.
+                                                                                                                                                                : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  768 |             1: mem_read_b = mem[addr[14:3]][addr[2:0]];
+      |                           ^
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:769:27: Operator ASSIGN expects 8 bits on the Assign RHS, but Assign RHS's SEL generates 2 bits.
+                                                                                                                                                                : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  769 |             2: mem_read_b = mem[addr[14:3]][addr[2:1]*2 +: 2];
+      |                           ^
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:770:27: Operator ASSIGN expects 8 bits on the Assign RHS, but Assign RHS's SEL generates 4 bits.
+                                                                                                                                                                : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  770 |             4: mem_read_b = mem[addr[14:3]][addr[2]*4 +: 4];
+      |                           ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:772:27: Operator ASSIGN expects 8 bits on the Assign RHS, but Assign RHS's ARRAYSEL generates 9 bits.
+                                                                                                                                                               : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  772 |             9: mem_read_b = mem[addr[14:3]];
+      |                           ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:773:28: Operator ASSIGN expects 8 bits on the Assign RHS, but Assign RHS's REPLICATE generates 16 bits.
+                                                                                                                                                               : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  773 |             16: mem_read_b = {mem[addr[14:4]*2+1][7:0], mem[addr[14:4]*2][7:0]};
+      |                            ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:774:28: Operator ASSIGN expects 8 bits on the Assign RHS, but Assign RHS's REPLICATE generates 18 bits.
+                                                                                                                                                               : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  774 |             18: mem_read_b = {mem[addr[14:4]*2+1]     , mem[addr[14:4]*2]};
+      |                            ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:775:28: Operator ASSIGN expects 8 bits on the Assign RHS, but Assign RHS's REPLICATE generates 32 bits.
+                                                                                                                                                               : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  775 |             32: mem_read_b = {mem[addr[14:5]*4+3][7:0], mem[addr[14:5]*4+2][7:0], mem[addr[14:5]*4+1][7:0], mem[addr[14:5]*4][7:0]};
+      |                            ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:776:28: Operator ASSIGN expects 8 bits on the Assign RHS, but Assign RHS's REPLICATE generates 36 bits.
+                                                                                                                                                               : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  776 |             36: mem_read_b = {mem[addr[14:5]*4+3]     , mem[addr[14:5]*4+2]     , mem[addr[14:5]*4+1]     , mem[addr[14:5]*4]};
+      |                            ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:777:28: Operator ASSIGN expects 8 bits on the Assign RHS, but Assign RHS's REPLICATE generates 64 bits.
+                                                                                                                                                               : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  777 |             64: mem_read_b = {mem[addr[14:6]*8+7][7:0], mem[addr[14:6]*8+6][7:0], mem[addr[14:6]*8+5][7:0], mem[addr[14:6]*8+4][7:0],
+      |                            ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:779:28: Operator ASSIGN expects 8 bits on the Assign RHS, but Assign RHS's REPLICATE generates 72 bits.
+                                                                                                                                                               : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  779 |             72: mem_read_b = {mem[addr[14:6]*8+7], mem[addr[14:6]*8+6], mem[addr[14:6]*8+5], mem[addr[14:6]*8+4],
+      |                            ^
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:792:31: Bit extraction of var[8:0] requires 4 bit index, not 3 bits.
+                                                                                                                                                                : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  792 |             1: mem[addr[14:3]][addr[2:0]] = data[0];
+      |                               ^
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:876:31: Bit extraction of var[8:0] requires 4 bit index, not 3 bits.
+                                                                                                                                                                : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  876 |             1: mem[addr[14:3]][addr[2:0]] = data[0];
+      |                               ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:1586:35: Operator ASSIGN expects 16 bits on the Assign RHS, but Assign RHS's REPLICATE generates 512 bits.
+                                                                                                                                                                : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+ 1586 |           1: {doa[16:9],doa[7:0]} = {16{a_out_mux[width_a-1:0]}};
+      |                                   ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:1587:35: Operator ASSIGN expects 16 bits on the Assign RHS, but Assign RHS's REPLICATE generates 256 bits.
+                                                                                                                                                                : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+ 1587 |           2: {doa[16:9],doa[7:0]} = { 8{a_out_mux[width_a-1:0]}};
+      |                                   ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:1588:35: Operator ASSIGN expects 16 bits on the Assign RHS, but Assign RHS's REPLICATE generates 128 bits.
+                                                                                                                                                                : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+ 1588 |           4: {doa[16:9],doa[7:0]} = { 4{a_out_mux[width_a-1:0]}};
+      |                                   ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:1589:35: Operator ASSIGN expects 16 bits on the Assign RHS, but Assign RHS's REPLICATE generates 64 bits.
+                                                                                                                                                                : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+ 1589 |           8: {doa[16:9],doa[7:0]} = { 2{a_out_mux[width_a-1:0]}};
+      |                                   ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:1590:35: Operator ASSIGN expects 18 bits on the Assign RHS, but Assign RHS's REPLICATE generates 64 bits.
+                                                                                                                                                                : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+ 1590 |           9: {doa[17:9],doa[8:0]} = { 2{a_out_mux[width_a-1:0]}};
+      |                                   ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:1591:35: Operator ASSIGN expects 16 bits on the Assign RHS, but Assign RHS's SEL generates 32 bits.
+                                                                                                                                                                : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+ 1591 |           16:{doa[16:9],doa[7:0]} =     a_out_mux[width_a-1:0]  ;
+      |                                   ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:1592:35: Operator ASSIGN expects 18 bits on the Assign RHS, but Assign RHS's SEL generates 32 bits.
+                                                                                                                                                                : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+ 1592 |           18: doa[17:0]           =     a_out_mux[width_a-1:0]  ;
+      |                                   ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:1629:36: Operator ASSIGN expects 16 bits on the Assign RHS, but Assign RHS's REPLICATE generates 128 bits.
+                                                                                                                                                                : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+ 1629 |            1: {dob[16:9],dob[7:0]} = {16{b_out_mux[width_b-1:0]}};
+      |                                    ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:1630:36: Operator ASSIGN expects 16 bits on the Assign RHS, but Assign RHS's REPLICATE generates 64 bits.
+                                                                                                                                                                : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+ 1630 |            2: {dob[16:9],dob[7:0]} = { 8{b_out_mux[width_b-1:0]}};
+      |                                    ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:1631:36: Operator ASSIGN expects 16 bits on the Assign RHS, but Assign RHS's REPLICATE generates 32 bits.
+                                                                                                                                                                : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+ 1631 |            4: {dob[16:9],dob[7:0]} = { 4{b_out_mux[width_b-1:0]}};
+      |                                    ^
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:1633:36: Operator ASSIGN expects 18 bits on the Assign RHS, but Assign RHS's REPLICATE generates 16 bits.
+                                                                                                                                                                 : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+ 1633 |            9: {dob[17:9],dob[8:0]} = { 2{b_out_mux[width_b-1:0]}};
+      |                                    ^
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:1634:36: Operator ASSIGN expects 16 bits on the Assign RHS, but Assign RHS's SEL generates 8 bits.
+                                                                                                                                                                 : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+ 1634 |            16:{dob[16:9],dob[7:0]} =     b_out_mux[width_b-1:0]  ;
+      |                                    ^
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:1635:36: Operator ASSIGN expects 18 bits on the Assign RHS, but Assign RHS's SEL generates 8 bits.
+                                                                                                                                                                 : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+ 1635 |            18: dob[17:0]           =     b_out_mux[width_b-1:0]  ;
+      |                                    ^
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:1636:58: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's SEL generates 8 bits.
+                                                                                                                                                                 : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+ 1636 |            32:{dob[34:27],dob[25:18],dob[16:9],dob[7:0]} = b_out_mux[width_b-1:0]  ;
+      |                                                          ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/rtl/rv32_cache.sv:177:46: Operator ASSIGNW expects 9 bits on the Assign RHS, but Assign RHS's AND generates 32 bits.
+                                                                                                                                                      : ... note: In instance 'rv32_observed_soc.soc.memory_system.caches[0].enabled.cache'
+  177 |             wire [SET_BITS-1:0] even_read_row=(validity_companion_address>>(WORD_BITS+3)) & (ROWS-1);
+      |                                              ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/rtl/rv32_cache.sv:198:70: Operator ASSIGNDLY expects 1 bits on the Assign RHS, but Assign RHS's SHIFTR generates 9 bits.
+                                                                                                                                                      : ... note: In instance 'rv32_observed_soc.soc.memory_system.caches[0].enabled.cache'
+  198 |                 always @(posedge clk) if(req_ready) read_bank[parity]<=read_row>>OFFSET_BITS;
+      |                                                                      ^~
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/rtl/rv32_cache.sv:207:51: Operator MODDIV expects 32 bits on the LHS, but LHS's VARREF 'write_row' generates 9 bits.
+                                                                                                                                                       : ... note: In instance 'rv32_observed_soc.soc.memory_system.caches[0].enabled.cache'
+  207 |                                 storage0[write_row%ROWS_PER_BANK]<=write_value;
+      |                                                   ^
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/rtl/rv32_cache.sv:209:51: Operator MODDIV expects 32 bits on the LHS, but LHS's VARREF 'write_row' generates 9 bits.
+                                                                                                                                                       : ... note: In instance 'rv32_observed_soc.soc.memory_system.caches[0].enabled.cache'
+  209 |                                 storage1[write_row%ROWS_PER_BANK]<=write_value;
+      |                                                   ^
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/rtl/rv32_cache.sv:212:53: Operator MODDIV expects 32 bits on the LHS, but LHS's VARREF 'read_row' generates 9 bits.
+                                                                                                                                                       : ... note: In instance 'rv32_observed_soc.soc.memory_system.caches[0].enabled.cache'
+  212 |                             read0<=storage0[read_row%ROWS_PER_BANK];
+      |                                                     ^
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/rtl/rv32_cache.sv:213:53: Operator MODDIV expects 32 bits on the LHS, but LHS's VARREF 'read_row' generates 9 bits.
+                                                                                                                                                       : ... note: In instance 'rv32_observed_soc.soc.memory_system.caches[0].enabled.cache'
+  213 |                             read1<=storage1[read_row%ROWS_PER_BANK];
+      |                                                     ^
+%Warning-UNUSEDPARAM: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/native_selected_observer.sv:9:23: Parameter is not used: 'NATIVE_SNAPSHOT'
+                                                                                                                                                                   : ... note: In instance 'rv32_observed_soc'
+    9 |     parameter integer NATIVE_SNAPSHOT=1,
+      |                       ^~~~~~~~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/rtl/rv32_rvc_frontend.sv:98:17: Bits of signal are not used: 'halfword'[15:2]
+                                                                                                                                                              : ... note: In instance 'rv32_observed_soc.soc.core.frontend'
+   98 |     wire [15:0] halfword=pc[1] ? current_data[31:16] : current_data[15:0];
+      |                 ^~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_GRS.v:34:21: Signal is not driven, nor used: 'i2c0_scl_i'
+                                                                                                                                                          : ... note: In instance 'rv32_observed_soc.GRS_INST'
+   34 |     wire            i2c0_scl_i      ;
+      |                     ^~~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_GRS.v:35:21: Signal is not driven, nor used: 'i2c0_scl_o'
+                                                                                                                                                          : ... note: In instance 'rv32_observed_soc.GRS_INST'
+   35 |     wire            i2c0_scl_o      ;
+      |                     ^~~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_GRS.v:36:21: Signal is not driven, nor used: 'i2c0_sda_i'
+                                                                                                                                                          : ... note: In instance 'rv32_observed_soc.GRS_INST'
+   36 |     wire            i2c0_sda_i      ;
+      |                     ^~~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_GRS.v:37:21: Signal is not driven, nor used: 'i2c0_sda_o'
+                                                                                                                                                          : ... note: In instance 'rv32_observed_soc.GRS_INST'
+   37 |     wire            i2c0_sda_o      ;
+      |                     ^~~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_GRS.v:38:21: Signal is not driven, nor used: 'irq_i2c0'
+                                                                                                                                                          : ... note: In instance 'rv32_observed_soc.GRS_INST'
+   38 |     wire            irq_i2c0        ;
+      |                     ^~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_GRS.v:39:21: Signal is not driven, nor used: 'i2c1_scl_i'
+                                                                                                                                                          : ... note: In instance 'rv32_observed_soc.GRS_INST'
+   39 |     wire            i2c1_scl_i      ;
+      |                     ^~~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_GRS.v:40:21: Signal is not driven, nor used: 'i2c1_scl_o'
+                                                                                                                                                          : ... note: In instance 'rv32_observed_soc.GRS_INST'
+   40 |     wire            i2c1_scl_o      ;
+      |                     ^~~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_GRS.v:41:21: Signal is not driven, nor used: 'i2c1_sda_i'
+                                                                                                                                                          : ... note: In instance 'rv32_observed_soc.GRS_INST'
+   41 |     wire            i2c1_sda_i      ;
+      |                     ^~~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_GRS.v:42:21: Signal is not driven, nor used: 'i2c1_sda_o'
+                                                                                                                                                          : ... note: In instance 'rv32_observed_soc.GRS_INST'
+   42 |     wire            i2c1_sda_o      ;
+      |                     ^~~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_GRS.v:43:21: Signal is not driven, nor used: 'irq_i2c1'
+                                                                                                                                                          : ... note: In instance 'rv32_observed_soc.GRS_INST'
+   43 |     wire            irq_i2c1        ;
+      |                     ^~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_GRS.v:46:21: Signal is not driven, nor used: 'clk_pctl'
+                                                                                                                                                          : ... note: In instance 'rv32_observed_soc.GRS_INST'
+   46 |     wire            clk_pctl;
+      |                     ^~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_GRS.v:47:21: Signal is not driven, nor used: 'rstn_pctl'
+                                                                                                                                                          : ... note: In instance 'rv32_observed_soc.GRS_INST'
+   47 |     wire            rstn_pctl;
+      |                     ^~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_GRS.v:48:21: Signal is not driven, nor used: 'spi_wakeup_pctl'
+                                                                                                                                                          : ... note: In instance 'rv32_observed_soc.GRS_INST'
+   48 |     wire            spi_wakeup_pctl;
+      |                     ^~~~~~~~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_GRS.v:49:21: Signal is not driven, nor used: 'i2c0_wakeup_pctl'
+                                                                                                                                                          : ... note: In instance 'rv32_observed_soc.GRS_INST'
+   49 |     wire            i2c0_wakeup_pctl;
+      |                     ^~~~~~~~~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_GRS.v:50:21: Signal is not driven, nor used: 'i2c1_wakeup_pctl'
+                                                                                                                                                          : ... note: In instance 'rv32_observed_soc.GRS_INST'
+   50 |     wire            i2c1_wakeup_pctl;
+      |                     ^~~~~~~~~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_GRS.v:53:21: Signal is not driven, nor used: 'spi_ss_i_n'
+                                                                                                                                                          : ... note: In instance 'rv32_observed_soc.GRS_INST'
+   53 |     wire            spi_ss_i_n      ;
+      |                     ^~~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_GRS.v:54:21: Signal is not driven, nor used: 'spi_ss_o_n'
+                                                                                                                                                          : ... note: In instance 'rv32_observed_soc.GRS_INST'
+   54 |     wire    [7:0]   spi_ss_o_n      ;
+      |                     ^~~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_GRS.v:55:21: Signal is not driven, nor used: 'spi_sck_oe_n'
+                                                                                                                                                          : ... note: In instance 'rv32_observed_soc.GRS_INST'
+   55 |     wire            spi_sck_oe_n    ;
+      |                     ^~~~~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_GRS.v:56:21: Signal is not driven, nor used: 'spi_sck_i'
+                                                                                                                                                          : ... note: In instance 'rv32_observed_soc.GRS_INST'
+   56 |     wire            spi_sck_i       ;
+      |                     ^~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_GRS.v:57:21: Signal is not driven, nor used: 'spi_sck_o'
+                                                                                                                                                          : ... note: In instance 'rv32_observed_soc.GRS_INST'
+   57 |     wire            spi_sck_o       ;
+      |                     ^~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_GRS.v:58:21: Signal is not driven, nor used: 'spi_mosi_oe_n'
+                                                                                                                                                          : ... note: In instance 'rv32_observed_soc.GRS_INST'
+   58 |     wire            spi_mosi_oe_n   ;
+      |                     ^~~~~~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_GRS.v:59:21: Signal is not driven, nor used: 'spi_mosi_i'
+                                                                                                                                                          : ... note: In instance 'rv32_observed_soc.GRS_INST'
+   59 |     wire            spi_mosi_i      ;
+      |                     ^~~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_GRS.v:60:21: Signal is not driven, nor used: 'spi_mosi_o'
+                                                                                                                                                          : ... note: In instance 'rv32_observed_soc.GRS_INST'
+   60 |     wire            spi_mosi_o      ;
+      |                     ^~~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_GRS.v:61:21: Signal is not driven, nor used: 'spi_miso_oe_n'
+                                                                                                                                                          : ... note: In instance 'rv32_observed_soc.GRS_INST'
+   61 |     wire            spi_miso_oe_n   ;
+      |                     ^~~~~~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_GRS.v:62:21: Signal is not driven, nor used: 'spi_miso_i'
+                                                                                                                                                          : ... note: In instance 'rv32_observed_soc.GRS_INST'
+   62 |     wire            spi_miso_i      ;
+      |                     ^~~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_GRS.v:63:21: Signal is not driven, nor used: 'spi_miso_o'
+                                                                                                                                                          : ... note: In instance 'rv32_observed_soc.GRS_INST'
+   63 |     wire            spi_miso_o      ;
+      |                     ^~~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_GRS.v:64:21: Signal is not driven, nor used: 'irq_spi'
+                                                                                                                                                          : ... note: In instance 'rv32_observed_soc.GRS_INST'
+   64 |     wire            irq_spi         ;
+      |                     ^~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_GRS.v:67:21: Signal is not driven, nor used: 'timer_rstn'
+                                                                                                                                                          : ... note: In instance 'rv32_observed_soc.GRS_INST'
+   67 |     wire            timer_rstn      ;
+      |                     ^~~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_GRS.v:68:21: Signal is not driven, nor used: 'timer_clk'
+                                                                                                                                                          : ... note: In instance 'rv32_observed_soc.GRS_INST'
+   68 |     wire            timer_clk       ;
+      |                     ^~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_GRS.v:69:21: Signal is not driven, nor used: 'timer_stamp'
+                                                                                                                                                          : ... note: In instance 'rv32_observed_soc.GRS_INST'
+   69 |     wire            timer_stamp     ;
+      |                     ^~~~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_GRS.v:70:21: Signal is not driven, nor used: 'timer_pwm'
+                                                                                                                                                          : ... note: In instance 'rv32_observed_soc.GRS_INST'
+   70 |     wire            timer_pwm       ;
+      |                     ^~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_GRS.v:71:21: Signal is not driven, nor used: 'irq_timer'
+                                                                                                                                                          : ... note: In instance 'rv32_observed_soc.GRS_INST'
+   71 |     wire            irq_timer       ;
+      |                     ^~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_GRS.v:74:21: Signal is not driven, nor used: 'pll0_prdata'
+                                                                                                                                                          : ... note: In instance 'rv32_observed_soc.GRS_INST'
+   74 |     wire    [7:0]   pll0_prdata     ;
+      |                     ^~~~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_GRS.v:75:21: Signal is not driven, nor used: 'pll0_pready'
+                                                                                                                                                          : ... note: In instance 'rv32_observed_soc.GRS_INST'
+   75 |     wire            pll0_pready     ;
+      |                     ^~~~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_GRS.v:76:21: Signal is not driven, nor used: 'pll1_prdata'
+                                                                                                                                                          : ... note: In instance 'rv32_observed_soc.GRS_INST'
+   76 |     wire    [7:0]   pll1_prdata     ;
+      |                     ^~~~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_GRS.v:77:21: Signal is not driven, nor used: 'pll1_pready'
+                                                                                                                                                          : ... note: In instance 'rv32_observed_soc.GRS_INST'
+   77 |     wire            pll1_pready     ;
+      |                     ^~~~~~~~~~~
+%Warning-UNUSEDPARAM: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/rtl/rv32_core.sv:8:23: Parameter is not used: 'FETCH_OVERLAP'
+                                                                                                                                                    : ... note: In instance 'rv32_observed_soc.soc.core'
+    8 |     parameter integer FETCH_OVERLAP=0,
+      |                       ^~~~~~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/rtl/rv32_core.sv:255:26: Signal is not used: 'prediction_hit'
+                                                                                                                                                       : ... note: In instance 'rv32_observed_soc.soc.core'
+  255 |     wire predicted_taken,prediction_hit;
+      |                          ^~~~~~~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/rtl/rv32_core.sv:273:16: Signal is not used: 'early_source_a'
+                                                                                                                                                       : ... note: In instance 'rv32_observed_soc.soc.core'
+  273 |     wire [3:0] early_source_a,early_source_b;
+      |                ^~~~~~~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/rtl/rv32_core.sv:273:31: Signal is not used: 'early_source_b'
+                                                                                                                                                       : ... note: In instance 'rv32_observed_soc.soc.core'
+  273 |     wire [3:0] early_source_a,early_source_b;
+      |                               ^~~~~~~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/rtl/rv32_memory_system.sv:71:16: Bits of signal are not used: 'cache_pair_valid'[1]
+                                                                                                                                                               : ... note: In instance 'rv32_observed_soc.soc.memory_system'
+   71 |     wire [1:0] cache_pair_valid;
+      |                ^~~~~~~~~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/rtl/rv32_peripherals.sv:59:21: Bits of signal are not used: 'native_output'[35:8]
+                                                                                                                                                             : ... note: In instance 'rv32_observed_soc.soc.peripherals'
+   59 |         wire [35:0] native_output;
+      |                     ^~~~~~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/rtl/rv32_rvc_expand.sv:16:16: Bits of signal are not used: 'branch_immediate'[0]
+                                                                                                                                                            : ... note: In instance 'rv32_observed_soc.soc.core.expand'
+   16 |     reg [12:0] branch_immediate;
+      |                ^~~~~~~~~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/rtl/rv32_rvc_expand.sv:17:16: Bits of signal are not used: 'jump_immediate'[0]
+                                                                                                                                                            : ... note: In instance 'rv32_observed_soc.soc.core.expand'
+   17 |     reg [20:0] jump_immediate;
+      |                ^~~~~~~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/rtl/rv32_rvc_frontend.sv:42:17: Signal is not used: 'word0_address'
+                                                                                                                                                              : ... note: In instance 'rv32_observed_soc.soc.core.frontend'
+   42 |     wire [31:0] word0_address={{(32-ADDRESS_BITS){1'b0}},word0_tag};
+      |                 ^~~~~~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/rtl/rv32_rvc_frontend.sv:43:17: Signal is not used: 'word1_address'
+                                                                                                                                                              : ... note: In instance 'rv32_observed_soc.soc.core.frontend'
+   43 |     wire [31:0] word1_address={{(32-ADDRESS_BITS){1'b0}},word1_tag};
+      |                 ^~~~~~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/rtl/rv32_rvc_frontend.sv:81:17: Bits of signal are not used: 'buffered_following'[31:16]
+                                                                                                                                                              : ... note: In instance 'rv32_observed_soc.soc.core.frontend'
+   81 |     wire [31:0] buffered_following=pc[2] ? word0_data : word1_data;
+      |                 ^~~~~~~~~~~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/rtl/rv32_rvc_frontend.sv:95:17: Bits of signal are not used: 'following_data'[31:16]
+                                                                                                                                                              : ... note: In instance 'rv32_observed_soc.soc.core.frontend'
+   95 |     wire [31:0] following_data=following_buffer_valid ? (pc[2] ? word0_data : word1_data) : following_pair ? i_rsp_pair_data : i_rsp_data;
+      |                 ^~~~~~~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/rtl/rv32_cache.sv:68:22: Signal is not used: 'dirty'
+                                                                                                                                                       : ... note: In instance 'rv32_observed_soc.soc.memory_system.caches[0].enabled.cache'
+   68 |     wire [LINES-1:0] dirty;
+      |                      ^~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/rtl/rv32_cache.sv:83:16: Signal is not used: 'request_data'
+                                                                                                                                                       : ... note: In instance 'rv32_observed_soc.soc.memory_system.caches[0].enabled.cache'
+   83 |     reg [31:0] request_data,victim_base;
+      |                ^~~~~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/rtl/rv32_cache.sv:105:58: Bits of signal are not used: 'word_data'[31:18,15:2]
+                                                                                                                                                        : ... note: In instance 'rv32_observed_soc.soc.memory_system.caches[0].enabled.cache'
+  105 |     function automatic [1:0] compact_halves(input [31:0] word_data);
+      |                                                          ^~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/rtl/rv32_cache.sv:127:17: Signal is not used: 'byte_mask'
+                                                                                                                                                        : ... note: In instance 'rv32_observed_soc.soc.memory_system.caches[0].enabled.cache'
+  127 |     wire [31:0] byte_mask={{8{request_strobe[3]}},{8{request_strobe[2]}},{8{request_strobe[1]}},{8{request_strobe[0]}}};
+      |                 ^~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/rtl/rv32_cache.sv:409:25: Bits of signal are not used: 'live_companion_address'[31:13,2:0]
+                                                                                                                                                        : ... note: In instance 'rv32_observed_soc.soc.memory_system.caches[0].enabled.cache'
+  409 |             wire [31:0] live_companion_address=USE_PRECOMPUTED_PAIR_ADDRESS!=0 ?
+      |                         ^~~~~~~~~~~~~~~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/rtl/rv32_cache.sv:414:39: Signal is not used: 'compact_companion_address'
+                                                                                                                                                        : ... note: In instance 'rv32_observed_soc.soc.memory_system.caches[0].enabled.cache'
+  414 |             wire [COMPANION_BITS-1:0] compact_companion_address=
+      |                                       ^~~~~~~~~~~~~~~~~~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/rtl/rv32_cache.sv:18:23: Signal is not used: 'req_pair_address'
+                                                                                                                                                       : ... note: In instance 'rv32_observed_soc.soc.memory_system.caches[1].enabled.cache'
+   18 |     input wire [31:0] req_pair_address,
+      |                       ^~~~~~~~~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/rtl/rv32_cache.sv:96:10: Signal is not used: 'lookup_companion_valid0'
+                                                                                                                                                       : ... note: In instance 'rv32_observed_soc.soc.memory_system.caches[1].enabled.cache'
+   96 |     wire lookup_companion_valid0,lookup_companion_valid1;
+      |          ^~~~~~~~~~~~~~~~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/rtl/rv32_cache.sv:96:34: Signal is not used: 'lookup_companion_valid1'
+                                                                                                                                                       : ... note: In instance 'rv32_observed_soc.soc.memory_system.caches[1].enabled.cache'
+   96 |     wire lookup_companion_valid0,lookup_companion_valid1;
+      |                                  ^~~~~~~~~~~~~~~~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:240:15: Signal is not used: 'beb_reg'
+                                                                                                                                                                 : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  240 |     reg [3:0] beb_reg;
+      |               ^~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:241:22: Signal is not driven, nor used: 'write_en_b'
+                                                                                                                                                                 : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  241 |     wire write_en_a, write_en_b, read_en_a, read_en_b;
+      |                      ^~~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:241:34: Signal is not driven, nor used: 'read_en_a'
+                                                                                                                                                                 : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  241 |     wire write_en_a, write_en_b, read_en_a, read_en_b;
+      |                                  ^~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:243:18: Signal is not used: 'ecc_rden'
+                                                                                                                                                                 : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  243 |     reg ecc_wren,ecc_rden;
+      |                  ^~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:244:26: Signal is not used: 'ecc_dbiterr_int'
+                                                                                                                                                                 : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  244 |     wire ecc_sbiterr_int,ecc_dbiterr_int;
+      |                          ^~~~~~~~~~~~~~~
+%Warning-UNDRIVEN: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:245:9: Signal is not driven: 'ecc_sbiterr'
+                                                                                                                                                            : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  245 |     reg ecc_sbiterr,ecc_dbiterr,ecc_sbiterr_reg,ecc_dbiterr_reg;
+      |         ^~~~~~~~~~~
+%Warning-UNDRIVEN: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:245:21: Signal is not driven: 'ecc_dbiterr'
+                                                                                                                                                             : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  245 |     reg ecc_sbiterr,ecc_dbiterr,ecc_sbiterr_reg,ecc_dbiterr_reg;
+      |                     ^~~~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:245:33: Signal is not driven, nor used: 'ecc_sbiterr_reg'
+                                                                                                                                                                 : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  245 |     reg ecc_sbiterr,ecc_dbiterr,ecc_sbiterr_reg,ecc_dbiterr_reg;
+      |                                 ^~~~~~~~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:245:49: Signal is not driven, nor used: 'ecc_dbiterr_reg'
+                                                                                                                                                                 : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  245 |     reg ecc_sbiterr,ecc_dbiterr,ecc_sbiterr_reg,ecc_dbiterr_reg;
+      |                                                 ^~~~~~~~~~~~~~~
+%Warning-UNDRIVEN: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:246:15: Signal is not driven: 'ecc_rdaddr'
+                                                                                                                                                             : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  246 |     reg [8:0] ecc_rdaddr,ecc_rdaddr_reg;
+      |               ^~~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:246:26: Signal is not driven, nor used: 'ecc_rdaddr_reg'
+                                                                                                                                                                 : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  246 |     reg [8:0] ecc_rdaddr,ecc_rdaddr_reg;
+      |                          ^~~~~~~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:247:16: Signal is not driven, nor used: 'a_out_ecc'
+                                                                                                                                                                 : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  247 |     reg [35:0] a_out_ecc,b_out_ecc;
+      |                ^~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:247:26: Signal is not driven, nor used: 'b_out_ecc'
+                                                                                                                                                                 : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  247 |     reg [35:0] a_out_ecc,b_out_ecc;
+      |                          ^~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:253:17: Signal is not used: 'd_out_ecc'
+                                                                                                                                                                 : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  253 |     wire [71:0] d_out_ecc;
+      |                 ^~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:258:16: Signal is not used: 'a_out_reg'
+                                                                                                                                                                 : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  258 |     reg [35:0] a_out_reg;
+      |                ^~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:260:16: Signal is not used: 'b_out_reg'
+                                                                                                                                                                 : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  260 |     reg [35:0] b_out_reg;
+      |                ^~~~~~~~~
+%Warning-UNUSEDSIGNAL: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:280:10: Signal is not used: 'rsta_int'
+                                                                                                                                                                 : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[3].native_ram'
+  280 |     wire rsta_int, rstb_int;
+      |          ^~~~~~~~
+%Warning-MULTIDRIVEN: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/rtl/rv32_core.sv:257:17: Bits [31:0] of signal 'rv32_observed_soc.soc.core.frontend_pc' have multiple combinational drivers
+                      /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/rtl/rv32_rvc_frontend.sv:150:24: ... Location of first driver
+  150 |     assign predictor_pc=pc;
+      |                        ^
+                      /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/rtl/rv32_rvc_frontend.sv:151:18: ... Location of other driver
+  151 |     assign out_pc=pc;
+      |                  ^
+                      /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/rtl/rv32_core.sv:257:17: ... Only the first driver will be respected
+%Warning-BLKSEQ: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:977:24: Blocking assignment '=' in sequential logic process
+                                                                                                                                                           : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[0].native_ram'
+                                                                                                                                                           : ... Suggest using delayed assignment '<='
+  977 |       #0.2 CLKA_active = 1'b0;
+      |                        ^
+%Warning-BLKSEQ: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:985:24: Blocking assignment '=' in sequential logic process
+                                                                                                                                                           : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[0].native_ram'
+                                                                                                                                                           : ... Suggest using delayed assignment '<='
+  985 |       #0.2 CLKB_active = 1'b0;
+      |                        ^
+%Warning-BLKSEQ: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:831:46: Blocking assignment '=' in sequential logic process
+                                                                                                                                                           : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[0].native_ram'
+                                                                                                                                                           : ... Suggest using delayed assignment '<='
+  831 |                     mem[addr[14:6]*8+7][7:0] = data[70:63];
+      |                                              ^
+%Warning-BLKSEQ: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:833:46: Blocking assignment '=' in sequential logic process
+                                                                                                                                                           : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[0].native_ram'
+                                                                                                                                                           : ... Suggest using delayed assignment '<='
+  833 |                     mem[addr[14:6]*8+6][7:0] = data[61:54];
+      |                                              ^
+%Warning-BLKSEQ: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:835:46: Blocking assignment '=' in sequential logic process
+                                                                                                                                                           : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[0].native_ram'
+                                                                                                                                                           : ... Suggest using delayed assignment '<='
+  835 |                     mem[addr[14:6]*8+5][7:0] = data[52:45];
+      |                                              ^
+%Warning-BLKSEQ: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:837:46: Blocking assignment '=' in sequential logic process
+                                                                                                                                                           : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[0].native_ram'
+                                                                                                                                                           : ... Suggest using delayed assignment '<='
+  837 |                     mem[addr[14:6]*8+4][7:0] = data[43:36];
+      |                                              ^
+%Warning-BLKSEQ: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:839:46: Blocking assignment '=' in sequential logic process
+                                                                                                                                                           : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[0].native_ram'
+                                                                                                                                                           : ... Suggest using delayed assignment '<='
+  839 |                     mem[addr[14:6]*8+3][7:0] = data[34:27];
+      |                                              ^
+%Warning-BLKSEQ: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:841:46: Blocking assignment '=' in sequential logic process
+                                                                                                                                                           : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[0].native_ram'
+                                                                                                                                                           : ... Suggest using delayed assignment '<='
+  841 |                     mem[addr[14:6]*8+2][7:0] = data[25:18];
+      |                                              ^
+%Warning-BLKSEQ: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:843:46: Blocking assignment '=' in sequential logic process
+                                                                                                                                                           : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[0].native_ram'
+                                                                                                                                                           : ... Suggest using delayed assignment '<='
+  843 |                     mem[addr[14:6]*8+1][7:0] = data[16:9];
+      |                                              ^
+%Warning-BLKSEQ: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:845:46: Blocking assignment '=' in sequential logic process
+                                                                                                                                                           : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[0].native_ram'
+                                                                                                                                                           : ... Suggest using delayed assignment '<='
+  845 |                     mem[addr[14:6]*8][7:0]   = data[7:0];
+      |                                              ^
+%Warning-BLKSEQ: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:1217:21: Blocking assignment '=' in sequential logic process
+                                                                                                                                                            : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[0].native_ram'
+                                                                                                                                                            : ... Suggest using delayed assignment '<='
+ 1217 |               b_out = rstb_val_int;
+      |                     ^
+%Warning-BLKSEQ: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:1219:36: Blocking assignment '=' in sequential logic process
+                                                                                                                                                            : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[0].native_ram'
+                                                                                                                                                            : ... Suggest using delayed assignment '<='
+ 1219 |               b_out[width_b-1 : 0] = mem_read_b(adb_reg[14:0]);
+      |                                    ^
+%Warning-SYNCASYNCNET: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/native_selected_observer.sv:12:21: Signal flopped as both synchronous and async: 'rst_n'
+                       /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/rtl/rv32_soc.sv:91:13: ... Location of async usage
+   91 |         if(!rst_n) maintenance_fault<=0;
+      |             ^~~~~
+                       /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/native_selected_observer.sv:41:30: ... Location of sync usage
+   41 |     always @(posedge clk) if(rst_n) begin
+      |                              ^~~~~
+%Warning-SYNCASYNCNET: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:204:12: Signal flopped as both synchronous and async: 'rv32_observed_soc.soc.peripherals.snapshot_bank[0].native_ram.RSTB'
+                                                                                                                                                                 : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[0].native_ram'
+                       /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:1216:16: ... Location of async usage
+ 1216 |            if (rstb_int)
+      |                ^~~~~~~~
+                       /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:1445:13: ... Location of sync usage
+ 1445 |         if (RSTB) begin
+      |             ^~~~
+%Warning-SYNCASYNCNET: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:203:12: Signal flopped as both synchronous and async: 'rv32_observed_soc.soc.peripherals.snapshot_bank[0].native_ram.RSTA'
+                                                                                                                                                                 : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[0].native_ram'
+                       /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:1566:13: ... Location of async usage
+ 1566 |         if (RSTA)
+      |             ^~~~
+                       /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:1434:13: ... Location of sync usage
+ 1434 |         if (RSTA) begin
+      |             ^~~~
+%Warning-UNOPTFLAT: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:276:25: Signal unoptimizable: Circular combinational logic: 'rv32_observed_soc.soc.peripherals.snapshot_bank[0].native_ram.cas_selb'
+                                                                                                                                                              : ... note: In instance 'rv32_observed_soc.soc.peripherals.snapshot_bank[0].native_ram'
+  276 |     reg  cas_sela=1'b1, cas_selb=1'b1;
+      |                         ^~~~~~~~
+                    /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:276:25:      Example path: rv32_observed_soc.soc.peripherals.snapshot_bank[0].native_ram.cas_selb
+                    /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:1003:5:      Example path: ASSIGNW
+                    /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/inputs/sim/vendor/GTP_DRM36K_E1.v:276:25:      Example path: rv32_observed_soc.soc.peripherals.snapshot_bank[0].native_ram.cas_selb

@@ -1,0 +1,44 @@
+﻿{
+  "release": "Original_155250",
+  "configured_clock_hz": 155250000,
+  "setup_uncertainty_ns": 0.15,
+  "functional_rtl_edits": 0,
+  "firmware_edits": 0,
+  "candidates": [
+    {
+      "build": "20261101-004552-4cce580e",
+      "profile": "Shared42",
+      "seed": 2,
+      "status": "timing_failed",
+      "setup_wns_ns": -0.303,
+      "post_route_luts": 6694,
+      "post_route_ffs": 3702,
+      "DRM": 22.5,
+      "bitstream_sha256": "BF8F2E0F7A10D803D887BE42F4BF7A6FD0670A41C75A61929F03C8F15A3EAA6E"
+    },
+    {
+      "build": "20261101-005555-3ea0d85f",
+      "profile": "Shared42",
+      "seed": 3,
+      "status": "timing_failed",
+      "setup_wns_ns": -0.076,
+      "post_route_luts": 6729,
+      "post_route_ffs": 3702,
+      "DRM": 22.5,
+      "bitstream_sha256": "FBECFE03F26A19232F3FADB6C1A21832C21531649ED24194802D836BCE9F0B18"
+    },
+    {
+      "build": "20261101-010901-9bbe8fee",
+      "profile": "NativeMinimal",
+      "seed": 1,
+      "status": "internal_timing_passed",
+      "setup_wns_ns": 0.119,
+      "post_route_luts": 6609,
+      "post_route_ffs": 3573,
+      "DRM": 22.5,
+      "bitstream_sha256": "2FFE2C094CC143A38A73CE3D507E9E25BB53950DAF266E71710A0D964606B868"
+    }
+  ],
+  "selected_build": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\builds\\20261101-010901-9bbe8fee",
+  "selected_reason": "Only candidate with all ten timing corner summaries passing; native minimal 42-data/33-trigger capture profile retained all signals and 1024 depth."
+}

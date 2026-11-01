@@ -1,0 +1,20 @@
+﻿{
+  "executable": "D:/PDS_2022.2-SP6.4\\bin\\pds_shell.exe",
+  "executable_sha256": "631ffd8f14d6246872873c72025cbc2734c9f8c388075b7afb0b042f3a684e6f",
+  "argv": [
+    "-file",
+    "D:/AAAFPGA/Bare_Core_Releases_20261101/H3_Retained_145125/physical/builds/20261101-015628-ffa262ba/implementation/build.tcl",
+    "-work_dir",
+    "D:/AAAFPGA/Bare_Core_Releases_20261101/H3_Retained_145125/physical/builds/20261101-015628-ffa262ba/implementation",
+    "-project_name",
+    "bare_core"
+  ],
+  "working_directory": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\physical\\builds\\20261101-015628-ffa262ba\\implementation",
+  "started_utc": "2026-10-31T18:02:33.7882279Z",
+  "finished_utc": "2026-10-31T18:08:24.6199921Z",
+  "pid": 5244,
+  "exit_code": 0,
+  "status": "finished",
+  "stdout": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\physical\\builds\\20261101-015628-ffa262ba\\implementation\\pds.stdout.log",
+  "stderr": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\physical\\builds\\20261101-015628-ffa262ba\\implementation\\pds.stderr.log"
+}

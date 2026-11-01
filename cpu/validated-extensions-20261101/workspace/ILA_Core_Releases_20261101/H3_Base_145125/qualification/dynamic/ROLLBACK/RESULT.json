@@ -1,0 +1,15 @@
+﻿{
+  "release": "H3_Base_145125",
+  "variant": "ROLLBACK",
+  "dynamic_window_completed": true,
+  "complete_coremark": false,
+  "cycle_limit": 2000000,
+  "firmware_sha256": "3a3aff510511ed4cd7fe304a6354861adae30531102446a24438e43f3e2a2884",
+  "uart_sha256": "bd26f3b0aedca77c4a66a4cdf89bef89b04991b2c9dc97cc385d230e82c26d8e",
+  "run_stdout_sha256": "1e6015faf4390ed302479825b30b5b30482d426b8a4660669e7f3aa0852cf8c9",
+  "exact_output": "ZGTC COREMARK READY send G; clock=145125000 Hz\nZGTC COREMARK START iterations=6000 validation=0\nPARTIAL_WINDOW_PASS cycle_limit=2000000 cycle_count=2000000 retired=1875092 snapshots=1 status_code=0xc0100002 ila_hash=0x28650d5aff3519fb trace_hash=0xa057084c5acf3323\nSIGNAL_CYCLES 1958084 1922271 1902219 1888735 1875092 1876533 1875094 1438 1932541 1875093\nFUNCTION_ENTRIES iterate=1 list=13 matrix=28 state=28\nEX_PRESELECT_PROFILE idle_candidates=19 older_load_wait=0 irq_cycles=0\nID_ZERO_PROFILE resolved=73510 redirects=15841\n",
+  "source_inputs": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\builds\\20261101-004705-33276f27\\rollback_test\\inputs",
+  "run_exit_code": 0,
+  "baseline_uart_equal": true,
+  "baseline_cycles_trace_and_42_probes_equal": true
+}

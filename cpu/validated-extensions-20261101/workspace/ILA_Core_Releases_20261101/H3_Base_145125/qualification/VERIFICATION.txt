@@ -1,0 +1,57 @@
+﻿Changed field: pds_soc_top.board.INIT_FILE (path relocation only); passive ILA connects 42 shared capture/trigger channels.
+MODIFIED_FILE=D:\AAAFPGA\ILA_Core_Releases_20261101\H3_Base_145125\builds\20261101-004705-33276f27\inputs\pds_soc_top.v
+DIFF_FILE=D:\AAAFPGA\ILA_Core_Releases_20261101\H3_Base_145125\builds\20261101-004705-33276f27\DIFF_FILE.txt
+VERIFICATION=D:\AAAFPGA\ILA_Core_Releases_20261101\H3_Base_145125\qualification\VERIFICATION.txt
+ROLLBACK=D:\AAAFPGA\ILA_Core_Releases_20261101\H3_Base_145125\builds\20261101-004705-33276f27\ROLLBACK.ps1
+Firmware image remains frozen V0: 3a3aff510511ed4cd7fe304a6354861adae30531102446a24438e43f3e2a2884
+Preserved frozen full-run evidence: cycles=1743221870 retired=1649428429 UART SHA256=1c9f93a53d018f363654d79a82e297ac4b128f3a692e98a40f9b8484306f9f90
+Validation below is a short unchanged-firmware 2000000-cycle equality window, not a completed new 6000-iteration CoreMark run.
+
+BASELINE exact command: pwsh -NoProfile -File "D:\AAAFPGA\ILA_Core_Releases_20261101\H3_Base_145125\qualification\Test-H3PassiveWindow.ps1" -Release H3_Base_145125 -Variant BASELINE -Cycles 2000000
+BASELINE input: D:\AAAFPGA\ILA_Core_Releases_20261101\H3_Base_145125\qualification\frozen_inputs
+BASELINE exact native run: {"executable":"wsl.exe","arguments":["--cd","/mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/qualification/dynamic/BASELINE","--exec","/mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/qualification/dynamic/BASELINE/objects/Vrv32_observed_soc","/mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/qualification/dynamic/BASELINE/uart.log","2000000"],"actual_exit_code":0,"started_utc":"2026-10-31T16:47:35.5586543Z","finished_utc":"2026-10-31T16:47:37.4791166Z","stdout":"D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\qualification\\dynamic\\BASELINE\\run.stdout.log","stderr":"D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\qualification\\dynamic\\BASELINE\\run.stderr.log"}
+BASELINE literal output:
+ZGTC COREMARK READY send G; clock=145125000 Hz
+ZGTC COREMARK START iterations=6000 validation=0
+PARTIAL_WINDOW_PASS cycle_limit=2000000 cycle_count=2000000 retired=1875092 snapshots=1 status_code=0xc0100002 ila_hash=0x28650d5aff3519fb trace_hash=0xa057084c5acf3323
+SIGNAL_CYCLES 1958084 1922271 1902219 1888735 1875092 1876533 1875094 1438 1932541 1875093
+FUNCTION_ENTRIES iterate=1 list=13 matrix=28 state=28
+EX_PRESELECT_PROFILE idle_candidates=19 older_load_wait=0 irq_cycles=0
+ID_ZERO_PROFILE resolved=73510 redirects=15841
+BASELINE exit status: 0
+BASELINE result: exact UART, cycle/retirement observations, 42-bit capture stream hash, and architectural retirement stream hash equal to this release baseline.
+
+MODIFIED exact command: pwsh -NoProfile -File "D:\AAAFPGA\ILA_Core_Releases_20261101\H3_Base_145125\qualification\Test-H3PassiveWindow.ps1" -Release H3_Base_145125 -Variant MODIFIED -Cycles 2000000 -BuildDirectory "D:\AAAFPGA\ILA_Core_Releases_20261101\H3_Base_145125\builds\20261101-004705-33276f27"
+MODIFIED input: D:\AAAFPGA\ILA_Core_Releases_20261101\H3_Base_145125\builds\20261101-004705-33276f27\inputs
+MODIFIED exact native run: {"executable":"wsl.exe","arguments":["--cd","/mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/qualification/dynamic/MODIFIED","--exec","/mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/qualification/dynamic/MODIFIED/objects/Vrv32_observed_soc","/mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/qualification/dynamic/MODIFIED/uart.log","2000000"],"actual_exit_code":0,"started_utc":"2026-10-31T16:49:00.2872751Z","finished_utc":"2026-10-31T16:49:02.2434812Z","stdout":"D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\qualification\\dynamic\\MODIFIED\\run.stdout.log","stderr":"D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\qualification\\dynamic\\MODIFIED\\run.stderr.log"}
+MODIFIED literal output:
+ZGTC COREMARK READY send G; clock=145125000 Hz
+ZGTC COREMARK START iterations=6000 validation=0
+PARTIAL_WINDOW_PASS cycle_limit=2000000 cycle_count=2000000 retired=1875092 snapshots=1 status_code=0xc0100002 ila_hash=0x28650d5aff3519fb trace_hash=0xa057084c5acf3323
+SIGNAL_CYCLES 1958084 1922271 1902219 1888735 1875092 1876533 1875094 1438 1932541 1875093
+FUNCTION_ENTRIES iterate=1 list=13 matrix=28 state=28
+EX_PRESELECT_PROFILE idle_candidates=19 older_load_wait=0 irq_cycles=0
+ID_ZERO_PROFILE resolved=73510 redirects=15841
+MODIFIED exit status: 0
+MODIFIED result: exact UART, cycle/retirement observations, 42-bit capture stream hash, and architectural retirement stream hash equal to this release baseline.
+
+ROLLBACK exact command: pwsh -NoProfile -File "D:\AAAFPGA\ILA_Core_Releases_20261101\H3_Base_145125\qualification\Test-H3PassiveWindow.ps1" -Release H3_Base_145125 -Variant ROLLBACK -Cycles 2000000 -BuildDirectory "D:\AAAFPGA\ILA_Core_Releases_20261101\H3_Base_145125\builds\20261101-004705-33276f27"
+ROLLBACK input: D:\AAAFPGA\ILA_Core_Releases_20261101\H3_Base_145125\builds\20261101-004705-33276f27\rollback_test\inputs
+ROLLBACK exact native run: {"executable":"wsl.exe","arguments":["--cd","/mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/qualification/dynamic/ROLLBACK","--exec","/mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/qualification/dynamic/ROLLBACK/objects/Vrv32_observed_soc","/mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/qualification/dynamic/ROLLBACK/uart.log","2000000"],"actual_exit_code":0,"started_utc":"2026-10-31T16:52:20.9629879Z","finished_utc":"2026-10-31T16:52:25.3103129Z","stdout":"D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\qualification\\dynamic\\ROLLBACK\\run.stdout.log","stderr":"D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\qualification\\dynamic\\ROLLBACK\\run.stderr.log"}
+ROLLBACK literal output:
+ZGTC COREMARK READY send G; clock=145125000 Hz
+ZGTC COREMARK START iterations=6000 validation=0
+PARTIAL_WINDOW_PASS cycle_limit=2000000 cycle_count=2000000 retired=1875092 snapshots=1 status_code=0xc0100002 ila_hash=0x28650d5aff3519fb trace_hash=0xa057084c5acf3323
+SIGNAL_CYCLES 1958084 1922271 1902219 1888735 1875092 1876533 1875094 1438 1932541 1875093
+FUNCTION_ENTRIES iterate=1 list=13 matrix=28 state=28
+EX_PRESELECT_PROFILE idle_candidates=19 older_load_wait=0 irq_cycles=0
+ID_ZERO_PROFILE resolved=73510 redirects=15841
+ROLLBACK exit status: 0
+ROLLBACK result: exact UART, cycle/retirement observations, 42-bit capture stream hash, and architectural retirement stream hash equal to this release baseline.
+
+ROLLBACK restoration command: pwsh -NoProfile -File "D:\AAAFPGA\ILA_Core_Releases_20261101\H3_Base_145125\builds\20261101-004705-33276f27\ROLLBACK.ps1" -BuildDirectory "D:\AAAFPGA\ILA_Core_Releases_20261101\H3_Base_145125\builds\20261101-004705-33276f27" -TargetDirectory "D:\AAAFPGA\ILA_Core_Releases_20261101\H3_Base_145125\builds\20261101-004705-33276f27\rollback_test\inputs"
+ROLLBACK literal restoration output: ROLLBACK PASS: restored 25 frozen input files; original INIT_FILE binding restored; functional RTL and firmware SHA256 match baseline.
+ROLLBACK restoration exit status: 0
+Restored behavior/status: separate rollback copy restores all 25 frozen input hashes and reproduces baseline dynamic observations. Modified build inputs retain their relocated firmware path.
+Physical implementation current status: timing_failed; stage=implemented
+Physical pipeline analysis uses EX PC and five stage occupancy flags plus ID, EX, MEM transfer events, MEM flush, and frontend instruction transfer. Cause-specific stall attribution requires additional probes.

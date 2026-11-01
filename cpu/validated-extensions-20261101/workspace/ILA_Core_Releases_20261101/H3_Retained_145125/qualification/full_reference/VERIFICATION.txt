@@ -1,0 +1,39 @@
+﻿Changed field: pds_soc_top.board.INIT_FILE (firmware path relocation only); functional RTL and firmware are unchanged.
+MODIFIED_FILE=D:\AAAFPGA\ILA_Core_Releases_20261101\H3_Retained_145125\builds\20261101-013613-bbd7e86b\inputs\pds_soc_top.v
+DIFF_FILE=D:\AAAFPGA\ILA_Core_Releases_20261101\H3_Retained_145125\builds\20261101-013613-bbd7e86b\DIFF_FILE.txt
+VERIFICATION=D:\AAAFPGA\ILA_Core_Releases_20261101\H3_Retained_145125\qualification\full_reference\VERIFICATION.txt
+ROLLBACK=D:\AAAFPGA\ILA_Core_Releases_20261101\H3_Retained_145125\builds\20261101-013613-bbd7e86b\ROLLBACK.ps1
+BASELINE command/input/output/exit: see ../VERIFICATION.txt for the recorded 2000000-cycle baseline and exact frozen full-run reference artifacts.
+MODIFIED exact command: pwsh -NoProfile -File "D:\AAAFPGA\ILA_Core_Releases_20261101\H3_Retained_145125\qualification\Run-H3FullReference.ps1" -Release H3_Retained_145125 -CycleLimit 2100000000
+MODIFIED exact native command: {"schema":"h3-full-reference-native-run/v1","release":"H3_Retained_145125","origin":"LOCAL RTL SIMULATION","executable":"wsl.exe","arguments":["--cd","/mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Retained_145125/qualification/full_reference","--exec","/mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Retained_145125/qualification/dynamic/MODIFIED/objects/Vrv32_observed_soc","/mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Retained_145125/qualification/full_reference/uart.log","2100000000"],"native_simulator":"D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\qualification\\dynamic\\MODIFIED\\objects\\Vrv32_observed_soc","native_simulator_sha256":"12e9a8b85e3b3887a45db4e9880093b16b37239f9e763eb53c45392e8e04d1e1","source_identity":"D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\qualification\\dynamic\\MODIFIED\\SOURCE_IDENTITY.json","source_identity_sha256":"adfbe8f365dacf7f5eaa8103ca9f81995eaf1dab65a5197735a7aa8c2089ab05","firmware_sha256":"3a3aff510511ed4cd7fe304a6354861adae30531102446a24438e43f3e2a2884","working_directory":"D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\qualification\\full_reference","pid":11952,"started_utc":"2026-10-31T17:06:27.4909064Z","actual_exit_code":0,"status":"finished","cycle_limit":2100000000,"reference_uart":"D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\qualification\\reference\\uart.log","reference_uart_sha256":"f07a9b92e47237fc974f0e9aceefc2551f965f8c1e1e8c08d68420b93ed5053a","stdout":"D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\qualification\\full_reference\\run.stdout.log","stderr":"D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\qualification\\full_reference\\run.stderr.log","finished_utc":"2026-10-31T17:33:06.5462219Z","elapsed_seconds":1599.0575513}
+MODIFIED input: D:\AAAFPGA\ILA_Core_Releases_20261101\H3_Retained_145125\qualification\full_reference; firmware SHA256=3a3aff510511ed4cd7fe304a6354861adae30531102446a24438e43f3e2a2884
+MODIFIED literal output:
+ZGTC COREMARK READY send G; clock=145125000 Hz
+ZGTC COREMARK START iterations=6000 validation=0
+2K performance run parameters for coremark.
+CoreMark Size    : 666
+Total ticks      : 12011
+Total time (secs): 12
+Iterations/Sec   : 500
+Iterations       : 6000
+Compiler version : GCC 10.2.0
+Compiler flags   : -march=rv32imc -mabi=ilp32 -mcmodel=medany -msmall-data-limit=0 -std=c11 -O3 -funroll-loops -ffreestanding -fno-builtin -ffunction-sections -fdata-sections -Wall -Wextra -DTOTAL_DATA_SIZE=2000 -DITERATIONS=6000 -DVALIDATION_RUN=0 -DPERFORMANCE_RUN=1 -DCPU_CLOCK_HZ=145125000u -DCONSOLE_DELAY_CYCLES=0
+Memory location  : 64KiB on-chip RAM; cache mode/geometry in ZGTC config
+seedcrc          : 0xe9f5
+[0]crclist       : 0xe714
+[0]crcmatrix     : 0x1fd7
+[0]crcstate      : 0x8e3a
+[0]crcfinal      : 0xa14c
+Correct operation validated. See README.md for run and reporting rules.
+ZGTC cycles_hex=0000000067e61feb retired_hex=00000000625047cd clock_hz=145125000
+ZGTC config=1e8e96fd ihit=937179909 imiss=519 dhit=410438109 dmiss=366362 writebacks=222359
+ZGTC COREMARK FINISHED
+EX_PRESELECT_PROFILE idle_candidates=19 older_load_wait=0 irq_cycles=0
+ID_ZERO_PROFILE resolved=66496573 redirects=14457250
+PASS RTL CoreMark smoke total_cycles=1743494280 total_retired=1649640866
+OBSERVER cycles=1743134699 retired=1649428429 minimum_sp=65152
+EVENTS redirects=31892730,156006,60005,0,0,0,0 eligible=31892730,156006,60005,0,0,0,0 request_stalls=0 response_waits=4184 barrier_cycles=0
+MODIFIED actual native exit status: 0
+MODIFIED result: full 6000 iterations; exact frozen reference UART/CRC/counters match; cycles=1743134699 retired=1649428429 UART SHA256=f07a9b92e47237fc974f0e9aceefc2551f965f8c1e1e8c08d68420b93ed5053a
+ROLLBACK command/input/literal output/exit: see ../VERIFICATION.txt; separate rollback copy restored all 25 frozen hashes and produced baseline-equal 2000000-cycle observations, exit 0.
+Restored behavior/status: baseline behavior reproduced by the separate rollback copy. Selected modified inputs retain the relocated firmware path. Complete new 6000-iteration simulation validates the modified functional core and firmware against the frozen full reference.

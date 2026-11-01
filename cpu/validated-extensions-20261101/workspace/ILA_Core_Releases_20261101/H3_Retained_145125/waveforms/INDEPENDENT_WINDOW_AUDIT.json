@@ -1,0 +1,48 @@
+﻿{
+  "release": "H3_Retained_145125",
+  "origin": "LOCAL RTL SIMULATION",
+  "hashes_valid": true,
+  "all_windows1024rows42channels": true,
+  "actual_entry_pc_and_exfire_trigger_checked": true,
+  "windows": [
+    {
+      "function": "core_bench_list",
+      "rows": 1024,
+      "trigger_sample": 256,
+      "trigger_pc": "0x00000942",
+      "first_cycle": "43109",
+      "last_cycle": "44132",
+      "first_sim_time_ps": "431120000",
+      "last_sim_time_ps": "441350000",
+      "actual_sim_edge_period_ps": 10000,
+      "csv_sha256": "682ea0d6265e1d0186d9dcf40c49222176c829618f413b6bed2f3da01420ad92",
+      "vcd_sha256": "fcff63eb25808d1b8601230a8deb40d423e80273ca310d24b47082a6be33fb06"
+    },
+    {
+      "function": "core_bench_matrix",
+      "rows": 1024,
+      "trigger_sample": 256,
+      "trigger_pc": "0x00002604",
+      "first_cycle": "79433",
+      "last_cycle": "80456",
+      "first_sim_time_ps": "794360000",
+      "last_sim_time_ps": "804590000",
+      "actual_sim_edge_period_ps": 10000,
+      "csv_sha256": "7244cc3f9e6aa9df1a737786c50436a7026c4806b7988a74ea0063bd7c8430f8",
+      "vcd_sha256": "1c789a8aa33fedc2d926f377113f8c45a823a33d3a094573e33e12a24e4cd0bf"
+    },
+    {
+      "function": "core_bench_state",
+      "rows": 1024,
+      "trigger_sample": 256,
+      "trigger_pc": "0x00002e18",
+      "first_cycle": "142360",
+      "last_cycle": "143383",
+      "first_sim_time_ps": "1423630000",
+      "last_sim_time_ps": "1433860000",
+      "actual_sim_edge_period_ps": 10000,
+      "csv_sha256": "a41cecd9c4f5ed35f820e8b14e1b1b1e48ea2134708fed8a57921e4fa6678569",
+      "vcd_sha256": "0529a480688acbfac18c31d59ecdceb960811dcdcfc9daa90a4df11e0b029298"
+    }
+  ]
+}

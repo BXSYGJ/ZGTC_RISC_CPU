@@ -1,0 +1,15 @@
+﻿{
+  "release": "Original_155250",
+  "variant": "ROLLBACK",
+  "dynamic_window_completed": true,
+  "complete_coremark": false,
+  "cycle_limit": 2000000,
+  "firmware_sha256": "1d66bdd8919951e18c191b82ea271c84bd156ea14f2ca9fcf5c4b56216069949",
+  "uart_sha256": "6066edfd9d90cada90a8340d9aec084a64b2e9143a8f1779f7a91158fcdc16ff",
+  "run_stdout_sha256": "8fee43dbd14dbf3019e27f59881ae0711cd5a8aa12e8095ca4b246e9f40102b6",
+  "exact_output": "ZGTC COREMARK READY send G; clock=155250000 Hz\nZGTC COREMARK START iterations=6000 validation=0\nPARTIAL_WINDOW_PASS cycle_limit=2000000 cycle_count=2000000 retired=1834318 snapshots=1 status_code=0xc0100002 ila_hash=0x89731e09f38ea293 trace_hash=0xd447d06ddf3d9bf9\nSIGNAL_CYCLES 1927664 1893089 1861007 1847685 1834318 1835787 1834320 1497 1903138 1834319\nFUNCTION_ENTRIES iterate=1 list=13 matrix=27 state=27\n",
+  "source_inputs": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\builds\\20261101-004552-4cce580e\\rollback_test\\inputs",
+  "run_exit_code": 0,
+  "baseline_uart_equal": true,
+  "baseline_cycles_trace_and_42_probes_equal": true
+}

@@ -1,0 +1,24 @@
+﻿Changed field: pds_soc_top.board.INIT_FILE (path relocation only)
+MODIFIED_FILE=D:\AAAFPGA\ILA_Core_Releases_20261101\H3_Base_145125\builds\20261101-013611-840c8de9\inputs\pds_soc_top.v
+DIFF_FILE=D:\AAAFPGA\ILA_Core_Releases_20261101\H3_Base_145125\builds\20261101-013611-840c8de9\DIFF_FILE.txt
+VERIFICATION=D:\AAAFPGA\ILA_Core_Releases_20261101\H3_Base_145125\builds\20261101-013611-840c8de9\VERIFICATION.txt
+ROLLBACK=D:\AAAFPGA\ILA_Core_Releases_20261101\H3_Base_145125\builds\20261101-013611-840c8de9\ROLLBACK.ps1
+BASELINE command: Build-MinimalIla.ps1 -Release H3_Base_145125 -Action Prepare
+BASELINE input: frozen physical/V0/inputs and recipe.json
+BASELINE output: BASELINE PASS: 25 frozen physical input SHA256 values recorded; firmware matches recipe; functional RTL untouched.
+BASELINE exit: 0
+MODIFIED command: Test-Inputs
+MODIFIED input: D:\AAAFPGA\ILA_Core_Releases_20261101\H3_Base_145125\builds\20261101-013611-840c8de9\inputs
+MODIFIED output: INPUT AUDIT PASS: 25 original hashes preserved; RTL/PLL/constraints/firmware unchanged; top INIT_FILE relocation only.
+MODIFIED exit: 0
+ROLLBACK command: pwsh -NoProfile -File "D:\AAAFPGA\ILA_Core_Releases_20261101\H3_Base_145125\builds\20261101-013611-840c8de9\ROLLBACK.ps1" -BuildDirectory "D:\AAAFPGA\ILA_Core_Releases_20261101\H3_Base_145125\builds\20261101-013611-840c8de9" -TargetDirectory "D:\AAAFPGA\ILA_Core_Releases_20261101\H3_Base_145125\builds\20261101-013611-840c8de9\rollback_test\inputs"
+ROLLBACK input: D:\AAAFPGA\ILA_Core_Releases_20261101\H3_Base_145125\builds\20261101-013611-840c8de9\rollback_test\inputs
+ROLLBACK output: ROLLBACK PASS: restored 25 frozen input files; original INIT_FILE binding restored; functional RTL and firmware SHA256 match baseline.
+ROLLBACK exit: 0
+Restored behavior/status: a separate rollback copy has every frozen hash and original top firmware path. The build inputs retain their relocated firmware binding.
+The requested waveform deliverable uses local RTL simulation; no physical board run is part of this task.
+MODIFIED PHYSICAL command: pds_shell.exe -file implementation/build.tcl -work_dir implementation -project_name cpu_ila
+MODIFIED PHYSICAL input: D:\AAAFPGA\ILA_Core_Releases_20261101\H3_Base_145125\builds\20261101-013611-840c8de9
+MODIFIED PHYSICAL result: internal_timing_passed; WNS=0.074 ns; LUT=6421; FF=3024; bitstream SHA256=77E9A98260A0DF6F51B548544FE356F44D235B65E31C58A2B27B464DFC8EA1EA
+MODIFIED PHYSICAL vendor exit: 0
+Restored behavior/status: rollback_test remains byte-identical to frozen baseline; modified build remains instrumented; local RTL waveform and full CoreMark simulation evidence are tracked separately.

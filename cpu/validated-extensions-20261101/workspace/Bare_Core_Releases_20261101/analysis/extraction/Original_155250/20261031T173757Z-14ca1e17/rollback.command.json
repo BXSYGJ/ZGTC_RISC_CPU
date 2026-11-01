@@ -1,0 +1,19 @@
+{
+  "executable": "wsl.exe",
+  "arguments": [
+    "--cd",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17",
+    "--exec",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/objects/Vbare_extraction_miter",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/rollback.json",
+    "2000000",
+    "0"
+  ],
+  "exit_code": 0,
+  "started_utc": "2026-10-31T17:38:17.007031+00:00",
+  "finished_utc": "2026-10-31T17:38:19.761835+00:00",
+  "stdout": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173757Z-14ca1e17\\rollback.stdout.log",
+  "stderr": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173757Z-14ca1e17\\rollback.stderr.log",
+  "stdout_raw": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173757Z-14ca1e17\\rollback.stdout.raw",
+  "stderr_raw": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173757Z-14ca1e17\\rollback.stderr.raw"
+}

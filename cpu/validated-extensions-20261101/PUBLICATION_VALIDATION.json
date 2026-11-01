@@ -1,0 +1,235 @@
+{
+  "schema": "cpu-extension-publication-validation/v1",
+  "status": "PASS",
+  "date": "2026-11-01",
+  "scope": "Byte-exact export verification and fresh physical source preparation; no new routing, full simulation or board testing.",
+  "snapshot_verification": {
+    "command": [
+      "D:\\Anaconda\\python.exe",
+      "D:\\AAAFPGA\\github-cpu-releases-20261101\\cpu\\validated-extensions-20261101\\verify_snapshot.py"
+    ],
+    "exit_code": 0,
+    "stdout": "SNAPSHOT_PASS files=2582 bytes=228966545",
+    "stderr": ""
+  },
+  "relocated_preparations": 6,
+  "local_markdown_links_checked": 57,
+  "checks": [
+    {
+      "command": [
+        "D:\\Anaconda\\python.exe",
+        "D:\\AAAFPGA\\github-cpu-releases-20261101\\cpu\\validated-extensions-20261101\\prepare_rebuild.py",
+        "--destination",
+        "D:\\AAAFPGA\\github-cpu-extension-rebuild-checks-20261101\\0027d5ac\\ila-Original_155250",
+        "--release",
+        "Original_155250",
+        "--variant",
+        "ila",
+        "--pds-root",
+        "D:/PDS_2022.2-SP6.4"
+      ],
+      "exit_code": 0,
+      "stdout": "REBUILD_WORKSPACE_READY D:\\AAAFPGA\\github-cpu-extension-rebuild-checks-20261101\\0027d5ac\\ila-Original_155250\nBUILD_SCRIPT D:\\AAAFPGA\\github-cpu-extension-rebuild-checks-20261101\\0027d5ac\\ila-Original_155250\\ILA_Core_Releases_20261101\\scripts\\Build-MinimalIla.ps1",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "D:\\AAAFPGA\\github-cpu-extension-rebuild-checks-20261101\\0027d5ac\\ila-Original_155250\\ILA_Core_Releases_20261101\\scripts\\Build-MinimalIla.ps1",
+        "-Release",
+        "Original_155250",
+        "-Action",
+        "Prepare",
+        "-PlacementSeed",
+        "1",
+        "-IlaProfile",
+        "NativeMinimal"
+      ],
+      "exit_code": 0,
+      "stdout": "BASELINE PASS: 25 frozen physical input SHA256 values recorded; firmware matches recipe; functional RTL untouched.\nBUILD_DIRECTORY=D:\\AAAFPGA\\github-cpu-extension-rebuild-checks-20261101\\0027d5ac\\ila-Original_155250\\ILA_Core_Releases_20261101\\Original_155250\\builds\\20261101-114554-79a28e5f\nINPUT AUDIT PASS: 25 original hashes preserved; RTL/PLL/constraints/firmware unchanged; top INIT_FILE relocation only.",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "D:\\Anaconda\\python.exe",
+        "D:\\AAAFPGA\\github-cpu-releases-20261101\\cpu\\validated-extensions-20261101\\prepare_rebuild.py",
+        "--destination",
+        "D:\\AAAFPGA\\github-cpu-extension-rebuild-checks-20261101\\0027d5ac\\ila-H3_Retained_145125",
+        "--release",
+        "H3_Retained_145125",
+        "--variant",
+        "ila",
+        "--pds-root",
+        "D:/PDS_2022.2-SP6.4"
+      ],
+      "exit_code": 0,
+      "stdout": "REBUILD_WORKSPACE_READY D:\\AAAFPGA\\github-cpu-extension-rebuild-checks-20261101\\0027d5ac\\ila-H3_Retained_145125\nBUILD_SCRIPT D:\\AAAFPGA\\github-cpu-extension-rebuild-checks-20261101\\0027d5ac\\ila-H3_Retained_145125\\ILA_Core_Releases_20261101\\scripts\\Build-MinimalIla.ps1",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "D:\\AAAFPGA\\github-cpu-extension-rebuild-checks-20261101\\0027d5ac\\ila-H3_Retained_145125\\ILA_Core_Releases_20261101\\scripts\\Build-MinimalIla.ps1",
+        "-Release",
+        "H3_Retained_145125",
+        "-Action",
+        "Prepare",
+        "-PlacementSeed",
+        "1",
+        "-IlaProfile",
+        "Lean24"
+      ],
+      "exit_code": 0,
+      "stdout": "BASELINE PASS: 25 frozen physical input SHA256 values recorded; firmware matches recipe; functional RTL untouched.\nBUILD_DIRECTORY=D:\\AAAFPGA\\github-cpu-extension-rebuild-checks-20261101\\0027d5ac\\ila-H3_Retained_145125\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-114556-89841a44\nINPUT AUDIT PASS: 25 original hashes preserved; RTL/PLL/constraints/firmware unchanged; top INIT_FILE relocation only.",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "D:\\Anaconda\\python.exe",
+        "D:\\AAAFPGA\\github-cpu-releases-20261101\\cpu\\validated-extensions-20261101\\prepare_rebuild.py",
+        "--destination",
+        "D:\\AAAFPGA\\github-cpu-extension-rebuild-checks-20261101\\0027d5ac\\ila-H3_Base_145125",
+        "--release",
+        "H3_Base_145125",
+        "--variant",
+        "ila",
+        "--pds-root",
+        "D:/PDS_2022.2-SP6.4"
+      ],
+      "exit_code": 0,
+      "stdout": "REBUILD_WORKSPACE_READY D:\\AAAFPGA\\github-cpu-extension-rebuild-checks-20261101\\0027d5ac\\ila-H3_Base_145125\nBUILD_SCRIPT D:\\AAAFPGA\\github-cpu-extension-rebuild-checks-20261101\\0027d5ac\\ila-H3_Base_145125\\ILA_Core_Releases_20261101\\scripts\\Build-MinimalIla.ps1",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "D:\\AAAFPGA\\github-cpu-extension-rebuild-checks-20261101\\0027d5ac\\ila-H3_Base_145125\\ILA_Core_Releases_20261101\\scripts\\Build-MinimalIla.ps1",
+        "-Release",
+        "H3_Base_145125",
+        "-Action",
+        "Prepare",
+        "-PlacementSeed",
+        "1",
+        "-IlaProfile",
+        "Lean24"
+      ],
+      "exit_code": 0,
+      "stdout": "BASELINE PASS: 25 frozen physical input SHA256 values recorded; firmware matches recipe; functional RTL untouched.\nBUILD_DIRECTORY=D:\\AAAFPGA\\github-cpu-extension-rebuild-checks-20261101\\0027d5ac\\ila-H3_Base_145125\\ILA_Core_Releases_20261101\\H3_Base_145125\\builds\\20261101-114558-70adf891\nINPUT AUDIT PASS: 25 original hashes preserved; RTL/PLL/constraints/firmware unchanged; top INIT_FILE relocation only.",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "D:\\Anaconda\\python.exe",
+        "D:\\AAAFPGA\\github-cpu-releases-20261101\\cpu\\validated-extensions-20261101\\prepare_rebuild.py",
+        "--destination",
+        "D:\\AAAFPGA\\github-cpu-extension-rebuild-checks-20261101\\0027d5ac\\bare-Original_155250",
+        "--release",
+        "Original_155250",
+        "--variant",
+        "bare",
+        "--pds-root",
+        "D:/PDS_2022.2-SP6.4"
+      ],
+      "exit_code": 0,
+      "stdout": "REBUILD_WORKSPACE_READY D:\\AAAFPGA\\github-cpu-extension-rebuild-checks-20261101\\0027d5ac\\bare-Original_155250\nBUILD_SCRIPT D:\\AAAFPGA\\github-cpu-extension-rebuild-checks-20261101\\0027d5ac\\bare-Original_155250\\Bare_Core_Releases_20261101\\scripts\\Build-BareCore.ps1",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "D:\\AAAFPGA\\github-cpu-extension-rebuild-checks-20261101\\0027d5ac\\bare-Original_155250\\Bare_Core_Releases_20261101\\scripts\\Build-BareCore.ps1",
+        "-Release",
+        "Original_155250",
+        "-Action",
+        "Prepare",
+        "-PlacementSeed",
+        "1",
+        "-FixtureProfile",
+        "SlowScanStaged"
+      ],
+      "exit_code": 0,
+      "stdout": "ROLLBACK_PASS restored_files=8\nBARE_PHYSICAL_PREPARED D:\\AAAFPGA\\github-cpu-extension-rebuild-checks-20261101\\0027d5ac\\bare-Original_155250\\Bare_Core_Releases_20261101\\Original_155250\\physical\\builds\\20261101-114600-412cb900",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "D:\\Anaconda\\python.exe",
+        "D:\\AAAFPGA\\github-cpu-releases-20261101\\cpu\\validated-extensions-20261101\\prepare_rebuild.py",
+        "--destination",
+        "D:\\AAAFPGA\\github-cpu-extension-rebuild-checks-20261101\\0027d5ac\\bare-H3_Retained_145125",
+        "--release",
+        "H3_Retained_145125",
+        "--variant",
+        "bare",
+        "--pds-root",
+        "D:/PDS_2022.2-SP6.4"
+      ],
+      "exit_code": 0,
+      "stdout": "REBUILD_WORKSPACE_READY D:\\AAAFPGA\\github-cpu-extension-rebuild-checks-20261101\\0027d5ac\\bare-H3_Retained_145125\nBUILD_SCRIPT D:\\AAAFPGA\\github-cpu-extension-rebuild-checks-20261101\\0027d5ac\\bare-H3_Retained_145125\\Bare_Core_Releases_20261101\\scripts\\Build-BareCore.ps1",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "D:\\AAAFPGA\\github-cpu-extension-rebuild-checks-20261101\\0027d5ac\\bare-H3_Retained_145125\\Bare_Core_Releases_20261101\\scripts\\Build-BareCore.ps1",
+        "-Release",
+        "H3_Retained_145125",
+        "-Action",
+        "Prepare",
+        "-PlacementSeed",
+        "1",
+        "-FixtureProfile",
+        "SlowScanStaged"
+      ],
+      "exit_code": 0,
+      "stdout": "ROLLBACK_PASS restored_files=8\nBARE_PHYSICAL_PREPARED D:\\AAAFPGA\\github-cpu-extension-rebuild-checks-20261101\\0027d5ac\\bare-H3_Retained_145125\\Bare_Core_Releases_20261101\\H3_Retained_145125\\physical\\builds\\20261101-114601-c15fd795",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "D:\\Anaconda\\python.exe",
+        "D:\\AAAFPGA\\github-cpu-releases-20261101\\cpu\\validated-extensions-20261101\\prepare_rebuild.py",
+        "--destination",
+        "D:\\AAAFPGA\\github-cpu-extension-rebuild-checks-20261101\\0027d5ac\\bare-H3_Base_145125",
+        "--release",
+        "H3_Base_145125",
+        "--variant",
+        "bare",
+        "--pds-root",
+        "D:/PDS_2022.2-SP6.4"
+      ],
+      "exit_code": 0,
+      "stdout": "REBUILD_WORKSPACE_READY D:\\AAAFPGA\\github-cpu-extension-rebuild-checks-20261101\\0027d5ac\\bare-H3_Base_145125\nBUILD_SCRIPT D:\\AAAFPGA\\github-cpu-extension-rebuild-checks-20261101\\0027d5ac\\bare-H3_Base_145125\\Bare_Core_Releases_20261101\\scripts\\Build-BareCore.ps1",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "D:\\AAAFPGA\\github-cpu-extension-rebuild-checks-20261101\\0027d5ac\\bare-H3_Base_145125\\Bare_Core_Releases_20261101\\scripts\\Build-BareCore.ps1",
+        "-Release",
+        "H3_Base_145125",
+        "-Action",
+        "Prepare",
+        "-PlacementSeed",
+        "1",
+        "-FixtureProfile",
+        "SlowScanStaged"
+      ],
+      "exit_code": 0,
+      "stdout": "ROLLBACK_PASS restored_files=8\nBARE_PHYSICAL_PREPARED D:\\AAAFPGA\\github-cpu-extension-rebuild-checks-20261101\\0027d5ac\\bare-H3_Base_145125\\Bare_Core_Releases_20261101\\H3_Base_145125\\physical\\builds\\20261101-114602-8457e2e5",
+      "stderr": ""
+    }
+  ]
+}

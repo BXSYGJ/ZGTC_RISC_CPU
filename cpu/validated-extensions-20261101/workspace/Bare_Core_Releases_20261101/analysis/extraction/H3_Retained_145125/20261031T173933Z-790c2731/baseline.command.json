@@ -1,0 +1,19 @@
+{
+  "executable": "wsl.exe",
+  "arguments": [
+    "--cd",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Retained_145125/20261031T173933Z-790c2731",
+    "--exec",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Retained_145125/20261031T173933Z-790c2731/objects/Vbare_extraction_miter",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Retained_145125/20261031T173933Z-790c2731/baseline.json",
+    "2000000",
+    "0"
+  ],
+  "exit_code": 0,
+  "started_utc": "2026-10-31T17:40:20.223289+00:00",
+  "finished_utc": "2026-10-31T17:40:23.677433+00:00",
+  "stdout": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Retained_145125\\20261031T173933Z-790c2731\\baseline.stdout.log",
+  "stderr": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Retained_145125\\20261031T173933Z-790c2731\\baseline.stderr.log",
+  "stdout_raw": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Retained_145125\\20261031T173933Z-790c2731\\baseline.stdout.raw",
+  "stderr_raw": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Retained_145125\\20261031T173933Z-790c2731\\baseline.stderr.raw"
+}

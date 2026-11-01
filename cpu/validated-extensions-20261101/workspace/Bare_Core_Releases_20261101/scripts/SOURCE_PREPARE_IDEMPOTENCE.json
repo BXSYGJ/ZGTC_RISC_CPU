@@ -1,0 +1,32 @@
+﻿{
+  "status": "PASS",
+  "releases": [
+    {
+      "release": "Original_155250",
+      "command": "pwsh -NoProfile -File D:/AAAFPGA\\Bare_Core_Releases_20261101\\scripts\\Prepare-BareCore.ps1 -Release Original_155250",
+      "literal_output": "BARE_PREPARE_EXISTING_PASS release=Original_155250 unchanged_rtl_files=8 source_manifest_preserved=true\r\nSOURCE_MANIFEST=D:\\AAAFPGA\\Bare_Core_Releases_20261101\\Original_155250\\SOURCE_MANIFEST.json",
+      "exit_status": 0,
+      "source_manifest_sha256_before": "065d766d105c2dd96d62ccda073ad5c70b8bf0fcc0fa8b0b1dce7b7bc9fd6dba",
+      "source_manifest_sha256_after": "065d766d105c2dd96d62ccda073ad5c70b8bf0fcc0fa8b0b1dce7b7bc9fd6dba",
+      "preserved": true
+    },
+    {
+      "release": "H3_Base_145125",
+      "command": "pwsh -NoProfile -File D:/AAAFPGA\\Bare_Core_Releases_20261101\\scripts\\Prepare-BareCore.ps1 -Release H3_Base_145125",
+      "literal_output": "BARE_PREPARE_EXISTING_PASS release=H3_Base_145125 unchanged_rtl_files=8 source_manifest_preserved=true\r\nSOURCE_MANIFEST=D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Base_145125\\SOURCE_MANIFEST.json",
+      "exit_status": 0,
+      "source_manifest_sha256_before": "f076d0a305bba6cad4c5910fa21245ac9cbd9eab7ad8f87178e905da2e62cfae",
+      "source_manifest_sha256_after": "f076d0a305bba6cad4c5910fa21245ac9cbd9eab7ad8f87178e905da2e62cfae",
+      "preserved": true
+    },
+    {
+      "release": "H3_Retained_145125",
+      "command": "pwsh -NoProfile -File D:/AAAFPGA\\Bare_Core_Releases_20261101\\scripts\\Prepare-BareCore.ps1 -Release H3_Retained_145125",
+      "literal_output": "BARE_PREPARE_EXISTING_PASS release=H3_Retained_145125 unchanged_rtl_files=8 source_manifest_preserved=true\r\nSOURCE_MANIFEST=D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\SOURCE_MANIFEST.json",
+      "exit_status": 0,
+      "source_manifest_sha256_before": "a5a5c7ed0f2df4710ea0d26871eae429436fa285fc7a1465640491fa3b526078",
+      "source_manifest_sha256_after": "a5a5c7ed0f2df4710ea0d26871eae429436fa285fc7a1465640491fa3b526078",
+      "preserved": true
+    }
+  ]
+}

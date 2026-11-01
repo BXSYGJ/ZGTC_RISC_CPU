@@ -1,0 +1,195 @@
+License checkout: fabric_inserter from D:\AAAFPGA\PangoLicense\pds_windows_c03532573d51_2029-09-04.lic
+M_PROCESS_FINISH_STARTED
+
+Executing : ins_open D:/AAAFPGA/ILA_Core_Releases_20261101/Original_155250/builds/20261101-010901-9bbe8fee/implementation/cpu.fic
+*************************************************************************
+*
+*  Parsing design. Please be patient as this can take several minutes.
+*
+*************************************************************************
+Compiling architecture definition.
+Loading technology operator library.
+Compiling technology operator library.
+Compiling technology operator (valence) library.
+W: Adm-4001: Attribute 'syn_encoding' is not supported. It is ignored.
+W: Adm-4001: Attribute 'syn_encoding' is not supported. It is ignored.
+W: Adm-4001: Attribute 'syn_encoding' is not supported. It is ignored.
+W: Adm-4001: Attribute 'syn_encoding' is not supported. It is ignored.
+W: Adm-4001: Attribute 'syn_encoding' is not supported. It is ignored.
+W: Adm-4001: Attribute 'syn_encoding' is not supported. It is ignored.
+W: Adm-4001: Attribute 'syn_encoding' is not supported. It is ignored.
+W: Adm-4001: Attribute 'syn_encoding' is not supported. It is ignored.
+W: Adm-4001: Attribute 'syn_encoding' is not supported. It is ignored.
+W: Adm-4001: Attribute 'syn_encoding' is not supported. It is ignored.
+W: Adm-4001: Attribute 'syn_encoding' is not supported. It is ignored.
+W: Adm-4001: Attribute 'syn_encoding' is not supported. It is ignored.
+W: Adm-4001: Attribute 'syn_encoding' is not supported. It is ignored.
+W: Adm-4001: Attribute 'syn_encoding' is not supported. It is ignored.
+W: Adm-4001: Attribute 'syn_encoding' is not supported. It is ignored.
+W: Adm-4001: Attribute 'syn_encoding' is not supported. It is ignored.
+W: Adm-4001: Attribute 'syn_encoding' is not supported. It is ignored.
+W: Adm-4001: Attribute 'syn_encoding' is not supported. It is ignored.
+W: Adm-4001: Attribute 'syn_encoding' is not supported. It is ignored.
+W: Adm-4001: Attribute 'syn_encoding' is not supported. It is ignored.
+W: Adm-4001: Attribute 'syn_encoding' is not supported. It is ignored.
+W: Adm-4001: Attribute 'syn_encoding' is not supported. It is ignored.
+W: Adm-4001: Attribute 'syn_encoding' is not supported. It is ignored.
+W: Adm-4001: Attribute 'syn_encoding' is not supported. It is ignored.
+W: Adm-4001: Attribute 'syn_encoding' is not supported. It is ignored.
+W: Adm-4001: Attribute 'syn_encoding' is not supported. It is ignored.
+W: Adm-4001: Attribute 'syn_encoding' is not supported. It is ignored.
+W: Adm-4001: Attribute 'syn_encoding' is not supported. It is ignored.
+W: Adm-4001: Attribute 'syn_encoding' is not supported. It is ignored.
+Compiling file 'D:/AAAFPGA/ILA_Core_Releases_20261101/Original_155250/builds/20261101-010901-9bbe8fee/implementation/source.adf' successful.
+Creating module hierarchy.
+Collecting net information.
+*************************************************************************
+*
+*  Design Parsing Done.
+*
+*************************************************************************
+Read project 'D:/AAAFPGA/ILA_Core_Releases_20261101/Original_155250/builds/20261101-010901-9bbe8fee/implementation/cpu.fic' Successfully.
+Executing : ins_open D:/AAAFPGA/ILA_Core_Releases_20261101/Original_155250/builds/20261101-010901-9bbe8fee/implementation/cpu.fic successfully.
+Executing : ins_core_info -core 0
+Core Information: Core 0                
+Trigger Port Number:                   1                                       
+Match Unit Number:                     1                                       
+Data Same As Trigger:                  0                                       
+Data Channel 0:                        board/soc/core/ex_pc[0]                 
+Data Channel 1:                        board/soc/core/ex_pc[1]                 
+Data Channel 2:                        board/soc/core/ex_pc[2]                 
+Data Channel 3:                        board/soc/core/ex_pc[3]                 
+Data Channel 4:                        board/soc/core/ex_pc[4]                 
+Data Channel 5:                        board/soc/core/ex_pc[5]                 
+Data Channel 6:                        board/soc/core/ex_pc[6]                 
+Data Channel 7:                        board/soc/core/ex_pc[7]                 
+Data Channel 8:                        board/soc/core/ex_pc[8]                 
+Data Channel 9:                        board/soc/core/ex_pc[9]                 
+Data Channel 10:                       board/soc/core/ex_pc[10]                
+Data Channel 11:                       board/soc/core/ex_pc[11]                
+Data Channel 12:                       board/soc/core/ex_pc[12]                
+Data Channel 13:                       board/soc/core/ex_pc[13]                
+Data Channel 14:                       board/soc/core/ex_pc[14]                
+Data Channel 15:                       board/soc/core/ex_pc[15]                
+Data Channel 16:                       board/soc/core/ex_pc[16]                
+Data Channel 17:                       board/soc/core/ex_pc[17]                
+Data Channel 18:                       board/soc/core/ex_pc[18]                
+Data Channel 19:                       board/soc/core/ex_pc[19]                
+Data Channel 20:                       board/soc/core/ex_pc[20]                
+Data Channel 21:                       board/soc/core/ex_pc[21]                
+Data Channel 22:                       board/soc/core/ex_pc[22]                
+Data Channel 23:                       board/soc/core/ex_pc[23]                
+Data Channel 24:                       board/soc/core/ex_pc[24]                
+Data Channel 25:                       board/soc/core/ex_pc[25]                
+Data Channel 26:                       board/soc/core/ex_pc[26]                
+Data Channel 27:                       board/soc/core/ex_pc[27]                
+Data Channel 28:                       board/soc/core/ex_pc[28]                
+Data Channel 29:                       board/soc/core/ex_pc[29]                
+Data Channel 30:                       board/soc/core/ex_pc[30]                
+Data Channel 31:                       board/soc/core/ex_pc[31]                
+Data Channel 32:                       board/soc/core/pipeline_valid[0]        
+Data Channel 33:                       board/soc/core/pipeline_valid[1]        
+Data Channel 34:                       board/soc/core/pipeline_valid[2]        
+Data Channel 35:                       board/soc/core/pipeline_valid[3]        
+Data Channel 36:                       board/soc/core/board/unused_trace_valid 
+Data Channel 37:                       board/soc/core/id_fire                  
+Data Channel 38:                       board/soc/core/ex_fire                  
+Data Channel 39:                       board/soc/core/mem_flush                
+Data Channel 40:                       board/soc/core/frontend_fire            
+Data Channel 41:                       board/soc/core/mem_fire                 
+Data Max Depth:                        1024                                    
+Trigger At Clock Edge:                 1                                       
+Trigger Sequence Level:                1                                       
+Enable Storage Qualification:          0                                       
+Enable Power on init data:             0                                       
+Clock Port channel:                    cpu_clk                                 
+Reset Port channel:                                                            
+
+                                      
+
+Trigger Port 0:                        
+Match Unit Number:                     1                                       
+Match Type:                            Basic                                   
+Counter Width:                         0                                       
+Used As Data Port:                     1                                       
+Trigger Channel 0:                     board/soc/core/ex_pc[0]                 
+Trigger Channel 1:                     board/soc/core/ex_pc[1]                 
+Trigger Channel 2:                     board/soc/core/ex_pc[2]                 
+Trigger Channel 3:                     board/soc/core/ex_pc[3]                 
+Trigger Channel 4:                     board/soc/core/ex_pc[4]                 
+Trigger Channel 5:                     board/soc/core/ex_pc[5]                 
+Trigger Channel 6:                     board/soc/core/ex_pc[6]                 
+Trigger Channel 7:                     board/soc/core/ex_pc[7]                 
+Trigger Channel 8:                     board/soc/core/ex_pc[8]                 
+Trigger Channel 9:                     board/soc/core/ex_pc[9]                 
+Trigger Channel 10:                    board/soc/core/ex_pc[10]                
+Trigger Channel 11:                    board/soc/core/ex_pc[11]                
+Trigger Channel 12:                    board/soc/core/ex_pc[12]                
+Trigger Channel 13:                    board/soc/core/ex_pc[13]                
+Trigger Channel 14:                    board/soc/core/ex_pc[14]                
+Trigger Channel 15:                    board/soc/core/ex_pc[15]                
+Trigger Channel 16:                    board/soc/core/ex_pc[16]                
+Trigger Channel 17:                    board/soc/core/ex_pc[17]                
+Trigger Channel 18:                    board/soc/core/ex_pc[18]                
+Trigger Channel 19:                    board/soc/core/ex_pc[19]                
+Trigger Channel 20:                    board/soc/core/ex_pc[20]                
+Trigger Channel 21:                    board/soc/core/ex_pc[21]                
+Trigger Channel 22:                    board/soc/core/ex_pc[22]                
+Trigger Channel 23:                    board/soc/core/ex_pc[23]                
+Trigger Channel 24:                    board/soc/core/ex_pc[24]                
+Trigger Channel 25:                    board/soc/core/ex_pc[25]                
+Trigger Channel 26:                    board/soc/core/ex_pc[26]                
+Trigger Channel 27:                    board/soc/core/ex_pc[27]                
+Trigger Channel 28:                    board/soc/core/ex_pc[28]                
+Trigger Channel 29:                    board/soc/core/ex_pc[29]                
+Trigger Channel 30:                    board/soc/core/ex_pc[30]                
+Trigger Channel 31:                    board/soc/core/ex_pc[31]                
+Trigger Channel 32:                    board/soc/core/ex_fire                  
+
+                                      
+Executing : ins_core_info -core 0 successfully.
+Executing : ins_core_info -core 0 -trig 0
+
+Trigger Port 0:                        
+Match Unit Number:                     1                                       
+Match Type:                            Basic                                   
+Counter Width:                         0                                       
+Used As Data Port:                     1                                       
+Trigger Channel 0:                     board/soc/core/ex_pc[0]                 
+Trigger Channel 1:                     board/soc/core/ex_pc[1]                 
+Trigger Channel 2:                     board/soc/core/ex_pc[2]                 
+Trigger Channel 3:                     board/soc/core/ex_pc[3]                 
+Trigger Channel 4:                     board/soc/core/ex_pc[4]                 
+Trigger Channel 5:                     board/soc/core/ex_pc[5]                 
+Trigger Channel 6:                     board/soc/core/ex_pc[6]                 
+Trigger Channel 7:                     board/soc/core/ex_pc[7]                 
+Trigger Channel 8:                     board/soc/core/ex_pc[8]                 
+Trigger Channel 9:                     board/soc/core/ex_pc[9]                 
+Trigger Channel 10:                    board/soc/core/ex_pc[10]                
+Trigger Channel 11:                    board/soc/core/ex_pc[11]                
+Trigger Channel 12:                    board/soc/core/ex_pc[12]                
+Trigger Channel 13:                    board/soc/core/ex_pc[13]                
+Trigger Channel 14:                    board/soc/core/ex_pc[14]                
+Trigger Channel 15:                    board/soc/core/ex_pc[15]                
+Trigger Channel 16:                    board/soc/core/ex_pc[16]                
+Trigger Channel 17:                    board/soc/core/ex_pc[17]                
+Trigger Channel 18:                    board/soc/core/ex_pc[18]                
+Trigger Channel 19:                    board/soc/core/ex_pc[19]                
+Trigger Channel 20:                    board/soc/core/ex_pc[20]                
+Trigger Channel 21:                    board/soc/core/ex_pc[21]                
+Trigger Channel 22:                    board/soc/core/ex_pc[22]                
+Trigger Channel 23:                    board/soc/core/ex_pc[23]                
+Trigger Channel 24:                    board/soc/core/ex_pc[24]                
+Trigger Channel 25:                    board/soc/core/ex_pc[25]                
+Trigger Channel 26:                    board/soc/core/ex_pc[26]                
+Trigger Channel 27:                    board/soc/core/ex_pc[27]                
+Trigger Channel 28:                    board/soc/core/ex_pc[28]                
+Trigger Channel 29:                    board/soc/core/ex_pc[29]                
+Trigger Channel 30:                    board/soc/core/ex_pc[30]                
+Trigger Channel 31:                    board/soc/core/ex_pc[31]                
+Trigger Channel 32:                    board/soc/core/ex_fire                  
+
+                                      
+Executing : ins_core_info -core 0 -trig 0 successfully.
+Executing : ins_save
+Executing : ins_save successfully.

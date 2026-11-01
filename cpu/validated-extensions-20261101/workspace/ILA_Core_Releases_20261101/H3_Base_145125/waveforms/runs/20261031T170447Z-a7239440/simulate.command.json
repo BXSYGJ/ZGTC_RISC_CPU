@@ -1,0 +1,16 @@
+﻿{
+  "executable": "wsl.exe",
+  "arguments": [
+    "--cd",
+    "/mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440",
+    "--exec",
+    "/mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/objects/Vrv32_observed_soc",
+    "/mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/waveforms/runs/20261031T170447Z-a7239440/uart.log",
+    "2000000"
+  ],
+  "exit_code": 0,
+  "started_utc": "2026-10-31T17:05:36.6331554Z",
+  "finished_utc": "2026-10-31T17:05:38.5848028Z",
+  "stdout": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\waveforms\\runs\\20261031T170447Z-a7239440\\simulate.stdout.log",
+  "stderr": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\waveforms\\runs\\20261031T170447Z-a7239440\\simulate.stderr.log"
+}

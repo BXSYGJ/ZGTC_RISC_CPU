@@ -1,0 +1,7 @@
+﻿ZGTC COREMARK READY send G; clock=145125000 Hz
+ZGTC COREMARK START iterations=6000 validation=0
+PARTIAL_WINDOW_PASS cycle_limit=2000000 cycle_count=2000000 retired=1875092 snapshots=1 status_code=0xc0100002 ila_hash=0x28650d5aff3519fb trace_hash=0xa057084c5acf3323
+SIGNAL_CYCLES 1958084 1922271 1902219 1888735 1875092 1876533 1875094 1438 1932541 1875093
+FUNCTION_ENTRIES iterate=1 list=13 matrix=28 state=28
+EX_PRESELECT_PROFILE idle_candidates=19 older_load_wait=0 irq_cycles=0
+ID_ZERO_PROFILE resolved=73510 redirects=15841

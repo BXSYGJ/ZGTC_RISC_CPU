@@ -1,0 +1,14 @@
+﻿{
+  "executable": "wsl.exe",
+  "arguments": [
+    "--cd",
+    "/tmp",
+    "--exec",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/H3_Retained_145125/physical/fixture-tests/20261031T175735Z-3ecae30a/objects/Vscan_fixture_tb"
+  ],
+  "started_utc": "2026-10-31T17:57:42.3979784Z",
+  "finished_utc": "2026-10-31T17:57:42.6900652Z",
+  "exit_code": 0,
+  "stdout": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\physical\\fixture-tests\\20261031T175735Z-3ecae30a\\execute.stdout.log",
+  "stderr": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\physical\\fixture-tests\\20261031T175735Z-3ecae30a\\execute.stderr.log"
+}

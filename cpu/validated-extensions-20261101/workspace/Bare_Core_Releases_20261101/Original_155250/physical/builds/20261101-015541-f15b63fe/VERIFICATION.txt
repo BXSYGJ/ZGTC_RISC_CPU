@@ -1,0 +1,57 @@
+﻿CHANGED FIELD: physical fixture_profile=SlowScanStaged. The eight frozen CPU RTL files and rv32_bare_core wrapper remain byte-identical.
+MODIFIED_FILE=D:/AAAFPGA\Bare_Core_Releases_20261101\Original_155250\physical\builds\20261101-015541-f15b63fe\inputs\bare_core_scan_top.sv
+DIFF_FILE=D:/AAAFPGA\Bare_Core_Releases_20261101\Original_155250\physical\builds\20261101-015541-f15b63fe\DIFF_FILE.txt
+VERIFICATION=D:/AAAFPGA\Bare_Core_Releases_20261101\Original_155250\physical\builds\20261101-015541-f15b63fe\VERIFICATION.txt
+ROLLBACK=D:/AAAFPGA\Bare_Core_Releases_20261101\Original_155250\physical\builds\20261101-015541-f15b63fe\ROLLBACK.ps1
+
+This receipt contains the final selected results. It reads existing invocation records and literal logs; this cleanup performs no simulation, synthesis, routing, or timing rerun.
+
+BASELINE exact command: wsl.exe --cd /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17 --exec /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/objects/Vbare_extraction_miter /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/baseline.json 2000000 0
+BASELINE input: exact eight-file CPU closure and immutable passthrough versus the independent original SoC, matching external cached services; 2000000 CPU edges; fault edge=0.
+BASELINE literal stdout:
+EXTRACTION_PASS edges=2000000 comparisons=4000000 retired=1834318 kernels=13,27,27 digest=cbcd7a3d93db2dce
+BASELINE exit_status=0
+
+ROLLBACK exact command: wsl.exe --cd /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17 --exec /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/objects/Vbare_extraction_miter /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/rollback.json 2000000 0
+ROLLBACK input: exact eight-file CPU closure and immutable passthrough versus the independent original SoC, matching external cached services; 2000000 CPU edges; fault edge=0.
+ROLLBACK literal stdout:
+EXTRACTION_PASS edges=2000000 comparisons=4000000 retired=1834318 kernels=13,27,27 digest=cbcd7a3d93db2dce
+ROLLBACK exit_status=0
+
+MODIFIED NEGATIVE CONTROL exact command: wsl.exe --cd /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17 --exec /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/objects/Vbare_extraction_miter /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/rejected.json 2000000 10000
+MODIFIED NEGATIVE CONTROL input: the same miter, with XOR32 applied only to the bare DUT d_rsp_data at edge10000.
+MODIFIED NEGATIVE CONTROL literal diagnostic output:
+EXTRACTION_MISMATCH edge=10000 phase=preedge mask=0x80000
+EXTRACTION_FAIL Bare DUT and independent reference port frames differ
+MODIFIED NEGATIVE CONTROL exit_status=1
+MODIFIED NEGATIVE CONTROL complete stderr log=D:\AAAFPGA\Bare_Core_Releases_20261101\analysis\extraction\Original_155250\20261031T173757Z-14ca1e17\modified-negative-control.stderr.log
+
+MODIFIED FIXTURE exact command: wsl.exe --cd /tmp --exec /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/Original_155250/physical/fixture-tests/20261031T175649Z-d5a34054/objects/Vscan_fixture_tb
+MODIFIED FIXTURE input: D:\AAAFPGA\Bare_Core_Releases_20261101\Original_155250\physical\builds\20261101-015541-f15b63fe\inputs\bare_core_scan_top.sv SHA256=051fb2ee13ef352360dbcfc6d8f19ac5a3ef8c297cc1490e34eee94ebbc3291b
+MODIFIED FIXTURE literal stdout:
+SCAN_FIXTURE_PASS patterns=179 input_bits=176 output_bits=439
+- /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/Original_155250/physical/fixture-tests/20261031T175649Z-d5a34054/scan_fixture_tb.sv:57: Verilog $finish
+- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01
+- Verilator: $finish at 2ms; walltime 0.151 s; speed 14.576 ms/s
+- Verilator: cpu 0.152 s on 1 threads; alloced 185 MB
+MODIFIED FIXTURE exit_status=0
+MODIFIED FIXTURE result: all179 patterns, all176 non-clock core input bits, all439 output bits, atomic input activation, one-edge output snapshot latency, and enforced two-edge serial hold passed.
+
+MODIFIED PHYSICAL exact command: D:/PDS_2022.2-SP6.4\bin\pds_shell.exe -file D:/AAAFPGA/Bare_Core_Releases_20261101/Original_155250/physical/builds/20261101-015541-f15b63fe/implementation/build.tcl -work_dir D:/AAAFPGA/Bare_Core_Releases_20261101/Original_155250/physical/builds/20261101-015541-f15b63fe/implementation -project_name bare_core
+MODIFIED PHYSICAL input: D:/AAAFPGA\Bare_Core_Releases_20261101\Original_155250\physical\builds\20261101-015541-f15b63fe
+MODIFIED PHYSICAL literal native timing result:
+Design Summary : All Constraints Met.
+MODIFIED PHYSICAL final audit result: timing_passed; 155250000Hz; all10 slow/fast timing tables and10 rows pass; worst setup slack=+0.176ns; total LUT=4386; total FF=2775.
+MODIFIED PHYSICAL actual effective setup uncertainty=0.200ns; requested minimum=0.150ns; exact_match=false; satisfies_minimum=true. The reported slack includes the actual deduction.
+MODIFIED PHYSICAL native exit_status=0; final read-only audit exit_status=0.
+MODIFIED PHYSICAL source invocation record=D:/AAAFPGA\Bare_Core_Releases_20261101\Original_155250\physical\builds\20261101-015541-f15b63fe\implementation\pds.invocation.json
+MODIFIED PHYSICAL final native timing report=D:\AAAFPGA\Bare_Core_Releases_20261101\Original_155250\physical\builds\20261101-015541-f15b63fe\implementation\report_timing\bare_core_scan_top.rtr
+
+ROLLBACK SOURCE RESTORATION exact command: pwsh -NoProfile -File D:/AAAFPGA\Bare_Core_Releases_20261101\Original_155250\physical\builds\20261101-015541-f15b63fe\ROLLBACK.ps1 -BuildDirectory D:/AAAFPGA\Bare_Core_Releases_20261101\Original_155250\physical\builds\20261101-015541-f15b63fe -DestinationDirectory D:/AAAFPGA\Bare_Core_Releases_20261101\Original_155250\physical\builds\20261101-015541-f15b63fe\rollback_final_review
+ROLLBACK SOURCE RESTORATION input: frozen_inputs, containing the eight original CPU RTL files.
+ROLLBACK SOURCE RESTORATION literal output: ROLLBACK_PASS restored_files=8
+ROLLBACK SOURCE RESTORATION exit_status=0.
+Restored behavior/status: rollback miter reproduces baseline for2000000 CPU edges and4000000 port-frame comparisons. All eight restored SHA256 values match the frozen inputs. The modified staged fixture remains changed.
+
+Final area reconciliation:4386 LUT=4028 core-exclusive+355 fixture-exclusive+1 shared+2 unattributed; conservative core LUT range4028..4031. Registers:1543 core+1232 fixture=2775.
+Functional evidence scope: fresh finite extraction miter and exact source/configuration join to the completed unchanged6000-iteration source SoC run with explicitly external cached-system services.

@@ -1,0 +1,31 @@
+﻿{
+  "generated_utc": "2026-10-31T18:09:21.7501975Z",
+  "powershell": "7.6.9",
+  "scripts": [
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\scripts\\Build-BareCore.ps1",
+      "sha256": "e949b9c49e2d34ca41de124d747eea6d93e78abbb90d0eaebf0cfb2c77be949a",
+      "utf8_bom": true,
+      "ast_errors": 0
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\scripts\\Prepare-BareCore.ps1",
+      "sha256": "57e7fd66dbab0df4663b66e9a56ebaebaa960aa8263b7d06f99e3fa38466bc13",
+      "utf8_bom": true,
+      "ast_errors": 0
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\scripts\\Restore-BareCoreInputs.ps1",
+      "sha256": "36d98062278b2228b31bb53ebc483ba48dd6a14f32cfd1ee3d9fa2b44746c13b",
+      "utf8_bom": true,
+      "ast_errors": 0
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\scripts\\Test-ScanFixture.ps1",
+      "sha256": "40bcfa5d475e1161b615d6390bd15b1995ac464b176e5a149506e68e0203cf41",
+      "utf8_bom": true,
+      "ast_errors": 0
+    }
+  ],
+  "actual_verification": "Original initial and SlowScanStaged vendor runs, real rollback copies, and179pattern dynamic tests; all3release source and functional extraction qualifications recorded separately."
+}

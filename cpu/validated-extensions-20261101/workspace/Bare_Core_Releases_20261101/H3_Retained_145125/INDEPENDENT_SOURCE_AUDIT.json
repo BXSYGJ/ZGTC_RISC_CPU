@@ -1,0 +1,34 @@
+﻿{
+  "schema": "independent-h3-bare-source-audit/v1",
+  "release": "H3_Retained_145125",
+  "exact8_frozen_rtl_equal": true,
+  "core_has_no_cache_memory_peripheral_uart_pll_ila": true,
+  "all_core_ports_direct_passthrough": true,
+  "port_count": 43,
+  "port_bits": 648,
+  "scan_controlled_input_bits": 176,
+  "individually_captured_output_bits": 471,
+  "parameters": {
+    "RESET_VECTOR": 0,
+    "ENABLE_PREDICTOR": 1,
+    "ENABLE_M": 1,
+    "ENABLE_C": 1,
+    "FETCH_ADDRESS_BITS": 16,
+    "FETCH_OVERLAP": 1,
+    "EARLY_D_REQUEST": 1,
+    "BTB_INDEX_BITS": 8,
+    "BTB_ADDRESS_BITS": 16,
+    "LOAD_USE_BUBBLE": 1,
+    "RETAIN_MUL_ELIGIBILITY": 1
+  },
+  "source_manifest": {
+    "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\SOURCE_MANIFEST.json",
+    "sha256": "a5a5c7ed0f2df4710ea0d26871eae429436fa285fc7a1465640491fa3b526078"
+  },
+  "wrapper_sha256": "4f777d97020457a02ea57e1579b10dd97baaac5e50033e8ce6b9bb7a28d3a468",
+  "boundary_sha256": "0b30438feff5926efa19fc5d98723e608bc6266d3ed51ee1974924833908439c",
+  "functional_rtl_changes": 0,
+  "performance_context": "Functional preservation will be checked against the frozen rv32_soc with equivalent external cached memory/peripheral services; bare-DUT area excludes those services.",
+  "physical_build_started": false,
+  "audited_utc": "2026-10-31T17:37:54.5784339Z"
+}

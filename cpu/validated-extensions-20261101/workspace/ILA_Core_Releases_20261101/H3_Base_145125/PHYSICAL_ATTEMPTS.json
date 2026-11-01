@@ -1,0 +1,1294 @@
+﻿[
+  {
+    "build_directory": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\builds\\20261101-004705-33276f27",
+    "manifest": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\builds\\20261101-004705-33276f27\\manifest.json",
+    "manifest_sha256": "39dedaab5abb5d282349d91127da38133294ea8c8f37671902c37f2932d9c9ac",
+    "status": "timing_failed",
+    "stage": "implemented",
+    "placement_seed": 2,
+    "ila_profile": "Shared42",
+    "report": {
+      "clock_hz": 145125000,
+      "cpu_period_ns": 6.89,
+      "clock_loads": 2793,
+      "timing_summary": "Some Constraints Violated.",
+      "constraints_met": false,
+      "setup_wns_ns": -0.204,
+      "estimated_mhz_not_hardware_measurement": 140.9642,
+      "setup_uncertainty_ns": 0.15,
+      "setup_uncertainty_paths_checked": 6,
+      "all_corner_audit": {
+        "all_corners_passed": false,
+        "summary_tables_checked": 10,
+        "includes_cpu_and_debugger_clocks": true,
+        "tables": [
+          {
+            "check": "Setup",
+            "corner": "Slow Corner",
+            "rows": [
+              {
+                "printed_clock_columns": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+                "slack_ns": -0.204,
+                "total_negative_slack_ns": -0.204,
+                "failing_endpoints": 1,
+                "total_endpoints": 14650,
+                "passed": false
+              },
+              {
+                "printed_clock_columns": "DebugCore_JCLK         DebugCore_JCLK",
+                "slack_ns": 23.719,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 514,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_CAPTURE      DebugCore_JCLK",
+                "slack_ns": 18.791,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 91,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_JCLK         DebugCore_CAPTURE",
+                "slack_ns": 44.299,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 16,
+                "passed": true
+              }
+            ]
+          },
+          {
+            "check": "Hold",
+            "corner": "Slow Corner",
+            "rows": [
+              {
+                "printed_clock_columns": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+                "slack_ns": 0.145,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 14650,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_JCLK         DebugCore_JCLK",
+                "slack_ns": 0.3,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 514,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_CAPTURE      DebugCore_JCLK",
+                "slack_ns": 25.469,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 91,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_JCLK         DebugCore_CAPTURE",
+                "slack_ns": 0.865,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 16,
+                "passed": true
+              }
+            ]
+          },
+          {
+            "check": "Recovery",
+            "corner": "Slow Corner",
+            "rows": [
+              {
+                "printed_clock_columns": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+                "slack_ns": 2.555,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 2256,
+                "passed": true
+              }
+            ]
+          },
+          {
+            "check": "Removal",
+            "corner": "Slow Corner",
+            "rows": [
+              {
+                "printed_clock_columns": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+                "slack_ns": 0.366,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 2256,
+                "passed": true
+              }
+            ]
+          },
+          {
+            "check": "Minimum Pulse Width",
+            "corner": "Slow Corner",
+            "rows": [
+              {
+                "printed_clock_columns": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+                "slack_ns": 2.1,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 2793,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_JCLK",
+                "slack_ns": 24.04,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 134,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_CAPTURE",
+                "slack_ns": 49.8,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 11,
+                "passed": true
+              }
+            ]
+          },
+          {
+            "check": "Setup",
+            "corner": "Fast Corner",
+            "rows": [
+              {
+                "printed_clock_columns": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+                "slack_ns": 2.728,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 14650,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_JCLK         DebugCore_JCLK",
+                "slack_ns": 24.281,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 514,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_CAPTURE      DebugCore_JCLK",
+                "slack_ns": 21.714,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 91,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_JCLK         DebugCore_CAPTURE",
+                "slack_ns": 46.564,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 16,
+                "passed": true
+              }
+            ]
+          },
+          {
+            "check": "Hold",
+            "corner": "Fast Corner",
+            "rows": [
+              {
+                "printed_clock_columns": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+                "slack_ns": 0.1,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 14650,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_JCLK         DebugCore_JCLK",
+                "slack_ns": 0.2,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 514,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_CAPTURE      DebugCore_JCLK",
+                "slack_ns": 25.246,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 91,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_JCLK         DebugCore_CAPTURE",
+                "slack_ns": 1.121,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 16,
+                "passed": true
+              }
+            ]
+          },
+          {
+            "check": "Recovery",
+            "corner": "Fast Corner",
+            "rows": [
+              {
+                "printed_clock_columns": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+                "slack_ns": 4.112,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 2256,
+                "passed": true
+              }
+            ]
+          },
+          {
+            "check": "Removal",
+            "corner": "Fast Corner",
+            "rows": [
+              {
+                "printed_clock_columns": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+                "slack_ns": 0.249,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 2256,
+                "passed": true
+              }
+            ]
+          },
+          {
+            "check": "Minimum Pulse Width",
+            "corner": "Fast Corner",
+            "rows": [
+              {
+                "printed_clock_columns": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+                "slack_ns": 2.647,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 2793,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_JCLK",
+                "slack_ns": 24.43,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 134,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_CAPTURE",
+                "slack_ns": 49.8,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 11,
+                "passed": true
+              }
+            ]
+          }
+        ]
+      },
+      "resources": {
+        "CLMA": {
+          "ff": 2607,
+          "lut": 4768
+        },
+        "CLMS": {
+          "ff": 772,
+          "lut": 1818
+        },
+        "DRM": 26.5,
+        "GPLL": 1.0,
+        "APM": 4.0,
+        "post_route_luts": 6586,
+        "post_route_ffs": 3379
+      },
+      "timing_report": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\builds\\20261101-004705-33276f27\\implementation\\report_timing\\pds_soc_top.rtr",
+      "timing_report_sha256": "F890907653CF257AB58340692BD3A63195E22660A51ED0B145A64B00DEA18662",
+      "hardware_validated": false
+    },
+    "independent_audit": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\builds\\20261101-004705-33276f27\\INDEPENDENT_MULTICORNER_AUDIT.json",
+    "independent_audit_passed": false,
+    "bitstream": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\builds\\20261101-004705-33276f27\\implementation\\generate_bitstream\\pds_soc_top.sbit",
+    "bitstream_sha256": "F718A1CC372BADB669F3CC609C02BEE98D5EBF2BD26AB63BAE95D57CB4D06BF5",
+    "fic": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\builds\\20261101-004705-33276f27\\implementation\\cpu.fic",
+    "fic_sha256": "365C7BCE565647A770B59B19017E848BD59A0743E2B56F75EDB8A85DBE5477CB"
+  },
+  {
+    "build_directory": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\builds\\20261101-010038-48f12ca2",
+    "manifest": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\builds\\20261101-010038-48f12ca2\\manifest.json",
+    "manifest_sha256": "720a86099bfe591f281b0eabc936708c76dfd844c8159e0f936c21c94df55edc",
+    "status": "canceled_before_vendor_start",
+    "stage": "prepared",
+    "placement_seed": 1,
+    "ila_profile": "Shared42",
+    "report": null,
+    "independent_audit": null,
+    "independent_audit_passed": false,
+    "bitstream": null,
+    "bitstream_sha256": null,
+    "fic": null,
+    "fic_sha256": null
+  },
+  {
+    "build_directory": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\builds\\20261101-010319-e2a7759d",
+    "manifest": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\builds\\20261101-010319-e2a7759d\\manifest.json",
+    "manifest_sha256": "b529057c31bc4731001e2d86829b4ffe40dad03ac0bc2ab4fa2c0e311fe8ee68",
+    "status": "timing_failed",
+    "stage": "implemented",
+    "placement_seed": 1,
+    "ila_profile": "NativeMinimal",
+    "report": {
+      "clock_hz": 145125000,
+      "cpu_period_ns": 6.89,
+      "clock_loads": 2732,
+      "timing_summary": "Some Constraints Violated.",
+      "constraints_met": false,
+      "setup_wns_ns": -0.05,
+      "estimated_mhz_not_hardware_measurement": 144.0922,
+      "setup_uncertainty_ns": 0.15,
+      "setup_uncertainty_paths_checked": 6,
+      "all_corner_audit": {
+        "all_corners_passed": false,
+        "summary_tables_checked": 10,
+        "includes_cpu_and_debugger_clocks": true,
+        "tables": [
+          {
+            "check": "Setup",
+            "corner": "Slow Corner",
+            "rows": [
+              {
+                "printed_clock_columns": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+                "slack_ns": -0.05,
+                "total_negative_slack_ns": -0.159,
+                "failing_endpoints": 7,
+                "total_endpoints": 14549,
+                "passed": false
+              },
+              {
+                "printed_clock_columns": "DebugCore_JCLK         DebugCore_JCLK",
+                "slack_ns": 23.987,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 390,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_CAPTURE      DebugCore_JCLK",
+                "slack_ns": 22.915,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 81,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_JCLK         DebugCore_CAPTURE",
+                "slack_ns": 44.624,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 16,
+                "passed": true
+              }
+            ]
+          },
+          {
+            "check": "Hold",
+            "corner": "Slow Corner",
+            "rows": [
+              {
+                "printed_clock_columns": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+                "slack_ns": 0.167,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 14549,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_JCLK         DebugCore_JCLK",
+                "slack_ns": 0.203,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 390,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_CAPTURE      DebugCore_JCLK",
+                "slack_ns": 21.307,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 81,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_JCLK         DebugCore_CAPTURE",
+                "slack_ns": 2.499,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 16,
+                "passed": true
+              }
+            ]
+          },
+          {
+            "check": "Recovery",
+            "corner": "Slow Corner",
+            "rows": [
+              {
+                "printed_clock_columns": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+                "slack_ns": 2.298,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 2195,
+                "passed": true
+              }
+            ]
+          },
+          {
+            "check": "Removal",
+            "corner": "Slow Corner",
+            "rows": [
+              {
+                "printed_clock_columns": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+                "slack_ns": 0.648,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 2195,
+                "passed": true
+              }
+            ]
+          },
+          {
+            "check": "Minimum Pulse Width",
+            "corner": "Slow Corner",
+            "rows": [
+              {
+                "printed_clock_columns": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+                "slack_ns": 2.1,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 2732,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_JCLK",
+                "slack_ns": 24.04,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 103,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_CAPTURE",
+                "slack_ns": 49.8,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 11,
+                "passed": true
+              }
+            ]
+          },
+          {
+            "check": "Setup",
+            "corner": "Fast Corner",
+            "rows": [
+              {
+                "printed_clock_columns": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+                "slack_ns": 2.719,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 14549,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_JCLK         DebugCore_JCLK",
+                "slack_ns": 24.557,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 390,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_CAPTURE      DebugCore_JCLK",
+                "slack_ns": 23.957,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 81,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_JCLK         DebugCore_CAPTURE",
+                "slack_ns": 46.662,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 16,
+                "passed": true
+              }
+            ]
+          },
+          {
+            "check": "Hold",
+            "corner": "Fast Corner",
+            "rows": [
+              {
+                "printed_clock_columns": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+                "slack_ns": 0.104,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 14549,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_JCLK         DebugCore_JCLK",
+                "slack_ns": 0.2,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 390,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_CAPTURE      DebugCore_JCLK",
+                "slack_ns": 22.855,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 81,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_JCLK         DebugCore_CAPTURE",
+                "slack_ns": 1.879,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 16,
+                "passed": true
+              }
+            ]
+          },
+          {
+            "check": "Recovery",
+            "corner": "Fast Corner",
+            "rows": [
+              {
+                "printed_clock_columns": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+                "slack_ns": 4.003,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 2195,
+                "passed": true
+              }
+            ]
+          },
+          {
+            "check": "Removal",
+            "corner": "Fast Corner",
+            "rows": [
+              {
+                "printed_clock_columns": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+                "slack_ns": 0.434,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 2195,
+                "passed": true
+              }
+            ]
+          },
+          {
+            "check": "Minimum Pulse Width",
+            "corner": "Fast Corner",
+            "rows": [
+              {
+                "printed_clock_columns": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+                "slack_ns": 2.647,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 2732,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_JCLK",
+                "slack_ns": 24.43,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 103,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_CAPTURE",
+                "slack_ns": 49.8,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 11,
+                "passed": true
+              }
+            ]
+          }
+        ]
+      },
+      "resources": {
+        "CLMA": {
+          "ff": 2593,
+          "lut": 5092
+        },
+        "CLMS": {
+          "ff": 657,
+          "lut": 1519
+        },
+        "DRM": 26.5,
+        "GPLL": 1.0,
+        "APM": 4.0,
+        "post_route_luts": 6611,
+        "post_route_ffs": 3250
+      },
+      "timing_report": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\builds\\20261101-010319-e2a7759d\\implementation\\report_timing\\pds_soc_top.rtr",
+      "timing_report_sha256": "7527287366AC1F015FB37B5526968D9F5771CE3E4A0A08BD6E865A62616516F2",
+      "hardware_validated": false
+    },
+    "independent_audit": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\builds\\20261101-010319-e2a7759d\\INDEPENDENT_MULTICORNER_AUDIT.json",
+    "independent_audit_passed": false,
+    "bitstream": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\builds\\20261101-010319-e2a7759d\\implementation\\generate_bitstream\\pds_soc_top.sbit",
+    "bitstream_sha256": "AB358DF4AC27B7C26917D096B352922A59A33997F322C0A337631DB2F4B2BA12",
+    "fic": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\builds\\20261101-010319-e2a7759d\\implementation\\cpu.fic",
+    "fic_sha256": "F2BC150FD67099D986E61421220272CAF87B18D07FFDE254150D1C30B5F8175C"
+  },
+  {
+    "build_directory": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\builds\\20261101-012944-948b6525",
+    "manifest": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\builds\\20261101-012944-948b6525\\manifest.json",
+    "manifest_sha256": "14523f2fda5f5b95801adc920d4d313544ec0e8e238dd8ff4d0f4116963ceb24",
+    "status": "timing_failed",
+    "stage": "implemented",
+    "placement_seed": 2,
+    "ila_profile": "NativeMinimal",
+    "report": {
+      "clock_hz": 145125000,
+      "cpu_period_ns": 6.89,
+      "clock_loads": 2732,
+      "timing_summary": "Some Constraints Violated.",
+      "constraints_met": false,
+      "setup_wns_ns": -0.06,
+      "estimated_mhz_not_hardware_measurement": 143.8849,
+      "setup_uncertainty_ns": 0.15,
+      "setup_uncertainty_paths_checked": 6,
+      "all_corner_audit": {
+        "all_corners_passed": false,
+        "summary_tables_checked": 10,
+        "includes_cpu_and_debugger_clocks": true,
+        "tables": [
+          {
+            "check": "Setup",
+            "corner": "Slow Corner",
+            "rows": [
+              {
+                "printed_clock_columns": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+                "slack_ns": -0.06,
+                "total_negative_slack_ns": -0.405,
+                "failing_endpoints": 14,
+                "total_endpoints": 14533,
+                "passed": false
+              },
+              {
+                "printed_clock_columns": "DebugCore_JCLK         DebugCore_JCLK",
+                "slack_ns": 22.629,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 380,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_CAPTURE      DebugCore_JCLK",
+                "slack_ns": 22.834,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 81,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_JCLK         DebugCore_CAPTURE",
+                "slack_ns": 45.097,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 16,
+                "passed": true
+              }
+            ]
+          },
+          {
+            "check": "Hold",
+            "corner": "Slow Corner",
+            "rows": [
+              {
+                "printed_clock_columns": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+                "slack_ns": 0.142,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 14533,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_JCLK         DebugCore_JCLK",
+                "slack_ns": 0.301,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 380,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_CAPTURE      DebugCore_JCLK",
+                "slack_ns": 22.729,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 81,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_JCLK         DebugCore_CAPTURE",
+                "slack_ns": 1.504,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 16,
+                "passed": true
+              }
+            ]
+          },
+          {
+            "check": "Recovery",
+            "corner": "Slow Corner",
+            "rows": [
+              {
+                "printed_clock_columns": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+                "slack_ns": 2.068,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 2195,
+                "passed": true
+              }
+            ]
+          },
+          {
+            "check": "Removal",
+            "corner": "Slow Corner",
+            "rows": [
+              {
+                "printed_clock_columns": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+                "slack_ns": 0.75,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 2195,
+                "passed": true
+              }
+            ]
+          },
+          {
+            "check": "Minimum Pulse Width",
+            "corner": "Slow Corner",
+            "rows": [
+              {
+                "printed_clock_columns": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+                "slack_ns": 2.1,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 2732,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_JCLK",
+                "slack_ns": 24.04,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 103,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_CAPTURE",
+                "slack_ns": 49.8,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 11,
+                "passed": true
+              }
+            ]
+          },
+          {
+            "check": "Setup",
+            "corner": "Fast Corner",
+            "rows": [
+              {
+                "printed_clock_columns": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+                "slack_ns": 2.715,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 14533,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_JCLK         DebugCore_JCLK",
+                "slack_ns": 23.666,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 380,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_CAPTURE      DebugCore_JCLK",
+                "slack_ns": 23.966,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 81,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_JCLK         DebugCore_CAPTURE",
+                "slack_ns": 46.903,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 16,
+                "passed": true
+              }
+            ]
+          },
+          {
+            "check": "Hold",
+            "corner": "Fast Corner",
+            "rows": [
+              {
+                "printed_clock_columns": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+                "slack_ns": 0.1,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 14533,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_JCLK         DebugCore_JCLK",
+                "slack_ns": 0.2,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 380,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_CAPTURE      DebugCore_JCLK",
+                "slack_ns": 23.645,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 81,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_JCLK         DebugCore_CAPTURE",
+                "slack_ns": 1.212,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 16,
+                "passed": true
+              }
+            ]
+          },
+          {
+            "check": "Recovery",
+            "corner": "Fast Corner",
+            "rows": [
+              {
+                "printed_clock_columns": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+                "slack_ns": 3.88,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 2195,
+                "passed": true
+              }
+            ]
+          },
+          {
+            "check": "Removal",
+            "corner": "Fast Corner",
+            "rows": [
+              {
+                "printed_clock_columns": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+                "slack_ns": 0.502,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 2195,
+                "passed": true
+              }
+            ]
+          },
+          {
+            "check": "Minimum Pulse Width",
+            "corner": "Fast Corner",
+            "rows": [
+              {
+                "printed_clock_columns": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+                "slack_ns": 2.647,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 2732,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_JCLK",
+                "slack_ns": 24.43,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 103,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_CAPTURE",
+                "slack_ns": 49.8,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 11,
+                "passed": true
+              }
+            ]
+          }
+        ]
+      },
+      "resources": {
+        "CLMA": {
+          "ff": 2592,
+          "lut": 5038
+        },
+        "CLMS": {
+          "ff": 658,
+          "lut": 1495
+        },
+        "DRM": 26.5,
+        "GPLL": 1.0,
+        "APM": 4.0,
+        "post_route_luts": 6533,
+        "post_route_ffs": 3250
+      },
+      "timing_report": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\builds\\20261101-012944-948b6525\\implementation\\report_timing\\pds_soc_top.rtr",
+      "timing_report_sha256": "F482E415FAB671CDAB61C0823CC075D704E9000524FA292891C238C48DE2B9EC",
+      "hardware_validated": false
+    },
+    "independent_audit": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\builds\\20261101-012944-948b6525\\INDEPENDENT_MULTICORNER_AUDIT.json",
+    "independent_audit_passed": false,
+    "bitstream": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\builds\\20261101-012944-948b6525\\implementation\\generate_bitstream\\pds_soc_top.sbit",
+    "bitstream_sha256": "CA7DF1F9763F3206D643CE08F7CA13A25EAC602F9FF17EF8755C8F420274BAEA",
+    "fic": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\builds\\20261101-012944-948b6525\\implementation\\cpu.fic",
+    "fic_sha256": "06FCF97E1EFE3C92033AF57AFEBCA0BC0571A689D8835885BB290A7046913BEF"
+  },
+  {
+    "build_directory": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\builds\\20261101-013611-840c8de9",
+    "manifest": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\builds\\20261101-013611-840c8de9\\manifest.json",
+    "manifest_sha256": "55192d9c602c27c090e02140cee4def06f58aed856b8f4a585df5b41bcc296cd",
+    "status": "internal_timing_passed",
+    "stage": "implemented",
+    "placement_seed": 1,
+    "ila_profile": "Lean24",
+    "report": {
+      "clock_hz": 145125000,
+      "cpu_period_ns": 6.89,
+      "clock_loads": 2617,
+      "timing_summary": "All Constraints Met.",
+      "constraints_met": true,
+      "setup_wns_ns": 0.074,
+      "estimated_mhz_not_hardware_measurement": 146.7136,
+      "setup_uncertainty_ns": 0.15,
+      "setup_uncertainty_paths_checked": 6,
+      "all_corner_audit": {
+        "all_corners_passed": true,
+        "summary_tables_checked": 10,
+        "includes_cpu_and_debugger_clocks": true,
+        "tables": [
+          {
+            "check": "Setup",
+            "corner": "Slow Corner",
+            "rows": [
+              {
+                "printed_clock_columns": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+                "slack_ns": 0.074,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 14306,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_JCLK         DebugCore_JCLK",
+                "slack_ns": 23.542,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 321,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_CAPTURE      DebugCore_JCLK",
+                "slack_ns": 18.354,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 94,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_JCLK         DebugCore_CAPTURE",
+                "slack_ns": 43.737,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 16,
+                "passed": true
+              }
+            ]
+          },
+          {
+            "check": "Hold",
+            "corner": "Slow Corner",
+            "rows": [
+              {
+                "printed_clock_columns": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+                "slack_ns": 0.151,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 14306,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_JCLK         DebugCore_JCLK",
+                "slack_ns": 0.3,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 321,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_CAPTURE      DebugCore_JCLK",
+                "slack_ns": 25.882,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 94,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_JCLK         DebugCore_CAPTURE",
+                "slack_ns": 0.875,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 16,
+                "passed": true
+              }
+            ]
+          },
+          {
+            "check": "Recovery",
+            "corner": "Slow Corner",
+            "rows": [
+              {
+                "printed_clock_columns": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+                "slack_ns": 3.04,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 2117,
+                "passed": true
+              }
+            ]
+          },
+          {
+            "check": "Removal",
+            "corner": "Slow Corner",
+            "rows": [
+              {
+                "printed_clock_columns": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+                "slack_ns": 0.436,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 2117,
+                "passed": true
+              }
+            ]
+          },
+          {
+            "check": "Minimum Pulse Width",
+            "corner": "Slow Corner",
+            "rows": [
+              {
+                "printed_clock_columns": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+                "slack_ns": 2.1,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 2617,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_JCLK",
+                "slack_ns": 24.04,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 88,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_CAPTURE",
+                "slack_ns": 49.8,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 11,
+                "passed": true
+              }
+            ]
+          },
+          {
+            "check": "Setup",
+            "corner": "Fast Corner",
+            "rows": [
+              {
+                "printed_clock_columns": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+                "slack_ns": 2.802,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 14306,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_JCLK         DebugCore_JCLK",
+                "slack_ns": 24.187,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 321,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_CAPTURE      DebugCore_JCLK",
+                "slack_ns": 21.459,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 94,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_JCLK         DebugCore_CAPTURE",
+                "slack_ns": 46.176,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 16,
+                "passed": true
+              }
+            ]
+          },
+          {
+            "check": "Hold",
+            "corner": "Fast Corner",
+            "rows": [
+              {
+                "printed_clock_columns": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+                "slack_ns": 0.101,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 14306,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_JCLK         DebugCore_JCLK",
+                "slack_ns": 0.2,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 321,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_CAPTURE      DebugCore_JCLK",
+                "slack_ns": 25.473,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 94,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_JCLK         DebugCore_CAPTURE",
+                "slack_ns": 1.248,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 16,
+                "passed": true
+              }
+            ]
+          },
+          {
+            "check": "Recovery",
+            "corner": "Fast Corner",
+            "rows": [
+              {
+                "printed_clock_columns": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+                "slack_ns": 4.475,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 2117,
+                "passed": true
+              }
+            ]
+          },
+          {
+            "check": "Removal",
+            "corner": "Fast Corner",
+            "rows": [
+              {
+                "printed_clock_columns": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+                "slack_ns": 0.29,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 2117,
+                "passed": true
+              }
+            ]
+          },
+          {
+            "check": "Minimum Pulse Width",
+            "corner": "Fast Corner",
+            "rows": [
+              {
+                "printed_clock_columns": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+                "slack_ns": 2.647,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 2617,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_JCLK",
+                "slack_ns": 24.43,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 88,
+                "passed": true
+              },
+              {
+                "printed_clock_columns": "DebugCore_CAPTURE",
+                "slack_ns": 49.8,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "total_endpoints": 11,
+                "passed": true
+              }
+            ]
+          }
+        ]
+      },
+      "resources": {
+        "CLMA": {
+          "ff": 2308,
+          "lut": 4659
+        },
+        "CLMS": {
+          "ff": 716,
+          "lut": 1762
+        },
+        "DRM": 26.0,
+        "GPLL": 1.0,
+        "APM": 4.0,
+        "post_route_luts": 6421,
+        "post_route_ffs": 3024
+      },
+      "timing_report": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\builds\\20261101-013611-840c8de9\\implementation\\report_timing\\pds_soc_top.rtr",
+      "timing_report_sha256": "C504222C67288FDBD8A25CBC4867D2140096508FDEE81E5F6FCE0784731AEE88",
+      "hardware_validated": false
+    },
+    "independent_audit": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\builds\\20261101-013611-840c8de9\\INDEPENDENT_MULTICORNER_AUDIT.json",
+    "independent_audit_passed": true,
+    "bitstream": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\builds\\20261101-013611-840c8de9\\implementation\\generate_bitstream\\pds_soc_top.sbit",
+    "bitstream_sha256": "77E9A98260A0DF6F51B548544FE356F44D235B65E31C58A2B27B464DFC8EA1EA",
+    "fic": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\builds\\20261101-013611-840c8de9\\implementation\\cpu.fic",
+    "fic_sha256": "E93EB7C9506AAD7F81F9BE92EC2C5DA80E62002CE4193D7096F1B010D85335B9"
+  }
+]

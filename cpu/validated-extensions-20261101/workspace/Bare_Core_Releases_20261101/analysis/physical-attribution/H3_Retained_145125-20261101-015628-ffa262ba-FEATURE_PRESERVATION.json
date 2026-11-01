@@ -1,0 +1,2128 @@
+{
+  "schema": "bare-core-physical-feature-preservation/v1",
+  "status": "PASS",
+  "release": "H3_Retained_145125",
+  "physical_build_directory": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\physical\\builds\\20261101-015628-ffa262ba",
+  "inventory": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\physical-attribution\\H3_Retained_145125-20261101-015628-ffa262ba-PHYSICAL_PRIMITIVE_INVENTORY.json",
+  "inventory_sha256": "ce48c29036c06c58edf821dbad820a26795984a10150496059594bbc5201ccb7",
+  "physical_export_sha256": "0b2efedee162daefe7ebb8cc94de672621556083c6840624275aa731934a1320",
+  "source_closure": [
+    {
+      "name": "rv32_core.sv",
+      "actual_physical_input": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\physical\\builds\\20261101-015628-ffa262ba\\inputs\\rtl\\rv32_core.sv",
+      "sha256": "af9aeb1ef431c860e108b2fd3ce09d596757d2dba4a92a065b3ad616483d0748"
+    },
+    {
+      "name": "rv32_rvc_frontend.sv",
+      "actual_physical_input": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\physical\\builds\\20261101-015628-ffa262ba\\inputs\\rtl\\rv32_rvc_frontend.sv",
+      "sha256": "210b5ba9280c3840aafc27e7c3e35616085efde310793dc1661cc72f50984128"
+    },
+    {
+      "name": "rv32_rvc_expand.sv",
+      "actual_physical_input": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\physical\\builds\\20261101-015628-ffa262ba\\inputs\\rtl\\rv32_rvc_expand.sv",
+      "sha256": "308ac8a65c9e29aeec27b38417483d0f43fd7c54487c26e89a3fa54b4647951b"
+    },
+    {
+      "name": "rv32_decode.sv",
+      "actual_physical_input": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\physical\\builds\\20261101-015628-ffa262ba\\inputs\\rtl\\rv32_decode.sv",
+      "sha256": "9cb2b57b46ed775d85b6e70a3eebe92c2d5e49e9a6483993109e2c096d9a3ff3"
+    },
+    {
+      "name": "rv32_alu.sv",
+      "actual_physical_input": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\physical\\builds\\20261101-015628-ffa262ba\\inputs\\rtl\\rv32_alu.sv",
+      "sha256": "125647d90b98f294743127637406d19479eebda82dccfaaba7acaf59d5ae38b1"
+    },
+    {
+      "name": "rv32_muldiv.sv",
+      "actual_physical_input": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\physical\\builds\\20261101-015628-ffa262ba\\inputs\\rtl\\rv32_muldiv.sv",
+      "sha256": "5306ad46b57db551cc83df20dc4c9d2f09aa7077e6289037abfc4fcd8fa3db0e"
+    },
+    {
+      "name": "rv32_btb.sv",
+      "actual_physical_input": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\physical\\builds\\20261101-015628-ffa262ba\\inputs\\rtl\\rv32_btb.sv",
+      "sha256": "b1b3481343a2e1275cfd984c4eab05c5f9d92cb72dab652010463073eb86eb4f"
+    },
+    {
+      "name": "rv32_machine.sv",
+      "actual_physical_input": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\physical\\builds\\20261101-015628-ffa262ba\\inputs\\rtl\\rv32_machine.sv",
+      "sha256": "56b542e419c58216a08b0a5c83322506e42e2721fa28db50a6454ebe29607abd"
+    }
+  ],
+  "parameters": {
+    "RESET_VECTOR": 0,
+    "ENABLE_PREDICTOR": 1,
+    "ENABLE_M": 1,
+    "ENABLE_C": 1,
+    "FETCH_ADDRESS_BITS": 16,
+    "FETCH_OVERLAP": 1,
+    "EARLY_D_REQUEST": 1,
+    "BTB_INDEX_BITS": 8,
+    "BTB_ADDRESS_BITS": 16,
+    "LOAD_USE_BUBBLE": 1,
+    "RETAIN_MUL_ELIGIBILITY": 1
+  },
+  "features": {
+    "mcycle": {
+      "retained_bit_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63
+      ],
+      "physical_flip_flops": {
+        "1": [
+          {
+            "physical_instance": "CLMA_87_1362/FF1/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[1]/opit_0_inv_AQ_perm/FF1/FF",
+            "ports": {
+              "Q": "core_outputs[344]",
+              "CE": "\\CLMA_87_1362/ntCE1 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1362/ntQD1 ",
+              "SR": "ntR164"
+            }
+          }
+        ],
+        "2": [
+          {
+            "physical_instance": "CLMA_87_1362/FF2/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[2]/opit_0_inv_AQ_perm/FF2/FF",
+            "ports": {
+              "Q": "core_outputs[345]",
+              "CE": "\\CLMA_87_1362/ntCE1 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1362/ntQD2 ",
+              "SR": "ntR164"
+            }
+          }
+        ],
+        "3": [
+          {
+            "physical_instance": "CLMA_87_1362/FF3/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[3]/opit_0_inv_AQ_perm/FF3/FF",
+            "ports": {
+              "Q": "core_outputs[346]",
+              "CE": "\\CLMA_87_1362/ntCE1 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1362/ntQD3 ",
+              "SR": "ntR164"
+            }
+          }
+        ],
+        "4": [
+          {
+            "physical_instance": "CLMA_87_1368/FF0/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[4]/opit_0_inv_AQ_perm/FF0/FF",
+            "ports": {
+              "Q": "core_outputs[347]",
+              "CE": "ntR449",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1368/ntQD0 ",
+              "SR": "ntR163"
+            }
+          }
+        ],
+        "5": [
+          {
+            "physical_instance": "CLMA_87_1368/FF1/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[5]/opit_0_inv_AQ_perm/FF1/FF",
+            "ports": {
+              "Q": "core_outputs[348]",
+              "CE": "ntR449",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1368/ntQD1 ",
+              "SR": "ntR163"
+            }
+          }
+        ],
+        "6": [
+          {
+            "physical_instance": "CLMA_87_1368/FF2/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[6]/opit_0_inv_AQ_perm/FF2/FF",
+            "ports": {
+              "Q": "core_outputs[349]",
+              "CE": "ntR449",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1368/ntQD2 ",
+              "SR": "ntR163"
+            }
+          }
+        ],
+        "7": [
+          {
+            "physical_instance": "CLMA_87_1368/FF3/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[7]/opit_0_inv_AQ_perm/FF3/FF",
+            "ports": {
+              "Q": "core_outputs[350]",
+              "CE": "ntR449",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1368/ntQD3 ",
+              "SR": "ntR163"
+            }
+          }
+        ],
+        "8": [
+          {
+            "physical_instance": "CLMA_87_1380/FF0/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[8]/opit_0_inv_AQ_perm/FF0/FF",
+            "ports": {
+              "Q": "core_outputs[351]",
+              "CE": "ntR448",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1380/ntQD0 ",
+              "SR": "ntR162"
+            }
+          }
+        ],
+        "9": [
+          {
+            "physical_instance": "CLMA_87_1380/FF1/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[9]/opit_0_inv_AQ_perm/FF1/FF",
+            "ports": {
+              "Q": "core_outputs[352]",
+              "CE": "ntR448",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1380/ntQD1 ",
+              "SR": "ntR162"
+            }
+          }
+        ],
+        "10": [
+          {
+            "physical_instance": "CLMA_87_1380/FF2/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[10]/opit_0_inv_AQ_perm/FF2/FF",
+            "ports": {
+              "Q": "core_outputs[353]",
+              "CE": "ntR448",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1380/ntQD2 ",
+              "SR": "ntR162"
+            }
+          }
+        ],
+        "11": [
+          {
+            "physical_instance": "CLMA_87_1380/FF3/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[11]/opit_0_inv_AQ_perm/FF3/FF",
+            "ports": {
+              "Q": "core_outputs[354]",
+              "CE": "ntR448",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1380/ntQD3 ",
+              "SR": "ntR162"
+            }
+          }
+        ],
+        "12": [
+          {
+            "physical_instance": "CLMA_87_1386/FF0/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[12]/opit_0_inv_AQ_perm/FF0/FF",
+            "ports": {
+              "Q": "core_outputs[355]",
+              "CE": "ntR447",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1386/ntQD0 ",
+              "SR": "ntR161"
+            }
+          }
+        ],
+        "13": [
+          {
+            "physical_instance": "CLMA_87_1386/FF1/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[13]/opit_0_inv_AQ_perm/FF1/FF",
+            "ports": {
+              "Q": "core_outputs[356]",
+              "CE": "ntR447",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1386/ntQD1 ",
+              "SR": "ntR161"
+            }
+          }
+        ],
+        "14": [
+          {
+            "physical_instance": "CLMA_87_1386/FF2/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[14]/opit_0_inv_AQ_perm/FF2/FF",
+            "ports": {
+              "Q": "core_outputs[357]",
+              "CE": "ntR447",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1386/ntQD2 ",
+              "SR": "ntR161"
+            }
+          }
+        ],
+        "15": [
+          {
+            "physical_instance": "CLMA_87_1386/FF3/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[15]/opit_0_inv_AQ_perm/FF3/FF",
+            "ports": {
+              "Q": "core_outputs[358]",
+              "CE": "ntR447",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1386/ntQD3 ",
+              "SR": "ntR161"
+            }
+          }
+        ],
+        "16": [
+          {
+            "physical_instance": "CLMA_87_1392/FF0/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[16]/opit_0_inv_AQ_perm/FF0/FF",
+            "ports": {
+              "Q": "core_outputs[359]",
+              "CE": "ntR446",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1392/ntQD0 ",
+              "SR": "ntR160"
+            }
+          }
+        ],
+        "17": [
+          {
+            "physical_instance": "CLMA_87_1392/FF1/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[17]/opit_0_inv_AQ_perm/FF1/FF",
+            "ports": {
+              "Q": "core_outputs[360]",
+              "CE": "ntR446",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1392/ntQD1 ",
+              "SR": "ntR160"
+            }
+          }
+        ],
+        "18": [
+          {
+            "physical_instance": "CLMA_87_1392/FF2/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[18]/opit_0_inv_AQ_perm/FF2/FF",
+            "ports": {
+              "Q": "core_outputs[361]",
+              "CE": "ntR446",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1392/ntQD2 ",
+              "SR": "ntR160"
+            }
+          }
+        ],
+        "19": [
+          {
+            "physical_instance": "CLMA_87_1392/FF3/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[19]/opit_0_inv_AQ_perm/FF3/FF",
+            "ports": {
+              "Q": "core_outputs[362]",
+              "CE": "ntR446",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1392/ntQD3 ",
+              "SR": "ntR160"
+            }
+          }
+        ],
+        "20": [
+          {
+            "physical_instance": "CLMA_87_1398/FF0/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[20]/opit_0_inv_AQ_perm/FF0/FF",
+            "ports": {
+              "Q": "core_outputs[363]",
+              "CE": "ntR445",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1398/ntQD0 ",
+              "SR": "ntR159"
+            }
+          }
+        ],
+        "21": [
+          {
+            "physical_instance": "CLMA_87_1398/FF1/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[21]/opit_0_inv_AQ_perm/FF1/FF",
+            "ports": {
+              "Q": "core_outputs[364]",
+              "CE": "ntR445",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1398/ntQD1 ",
+              "SR": "ntR159"
+            }
+          }
+        ],
+        "22": [
+          {
+            "physical_instance": "CLMA_87_1398/FF2/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[22]/opit_0_inv_AQ_perm/FF2/FF",
+            "ports": {
+              "Q": "core_outputs[365]",
+              "CE": "ntR445",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1398/ntQD2 ",
+              "SR": "ntR159"
+            }
+          }
+        ],
+        "23": [
+          {
+            "physical_instance": "CLMA_87_1398/FF3/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[23]/opit_0_inv_AQ_perm/FF3/FF",
+            "ports": {
+              "Q": "core_outputs[366]",
+              "CE": "ntR445",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1398/ntQD3 ",
+              "SR": "ntR159"
+            }
+          }
+        ],
+        "24": [
+          {
+            "physical_instance": "CLMA_87_1404/FF0/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[24]/opit_0_inv_AQ_perm/FF0/FF",
+            "ports": {
+              "Q": "core_outputs[367]",
+              "CE": "ntR444",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1404/ntQD0 ",
+              "SR": "ntR158"
+            }
+          }
+        ],
+        "25": [
+          {
+            "physical_instance": "CLMA_87_1404/FF1/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[25]/opit_0_inv_AQ_perm/FF1/FF",
+            "ports": {
+              "Q": "core_outputs[368]",
+              "CE": "ntR444",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1404/ntQD1 ",
+              "SR": "ntR158"
+            }
+          }
+        ],
+        "26": [
+          {
+            "physical_instance": "CLMA_87_1404/FF2/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[26]/opit_0_inv_AQ_perm/FF2/FF",
+            "ports": {
+              "Q": "core_outputs[369]",
+              "CE": "ntR444",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1404/ntQD2 ",
+              "SR": "ntR158"
+            }
+          }
+        ],
+        "27": [
+          {
+            "physical_instance": "CLMA_87_1404/FF3/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[27]/opit_0_inv_AQ_perm/FF3/FF",
+            "ports": {
+              "Q": "core_outputs[370]",
+              "CE": "ntR444",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1404/ntQD3 ",
+              "SR": "ntR158"
+            }
+          }
+        ],
+        "28": [
+          {
+            "physical_instance": "CLMA_87_1410/FF0/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[28]/opit_0_inv_AQ_perm/FF0/FF",
+            "ports": {
+              "Q": "core_outputs[371]",
+              "CE": "ntR443",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1410/ntQD0 ",
+              "SR": "ntR157"
+            }
+          }
+        ],
+        "29": [
+          {
+            "physical_instance": "CLMA_87_1410/FF1/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[29]/opit_0_inv_AQ_perm/FF1/FF",
+            "ports": {
+              "Q": "core_outputs[372]",
+              "CE": "ntR443",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1410/ntQD1 ",
+              "SR": "ntR157"
+            }
+          }
+        ],
+        "30": [
+          {
+            "physical_instance": "CLMA_87_1410/FF2/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[30]/opit_0_inv_AQ_perm/FF2/FF",
+            "ports": {
+              "Q": "core_outputs[373]",
+              "CE": "ntR443",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1410/ntQD2 ",
+              "SR": "ntR157"
+            }
+          }
+        ],
+        "31": [
+          {
+            "physical_instance": "CLMA_87_1410/FF3/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[31]/opit_0_inv_AQ_perm/FF3/FF",
+            "ports": {
+              "Q": "core_outputs[374]",
+              "CE": "ntR443",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1410/ntQD3 ",
+              "SR": "ntR157"
+            }
+          }
+        ],
+        "32": [
+          {
+            "physical_instance": "CLMA_87_1416/FF0/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[32]/opit_0_inv_AQ_perm/FF0/FF",
+            "ports": {
+              "Q": "core_outputs[375]",
+              "CE": "\\CLMA_87_1416/ntCE1 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1416/ntQD0 ",
+              "SR": "ntR156"
+            }
+          }
+        ],
+        "33": [
+          {
+            "physical_instance": "CLMA_87_1416/FF1/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[33]/opit_0_inv_AQ_perm/FF1/FF",
+            "ports": {
+              "Q": "core_outputs[376]",
+              "CE": "\\CLMA_87_1416/ntCE1 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1416/ntQD1 ",
+              "SR": "ntR156"
+            }
+          }
+        ],
+        "34": [
+          {
+            "physical_instance": "CLMA_87_1416/FF2/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[34]/opit_0_inv_AQ_perm/FF2/FF",
+            "ports": {
+              "Q": "core_outputs[377]",
+              "CE": "\\CLMA_87_1416/ntCE1 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1416/ntQD2 ",
+              "SR": "ntR156"
+            }
+          }
+        ],
+        "35": [
+          {
+            "physical_instance": "CLMA_87_1416/FF3/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[35]/opit_0_inv_AQ_perm/FF3/FF",
+            "ports": {
+              "Q": "core_outputs[378]",
+              "CE": "\\CLMA_87_1416/ntCE1 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1416/ntQD3 ",
+              "SR": "ntR156"
+            }
+          }
+        ],
+        "36": [
+          {
+            "physical_instance": "CLMA_87_1422/FF0/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[36]/opit_0_inv_AQ_perm/FF0/FF",
+            "ports": {
+              "Q": "core_outputs[379]",
+              "CE": "ntR442",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1422/ntQD0 ",
+              "SR": "ntR155"
+            }
+          }
+        ],
+        "37": [
+          {
+            "physical_instance": "CLMA_87_1422/FF1/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[37]/opit_0_inv_AQ_perm/FF1/FF",
+            "ports": {
+              "Q": "core_outputs[380]",
+              "CE": "ntR442",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1422/ntQD1 ",
+              "SR": "ntR155"
+            }
+          }
+        ],
+        "38": [
+          {
+            "physical_instance": "CLMA_87_1422/FF2/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[38]/opit_0_inv_AQ_perm/FF2/FF",
+            "ports": {
+              "Q": "core_outputs[381]",
+              "CE": "ntR442",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1422/ntQD2 ",
+              "SR": "ntR155"
+            }
+          }
+        ],
+        "39": [
+          {
+            "physical_instance": "CLMA_87_1422/FF3/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[39]/opit_0_inv_AQ_perm/FF3/FF",
+            "ports": {
+              "Q": "core_outputs[382]",
+              "CE": "ntR442",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1422/ntQD3 ",
+              "SR": "ntR155"
+            }
+          }
+        ],
+        "40": [
+          {
+            "physical_instance": "CLMA_87_1428/FF0/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[40]/opit_0_inv_AQ_perm/FF0/FF",
+            "ports": {
+              "Q": "core_outputs[383]",
+              "CE": "ntR441",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1428/ntQD0 ",
+              "SR": "ntR154"
+            }
+          }
+        ],
+        "41": [
+          {
+            "physical_instance": "CLMA_87_1428/FF1/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[41]/opit_0_inv_AQ_perm/FF1/FF",
+            "ports": {
+              "Q": "core_outputs[384]",
+              "CE": "ntR441",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1428/ntQD1 ",
+              "SR": "ntR154"
+            }
+          }
+        ],
+        "42": [
+          {
+            "physical_instance": "CLMA_87_1428/FF2/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[42]/opit_0_inv_AQ_perm/FF2/FF",
+            "ports": {
+              "Q": "core_outputs[385]",
+              "CE": "ntR441",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1428/ntQD2 ",
+              "SR": "ntR154"
+            }
+          }
+        ],
+        "43": [
+          {
+            "physical_instance": "CLMA_87_1428/FF3/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[43]/opit_0_inv_AQ_perm/FF3/FF",
+            "ports": {
+              "Q": "core_outputs[386]",
+              "CE": "ntR441",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1428/ntQD3 ",
+              "SR": "ntR154"
+            }
+          }
+        ],
+        "44": [
+          {
+            "physical_instance": "CLMA_87_1434/FF0/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[44]/opit_0_inv_AQ_perm/FF0/FF",
+            "ports": {
+              "Q": "core_outputs[387]",
+              "CE": "ntR440",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1434/ntQD0 ",
+              "SR": "ntR153"
+            }
+          }
+        ],
+        "45": [
+          {
+            "physical_instance": "CLMA_87_1434/FF1/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[45]/opit_0_inv_AQ_perm/FF1/FF",
+            "ports": {
+              "Q": "core_outputs[388]",
+              "CE": "ntR440",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1434/ntQD1 ",
+              "SR": "ntR153"
+            }
+          }
+        ],
+        "46": [
+          {
+            "physical_instance": "CLMA_87_1434/FF2/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[46]/opit_0_inv_AQ_perm/FF2/FF",
+            "ports": {
+              "Q": "core_outputs[389]",
+              "CE": "ntR440",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1434/ntQD2 ",
+              "SR": "ntR153"
+            }
+          }
+        ],
+        "47": [
+          {
+            "physical_instance": "CLMA_87_1434/FF3/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[47]/opit_0_inv_AQ_perm/FF3/FF",
+            "ports": {
+              "Q": "core_outputs[390]",
+              "CE": "ntR440",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1434/ntQD3 ",
+              "SR": "ntR153"
+            }
+          }
+        ],
+        "48": [
+          {
+            "physical_instance": "CLMA_87_1440/FF0/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[48]/opit_0_inv_AQ_perm/FF0/FF",
+            "ports": {
+              "Q": "core_outputs[391]",
+              "CE": "ntR439",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1440/ntQD0 ",
+              "SR": "ntR152"
+            }
+          }
+        ],
+        "49": [
+          {
+            "physical_instance": "CLMA_87_1440/FF1/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[49]/opit_0_inv_AQ_perm/FF1/FF",
+            "ports": {
+              "Q": "core_outputs[392]",
+              "CE": "ntR439",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1440/ntQD1 ",
+              "SR": "ntR152"
+            }
+          }
+        ],
+        "50": [
+          {
+            "physical_instance": "CLMA_87_1440/FF2/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[50]/opit_0_inv_AQ_perm/FF2/FF",
+            "ports": {
+              "Q": "core_outputs[393]",
+              "CE": "ntR439",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1440/ntQD2 ",
+              "SR": "ntR152"
+            }
+          }
+        ],
+        "51": [
+          {
+            "physical_instance": "CLMA_87_1440/FF3/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[51]/opit_0_inv_AQ_perm/FF3/FF",
+            "ports": {
+              "Q": "core_outputs[394]",
+              "CE": "ntR439",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1440/ntQD3 ",
+              "SR": "ntR152"
+            }
+          }
+        ],
+        "52": [
+          {
+            "physical_instance": "CLMA_87_1446/FF0/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[52]/opit_0_inv_AQ_perm/FF0/FF",
+            "ports": {
+              "Q": "core_outputs[395]",
+              "CE": "ntR438",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1446/ntQD0 ",
+              "SR": "ntR151"
+            }
+          }
+        ],
+        "53": [
+          {
+            "physical_instance": "CLMA_87_1446/FF1/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[53]/opit_0_inv_AQ_perm/FF1/FF",
+            "ports": {
+              "Q": "core_outputs[396]",
+              "CE": "ntR438",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1446/ntQD1 ",
+              "SR": "ntR151"
+            }
+          }
+        ],
+        "54": [
+          {
+            "physical_instance": "CLMA_87_1446/FF2/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[54]/opit_0_inv_AQ_perm/FF2/FF",
+            "ports": {
+              "Q": "core_outputs[397]",
+              "CE": "ntR438",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1446/ntQD2 ",
+              "SR": "ntR151"
+            }
+          }
+        ],
+        "55": [
+          {
+            "physical_instance": "CLMA_87_1446/FF3/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[55]/opit_0_inv_AQ_perm/FF3/FF",
+            "ports": {
+              "Q": "core_outputs[398]",
+              "CE": "ntR438",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1446/ntQD3 ",
+              "SR": "ntR151"
+            }
+          }
+        ],
+        "56": [
+          {
+            "physical_instance": "CLMA_87_1452/FF0/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[56]/opit_0_inv_AQ_perm/FF0/FF",
+            "ports": {
+              "Q": "core_outputs[399]",
+              "CE": "ntR437",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1452/ntQD0 ",
+              "SR": "ntR150"
+            }
+          }
+        ],
+        "57": [
+          {
+            "physical_instance": "CLMA_87_1452/FF1/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[57]/opit_0_inv_AQ_perm/FF1/FF",
+            "ports": {
+              "Q": "core_outputs[400]",
+              "CE": "ntR437",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1452/ntQD1 ",
+              "SR": "ntR150"
+            }
+          }
+        ],
+        "58": [
+          {
+            "physical_instance": "CLMA_87_1452/FF2/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[58]/opit_0_inv_AQ_perm/FF2/FF",
+            "ports": {
+              "Q": "core_outputs[401]",
+              "CE": "ntR437",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1452/ntQD2 ",
+              "SR": "ntR150"
+            }
+          }
+        ],
+        "59": [
+          {
+            "physical_instance": "CLMA_87_1452/FF3/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[59]/opit_0_inv_AQ_perm/FF3/FF",
+            "ports": {
+              "Q": "core_outputs[402]",
+              "CE": "ntR437",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1452/ntQD3 ",
+              "SR": "ntR150"
+            }
+          }
+        ],
+        "60": [
+          {
+            "physical_instance": "CLMA_87_1458/FF0/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[60]/opit_0_inv_AQ_perm/FF0/FF",
+            "ports": {
+              "Q": "core_outputs[403]",
+              "CE": "ntR436",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1458/ntQD0 ",
+              "SR": "ntR149"
+            }
+          }
+        ],
+        "61": [
+          {
+            "physical_instance": "CLMA_87_1458/FF1/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[61]/opit_0_inv_AQ_perm/FF1/FF",
+            "ports": {
+              "Q": "core_outputs[404]",
+              "CE": "ntR436",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1458/ntQD1 ",
+              "SR": "ntR149"
+            }
+          }
+        ],
+        "62": [
+          {
+            "physical_instance": "CLMA_87_1458/FF2/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[62]/opit_0_inv_AQ_perm/FF2/FF",
+            "ports": {
+              "Q": "core_outputs[405]",
+              "CE": "ntR436",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1458/ntQD2 ",
+              "SR": "ntR149"
+            }
+          }
+        ],
+        "63": [
+          {
+            "physical_instance": "CLMA_87_1458/FF3/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[63]/opit_0_inv_AQ_perm/FF3/FF",
+            "ports": {
+              "Q": "core_outputs[406]",
+              "CE": "ntR436",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_87_1458/ntQD3 ",
+              "SR": "ntR149"
+            }
+          }
+        ],
+        "0": [
+          {
+            "physical_instance": "CLMA_99_1369/FF0/FF",
+            "provenance": "core_boundary/dut/machine/mcycle[0]/opit_0_inv_L6Q_perm/FF0/FF",
+            "ports": {
+              "Q": "core_outputs[343]",
+              "CE": "\\CLMA_87_1362/ntCE1 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_99_1369/ntQD0 ",
+              "SR": "\\CLMA_99_1369/ntRSCO "
+            }
+          }
+        ]
+      },
+      "all_64_bits_present": true
+    },
+    "minstret": {
+      "retained_bit_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63
+      ],
+      "physical_flip_flops": {
+        "9": [
+          {
+            "physical_instance": "CLMA_93_1386/FF2/FF",
+            "provenance": "core_boundary/dut/machine/minstret[9]/opit_0_inv_L6Q_perm/FF2/FF",
+            "ports": {
+              "Q": "core_outputs[416]",
+              "CE": "\\CLMS_93_1387/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_93_1386/ntQD2 ",
+              "SR": "ntR238"
+            }
+          }
+        ],
+        "13": [
+          {
+            "physical_instance": "CLMA_93_1386/FF3/FF",
+            "provenance": "core_boundary/dut/machine/minstret[13]/opit_0_inv_L6Q_perm/FF3/FF",
+            "ports": {
+              "Q": "core_outputs[420]",
+              "CE": "\\CLMS_93_1387/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_93_1386/ntQD3 ",
+              "SR": "ntR238"
+            }
+          }
+        ],
+        "8": [
+          {
+            "physical_instance": "CLMA_93_1428/FF0/FF",
+            "provenance": "core_boundary/dut/machine/minstret[8]/opit_0_inv_L6Q_perm/FF0/FF",
+            "ports": {
+              "Q": "core_outputs[415]",
+              "CE": "\\CLMS_93_1387/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_93_1428/ntQD0 ",
+              "SR": "\\CLMA_93_1428/ntRSCO "
+            }
+          }
+        ],
+        "12": [
+          {
+            "physical_instance": "CLMA_93_1428/FF1/FF",
+            "provenance": "core_boundary/dut/machine/minstret[12]/opit_0_inv_L6Q_perm/FF1/FF",
+            "ports": {
+              "Q": "core_outputs[419]",
+              "CE": "\\CLMS_93_1387/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_93_1428/ntQD1 ",
+              "SR": "\\CLMA_93_1428/ntRSCO "
+            }
+          }
+        ],
+        "14": [
+          {
+            "physical_instance": "CLMA_93_1428/FF2/FF",
+            "provenance": "core_boundary/dut/machine/minstret[14]/opit_0_inv_L6Q_perm/FF2/FF",
+            "ports": {
+              "Q": "core_outputs[421]",
+              "CE": "\\CLMS_93_1387/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_93_1428/ntQD2 ",
+              "SR": "\\CLMA_93_1428/ntRSCO "
+            }
+          }
+        ],
+        "44": [
+          {
+            "physical_instance": "CLMA_93_1440/FF0/FF",
+            "provenance": "core_boundary/dut/machine/minstret[44]/opit_0_inv_L6Q_perm/FF0/FF",
+            "ports": {
+              "Q": "core_outputs[451]",
+              "CE": "\\CLMA_93_1446/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_93_1440/ntQD0 ",
+              "SR": "ntR234"
+            }
+          }
+        ],
+        "40": [
+          {
+            "physical_instance": "CLMA_93_1446/FF0/FF",
+            "provenance": "core_boundary/dut/machine/minstret[40]/opit_0_inv_L6Q_perm/FF0/FF",
+            "ports": {
+              "Q": "core_outputs[447]",
+              "CE": "\\CLMA_93_1446/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_93_1446/ntQD0 ",
+              "SR": "ntR234"
+            }
+          }
+        ],
+        "45": [
+          {
+            "physical_instance": "CLMA_93_1446/FF1/FF",
+            "provenance": "core_boundary/dut/machine/minstret[45]/opit_0_inv_L6Q_perm/FF1/FF",
+            "ports": {
+              "Q": "core_outputs[452]",
+              "CE": "\\CLMA_93_1446/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_93_1446/ntQD1 ",
+              "SR": "ntR234"
+            }
+          }
+        ],
+        "15": [
+          {
+            "physical_instance": "CLMA_99_1380/FF0/FF",
+            "provenance": "core_boundary/dut/machine/minstret[15]/opit_0_inv_L6Q_perm/FF0/FF",
+            "ports": {
+              "Q": "core_outputs[422]",
+              "CE": "\\CLMS_93_1387/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_99_1380/ntQD0 ",
+              "SR": "ntR213"
+            }
+          }
+        ],
+        "16": [
+          {
+            "physical_instance": "CLMA_99_1380/FF1/FF",
+            "provenance": "core_boundary/dut/machine/minstret[16]/opit_0_inv_L6Q_perm/FF1/FF",
+            "ports": {
+              "Q": "core_outputs[423]",
+              "CE": "\\CLMS_93_1387/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_99_1380/ntQD1 ",
+              "SR": "ntR213"
+            }
+          }
+        ],
+        "11": [
+          {
+            "physical_instance": "CLMA_99_1380/FF2/FF",
+            "provenance": "core_boundary/dut/machine/minstret[11]/opit_0_inv_L6Q_perm/FF2/FF",
+            "ports": {
+              "Q": "core_outputs[418]",
+              "CE": "\\CLMS_93_1387/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_99_1380/ntQD2 ",
+              "SR": "ntR213"
+            }
+          }
+        ],
+        "6": [
+          {
+            "physical_instance": "CLMA_99_1380/FF3/FF",
+            "provenance": "core_boundary/dut/machine/minstret[6]/opit_0_inv_L6Q_perm/FF3/FF",
+            "ports": {
+              "Q": "core_outputs[413]",
+              "CE": "\\CLMS_93_1387/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_99_1380/ntQD3 ",
+              "SR": "ntR213"
+            }
+          }
+        ],
+        "47": [
+          {
+            "physical_instance": "CLMA_99_1386/FF0/FF",
+            "provenance": "core_boundary/dut/machine/minstret[47]/opit_0_inv_L6Q_perm/FF0/FF",
+            "ports": {
+              "Q": "core_outputs[454]",
+              "CE": "\\CLMA_93_1446/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_99_1386/ntQD0 ",
+              "SR": "ntR212"
+            }
+          }
+        ],
+        "7": [
+          {
+            "physical_instance": "CLMA_99_1398/FF1/FF",
+            "provenance": "core_boundary/dut/machine/minstret[7]/opit_0_inv_L6Q_perm/FF1/FF",
+            "ports": {
+              "Q": "core_outputs[414]",
+              "CE": "\\CLMS_93_1387/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_99_1398/ntQD1 ",
+              "SR": "ntR211"
+            }
+          }
+        ],
+        "10": [
+          {
+            "physical_instance": "CLMA_99_1422/FF0/FF",
+            "provenance": "core_boundary/dut/machine/minstret[10]/opit_0_inv_L6Q_perm/FF0/FF",
+            "ports": {
+              "Q": "core_outputs[417]",
+              "CE": "\\CLMS_93_1387/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_99_1422/ntQD0 ",
+              "SR": "ntR209"
+            }
+          }
+        ],
+        "31": [
+          {
+            "physical_instance": "CLMA_99_1422/FF1/FF",
+            "provenance": "core_boundary/dut/machine/minstret[31]/opit_0_inv_L6Q_perm/FF1/FF",
+            "ports": {
+              "Q": "core_outputs[438]",
+              "CE": "\\CLMS_93_1387/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_99_1422/ntQD1 ",
+              "SR": "ntR209"
+            }
+          }
+        ],
+        "39": [
+          {
+            "physical_instance": "CLMA_99_1434/FF0/FF",
+            "provenance": "core_boundary/dut/machine/minstret[39]/opit_0_inv_L6Q_perm/FF0/FF",
+            "ports": {
+              "Q": "core_outputs[446]",
+              "CE": "\\CLMA_93_1446/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_99_1434/ntQD0 ",
+              "SR": "ntR208"
+            }
+          }
+        ],
+        "48": [
+          {
+            "physical_instance": "CLMA_105_1369/FF0/FF",
+            "provenance": "core_boundary/dut/machine/minstret[48]/opit_0_inv_L6Q_perm/FF0/FF",
+            "ports": {
+              "Q": "core_outputs[455]",
+              "CE": "\\CLMA_93_1446/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_105_1369/ntQD0 ",
+              "SR": "ntR65"
+            }
+          }
+        ],
+        "52": [
+          {
+            "physical_instance": "CLMA_105_1369/FF1/FF",
+            "provenance": "core_boundary/dut/machine/minstret[52]/opit_0_inv_L6Q_perm/FF1/FF",
+            "ports": {
+              "Q": "core_outputs[459]",
+              "CE": "\\CLMA_93_1446/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_105_1369/ntQD1 ",
+              "SR": "ntR65"
+            }
+          }
+        ],
+        "54": [
+          {
+            "physical_instance": "CLMA_105_1369/FF2/FF",
+            "provenance": "core_boundary/dut/machine/minstret[54]/opit_0_inv_L6Q_perm/FF2/FF",
+            "ports": {
+              "Q": "core_outputs[461]",
+              "CE": "\\CLMA_93_1446/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_105_1369/ntQD2 ",
+              "SR": "ntR65"
+            }
+          }
+        ],
+        "50": [
+          {
+            "physical_instance": "CLMA_105_1369/FF3/FF",
+            "provenance": "core_boundary/dut/machine/minstret[50]/opit_0_inv_L6Q_perm/FF3/FF",
+            "ports": {
+              "Q": "core_outputs[457]",
+              "CE": "\\CLMA_93_1446/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_105_1369/ntQD3 ",
+              "SR": "ntR65"
+            }
+          }
+        ],
+        "20": [
+          {
+            "physical_instance": "CLMA_105_1380/FF0/FF",
+            "provenance": "core_boundary/dut/machine/minstret[20]/opit_0_inv_L6Q_perm/FF0/FF",
+            "ports": {
+              "Q": "core_outputs[427]",
+              "CE": "\\CLMS_93_1387/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_105_1380/ntQD0 ",
+              "SR": "ntR347"
+            }
+          }
+        ],
+        "18": [
+          {
+            "physical_instance": "CLMA_105_1380/FF1/FF",
+            "provenance": "core_boundary/dut/machine/minstret[18]/opit_0_inv_L6Q_perm/FF1/FF",
+            "ports": {
+              "Q": "core_outputs[425]",
+              "CE": "\\CLMS_93_1387/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_105_1380/ntQD1 ",
+              "SR": "ntR347"
+            }
+          }
+        ],
+        "17": [
+          {
+            "physical_instance": "CLMA_105_1380/FF2/FF",
+            "provenance": "core_boundary/dut/machine/minstret[17]/opit_0_inv_L6Q_perm/FF2/FF",
+            "ports": {
+              "Q": "core_outputs[424]",
+              "CE": "\\CLMS_93_1387/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_105_1380/ntQD2 ",
+              "SR": "ntR347"
+            }
+          }
+        ],
+        "2": [
+          {
+            "physical_instance": "CLMA_105_1381/FF2/FF",
+            "provenance": "core_boundary/dut/machine/minstret[2]/opit_0_inv_L6Q_perm/FF2/FF",
+            "ports": {
+              "Q": "core_outputs[409]",
+              "CE": "\\CLMS_93_1387/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_105_1381/ntQD2 ",
+              "SR": "ntR64"
+            }
+          }
+        ],
+        "4": [
+          {
+            "physical_instance": "CLMA_105_1381/FF3/FF",
+            "provenance": "core_boundary/dut/machine/minstret[4]/opit_0_inv_L6Q_perm/FF3/FF",
+            "ports": {
+              "Q": "core_outputs[411]",
+              "CE": "\\CLMS_93_1387/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_105_1381/ntQD3 ",
+              "SR": "ntR64"
+            }
+          }
+        ],
+        "26": [
+          {
+            "physical_instance": "CLMA_105_1405/FF2/FF",
+            "provenance": "core_boundary/dut/machine/minstret[26]/opit_0_inv_L6Q_perm/FF2/FF",
+            "ports": {
+              "Q": "core_outputs[433]",
+              "CE": "\\CLMS_93_1387/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_105_1405/ntQD2 ",
+              "SR": "ntR62"
+            }
+          }
+        ],
+        "25": [
+          {
+            "physical_instance": "CLMA_105_1405/FF3/FF",
+            "provenance": "core_boundary/dut/machine/minstret[25]/opit_0_inv_L6Q_perm/FF3/FF",
+            "ports": {
+              "Q": "core_outputs[432]",
+              "CE": "\\CLMS_93_1387/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_105_1405/ntQD3 ",
+              "SR": "ntR62"
+            }
+          }
+        ],
+        "51": [
+          {
+            "physical_instance": "CLMA_105_1410/FF2/FF",
+            "provenance": "core_boundary/dut/machine/minstret[51]/opit_0_inv_L6Q_perm/FF2/FF",
+            "ports": {
+              "Q": "core_outputs[458]",
+              "CE": "\\CLMA_93_1446/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_105_1410/ntQD2 ",
+              "SR": "ntR343"
+            }
+          }
+        ],
+        "32": [
+          {
+            "physical_instance": "CLMA_105_1411/FF2/FF",
+            "provenance": "core_boundary/dut/machine/minstret[32]/opit_0_inv_L6Q_perm/FF2/FF",
+            "ports": {
+              "Q": "core_outputs[439]",
+              "CE": "\\CLMA_93_1446/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_105_1411/ntQD2 ",
+              "SR": "ntR61"
+            }
+          }
+        ],
+        "24": [
+          {
+            "physical_instance": "CLMA_105_1416/FF2/FF",
+            "provenance": "core_boundary/dut/machine/minstret[24]/opit_0_inv_L6Q_perm/FF2/FF",
+            "ports": {
+              "Q": "core_outputs[431]",
+              "CE": "\\CLMS_93_1387/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_105_1416/ntQD2 ",
+              "SR": "ntR342"
+            }
+          }
+        ],
+        "38": [
+          {
+            "physical_instance": "CLMA_105_1428/FF0/FF",
+            "provenance": "core_boundary/dut/machine/minstret[38]/opit_0_inv_L6Q_perm/FF0/FF",
+            "ports": {
+              "Q": "core_outputs[445]",
+              "CE": "\\CLMA_93_1446/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_105_1428/ntQD0 ",
+              "SR": "ntR340"
+            }
+          }
+        ],
+        "43": [
+          {
+            "physical_instance": "CLMA_105_1440/FF0/FF",
+            "provenance": "core_boundary/dut/machine/minstret[43]/opit_0_inv_L6Q_perm/FF0/FF",
+            "ports": {
+              "Q": "core_outputs[450]",
+              "CE": "\\CLMA_93_1446/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_105_1440/ntQD0 ",
+              "SR": "\\CLMA_105_1440/ntRSCO "
+            }
+          }
+        ],
+        "42": [
+          {
+            "physical_instance": "CLMA_105_1440/FF1/FF",
+            "provenance": "core_boundary/dut/machine/minstret[42]/opit_0_inv_L6Q_perm/FF1/FF",
+            "ports": {
+              "Q": "core_outputs[449]",
+              "CE": "\\CLMA_93_1446/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_105_1440/ntQD1 ",
+              "SR": "\\CLMA_105_1440/ntRSCO "
+            }
+          }
+        ],
+        "41": [
+          {
+            "physical_instance": "CLMA_105_1440/FF2/FF",
+            "provenance": "core_boundary/dut/machine/minstret[41]/opit_0_inv_L6Q_perm/FF2/FF",
+            "ports": {
+              "Q": "core_outputs[448]",
+              "CE": "\\CLMA_93_1446/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_105_1440/ntQD2 ",
+              "SR": "\\CLMA_105_1440/ntRSCO "
+            }
+          }
+        ],
+        "55": [
+          {
+            "physical_instance": "CLMA_105_1440/FF3/FF",
+            "provenance": "core_boundary/dut/machine/minstret[55]/opit_0_inv_L6Q_perm/FF3/FF",
+            "ports": {
+              "Q": "core_outputs[462]",
+              "CE": "\\CLMA_93_1446/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_105_1440/ntQD3 ",
+              "SR": "\\CLMA_105_1440/ntRSCO "
+            }
+          }
+        ],
+        "46": [
+          {
+            "physical_instance": "CLMA_105_1447/FF0/FF",
+            "provenance": "core_boundary/dut/machine/minstret[46]/opit_0_inv_L6Q_perm/FF0/FF",
+            "ports": {
+              "Q": "core_outputs[453]",
+              "CE": "\\CLMA_93_1446/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_105_1447/ntQD0 ",
+              "SR": "\\CLMA_105_1447/ntRSCO "
+            }
+          }
+        ],
+        "57": [
+          {
+            "physical_instance": "CLMA_105_1447/FF1/FF",
+            "provenance": "core_boundary/dut/machine/minstret[57]/opit_0_inv_L6Q_perm/FF1/FF",
+            "ports": {
+              "Q": "core_outputs[464]",
+              "CE": "\\CLMA_93_1446/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_105_1447/ntQD1 ",
+              "SR": "\\CLMA_105_1447/ntRSCO "
+            }
+          }
+        ],
+        "63": [
+          {
+            "physical_instance": "CLMA_105_1459/FF0/FF",
+            "provenance": "core_boundary/dut/machine/minstret[63]/opit_0_inv_L6Q_perm/FF0/FF",
+            "ports": {
+              "Q": "core_outputs[470]",
+              "CE": "\\CLMA_93_1446/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_105_1459/ntQD0 ",
+              "SR": "\\CLMA_105_1459/ntRSCO "
+            }
+          }
+        ],
+        "53": [
+          {
+            "physical_instance": "CLMA_111_1392/FF0/FF",
+            "provenance": "core_boundary/dut/machine/minstret[53]/opit_0_inv_L6Q_perm/FF0/FF",
+            "ports": {
+              "Q": "core_outputs[460]",
+              "CE": "\\CLMA_93_1446/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_111_1392/ntQD0 ",
+              "SR": "\\CLMA_111_1392/ntRSCO "
+            }
+          }
+        ],
+        "49": [
+          {
+            "physical_instance": "CLMA_111_1392/FF1/FF",
+            "provenance": "core_boundary/dut/machine/minstret[49]/opit_0_inv_L6Q_perm/FF1/FF",
+            "ports": {
+              "Q": "core_outputs[456]",
+              "CE": "\\CLMA_93_1446/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_111_1392/ntQD1 ",
+              "SR": "\\CLMA_111_1392/ntRSCO "
+            }
+          }
+        ],
+        "28": [
+          {
+            "physical_instance": "CLMA_111_1404/FF0/FF",
+            "provenance": "core_boundary/dut/machine/minstret[28]/opit_0_inv_L6Q_perm/FF0/FF",
+            "ports": {
+              "Q": "core_outputs[435]",
+              "CE": "\\CLMS_93_1387/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_111_1404/ntQD0 ",
+              "SR": "ntR206"
+            }
+          }
+        ],
+        "23": [
+          {
+            "physical_instance": "CLMA_111_1404/FF1/FF",
+            "provenance": "core_boundary/dut/machine/minstret[23]/opit_0_inv_L6Q_perm/FF1/FF",
+            "ports": {
+              "Q": "core_outputs[430]",
+              "CE": "\\CLMS_93_1387/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_111_1404/ntQD1 ",
+              "SR": "ntR206"
+            }
+          }
+        ],
+        "0": [
+          {
+            "physical_instance": "CLMA_111_1416/FF2/FF",
+            "provenance": "core_boundary/dut/machine/minstret[0]/opit_0_inv_L6Q_perm/FF2/FF",
+            "ports": {
+              "Q": "core_outputs[407]",
+              "CE": "\\CLMS_93_1387/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_111_1416/ntQD2 ",
+              "SR": "ntR205"
+            }
+          }
+        ],
+        "35": [
+          {
+            "physical_instance": "CLMA_111_1434/FF0/FF",
+            "provenance": "core_boundary/dut/machine/minstret[35]/opit_0_inv_L6Q_perm/FF0/FF",
+            "ports": {
+              "Q": "core_outputs[442]",
+              "CE": "\\CLMA_93_1446/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_111_1434/ntQD0 ",
+              "SR": "\\CLMA_111_1434/ntRSCO "
+            }
+          }
+        ],
+        "37": [
+          {
+            "physical_instance": "CLMA_111_1434/FF1/FF",
+            "provenance": "core_boundary/dut/machine/minstret[37]/opit_0_inv_L6Q_perm/FF1/FF",
+            "ports": {
+              "Q": "core_outputs[444]",
+              "CE": "\\CLMA_93_1446/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_111_1434/ntQD1 ",
+              "SR": "\\CLMA_111_1434/ntRSCO "
+            }
+          }
+        ],
+        "58": [
+          {
+            "physical_instance": "CLMA_111_1452/FF0/FF",
+            "provenance": "core_boundary/dut/machine/minstret[58]/opit_0_inv_L6Q_perm/FF0/FF",
+            "ports": {
+              "Q": "core_outputs[465]",
+              "CE": "\\CLMA_93_1446/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_111_1452/ntQD0 ",
+              "SR": "ntR202"
+            }
+          }
+        ],
+        "59": [
+          {
+            "physical_instance": "CLMA_111_1452/FF1/FF",
+            "provenance": "core_boundary/dut/machine/minstret[59]/opit_0_inv_L6Q_perm/FF1/FF",
+            "ports": {
+              "Q": "core_outputs[466]",
+              "CE": "\\CLMA_93_1446/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_111_1452/ntQD1 ",
+              "SR": "ntR202"
+            }
+          }
+        ],
+        "60": [
+          {
+            "physical_instance": "CLMA_111_1458/FF0/FF",
+            "provenance": "core_boundary/dut/machine/minstret[60]/opit_0_inv_L6Q_perm/FF0/FF",
+            "ports": {
+              "Q": "core_outputs[467]",
+              "CE": "\\CLMA_93_1446/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_111_1458/ntQD0 ",
+              "SR": "ntR202"
+            }
+          }
+        ],
+        "62": [
+          {
+            "physical_instance": "CLMA_111_1458/FF1/FF",
+            "provenance": "core_boundary/dut/machine/minstret[62]/opit_0_inv_L6Q_perm/FF1/FF",
+            "ports": {
+              "Q": "core_outputs[469]",
+              "CE": "\\CLMA_93_1446/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_111_1458/ntQD1 ",
+              "SR": "ntR202"
+            }
+          }
+        ],
+        "56": [
+          {
+            "physical_instance": "CLMA_111_1458/FF2/FF",
+            "provenance": "core_boundary/dut/machine/minstret[56]/opit_0_inv_L6Q_perm/FF2/FF",
+            "ports": {
+              "Q": "core_outputs[463]",
+              "CE": "\\CLMA_93_1446/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_111_1458/ntQD2 ",
+              "SR": "ntR202"
+            }
+          }
+        ],
+        "61": [
+          {
+            "physical_instance": "CLMA_111_1458/FF3/FF",
+            "provenance": "core_boundary/dut/machine/minstret[61]/opit_0_inv_L6Q_perm/FF3/FF",
+            "ports": {
+              "Q": "core_outputs[468]",
+              "CE": "\\CLMA_93_1446/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMA_111_1458/ntQD3 ",
+              "SR": "ntR202"
+            }
+          }
+        ],
+        "19": [
+          {
+            "physical_instance": "CLMS_93_1387/FF0/FF",
+            "provenance": "core_boundary/dut/machine/minstret[19]/opit_0_inv_L6Q_perm/FF0/FF",
+            "ports": {
+              "Q": "core_outputs[426]",
+              "CE": "\\CLMS_93_1387/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMS_93_1387/ntQD0 ",
+              "SR": "ntR89"
+            }
+          }
+        ],
+        "22": [
+          {
+            "physical_instance": "CLMS_93_1387/FF1/FF",
+            "provenance": "core_boundary/dut/machine/minstret[22]/opit_0_inv_L6Q_perm/FF1/FF",
+            "ports": {
+              "Q": "core_outputs[429]",
+              "CE": "\\CLMS_93_1387/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMS_93_1387/ntQD1 ",
+              "SR": "ntR89"
+            }
+          }
+        ],
+        "21": [
+          {
+            "physical_instance": "CLMS_111_1393/FF0/FF",
+            "provenance": "core_boundary/dut/machine/minstret[21]/opit_0_inv_L6Q_perm/FF0/FF",
+            "ports": {
+              "Q": "core_outputs[428]",
+              "CE": "\\CLMS_93_1387/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMS_111_1393/ntQD0 ",
+              "SR": "ntR74"
+            }
+          }
+        ],
+        "5": [
+          {
+            "physical_instance": "CLMS_111_1399/FF0/FF",
+            "provenance": "core_boundary/dut/machine/minstret[5]/opit_0_inv_L6Q_perm/FF0/FF",
+            "ports": {
+              "Q": "core_outputs[412]",
+              "CE": "\\CLMS_93_1387/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMS_111_1399/ntQD0 ",
+              "SR": "ntR73"
+            }
+          }
+        ],
+        "27": [
+          {
+            "physical_instance": "CLMS_111_1405/FF0/FF",
+            "provenance": "core_boundary/dut/machine/minstret[27]/opit_0_inv_L6Q_perm/FF0/FF",
+            "ports": {
+              "Q": "core_outputs[434]",
+              "CE": "\\CLMS_93_1387/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMS_111_1405/ntQD0 ",
+              "SR": "ntR72"
+            }
+          }
+        ],
+        "3": [
+          {
+            "physical_instance": "CLMS_111_1411/FF2/FF",
+            "provenance": "core_boundary/dut/machine/minstret[3]/opit_0_inv_L6Q_perm/FF2/FF",
+            "ports": {
+              "Q": "core_outputs[410]",
+              "CE": "\\CLMS_93_1387/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMS_111_1411/ntQD2 ",
+              "SR": "ntR71"
+            }
+          }
+        ],
+        "1": [
+          {
+            "physical_instance": "CLMS_111_1411/FF3/FF",
+            "provenance": "core_boundary/dut/machine/minstret[1]/opit_0_inv_L6Q_perm/FF3/FF",
+            "ports": {
+              "Q": "core_outputs[408]",
+              "CE": "\\CLMS_93_1387/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMS_111_1411/ntQD3 ",
+              "SR": "ntR71"
+            }
+          }
+        ],
+        "33": [
+          {
+            "physical_instance": "CLMS_111_1417/FF0/FF",
+            "provenance": "core_boundary/dut/machine/minstret[33]/opit_0_inv_L6Q_perm/FF0/FF",
+            "ports": {
+              "Q": "core_outputs[440]",
+              "CE": "\\CLMA_93_1446/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMS_111_1417/ntQD0 ",
+              "SR": "ntR70"
+            }
+          }
+        ],
+        "30": [
+          {
+            "physical_instance": "CLMS_111_1423/FF0/FF",
+            "provenance": "core_boundary/dut/machine/minstret[30]/opit_0_inv_L6Q_perm/FF0/FF",
+            "ports": {
+              "Q": "core_outputs[437]",
+              "CE": "\\CLMS_93_1387/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMS_111_1423/ntQD0 ",
+              "SR": "ntR69"
+            }
+          }
+        ],
+        "29": [
+          {
+            "physical_instance": "CLMS_111_1423/FF1/FF",
+            "provenance": "core_boundary/dut/machine/minstret[29]/opit_0_inv_L6Q_perm/FF1/FF",
+            "ports": {
+              "Q": "core_outputs[436]",
+              "CE": "\\CLMS_93_1387/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMS_111_1423/ntQD1 ",
+              "SR": "ntR69"
+            }
+          }
+        ],
+        "34": [
+          {
+            "physical_instance": "CLMS_111_1423/FF2/FF",
+            "provenance": "core_boundary/dut/machine/minstret[34]/opit_0_inv_L6Q_perm/FF2/FF",
+            "ports": {
+              "Q": "core_outputs[441]",
+              "CE": "\\CLMA_93_1446/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMS_111_1423/ntQD2 ",
+              "SR": "ntR69"
+            }
+          }
+        ],
+        "36": [
+          {
+            "physical_instance": "CLMS_111_1423/FF3/FF",
+            "provenance": "core_boundary/dut/machine/minstret[36]/opit_0_inv_L6Q_perm/FF3/FF",
+            "ports": {
+              "Q": "core_outputs[443]",
+              "CE": "\\CLMA_93_1446/ntCE0 ",
+              "CK": "ntclkbufg_0",
+              "D": "\\CLMS_111_1423/ntQD3 ",
+              "SR": "ntR69"
+            }
+          }
+        ]
+      },
+      "all_64_bits_present": true
+    },
+    "rvc_frontend": {
+      "retained_physical_cells": 730,
+      "resources": {
+        "LUT6": 582,
+        "FF": 148,
+        "DistributedRAM": 0,
+        "APM": 0
+      },
+      "examples": [
+        {
+          "physical_instance": "CLMA_69_1398/FYA/LUT6CARRY",
+          "provenance": "core_boundary/dut/frontend/N236_13[6]/gateop_perm/FYA/LUT6CARRY"
+        },
+        {
+          "physical_instance": "CLMA_69_1398/FYC/LUT6CARRY",
+          "provenance": "core_boundary/dut/frontend/N236_11[4]/LUT6D_inst_perm/FYC/LUT6CARRY"
+        },
+        {
+          "physical_instance": "CLMA_69_1405/FYA/LUT6CARRY",
+          "provenance": "core_boundary/dut/frontend/N236_13[7]/gateop_perm/FYA/LUT6CARRY"
+        }
+      ]
+    },
+    "rvc_expand": {
+      "retained_physical_cells": 44,
+      "resources": {
+        "LUT6": 44,
+        "FF": 0,
+        "DistributedRAM": 0,
+        "APM": 0
+      },
+      "examples": [
+        {
+          "physical_instance": "CLMA_57_1416/FYB/LUT6CARRY",
+          "provenance": "core_boundary/dut/expand/N260_58[9]/LUT6D_inst_perm/FYB/LUT6CARRY"
+        },
+        {
+          "physical_instance": "CLMA_105_1363/FYA/LUT6CARRY",
+          "provenance": "core_boundary/dut/expand/N176_11[16]/LUT6_inst_perm/FYA/LUT6CARRY"
+        },
+        {
+          "physical_instance": "CLMA_111_1350/FYB/LUT6CARRY",
+          "provenance": "core_boundary/dut/expand/N176_11[18]/LUT6_inst_perm/FYB/LUT6CARRY"
+        }
+      ]
+    },
+    "predictor": {
+      "retained_physical_cells": 412,
+      "resources": {
+        "LUT6": 158,
+        "FF": 42,
+        "DistributedRAM": 212,
+        "APM": 0
+      },
+      "examples": [
+        {
+          "physical_instance": "CLMA_69_1338/FYD/LUT6CARRY",
+          "provenance": "core_boundary/dut/predictor/N40_23/LUT6_inst_perm/FYD/LUT6CARRY"
+        },
+        {
+          "physical_instance": "CLMA_81_1338/FYC/LUT6CARRY",
+          "provenance": "core_boundary/dut/predictor/N40_18/LUT6_inst_perm/FYC/LUT6CARRY"
+        },
+        {
+          "physical_instance": "CLMA_87_1332/FYA/LUT6CARRY",
+          "provenance": "core_boundary/dut/predictor/N17_2/gateop_perm/FYA/LUT6CARRY"
+        }
+      ]
+    },
+    "return_stack": {
+      "retained_physical_cells": 34,
+      "resources": {
+        "LUT6": 1,
+        "FF": 33,
+        "DistributedRAM": 0,
+        "APM": 0
+      },
+      "examples": [
+        {
+          "physical_instance": "CLMA_111_1338/FF2/FF",
+          "provenance": "core_boundary/dut/predictor/return_stack.count[0]/opit_0_inv_L6Q_perm/FF2/FF"
+        },
+        {
+          "physical_instance": "CLMA_111_1338/FYC/LUT6CARRY",
+          "provenance": "core_boundary/dut/predictor/return_stack.count[0]/opit_0_inv_L6Q_perm/FYC/LUT6CARRY"
+        },
+        {
+          "physical_instance": "CLMA_117_1404/FF0/FF",
+          "provenance": "core_boundary/dut/predictor/return_stack.addresses[0][13]/opit_0/FF0/FF"
+        }
+      ]
+    },
+    "multiply_divide": {
+      "retained_physical_cells": 522,
+      "resources": {
+        "LUT6": 375,
+        "FF": 143,
+        "DistributedRAM": 0,
+        "APM": 4
+      },
+      "examples": [
+        {
+          "physical_instance": "APM_161_1410/XAPM_CORE_D/APM",
+          "provenance": "core_boundary/dut/multiply_divide.unit/N108/gopapm/XAPM_CORE_D/APM"
+        },
+        {
+          "physical_instance": "APM_161_1440/XAPM_CORE_D/APM",
+          "provenance": "core_boundary/dut/multiply_divide.unit/N111/gopapm/XAPM_CORE_D/APM"
+        },
+        {
+          "physical_instance": "APM_161_1440/XAPM_CORE_U/APM",
+          "provenance": "core_boundary/dut/multiply_divide.unit/N105/gopapm/XAPM_CORE_U/APM"
+        }
+      ]
+    },
+    "machine_csrs_exceptions_interrupt_logic": {
+      "retained_physical_cells": 799,
+      "resources": {
+        "LUT6": 505,
+        "FF": 294,
+        "DistributedRAM": 0,
+        "APM": 0
+      },
+      "examples": [
+        {
+          "physical_instance": "CLMA_57_1338/FF0/FF",
+          "provenance": "core_boundary/dut/machine/mcause[17]/opit_0_inv_L6QL5Q_perm/FF0/FF"
+        },
+        {
+          "physical_instance": "CLMA_57_1338/FF2/FF",
+          "provenance": "core_boundary/dut/machine/mtval[17]/opit_0_inv_L6QL5Q_perm/FF2/FF"
+        },
+        {
+          "physical_instance": "CLMA_57_1338/FFAPP0/FF",
+          "provenance": "core_boundary/dut/machine/mcause[17]/opit_0_inv_L6QL5Q_perm/FFAPP0/FF"
+        }
+      ]
+    },
+    "decoder": {
+      "retained_physical_cells": 22,
+      "resources": {
+        "LUT6": 22,
+        "FF": 0,
+        "DistributedRAM": 0,
+        "APM": 0
+      },
+      "examples": [
+        {
+          "physical_instance": "CLMA_129_1392/FYC/LUT6CARRY",
+          "provenance": "core_boundary/dut/decoder/N299_6/LUT6_inst_1_perm/FYC/LUT6CARRY"
+        },
+        {
+          "physical_instance": "CLMA_129_1392/FYD/LUT6CARRY",
+          "provenance": "core_boundary/dut/decoder/N299_6/LUT6_inst_perm/FYD/LUT6CARRY"
+        },
+        {
+          "physical_instance": "CLMA_147_1350/FYB/LUT6CARRY",
+          "provenance": "core_boundary/dut/decoder/alu_op_13[0]_7/LUT6_inst_perm/FYB/LUT6CARRY"
+        }
+      ]
+    },
+    "alu": {
+      "retained_physical_cells": 225,
+      "resources": {
+        "LUT6": 225,
+        "FF": 0,
+        "DistributedRAM": 0,
+        "APM": 0
+      },
+      "examples": [
+        {
+          "physical_instance": "CLMA_117_1386/FYC/LUT6CARRY",
+          "provenance": "core_boundary/dut/alu/result_14[5]_muxf7_perm/FYC/LUT6CARRY"
+        },
+        {
+          "physical_instance": "CLMA_117_1386/FYD/LUT6CARRY",
+          "provenance": "core_boundary/dut/alu/result_14[5]_muxf7_perm/FYD/LUT6CARRY"
+        },
+        {
+          "physical_instance": "CLMA_123_1470/FYC/LUT6CARRY",
+          "provenance": "core_boundary/dut/alu/result_14[3]_muxf7_perm/FYC/LUT6CARRY"
+        }
+      ]
+    },
+    "register_file": {
+      "physical_ram_slots": 16,
+      "cells": [
+        {
+          "physical_instance": "CLMS_123_1429/FYB/RAM32X2",
+          "provenance": "core_boundary/dut/registers_14/ram32x2d/FYB/RAM32X2"
+        },
+        {
+          "physical_instance": "CLMS_147_1333/FYA/RAM32X2",
+          "provenance": "core_boundary/dut/registers_11/ram32x2d/FYA/RAM32X2"
+        },
+        {
+          "physical_instance": "CLMS_147_1333/FYB/RAM32X2",
+          "provenance": "core_boundary/dut/registers_9/ram32x2d/FYB/RAM32X2"
+        },
+        {
+          "physical_instance": "CLMS_147_1381/FYA/RAM32X2",
+          "provenance": "core_boundary/dut/registers_10/ram32x2d/FYA/RAM32X2"
+        },
+        {
+          "physical_instance": "CLMS_147_1441/FYA/RAM32X2",
+          "provenance": "core_boundary/dut/registers_5/ram32x2d/FYA/RAM32X2"
+        },
+        {
+          "physical_instance": "CLMS_177_1321/FYB/RAM32X2",
+          "provenance": "core_boundary/dut/registers_12/ram32x2d/FYB/RAM32X2"
+        },
+        {
+          "physical_instance": "CLMS_177_1417/FYA/RAM32X2",
+          "provenance": "core_boundary/dut/registers_15/ram32x2d/FYA/RAM32X2"
+        },
+        {
+          "physical_instance": "CLMS_177_1429/FYB/RAM32X2",
+          "provenance": "core_boundary/dut/registers_2/ram32x2d/FYB/RAM32X2"
+        },
+        {
+          "physical_instance": "CLMS_177_1429/FYC/RAM32X2",
+          "provenance": "core_boundary/dut/registers_13/ram32x2d/FYC/RAM32X2"
+        },
+        {
+          "physical_instance": "CLMS_177_1435/FYA/RAM32X2",
+          "provenance": "core_boundary/dut/registers_4/ram32x2d/FYA/RAM32X2"
+        },
+        {
+          "physical_instance": "CLMS_177_1441/FYA/RAM32X2",
+          "provenance": "core_boundary/dut/registers_7/ram32x2d/FYA/RAM32X2"
+        },
+        {
+          "physical_instance": "CLMS_177_1465/FYC/RAM32X2",
+          "provenance": "core_boundary/dut/registers_8/ram32x2d/FYC/RAM32X2"
+        },
+        {
+          "physical_instance": "CLMS_195_1411/FYB/RAM32X2",
+          "provenance": "core_boundary/dut/registers_3/ram32x2d/FYB/RAM32X2"
+        },
+        {
+          "physical_instance": "CLMS_195_1429/FYB/RAM32X2",
+          "provenance": "core_boundary/dut/registers_0/ram32x2d/FYB/RAM32X2"
+        },
+        {
+          "physical_instance": "CLMS_195_1435/FYC/RAM32X2",
+          "provenance": "core_boundary/dut/registers_6/ram32x2d/FYC/RAM32X2"
+        },
+        {
+          "physical_instance": "CLMS_207_1393/FYB/RAM32X2",
+          "provenance": "core_boundary/dut/registers_16/ram32x2d/FYB/RAM32X2"
+        }
+      ]
+    }
+  },
+  "scope": "Actual physical site/provenance presence plus exact unchanged core source identity; behavioral qualification is the separate extraction miter and original full source simulation",
+  "hardware_measurement": false,
+  "audit_script_sha256": "143e3603b6e6e3e9c0c24ac235ea893a95c123799c87e5bed45eece42ae1de51"
+}

@@ -1,2 +1,3 @@
 cpu/experiments/** -text
+cpu/validated-extensions-20261101/** -text
 cpu/docs/evidence/** -text

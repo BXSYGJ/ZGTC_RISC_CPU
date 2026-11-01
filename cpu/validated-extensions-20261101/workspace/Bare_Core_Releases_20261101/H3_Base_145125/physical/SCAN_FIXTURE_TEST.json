@@ -1,0 +1,20 @@
+﻿{
+  "schema": "physical-scan-fixture-test/v1",
+  "release": "H3_Base_145125",
+  "origin": "LOCAL RTL SIMULATION",
+  "status": "PASS",
+  "source_manifest": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Base_145125\\SOURCE_MANIFEST.json",
+  "source_manifest_sha256": "f076d0a305bba6cad4c5910fa21245ac9cbd9eab7ad8f87178e905da2e62cfae",
+  "testbench": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Base_145125\\physical\\fixture-tests\\20261031T174817Z-85f060ca\\scan_fixture_tb.sv",
+  "testbench_sha256": "d9dfe48955b16f2d30cf11bc59a5661ec0ade81763bf64ec3440f10f963bd4c2",
+  "patterns": 179,
+  "patterns_description": "Walking one across all 176 core input bits, all ones, alternating bits, and all zeros.",
+  "input_bits": 176,
+  "output_bits": 471,
+  "atomic_input_update_verified": true,
+  "every_core_input_port_checked": true,
+  "every_captured_output_bit_shifted_and_checked": true,
+  "literal_output": "SCAN_FIXTURE_PASS patterns=179 input_bits=176 output_bits=471",
+  "exit_status": 0,
+  "run_directory": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Base_145125\\physical\\fixture-tests\\20261031T174817Z-85f060ca"
+}

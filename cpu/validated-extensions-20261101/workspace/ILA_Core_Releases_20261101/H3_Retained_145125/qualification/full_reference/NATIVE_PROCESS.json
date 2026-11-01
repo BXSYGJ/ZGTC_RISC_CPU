@@ -1,0 +1,31 @@
+﻿{
+  "schema": "h3-full-reference-native-run/v1",
+  "release": "H3_Retained_145125",
+  "origin": "LOCAL RTL SIMULATION",
+  "executable": "wsl.exe",
+  "arguments": [
+    "--cd",
+    "/mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Retained_145125/qualification/full_reference",
+    "--exec",
+    "/mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Retained_145125/qualification/dynamic/MODIFIED/objects/Vrv32_observed_soc",
+    "/mnt/d/AAAFPGA/ILA_Core_Releases_20261101/H3_Retained_145125/qualification/full_reference/uart.log",
+    "2100000000"
+  ],
+  "native_simulator": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\qualification\\dynamic\\MODIFIED\\objects\\Vrv32_observed_soc",
+  "native_simulator_sha256": "12e9a8b85e3b3887a45db4e9880093b16b37239f9e763eb53c45392e8e04d1e1",
+  "source_identity": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\qualification\\dynamic\\MODIFIED\\SOURCE_IDENTITY.json",
+  "source_identity_sha256": "adfbe8f365dacf7f5eaa8103ca9f81995eaf1dab65a5197735a7aa8c2089ab05",
+  "firmware_sha256": "3a3aff510511ed4cd7fe304a6354861adae30531102446a24438e43f3e2a2884",
+  "working_directory": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\qualification\\full_reference",
+  "pid": 11952,
+  "started_utc": "2026-10-31T17:06:27.4909064Z",
+  "actual_exit_code": 0,
+  "status": "finished",
+  "cycle_limit": 2100000000,
+  "reference_uart": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\qualification\\reference\\uart.log",
+  "reference_uart_sha256": "f07a9b92e47237fc974f0e9aceefc2551f965f8c1e1e8c08d68420b93ed5053a",
+  "stdout": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\qualification\\full_reference\\run.stdout.log",
+  "stderr": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\qualification\\full_reference\\run.stderr.log",
+  "finished_utc": "2026-10-31T17:33:06.5462219Z",
+  "elapsed_seconds": 1599.0575513
+}

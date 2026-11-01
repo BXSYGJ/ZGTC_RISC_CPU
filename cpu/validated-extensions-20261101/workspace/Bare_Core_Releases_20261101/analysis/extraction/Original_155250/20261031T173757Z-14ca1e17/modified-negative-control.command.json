@@ -1,0 +1,19 @@
+{
+  "executable": "wsl.exe",
+  "arguments": [
+    "--cd",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17",
+    "--exec",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/objects/Vbare_extraction_miter",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/rejected.json",
+    "2000000",
+    "10000"
+  ],
+  "exit_code": 1,
+  "started_utc": "2026-10-31T17:38:16.846646+00:00",
+  "finished_utc": "2026-10-31T17:38:17.002945+00:00",
+  "stdout": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173757Z-14ca1e17\\modified-negative-control.stdout.log",
+  "stderr": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173757Z-14ca1e17\\modified-negative-control.stderr.log",
+  "stdout_raw": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173757Z-14ca1e17\\modified-negative-control.stdout.raw",
+  "stderr_raw": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\Original_155250\\20261031T173757Z-14ca1e17\\modified-negative-control.stderr.raw"
+}

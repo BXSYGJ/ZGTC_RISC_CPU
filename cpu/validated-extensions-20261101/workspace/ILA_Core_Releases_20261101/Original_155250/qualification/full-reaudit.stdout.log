@@ -1,0 +1,17 @@
+{
+  "origin": "LOCAL RTL SIMULATION",
+  "complete_coremark_run": true,
+  "iterations": 6000,
+  "firmware_sha256": "1d66bdd8919951e18c191b82ea271c84bd156ea14f2ca9fcf5c4b56216069949",
+  "uart_sha256": "a8cb3ce6b7eff3082c970cf1a23f79524b8abe4229a0e560fa2f8e96130f5e10",
+  "reference_uart_sha256": "a8cb3ce6b7eff3082c970cf1a23f79524b8abe4229a0e560fa2f8e96130f5e10",
+  "uart_byte_identical": true,
+  "cycle_count": 1782669419,
+  "retired_count": 1649428429,
+  "baseline_cycles_and_retired_equal": true,
+  "hardware_validated": false,
+  "exit_code": 0,
+  "run_directory": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\qualification\\full-runs\\20261031T170813Z-21000bdf",
+  "exact_stdout": "ZGTC COREMARK READY send G; clock=155250000 Hz\nZGTC COREMARK START iterations=6000 validation=0\n2K performance run parameters for coremark.\nCoreMark Size    : 666\nTotal ticks      : 11482\nTotal time (secs): 11\nIterations/Sec   : 545\nIterations       : 6000\nCompiler version : GCC 10.2.0\nCompiler flags   : -march=rv32imc -mabi=ilp32 -mcmodel=medany -msmall-data-limit=0 -std=c11 -O3 -funroll-loops -ffreestanding -fno-builtin -ffunction-sections -fdata-sections -Wall -Wextra -DTOTAL_DATA_SIZE=2000 -DITERATIONS=6000 -DVALIDATION_RUN=0 -DPERFORMANCE_RUN=1 -DCPU_CLOCK_HZ=155250000u -DCONSOLE_DELAY_CYCLES=0\nMemory location  : 64KiB on-chip RAM; cache mode/geometry in ZGTC config\nseedcrc          : 0xe9f5\n[0]crclist       : 0xe714\n[0]crcmatrix     : 0x1fd7\n[0]crcstate      : 0x8e3a\n[0]crcfinal      : 0xa14c\nCorrect operation validated. See README.md for run and reporting rules.\nZGTC cycles_hex=000000006a41606b retired_hex=00000000625047cd clock_hz=155250000\nZGTC config=1e8e96fd ihit=1007538394 imiss=521 dhit=410438109 dmiss=366362 writebacks=222359\nZGTC COREMARK FINISHED\nPASS RTL CoreMark smoke total_cycles=1783029704 total_retired=1649640595\nOBSERVER cycles=1782669419 retired=1649428429 minimum_sp=65152\nEVENTS redirects=31607295,710878,96010,0,0,0,0 eligible=31607295,710878,96010,0,0,0,0 request_stalls=0 response_waits=4200 barrier_cycles=0\n",
+  "completed_utc": "2026-10-31T17:27:21.8398847Z"
+}

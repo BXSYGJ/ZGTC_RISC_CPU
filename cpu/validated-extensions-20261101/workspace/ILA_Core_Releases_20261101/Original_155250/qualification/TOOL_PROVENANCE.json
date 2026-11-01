@@ -1,0 +1,10 @@
+﻿{
+  "simulation_tool": "/usr/bin/verilator",
+  "simulation_tool_version": "Verilator 4.038 2020-07-11 rev v4.036-114-g0cd4a57ad",
+  "simulation_tool_launcher_sha256": "ebe0a4ad8d1995ffcf1f9972f2e2614998ffc73f3fc94003ec7b689d5432f463",
+  "pds_tool": "Fabric Compiler 2022.2-SP6.4 build146967",
+  "configured_fpga_clock_hz": 155250000,
+  "simulation_uart_clock_hz": 3200,
+  "simulation_uart_baud": 100,
+  "driver_clock_period_ps": 10000
+}

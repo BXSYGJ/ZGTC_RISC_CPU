@@ -1,0 +1,304 @@
+{
+  "schema": "bare-core-final-physical-area-summary/v1",
+  "status": "PASS",
+  "releases": [
+    {
+      "release": "Original_155250",
+      "build_id": "20261101-015541-f15b63fe",
+      "status": "PASS",
+      "origin": "LOCAL PDS IMPLEMENTATION",
+      "area_inventory": {
+        "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\physical-attribution\\Original_155250-20261101-015541-f15b63fe-PHYSICAL_PRIMITIVE_INVENTORY.json",
+        "sha256": "33b2376adca15c7494263f31b4c11ea773299ed34bda7670c05c32bf9003fcd6"
+      },
+      "feature_preservation": {
+        "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\physical-attribution\\Original_155250-20261101-015541-f15b63fe-FEATURE_PRESERVATION.json",
+        "sha256": "9365b71712ea2986cb2da1ac0893eb87ce7b72bf629073d7afdc738834bb2ba1"
+      },
+      "physical_build_manifest": {
+        "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\Original_155250\\physical\\builds\\20261101-015541-f15b63fe\\manifest.json",
+        "sha256": "b7f29ad36b971de1a823dae529df456de1d929479b07ea26f355b9ee1ba9d085"
+      },
+      "source_manifest": {
+        "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\Original_155250\\SOURCE_MANIFEST.json",
+        "sha256": "065d766d105c2dd96d62ccda073ad5c70b8bf0fcc0fa8b0b1dce7b7bc9fd6dba"
+      },
+      "clock_hz": 155250000,
+      "setup_wns_ns": 0.176,
+      "requested_minimum_setup_uncertainty_ns": 0.15,
+      "actual_setup_uncertainties_ns": [
+        0.2
+      ],
+      "all_timing_corners_passed": true,
+      "native_core_hierarchy": {
+        "LUT": 3859,
+        "FF": 1543,
+        "Distributed RAM": 312,
+        "APM": 4
+      },
+      "native_top_hierarchy": {
+        "LUT": 4192,
+        "FF": 2775,
+        "Distributed RAM": 312,
+        "APM": 4
+      },
+      "native_global": {
+        "LUT": 4386,
+        "FF": 2775,
+        "Distributed RAM": 312
+      },
+      "exported_core_lut_and_ram_slots": 3859,
+      "exported_fixture_lut_and_ram_slots": 333,
+      "core_only_generated_constant_lut": 169,
+      "fixture_only_generated_constant_lut": 22,
+      "core_exclusive_physical_lut_and_ram_slots": 4028,
+      "fixture_exclusive_physical_lut_and_ram_slots": 355,
+      "shared_constant_lut": 1,
+      "unresolved_exported_lut": 0,
+      "native_global_only_lut_slots": 2,
+      "physical_core_lut_lower_bound": 4028,
+      "physical_core_lut_conservative_upper_bound": 4031,
+      "native_core_ff": 1543,
+      "exported_core_ff": 1543,
+      "native_fixture_ff": 1232,
+      "native_core_ff_omitted_from_simulation_export": 0,
+      "native_only_ff_localizations": [],
+      "counter_bits_preserved": {
+        "mcycle": 64,
+        "minstret": 64
+      },
+      "feature_audit": "8 required feature cones plus register-file RAM present",
+      "functional_extraction": {
+        "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\Original_155250-EXTRACTION_QUALIFICATION.json",
+        "sha256": "b03404d67297d2b30c7cc21feb4663cd1f404a3ab7cb3e5b2dfc27d5abbfc9df",
+        "bytes": 6045
+      },
+      "completed_original_source_reference_join": {
+        "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\qualification\\full-runs\\20261031T170813Z-21000bdf\\RESULT.json",
+        "sha256": "8036b6a83aa5bf89240ce0e402ddf64bcc9c89d7a23bd2263720dc300ee5c8bb",
+        "bytes": 2577
+      },
+      "hardware_measurement": false
+    },
+    {
+      "release": "H3_Base_145125",
+      "build_id": "20261101-015628-87641d51",
+      "status": "PASS",
+      "origin": "LOCAL PDS IMPLEMENTATION",
+      "area_inventory": {
+        "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\physical-attribution\\H3_Base_145125-20261101-015628-87641d51-PHYSICAL_PRIMITIVE_INVENTORY.json",
+        "sha256": "26b3096fe7a4ef8df4955b35fe570871d56e9725c2f16fadade075003b88450e"
+      },
+      "feature_preservation": {
+        "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\physical-attribution\\H3_Base_145125-20261101-015628-87641d51-FEATURE_PRESERVATION.json",
+        "sha256": "6e5e456fb055fe2eef6f8334674ee02829638eaa1e78cca89c14da8e608e5de9"
+      },
+      "physical_build_manifest": {
+        "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Base_145125\\physical\\builds\\20261101-015628-87641d51\\manifest.json",
+        "sha256": "f293fa440c94306436bf06ff0e452e2a69600de47a33997dd9b80b58aad791bd"
+      },
+      "source_manifest": {
+        "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Base_145125\\SOURCE_MANIFEST.json",
+        "sha256": "f076d0a305bba6cad4c5910fa21245ac9cbd9eab7ad8f87178e905da2e62cfae"
+      },
+      "clock_hz": 145125000,
+      "setup_wns_ns": 0.047,
+      "requested_minimum_setup_uncertainty_ns": 0.15,
+      "actual_setup_uncertainties_ns": [
+        0.2
+      ],
+      "all_timing_corners_passed": true,
+      "native_core_hierarchy": {
+        "LUT": 3892,
+        "FF": 1528,
+        "Distributed RAM": 246,
+        "APM": 4
+      },
+      "native_top_hierarchy": {
+        "LUT": 4270,
+        "FF": 2826,
+        "Distributed RAM": 246,
+        "APM": 4
+      },
+      "native_global": {
+        "LUT": 4498,
+        "FF": 2826,
+        "Distributed RAM": 246
+      },
+      "exported_core_lut_and_ram_slots": 3892,
+      "exported_fixture_lut_and_ram_slots": 378,
+      "core_only_generated_constant_lut": 203,
+      "fixture_only_generated_constant_lut": 13,
+      "core_exclusive_physical_lut_and_ram_slots": 4095,
+      "fixture_exclusive_physical_lut_and_ram_slots": 391,
+      "shared_constant_lut": 11,
+      "unresolved_exported_lut": 0,
+      "native_global_only_lut_slots": 1,
+      "physical_core_lut_lower_bound": 4095,
+      "physical_core_lut_conservative_upper_bound": 4107,
+      "native_core_ff": 1528,
+      "exported_core_ff": 1524,
+      "native_fixture_ff": 1298,
+      "native_core_ff_omitted_from_simulation_export": 4,
+      "native_only_ff_localizations": [
+        {
+          "packed_instance": "core_boundary/dut/multiply_divide.unit/quotient_negative/opit_0_inv_L5Q_1_perm",
+          "packed_kind": "gopLUT6L5Q",
+          "packed_ff_outputs": [
+            "L5Q"
+          ],
+          "packed_ff_count": 1,
+          "exported_ff_count": 0,
+          "region": "core"
+        },
+        {
+          "packed_instance": "core_boundary/dut/multiply_divide.unit/quotient_negative/opit_0_inv_L5Q_2_perm",
+          "packed_kind": "gopLUT6L5Q",
+          "packed_ff_outputs": [
+            "L5Q"
+          ],
+          "packed_ff_count": 1,
+          "exported_ff_count": 0,
+          "region": "core"
+        },
+        {
+          "packed_instance": "core_boundary/dut/multiply_divide.unit/remainder_negative/opit_0_inv_L5Q_1_perm",
+          "packed_kind": "gopLUT6L5Q",
+          "packed_ff_outputs": [
+            "L5Q"
+          ],
+          "packed_ff_count": 1,
+          "exported_ff_count": 0,
+          "region": "core"
+        },
+        {
+          "packed_instance": "core_boundary/dut/multiply_divide.unit/remainder_negative/opit_0_inv_L5Q_2_perm",
+          "packed_kind": "gopLUT6L5Q",
+          "packed_ff_outputs": [
+            "L5Q"
+          ],
+          "packed_ff_count": 1,
+          "exported_ff_count": 0,
+          "region": "core"
+        }
+      ],
+      "counter_bits_preserved": {
+        "mcycle": 64,
+        "minstret": 64
+      },
+      "feature_audit": "8 required feature cones plus register-file RAM present",
+      "functional_extraction": {
+        "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\H3_Base_145125-EXTRACTION_QUALIFICATION.json",
+        "sha256": "d9695e97faf4944de18643f2b64d496cc1a238e415e0b1464d8f08e96cfdf0f5",
+        "bytes": 6021
+      },
+      "completed_original_source_reference_join": {
+        "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\qualification\\full_reference\\RESULT.json",
+        "sha256": "e2b53478514a7a22eb3cf77c25e5141bfb0e812042992cf3ccfebf361bea4b7f",
+        "bytes": 2550
+      },
+      "hardware_measurement": false
+    },
+    {
+      "release": "H3_Retained_145125",
+      "build_id": "20261101-015628-ffa262ba",
+      "status": "PASS",
+      "origin": "LOCAL PDS IMPLEMENTATION",
+      "area_inventory": {
+        "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\physical-attribution\\H3_Retained_145125-20261101-015628-ffa262ba-PHYSICAL_PRIMITIVE_INVENTORY.json",
+        "sha256": "ce48c29036c06c58edf821dbad820a26795984a10150496059594bbc5201ccb7"
+      },
+      "feature_preservation": {
+        "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\physical-attribution\\H3_Retained_145125-20261101-015628-ffa262ba-FEATURE_PRESERVATION.json",
+        "sha256": "b5c03857be5daf179eb97425d3c6be915d2733218d7cc1d384f3f9204f9458ea"
+      },
+      "physical_build_manifest": {
+        "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\physical\\builds\\20261101-015628-ffa262ba\\manifest.json",
+        "sha256": "d43c4830c3157b4d3bc3c360f91f25770f88683809cee6e6652d88683e603481"
+      },
+      "source_manifest": {
+        "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\SOURCE_MANIFEST.json",
+        "sha256": "a5a5c7ed0f2df4710ea0d26871eae429436fa285fc7a1465640491fa3b526078"
+      },
+      "clock_hz": 145125000,
+      "setup_wns_ns": 0.019,
+      "requested_minimum_setup_uncertainty_ns": 0.15,
+      "actual_setup_uncertainties_ns": [
+        0.2
+      ],
+      "all_timing_corners_passed": true,
+      "native_core_hierarchy": {
+        "LUT": 3923,
+        "FF": 1554,
+        "Distributed RAM": 246,
+        "APM": 4
+      },
+      "native_top_hierarchy": {
+        "LUT": 4301,
+        "FF": 2850,
+        "Distributed RAM": 246,
+        "APM": 4
+      },
+      "native_global": {
+        "LUT": 4550,
+        "FF": 2850,
+        "Distributed RAM": 246
+      },
+      "exported_core_lut_and_ram_slots": 3925,
+      "exported_fixture_lut_and_ram_slots": 378,
+      "core_only_generated_constant_lut": 218,
+      "fixture_only_generated_constant_lut": 25,
+      "core_exclusive_physical_lut_and_ram_slots": 4143,
+      "fixture_exclusive_physical_lut_and_ram_slots": 403,
+      "shared_constant_lut": 1,
+      "unresolved_exported_lut": 0,
+      "native_global_only_lut_slots": 3,
+      "physical_core_lut_lower_bound": 4143,
+      "physical_core_lut_conservative_upper_bound": 4147,
+      "native_core_ff": 1554,
+      "exported_core_ff": 1553,
+      "native_fixture_ff": 1296,
+      "native_core_ff_omitted_from_simulation_export": 1,
+      "native_only_ff_localizations": [
+        {
+          "packed_instance": "core_boundary/dut/ex_decode[14]/opit_0_inv_L5Q_1_perm",
+          "packed_kind": "gopLUT6L5Q",
+          "packed_ff_outputs": [
+            "L5Q"
+          ],
+          "packed_ff_count": 1,
+          "exported_ff_count": 0,
+          "region": "core"
+        }
+      ],
+      "counter_bits_preserved": {
+        "mcycle": 64,
+        "minstret": 64
+      },
+      "feature_audit": "8 required feature cones plus register-file RAM present",
+      "functional_extraction": {
+        "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\H3_Retained_145125-EXTRACTION_QUALIFICATION.json",
+        "sha256": "fa0d883ae8f8d0504311fc9aa1b1e242db397d68c5e48ee5ee7e943a83120fb4",
+        "bytes": 6117
+      },
+      "completed_original_source_reference_join": {
+        "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\qualification\\full_reference\\RESULT.json",
+        "sha256": "7fb7e4af07239e1fb8431cb8795a2a120319c582bf8a66e0668aa45f8c48f743",
+        "bytes": 2562
+      },
+      "hardware_measurement": false
+    }
+  ],
+  "attribution_method": "Unique physical slots and actual source provenance; generated constant consumer graph; native-only register owner joins; explicit shared and global-only residues",
+  "resource_weights_fitted": false,
+  "estimated_fixture_subtraction": false,
+  "area_label": "Core-only physical area with explicitly external cached-system execution services",
+  "full_bare_coremark_execution": false,
+  "hardware_measurement": false,
+  "extraction_qualification": {
+    "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\EXTRACTION_QUALIFICATION.json",
+    "sha256": "ff143c2ea2067681c55020832f385b46a6ba813e87f9de6afaa1594533ffdb57"
+  },
+  "audited_utc": "2026-10-31T18:16:44.385781+00:00",
+  "generator_sha256": "2ffd4972a663e2fdfd01fc4e566386efb0b2effbb5ad7709327c9ec7d1d628fe"
+}

@@ -1,0 +1,29 @@
+﻿{
+  "release": "H3_Base_145125",
+  "seed": 1,
+  "ila_profile": "Lean24",
+  "pid": 38604,
+  "command": [
+    "pwsh.exe",
+    "-NoProfile",
+    "-File",
+    "\"D:\\AAAFPGA\\ILA_Core_Releases_20261101\\scripts\\Build-MinimalIla.ps1\"",
+    "-Release",
+    "H3_Base_145125",
+    "-Action",
+    "Build",
+    "-PlacementSeed",
+    "1",
+    "-IlaProfile",
+    "Lean24",
+    "-BuildDirectory",
+    "\"D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\builds\\20261101-013611-840c8de9\""
+  ],
+  "build_directory": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\builds\\20261101-013611-840c8de9",
+  "authorized_profile_simplification_single_trial": true,
+  "capture_data": 24,
+  "trigger_width": 17,
+  "capture_depth": 1024,
+  "reason": "Oneauthorizedminimalprofilestudy:EXPC16+5valid+ID/EX/MEMfire;exact42-bitlocalwaveformsareapreservedsuperset.",
+  "started_utc": "2026-10-31T17:36:12.7418729Z"
+}

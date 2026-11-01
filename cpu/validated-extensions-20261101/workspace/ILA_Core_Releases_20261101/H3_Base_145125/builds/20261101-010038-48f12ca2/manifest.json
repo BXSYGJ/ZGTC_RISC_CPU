@@ -1,0 +1,28 @@
+﻿{
+  "schema": "minimal-pipeline-ila/v1",
+  "release": "H3_Base_145125",
+  "build_directory": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\builds\\20261101-010038-48f12ca2",
+  "source_release": "D:\\AAAFPGA\\Current_Paper_and_Sub7000_Core_Releases_20261012\\cores\\H3_Base_145125",
+  "configuration": "V0",
+  "clock_hz": 145125000,
+  "placement_seed": 1,
+  "clock_uncertainty_ns": 0.15,
+  "device": "PG2L200H",
+  "package": "FBB676",
+  "speedgrade": "-6",
+  "firmware_sha256": "3A3AFF510511ED4CD7FE304A6354861ADAE30531102446A24438E43F3E2A2884",
+  "stage": "prepared",
+  "status": "canceled_before_vendor_start",
+  "hardware_validated": false,
+  "full_score_qualified": false,
+  "changed_field": "pds_soc_top.board.INIT_FILE (path relocation only)",
+  "created_utc": "2026-10-31T17:00:38.6101327Z",
+  "updated_utc": "2026-10-31T17:13:41.6618598Z",
+  "cancellation": {
+    "wrapper_pid": 28736,
+    "reason": "User requested subsequent attempts use NativeMinimal profile instead of Shared42.",
+    "own_waiting_wrapper_stopped": true,
+    "vendor_invocations_started": 0,
+    "inputs_and_hash_records_preserved": true
+  }
+}

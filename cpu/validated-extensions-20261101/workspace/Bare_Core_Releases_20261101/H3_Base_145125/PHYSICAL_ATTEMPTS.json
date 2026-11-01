@@ -1,0 +1,774 @@
+﻿{
+  "release": "H3_Base_145125",
+  "attempts": [
+    {
+      "build_directory": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Base_145125\\physical\\builds\\20261101-014322-ea7e6683",
+      "manifest_status": "timing_failed",
+      "fixture_profile": "InitialFastScan",
+      "placement_seed": 2,
+      "report": {
+        "clock_hz": 145125000,
+        "clock_period_ns": 6.890612,
+        "requested_setup_uncertainty_ns": 0.15,
+        "observed_setup_uncertainties_ns": [
+          0.2
+        ],
+        "setup_uncertainty_matches_request": false,
+        "setup_uncertainty_paths_checked": 4,
+        "clock_loads": 1926,
+        "setup_wns_ns": -2.001,
+        "timing_summary": "Some Constraints Violated.",
+        "constraints_met": false,
+        "all_corner_audit": {
+          "all_corners_passed": false,
+          "summary_tables_checked": 10,
+          "tables": [
+            {
+              "check": "Setup",
+              "corner": "Slow Corner",
+              "rows": [
+                {
+                  "clock_columns": "core_clk               core_clk",
+                  "slack_ns": -2.001,
+                  "total_negative_slack_ns": -8.04,
+                  "failing_endpoints": 62,
+                  "total_endpoints": 10149,
+                  "passed": false
+                }
+              ]
+            },
+            {
+              "check": "Hold",
+              "corner": "Slow Corner",
+              "rows": [
+                {
+                  "clock_columns": "core_clk               core_clk",
+                  "slack_ns": -3.339,
+                  "total_negative_slack_ns": -114.447,
+                  "failing_endpoints": 38,
+                  "total_endpoints": 10149,
+                  "passed": false
+                }
+              ]
+            },
+            {
+              "check": "Recovery",
+              "corner": "Slow Corner",
+              "rows": [
+                {
+                  "clock_columns": "core_clk               core_clk",
+                  "slack_ns": 0.329,
+                  "total_negative_slack_ns": 0.0,
+                  "failing_endpoints": 0,
+                  "total_endpoints": 1716,
+                  "passed": true
+                }
+              ]
+            },
+            {
+              "check": "Removal",
+              "corner": "Slow Corner",
+              "rows": [
+                {
+                  "clock_columns": "core_clk               core_clk",
+                  "slack_ns": 0.086,
+                  "total_negative_slack_ns": 0.0,
+                  "failing_endpoints": 0,
+                  "total_endpoints": 1716,
+                  "passed": true
+                }
+              ]
+            },
+            {
+              "check": "Minimum Pulse Width",
+              "corner": "Slow Corner",
+              "rows": [
+                {
+                  "clock_columns": "core_clk",
+                  "slack_ns": 2.791,
+                  "total_negative_slack_ns": 0.0,
+                  "failing_endpoints": 0,
+                  "total_endpoints": 1926,
+                  "passed": true
+                }
+              ]
+            },
+            {
+              "check": "Setup",
+              "corner": "Fast Corner",
+              "rows": [
+                {
+                  "clock_columns": "core_clk               core_clk",
+                  "slack_ns": 0.809,
+                  "total_negative_slack_ns": 0.0,
+                  "failing_endpoints": 0,
+                  "total_endpoints": 10149,
+                  "passed": true
+                }
+              ]
+            },
+            {
+              "check": "Hold",
+              "corner": "Fast Corner",
+              "rows": [
+                {
+                  "clock_columns": "core_clk               core_clk",
+                  "slack_ns": -1.88,
+                  "total_negative_slack_ns": -62.907,
+                  "failing_endpoints": 38,
+                  "total_endpoints": 10149,
+                  "passed": false
+                }
+              ]
+            },
+            {
+              "check": "Recovery",
+              "corner": "Fast Corner",
+              "rows": [
+                {
+                  "clock_columns": "core_clk               core_clk",
+                  "slack_ns": 2.793,
+                  "total_negative_slack_ns": 0.0,
+                  "failing_endpoints": 0,
+                  "total_endpoints": 1716,
+                  "passed": true
+                }
+              ]
+            },
+            {
+              "check": "Removal",
+              "corner": "Fast Corner",
+              "rows": [
+                {
+                  "clock_columns": "core_clk               core_clk",
+                  "slack_ns": 0.188,
+                  "total_negative_slack_ns": 0.0,
+                  "failing_endpoints": 0,
+                  "total_endpoints": 1716,
+                  "passed": true
+                }
+              ]
+            },
+            {
+              "check": "Minimum Pulse Width",
+              "corner": "Fast Corner",
+              "rows": [
+                {
+                  "clock_columns": "core_clk",
+                  "slack_ns": 2.79,
+                  "total_negative_slack_ns": 0.0,
+                  "failing_endpoints": 0,
+                  "total_endpoints": 1926,
+                  "passed": true
+                }
+              ]
+            }
+          ]
+        },
+        "resources": {
+          "CLMA": {
+            "ff": 1811,
+            "lut": 3174
+          },
+          "CLMS": {
+            "ff": 526,
+            "lut": 1251
+          },
+          "APM": 4.0,
+          "DRM": 0.0,
+          "GPLL": 0.0,
+          "IO": 7.0,
+          "lut": 4425,
+          "ff": 2337
+        },
+        "routed_primitive_inventory": {
+          "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Base_145125\\physical\\builds\\20261101-014322-ea7e6683\\implementation\\routed-primitive-inventory.json",
+          "sha256": "7415b45e5df2b5390774a9dacb544c79faf7fda92230084e6bcd4192e95c08bf",
+          "primitive_instances": 5500,
+          "all_primitive_instances_reconciled": true
+        },
+        "area_attribution_status": "Packed primitive inventory is complete; scalar LUT/FF attribution requires the post-route exported primitive audit.",
+        "timing_report": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Base_145125\\physical\\builds\\20261101-014322-ea7e6683\\implementation\\report_timing\\bare_core_scan_top.rtr",
+        "timing_report_sha256": "8941659f2eea99742b1f53e44d6f0c1bc72139da9eec2078007910aa20658bf9",
+        "functional_rtl_changes": 0,
+        "hardware_validated": false
+      },
+      "independent_audit": {
+        "schema": "h3-bare-independent-multicorner-audit/v1",
+        "release": "H3_Base_145125",
+        "build_directory": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Base_145125\\physical\\builds\\20261101-014322-ea7e6683",
+        "qualified": false,
+        "timing_analysis_mode": "multi corner",
+        "design_summary": "Some Constraints Violated.",
+        "clock_hz": 145125000,
+        "configured_setup_uncertainty_ns": 0.15,
+        "reported_effective_setup_uncertainty_ns": 0.2,
+        "uncertainty_scope": "Native first attempt adds configured setup .150 and hold .050; actual setup deduction is .200 ns.",
+        "clocks": [
+          {
+            "name": "core_clk",
+            "period_ns": 6.89,
+            "waveform": "0.0000 3.4450",
+            "type": "Declared",
+            "clock_loads": 1926,
+            "non_clock_loads": 152,
+            "source": "clk"
+          }
+        ],
+        "summary_rows": [
+          {
+            "check": "Setup",
+            "corner": "Slow",
+            "launch_clock": "core_clk",
+            "capture_clock": "core_clk",
+            "worst_slack_ns": -2.001,
+            "total_negative_slack_ns": -8.04,
+            "failing_endpoints": 62,
+            "total_endpoints": 10149
+          },
+          {
+            "check": "Hold",
+            "corner": "Slow",
+            "launch_clock": "core_clk",
+            "capture_clock": "core_clk",
+            "worst_slack_ns": -3.339,
+            "total_negative_slack_ns": -114.447,
+            "failing_endpoints": 38,
+            "total_endpoints": 10149
+          },
+          {
+            "check": "Recovery",
+            "corner": "Slow",
+            "launch_clock": "core_clk",
+            "capture_clock": "core_clk",
+            "worst_slack_ns": 0.329,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 1716
+          },
+          {
+            "check": "Removal",
+            "corner": "Slow",
+            "launch_clock": "core_clk",
+            "capture_clock": "core_clk",
+            "worst_slack_ns": 0.086,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 1716
+          },
+          {
+            "check": "Minimum Pulse Width",
+            "corner": "Slow",
+            "launch_clock": "core_clk",
+            "capture_clock": "core_clk",
+            "worst_slack_ns": 2.791,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 1926
+          },
+          {
+            "check": "Setup",
+            "corner": "Fast",
+            "launch_clock": "core_clk",
+            "capture_clock": "core_clk",
+            "worst_slack_ns": 0.809,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 10149
+          },
+          {
+            "check": "Hold",
+            "corner": "Fast",
+            "launch_clock": "core_clk",
+            "capture_clock": "core_clk",
+            "worst_slack_ns": -1.88,
+            "total_negative_slack_ns": -62.907,
+            "failing_endpoints": 38,
+            "total_endpoints": 10149
+          },
+          {
+            "check": "Recovery",
+            "corner": "Fast",
+            "launch_clock": "core_clk",
+            "capture_clock": "core_clk",
+            "worst_slack_ns": 2.793,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 1716
+          },
+          {
+            "check": "Removal",
+            "corner": "Fast",
+            "launch_clock": "core_clk",
+            "capture_clock": "core_clk",
+            "worst_slack_ns": 0.188,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 1716
+          },
+          {
+            "check": "Minimum Pulse Width",
+            "corner": "Fast",
+            "launch_clock": "core_clk",
+            "capture_clock": "core_clk",
+            "worst_slack_ns": 2.79,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 1926
+          }
+        ],
+        "violations": [
+          {
+            "check": "Setup",
+            "corner": "Slow",
+            "launch_clock": "core_clk",
+            "capture_clock": "core_clk",
+            "worst_slack_ns": -2.001,
+            "total_negative_slack_ns": -8.04,
+            "failing_endpoints": 62,
+            "total_endpoints": 10149
+          },
+          {
+            "check": "Hold",
+            "corner": "Slow",
+            "launch_clock": "core_clk",
+            "capture_clock": "core_clk",
+            "worst_slack_ns": -3.339,
+            "total_negative_slack_ns": -114.447,
+            "failing_endpoints": 38,
+            "total_endpoints": 10149
+          },
+          {
+            "check": "Hold",
+            "corner": "Fast",
+            "launch_clock": "core_clk",
+            "capture_clock": "core_clk",
+            "worst_slack_ns": -1.88,
+            "total_negative_slack_ns": -62.907,
+            "failing_endpoints": 38,
+            "total_endpoints": 10149
+          }
+        ],
+        "setup_uncertainty_paths": [
+          {
+            "group": "core_clk",
+            "corner": "slow",
+            "uncertainty_ns": -0.2
+          },
+          {
+            "group": "core_clk",
+            "corner": "slow",
+            "uncertainty_ns": -0.2
+          },
+          {
+            "group": "core_clk",
+            "corner": "fast",
+            "uncertainty_ns": -0.2
+          },
+          {
+            "group": "core_clk",
+            "corner": "fast",
+            "uncertainty_ns": -0.2
+          }
+        ],
+        "resources": {
+          "CLMA": {
+            "ff": 1811,
+            "lut": 3174
+          },
+          "CLMS": {
+            "ff": 526,
+            "lut": 1251
+          },
+          "DRM": 0.0,
+          "GPLL": 0.0,
+          "APM": 4.0,
+          "post_route_luts": 4425,
+          "post_route_ffs": 2337
+        },
+        "report": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Base_145125\\physical\\builds\\20261101-014322-ea7e6683\\implementation\\report_timing\\bare_core_scan_top.rtr",
+        "report_sha256": "8941659f2eea99742b1f53e44d6f0c1bc72139da9eec2078007910aa20658bf9",
+        "hardware_validated": false,
+        "audited_utc": "2026-10-31T17:54:10.8359736Z"
+      },
+      "selected": false
+    },
+    {
+      "build_directory": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Base_145125\\physical\\builds\\20261101-015628-87641d51",
+      "manifest_status": "timing_passed",
+      "fixture_profile": "SlowScanStaged",
+      "placement_seed": 1,
+      "report": {
+        "clock_hz": 145125000,
+        "clock_period_ns": 6.890612,
+        "requested_minimum_setup_uncertainty_ns": 0.15,
+        "requested_setup_uncertainty_ns": 0.15,
+        "observed_setup_uncertainties_ns": [
+          0.2
+        ],
+        "setup_uncertainty_matches_request": false,
+        "setup_uncertainty_exact_match": false,
+        "setup_uncertainty_satisfies_minimum": true,
+        "setup_uncertainty_note": "Actual deductions are read from the native report. A passing route at a larger setup uncertainty satisfies the requested minimum budget; it is not relabeled as an exact match.",
+        "setup_uncertainty_paths_checked": 6,
+        "clock_loads": 2393,
+        "setup_wns_ns": 0.047,
+        "timing_summary": "All Constraints Met.",
+        "constraints_met": true,
+        "all_corner_audit": {
+          "all_corners_passed": true,
+          "summary_tables_checked": 10,
+          "tables": [
+            {
+              "check": "Setup",
+              "corner": "Slow Corner",
+              "rows": [
+                {
+                  "clock_columns": "core_clk               core_clk",
+                  "slack_ns": 0.047,
+                  "total_negative_slack_ns": 0.0,
+                  "failing_endpoints": 0,
+                  "total_endpoints": 11042,
+                  "passed": true
+                }
+              ]
+            },
+            {
+              "check": "Hold",
+              "corner": "Slow Corner",
+              "rows": [
+                {
+                  "clock_columns": "core_clk               core_clk",
+                  "slack_ns": 0.197,
+                  "total_negative_slack_ns": 0.0,
+                  "failing_endpoints": 0,
+                  "total_endpoints": 11042,
+                  "passed": true
+                }
+              ]
+            },
+            {
+              "check": "Recovery",
+              "corner": "Slow Corner",
+              "rows": [
+                {
+                  "clock_columns": "core_clk               core_clk",
+                  "slack_ns": 2.964,
+                  "total_negative_slack_ns": 0.0,
+                  "failing_endpoints": 0,
+                  "total_endpoints": 2183,
+                  "passed": true
+                }
+              ]
+            },
+            {
+              "check": "Removal",
+              "corner": "Slow Corner",
+              "rows": [
+                {
+                  "clock_columns": "core_clk               core_clk",
+                  "slack_ns": 0.102,
+                  "total_negative_slack_ns": 0.0,
+                  "failing_endpoints": 0,
+                  "total_endpoints": 2183,
+                  "passed": true
+                }
+              ]
+            },
+            {
+              "check": "Minimum Pulse Width",
+              "corner": "Slow Corner",
+              "rows": [
+                {
+                  "clock_columns": "core_clk",
+                  "slack_ns": 2.791,
+                  "total_negative_slack_ns": 0.0,
+                  "failing_endpoints": 0,
+                  "total_endpoints": 2393,
+                  "passed": true
+                }
+              ]
+            },
+            {
+              "check": "Setup",
+              "corner": "Fast Corner",
+              "rows": [
+                {
+                  "clock_columns": "core_clk               core_clk",
+                  "slack_ns": 1.657,
+                  "total_negative_slack_ns": 0.0,
+                  "failing_endpoints": 0,
+                  "total_endpoints": 11042,
+                  "passed": true
+                }
+              ]
+            },
+            {
+              "check": "Hold",
+              "corner": "Fast Corner",
+              "rows": [
+                {
+                  "clock_columns": "core_clk               core_clk",
+                  "slack_ns": 0.069,
+                  "total_negative_slack_ns": 0.0,
+                  "failing_endpoints": 0,
+                  "total_endpoints": 11042,
+                  "passed": true
+                }
+              ]
+            },
+            {
+              "check": "Recovery",
+              "corner": "Fast Corner",
+              "rows": [
+                {
+                  "clock_columns": "core_clk               core_clk",
+                  "slack_ns": 2.733,
+                  "total_negative_slack_ns": 0.0,
+                  "failing_endpoints": 0,
+                  "total_endpoints": 2183,
+                  "passed": true
+                }
+              ]
+            },
+            {
+              "check": "Removal",
+              "corner": "Fast Corner",
+              "rows": [
+                {
+                  "clock_columns": "core_clk               core_clk",
+                  "slack_ns": 0.14,
+                  "total_negative_slack_ns": 0.0,
+                  "failing_endpoints": 0,
+                  "total_endpoints": 2183,
+                  "passed": true
+                }
+              ]
+            },
+            {
+              "check": "Minimum Pulse Width",
+              "corner": "Fast Corner",
+              "rows": [
+                {
+                  "clock_columns": "core_clk",
+                  "slack_ns": 2.79,
+                  "total_negative_slack_ns": 0.0,
+                  "failing_endpoints": 0,
+                  "total_endpoints": 2393,
+                  "passed": true
+                }
+              ]
+            }
+          ]
+        },
+        "resources": {
+          "CLMA": {
+            "ff": 2114,
+            "lut": 3238
+          },
+          "CLMS": {
+            "ff": 712,
+            "lut": 1260
+          },
+          "APM": 4.0,
+          "DRM": 0.0,
+          "GPLL": 0.0,
+          "IO": 7.0,
+          "lut": 4498,
+          "ff": 2826
+        },
+        "routed_primitive_inventory": {
+          "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Base_145125\\physical\\builds\\20261101-015628-87641d51\\implementation\\routed-primitive-inventory.json",
+          "sha256": "fe6e836d248ec574e2cf6e3f622ecc5cc0dc184e73917757758567e8cd279a08",
+          "primitive_instances": 5972,
+          "all_primitive_instances_reconciled": true
+        },
+        "area_attribution_status": "Packed primitive inventory is complete. The separately hashed independent native export attribution is linked from the release SELECTED_BUILD.json.",
+        "timing_report": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Base_145125\\physical\\builds\\20261101-015628-87641d51\\implementation\\report_timing\\bare_core_scan_top.rtr",
+        "timing_report_sha256": "770f0a13b7dc55fa4f0688203a1706a1fe8e52110109d85b6f020714620c95b5",
+        "functional_rtl_changes": 0,
+        "hardware_validated": false
+      },
+      "independent_audit": {
+        "schema": "h3-bare-independent-multicorner-audit/v1",
+        "release": "H3_Base_145125",
+        "build_directory": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Base_145125\\physical\\builds\\20261101-015628-87641d51",
+        "qualified": true,
+        "timing_analysis_mode": "multi corner",
+        "design_summary": "All Constraints Met.",
+        "clock_hz": 145125000,
+        "configured_setup_uncertainty_ns": 0.15,
+        "reported_effective_setup_uncertainty_ns": 0.2,
+        "uncertainty_scope": "Every detailed setup path matches the explicit audit expectation; actual effective uncertainty remains explicit and is compared with the requested minimum separately.",
+        "clocks": [
+          {
+            "name": "core_clk",
+            "period_ns": 6.89,
+            "waveform": "0.0000 3.4450",
+            "type": "Declared",
+            "clock_loads": 2393,
+            "non_clock_loads": 151,
+            "source": "clk"
+          }
+        ],
+        "summary_rows": [
+          {
+            "check": "Setup",
+            "corner": "Slow",
+            "launch_clock": "core_clk",
+            "capture_clock": "core_clk",
+            "worst_slack_ns": 0.047,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 11042
+          },
+          {
+            "check": "Hold",
+            "corner": "Slow",
+            "launch_clock": "core_clk",
+            "capture_clock": "core_clk",
+            "worst_slack_ns": 0.197,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 11042
+          },
+          {
+            "check": "Recovery",
+            "corner": "Slow",
+            "launch_clock": "core_clk",
+            "capture_clock": "core_clk",
+            "worst_slack_ns": 2.964,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 2183
+          },
+          {
+            "check": "Removal",
+            "corner": "Slow",
+            "launch_clock": "core_clk",
+            "capture_clock": "core_clk",
+            "worst_slack_ns": 0.102,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 2183
+          },
+          {
+            "check": "Minimum Pulse Width",
+            "corner": "Slow",
+            "launch_clock": "core_clk",
+            "capture_clock": "core_clk",
+            "worst_slack_ns": 2.791,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 2393
+          },
+          {
+            "check": "Setup",
+            "corner": "Fast",
+            "launch_clock": "core_clk",
+            "capture_clock": "core_clk",
+            "worst_slack_ns": 1.657,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 11042
+          },
+          {
+            "check": "Hold",
+            "corner": "Fast",
+            "launch_clock": "core_clk",
+            "capture_clock": "core_clk",
+            "worst_slack_ns": 0.069,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 11042
+          },
+          {
+            "check": "Recovery",
+            "corner": "Fast",
+            "launch_clock": "core_clk",
+            "capture_clock": "core_clk",
+            "worst_slack_ns": 2.733,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 2183
+          },
+          {
+            "check": "Removal",
+            "corner": "Fast",
+            "launch_clock": "core_clk",
+            "capture_clock": "core_clk",
+            "worst_slack_ns": 0.14,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 2183
+          },
+          {
+            "check": "Minimum Pulse Width",
+            "corner": "Fast",
+            "launch_clock": "core_clk",
+            "capture_clock": "core_clk",
+            "worst_slack_ns": 2.79,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 2393
+          }
+        ],
+        "violations": [],
+        "setup_uncertainty_paths": [
+          {
+            "group": "core_clk",
+            "corner": "slow",
+            "uncertainty_ns": -0.2
+          },
+          {
+            "group": "core_clk",
+            "corner": "slow",
+            "uncertainty_ns": -0.2
+          },
+          {
+            "group": "core_clk",
+            "corner": "slow",
+            "uncertainty_ns": -0.2
+          },
+          {
+            "group": "core_clk",
+            "corner": "fast",
+            "uncertainty_ns": -0.2
+          },
+          {
+            "group": "core_clk",
+            "corner": "fast",
+            "uncertainty_ns": -0.2
+          },
+          {
+            "group": "core_clk",
+            "corner": "fast",
+            "uncertainty_ns": -0.2
+          }
+        ],
+        "resources": {
+          "CLMA": {
+            "ff": 2114,
+            "lut": 3238
+          },
+          "CLMS": {
+            "ff": 712,
+            "lut": 1260
+          },
+          "DRM": 0.0,
+          "GPLL": 0.0,
+          "APM": 4.0,
+          "post_route_luts": 4498,
+          "post_route_ffs": 2826
+        },
+        "report": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Base_145125\\physical\\builds\\20261101-015628-87641d51\\implementation\\report_timing\\bare_core_scan_top.rtr",
+        "report_sha256": "770f0a13b7dc55fa4f0688203a1706a1fe8e52110109d85b6f020714620c95b5",
+        "hardware_validated": false,
+        "audited_utc": "2026-10-31T18:13:43.7212734Z"
+      },
+      "selected": true
+    }
+  ],
+  "bounded_final_attempt": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Base_145125\\physical\\builds\\20261101-015628-87641d51",
+  "additional_attempts": 0
+}

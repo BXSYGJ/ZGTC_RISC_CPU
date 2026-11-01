@@ -1,0 +1,613 @@
+﻿{
+  "module": "rv32_bare_core",
+  "dut": "rv32_core",
+  "dut_hierarchy": "core_boundary/dut",
+  "physical_top": "bare_core_scan_top",
+  "all_port_bits": 616.0,
+  "core_input_bits_including_clk": 177,
+  "scan_controlled_input_bits": 176,
+  "individually_captured_output_bits": 439,
+  "input_mapping": [
+    {
+      "port": "rst_n",
+      "width": 1,
+      "lsb": 0,
+      "msb": 0,
+      "connection": "active_inputs[0]"
+    },
+    {
+      "port": "i_req_ready",
+      "width": 1,
+      "lsb": 1,
+      "msb": 1,
+      "connection": "active_inputs[1]"
+    },
+    {
+      "port": "i_rsp_valid",
+      "width": 1,
+      "lsb": 2,
+      "msb": 2,
+      "connection": "active_inputs[2]"
+    },
+    {
+      "port": "i_rsp_data",
+      "width": 32,
+      "lsb": 3,
+      "msb": 34,
+      "connection": "active_inputs[34:3]"
+    },
+    {
+      "port": "i_rsp_pair_data",
+      "width": 32,
+      "lsb": 35,
+      "msb": 66,
+      "connection": "active_inputs[66:35]"
+    },
+    {
+      "port": "i_rsp_is_c",
+      "width": 2,
+      "lsb": 67,
+      "msb": 68,
+      "connection": "active_inputs[68:67]"
+    },
+    {
+      "port": "i_rsp_pair_is_c",
+      "width": 2,
+      "lsb": 69,
+      "msb": 70,
+      "connection": "active_inputs[70:69]"
+    },
+    {
+      "port": "i_rsp_pair_valid",
+      "width": 1,
+      "lsb": 71,
+      "msb": 71,
+      "connection": "active_inputs[71]"
+    },
+    {
+      "port": "i_rsp_error",
+      "width": 1,
+      "lsb": 72,
+      "msb": 72,
+      "connection": "active_inputs[72]"
+    },
+    {
+      "port": "d_req_ready",
+      "width": 1,
+      "lsb": 73,
+      "msb": 73,
+      "connection": "active_inputs[73]"
+    },
+    {
+      "port": "d_rsp_valid",
+      "width": 1,
+      "lsb": 74,
+      "msb": 74,
+      "connection": "active_inputs[74]"
+    },
+    {
+      "port": "d_rsp_data",
+      "width": 32,
+      "lsb": 75,
+      "msb": 106,
+      "connection": "active_inputs[106:75]"
+    },
+    {
+      "port": "d_rsp_error",
+      "width": 1,
+      "lsb": 107,
+      "msb": 107,
+      "connection": "active_inputs[107]"
+    },
+    {
+      "port": "maintenance_ready",
+      "width": 1,
+      "lsb": 108,
+      "msb": 108,
+      "connection": "active_inputs[108]"
+    },
+    {
+      "port": "timer_value",
+      "width": 64,
+      "lsb": 109,
+      "msb": 172,
+      "connection": "active_inputs[172:109]"
+    },
+    {
+      "port": "irq_external",
+      "width": 1,
+      "lsb": 173,
+      "msb": 173,
+      "connection": "active_inputs[173]"
+    },
+    {
+      "port": "irq_software",
+      "width": 1,
+      "lsb": 174,
+      "msb": 174,
+      "connection": "active_inputs[174]"
+    },
+    {
+      "port": "irq_timer",
+      "width": 1,
+      "lsb": 175,
+      "msb": 175,
+      "connection": "active_inputs[175]"
+    }
+  ],
+  "output_mapping": [
+    {
+      "port": "i_req_valid",
+      "width": 1,
+      "lsb": 0,
+      "msb": 0,
+      "connection": "core_outputs[0]"
+    },
+    {
+      "port": "i_req_address",
+      "width": 32,
+      "lsb": 1,
+      "msb": 32,
+      "connection": "core_outputs[32:1]"
+    },
+    {
+      "port": "i_rsp_ready",
+      "width": 1,
+      "lsb": 33,
+      "msb": 33,
+      "connection": "core_outputs[33]"
+    },
+    {
+      "port": "d_req_valid",
+      "width": 1,
+      "lsb": 34,
+      "msb": 34,
+      "connection": "core_outputs[34]"
+    },
+    {
+      "port": "d_req_address",
+      "width": 32,
+      "lsb": 35,
+      "msb": 66,
+      "connection": "core_outputs[66:35]"
+    },
+    {
+      "port": "d_req_data",
+      "width": 32,
+      "lsb": 67,
+      "msb": 98,
+      "connection": "core_outputs[98:67]"
+    },
+    {
+      "port": "d_req_strobe",
+      "width": 4,
+      "lsb": 99,
+      "msb": 102,
+      "connection": "core_outputs[102:99]"
+    },
+    {
+      "port": "d_req_write",
+      "width": 1,
+      "lsb": 103,
+      "msb": 103,
+      "connection": "core_outputs[103]"
+    },
+    {
+      "port": "d_rsp_ready",
+      "width": 1,
+      "lsb": 104,
+      "msb": 104,
+      "connection": "core_outputs[104]"
+    },
+    {
+      "port": "maintenance_valid",
+      "width": 1,
+      "lsb": 105,
+      "msb": 105,
+      "connection": "core_outputs[105]"
+    },
+    {
+      "port": "trace_valid",
+      "width": 1,
+      "lsb": 106,
+      "msb": 106,
+      "connection": "core_outputs[106]"
+    },
+    {
+      "port": "trace_pc",
+      "width": 32,
+      "lsb": 107,
+      "msb": 138,
+      "connection": "core_outputs[138:107]"
+    },
+    {
+      "port": "trace_instruction",
+      "width": 32,
+      "lsb": 139,
+      "msb": 170,
+      "connection": "core_outputs[170:139]"
+    },
+    {
+      "port": "trace_write",
+      "width": 1,
+      "lsb": 171,
+      "msb": 171,
+      "connection": "core_outputs[171]"
+    },
+    {
+      "port": "trace_rd",
+      "width": 5,
+      "lsb": 172,
+      "msb": 176,
+      "connection": "core_outputs[176:172]"
+    },
+    {
+      "port": "trace_data",
+      "width": 32,
+      "lsb": 177,
+      "msb": 208,
+      "connection": "core_outputs[208:177]"
+    },
+    {
+      "port": "trap_valid",
+      "width": 1,
+      "lsb": 209,
+      "msb": 209,
+      "connection": "core_outputs[209]"
+    },
+    {
+      "port": "trap_pc",
+      "width": 32,
+      "lsb": 210,
+      "msb": 241,
+      "connection": "core_outputs[241:210]"
+    },
+    {
+      "port": "trap_cause",
+      "width": 32,
+      "lsb": 242,
+      "msb": 273,
+      "connection": "core_outputs[273:242]"
+    },
+    {
+      "port": "trap_value",
+      "width": 32,
+      "lsb": 274,
+      "msb": 305,
+      "connection": "core_outputs[305:274]"
+    },
+    {
+      "port": "pipeline_valid",
+      "width": 5,
+      "lsb": 306,
+      "msb": 310,
+      "connection": "core_outputs[310:306]"
+    },
+    {
+      "port": "cycle_count",
+      "width": 64,
+      "lsb": 311,
+      "msb": 374,
+      "connection": "core_outputs[374:311]"
+    },
+    {
+      "port": "retired_count",
+      "width": 64,
+      "lsb": 375,
+      "msb": 438,
+      "connection": "core_outputs[438:375]"
+    }
+  ],
+  "ports": [
+    {
+      "direction": "input",
+      "name": "clk",
+      "width": 1,
+      "range": "",
+      "connection": "clk"
+    },
+    {
+      "direction": "input",
+      "name": "rst_n",
+      "width": 1,
+      "range": "",
+      "connection": "active_inputs[0]"
+    },
+    {
+      "direction": "output",
+      "name": "i_req_valid",
+      "width": 1,
+      "range": "",
+      "connection": "core_outputs[0]"
+    },
+    {
+      "direction": "input",
+      "name": "i_req_ready",
+      "width": 1,
+      "range": "",
+      "connection": "active_inputs[1]"
+    },
+    {
+      "direction": "output",
+      "name": "i_req_address",
+      "width": 32,
+      "range": "[31:0]",
+      "connection": "core_outputs[32:1]"
+    },
+    {
+      "direction": "input",
+      "name": "i_rsp_valid",
+      "width": 1,
+      "range": "",
+      "connection": "active_inputs[2]"
+    },
+    {
+      "direction": "output",
+      "name": "i_rsp_ready",
+      "width": 1,
+      "range": "",
+      "connection": "core_outputs[33]"
+    },
+    {
+      "direction": "input",
+      "name": "i_rsp_data",
+      "width": 32,
+      "range": "[31:0]",
+      "connection": "active_inputs[34:3]"
+    },
+    {
+      "direction": "input",
+      "name": "i_rsp_pair_data",
+      "width": 32,
+      "range": "[31:0]",
+      "connection": "active_inputs[66:35]"
+    },
+    {
+      "direction": "input",
+      "name": "i_rsp_is_c",
+      "width": 2,
+      "range": "[1:0]",
+      "connection": "active_inputs[68:67]"
+    },
+    {
+      "direction": "input",
+      "name": "i_rsp_pair_is_c",
+      "width": 2,
+      "range": "[1:0]",
+      "connection": "active_inputs[70:69]"
+    },
+    {
+      "direction": "input",
+      "name": "i_rsp_pair_valid",
+      "width": 1,
+      "range": "",
+      "connection": "active_inputs[71]"
+    },
+    {
+      "direction": "input",
+      "name": "i_rsp_error",
+      "width": 1,
+      "range": "",
+      "connection": "active_inputs[72]"
+    },
+    {
+      "direction": "output",
+      "name": "d_req_valid",
+      "width": 1,
+      "range": "",
+      "connection": "core_outputs[34]"
+    },
+    {
+      "direction": "input",
+      "name": "d_req_ready",
+      "width": 1,
+      "range": "",
+      "connection": "active_inputs[73]"
+    },
+    {
+      "direction": "output",
+      "name": "d_req_address",
+      "width": 32,
+      "range": "[31:0]",
+      "connection": "core_outputs[66:35]"
+    },
+    {
+      "direction": "output",
+      "name": "d_req_data",
+      "width": 32,
+      "range": "[31:0]",
+      "connection": "core_outputs[98:67]"
+    },
+    {
+      "direction": "output",
+      "name": "d_req_strobe",
+      "width": 4,
+      "range": "[3:0]",
+      "connection": "core_outputs[102:99]"
+    },
+    {
+      "direction": "output",
+      "name": "d_req_write",
+      "width": 1,
+      "range": "",
+      "connection": "core_outputs[103]"
+    },
+    {
+      "direction": "input",
+      "name": "d_rsp_valid",
+      "width": 1,
+      "range": "",
+      "connection": "active_inputs[74]"
+    },
+    {
+      "direction": "output",
+      "name": "d_rsp_ready",
+      "width": 1,
+      "range": "",
+      "connection": "core_outputs[104]"
+    },
+    {
+      "direction": "input",
+      "name": "d_rsp_data",
+      "width": 32,
+      "range": "[31:0]",
+      "connection": "active_inputs[106:75]"
+    },
+    {
+      "direction": "input",
+      "name": "d_rsp_error",
+      "width": 1,
+      "range": "",
+      "connection": "active_inputs[107]"
+    },
+    {
+      "direction": "output",
+      "name": "maintenance_valid",
+      "width": 1,
+      "range": "",
+      "connection": "core_outputs[105]"
+    },
+    {
+      "direction": "input",
+      "name": "maintenance_ready",
+      "width": 1,
+      "range": "",
+      "connection": "active_inputs[108]"
+    },
+    {
+      "direction": "input",
+      "name": "timer_value",
+      "width": 64,
+      "range": "[63:0]",
+      "connection": "active_inputs[172:109]"
+    },
+    {
+      "direction": "input",
+      "name": "irq_external",
+      "width": 1,
+      "range": "",
+      "connection": "active_inputs[173]"
+    },
+    {
+      "direction": "input",
+      "name": "irq_software",
+      "width": 1,
+      "range": "",
+      "connection": "active_inputs[174]"
+    },
+    {
+      "direction": "input",
+      "name": "irq_timer",
+      "width": 1,
+      "range": "",
+      "connection": "active_inputs[175]"
+    },
+    {
+      "direction": "output",
+      "name": "trace_valid",
+      "width": 1,
+      "range": "",
+      "connection": "core_outputs[106]"
+    },
+    {
+      "direction": "output",
+      "name": "trace_pc",
+      "width": 32,
+      "range": "[31:0]",
+      "connection": "core_outputs[138:107]"
+    },
+    {
+      "direction": "output",
+      "name": "trace_instruction",
+      "width": 32,
+      "range": "[31:0]",
+      "connection": "core_outputs[170:139]"
+    },
+    {
+      "direction": "output",
+      "name": "trace_write",
+      "width": 1,
+      "range": "",
+      "connection": "core_outputs[171]"
+    },
+    {
+      "direction": "output",
+      "name": "trace_rd",
+      "width": 5,
+      "range": "[4:0]",
+      "connection": "core_outputs[176:172]"
+    },
+    {
+      "direction": "output",
+      "name": "trace_data",
+      "width": 32,
+      "range": "[31:0]",
+      "connection": "core_outputs[208:177]"
+    },
+    {
+      "direction": "output",
+      "name": "trap_valid",
+      "width": 1,
+      "range": "",
+      "connection": "core_outputs[209]"
+    },
+    {
+      "direction": "output",
+      "name": "trap_pc",
+      "width": 32,
+      "range": "[31:0]",
+      "connection": "core_outputs[241:210]"
+    },
+    {
+      "direction": "output",
+      "name": "trap_cause",
+      "width": 32,
+      "range": "[31:0]",
+      "connection": "core_outputs[273:242]"
+    },
+    {
+      "direction": "output",
+      "name": "trap_value",
+      "width": 32,
+      "range": "[31:0]",
+      "connection": "core_outputs[305:274]"
+    },
+    {
+      "direction": "output",
+      "name": "pipeline_valid",
+      "width": 5,
+      "range": "[4:0]",
+      "connection": "core_outputs[310:306]"
+    },
+    {
+      "direction": "output",
+      "name": "cycle_count",
+      "width": 64,
+      "range": "[63:0]",
+      "connection": "core_outputs[374:311]"
+    },
+    {
+      "direction": "output",
+      "name": "retired_count",
+      "width": 64,
+      "range": "[63:0]",
+      "connection": "core_outputs[438:375]"
+    }
+  ],
+  "parameters": {
+    "RESET_VECTOR": 0,
+    "ENABLE_PREDICTOR": 1,
+    "ENABLE_M": 1,
+    "ENABLE_C": 1,
+    "FETCH_ADDRESS_BITS": 16,
+    "FETCH_OVERLAP": 1,
+    "EARLY_D_REQUEST": 1,
+    "BTB_INDEX_BITS": 8,
+    "BTB_ADDRESS_BITS": 16,
+    "LOAD_USE_BUBBLE": 1
+  },
+  "hierarchy_policy": "syn_hier=fixed on rv32_bare_core and rv32_core",
+  "input_update": "All core input bits except clk are scan-controlled active registers, atomically updated from input_shift. No core input is tied to a constant.",
+  "output_observation": "Every output bit is captured separately and shifted out. There is no XOR/signature compression.",
+  "physical_clock": "Direct external clk; no PLL, clock gating, or ILA."
+}

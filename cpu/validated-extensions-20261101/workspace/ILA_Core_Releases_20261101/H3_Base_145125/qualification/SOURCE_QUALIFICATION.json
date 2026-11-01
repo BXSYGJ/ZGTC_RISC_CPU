@@ -1,0 +1,453 @@
+﻿{
+  "schema": "h3-minimal-ila-independent-source-qualification/v1",
+  "release": "H3_Base_145125",
+  "qualified_utc": "2026-10-31T17:11:26.5322866Z",
+  "frozen_recipe": "D:\\AAAFPGA\\Current_Paper_and_Sub7000_Core_Releases_20261012\\cores\\H3_Base_145125\\recipe.json",
+  "frozen_recipe_sha256": "49047af81342dbfa94c85195b5bac8331a7f323d0b6b6fd20797c9a5d6139806",
+  "frozen_input_root": "D:\\AAAFPGA\\Current_Paper_and_Sub7000_Core_Releases_20261012\\cores\\H3_Base_145125\\physical\\V0\\inputs",
+  "isolated_frozen_copy": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\qualification\\frozen_inputs",
+  "input_count": 25,
+  "original_inputs_unchanged": true,
+  "physical_simulation_rtl": [
+    {
+      "file": "rv32_alu.sv",
+      "sha256": "125647d90b98f294743127637406d19479eebda82dccfaaba7acaf59d5ae38b1",
+      "simulation_equals_physical": true
+    },
+    {
+      "file": "rv32_btb.sv",
+      "sha256": "b1b3481343a2e1275cfd984c4eab05c5f9d92cb72dab652010463073eb86eb4f",
+      "simulation_equals_physical": true
+    },
+    {
+      "file": "rv32_burst_arbiter.sv",
+      "sha256": "82104b39f85d2942e3d0a6780f79099062cc5a4f71fdf87491191de2f632c8af",
+      "simulation_equals_physical": true
+    },
+    {
+      "file": "rv32_burst_ram.sv",
+      "sha256": "089b3788fa87d3176a4e0b09e40382e1349cc33e8f9d2227d567ad0788672417",
+      "simulation_equals_physical": true
+    },
+    {
+      "file": "rv32_cache.sv",
+      "sha256": "c9d73d59e80a70399df214dfbbe3316083e6df0d33974e1564795a4ae875d6c1",
+      "simulation_equals_physical": true
+    },
+    {
+      "file": "rv32_core.sv",
+      "sha256": "15f86ba74e955ce93c3937106c7650d367b0b6249ed8799e3b373f34f31da404",
+      "simulation_equals_physical": true
+    },
+    {
+      "file": "rv32_decode.sv",
+      "sha256": "9cb2b57b46ed775d85b6e70a3eebe92c2d5e49e9a6483993109e2c096d9a3ff3",
+      "simulation_equals_physical": true
+    },
+    {
+      "file": "rv32_fifo.sv",
+      "sha256": "20bb573cdbae386a8b44df780eefc11b85323cf2bbaa4fb2073a5e87e626b2eb",
+      "simulation_equals_physical": true
+    },
+    {
+      "file": "rv32_machine.sv",
+      "sha256": "56b542e419c58216a08b0a5c83322506e42e2721fa28db50a6454ebe29607abd",
+      "simulation_equals_physical": true
+    },
+    {
+      "file": "rv32_memory_system.sv",
+      "sha256": "39833ea3b440e8c4d8f2e54f3382280b32456744f394f317c2c9ca17235acd39",
+      "simulation_equals_physical": true
+    },
+    {
+      "file": "rv32_muldiv.sv",
+      "sha256": "64df4940f2d309fa68e8183f5ed1825e8843046703bf5f34ec8b885b03532246",
+      "simulation_equals_physical": true
+    },
+    {
+      "file": "rv32_peripherals.sv",
+      "sha256": "d4acd7818f67cf5466e04e94307da420fa3bd004225a0633b7be35a1babeae8e",
+      "simulation_equals_physical": true
+    },
+    {
+      "file": "rv32_rvc_expand.sv",
+      "sha256": "308ac8a65c9e29aeec27b38417483d0f43fd7c54487c26e89a3fa54b4647951b",
+      "simulation_equals_physical": true
+    },
+    {
+      "file": "rv32_rvc_frontend.sv",
+      "sha256": "210b5ba9280c3840aafc27e7c3e35616085efde310793dc1661cc72f50984128",
+      "simulation_equals_physical": true
+    },
+    {
+      "file": "rv32_soc.sv",
+      "sha256": "cf5817f06eb68f923c965f51e60f6dde76462f0a6dbf2023ecd78cabad8e2fe9",
+      "simulation_equals_physical": true
+    },
+    {
+      "file": "rv32_uart.sv",
+      "sha256": "b83f5d6055bd794ca49e3781e673a00749249eaeaf1f2e908398dd5ce54ab8a2",
+      "simulation_equals_physical": true
+    },
+    {
+      "file": "rv32_uncached.sv",
+      "sha256": "d276e6b38ddb05117f52e054367f7f3d4503ba76f8f49025973197943ef50907",
+      "simulation_equals_physical": true
+    }
+  ],
+  "clock_hz": 145125000,
+  "expected_period_ns": 6.890611541774333,
+  "uncertainty_ns": 0.15,
+  "pnr_options": "-dc_duplication false -plc_decongestion 0 -gplace_seed 2 -logic_optimize_lut6d_combing_strategy 3",
+  "firmware_hex_sha256": "3a3aff510511ed4cd7fe304a6354861adae30531102446a24438e43f3e2a2884",
+  "firmware_elf_sha256": "64e1ba2532154356c4819bb0e7e05d481321f1afbb474cbf2fa6c67b0d243ed3",
+  "reference_uart_sha256": "1c9f93a53d018f363654d79a82e297ac4b128f3a692e98a40f9b8484306f9f90",
+  "reference_cycles_hex": "0000000067e7746e",
+  "reference_cycles": 1743221870,
+  "reference_retired_hex": "00000000625047cd",
+  "reference_retired": 1649428429,
+  "reference_full_coremark_completed": true,
+  "nm_command": [
+    "wsl.exe",
+    "--cd",
+    "/tmp",
+    "--exec",
+    "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/cpu_paper/tools/xpack-riscv-none-embed-gcc-10.2.0-1.2/bin/riscv-none-embed-nm",
+    "-S",
+    "-n",
+    "/mnt/d/AAAFPGA/Current_Paper_and_Sub7000_Core_Releases_20261012/cores/H3_Base_145125/firmware/V0/firmware.elf"
+  ],
+  "nm_exit_code": 0,
+  "key_functions": [
+    {
+      "function": "main",
+      "start": "0x000000f2",
+      "size_bytes": 1702,
+      "trigger": "EX_PC == 0x000000f2 AND ex_fire == 1"
+    },
+    {
+      "function": "iterate",
+      "start": "0x00000088",
+      "size_bytes": 106,
+      "trigger": "EX_PC == 0x00000088 AND ex_fire == 1"
+    },
+    {
+      "function": "core_bench_list",
+      "start": "0x00000942",
+      "size_bytes": 1258,
+      "trigger": "EX_PC == 0x00000942 AND ex_fire == 1"
+    },
+    {
+      "function": "matrix_test",
+      "start": "0x0000125e",
+      "size_bytes": 5030,
+      "trigger": "EX_PC == 0x0000125e AND ex_fire == 1"
+    },
+    {
+      "function": "core_bench_matrix",
+      "start": "0x00002604",
+      "size_bytes": 34,
+      "trigger": "EX_PC == 0x00002604 AND ex_fire == 1"
+    },
+    {
+      "function": "core_bench_state",
+      "start": "0x00002e18",
+      "size_bytes": 356,
+      "trigger": "EX_PC == 0x00002e18 AND ex_fire == 1"
+    },
+    {
+      "function": "core_state_transition",
+      "start": "0x00002b96",
+      "size_bytes": 642,
+      "trigger": "EX_PC == 0x00002b96 AND ex_fire == 1"
+    },
+    {
+      "function": "start_time",
+      "start": "0x00003930",
+      "size_bytes": 92,
+      "trigger": "EX_PC == 0x00003930 AND ex_fire == 1"
+    },
+    {
+      "function": "stop_time",
+      "start": "0x0000398c",
+      "size_bytes": 92,
+      "trigger": "EX_PC == 0x0000398c AND ex_fire == 1"
+    },
+    {
+      "function": "ee_printf",
+      "start": "0x00003bc4",
+      "size_bytes": 782,
+      "trigger": "EX_PC == 0x00003bc4 AND ex_fire == 1"
+    }
+  ],
+  "sample_clock": "cpu_clk",
+  "data_width": 42,
+  "trigger_width": 42,
+  "data_equals_trigger": true,
+  "capture_depth": 1024,
+  "channels": [
+    {
+      "channel": 0,
+      "source": "board/soc/core/ex_pc[0]",
+      "meaning": "EX PC bit 0"
+    },
+    {
+      "channel": 1,
+      "source": "board/soc/core/ex_pc[1]",
+      "meaning": "EX PC bit 1"
+    },
+    {
+      "channel": 2,
+      "source": "board/soc/core/ex_pc[2]",
+      "meaning": "EX PC bit 2"
+    },
+    {
+      "channel": 3,
+      "source": "board/soc/core/ex_pc[3]",
+      "meaning": "EX PC bit 3"
+    },
+    {
+      "channel": 4,
+      "source": "board/soc/core/ex_pc[4]",
+      "meaning": "EX PC bit 4"
+    },
+    {
+      "channel": 5,
+      "source": "board/soc/core/ex_pc[5]",
+      "meaning": "EX PC bit 5"
+    },
+    {
+      "channel": 6,
+      "source": "board/soc/core/ex_pc[6]",
+      "meaning": "EX PC bit 6"
+    },
+    {
+      "channel": 7,
+      "source": "board/soc/core/ex_pc[7]",
+      "meaning": "EX PC bit 7"
+    },
+    {
+      "channel": 8,
+      "source": "board/soc/core/ex_pc[8]",
+      "meaning": "EX PC bit 8"
+    },
+    {
+      "channel": 9,
+      "source": "board/soc/core/ex_pc[9]",
+      "meaning": "EX PC bit 9"
+    },
+    {
+      "channel": 10,
+      "source": "board/soc/core/ex_pc[10]",
+      "meaning": "EX PC bit 10"
+    },
+    {
+      "channel": 11,
+      "source": "board/soc/core/ex_pc[11]",
+      "meaning": "EX PC bit 11"
+    },
+    {
+      "channel": 12,
+      "source": "board/soc/core/ex_pc[12]",
+      "meaning": "EX PC bit 12"
+    },
+    {
+      "channel": 13,
+      "source": "board/soc/core/ex_pc[13]",
+      "meaning": "EX PC bit 13"
+    },
+    {
+      "channel": 14,
+      "source": "board/soc/core/ex_pc[14]",
+      "meaning": "EX PC bit 14"
+    },
+    {
+      "channel": 15,
+      "source": "board/soc/core/ex_pc[15]",
+      "meaning": "EX PC bit 15"
+    },
+    {
+      "channel": 16,
+      "source": "board/soc/core/ex_pc[16]",
+      "meaning": "EX PC bit 16"
+    },
+    {
+      "channel": 17,
+      "source": "board/soc/core/ex_pc[17]",
+      "meaning": "EX PC bit 17"
+    },
+    {
+      "channel": 18,
+      "source": "board/soc/core/ex_pc[18]",
+      "meaning": "EX PC bit 18"
+    },
+    {
+      "channel": 19,
+      "source": "board/soc/core/ex_pc[19]",
+      "meaning": "EX PC bit 19"
+    },
+    {
+      "channel": 20,
+      "source": "board/soc/core/ex_pc[20]",
+      "meaning": "EX PC bit 20"
+    },
+    {
+      "channel": 21,
+      "source": "board/soc/core/ex_pc[21]",
+      "meaning": "EX PC bit 21"
+    },
+    {
+      "channel": 22,
+      "source": "board/soc/core/ex_pc[22]",
+      "meaning": "EX PC bit 22"
+    },
+    {
+      "channel": 23,
+      "source": "board/soc/core/ex_pc[23]",
+      "meaning": "EX PC bit 23"
+    },
+    {
+      "channel": 24,
+      "source": "board/soc/core/ex_pc[24]",
+      "meaning": "EX PC bit 24"
+    },
+    {
+      "channel": 25,
+      "source": "board/soc/core/ex_pc[25]",
+      "meaning": "EX PC bit 25"
+    },
+    {
+      "channel": 26,
+      "source": "board/soc/core/ex_pc[26]",
+      "meaning": "EX PC bit 26"
+    },
+    {
+      "channel": 27,
+      "source": "board/soc/core/ex_pc[27]",
+      "meaning": "EX PC bit 27"
+    },
+    {
+      "channel": 28,
+      "source": "board/soc/core/ex_pc[28]",
+      "meaning": "EX PC bit 28"
+    },
+    {
+      "channel": 29,
+      "source": "board/soc/core/ex_pc[29]",
+      "meaning": "EX PC bit 29"
+    },
+    {
+      "channel": 30,
+      "source": "board/soc/core/ex_pc[30]",
+      "meaning": "EX PC bit 30"
+    },
+    {
+      "channel": 31,
+      "source": "board/soc/core/ex_pc[31]",
+      "meaning": "EX PC bit 31"
+    },
+    {
+      "channel": 32,
+      "source": "board/soc/core/if_valid",
+      "meaning": "IF occupied"
+    },
+    {
+      "channel": 33,
+      "source": "board/soc/core/id_valid",
+      "meaning": "ID occupied"
+    },
+    {
+      "channel": 34,
+      "source": "board/soc/core/ex_valid",
+      "meaning": "EX occupied"
+    },
+    {
+      "channel": 35,
+      "source": "board/soc/core/mem_valid",
+      "meaning": "MEM occupied"
+    },
+    {
+      "channel": 36,
+      "source": "board/soc/core/wb_valid",
+      "meaning": "WB retire event"
+    },
+    {
+      "channel": 37,
+      "source": "board/soc/core/id_fire",
+      "meaning": "ID transfers to EX"
+    },
+    {
+      "channel": 38,
+      "source": "board/soc/core/ex_fire",
+      "meaning": "EX transfers to MEM"
+    },
+    {
+      "channel": 39,
+      "source": "board/soc/core/mem_flush",
+      "meaning": "MEM causes frontend redirect"
+    },
+    {
+      "channel": 40,
+      "source": "board/soc/core/frontend_fire",
+      "meaning": "Frontend transfers an instruction to IF"
+    },
+    {
+      "channel": 41,
+      "source": "board/soc/core/mem_fire",
+      "meaning": "MEM completion event"
+    }
+  ],
+  "source_semantics": [
+    {
+      "check": "pipeline_order",
+      "matched": "assign pipeline_valid={wb_valid,mem_valid,ex_valid,id_valid,if_valid};",
+      "pass": true
+    },
+    {
+      "check": "frontend_transfer",
+      "matched": "assign frontend_fire=frontend_out_valid && frontend_out_ready;",
+      "pass": true
+    },
+    {
+      "check": "mem_completion",
+      "matched": "wire mem_fire=mem_valid &&",
+      "pass": true
+    },
+    {
+      "check": "mem_redirect",
+      "matched": "wire mem_flush=mem_fire &&",
+      "pass": true
+    },
+    {
+      "check": "wb_retirement",
+      "matched": "assign trace_valid=wb_valid;",
+      "pass": true
+    },
+    {
+      "check": "id_transfer",
+      "matched": "wire id_fire=interrupt_pending ? id_fire_with_irq : id_fire_without_irq;",
+      "pass": true
+    },
+    {
+      "check": "ex_transfer",
+      "matched": "wire ex_fire=interrupt_pending ? ex_fire_with_irq : ex_fire_without_irq;",
+      "pass": true
+    },
+    {
+      "check": "ex_pc_capture",
+      "matched": "ex_valid<=1; ex_pc<=id_pc;",
+      "pass": true
+    },
+    {
+      "check": "frontend_if_capture",
+      "matched": "if(frontend_fire) begin\r\n                if_valid<=1; if_pc<=frontend_pc;",
+      "pass": true
+    },
+    {
+      "check": "flush_override",
+      "matched": "if(frontend_flush) begin\r\n                if_valid<=0; id_valid<=0;",
+      "pass": true
+    }
+  ],
+  "scope": "Source/firmware identity and signal semantics. Physical net names, capture correctness, final ILA timing, and board UART require separate generated evidence."
+}

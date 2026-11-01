@@ -1,0 +1,561 @@
+{
+  "schema": 1,
+  "release": "H3_Retained_145125",
+  "origin": "LOCAL RTL SIMULATION",
+  "bare_source_manifest": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\SOURCE_MANIFEST.json",
+  "bare_source_manifest_sha256": "a5a5c7ed0f2df4710ea0d26871eae429436fa285fc7a1465640491fa3b526078",
+  "parent_waveform_manifest": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\waveforms\\WAVEFORM_MANIFEST.json",
+  "parent_waveform_manifest_sha256": "6e9c10114b68fe5ac4fcc430e04bccc69c5eb93c809bf89cb58febf8b7101f0e",
+  "core_closure": [
+    {
+      "name": "rv32_core.sv",
+      "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\source\\rtl\\rv32_core.sv",
+      "reference_original": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-004707-430d2073\\inputs\\rtl\\rv32_core.sv",
+      "sha256": "af9aeb1ef431c860e108b2fd3ce09d596757d2dba4a92a065b3ad616483d0748",
+      "exact_bytes_equal": true,
+      "reference_transform": "Only module-type identifiers gain reference_ prefix"
+    },
+    {
+      "name": "rv32_rvc_frontend.sv",
+      "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\source\\rtl\\rv32_rvc_frontend.sv",
+      "reference_original": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-004707-430d2073\\inputs\\rtl\\rv32_rvc_frontend.sv",
+      "sha256": "210b5ba9280c3840aafc27e7c3e35616085efde310793dc1661cc72f50984128",
+      "exact_bytes_equal": true,
+      "reference_transform": "Only module-type identifiers gain reference_ prefix"
+    },
+    {
+      "name": "rv32_rvc_expand.sv",
+      "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\source\\rtl\\rv32_rvc_expand.sv",
+      "reference_original": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-004707-430d2073\\inputs\\rtl\\rv32_rvc_expand.sv",
+      "sha256": "308ac8a65c9e29aeec27b38417483d0f43fd7c54487c26e89a3fa54b4647951b",
+      "exact_bytes_equal": true,
+      "reference_transform": "Only module-type identifiers gain reference_ prefix"
+    },
+    {
+      "name": "rv32_decode.sv",
+      "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\source\\rtl\\rv32_decode.sv",
+      "reference_original": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-004707-430d2073\\inputs\\rtl\\rv32_decode.sv",
+      "sha256": "9cb2b57b46ed775d85b6e70a3eebe92c2d5e49e9a6483993109e2c096d9a3ff3",
+      "exact_bytes_equal": true,
+      "reference_transform": "Only module-type identifiers gain reference_ prefix"
+    },
+    {
+      "name": "rv32_alu.sv",
+      "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\source\\rtl\\rv32_alu.sv",
+      "reference_original": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-004707-430d2073\\inputs\\rtl\\rv32_alu.sv",
+      "sha256": "125647d90b98f294743127637406d19479eebda82dccfaaba7acaf59d5ae38b1",
+      "exact_bytes_equal": true,
+      "reference_transform": "Only module-type identifiers gain reference_ prefix"
+    },
+    {
+      "name": "rv32_muldiv.sv",
+      "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\source\\rtl\\rv32_muldiv.sv",
+      "reference_original": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-004707-430d2073\\inputs\\rtl\\rv32_muldiv.sv",
+      "sha256": "5306ad46b57db551cc83df20dc4c9d2f09aa7077e6289037abfc4fcd8fa3db0e",
+      "exact_bytes_equal": true,
+      "reference_transform": "Only module-type identifiers gain reference_ prefix"
+    },
+    {
+      "name": "rv32_btb.sv",
+      "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\source\\rtl\\rv32_btb.sv",
+      "reference_original": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-004707-430d2073\\inputs\\rtl\\rv32_btb.sv",
+      "sha256": "b1b3481343a2e1275cfd984c4eab05c5f9d92cb72dab652010463073eb86eb4f",
+      "exact_bytes_equal": true,
+      "reference_transform": "Only module-type identifiers gain reference_ prefix"
+    },
+    {
+      "name": "rv32_machine.sv",
+      "bare": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\source\\rtl\\rv32_machine.sv",
+      "reference_original": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-004707-430d2073\\inputs\\rtl\\rv32_machine.sv",
+      "sha256": "56b542e419c58216a08b0a5c83322506e42e2721fa28db50a6454ebe29607abd",
+      "exact_bytes_equal": true,
+      "reference_transform": "Only module-type identifiers gain reference_ prefix"
+    }
+  ],
+  "parameters": {
+    "RESET_VECTOR": 0,
+    "ENABLE_PREDICTOR": 1,
+    "ENABLE_M": 1,
+    "ENABLE_C": 1,
+    "FETCH_ADDRESS_BITS": 16,
+    "FETCH_OVERLAP": 1,
+    "EARLY_D_REQUEST": 1,
+    "BTB_INDEX_BITS": 8,
+    "BTB_ADDRESS_BITS": 16,
+    "LOAD_USE_BUBBLE": 1,
+    "RETAIN_MUL_ELIGIBILITY": 1
+  },
+  "ports": [
+    {
+      "name": "clk",
+      "direction": "input",
+      "width": 1
+    },
+    {
+      "name": "rst_n",
+      "direction": "input",
+      "width": 1
+    },
+    {
+      "name": "i_req_valid",
+      "direction": "output",
+      "width": 1
+    },
+    {
+      "name": "i_req_ready",
+      "direction": "input",
+      "width": 1
+    },
+    {
+      "name": "i_req_address",
+      "direction": "output",
+      "width": 32
+    },
+    {
+      "name": "i_req_pair_address",
+      "direction": "output",
+      "width": 32
+    },
+    {
+      "name": "i_rsp_valid",
+      "direction": "input",
+      "width": 1
+    },
+    {
+      "name": "i_rsp_ready",
+      "direction": "output",
+      "width": 1
+    },
+    {
+      "name": "i_rsp_data",
+      "direction": "input",
+      "width": 32
+    },
+    {
+      "name": "i_rsp_pair_data",
+      "direction": "input",
+      "width": 32
+    },
+    {
+      "name": "i_rsp_is_c",
+      "direction": "input",
+      "width": 2
+    },
+    {
+      "name": "i_rsp_pair_is_c",
+      "direction": "input",
+      "width": 2
+    },
+    {
+      "name": "i_rsp_pair_valid",
+      "direction": "input",
+      "width": 1
+    },
+    {
+      "name": "i_rsp_error",
+      "direction": "input",
+      "width": 1
+    },
+    {
+      "name": "d_req_valid",
+      "direction": "output",
+      "width": 1
+    },
+    {
+      "name": "d_req_ready",
+      "direction": "input",
+      "width": 1
+    },
+    {
+      "name": "d_req_address",
+      "direction": "output",
+      "width": 32
+    },
+    {
+      "name": "d_req_data",
+      "direction": "output",
+      "width": 32
+    },
+    {
+      "name": "d_req_strobe",
+      "direction": "output",
+      "width": 4
+    },
+    {
+      "name": "d_req_write",
+      "direction": "output",
+      "width": 1
+    },
+    {
+      "name": "d_rsp_valid",
+      "direction": "input",
+      "width": 1
+    },
+    {
+      "name": "d_rsp_ready",
+      "direction": "output",
+      "width": 1
+    },
+    {
+      "name": "d_rsp_data",
+      "direction": "input",
+      "width": 32
+    },
+    {
+      "name": "d_rsp_error",
+      "direction": "input",
+      "width": 1
+    },
+    {
+      "name": "maintenance_valid",
+      "direction": "output",
+      "width": 1
+    },
+    {
+      "name": "maintenance_ready",
+      "direction": "input",
+      "width": 1
+    },
+    {
+      "name": "timer_value",
+      "direction": "input",
+      "width": 64
+    },
+    {
+      "name": "irq_external",
+      "direction": "input",
+      "width": 1
+    },
+    {
+      "name": "irq_software",
+      "direction": "input",
+      "width": 1
+    },
+    {
+      "name": "irq_timer",
+      "direction": "input",
+      "width": 1
+    },
+    {
+      "name": "trace_valid",
+      "direction": "output",
+      "width": 1
+    },
+    {
+      "name": "trace_pc",
+      "direction": "output",
+      "width": 32
+    },
+    {
+      "name": "trace_instruction",
+      "direction": "output",
+      "width": 32
+    },
+    {
+      "name": "trace_write",
+      "direction": "output",
+      "width": 1
+    },
+    {
+      "name": "trace_rd",
+      "direction": "output",
+      "width": 5
+    },
+    {
+      "name": "trace_data",
+      "direction": "output",
+      "width": 32
+    },
+    {
+      "name": "trap_valid",
+      "direction": "output",
+      "width": 1
+    },
+    {
+      "name": "trap_pc",
+      "direction": "output",
+      "width": 32
+    },
+    {
+      "name": "trap_cause",
+      "direction": "output",
+      "width": 32
+    },
+    {
+      "name": "trap_value",
+      "direction": "output",
+      "width": 32
+    },
+    {
+      "name": "pipeline_valid",
+      "direction": "output",
+      "width": 5
+    },
+    {
+      "name": "cycle_count",
+      "direction": "output",
+      "width": 64
+    },
+    {
+      "name": "retired_count",
+      "direction": "output",
+      "width": 64
+    }
+  ],
+  "frame_bits": 646,
+  "mismatch_groups": [
+    "core.i_req_valid",
+    "core.i_req_ready",
+    "core.i_req_address",
+    "core.i_req_pair_address",
+    "core.i_rsp_valid",
+    "core.i_rsp_ready",
+    "core.i_rsp_data",
+    "core.i_rsp_pair_data",
+    "core.i_rsp_is_c",
+    "core.i_rsp_pair_is_c",
+    "core.i_rsp_pair_valid",
+    "core.i_rsp_error",
+    "core.d_req_valid",
+    "core.d_req_ready",
+    "core.d_req_address",
+    "core.d_req_data",
+    "core.d_req_strobe",
+    "core.d_req_write",
+    "core.d_rsp_valid",
+    "core.d_rsp_ready",
+    "core.d_rsp_data",
+    "core.d_rsp_error",
+    "core.maintenance_valid",
+    "core.maintenance_ready",
+    "core.timer_value",
+    "core.irq_external",
+    "core.irq_software",
+    "core.irq_timer",
+    "core.trace_valid",
+    "core.trace_pc",
+    "core.trace_instruction",
+    "core.trace_write",
+    "core.trace_rd",
+    "core.trace_data",
+    "core.trap_valid",
+    "core.trap_pc",
+    "core.trap_cause",
+    "core.trap_value",
+    "core.pipeline_valid",
+    "core.cycle_count",
+    "core.retired_count",
+    "serial_tx",
+    "gpio_output",
+    "status_code",
+    "maintenance_fault",
+    "mmio_req_valid",
+    "mmio_req_ready",
+    "mmio_rsp_valid",
+    "mmio_rsp_ready",
+    "mmio_rsp_data",
+    "mmio_rsp_error"
+  ],
+  "wrapper": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\source\\rv32_bare_core.sv",
+  "wrapper_sha256": "4f777d97020457a02ea57e1579b10dd97baaac5e50033e8ce6b9bb7a28d3a468",
+  "configured_core_clock_hz": 145125000,
+  "simulation_clock_hz": 3200,
+  "uart_baud": 100,
+  "external_service": {
+    "kind": "Unmodified selected rv32_memory_system and rv32_peripherals outside DUT",
+    "cache_enabled": true,
+    "i_cache_set_bits": 9,
+    "d_cache_set_bits": 6,
+    "ram_bytes": 65536,
+    "two_independent_service_instances": true,
+    "native_vendor_memory_model": true,
+    "excluded_from_dut_synthesis": true
+  },
+  "firmware_sha256": "3a3aff510511ed4cd7fe304a6354861adae30531102446a24438e43f3e2a2884",
+  "tool": "/tmp/ccfa-native-snapshot-verilator-v5.032-5a262564b1/verilator-5.032/bin/verilator",
+  "compile_arguments": [
+    "--cd",
+    "/tmp",
+    "--exec",
+    "/tmp/ccfa-native-snapshot-verilator-v5.032-5a262564b1/verilator-5.032/bin/verilator",
+    "--cc",
+    "--exe",
+    "--build",
+    "--timing",
+    "--Wall",
+    "-Wno-fatal",
+    "-j",
+    "1",
+    "-MAKEFLAGS",
+    "OPT_FAST=-O3",
+    "--top-module",
+    "bare_extraction_miter",
+    "--Mdir",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Retained_145125/20261031T173933Z-790c2731/objects",
+    "-CFLAGS",
+    "-O3 -std=c++20 -DMITER_NATIVE=1 -DMITER_FRAME_BITS=646 -DMITER_FRAME_WORDS=21",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Retained_145125/20261031T173933Z-790c2731/inputs/bare/rv32_alu.sv",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Retained_145125/20261031T173933Z-790c2731/inputs/bare/rv32_bare_core.sv",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Retained_145125/20261031T173933Z-790c2731/inputs/bare/rv32_btb.sv",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Retained_145125/20261031T173933Z-790c2731/inputs/bare/rv32_core.sv",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Retained_145125/20261031T173933Z-790c2731/inputs/bare/rv32_decode.sv",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Retained_145125/20261031T173933Z-790c2731/inputs/bare/rv32_machine.sv",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Retained_145125/20261031T173933Z-790c2731/inputs/bare/rv32_muldiv.sv",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Retained_145125/20261031T173933Z-790c2731/inputs/bare/rv32_rvc_expand.sv",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Retained_145125/20261031T173933Z-790c2731/inputs/bare/rv32_rvc_frontend.sv",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Retained_145125/20261031T173933Z-790c2731/inputs/reference/reference_soc.sv",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Retained_145125/20261031T173933Z-790c2731/inputs/reference/rv32_alu.sv",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Retained_145125/20261031T173933Z-790c2731/inputs/reference/rv32_btb.sv",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Retained_145125/20261031T173933Z-790c2731/inputs/reference/rv32_core.sv",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Retained_145125/20261031T173933Z-790c2731/inputs/reference/rv32_decode.sv",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Retained_145125/20261031T173933Z-790c2731/inputs/reference/rv32_machine.sv",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Retained_145125/20261031T173933Z-790c2731/inputs/reference/rv32_muldiv.sv",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Retained_145125/20261031T173933Z-790c2731/inputs/reference/rv32_rvc_expand.sv",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Retained_145125/20261031T173933Z-790c2731/inputs/reference/rv32_rvc_frontend.sv",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Retained_145125/20261031T173933Z-790c2731/inputs/environment/bare_environment.sv",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Retained_145125/20261031T173933Z-790c2731/inputs/environment/rv32_burst_arbiter.sv",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Retained_145125/20261031T173933Z-790c2731/inputs/environment/rv32_burst_ram.sv",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Retained_145125/20261031T173933Z-790c2731/inputs/environment/rv32_cache.sv",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Retained_145125/20261031T173933Z-790c2731/inputs/environment/rv32_fifo.sv",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Retained_145125/20261031T173933Z-790c2731/inputs/environment/rv32_memory_system.sv",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Retained_145125/20261031T173933Z-790c2731/inputs/environment/rv32_peripherals.sv",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Retained_145125/20261031T173933Z-790c2731/inputs/environment/rv32_uart.sv",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Retained_145125/20261031T173933Z-790c2731/inputs/environment/rv32_uncached.sv",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Retained_145125/20261031T173933Z-790c2731/inputs/vendor/GTP_DRM36K_E1.v",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Retained_145125/20261031T173933Z-790c2731/inputs/vendor/GTP_GRS.v",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Retained_145125/20261031T173933Z-790c2731/inputs/bare_extraction_miter.sv",
+    "/mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/H3_Retained_145125/20261031T173933Z-790c2731/inputs/driver.cpp"
+  ],
+  "miter_driver_template_sha256": "13b3664d9a63399cfe2a9e63948282041b64f1900a56c8286a5880ac9237abc6",
+  "generator_sha256": "a8f014f512ab8983b62924e8c71328a4c2e66f72a2e42b7e67652073c83fecf2",
+  "inputs": [
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Retained_145125\\20261031T173933Z-790c2731\\inputs\\bare\\rv32_alu.sv",
+      "sha256": "125647d90b98f294743127637406d19479eebda82dccfaaba7acaf59d5ae38b1"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Retained_145125\\20261031T173933Z-790c2731\\inputs\\bare\\rv32_bare_core.sv",
+      "sha256": "4f777d97020457a02ea57e1579b10dd97baaac5e50033e8ce6b9bb7a28d3a468"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Retained_145125\\20261031T173933Z-790c2731\\inputs\\bare\\rv32_btb.sv",
+      "sha256": "b1b3481343a2e1275cfd984c4eab05c5f9d92cb72dab652010463073eb86eb4f"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Retained_145125\\20261031T173933Z-790c2731\\inputs\\bare\\rv32_core.sv",
+      "sha256": "af9aeb1ef431c860e108b2fd3ce09d596757d2dba4a92a065b3ad616483d0748"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Retained_145125\\20261031T173933Z-790c2731\\inputs\\bare\\rv32_decode.sv",
+      "sha256": "9cb2b57b46ed775d85b6e70a3eebe92c2d5e49e9a6483993109e2c096d9a3ff3"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Retained_145125\\20261031T173933Z-790c2731\\inputs\\bare\\rv32_machine.sv",
+      "sha256": "56b542e419c58216a08b0a5c83322506e42e2721fa28db50a6454ebe29607abd"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Retained_145125\\20261031T173933Z-790c2731\\inputs\\bare\\rv32_muldiv.sv",
+      "sha256": "5306ad46b57db551cc83df20dc4c9d2f09aa7077e6289037abfc4fcd8fa3db0e"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Retained_145125\\20261031T173933Z-790c2731\\inputs\\bare\\rv32_rvc_expand.sv",
+      "sha256": "308ac8a65c9e29aeec27b38417483d0f43fd7c54487c26e89a3fa54b4647951b"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Retained_145125\\20261031T173933Z-790c2731\\inputs\\bare\\rv32_rvc_frontend.sv",
+      "sha256": "210b5ba9280c3840aafc27e7c3e35616085efde310793dc1661cc72f50984128"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Retained_145125\\20261031T173933Z-790c2731\\inputs\\bare_extraction_miter.sv",
+      "sha256": "1344ef4229dd3869f36c27660b9324c5af00d7498f99ff3d50e2780e8b2c10a1"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Retained_145125\\20261031T173933Z-790c2731\\inputs\\driver.cpp",
+      "sha256": "13b3664d9a63399cfe2a9e63948282041b64f1900a56c8286a5880ac9237abc6"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Retained_145125\\20261031T173933Z-790c2731\\inputs\\environment\\bare_environment.sv",
+      "sha256": "20e9eb8fca5ea1b41b828a8a91d70c6c9f10c4e8ba2fb60af6c1d0586cea5494"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Retained_145125\\20261031T173933Z-790c2731\\inputs\\environment\\rv32_burst_arbiter.sv",
+      "sha256": "82104b39f85d2942e3d0a6780f79099062cc5a4f71fdf87491191de2f632c8af"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Retained_145125\\20261031T173933Z-790c2731\\inputs\\environment\\rv32_burst_ram.sv",
+      "sha256": "089b3788fa87d3176a4e0b09e40382e1349cc33e8f9d2227d567ad0788672417"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Retained_145125\\20261031T173933Z-790c2731\\inputs\\environment\\rv32_cache.sv",
+      "sha256": "c9d73d59e80a70399df214dfbbe3316083e6df0d33974e1564795a4ae875d6c1"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Retained_145125\\20261031T173933Z-790c2731\\inputs\\environment\\rv32_fifo.sv",
+      "sha256": "20bb573cdbae386a8b44df780eefc11b85323cf2bbaa4fb2073a5e87e626b2eb"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Retained_145125\\20261031T173933Z-790c2731\\inputs\\environment\\rv32_memory_system.sv",
+      "sha256": "39833ea3b440e8c4d8f2e54f3382280b32456744f394f317c2c9ca17235acd39"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Retained_145125\\20261031T173933Z-790c2731\\inputs\\environment\\rv32_peripherals.sv",
+      "sha256": "d4acd7818f67cf5466e04e94307da420fa3bd004225a0633b7be35a1babeae8e"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Retained_145125\\20261031T173933Z-790c2731\\inputs\\environment\\rv32_uart.sv",
+      "sha256": "b83f5d6055bd794ca49e3781e673a00749249eaeaf1f2e908398dd5ce54ab8a2"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Retained_145125\\20261031T173933Z-790c2731\\inputs\\environment\\rv32_uncached.sv",
+      "sha256": "d276e6b38ddb05117f52e054367f7f3d4503ba76f8f49025973197943ef50907"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Retained_145125\\20261031T173933Z-790c2731\\inputs\\native_timing_tick_v2.h",
+      "sha256": "a20581e2ddcdd023beec4af3402e9288c10128e5d0eaaf3470fa175e51c1f068"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Retained_145125\\20261031T173933Z-790c2731\\inputs\\reference\\reference_soc.sv",
+      "sha256": "b1cb19a23ef15679401e67fb5da17c039e362d4b7ed76b1ce6097fde82c530c6"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Retained_145125\\20261031T173933Z-790c2731\\inputs\\reference\\rv32_alu.sv",
+      "sha256": "19be23911d701fb0c35f0c88e97ce6ec4497cdbc581c1f03716c83f95c1e2a3f"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Retained_145125\\20261031T173933Z-790c2731\\inputs\\reference\\rv32_btb.sv",
+      "sha256": "9fb0ecc2a514b5d72da7dfa7614601728794d1cdc9de9fb948c5aae9adc95fee"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Retained_145125\\20261031T173933Z-790c2731\\inputs\\reference\\rv32_core.sv",
+      "sha256": "7fc551d0b6af16d0f1cdd2a69e1e2f903e33242eb30dcc571bcc6f46f44dd9f0"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Retained_145125\\20261031T173933Z-790c2731\\inputs\\reference\\rv32_decode.sv",
+      "sha256": "ae0d29f0865e4cf209e94b3b8f9a43366db353188cbd4a5a98d91377220b9b1e"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Retained_145125\\20261031T173933Z-790c2731\\inputs\\reference\\rv32_machine.sv",
+      "sha256": "e52f0209613c89b891f8d698449864ed71d15b8e93391ada990417dcb3d92b67"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Retained_145125\\20261031T173933Z-790c2731\\inputs\\reference\\rv32_muldiv.sv",
+      "sha256": "40c061e01b6ede81fbcb3f2f71c24fb761d1832bf64bd0a5755fa283a4a5de48"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Retained_145125\\20261031T173933Z-790c2731\\inputs\\reference\\rv32_rvc_expand.sv",
+      "sha256": "79e72dcfd8116ffc5d3665880d3d2821227a05e9e91b735c095bea50f143a9e3"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Retained_145125\\20261031T173933Z-790c2731\\inputs\\reference\\rv32_rvc_frontend.sv",
+      "sha256": "de473767a6b56d32b68f9a481d54314764d571e15d7bf6059a9874f903b8e11a"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Retained_145125\\20261031T173933Z-790c2731\\inputs\\vendor\\GTP_DRM36K_E1.v",
+      "sha256": "3e372cd60025a439eb7435d770930260e22c40f148ae83c4bdf7398fb65ddb66"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\extraction\\H3_Retained_145125\\20261031T173933Z-790c2731\\inputs\\vendor\\GTP_GRS.v",
+      "sha256": "dae720bcc467ddb4ff99f2753368934e2649b87f6ac63b8a0d7219699bac1dec"
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+##### Written on 2026/11/01 02:08:39 ###############################
+
+
+##### INFO ##################################################
+
+Current device : 
+	PG2L200H-6FBB676
+
+Top Module : 
+	bare_core_scan_top
+
+Constraint File(s) : 
+	D:/AAAFPGA/Bare_Core_Releases_20261101/H3_Base_145125/physical/builds/20261101-015628-87641d51/bare_core.fdc
+
+##### SUMMARY ######################################################
+
+Found 0 error(s), 0 critical warning(s), 0 warning(s), out of 47 constraint(s)
+
+
+Inapplicable constraints(except overwritten constraints):
+********************************************
+
+
+Constraints with issues:
+********************************************
+
+
+Issues without commands:
+********************************************
+
+
+Unconstrained ports:
+********************************************
+
+
+Constraints with matching wildcard expressions:
+********************************************
+
+

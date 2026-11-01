@@ -1,0 +1,22 @@
+﻿{
+  "executable": "D:/PDS_2022.2-SP6.4\\bin\\cdt_ins.exe",
+  "executable_sha256": "B526DA86DA96B84A591F63D1E35F3B4CA50433F14DA9D136F7BF10DD50F07D94",
+  "argv": [
+    "-device",
+    "PG2L200H",
+    "-package",
+    "FBB676",
+    "-speedgrade",
+    "-6",
+    "-file",
+    "D:/AAAFPGA/ILA_Core_Releases_20261101/Original_155250/builds/20261101-010901-9bbe8fee/implementation/probe.tcl"
+  ],
+  "working_directory": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\builds\\20261101-010901-9bbe8fee\\implementation",
+  "started_utc": "2026-10-31T17:14:40.8114256Z",
+  "pid": 46592,
+  "exit_code": 0,
+  "stdout": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\builds\\20261101-010901-9bbe8fee\\implementation\\probe.stdout.log",
+  "stderr": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\builds\\20261101-010901-9bbe8fee\\implementation\\probe.stderr.log",
+  "status": "finished",
+  "finished_utc": "2026-10-31T17:14:43.7047450Z"
+}

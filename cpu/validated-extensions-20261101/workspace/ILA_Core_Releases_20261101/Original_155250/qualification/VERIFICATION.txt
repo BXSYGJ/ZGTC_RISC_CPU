@@ -1,0 +1,72 @@
+﻿Changed field: copied pds_soc_top.board.INIT_FILE path relocation only. Functional RTL, PLL, constraints, and unchanged 6000-iteration firmware retain frozen SHA256 values.
+MODIFIED_FILE=D:\AAAFPGA\ILA_Core_Releases_20261101\Original_155250\builds\20261101-010901-9bbe8fee\inputs\pds_soc_top.v
+DIFF_FILE=D:\AAAFPGA\ILA_Core_Releases_20261101\Original_155250\builds\20261101-010901-9bbe8fee\DIFF_FILE.txt
+VERIFICATION=D:\AAAFPGA\ILA_Core_Releases_20261101\Original_155250\qualification\VERIFICATION.txt
+ROLLBACK=D:\AAAFPGA\ILA_Core_Releases_20261101\Original_155250\builds\20261101-010901-9bbe8fee\ROLLBACK.ps1
+BASELINE command: pwsh -NoProfile -File "D:\AAAFPGA\ILA_Core_Releases_20261101\Original_155250\qualification\Test-OriginalPassiveWindow.ps1" -Variant BASELINE
+BASELINE input: D:\AAAFPGA\Current_Paper_and_Sub7000_Core_Releases_20261012\cores\Original_155250\physical\V0\inputs
+BASELINE literal stdout:
+ZGTC COREMARK READY send G; clock=155250000 Hz
+ZGTC COREMARK START iterations=6000 validation=0
+PARTIAL_WINDOW_PASS cycle_limit=2000000 cycle_count=2000000 retired=1834318 snapshots=1 status_code=0xc0100002 ila_hash=0x89731e09f38ea293 trace_hash=0xd447d06ddf3d9bf9
+SIGNAL_CYCLES 1927664 1893089 1861007 1847685 1834318 1835787 1834320 1497 1903138 1834319
+FUNCTION_ENTRIES iterate=1 list=13 matrix=27 state=27
+
+BASELINE exit status: 0
+MODIFIED command: pwsh -NoProfile -File "D:\AAAFPGA\ILA_Core_Releases_20261101\Original_155250\qualification\Test-OriginalPassiveWindow.ps1" -Variant MODIFIED -BuildDirectory "D:\AAAFPGA\ILA_Core_Releases_20261101\Original_155250\builds\20261101-004552-4cce580e"
+MODIFIED input: D:\AAAFPGA\ILA_Core_Releases_20261101\Original_155250\builds\20261101-004552-4cce580e\inputs
+MODIFIED literal stdout:
+ZGTC COREMARK READY send G; clock=155250000 Hz
+ZGTC COREMARK START iterations=6000 validation=0
+PARTIAL_WINDOW_PASS cycle_limit=2000000 cycle_count=2000000 retired=1834318 snapshots=1 status_code=0xc0100002 ila_hash=0x89731e09f38ea293 trace_hash=0xd447d06ddf3d9bf9
+SIGNAL_CYCLES 1927664 1893089 1861007 1847685 1834318 1835787 1834320 1497 1903138 1834319
+FUNCTION_ENTRIES iterate=1 list=13 matrix=27 state=27
+
+MODIFIED exit status: 0
+ROLLBACK command: pwsh -NoProfile -File "D:\AAAFPGA\ILA_Core_Releases_20261101\Original_155250\qualification\Test-OriginalPassiveWindow.ps1" -Variant ROLLBACK -BuildDirectory "D:\AAAFPGA\ILA_Core_Releases_20261101\Original_155250\builds\20261101-004552-4cce580e"
+ROLLBACK input: D:\AAAFPGA\ILA_Core_Releases_20261101\Original_155250\builds\20261101-004552-4cce580e\rollback_test\inputs
+ROLLBACK literal stdout:
+ZGTC COREMARK READY send G; clock=155250000 Hz
+ZGTC COREMARK START iterations=6000 validation=0
+PARTIAL_WINDOW_PASS cycle_limit=2000000 cycle_count=2000000 retired=1834318 snapshots=1 status_code=0xc0100002 ila_hash=0x89731e09f38ea293 trace_hash=0xd447d06ddf3d9bf9
+SIGNAL_CYCLES 1927664 1893089 1861007 1847685 1834318 1835787 1834320 1497 1903138 1834319
+FUNCTION_ENTRIES iterate=1 list=13 matrix=27 state=27
+
+ROLLBACK exit status: 0
+Restored behavior/status: rollback restored a separate copy to all frozen hashes and original INIT_FILE; its full UART/retire/probe observations equal the baseline over 2,000,000 cycles. The selected physical build remains instrumented and relocated.
+SELECTED PDS command: pwsh -NoProfile -File "D:\AAAFPGA\ILA_Core_Releases_20261101\scripts\Build-MinimalIla.ps1" -Release Original_155250 -Action Audit -BuildDirectory "D:\AAAFPGA\ILA_Core_Releases_20261101\Original_155250\builds\20261101-010901-9bbe8fee" -PlacementSeed 1 -IlaProfile NativeMinimal
+SELECTED PDS literal result: status=internal_timing_passed; clock_hz=155250000; CPU WNS=0.119 ns; setup_uncertainty_ns=0.150; all 10 corner summary tables and 26 clock-pair rows pass; LUT=6609; FF=3573; DRM=22.5.
+SELECTED PDS audit exit status: 0
+Local waveform origin: LOCAL RTL SIMULATION. CSV/VCD values are observed from the unchanged RTL simulator with exact source and firmware hash records. Hardware validation is false.
+Full 6000-iteration Original local RTL simulation: running; final evidence will be appended after completion.
+FULL MODIFIED command: wsl.exe --cd "D:\AAAFPGA\ILA_Core_Releases_20261101\Original_155250\qualification\full-runs\20261031T170813Z-21000bdf" --exec objects/Vrv32_observed_soc uart.log 2100000000
+FULL MODIFIED input: unchanged frozen V0 firmware and byte-identical functional physical RTL; exact frozen legacy driver and observer.
+FULL MODIFIED literal output:
+ZGTC COREMARK READY send G; clock=155250000 Hz
+ZGTC COREMARK START iterations=6000 validation=0
+2K performance run parameters for coremark.
+CoreMark Size    : 666
+Total ticks      : 11482
+Total time (secs): 11
+Iterations/Sec   : 545
+Iterations       : 6000
+Compiler version : GCC 10.2.0
+Compiler flags   : -march=rv32imc -mabi=ilp32 -mcmodel=medany -msmall-data-limit=0 -std=c11 -O3 -funroll-loops -ffreestanding -fno-builtin -ffunction-sections -fdata-sections -Wall -Wextra -DTOTAL_DATA_SIZE=2000 -DITERATIONS=6000 -DVALIDATION_RUN=0 -DPERFORMANCE_RUN=1 -DCPU_CLOCK_HZ=155250000u -DCONSOLE_DELAY_CYCLES=0
+Memory location  : 64KiB on-chip RAM; cache mode/geometry in ZGTC config
+seedcrc          : 0xe9f5
+[0]crclist       : 0xe714
+[0]crcmatrix     : 0x1fd7
+[0]crcstate      : 0x8e3a
+[0]crcfinal      : 0xa14c
+Correct operation validated. See README.md for run and reporting rules.
+ZGTC cycles_hex=000000006a41606b retired_hex=00000000625047cd clock_hz=155250000
+ZGTC config=1e8e96fd ihit=1007538394 imiss=521 dhit=410438109 dmiss=366362 writebacks=222359
+ZGTC COREMARK FINISHED
+PASS RTL CoreMark smoke total_cycles=1783029704 total_retired=1649640595
+OBSERVER cycles=1782669419 retired=1649428429 minimum_sp=65152
+EVENTS redirects=31607295,710878,96010,0,0,0,0 eligible=31607295,710878,96010,0,0,0,0 request_stalls=0 response_waits=4200 barrier_cycles=0
+
+FULL MODIFIED simulator exit status: 0
+FULL MODIFIED evidence reaudit command: pwsh -NoProfile -File Run-FullOriginalSimulation.ps1 -BuildDirectory first_modified_build -ExistingRunDirectory recorded_full_run
+FULL MODIFIED evidence reaudit exit status: 0
+FULL RESTORED BEHAVIOR: final UART SHA256 equals frozen reference a8cb3ce6b7eff3082c970cf1a23f79524b8abe4229a0e560fa2f8e96130f5e10; cycles=1782669419 and retired=1649428429 remain identical.

@@ -1,0 +1,63 @@
+﻿{
+  "schema": "six-release-final-verification/v1",
+  "status": "PASS",
+  "verified_utc": "2026-10-31T18:18:29.8046230Z",
+  "ila_releases": 3,
+  "bare_releases": 3,
+  "local_waveform_windows": 9,
+  "full_6000_source_runs": 3,
+  "bare_extraction_baseline_edges": 6000000,
+  "bare_extraction_rollback_edges": 6000000,
+  "physical_timing_passes": 6,
+  "remote_board_operations": "disabled by user",
+  "receipts": [
+    {
+      "command": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Refresh-ReleaseCatalog.ps1",
+      "arguments": "-RequireTimingClosure",
+      "exit_code": 0,
+      "literal_output": "CATALOG_VERIFIED releases=3 windows=9 full_runs=3\r\nD:\\AAAFPGA\\ILA_Core_Releases_20261101\\RELEASES.json"
+    },
+    {
+      "command": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\Refresh-ReleaseCatalog.ps1",
+      "arguments": null,
+      "exit_code": 0,
+      "literal_output": "BARE_CATALOG_VERIFIED releases=3 native_area_reconciled=true extraction_and_rollback=true\r\nD:\\AAAFPGA\\Bare_Core_Releases_20261101\\RELEASES.json"
+    }
+  ],
+  "linked": [
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\RELEASES.json",
+      "sha256": "1c75e6974e686ce08a6593b1fd6c98dbd3b43f44616bda5102088e09e84f7c8c"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\RELEASES.json",
+      "sha256": "73ed3c75f97d1c2669e5fa4f1019bf81117247c5a4997f3f568512d9a8f695c5"
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\SELECTED_BUILD.json",
+      "sha256": "ffa08f1f9f31dfb7e31a621786dda92fa0a4c5221869f35c2d3c8c92e9ba9df4"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\Original_155250\\SELECTED_BUILD.json",
+      "sha256": "f4846ecf4b5a87989fe25d9f47a26833b4f83d207353b1f6504745499120ffd6"
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\SELECTED_BUILD.json",
+      "sha256": "150005c01afe214c366e869218cfc7fb4da46b1242b8bc5d43e64c1bdc8888c1"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Retained_145125\\SELECTED_BUILD.json",
+      "sha256": "d54b4d061e969856b096f2ace8ac70d1dbc57c9d0256ab1f85e7b25bc4506582"
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\SELECTED_BUILD.json",
+      "sha256": "c309e508d3eef2a95b388e3f662796b931782c01c4171b623d77549c9ff0df87"
+    },
+    {
+      "path": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\H3_Base_145125\\SELECTED_BUILD.json",
+      "sha256": "a16173b74ec89d4f31ad892802619cae8a94a68cd5337d75b2cf205e7e14f1ba"
+    }
+  ],
+  "native_area_audit": "D:\\AAAFPGA\\Bare_Core_Releases_20261101\\analysis\\PHYSICAL_AREA_AUDIT.json",
+  "native_area_audit_sha256": "813e562dadf2f94541c41a86d85ce727c341e8327059d1879d7c4b1120e1b6be"
+}

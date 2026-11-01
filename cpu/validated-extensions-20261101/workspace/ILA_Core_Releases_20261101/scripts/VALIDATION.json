@@ -1,0 +1,30 @@
+﻿{
+  "generated_utc": "2026-10-31T18:09:21.8854281Z",
+  "powershell": "7.6.9",
+  "scripts": [
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\scripts\\Build-MinimalIla.ps1",
+      "sha256": "db6def6fdf717ca7535ba7b1f98d607cc9966053a2978196733bfd695f04cd66",
+      "utf8_bom": true,
+      "ast_errors": 0
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\scripts\\Export-LocalIlaWaveforms.ps1",
+      "sha256": "eb151db929d4693dfbb7b979fc60825095dc5801c8acb521fd1925208d7ea6ae",
+      "utf8_bom": true,
+      "ast_errors": 0
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\scripts\\Restore-MinimalIlaInputs.ps1",
+      "sha256": "f17bec5d062c24d4856ed0baa241bc39cdeef2cf65267eca26cfbc303e0a965b",
+      "utf8_bom": true,
+      "ast_errors": 0
+    }
+  ],
+  "implemented_profiles": [
+    "Shared42",
+    "NativeMinimal",
+    "Lean24"
+  ],
+  "actual_profile_verification": "Native cdt_ins canonicalFIC and inserted-core mapping audits retained per physical candidate."
+}

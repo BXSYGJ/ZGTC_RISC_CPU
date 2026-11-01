@@ -1,0 +1,47 @@
+﻿[
+  {
+    "release": "Original_155250",
+    "role": "V0",
+    "elf": "D:\\AAAFPGA\\Current_Paper_and_Sub7000_Core_Releases_20261012\\cores\\Original_155250\\firmware\\V0\\firmware.elf",
+    "elf_sha256": "83F29B048134859A38B162B78C0ECCA7F7CB98269A4771AC3F9732D4A8DDF6DB",
+    "symbols": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\transport\\Original_155250-V0-symbols.txt",
+    "symbols_sha256": "D363FC7049AC0A62669ABB1A009585E4BD73E2866C63E9A5072462AA2EBC877A",
+    "command": "llvm-nm -S -n",
+    "key_addresses": {
+      "iterate": "0x88",
+      "core_bench_list": "0x942",
+      "core_bench_matrix": "0x2604",
+      "core_bench_state": "0x2e18"
+    }
+  },
+  {
+    "release": "H3_Base_145125",
+    "role": "V0",
+    "elf": "D:\\AAAFPGA\\Current_Paper_and_Sub7000_Core_Releases_20261012\\cores\\H3_Base_145125\\firmware\\V0\\firmware.elf",
+    "elf_sha256": "64E1BA2532154356C4819BB0E7E05D481321F1AFBB474CBF2FA6C67B0D243ED3",
+    "symbols": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\transport\\H3_Base_145125-V0-symbols.txt",
+    "symbols_sha256": "D363FC7049AC0A62669ABB1A009585E4BD73E2866C63E9A5072462AA2EBC877A",
+    "command": "llvm-nm -S -n",
+    "key_addresses": {
+      "iterate": "0x88",
+      "core_bench_list": "0x942",
+      "core_bench_matrix": "0x2604",
+      "core_bench_state": "0x2e18"
+    }
+  },
+  {
+    "release": "H3_Retained_145125",
+    "role": "V0",
+    "elf": "D:\\AAAFPGA\\Current_Paper_and_Sub7000_Core_Releases_20261012\\cores\\H3_Retained_145125\\firmware\\V0\\firmware.elf",
+    "elf_sha256": "64E1BA2532154356C4819BB0E7E05D481321F1AFBB474CBF2FA6C67B0D243ED3",
+    "symbols": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\transport\\H3_Retained_145125-V0-symbols.txt",
+    "symbols_sha256": "D363FC7049AC0A62669ABB1A009585E4BD73E2866C63E9A5072462AA2EBC877A",
+    "command": "llvm-nm -S -n",
+    "key_addresses": {
+      "iterate": "0x88",
+      "core_bench_list": "0x942",
+      "core_bench_matrix": "0x2604",
+      "core_bench_state": "0x2e18"
+    }
+  }
+]

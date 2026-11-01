@@ -1,0 +1,16 @@
+{
+  "native_ff_count": 2850,
+  "exported_ff_count": 2849,
+  "differences": [
+    {
+      "packed_instance": "core_boundary/dut/ex_decode[14]/opit_0_inv_L5Q_1_perm",
+      "packed_kind": "gopLUT6L5Q",
+      "packed_ff_outputs": [
+        "L5Q"
+      ],
+      "packed_ff_count": 1,
+      "exported_ff_count": 0
+    }
+  ],
+  "unmatched_exported_owners": {}
+}

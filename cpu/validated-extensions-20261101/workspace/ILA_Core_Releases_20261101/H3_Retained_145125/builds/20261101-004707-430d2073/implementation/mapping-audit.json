@@ -1,0 +1,305 @@
+﻿{
+  "clock": "cpu_clk",
+  "depth": 1024,
+  "data_channels": 42,
+  "trigger_channels": 42,
+  "data_equals_trigger": true,
+  "data": [
+    {
+      "channel": 0,
+      "meaning": "ex_pc[0]",
+      "native": "board/soc/core/ex_pc[0]"
+    },
+    {
+      "channel": 1,
+      "meaning": "ex_pc[1]",
+      "native": "board/soc/core/ex_pc[1]"
+    },
+    {
+      "channel": 2,
+      "meaning": "ex_pc[2]",
+      "native": "board/soc/core/ex_pc[2]"
+    },
+    {
+      "channel": 3,
+      "meaning": "ex_pc[3]",
+      "native": "board/soc/core/ex_pc[3]"
+    },
+    {
+      "channel": 4,
+      "meaning": "ex_pc[4]",
+      "native": "board/soc/core/ex_pc[4]"
+    },
+    {
+      "channel": 5,
+      "meaning": "ex_pc[5]",
+      "native": "board/soc/core/ex_pc[5]"
+    },
+    {
+      "channel": 6,
+      "meaning": "ex_pc[6]",
+      "native": "board/soc/core/ex_pc[6]"
+    },
+    {
+      "channel": 7,
+      "meaning": "ex_pc[7]",
+      "native": "board/soc/core/ex_pc[7]"
+    },
+    {
+      "channel": 8,
+      "meaning": "ex_pc[8]",
+      "native": "board/soc/core/ex_pc[8]"
+    },
+    {
+      "channel": 9,
+      "meaning": "ex_pc[9]",
+      "native": "board/soc/core/ex_pc[9]"
+    },
+    {
+      "channel": 10,
+      "meaning": "ex_pc[10]",
+      "native": "board/soc/core/ex_pc[10]"
+    },
+    {
+      "channel": 11,
+      "meaning": "ex_pc[11]",
+      "native": "board/soc/core/ex_pc[11]"
+    },
+    {
+      "channel": 12,
+      "meaning": "ex_pc[12]",
+      "native": "board/soc/core/ex_pc[12]"
+    },
+    {
+      "channel": 13,
+      "meaning": "ex_pc[13]",
+      "native": "board/soc/core/ex_pc[13]"
+    },
+    {
+      "channel": 14,
+      "meaning": "ex_pc[14]",
+      "native": "board/soc/core/ex_pc[14]"
+    },
+    {
+      "channel": 15,
+      "meaning": "ex_pc[15]",
+      "native": "board/soc/core/ex_pc[15]"
+    },
+    {
+      "channel": 16,
+      "meaning": "ex_pc[16]",
+      "native": "board/soc/core/ex_pc[16]"
+    },
+    {
+      "channel": 17,
+      "meaning": "ex_pc[17]",
+      "native": "board/soc/core/ex_pc[17]"
+    },
+    {
+      "channel": 18,
+      "meaning": "ex_pc[18]",
+      "native": "board/soc/core/ex_pc[18]"
+    },
+    {
+      "channel": 19,
+      "meaning": "ex_pc[19]",
+      "native": "board/soc/core/ex_pc[19]"
+    },
+    {
+      "channel": 20,
+      "meaning": "ex_pc[20]",
+      "native": "board/soc/core/ex_pc[20]"
+    },
+    {
+      "channel": 21,
+      "meaning": "ex_pc[21]",
+      "native": "board/soc/core/ex_pc[21]"
+    },
+    {
+      "channel": 22,
+      "meaning": "ex_pc[22]",
+      "native": "board/soc/core/ex_pc[22]"
+    },
+    {
+      "channel": 23,
+      "meaning": "ex_pc[23]",
+      "native": "board/soc/core/ex_pc[23]"
+    },
+    {
+      "channel": 24,
+      "meaning": "ex_pc[24]",
+      "native": "board/soc/core/ex_pc[24]"
+    },
+    {
+      "channel": 25,
+      "meaning": "ex_pc[25]",
+      "native": "board/soc/core/ex_pc[25]"
+    },
+    {
+      "channel": 26,
+      "meaning": "ex_pc[26]",
+      "native": "board/soc/core/ex_pc[26]"
+    },
+    {
+      "channel": 27,
+      "meaning": "ex_pc[27]",
+      "native": "board/soc/core/ex_pc[27]"
+    },
+    {
+      "channel": 28,
+      "meaning": "ex_pc[28]",
+      "native": "board/soc/core/ex_pc[28]"
+    },
+    {
+      "channel": 29,
+      "meaning": "ex_pc[29]",
+      "native": "board/soc/core/ex_pc[29]"
+    },
+    {
+      "channel": 30,
+      "meaning": "ex_pc[30]",
+      "native": "board/soc/core/ex_pc[30]"
+    },
+    {
+      "channel": 31,
+      "meaning": "ex_pc[31]",
+      "native": "board/soc/core/ex_pc[31]"
+    },
+    {
+      "channel": 32,
+      "meaning": "if_valid",
+      "native": "board/soc/core/pipeline_valid[0]"
+    },
+    {
+      "channel": 33,
+      "meaning": "id_valid",
+      "native": "board/soc/core/pipeline_valid[1]"
+    },
+    {
+      "channel": 34,
+      "meaning": "ex_valid",
+      "native": "board/soc/core/pipeline_valid[2]"
+    },
+    {
+      "channel": 35,
+      "meaning": "mem_valid",
+      "native": "board/soc/core/pipeline_valid[3]"
+    },
+    {
+      "channel": 36,
+      "meaning": "wb_valid",
+      "native": "board/soc/core/board/unused_trace_valid"
+    },
+    {
+      "channel": 37,
+      "meaning": "id_fire",
+      "native": "board/soc/core/id_fire"
+    },
+    {
+      "channel": 38,
+      "meaning": "ex_fire",
+      "native": "board/soc/core/ex_fire"
+    },
+    {
+      "channel": 39,
+      "meaning": "mem_flush",
+      "native": "board/soc/core/mem_flush"
+    },
+    {
+      "channel": 40,
+      "meaning": "frontend_fire",
+      "native": "board/soc/core/frontend_fire"
+    },
+    {
+      "channel": 41,
+      "meaning": "mem_fire",
+      "native": "board/soc/core/mem_fire"
+    }
+  ],
+  "trigger": [
+    "board/soc/core/ex_pc[0]",
+    "board/soc/core/ex_pc[1]",
+    "board/soc/core/ex_pc[2]",
+    "board/soc/core/ex_pc[3]",
+    "board/soc/core/ex_pc[4]",
+    "board/soc/core/ex_pc[5]",
+    "board/soc/core/ex_pc[6]",
+    "board/soc/core/ex_pc[7]",
+    "board/soc/core/ex_pc[8]",
+    "board/soc/core/ex_pc[9]",
+    "board/soc/core/ex_pc[10]",
+    "board/soc/core/ex_pc[11]",
+    "board/soc/core/ex_pc[12]",
+    "board/soc/core/ex_pc[13]",
+    "board/soc/core/ex_pc[14]",
+    "board/soc/core/ex_pc[15]",
+    "board/soc/core/ex_pc[16]",
+    "board/soc/core/ex_pc[17]",
+    "board/soc/core/ex_pc[18]",
+    "board/soc/core/ex_pc[19]",
+    "board/soc/core/ex_pc[20]",
+    "board/soc/core/ex_pc[21]",
+    "board/soc/core/ex_pc[22]",
+    "board/soc/core/ex_pc[23]",
+    "board/soc/core/ex_pc[24]",
+    "board/soc/core/ex_pc[25]",
+    "board/soc/core/ex_pc[26]",
+    "board/soc/core/ex_pc[27]",
+    "board/soc/core/ex_pc[28]",
+    "board/soc/core/ex_pc[29]",
+    "board/soc/core/ex_pc[30]",
+    "board/soc/core/ex_pc[31]",
+    "board/soc/core/pipeline_valid[0]",
+    "board/soc/core/pipeline_valid[1]",
+    "board/soc/core/pipeline_valid[2]",
+    "board/soc/core/pipeline_valid[3]",
+    "board/soc/core/board/unused_trace_valid",
+    "board/soc/core/id_fire",
+    "board/soc/core/ex_fire",
+    "board/soc/core/mem_flush",
+    "board/soc/core/frontend_fire",
+    "board/soc/core/mem_fire"
+  ],
+  "native_net_inventory_count": 7264,
+  "pipeline_driver_proof": [
+    {
+      "meaning": "if_valid",
+      "primitive": "GTP_DFF_C",
+      "instance": "if_valid",
+      "q": "pipeline_valid[0]",
+      "native": "board/soc/core/pipeline_valid[0]"
+    },
+    {
+      "meaning": "id_valid",
+      "primitive": "GTP_DFF_C",
+      "instance": "id_valid",
+      "q": "pipeline_valid[1]",
+      "native": "board/soc/core/pipeline_valid[1]"
+    },
+    {
+      "meaning": "ex_valid",
+      "primitive": "GTP_DFF_C",
+      "instance": "ex_valid",
+      "q": "pipeline_valid[2]",
+      "native": "board/soc/core/pipeline_valid[2]"
+    },
+    {
+      "meaning": "mem_valid",
+      "primitive": "GTP_DFF_C",
+      "instance": "mem_valid",
+      "q": "pipeline_valid[3]",
+      "native": "board/soc/core/pipeline_valid[3]"
+    },
+    {
+      "meaning": "wb_valid",
+      "primitive": "GTP_DFF_C",
+      "instance": "wb_valid",
+      "q": "board/unused_trace_valid",
+      "native": "board/soc/core/board/unused_trace_valid"
+    }
+  ],
+  "source_netlist_sha256": "13583D5C2FFFADD298D25739A24338B277BDAB79AF0F0FA89CE3E80551DF4287",
+  "fic_sha256": "74B9F9023F98F8022A5B50A0A475168C9F7F54FA44119ED0B7B3EF8BF54FE1A7",
+  "verified_by": "cdt_ins ins_list_nets + ins_core_info + canonical FIC + synthesized pipeline register Q drivers",
+  "sample_alignment": "Native signals at the same rising cpu_clk edge; zero extra probe registers; no functional feedback."
+}

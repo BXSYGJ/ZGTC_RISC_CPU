@@ -1,0 +1,18 @@
+add_design {D:/AAAFPGA/Bare_Core_Releases_20261101/Original_155250/physical/builds/20261101-015541-f15b63fe/inputs/rtl/rv32_core.sv}
+add_design {D:/AAAFPGA/Bare_Core_Releases_20261101/Original_155250/physical/builds/20261101-015541-f15b63fe/inputs/rtl/rv32_rvc_frontend.sv}
+add_design {D:/AAAFPGA/Bare_Core_Releases_20261101/Original_155250/physical/builds/20261101-015541-f15b63fe/inputs/rtl/rv32_rvc_expand.sv}
+add_design {D:/AAAFPGA/Bare_Core_Releases_20261101/Original_155250/physical/builds/20261101-015541-f15b63fe/inputs/rtl/rv32_decode.sv}
+add_design {D:/AAAFPGA/Bare_Core_Releases_20261101/Original_155250/physical/builds/20261101-015541-f15b63fe/inputs/rtl/rv32_alu.sv}
+add_design {D:/AAAFPGA/Bare_Core_Releases_20261101/Original_155250/physical/builds/20261101-015541-f15b63fe/inputs/rtl/rv32_muldiv.sv}
+add_design {D:/AAAFPGA/Bare_Core_Releases_20261101/Original_155250/physical/builds/20261101-015541-f15b63fe/inputs/rtl/rv32_btb.sv}
+add_design {D:/AAAFPGA/Bare_Core_Releases_20261101/Original_155250/physical/builds/20261101-015541-f15b63fe/inputs/rtl/rv32_machine.sv}
+add_design {D:/AAAFPGA/Bare_Core_Releases_20261101/Original_155250/physical/builds/20261101-015541-f15b63fe/inputs/rv32_bare_core.sv}
+add_design {D:/AAAFPGA/Bare_Core_Releases_20261101/Original_155250/physical/builds/20261101-015541-f15b63fe/inputs/bare_core_scan_top.sv}
+add_constraint {D:/AAAFPGA/Bare_Core_Releases_20261101/Original_155250/physical/builds/20261101-015541-f15b63fe/bare_core.fdc}
+set_arch -family Logos2 -device PG2L200H -speedgrade -6 -package FBB676
+compile -system_verilog -top_module bare_core_scan_top
+synthesize -ads -selected_syn_tool_opt 2
+dev_map -detail
+pnr -dc_duplication true -plc_decongestion 0 -gplace_seed 1 -logic_optimize_lut6d_combing_strategy 3
+report_timing
+gen_netlist

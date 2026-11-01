@@ -1,0 +1,210 @@
+﻿{
+  "schema": "independent-minimal-ila-releases/v1",
+  "generated_utc": "2026-10-31T18:18:29.6380584Z",
+  "remote_operations": "disabled by user; no board programming",
+  "releases": [
+    {
+      "release": "Original_155250",
+      "source_selection": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\SELECTED_BUILD.json",
+      "selection_sha256": "ffa08f1f9f31dfb7e31a621786dda92fa0a4c5221869f35c2d3c8c92e9ba9df4",
+      "configured_clock_hz": 155250000,
+      "timing_closure": true,
+      "setup_slack_ns": 0.119,
+      "cpu_clock_uncertainty_ns": 0.15,
+      "ila_profile": "NativeMinimal",
+      "resources": {
+        "CLMA": {
+          "ff": 2636,
+          "lut": 4892
+        },
+        "CLMS": {
+          "ff": 937,
+          "lut": 1717
+        },
+        "DRM": 22.5,
+        "GPLL": 1.0,
+        "APM": 4.0,
+        "post_route_luts": 6609,
+        "post_route_ffs": 3573
+      },
+      "build_directory": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\builds\\20261101-010901-9bbe8fee",
+      "full_6000_simulation_passed": true,
+      "full_result": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\qualification\\full-runs\\20261031T170813Z-21000bdf\\RESULT.json",
+      "cycles": 1782669419,
+      "retired_instructions": 1649428429,
+      "coremark_per_mhz": 3.3657390069358675,
+      "target_clock_derived_coremark": 522.5309808267934,
+      "target_clock_derived_coremark_per_lut": 0.07906354680387251,
+      "coremark_per_mhz_per_klut": 0.5092660019573109,
+      "performance_scope": "Exact V0 firmware and external cached-system service; configured clock score is derived, not a new board measurement.",
+      "waveform_origin": "LOCAL RTL SIMULATION",
+      "waveform_manifest": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\waveforms\\WAVEFORM_MANIFEST.json",
+      "windows": [
+        {
+          "function": "core_bench_list",
+          "csv": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\waveforms\\core_bench_list.csv",
+          "vcd": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\waveforms\\core_bench_list.vcd",
+          "samples": 1024,
+          "trigger_pc": "0x00000942",
+          "first_cycle": 43449,
+          "last_cycle": 44472
+        },
+        {
+          "function": "core_bench_matrix",
+          "csv": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\waveforms\\core_bench_matrix.csv",
+          "vcd": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\waveforms\\core_bench_matrix.vcd",
+          "samples": 1024,
+          "trigger_pc": "0x00002604",
+          "first_cycle": 80237,
+          "last_cycle": 81260
+        },
+        {
+          "function": "core_bench_state",
+          "csv": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\waveforms\\core_bench_state.csv",
+          "vcd": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\waveforms\\core_bench_state.vcd",
+          "samples": 1024,
+          "trigger_pc": "0x00002e18",
+          "first_cycle": 143873,
+          "last_cycle": 144896
+        }
+      ],
+      "hardware_validated": false
+    },
+    {
+      "release": "H3_Retained_145125",
+      "source_selection": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\SELECTED_BUILD.json",
+      "selection_sha256": "150005c01afe214c366e869218cfc7fb4da46b1242b8bc5d43e64c1bdc8888c1",
+      "configured_clock_hz": 145125000,
+      "timing_closure": true,
+      "setup_slack_ns": 0.0,
+      "cpu_clock_uncertainty_ns": 0.15,
+      "ila_profile": "Lean24",
+      "resources": {
+        "CLMA": {
+          "ff": 2444,
+          "lut": 4984
+        },
+        "CLMS": {
+          "ff": 580,
+          "lut": 1472
+        },
+        "DRM": 26.0,
+        "GPLL": 1.0,
+        "APM": 4.0,
+        "post_route_luts": 6456,
+        "post_route_ffs": 3024
+      },
+      "build_directory": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\builds\\20261101-013613-bbd7e86b",
+      "full_6000_simulation_passed": true,
+      "full_result": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\qualification\\full_reference\\RESULT.json",
+      "cycles": 1743134699,
+      "retired_instructions": 1649428429,
+      "coremark_per_mhz": 3.442074788277736,
+      "target_clock_derived_coremark": 499.5311036488064,
+      "target_clock_derived_coremark_per_lut": 0.07737470626530459,
+      "coremark_per_mhz_per_klut": 0.5331590440331065,
+      "performance_scope": "Exact V0 firmware and external cached-system service; configured clock score is derived, not a new board measurement.",
+      "waveform_origin": "LOCAL RTL SIMULATION",
+      "waveform_manifest": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\waveforms\\WAVEFORM_MANIFEST.json",
+      "windows": [
+        {
+          "function": "core_bench_list",
+          "csv": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\waveforms\\core_bench_list.csv",
+          "vcd": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\waveforms\\core_bench_list.vcd",
+          "samples": 1024,
+          "trigger_pc": "0x00000942",
+          "first_cycle": 43109,
+          "last_cycle": 44132
+        },
+        {
+          "function": "core_bench_matrix",
+          "csv": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\waveforms\\core_bench_matrix.csv",
+          "vcd": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\waveforms\\core_bench_matrix.vcd",
+          "samples": 1024,
+          "trigger_pc": "0x00002604",
+          "first_cycle": 79433,
+          "last_cycle": 80456
+        },
+        {
+          "function": "core_bench_state",
+          "csv": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\waveforms\\core_bench_state.csv",
+          "vcd": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\waveforms\\core_bench_state.vcd",
+          "samples": 1024,
+          "trigger_pc": "0x00002e18",
+          "first_cycle": 142360,
+          "last_cycle": 143383
+        }
+      ],
+      "hardware_validated": false
+    },
+    {
+      "release": "H3_Base_145125",
+      "source_selection": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\SELECTED_BUILD.json",
+      "selection_sha256": "c309e508d3eef2a95b388e3f662796b931782c01c4171b623d77549c9ff0df87",
+      "configured_clock_hz": 145125000,
+      "timing_closure": true,
+      "setup_slack_ns": 0.074,
+      "cpu_clock_uncertainty_ns": 0.15,
+      "ila_profile": "Lean24",
+      "resources": {
+        "CLMA": {
+          "ff": 2308,
+          "lut": 4659
+        },
+        "CLMS": {
+          "ff": 716,
+          "lut": 1762
+        },
+        "DRM": 26.0,
+        "GPLL": 1.0,
+        "APM": 4.0,
+        "post_route_luts": 6421,
+        "post_route_ffs": 3024
+      },
+      "build_directory": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\builds\\20261101-013611-840c8de9",
+      "full_6000_simulation_passed": true,
+      "full_result": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\qualification\\full_reference\\RESULT.json",
+      "cycles": 1743221870,
+      "retired_instructions": 1649428429,
+      "coremark_per_mhz": 3.441902664977465,
+      "target_clock_derived_coremark": 499.5061242548546,
+      "target_clock_derived_coremark_per_lut": 0.07779257502801037,
+      "coremark_per_mhz_per_klut": 0.536038415352354,
+      "performance_scope": "Exact V0 firmware and external cached-system service; configured clock score is derived, not a new board measurement.",
+      "waveform_origin": "LOCAL RTL SIMULATION",
+      "waveform_manifest": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\waveforms\\WAVEFORM_MANIFEST.json",
+      "windows": [
+        {
+          "function": "core_bench_list",
+          "csv": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\waveforms\\core_bench_list.csv",
+          "vcd": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\waveforms\\core_bench_list.vcd",
+          "samples": 1024,
+          "trigger_pc": "0x00000942",
+          "first_cycle": 43109,
+          "last_cycle": 44132
+        },
+        {
+          "function": "core_bench_matrix",
+          "csv": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\waveforms\\core_bench_matrix.csv",
+          "vcd": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\waveforms\\core_bench_matrix.vcd",
+          "samples": 1024,
+          "trigger_pc": "0x00002604",
+          "first_cycle": 79433,
+          "last_cycle": 80456
+        },
+        {
+          "function": "core_bench_state",
+          "csv": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\waveforms\\core_bench_state.csv",
+          "vcd": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\waveforms\\core_bench_state.vcd",
+          "samples": 1024,
+          "trigger_pc": "0x00002e18",
+          "first_cycle": 142375,
+          "last_cycle": 143398
+        }
+      ],
+      "hardware_validated": false
+    }
+  ],
+  "waveform_index": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\analysis\\README.md",
+  "renderer_verification": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\analysis\\RENDERER_VERIFICATION.json"
+}

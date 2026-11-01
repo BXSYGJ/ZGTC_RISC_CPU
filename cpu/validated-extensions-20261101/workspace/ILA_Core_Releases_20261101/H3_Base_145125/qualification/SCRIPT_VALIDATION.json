@@ -1,0 +1,43 @@
+﻿{
+  "release": "H3_Base_145125",
+  "checked_utc": "2026-10-31T17:48:40.8183972Z",
+  "scripts": [
+    {
+      "file": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\qualification\\Audit-H3Timing.ps1",
+      "sha256": "1a7f485c7766c1a5fdc4415fc76cc684aa93ec16ff6b0f8cf3707ee49415709a",
+      "utf8_bom": true,
+      "parse_errors": 0
+    },
+    {
+      "file": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\qualification\\Finalize-H3Release.ps1",
+      "sha256": "c2c340f86451fc5801f3096ac4a20c7358e28a6f11a022c1ba8d70fecd9a6822",
+      "utf8_bom": true,
+      "parse_errors": 0
+    },
+    {
+      "file": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\qualification\\Qualify-H3Source.ps1",
+      "sha256": "fcc39ec1d7c2339094f7c9a0c2a9d903e4dc86cd72b7c9a3ef07016ba5f8b831",
+      "utf8_bom": true,
+      "parse_errors": 0
+    },
+    {
+      "file": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\qualification\\Run-H3FullReference.ps1",
+      "sha256": "3773092eb9d7efc984be5fac49016de6a11eff0a92d7d6f7c19e79bdc4a58125",
+      "utf8_bom": true,
+      "parse_errors": 0
+    },
+    {
+      "file": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\qualification\\Summarize-H3Qualification.ps1",
+      "sha256": "e260fb4c1fb7d50e25828371f723ce1d32c5415820f1bd58544b627f152414b3",
+      "utf8_bom": true,
+      "parse_errors": 0
+    },
+    {
+      "file": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\qualification\\Test-H3PassiveWindow.ps1",
+      "sha256": "302f6767c23f747612b29c21f289930768e10c42aa287df2418358d746cfe297",
+      "utf8_bom": true,
+      "parse_errors": 0
+    }
+  ],
+  "pass": true
+}

@@ -1,0 +1,782 @@
+License checkout: fabric_shell from D:\AAAFPGA\PangoLicense\pds_windows_c03532573d51_2029-09-04.lic
+Compiling architecture definition.
+Analyzing project file 'D:/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/builds/20261101-013611-840c8de9/implementation/cpu_ila.pds'.
+Executing : add_design D:/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/builds/20261101-013611-840c8de9/implementation/netlist.v
+Executing : add_design D:/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/builds/20261101-013611-840c8de9/implementation/netlist.v successfully.
+Executing : add_constraint D:/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/builds/20261101-013611-840c8de9/inputs/constraints/board.fdc
+Executing : add_constraint D:/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/builds/20261101-013611-840c8de9/inputs/constraints/board.fdc successfully.
+Executing : add_constraint D:/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/builds/20261101-013611-840c8de9/inputs/constraints/uart_remotelab.fdc
+Executing : add_constraint D:/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/builds/20261101-013611-840c8de9/inputs/constraints/uart_remotelab.fdc successfully.
+Executing : add_fic D:/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/builds/20261101-013611-840c8de9/implementation/cpu.fic
+Executing : add_fic D:/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/builds/20261101-013611-840c8de9/implementation/cpu.fic successfully.
+Executing : set_arch -family Logos2 -device PG2L200H -speedgrade -6 -package FBB676
+Executing : set_arch -family Logos2 -device PG2L200H -speedgrade -6 -package FBB676 successfully.
+
+
+Executing : compile -system_verilog -top_module pds_soc_top
+Executing : compile -system_verilog -top_module pds_soc_top successfully.
+
+
+Executing : dev_map -input_db_file D:/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/builds/20261101-013611-840c8de9/implementation/source.adf
+
+
+Process "Device Map" started.
+Current time: Sun Nov  1 01:36:57 2026
+Compiling architecture definition.
+Analyzing project file 'D:/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/builds/20261101-013611-840c8de9/implementation/cpu_ila.pds'.
+Compiling verification operator library.
+Compiling common defs.
+Loading technology operator library.
+Compiling technology operator library.
+Compiling technology operator (valence) library.
+Compiling operator packing rules.
+Compiling prim grid devices.
+Compiling gate devices.
+Compiling gate operators.
+Compiling tech operator impls.
+Building architecture model.
+Loading device packaging model.
+NOTE: The technology fpga was specified.
+NOTE: delay_model specified was generic_cmos.
+NOTE: Using the fpga syntax tables...
+Totals:
+ Calls to malloc = 0
+ Calls to calloc = 148672
+
+License checkout: fabric_inserter from D:\AAAFPGA\PangoLicense\pds_windows_c03532573d51_2029-09-04.lic
+Generating cores. Please be patient as this can take several minutes...
+  >Generating core DebugCore0...
+  >Running ADS for debugcore...
+  >Making net connections...
+Core Insertion Complete.
+Flattening design 'pds_soc_top'
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_rden[1]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_rden[2]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_rden[3]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_rden[4]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_rden[5]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_rden[6]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_rden[7]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_rden[8]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_rden[9]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_rden[10]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_rden[11]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_rden[12]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_rden[13]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_rden[14]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_rden[15]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_rden[17]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_rden[19]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_sel_int[1]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_sel_int[2]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_sel_int[3]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_sel_int[4]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_sel_int[5]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_sel_int[6]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_sel_int[7]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_sel_int[8]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_sel_int[9]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_sel_int[10]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_sel_int[11]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_sel_int[12]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_sel_int[13]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_sel_int[14]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_sel_int[15]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_sel_int[17]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_CORES/u_debug_core_0/u_hub_data_decode/conf_sel_int[19]' of 'GTP_DFF_C' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'board/soc/memory_system/caches[0].enabled.cache/request_address[0]_1' of 'GTP_DFF_CE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'board/soc/memory_system/caches[0].enabled.cache/request_address[1]_1' of 'GTP_DFF_CE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'board/soc/memory_system/caches[0].enabled.cache_1/request_address[0]_1' of 'GTP_DFF_CE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'board/soc/memory_system/caches[0].enabled.cache_1/request_address[1]_1' of 'GTP_DFF_CE' unit is dangling and will be cleaned.
+Device mapping started.
+Optimizing circuit logic.
+Checking design netlist.
+Processing tech operator.
+I: The instance clkbufg_3(GTP_CLKBUFG) has been inserted on the net cpu_clk in design, driver pin CLKOUT0(instance multiplied_clock.clock_source/pll) -> load pin CLK(instance board/reset_pipe[0]).
+I: The instance clkbufg_4(GTP_CLKBUFG) has been inserted on the net u_CORES/drck_o in design, driver pin TCK_USER(instance u_CORES/u_GTP_SCANCHAIN_PG) -> load pin CLK(instance u_CORES/u_debug_core_0/u0_trig_unit/conf_reg[0]).
+Converting tech operator to gate operator.
+Processing gate operator.
+I: Infer CARRY group, base inst: board/soc/core/N64_0_0/gateop, insts:15.
+I: Infer CARRY group, base inst: board/soc/core/N73_0_1/gateop, insts:14.
+I: Infer CARRY group, base inst: board/soc/core/N82_0_1/gateop, insts:14.
+I: Infer CARRY group, base inst: board/soc/core/N91_0_1/gateop, insts:14.
+I: Infer CARRY group, base inst: board/soc/core/N100_0_1/gateop, insts:14.
+I: Infer CARRY group, base inst: board/soc/core/N394_3/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/N413_0_1/gateop, insts:31.
+I: Infer CARRY group, base inst: board/soc/core/N416_0_1/gateop, insts:31.
+I: Infer CARRY group, base inst: board/soc/core/N421.eq_0/gateop, insts:16.
+I: Infer CARRY group, base inst: board/soc/core/N423.eq_0/gateop, insts:16.
+I: Infer CARRY group, base inst: board/soc/core/N426_1/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/N626.eq_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/N628.lt_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/N631.eq_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/N633.lt_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/N636.eq_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/N638.lt_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/N641.eq_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/N643.lt_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/N672_0_1/gateop, insts:31.
+I: Infer CARRY group, base inst: board/soc/core/N674.eq_0/gateop, insts:16.
+I: Infer CARRY group, base inst: board/soc/core/N676.eq_0/gateop, insts:16.
+I: Infer CARRY group, base inst: board/soc/core/N679.eq_0/gateop, insts:17.
+I: Infer CARRY group, base inst: board/soc/core/N694[31]/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/N703_2/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/N717_4_4/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/N770_1_1/gateop, insts:9.
+I: Infer CARRY group, base inst: board/soc/core/N772_1/gateop, insts:8.
+I: Infer CARRY group, base inst: board/soc/core/N778_1_1/gateop, insts:9.
+I: Infer CARRY group, base inst: board/soc/core/N780_1/gateop, insts:8.
+I: Infer CARRY group, base inst: board/soc/core/N784_1/gateop, insts:8.
+I: Infer CARRY group, base inst: board/soc/core/N788_1/gateop, insts:8.
+I: Infer CARRY group, base inst: board/soc/core/N795_1/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/N795_2/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/N975_7/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/N1004_0_0/gateop, insts:32.
+I: Infer CARRY group, base inst: board/soc/core/N1060_2/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/N1063_7_46/gateop, insts:5.
+I: Infer CARRY group, base inst: board/soc/core/N1064_44/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/N1147.eq_0/gateop, insts:16.
+I: Infer CARRY group, base inst: board/soc/core/N1480_1/gateop, insts:32.
+I: Infer CARRY group, base inst: board/soc/core/address_byte0_0/gateop, insts:10.
+I: Infer CARRY group, base inst: board/soc/memory_system/N29_9[23]_1/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/memory_system/N29_9[31]/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/peripherals/N158_0_1/gateop, insts:15.
+I: Infer CARRY group, base inst: board/soc/peripherals/N163_1/gateop, insts:16.
+I: Infer CARRY group, base inst: board/soc/peripherals/N168_1/gateop, insts:16.
+I: Infer CARRY group, base inst: board/soc/peripherals/N173_0/gateop, insts:17.
+I: Infer CARRY group, base inst: board/soc/peripherals/N207.lt_0/gateop, insts:32.
+I: Infer CARRY group, base inst: board/soc/peripherals/N287_0_1/gateop, insts:31.
+I: Infer CARRY group, base inst: u_CORES/u_debug_core_0/u_Storage_Condition/N256_1_1/gateop, insts:9.
+I: Infer CARRY group, base inst: u_CORES/u_debug_core_0/u_Storage_Condition/N275_1.fsub_1/gateop, insts:9.
+I: Infer CARRY group, base inst: u_CORES/u_debug_core_0/u_Storage_Condition/N308_1_1/gateop, insts:9.
+I: Infer CARRY group, base inst: u_CORES/u_debug_core_0/u_Storage_Condition/N317_1_1/gateop, insts:9.
+I: Infer CARRY group, base inst: u_CORES/u_debug_core_0/u_rd_addr_gen/N38_1_1/gateop, insts:9.
+I: Infer CARRY group, base inst: board/soc/core/alu/arithmetic_result_0/gateop, insts:34.
+I: Infer CARRY group, base inst: board/soc/core/frontend/N14_0_1/gateop, insts:29.
+I: Infer CARRY group, base inst: board/soc/core/frontend/N29_0_1/gateop, insts:14.
+I: Infer CARRY group, base inst: board/soc/core/frontend/N33.eq_0/gateop, insts:7.
+I: Infer CARRY group, base inst: board/soc/core/frontend/N36.eq_0/gateop, insts:7.
+I: Infer CARRY group, base inst: board/soc/core/frontend/N38.eq_0/gateop, insts:7.
+I: Infer CARRY group, base inst: board/soc/core/frontend/N40.eq_0/gateop, insts:7.
+I: Infer CARRY group, base inst: board/soc/core/frontend/N44.eq_0/gateop, insts:11.
+I: Infer CARRY group, base inst: board/soc/core/frontend/N48.eq_0/gateop, insts:11.
+I: Infer CARRY group, base inst: board/soc/core/frontend/N61.eq_0/gateop, insts:7.
+I: Infer CARRY group, base inst: board/soc/core/frontend/N63.eq_0/gateop, insts:7.
+I: Infer CARRY group, base inst: board/soc/core/frontend/N96_5[32]/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/frontend/N126_0_1/gateop, insts:28.
+I: Infer CARRY group, base inst: board/soc/core/frontend/N174.eq_0/gateop, insts:7.
+I: Infer CARRY group, base inst: board/soc/core/frontend/N176.eq_0/gateop, insts:7.
+I: Infer CARRY group, base inst: board/soc/core/frontend/N180.eq_0/gateop, insts:7.
+I: Infer CARRY group, base inst: board/soc/core/frontend/N186.eq_0/gateop, insts:12.
+I: Infer CARRY group, base inst: board/soc/core/frontend/N218_185/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/frontend/N218_189/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/frontend/N218_206/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/frontend/N218_208/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/frontend/N224_6/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/frontend/N226_4[3]/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/frontend/N226_4[4]/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/frontend/N226_4[5]/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/frontend/N226_4[6]/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/frontend/N226_4[7]/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/frontend/N226_4[8]/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/frontend/N226_4[9]/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/frontend/N229_0_1/gateop, insts:14.
+I: Infer CARRY group, base inst: board/soc/core/frontend/N233_0_1/gateop, insts:14.
+I: Infer CARRY group, base inst: board/soc/core/frontend/N367_12/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/frontend/N384_3/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/frontend/N384_12/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/core/machine/N29_0_0/gateop, insts:31.
+I: Infer CARRY group, base inst: board/soc/core/machine/N102_0_0/gateop, insts:64.
+I: Infer CARRY group, base inst: board/soc/core/machine/N104_0_1/gateop, insts:63.
+I: Infer CARRY group, base inst: board/soc/core/multiply_divide.unit/N34_1_0/gateop, insts:48.
+I: Infer CARRY group, base inst: board/soc/core/multiply_divide.unit/N43.fsub_1/gateop, insts:33.
+I: Infer CARRY group, base inst: board/soc/core/multiply_divide.unit/N131_1.fsub_0/gateop, insts:32.
+I: Infer CARRY group, base inst: board/soc/core/multiply_divide.unit/N133_1.fsub_0/gateop, insts:32.
+I: Infer CARRY group, base inst: board/soc/core/multiply_divide.unit/N183_1.fsub_1/gateop, insts:31.
+I: Infer CARRY group, base inst: board/soc/core/multiply_divide.unit/N185_1.fsub_0/gateop, insts:32.
+I: Infer CARRY group, base inst: board/soc/core/predictor/N130.eq_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/predictor/N133.eq_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/predictor/N148.eq_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/predictor/N151.eq_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/predictor/N166.eq_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/predictor/N169.eq_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/predictor/N184.eq_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/core/predictor/N187.eq_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/memory_system/caches[0].enabled.cache/N37/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/memory_system/caches[0].enabled.cache/N1434_2/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/memory_system/caches[0].enabled.cache/N2548.eq_0/gateop, insts:5.
+I: Infer CARRY group, base inst: board/soc/memory_system/caches[0].enabled.cache/N2586[1]/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/memory_system/caches[0].enabled.cache/N2588[1]/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/memory_system/caches[0].enabled.cache/N2608.eq_0/gateop, insts:5.
+I: Infer CARRY group, base inst: board/soc/memory_system/caches[0].enabled.cache/N2664_1_1/gateop, insts:31.
+I: Infer CARRY group, base inst: board/soc/memory_system/caches[0].enabled.cache/N2670_1_1/gateop, insts:31.
+I: Infer CARRY group, base inst: board/soc/memory_system/caches[0].enabled.cache/N2711_1_1/gateop, insts:9.
+I: Infer CARRY group, base inst: board/soc/memory_system/caches[0].enabled.cache_1/N1/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/memory_system/caches[0].enabled.cache_1/N7.eq_0/gateop, insts:3.
+I: Infer CARRY group, base inst: board/soc/memory_system/caches[0].enabled.cache_1/N9.eq_0/gateop, insts:3.
+I: Infer CARRY group, base inst: board/soc/memory_system/caches[0].enabled.cache_1/N22/gateop, insts:2.
+I: Infer CARRY group, base inst: board/soc/memory_system/caches[0].enabled.cache_1/N684.eq_0/gateop, insts:4.
+I: Infer CARRY group, base inst: board/soc/memory_system/caches[0].enabled.cache_1/N743_1_1/gateop, insts:31.
+I: Infer CARRY group, base inst: board/soc/memory_system/caches[0].enabled.cache_1/N750_1_1/gateop, insts:31.
+I: Infer CARRY group, base inst: board/soc/memory_system/caches[0].enabled.cache_1/N793_1_1/gateop, insts:31.
+I: Infer CARRY group, base inst: board/soc/memory_system/ram/N8_1_1/gateop, insts:29.
+I: Infer CARRY group, base inst: board/soc/memory_system/ram/N25_1_1/gateop, insts:12.
+I: Infer CARRY group, base inst: board/soc/peripherals/uart/N26_0.fsub_1/gateop, insts:13.
+I: Infer CARRY group, base inst: board/soc/peripherals/uart/N59_0.fsub_0/gateop, insts:14.
+Device Utilization Summary:
++------------------------------------------------------------------------+
+| Logic Utilization     | Used     | Available     | Utilization(%)     
++------------------------------------------------------------------------+
+| APM                   | 4        | 740           | 1                  
+| FF                    | 3024     | 319600        | 1                  
+| LUT                   | 5977     | 159800        | 4                  
+| Distributed RAM       | 371      | 39500         | 1                  
+| DRM                   | 26       | 415           | 7                  
+| IO                    | 13       | 400           | 4                  
+| RCKB                  | 0        | 40            | 0                  
+| SCANCHAIN             | 1        | 1             | 100                
+| USCM                  | 2        | 32            | 7                  
+| CCS                   | 1        | 1             | 100                
+| ADC                   | 0        | 1             | 0                  
+| DDR_PHY               | 0        | 40            | 0                  
+| HSSTLP                | 0        | 2             | 0                  
+| GPLL                  | 1        | 10            | 10                 
+| PPLL                  | 0        | 10            | 0                  
+| DDRPHY_CPD            | 0        | 20            | 0                  
+| HCKB                  | 0        | 120           | 0                  
+| IOCKB                 | 0        | 40            | 0                  
+| MRCKB                 | 0        | 20            | 0                  
+| PCIE                  | 0        | 1             | 0                  
+| DDRPHY_IOCLK_DIV      | 0        | 10            | 0                  
+| ANALOG                | 0        | 1             | 0                  
+| TSERDES               | 0        | 80            | 0                  
+| KEYRAM                | 0        | 1             | 0                  
++------------------------------------------------------------------------+
+
+Device mapping done.
+Total device mapping takes 0.94 sec.
+
+Design 'pds_soc_top' has been successfully mapped to architecture-specific objects.
+Saving design to DB.
+Action dev_map: Real time elapsed is 0h:0m:31s
+Action dev_map: CPU time elapsed is 0h:0m:11s
+Action dev_map: Process CPU time elapsed is 0h:0m:12s
+Current time: Sun Nov  1 01:37:27 2026
+Action dev_map: Peak memory pool usage is 520 MB
+Action from dev_map to dev_map: Total Real Time elapsed is 0h:0m:31s
+Action from dev_map to dev_map: Total CPU time elapsed is 0h:0m:11s
+Action from dev_map to dev_map: Total Process CPU Time elapsed is 0h:0m:12s
+Process "Device Map" done.
+Executing : dev_map -input_db_file D:/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/builds/20261101-013611-840c8de9/implementation/source.adf successfully.
+
+
+Executing : pnr -dc_duplication false -plc_decongestion 0 -gplace_seed 1 -logic_optimize_lut6d_combing_strategy 3
+
+
+Process "Place & Route" started.
+Current time: Sun Nov  1 01:37:27 2026
+Compiling architecture definition.
+Analyzing project file 'D:/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/builds/20261101-013611-840c8de9/implementation/cpu_ila.pds'.
+Compiling verification operator library.
+Compiling common defs.
+Compiling prim grid devices.
+Compiling gate devices.
+Compiling gate operators.
+Building architecture model.
+Loading device packaging model.
+pnr strategy configuration : 
+strategy name : 0
+Building architecture floorplan logic view.
+Constraint check start.
+Executing : def_port {led[0]} LOC=A20 VCCIO=3.3 IOSTANDARD=LVCMOS33 DRIVE=8 SLEW=SLOW NONE=TRUE
+Executing : def_port {led[0]} LOC=A20 VCCIO=3.3 IOSTANDARD=LVCMOS33 DRIVE=8 SLEW=SLOW NONE=TRUE successfully
+Executing : def_port {led[1]} LOC=C18 VCCIO=3.3 IOSTANDARD=LVCMOS33 DRIVE=8 SLEW=SLOW NONE=TRUE
+Executing : def_port {led[1]} LOC=C18 VCCIO=3.3 IOSTANDARD=LVCMOS33 DRIVE=8 SLEW=SLOW NONE=TRUE successfully
+Executing : def_port {led[2]} LOC=C19 VCCIO=3.3 IOSTANDARD=LVCMOS33 DRIVE=8 SLEW=SLOW NONE=TRUE
+Executing : def_port {led[2]} LOC=C19 VCCIO=3.3 IOSTANDARD=LVCMOS33 DRIVE=8 SLEW=SLOW NONE=TRUE successfully
+Executing : def_port {led[3]} LOC=E18 VCCIO=3.3 IOSTANDARD=LVCMOS33 DRIVE=8 SLEW=SLOW NONE=TRUE
+Executing : def_port {led[3]} LOC=E18 VCCIO=3.3 IOSTANDARD=LVCMOS33 DRIVE=8 SLEW=SLOW NONE=TRUE successfully
+Executing : def_port {led[4]} LOC=A17 VCCIO=3.3 IOSTANDARD=LVCMOS33 DRIVE=8 SLEW=SLOW NONE=TRUE
+Executing : def_port {led[4]} LOC=A17 VCCIO=3.3 IOSTANDARD=LVCMOS33 DRIVE=8 SLEW=SLOW NONE=TRUE successfully
+Executing : def_port {led[5]} LOC=A18 VCCIO=3.3 IOSTANDARD=LVCMOS33 DRIVE=8 SLEW=SLOW NONE=TRUE
+Executing : def_port {led[5]} LOC=A18 VCCIO=3.3 IOSTANDARD=LVCMOS33 DRIVE=8 SLEW=SLOW NONE=TRUE successfully
+Executing : def_port {led[6]} LOC=C17 VCCIO=3.3 IOSTANDARD=LVCMOS33 DRIVE=8 SLEW=SLOW NONE=TRUE
+Executing : def_port {led[6]} LOC=C17 VCCIO=3.3 IOSTANDARD=LVCMOS33 DRIVE=8 SLEW=SLOW NONE=TRUE successfully
+Executing : def_port {led[7]} LOC=B17 VCCIO=3.3 IOSTANDARD=LVCMOS33 DRIVE=8 SLEW=SLOW NONE=TRUE
+Executing : def_port {led[7]} LOC=B17 VCCIO=3.3 IOSTANDARD=LVCMOS33 DRIVE=8 SLEW=SLOW NONE=TRUE successfully
+Executing : def_port {uart_tx} LOC=AB26 VCCIO=3.3 IOSTANDARD=LVCMOS33 DRIVE=8 SLEW=SLOW NONE=TRUE
+Executing : def_port {uart_tx} LOC=AB26 VCCIO=3.3 IOSTANDARD=LVCMOS33 DRIVE=8 SLEW=SLOW NONE=TRUE successfully
+Executing : def_port {clk} LOC=D18 VCCIO=3.3 IOSTANDARD=LVCMOS33 NONE=TRUE
+Executing : def_port {clk} LOC=D18 VCCIO=3.3 IOSTANDARD=LVCMOS33 NONE=TRUE successfully
+Executing : def_port {key} LOC=C23 VCCIO=3.3 IOSTANDARD=LVCMOS33 NONE=TRUE
+Executing : def_port {key} LOC=C23 VCCIO=3.3 IOSTANDARD=LVCMOS33 NONE=TRUE successfully
+Executing : def_port {rst_n} LOC=C22 VCCIO=3.3 IOSTANDARD=LVCMOS33 NONE=TRUE
+Executing : def_port {rst_n} LOC=C22 VCCIO=3.3 IOSTANDARD=LVCMOS33 NONE=TRUE successfully
+Executing : def_port {uart_rx} LOC=AC26 VCCIO=3.3 IOSTANDARD=LVCMOS33 NONE=TRUE
+Executing : def_port {uart_rx} LOC=AC26 VCCIO=3.3 IOSTANDARD=LVCMOS33 NONE=TRUE successfully
+Constraint check end.
+NOTE: The technology fpga was specified.
+NOTE: delay_model specified was generic_cmos.
+NOTE: Using the fpga syntax tables...
+Totals:
+ Calls to malloc = 0
+ Calls to calloc = 5993935
+
+I: Column Clock Check open.
+Read Column Clock Map.
+
+Placement started.
+Phase 1 Pre global placement started.
+Mapping instance GRS_INST/grs_ccs to CCS_75_622.
+Mapping instance u_CORES/u_GTP_SCANCHAIN_PG/scanchain to SCANCHAIN_76_618.
+Mapping instance multiplied_clock.clock_source/pll/gpll_inst to GPLL_7_1381.
+Phase 1.1 1st GP placement started.
+Design Utilization : 4%.
+Build SRB system takes 5.09 sec.
+Wirelength after clock region global placement is 45825 and checksum is B5B04BDDF40E51CE.
+1st GP placement takes 7.41 sec.
+
+Phase 1.2 Clock placement started.
+Mapping instance clkbufg_3/gopclkbufg to USCM_383_930.
+C: Place-2028: GLOBAL_CLOCK: the driver u_CORES/u_GTP_SCANCHAIN_PG/scanchain fixed at SCANCHAIN_76_618 is unreasonable. Sub-optimal placement for a clock source and a clock buffer.
+Mapping instance clkbufg_4/gopclkbufg to USCM_383_882.
+Clock placement takes 0.23 sec.
+
+Wirelength after Pre Global Placement is 45825 and checksum is B5B04BDDF40E51CE.
+Pre global placement takes 8.75 sec.
+
+Phase 2 Global placement started.
+Phase 2.1 Fixed placement started.
+First map gop timing takes 1.52 sec
+Init coarse delay table.
+Read place coarse delay table takes 1.88 sec.
+Placed fixed group with base inst clk_ibuf/opit_1 on IOLHR_16_1386.
+Placed fixed group with base inst key_ibuf/opit_1 on IOLHR_16_1290.
+Placed fixed group with base inst led_obuf[0]/opit_1 on IOLHR_16_1338.
+Placed fixed group with base inst led_obuf[1]/opit_1 on IOLHR_16_1380.
+Placed fixed group with base inst led_obuf[2]/opit_1 on IOLHR_16_1362.
+Placed fixed group with base inst led_obuf[3]/opit_1 on IOLHR_16_1392.
+Placed fixed group with base inst led_obuf[4]/opit_1 on IOLHR_16_1422.
+Placed fixed group with base inst led_obuf[5]/opit_1 on IOLHR_16_1416.
+Placed fixed group with base inst led_obuf[6]/opit_1 on IOLHR_16_1446.
+Placed fixed group with base inst led_obuf[7]/opit_1 on IOLHR_16_1440.
+Placed fixed group with base inst rst_n_ibuf/opit_1 on IOLHR_16_1296.
+Placed fixed group with base inst uart_rx_ibuf/opit_1 on IOLHR_16_570.
+Placed fixed group with base inst uart_tx_obuf/opit_1 on IOLHR_16_576.
+Placed fixed instance GRS_INST/grs_ccs on CCS_75_622.
+Placed fixed instance clkbufg_3/gopclkbufg on USCM_383_930.
+Placed fixed instance clkbufg_4/gopclkbufg on USCM_383_882.
+Placed fixed instance multiplied_clock.clock_source/pll/gpll_inst on GPLL_7_1381.
+Placed fixed instance u_CORES/u_GTP_SCANCHAIN_PG/scanchain on SCANCHAIN_76_618.
+Placed fixed instance BKCL_auto_0 on BKCL_1_1258.
+Placed fixed instance BKCL_auto_1 on BKCL_1_340.
+Fixed placement takes 4.94 sec.
+
+Phase 2.2 Process placement started.
+Process placement takes 0.02 sec.
+
+Phase 2.3 IO placement started.
+IO placement takes 0.08 sec.
+
+PBM start.
+Total cost after SA planning is 94534.693269.
+SA total time: 1742 msec
+PBM of GP end, takes 1.98 sec.
+Phase 2.4 2nd GP placement started.
+Run super clustering :
+	Initial slack -9635.
+	14 iterations finished.
+	Final slack -5895.
+Super clustering done.
+Design Utilization : 4%.
+I: GP end with result: density(0.021998)
+Worst slack after global placement is -731
+2nd GP placement takes 9.70 sec.
+
+Wirelength after global placement is 93258 and checksum is 4E0D99508D73C5A3.
+Global placement takes 16.72 sec.
+
+Phase 3 Post global placement started.
+Packing LUT6D started.
+I: LUT6D pack result: There are 1659 LUT6 in collection, pack success:25
+Packing LUT6D takes 0.89 sec.
+Phase 3.1 Macro cell placement started.
+I: Process macros using "Global".
+Wirelength after macro cell placement is 93484 and checksum is CDF7391A04C340CF.
+Macro cell placement takes 0.64 sec.
+
+PBM start.
+PBM of PostGP end, takes 0.00 sec.
+Phase 3.2 3rd GP placement started.
+Design Utilization : 4%.
+I: GP end with result: density(0.000641)
+Worst slack after post global placement is -399
+3rd GP placement takes 2.45 sec.
+
+Wirelength after post global placement is 89435 and checksum is 2BA801D26DDB3D5A.
+Packing LUT6D started.
+I: LUT6D pack result: There are 1390 LUT6 in collection, pack success:1
+Packing LUT6D takes 0.80 sec.
+Post global placement takes 4.80 sec.
+
+Phase 4 Legalization started.
+The average distance in LP is 0.245580.
+Wirelength after legalization is 93987 and checksum is C576BB406FAB9B56.
+Legalization takes 0.36 sec.
+
+Phase 5 Timing-driven detailed placement started.
+Phase 5.1 Replication placement started.
+Replication placement takes 0.00 sec.
+
+Wirelength after replication placement is 93987 and checksum is C576BB406FAB9B56.
+Phase 5.2 Swapping placement started.
+Worst slack before detailed placement is -906, TNS before detailed placement is -236550. 
+Cost at Swap iteration 0 : -906, wslk -906, tns -225549, takes 0.56 sec.
+    wire length at Swap iteration 0 : last 93883.00, curr 92360.00, change rate -1.62%
+Cost at DP iteration 0 : -906, wslk -494, tns -40099, takes 1.22 sec.
+    wire length at DP iteration 0 : last 92360.00, curr 95133.00, change rate 3.00%
+Cost at Swap iteration 1 : -494, wslk -494, tns -37777, takes 0.69 sec.
+    wire length at Swap iteration 1 : last 95133.00, curr 95056.00, change rate -0.08%
+Cost at Swap iteration 2 : -494, wslk -491, tns -37284, takes 0.55 sec.
+    wire length at Swap iteration 2 : last 95056.00, curr 95043.00, change rate -0.01%
+Cost at DP iteration 2 : -491, wslk -141, tns -1067, takes 1.11 sec.
+    wire length at DP iteration 2 : last 95043.00, curr 97506.00, change rate 2.59%
+Cost at Swap iteration 3 : -141, wslk -141, tns -251, takes 0.55 sec.
+    wire length at Swap iteration 3 : last 97506.00, curr 97367.00, change rate -0.14%
+Cost at Swap iteration 4 : -141, wslk -141, tns -251, takes 0.52 sec.
+    wire length at Swap iteration 4 : last 97367.00, curr 97358.00, change rate -0.01%
+Cost at DP iteration 4 : -141, wslk 106, tns 0, takes 1.23 sec.
+    wire length at DP iteration 4 : last 97358.00, curr 99281.00, change rate 1.98%
+Cost at Swap iteration 5 : 106, wslk 106, tns 0, takes 0.44 sec.
+    wire length at Swap iteration 5 : last 99281.00, curr 99160.00, change rate -0.12%
+Cost at Swap iteration 6 : 106, wslk 106, tns 0, takes 0.33 sec.
+    wire length at Swap iteration 6 : last 99160.00, curr 99160.00, change rate 0.00%
+Cost at DP iteration 6 : 106, wslk 146, tns 0, takes 1.09 sec.
+    wire length at DP iteration 6 : last 99160.00, curr 99844.00, change rate 0.69%
+Cost at Swap iteration 7 : 146, wslk 146, tns 0, takes 0.41 sec.
+    wire length at Swap iteration 7 : last 99844.00, curr 99823.00, change rate -0.02%
+Cost at Swap iteration 8 : 146, wslk 146, tns 0, takes 0.42 sec.
+    wire length at Swap iteration 8 : last 99823.00, curr 99814.00, change rate -0.01%
+Cost at DP iteration 8 : 146, wslk 198, tns 0, takes 1.03 sec.
+    wire length at DP iteration 8 : last 99814.00, curr 100477.00, change rate 0.66%
+Cost at Swap iteration 9 : 198, wslk 198, tns 0, takes 0.41 sec.
+    wire length at Swap iteration 9 : last 100477.00, curr 100456.00, change rate -0.02%
+Cost at Swap iteration 10 : 198, wslk 198, tns 0, takes 0.31 sec.
+    wire length at Swap iteration 10 : last 100456.00, curr 100456.00, change rate 0.00%
+Cost at DP iteration 10 : 198, wslk 198, tns 0, takes 0.94 sec.
+    wire length at DP iteration 10 : last 100456.00, curr 101011.00, change rate 0.55%
+Cost at Swap iteration 11 : 198, wslk 198, tns 0, takes 0.30 sec.
+    wire length at Swap iteration 11 : last 101011.00, curr 101009.00, change rate -0.00%
+Worst slack after detailed placement is 198, TNS after detailed placement is 0. 
+Swapping placement takes 12.62 sec.
+
+Wirelength after detailed placement is 101034 and checksum is 2D2DAE90A00B3485.
+Timing-driven detailed placement takes 12.64 sec.
+
+Worst slack is 189, TNS after placement is 0.
+Placement done.
+Total placement takes 45.59 sec.
+Finished placement.
+
+Routing started.
+Build routing arch for double attribute device.
+Enter timing driven router mode.
+Route thread size: 5
+Building routing graph takes 10.00 sec.
+Init coarse delay table.
+Read place coarse delay table takes 1.86 sec.
+Build SRB system takes 2.44 sec.
+Setup STE netlist take 5216 msec.
+Dispose control chain take 152 msec.
+Collect const net info take 153 msec.
+Worst slack is 189, TNS before route is 0.
+Total nets for routing: 7886.
+Total loads for routing: 39825.
+Direct connect net size: 984
+Build all design net take 292 msec.
+Processing design graph takes 5.82 sec.
+Delay table total memory: 72.73170853 MB
+Route graph total memory: 321.59808445 MB
+Route design total memory: 13.34227753 MB
+Global routing takes 0.00 sec.
+Total 7884 subnets.
+Unrouted clock nets at iteration 0 (0.031 sec): 4
+Unrouted clock nets at iteration 1 (0.004 sec): 0
+Total route nets size: 7878
+Pre route takes 3.745 sec
+Unrouted general nets at iteration 3 (MT total route time: 1.895 sec): 7108(overused: 56570)
+Unrouted general nets at iteration 4 (MT total route time: 1.851 sec): 6395(overused: 45619)
+Unrouted general nets at iteration 5 (MT total route time: 1.737 sec): 5779(overused: 34838)
+Unrouted general nets at iteration 6 (MT total route time: 1.703 sec): 5218(overused: 27070)
+Unrouted general nets at iteration 7 (MT total route time: 1.657 sec): 4764(overused: 22350)
+Unrouted general nets at iteration 8 (MT total route time: 1.351 sec): 3949(overused: 19377)
+Unrouted general nets at iteration 9 (MT total route time: 1.250 sec): 3535(overused: 15853)
+Unrouted general nets at iteration 10 (MT total route time: 1.080 sec): 3193(overused: 13686)
+Unrouted general nets at iteration 11 (MT total route time: 0.954 sec): 2843(overused: 11226)
+Unrouted general nets at iteration 12 (MT total route time: 0.907 sec): 2524(overused: 9262)
+Unrouted general nets at iteration 13 (MT total route time: 1.076 sec): 2223(overused: 7809)
+Unrouted general nets at iteration 14 (MT total route time: 0.720 sec): 2203(overused: 7773)
+Unrouted general nets at iteration 15 (MT total route time: 0.732 sec): 2199(overused: 7590)
+Unrouted general nets at iteration 16 (MT total route time: 0.737 sec): 2137(overused: 7236)
+Unrouted general nets at iteration 17 (MT total route time: 0.684 sec): 1986(overused: 6501)
+Unrouted general nets at iteration 18 (MT total route time: 0.635 sec): 1809(overused: 5416)
+Unrouted general nets at iteration 19 (MT total route time: 0.568 sec): 1639(overused: 4718)
+Unrouted general nets at iteration 20 (MT total route time: 0.483 sec): 1488(overused: 4041)
+Unrouted general nets at iteration 21 (MT total route time: 0.498 sec): 1350(overused: 3585)
+Unrouted general nets at iteration 22 (MT total route time: 0.415 sec): 1179(overused: 3025)
+Unrouted general nets at iteration 23 (MT total route time: 0.369 sec): 1118(overused: 2805)
+Unrouted general nets at iteration 24 (MT total route time: 0.365 sec): 1075(overused: 2641)
+Unrouted general nets at iteration 25 (MT total route time: 0.355 sec): 1060(overused: 2713)
+Unrouted general nets at iteration 26 (MT total route time: 0.393 sec): 1038(overused: 2595)
+Unrouted general nets at iteration 27 (MT total route time: 0.366 sec): 997(overused: 2463)
+Unrouted general nets at iteration 28 (MT total route time: 0.314 sec): 919(overused: 2161)
+Unrouted general nets at iteration 29 (MT total route time: 0.283 sec): 832(overused: 1850)
+Unrouted general nets at iteration 30 (MT total route time: 0.299 sec): 807(overused: 1864)
+Unrouted general nets at iteration 31 (MT total route time: 0.264 sec): 753(overused: 1687)
+Unrouted general nets at iteration 32 (MT total route time: 0.243 sec): 674(overused: 1429)
+Unrouted general nets at iteration 33 (MT total route time: 0.203 sec): 574(overused: 1173)
+Unrouted general nets at iteration 34 (MT total route time: 0.193 sec): 587(overused: 1200)
+Unrouted general nets at iteration 35 (MT total route time: 0.210 sec): 535(overused: 1137)
+Unrouted general nets at iteration 36 (MT total route time: 0.236 sec): 481(overused: 1008)
+Unrouted general nets at iteration 37 (MT total route time: 0.286 sec): 445(overused: 894)
+Unrouted general nets at iteration 38 (MT total route time: 0.225 sec): 403(overused: 769)
+Unrouted general nets at iteration 39 (MT total route time: 0.146 sec): 379(overused: 759)
+Unrouted general nets at iteration 40 (MT total route time: 0.185 sec): 383(overused: 755)
+Unrouted general nets at iteration 41 (MT total route time: 0.171 sec): 364(overused: 641)
+Unrouted general nets at iteration 42 (MT total route time: 0.144 sec): 333(overused: 620)
+Unrouted general nets at iteration 43 (MT total route time: 0.171 sec): 331(overused: 688)
+Unrouted general nets at iteration 44 (MT total route time: 0.119 sec): 268(overused: 520)
+Unrouted general nets at iteration 45 (MT total route time: 0.100 sec): 218(overused: 365)
+Unrouted general nets at iteration 46 (MT total route time: 0.095 sec): 202(overused: 326)
+Unrouted general nets at iteration 47 (MT total route time: 0.079 sec): 186(overused: 322)
+Unrouted general nets at iteration 48 (MT total route time: 0.076 sec): 181(overused: 356)
+Unrouted general nets at iteration 49 (MT total route time: 0.061 sec): 157(overused: 252)
+Unrouted general nets at iteration 50 (MT total route time: 0.065 sec): 148(overused: 262)
+Unrouted general nets at iteration 51 (MT total route time: 0.068 sec): 169(overused: 294)
+Unrouted general nets at iteration 52 (MT total route time: 0.072 sec): 158(overused: 274)
+Unrouted general nets at iteration 53 (MT total route time: 0.065 sec): 140(overused: 252)
+Unrouted general nets at iteration 54 (MT total route time: 0.061 sec): 141(overused: 252)
+Unrouted general nets at iteration 55 (MT total route time: 0.069 sec): 125(overused: 236)
+Unrouted general nets at iteration 56 (MT total route time: 0.062 sec): 111(overused: 187)
+Unrouted general nets at iteration 57 (MT total route time: 0.057 sec): 90(overused: 154)
+Unrouted general nets at iteration 58 (MT total route time: 0.057 sec): 63(overused: 108)
+Unrouted general nets at iteration 59 (MT total route time: 0.037 sec): 33(overused: 52)
+Unrouted general nets at iteration 60 (MT total route time: 0.035 sec): 31(overused: 56)
+Unrouted general nets at iteration 61 (MT total route time: 0.061 sec): 50(overused: 74)
+Unrouted general nets at iteration 62 (MT total route time: 0.040 sec): 51(overused: 72)
+Unrouted general nets at iteration 63 (MT total route time: 0.044 sec): 35(overused: 50)
+Unrouted general nets at iteration 64 (MT total route time: 0.053 sec): 66(overused: 124)
+Unrouted general nets at iteration 65 (MT total route time: 0.049 sec): 61(overused: 112)
+Unrouted general nets at iteration 66 (MT total route time: 0.041 sec): 59(overused: 100)
+Unrouted general nets at iteration 67 (MT total route time: 0.037 sec): 53(overused: 85)
+Unrouted general nets at iteration 68 (MT total route time: 0.035 sec): 45(overused: 79)
+Unrouted general nets at iteration 69 (MT total route time: 0.043 sec): 58(overused: 110)
+Unrouted general nets at iteration 70 (MT total route time: 0.050 sec): 77(overused: 166)
+Unrouted general nets at iteration 71 (MT total route time: 0.041 sec): 50(overused: 80)
+Unrouted general nets at iteration 72 (MT total route time: 0.036 sec): 59(overused: 102)
+Unrouted general nets at iteration 73 (MT total route time: 0.057 sec): 72(overused: 125)
+Unrouted general nets at iteration 74 (MT total route time: 0.057 sec): 75(overused: 141)
+Unrouted general nets at iteration 75 (MT total route time: 0.069 sec): 104(overused: 212)
+Unrouted general nets at iteration 76 (MT total route time: 0.063 sec): 82(overused: 118)
+Unrouted general nets at iteration 77 (MT total route time: 0.046 sec): 74(overused: 133)
+Unrouted general nets at iteration 78 (MT total route time: 0.048 sec): 65(overused: 108)
+Unrouted general nets at iteration 79 (MT total route time: 0.040 sec): 51(overused: 88)
+Unrouted general nets at iteration 80 (MT total route time: 0.032 sec): 40(overused: 62)
+Unrouted general nets at iteration 81 (MT total route time: 0.032 sec): 38(overused: 68)
+Unrouted general nets at iteration 82 (MT total route time: 0.035 sec): 38(overused: 58)
+Unrouted general nets at iteration 83 (MT total route time: 0.035 sec): 33(overused: 56)
+Unrouted general nets at iteration 84 (MT total route time: 0.032 sec): 25(overused: 36)
+Unrouted general nets at iteration 85 (MT total route time: 0.029 sec): 14(overused: 28)
+Unrouted general nets at iteration 86 (MT total route time: 0.028 sec): 12(overused: 16)
+Unrouted general nets at iteration 87 (MT total route time: 0.024 sec): 13(overused: 20)
+Unrouted general nets at iteration 88 (MT total route time: 0.025 sec): 10(overused: 14)
+Unrouted general nets at iteration 89 (MT total route time: 0.026 sec): 4(overused: 4)
+Unrouted general nets at iteration 90 (MT total route time: 0.031 sec): 4(overused: 6)
+Unrouted general nets at iteration 91 (MT total route time: 0.022 sec): 2(overused: 2)
+Unrouted general nets at iteration 92 (MT total route time: 0.025 sec): 2(overused: 2)
+Unrouted general nets at iteration 93 (MT total route time: 0.032 sec): 0(overused: 0)
+----General net take 0.033 sec(route net take 0.016 sec, inc cost take 0.017 sec, iter times: 1)
+----const net route take 0.044 sec
+Unrouted nets at iteration 94 (0.078 sec): 0
+Detailed routing takes 44.78 sec.
+I: Design net u_CORES/capt_o is routed by general path.
+C: Route-2036: The clock path from u_CORES/u_GTP_SCANCHAIN_PG/scanchain:CAPTUREDR to u_CORES/u_debug_core_0/u_hub_data_decode/id_sample.conf_id[0]/opit_0_inv:CLK is routed by SRB.
+I: Design net u_CORES/drck_o is routed by general path.
+C: Route-2036: The clock path from u_CORES/u_GTP_SCANCHAIN_PG/scanchain:TCK1 to clkbufg_4/gopclkbufg:CLK is routed by SRB.
+Fix violation Finished.
+No hold violation.
+Hold Violation Fix in router takes 3.42 sec.
+Sort Original Nets take 0.006 sec
+Build solution node for device pins which were mapped to more than one design pin take 0.018 sec
+Total net: 7886, route succeed net: 7886
+Generate routing result take 0.024 sec
+Handle PERMUX permutation take 0.452 sec
+Handle const net take 0.020 sec
+Handle route through take 0.012 sec
+Handle loads' routing node take 0.093 sec
+Used SRB routing arc is 103294.
+Finish routing takes 0.80 sec.
+Total routing takes 67.54 sec.
+
+
+Device Utilization Summary :
++------------------------------------------------------------------------------------+
+| Logic Utilization                 | Used     | Available     | Utilization(%)     
++------------------------------------------------------------------------------------+
+| Use of ADC                        | 0        | 1             | 0                  
+| Use of ANALOG                     | 0        | 1             | 0                  
+| Use of APM                        | 4        | 740           | 1                  
+| Use of BKCL                       | 2        | 10            | 20                 
+| Use of CCS                        | 1        | 1             | 100                
+| Use of CLMA                       | 1448     | 30075         | 5                  
+|   FF                              | 2308     | 240600        | 1                  
+|   LUT                             | 4659     | 120300        | 4                  
+|   LUT-FF pairs                    | 1515     | 120300        | 2                  
+| Use of CLMS                       | 522      | 9875          | 6                  
+|   FF                              | 716      | 79000         | 1                  
+|   LUT                             | 1762     | 39500         | 5                  
+|   LUT-FF pairs                    | 493      | 39500         | 2                  
+|   Distributed RAM                 | 371      | 39500         | 1                  
+| Use of DDRPHY_CPD                 | 0        | 20            | 0                  
+| Use of DDRPHY_IOCLK_DIV           | 0        | 10            | 0                  
+| Use of DDR_PHY                    | 0        | 40            | 0                  
+| Use of DRM                        | 26       | 415           | 7                  
+| Use of GCLK_INBUF_SYN             | 0        | 40            | 0                  
+| Use of GPLL                       | 1        | 10            | 10                 
+| Use of GSEB                       | 0        | 512           | 0                  
+| Use of HARD0                      | 574      | 25050         | 3                  
+| Use of HCKB                       | 3        | 120           | 3                  
+|  HCKB dataused                    | 0        | 120           | 0                  
+| Use of HCKMUX_TEST                | 0        | 10            | 0                  
+| Use of HSSTLP                     | 0        | 2             | 0                  
+| Use of IO                         | 13       | 400           | 4                  
+|   IOBD                            | 5        | 192           | 3                  
+|   IOBS                            | 8        | 208           | 4                  
+| Use of IOCKB                      | 0        | 40            | 0                  
+| Use of IOCKMUX_TEST               | 0        | 10            | 0                  
+| Use of IOLHR                      | 13       | 500           | 3                  
+| Use of KEYRAM                     | 0        | 1             | 0                  
+| Use of MFG_TEST                   | 0        | 1             | 0                  
+| Use of MRCKB                      | 0        | 20            | 0                  
+| Use of MRCKMUX_TEST               | 0        | 10            | 0                  
+| Use of MRPOSTMUX_TEST             | 0        | 10            | 0                  
+| Use of PCIE                       | 0        | 1             | 0                  
+| Use of PCKMUX_TEST                | 0        | 20            | 0                  
+| Use of PLLMRMUX_TEST              | 0        | 10            | 0                  
+| Use of PLLREFMUX_TEST             | 0        | 10            | 0                  
+| Use of POSTGMUXLR_TEST            | 0        | 4             | 0                  
+| Use of PPLL                       | 0        | 10            | 0                  
+| Use of PREGMUXC_TEST              | 0        | 3             | 0                  
+| Use of PREGMUXC_X16_200H_TEST     | 0        | 4             | 0                  
+| Use of PREGMUXLR_TEST             | 0        | 10            | 0                  
+| Use of RCKB                       | 0        | 40            | 0                  
+|  RCKB dataused                    | 0        | 40            | 0                  
+| Use of RCKMUX_TEST                | 0        | 10            | 0                  
+| Use of SCANCHAIN                  | 1        | 1             | 100                
+| Use of SCKMUX_TEST                | 0        | 20            | 0                  
+| Use of SFB                        | 0        | 5075          | 0                  
+| Use of SPAD                       | 0        | 8             | 0                  
+| Use of TSERDES                    | 0        | 80            | 0                  
+| Use of USCM                       | 2        | 32            | 7                  
+|  USCM dataused                    | 0        | 32            | 0                  
+| Use of USCMMUX_TEST               | 0        | 32            | 0                  
++------------------------------------------------------------------------------------+
+
+Finished routing.
+Design 'pds_soc_top' has been placed and routed successfully.
+Saving design to DB.
+Finished placement and routing.
+Action pnr: Real time elapsed is 0h:2m:29s
+Action pnr: CPU time elapsed is 0h:2m:14s
+Action pnr: Process CPU time elapsed is 0h:2m:49s
+Current time: Sun Nov  1 01:39:55 2026
+Action pnr: Peak memory pool usage is 3,068 MB
+Action from dev_map to pnr: Total Real Time elapsed is 0h:3m:0s
+Action from dev_map to pnr: Total CPU time elapsed is 0h:2m:25s
+Action from dev_map to pnr: Total Process CPU Time elapsed is 0h:3m:1s
+Process "Place & Route" done.
+Executing : pnr -dc_duplication false -plc_decongestion 0 -gplace_seed 1 -logic_optimize_lut6d_combing_strategy 3 successfully.
+
+
+Executing : report_timing
+
+
+Process "Report Timing" started.
+Current time: Sun Nov  1 01:39:57 2026
+Compiling architecture definition.
+Analyzing project file 'D:/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/builds/20261101-013611-840c8de9/implementation/cpu_ila.pds'.
+Compiling verification operator library.
+Compiling common defs.
+Compiling prim grid devices.
+Compiling gate devices.
+Compiling gate operators.
+Building architecture model.
+Loading device packaging model.
+Reading design from pnr DB.
+Start Report Post-PnR timing.
+NOTE: The technology fpga was specified.
+NOTE: delay_model specified was generic_cmos.
+NOTE: Using the fpga syntax tables...
+Totals:
+ Calls to malloc = 0
+ Calls to calloc = 5993935
+
+Constructing timing graph ...
+Timing graph has been constructed successfully
+W: Timing-4087: Port 'led[0]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'led[1]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'led[2]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'led[3]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'led[4]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'led[5]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'led[6]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'led[7]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'uart_tx' is not constrained, it is treated as combinational output.
+W: Timing-4086: Port 'key' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'rst_n' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'uart_rx' is not constrained, it is treated as combinational input.
+Report timing is finished successfully.
+Action report_timing: Real time elapsed is 0h:0m:21s
+Action report_timing: CPU time elapsed is 0h:0m:16s
+Action report_timing: Process CPU time elapsed is 0h:0m:17s
+Current time: Sun Nov  1 01:40:17 2026
+Action report_timing: Peak memory pool usage is 1,557 MB
+Action from dev_map to report_timing: Total Real Time elapsed is 0h:3m:21s
+Action from dev_map to report_timing: Total CPU time elapsed is 0h:2m:41s
+Action from dev_map to report_timing: Total Process CPU Time elapsed is 0h:3m:18s
+Process "Report Timing" done.
+Executing : report_timing successfully.
+
+
+Executing : gen_bit_stream
+
+
+Process "Generate Bitstream" started.
+Current time: Sun Nov  1 01:40:17 2026
+Compiling architecture definition.
+Analyzing project file 'D:/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/builds/20261101-013611-840c8de9/implementation/cpu_ila.pds'.
+Compiling verification operator library.
+Compiling common defs.
+Compiling prim grid devices.
+Compiling gate devices.
+Compiling gate operators.
+Building architecture model.
+Loading device packaging model.
+Reading design from DB.
+Start Generating Programming File...
+Reading design from DB takes 1.609375 sec.
+Generating architecture configuration.
+C: Bitstream-2001: SCBV has not been set. Please set SCBV value based on PCB board, where is in configuration tab of bit stream options.
+The bitstream file is "D:/AAAFPGA/ILA_Core_Releases_20261101/H3_Base_145125/builds/20261101-013611-840c8de9/implementation/generate_bitstream/pds_soc_top.sbit"
+Generate programming file takes 14.093750 sec.
+Generating Programming File done.
+Action gen_bit_stream: Real time elapsed is 0h:0m:32s
+Action gen_bit_stream: CPU time elapsed is 0h:0m:27s
+Action gen_bit_stream: Process CPU time elapsed is 0h:0m:27s
+Current time: Sun Nov  1 01:40:48 2026
+Action gen_bit_stream: Peak memory pool usage is 2,398 MB
+Action from dev_map to gen_bit_stream: Total Real Time elapsed is 0h:3m:53s
+Action from dev_map to gen_bit_stream: Total CPU time elapsed is 0h:3m:8s
+Action from dev_map to gen_bit_stream: Total Process CPU Time elapsed is 0h:3m:45s
+Process "Generate Bitstream" done.
+Executing : gen_bit_stream successfully.

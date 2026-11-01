@@ -1,0 +1,22 @@
+﻿{
+  "schema": "minimal-pipeline-ila/v1",
+  "release": "Original_155250",
+  "build_directory": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\builds\\20261101-004439-8819c404",
+  "source_release": "D:\\AAAFPGA\\Current_Paper_and_Sub7000_Core_Releases_20261012\\cores\\Original_155250",
+  "configuration": "V0",
+  "clock_hz": 155250000,
+  "placement_seed": 2,
+  "clock_uncertainty_ns": 0.15,
+  "device": "PG2L200H",
+  "package": "FBB676",
+  "speedgrade": "-6",
+  "firmware_sha256": "1D66BDD8919951E18C191B82EA271C84BD156EA14F2CA9FCF5C4B56216069949",
+  "stage": "prepared",
+  "status": "failed",
+  "hardware_validated": false,
+  "full_score_qualified": false,
+  "changed_field": "pds_soc_top.board.INIT_FILE (path relocation only)",
+  "created_utc": "2026-10-31T16:44:39.464176Z",
+  "updated_utc": "2026-10-31T16:44:57.1200045Z",
+  "error": "Vendor stage failed: pds; inspect D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\builds\\20261101-004439-8819c404\\synthesis\\pds.stdout.log"
+}

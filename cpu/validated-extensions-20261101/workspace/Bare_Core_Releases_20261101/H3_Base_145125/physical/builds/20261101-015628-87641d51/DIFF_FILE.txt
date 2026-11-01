@@ -1,0 +1,5 @@
+﻿CHANGED FIELD: Added standalone rv32_bare_core passthrough and bare_core_scan_top physical scan fixture.
+Unchanged functional RTL: all eight frozen source file SHA256 values.
+DUT hierarchy: core_boundary/dut; no cache, memory system, RAM service, peripheral, PLL, or ILA.
+Scan-controlled core input bits excluding clock: 176
+Individually captured core output bits: 471

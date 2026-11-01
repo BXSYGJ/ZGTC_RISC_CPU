@@ -1,0 +1,6 @@
+﻿Changed field: pds_soc_top.board.INIT_FILE
+--- frozen pds_soc_top.v
++++ relocated inputs/pds_soc_top.v
+- .INIT_FILE("E:/r15525/V0/physical-results/rvc-physical-20261008T144046Z-e917d713/inputs/firmware.hex")
++ .INIT_FILE("D:/AAAFPGA/ILA_Core_Releases_20261101/Original_155250/builds/20261101-010901-9bbe8fee/inputs/firmware.hex")
+All functional RTL, PLL, constraints, and firmware bytes are identical to the frozen physical V0 inputs.

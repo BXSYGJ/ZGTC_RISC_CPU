@@ -1,5 +1,7 @@
 # Packaged CPU releases
 
+**2026-11-01 update:** [Three new minimal-ILA systems and three bare-core extractions](validated-extensions-20261101/README.md) include local simulation waveforms, timing/resource reports, snapshot verification and relocated physical-project preparation. These local results have a separate evidence scope from the archived board-qualified releases below.
+
 Each qualified CPU version has its own folder directly under `cpu/`. V0 performance and V1 validation remain together inside each release. All scores below use 6,000 iterations and archived board cycle counters.
 
 | Release folder | ISA | MHz | V0 CoreMark | V0 CoreMark/MHz | LUT / FF | DRM / APM |

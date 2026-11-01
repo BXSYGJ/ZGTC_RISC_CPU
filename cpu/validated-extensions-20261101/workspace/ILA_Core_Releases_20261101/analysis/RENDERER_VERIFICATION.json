@@ -1,0 +1,211 @@
+{
+  "origin": "LOCAL RTL SIMULATION",
+  "status": "PASS",
+  "tests": {
+    "command": "python -m unittest -v test_local_waveform_renderer.py",
+    "exit_code": 0,
+    "literal_output": "test_changed_native_csv_bit_rejected_even_when_hash_updated (test_local_waveform_renderer.ActualRecordingTamperTests.test_changed_native_csv_bit_rejected_even_when_hash_updated) ... ok\r\ntest_changed_packed_observation_rejected_even_when_hash_updated (test_local_waveform_renderer.ActualRecordingTamperTests.test_changed_packed_observation_rejected_even_when_hash_updated) ... ok\r\ntest_hardware_relabel_is_rejected (test_local_waveform_renderer.ActualRecordingTamperTests.test_hardware_relabel_is_rejected) ... ok\r\ntest_missing_edge_is_rejected (test_local_waveform_renderer.LocalRendererTests.test_missing_edge_is_rejected) ... ok\r\ntest_settled_timestamp_groups_match_every_synthetic_bit (test_local_waveform_renderer.LocalRendererTests.test_settled_timestamp_groups_match_every_synthetic_bit) ... ok\r\ntest_synthetic_plot_is_explicitly_labeled (test_local_waveform_renderer.LocalRendererTests.test_synthetic_plot_is_explicitly_labeled) ... ok\r\ntest_trigger_annotation_and_pipeline_validity (test_local_waveform_renderer.LocalRendererTests.test_trigger_annotation_and_pipeline_validity) ... ok\r\ntest_unknown_sample_is_rejected_without_fill (test_local_waveform_renderer.LocalRendererTests.test_unknown_sample_is_rejected_without_fill) ... ok\r\n\r\n----------------------------------------------------------------------\r\nRan 8 tests in 0.605s\r\n\r\nOK"
+  },
+  "render": {
+    "command": "pwsh -NoProfile -File D:/AAAFPGA/ILA_Core_Releases_20261101/transport/Render-LocalIlaWaveforms.ps1",
+    "exit_code": 0,
+    "literal_output": "{\"state\": \"RENDERED\", \"origin\": \"LOCAL RTL SIMULATION\", \"windows\": 9, \"png_files\": 18, \"svg_files\": 18}"
+  },
+  "windows": 9,
+  "recorded_edges": 9216,
+  "csv_vcd_probe_bits_checked": 387072,
+  "packed_csv_bits_checked": 387072,
+  "verified_output_files": [
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\waveforms\\analysis\\core_bench_list\\full1024.png",
+      "sha256": "83d9d8eb327c94e093b7f89678435dd8801f3370a457fd059a608c7606a685f9",
+      "bytes": 301070
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\waveforms\\analysis\\core_bench_list\\full1024.svg",
+      "sha256": "e5de606e68927351f1e78ef73363abeea62f0278ca201f880fa18ddd1db2f7d4",
+      "bytes": 249491
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\waveforms\\analysis\\core_bench_list\\trigger-zoom.png",
+      "sha256": "0433537849ed4c535149314c60e1c9cf243e903077ad162f94c150c93570e9a7",
+      "bytes": 246391
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\waveforms\\analysis\\core_bench_list\\trigger-zoom.svg",
+      "sha256": "db619d0f661411397d73349a9dadb18b2b360849ed5b133549e42074e03cd20f",
+      "bytes": 50489
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\waveforms\\analysis\\core_bench_matrix\\full1024.png",
+      "sha256": "df2bae36c5a6d15e828b37f76b966939ceefba802fa053cffec5fb8234569c2b",
+      "bytes": 299674
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\waveforms\\analysis\\core_bench_matrix\\full1024.svg",
+      "sha256": "674c6972d07b234a2295d491b6033170308b1a0c7ecf865bb43cbe8b0f805e34",
+      "bytes": 260517
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\waveforms\\analysis\\core_bench_matrix\\trigger-zoom.png",
+      "sha256": "40684072d3832f757e70277efa311b9c160850c64b85cd43b0c7e6ce9cd72eac",
+      "bytes": 244764
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\waveforms\\analysis\\core_bench_matrix\\trigger-zoom.svg",
+      "sha256": "2a40ab4233f8d5f511044f5c4ad1d10b41b1f51fc19215722b1a4acd4627072e",
+      "bytes": 44691
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\waveforms\\analysis\\core_bench_state\\full1024.png",
+      "sha256": "c848a4e3d2d68b202cfde009b850244d6dc2dfaf66224f0751cba2d1ba5660bf",
+      "bytes": 306987
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\waveforms\\analysis\\core_bench_state\\full1024.svg",
+      "sha256": "22068cca0712a0217b2ce06ce2dace71db4c7d9cefde01b7be40189636a72160",
+      "bytes": 268930
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\waveforms\\analysis\\core_bench_state\\trigger-zoom.png",
+      "sha256": "dfcf229d9422d935bb8d754f08e972731dc38c07d67e629de8b19909923ae12c",
+      "bytes": 247739
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\Original_155250\\waveforms\\analysis\\core_bench_state\\trigger-zoom.svg",
+      "sha256": "f9dae738677e9a2fa81de9629080c80082ecfe38c5af24e8e83c28f495317486",
+      "bytes": 49175
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\waveforms\\analysis\\core_bench_list\\full1024.png",
+      "sha256": "f541bd62738a1cf1ea5e5d7bca0f038697061c8b66f5efcef8bfacffc85349f7",
+      "bytes": 301014
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\waveforms\\analysis\\core_bench_list\\full1024.svg",
+      "sha256": "d815c459eaee2aaf7c5ace4ea4fc7980b00ae73e44e7ec80f20c239782567eea",
+      "bytes": 247216
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\waveforms\\analysis\\core_bench_list\\trigger-zoom.png",
+      "sha256": "e933d9f8c392229dff10261e3a1a4e3fdb611f6222d8b766dc886bd546bcaf88",
+      "bytes": 245991
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\waveforms\\analysis\\core_bench_list\\trigger-zoom.svg",
+      "sha256": "a0acbfea581baaf3eeb4c2de62b951f1471de82f08385b04eb856dcdc8a397bb",
+      "bytes": 50493
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\waveforms\\analysis\\core_bench_matrix\\full1024.png",
+      "sha256": "1520ad405286153535211ed161ea117a1a76438c3151a9c40906baaf2dbd168c",
+      "bytes": 298661
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\waveforms\\analysis\\core_bench_matrix\\full1024.svg",
+      "sha256": "00f464cbde8468a8805182b73e6076f46ecf7737e45ce8ea9b1c4c00c2d26515",
+      "bytes": 264111
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\waveforms\\analysis\\core_bench_matrix\\trigger-zoom.png",
+      "sha256": "a5b7158759f5883cc09efb3edade414134a547affa404b2bdff986cde2e8a763",
+      "bytes": 243116
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\waveforms\\analysis\\core_bench_matrix\\trigger-zoom.svg",
+      "sha256": "565bc98645193e4b83881a4bc519d13e5d559fc21e25d260736559eb6c402652",
+      "bytes": 44695
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\waveforms\\analysis\\core_bench_state\\full1024.png",
+      "sha256": "5955cb6d91c50231a891c734cbda3bb901f71842ef4999a5b14292b1a4f828a4",
+      "bytes": 300111
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\waveforms\\analysis\\core_bench_state\\full1024.svg",
+      "sha256": "df16c96af69b3715eee47654e6552f0c56322910b3a183f1bec5b5dfe76ad28d",
+      "bytes": 267487
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\waveforms\\analysis\\core_bench_state\\trigger-zoom.png",
+      "sha256": "a6f238da9d050f2ee92ff2bc1b5a95e87eb5de74cad7e71fde393f68404017e9",
+      "bytes": 249134
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\waveforms\\analysis\\core_bench_state\\trigger-zoom.svg",
+      "sha256": "2b63068e0fcbb4ce84e208cb1f6e0d42e196309c6cb3827c9af3cfeba566a2d1",
+      "bytes": 49942
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\waveforms\\analysis\\core_bench_list\\full1024.png",
+      "sha256": "064bf9f9b15b0fc4ad3d1692a2b55f1b7de1cfff9ca0c07e29402fb418811ec0",
+      "bytes": 301778
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\waveforms\\analysis\\core_bench_list\\full1024.svg",
+      "sha256": "65294c7e03358451845551362ad623080f4c85d2f668c291001c5a6b9d52b904",
+      "bytes": 247220
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\waveforms\\analysis\\core_bench_list\\trigger-zoom.png",
+      "sha256": "411c6dd57240703ec138ecbb2168962ae7eed1afa8c241613347719f8093f378",
+      "bytes": 246631
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\waveforms\\analysis\\core_bench_list\\trigger-zoom.svg",
+      "sha256": "6881101be461fd15863ece0518661fd8f9d0de3808e71fa21c111e0a690128ac",
+      "bytes": 50497
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\waveforms\\analysis\\core_bench_matrix\\full1024.png",
+      "sha256": "ce1f7b0369ac757ef073f445c1af9fc3574dab88d7e8110a957692b4b1408c3b",
+      "bytes": 299340
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\waveforms\\analysis\\core_bench_matrix\\full1024.svg",
+      "sha256": "07d4ef69d2cafc8bc6595d8ad8b72a7ad9dff25a430fdc1c9c3d117b1ad513ec",
+      "bytes": 264115
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\waveforms\\analysis\\core_bench_matrix\\trigger-zoom.png",
+      "sha256": "5030bfe6f4dfea0fb2c483deebc97754e62d1c7fbd283cbf6b139a0bd7be5370",
+      "bytes": 243747
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\waveforms\\analysis\\core_bench_matrix\\trigger-zoom.svg",
+      "sha256": "9349d2930ba3522472788359de8176bec7e6a16964af93f134258b5988f8b3a5",
+      "bytes": 44699
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\waveforms\\analysis\\core_bench_state\\full1024.png",
+      "sha256": "fab1f1932254d949727ac51114cec0970814727ddb698e1145edc735cc5aa702",
+      "bytes": 300281
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\waveforms\\analysis\\core_bench_state\\full1024.svg",
+      "sha256": "58d5e3e5dbb8a1a04751921acc02b301e1793cf4615cb9ae344738476b075965",
+      "bytes": 267491
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\waveforms\\analysis\\core_bench_state\\trigger-zoom.png",
+      "sha256": "99cd3118ec33539359a2018634e7e39e6f764638d9012b541f8a66590f1fad0f",
+      "bytes": 249420
+    },
+    {
+      "path": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Retained_145125\\waveforms\\analysis\\core_bench_state\\trigger-zoom.svg",
+      "sha256": "2b6a8cd212af7617202b95bd0d4fa388af71dd4ee6f1ca7016eaccf0936e74b9",
+      "bytes": 49946
+    }
+  ],
+  "visual_qa": [
+    "Original list zoom",
+    "Original matrix overview",
+    "H3 Base matrix zoom and overview",
+    "H3 Retained state zoom"
+  ],
+  "hardware_waveform_claim": false,
+  "remote_status": "unused",
+  "generated_utc": "2026-10-31T17:23:53.3207685Z",
+  "aggregate_sha256": "1de0c799597913e185c13ff08bf14a4631e29d4effc32ca31dcc9592567bfdbd",
+  "all_source_manifest_hashes_current": true
+}

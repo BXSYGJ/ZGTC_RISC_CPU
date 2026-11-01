@@ -1,0 +1,304 @@
+﻿{
+  "clock_hz": 145125000,
+  "cpu_period_ns": 6.89,
+  "clock_loads": 2617,
+  "timing_summary": "All Constraints Met.",
+  "constraints_met": true,
+  "setup_wns_ns": 0.074,
+  "estimated_mhz_not_hardware_measurement": 146.7136,
+  "setup_uncertainty_ns": 0.15,
+  "setup_uncertainty_paths_checked": 6,
+  "all_corner_audit": {
+    "all_corners_passed": true,
+    "summary_tables_checked": 10,
+    "includes_cpu_and_debugger_clocks": true,
+    "tables": [
+      {
+        "check": "Setup",
+        "corner": "Slow Corner",
+        "rows": [
+          {
+            "printed_clock_columns": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+            "slack_ns": 0.074,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 14306,
+            "passed": true
+          },
+          {
+            "printed_clock_columns": "DebugCore_JCLK         DebugCore_JCLK",
+            "slack_ns": 23.542,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 321,
+            "passed": true
+          },
+          {
+            "printed_clock_columns": "DebugCore_CAPTURE      DebugCore_JCLK",
+            "slack_ns": 18.354,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 94,
+            "passed": true
+          },
+          {
+            "printed_clock_columns": "DebugCore_JCLK         DebugCore_CAPTURE",
+            "slack_ns": 43.737,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 16,
+            "passed": true
+          }
+        ]
+      },
+      {
+        "check": "Hold",
+        "corner": "Slow Corner",
+        "rows": [
+          {
+            "printed_clock_columns": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+            "slack_ns": 0.151,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 14306,
+            "passed": true
+          },
+          {
+            "printed_clock_columns": "DebugCore_JCLK         DebugCore_JCLK",
+            "slack_ns": 0.3,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 321,
+            "passed": true
+          },
+          {
+            "printed_clock_columns": "DebugCore_CAPTURE      DebugCore_JCLK",
+            "slack_ns": 25.882,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 94,
+            "passed": true
+          },
+          {
+            "printed_clock_columns": "DebugCore_JCLK         DebugCore_CAPTURE",
+            "slack_ns": 0.875,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 16,
+            "passed": true
+          }
+        ]
+      },
+      {
+        "check": "Recovery",
+        "corner": "Slow Corner",
+        "rows": [
+          {
+            "printed_clock_columns": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+            "slack_ns": 3.04,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 2117,
+            "passed": true
+          }
+        ]
+      },
+      {
+        "check": "Removal",
+        "corner": "Slow Corner",
+        "rows": [
+          {
+            "printed_clock_columns": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+            "slack_ns": 0.436,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 2117,
+            "passed": true
+          }
+        ]
+      },
+      {
+        "check": "Minimum Pulse Width",
+        "corner": "Slow Corner",
+        "rows": [
+          {
+            "printed_clock_columns": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+            "slack_ns": 2.1,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 2617,
+            "passed": true
+          },
+          {
+            "printed_clock_columns": "DebugCore_JCLK",
+            "slack_ns": 24.04,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 88,
+            "passed": true
+          },
+          {
+            "printed_clock_columns": "DebugCore_CAPTURE",
+            "slack_ns": 49.8,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 11,
+            "passed": true
+          }
+        ]
+      },
+      {
+        "check": "Setup",
+        "corner": "Fast Corner",
+        "rows": [
+          {
+            "printed_clock_columns": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+            "slack_ns": 2.802,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 14306,
+            "passed": true
+          },
+          {
+            "printed_clock_columns": "DebugCore_JCLK         DebugCore_JCLK",
+            "slack_ns": 24.187,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 321,
+            "passed": true
+          },
+          {
+            "printed_clock_columns": "DebugCore_CAPTURE      DebugCore_JCLK",
+            "slack_ns": 21.459,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 94,
+            "passed": true
+          },
+          {
+            "printed_clock_columns": "DebugCore_JCLK         DebugCore_CAPTURE",
+            "slack_ns": 46.176,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 16,
+            "passed": true
+          }
+        ]
+      },
+      {
+        "check": "Hold",
+        "corner": "Fast Corner",
+        "rows": [
+          {
+            "printed_clock_columns": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+            "slack_ns": 0.101,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 14306,
+            "passed": true
+          },
+          {
+            "printed_clock_columns": "DebugCore_JCLK         DebugCore_JCLK",
+            "slack_ns": 0.2,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 321,
+            "passed": true
+          },
+          {
+            "printed_clock_columns": "DebugCore_CAPTURE      DebugCore_JCLK",
+            "slack_ns": 25.473,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 94,
+            "passed": true
+          },
+          {
+            "printed_clock_columns": "DebugCore_JCLK         DebugCore_CAPTURE",
+            "slack_ns": 1.248,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 16,
+            "passed": true
+          }
+        ]
+      },
+      {
+        "check": "Recovery",
+        "corner": "Fast Corner",
+        "rows": [
+          {
+            "printed_clock_columns": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+            "slack_ns": 4.475,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 2117,
+            "passed": true
+          }
+        ]
+      },
+      {
+        "check": "Removal",
+        "corner": "Fast Corner",
+        "rows": [
+          {
+            "printed_clock_columns": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+            "slack_ns": 0.29,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 2117,
+            "passed": true
+          }
+        ]
+      },
+      {
+        "check": "Minimum Pulse Width",
+        "corner": "Fast Corner",
+        "rows": [
+          {
+            "printed_clock_columns": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+            "slack_ns": 2.647,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 2617,
+            "passed": true
+          },
+          {
+            "printed_clock_columns": "DebugCore_JCLK",
+            "slack_ns": 24.43,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 88,
+            "passed": true
+          },
+          {
+            "printed_clock_columns": "DebugCore_CAPTURE",
+            "slack_ns": 49.8,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 11,
+            "passed": true
+          }
+        ]
+      }
+    ]
+  },
+  "resources": {
+    "CLMA": {
+      "ff": 2308,
+      "lut": 4659
+    },
+    "CLMS": {
+      "ff": 716,
+      "lut": 1762
+    },
+    "DRM": 26.0,
+    "GPLL": 1.0,
+    "APM": 4.0,
+    "post_route_luts": 6421,
+    "post_route_ffs": 3024
+  },
+  "timing_report": "D:\\AAAFPGA\\ILA_Core_Releases_20261101\\H3_Base_145125\\builds\\20261101-013611-840c8de9\\implementation\\report_timing\\pds_soc_top.rtr",
+  "timing_report_sha256": "C504222C67288FDBD8A25CBC4867D2140096508FDEE81E5F6FCE0784731AEE88",
+  "hardware_validated": false
+}

@@ -1,0 +1,57 @@
+﻿wsl: 检测到 localhost 代理配置，但未镜像到 WSL。NAT 模式下的 WSL 不支持 localhost 代理。
+%Warning-WIDTH: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/Original_155250/qualification/dynamic/MODIFIED/inputs/rtl/rv32_cache.sv:201:36: Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's SHIFTR generates 9 bits.
+                                                                                                                                        : ... In instance rv32_observed_soc.soc.memory_system.caches[0].enabled.cache
+  201 |                     read_valid_bank<=read_set >> VALID_OFFSET_BITS;
+      |                                    ^~
+                ... Use "/* verilator lint_off WIDTH */" and lint_on around source to disable this message.
+%Warning-WIDTH: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/Original_155250/qualification/dynamic/MODIFIED/inputs/rtl/rv32_burst_ram.sv:46:21: Operator NEQ expects 96 bits on the RHS, but RHS's CONST '?1?h0' generates 1 bits.
+                                                                                                                                           : ... In instance rv32_observed_soc.soc.memory_system.ram
+   46 |         if(INIT_FILE!="") $readmemh(INIT_FILE,memory);
+      |                     ^~
+%Warning-UNUSED: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/Original_155250/qualification/dynamic/MODIFIED/inputs/rtl/rv32_core.sv:161:26: Signal is not used: 'prediction_hit'
+                                                                                                                                        : ... In instance rv32_observed_soc.soc.core
+  161 |     wire predicted_taken,prediction_hit;
+      |                          ^~~~~~~~~~~~~~
+%Warning-UNUSED: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/Original_155250/qualification/dynamic/MODIFIED/inputs/rtl/rv32_memory_system.sv:70:16: Bits of signal are not used: 'cache_pair_valid'[1]
+                                                                                                                                                : ... In instance rv32_observed_soc.soc.memory_system
+   70 |     wire [1:0] cache_pair_valid;
+      |                ^~~~~~~~~~~~~~~~
+%Warning-UNUSED: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/Original_155250/qualification/dynamic/MODIFIED/inputs/rtl/rv32_cache.sv:63:22: Signal is not used: 'dirty'
+                                                                                                                                        : ... In instance rv32_observed_soc.soc.memory_system.caches[1].enabled.cache
+   63 |     wire [LINES-1:0] dirty;
+      |                      ^~~~~
+%Warning-UNUSED: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/Original_155250/qualification/dynamic/MODIFIED/inputs/rtl/rv32_cache.sv:99:58: Bits of signal are not used: 'word_data'[31:18,15:2]
+                                                                                                                                        : ... In instance rv32_observed_soc.soc.memory_system.caches[1].enabled.cache
+   99 |     function automatic [1:0] compact_halves(input [31:0] word_data);
+      |                                                          ^~~~~~~~~
+%Warning-UNUSED: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/Original_155250/qualification/dynamic/MODIFIED/inputs/rtl/rv32_cache.sv:78:16: Signal is not used: 'request_data'
+                                                                                                                                        : ... In instance rv32_observed_soc.soc.memory_system.caches[0].enabled.cache
+   78 |     reg [31:0] request_data,victim_base;
+      |                ^~~~~~~~~~~~
+%Warning-UNUSED: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/Original_155250/qualification/dynamic/MODIFIED/inputs/rtl/rv32_cache.sv:121:17: Signal is not used: 'byte_mask'
+                                                                                                                                         : ... In instance rv32_observed_soc.soc.memory_system.caches[0].enabled.cache
+  121 |     wire [31:0] byte_mask={{8{request_strobe[3]}},{8{request_strobe[2]}},{8{request_strobe[1]}},{8{request_strobe[0]}}};
+      |                 ^~~~~~~~~
+%Warning-UNUSED: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/Original_155250/qualification/dynamic/MODIFIED/inputs/rtl/rv32_rvc_expand.sv:16:16: Bits of signal are not used: 'branch_immediate'[0]
+                                                                                                                                             : ... In instance rv32_observed_soc.soc.core.expand
+   16 |     reg [12:0] branch_immediate;
+      |                ^~~~~~~~~~~~~~~~
+%Warning-UNUSED: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/Original_155250/qualification/dynamic/MODIFIED/inputs/rtl/rv32_rvc_expand.sv:17:16: Bits of signal are not used: 'jump_immediate'[0]
+                                                                                                                                             : ... In instance rv32_observed_soc.soc.core.expand
+   17 |     reg [20:0] jump_immediate;
+      |                ^~~~~~~~~~~~~~
+%Warning-UNUSED: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/Original_155250/qualification/dynamic/MODIFIED/inputs/rtl/rv32_rvc_frontend.sv:60:17: Bits of signal are not used: 'following_data'[31:16]
+                                                                                                                                               : ... In instance rv32_observed_soc.soc.core.frontend
+   60 |     wire [31:0] following_data=following_buffer_valid ? (pc[2] ? word0_data : word1_data) : following_pair ? i_rsp_pair_data : i_rsp_data;
+      |                 ^~~~~~~~~~~~~~
+%Warning-UNUSED: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/Original_155250/qualification/dynamic/MODIFIED/inputs/rtl/rv32_rvc_frontend.sv:90:17: Bits of signal are not used: 'redirect_address'[31:16]
+                                                                                                                                               : ... In instance rv32_observed_soc.soc.core.frontend
+   90 |     wire [31:0] redirect_address={redirect_pc[31:2],2'b0};
+      |                 ^~~~~~~~~~~~~~~~
+%Warning-SYNCASYNCNET: /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/Original_155250/qualification/dynamic/MODIFIED/inputs/sim/rv32_observed_soc.sv:11:21: Signal flopped as both synchronous and async: 'rst_n'
+                       /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/Original_155250/qualification/dynamic/MODIFIED/inputs/rtl/rv32_soc.sv:86:13: ... Location of async usage
+   86 |         if(!rst_n) maintenance_fault<=0;
+      |             ^~~~~
+                       /mnt/d/AAAFPGA/ILA_Core_Releases_20261101/Original_155250/qualification/dynamic/MODIFIED/inputs/sim/rv32_observed_soc.sv:41:30: ... Location of sync usage
+   41 |     always @(posedge clk) if(rst_n && soc.core.frontend_flush)
+      |                              ^~~~~

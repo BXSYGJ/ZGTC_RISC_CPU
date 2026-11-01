@@ -1,0 +1,204 @@
+wsl: 检测到 localhost 代理配置，但未镜像到 WSL。NAT 模式下的 WSL 不支持 localhost 代理。
+%Warning-DECLFILENAME: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/reference/rv32_alu.sv:2:8: Filename 'rv32_alu' does not match MODULE name: 'reference_rv32_alu'
+    2 | module reference_rv32_alu (
+      |        ^~~~~~~~~~~~~~~~~~
+                       ... Use "/* verilator lint_off DECLFILENAME */" and lint_on around source to disable this message.
+%Warning-DECLFILENAME: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/reference/rv32_btb.sv:2:8: Filename 'rv32_btb' does not match MODULE name: 'reference_rv32_btb'
+    2 | module reference_rv32_btb #(
+      |        ^~~~~~~~~~~~~~~~~~
+%Warning-DECLFILENAME: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/reference/rv32_core.sv:2:8: Filename 'rv32_core' does not match MODULE name: 'reference_rv32_core'
+    2 | module reference_rv32_core #(
+      |        ^~~~~~~~~~~~~~~~~~~
+%Warning-DECLFILENAME: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/reference/rv32_decode.sv:2:8: Filename 'rv32_decode' does not match MODULE name: 'reference_rv32_decode'
+    2 | module reference_rv32_decode #(
+      |        ^~~~~~~~~~~~~~~~~~~~~
+%Warning-DECLFILENAME: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/reference/rv32_machine.sv:2:8: Filename 'rv32_machine' does not match MODULE name: 'reference_rv32_machine'
+    2 | module reference_rv32_machine #(
+      |        ^~~~~~~~~~~~~~~~~~~~~~
+%Warning-DECLFILENAME: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/reference/rv32_muldiv.sv:2:8: Filename 'rv32_muldiv' does not match MODULE name: 'reference_rv32_muldiv'
+    2 | module reference_rv32_muldiv #(parameter integer PRECOMPUTE=0) (
+      |        ^~~~~~~~~~~~~~~~~~~~~
+%Warning-DECLFILENAME: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/reference/rv32_rvc_expand.sv:2:8: Filename 'rv32_rvc_expand' does not match MODULE name: 'reference_rv32_rvc_expand'
+    2 | module reference_rv32_rvc_expand (
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~
+%Warning-DECLFILENAME: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/reference/rv32_rvc_frontend.sv:2:8: Filename 'rv32_rvc_frontend' does not match MODULE name: 'reference_rv32_rvc_frontend'
+    2 | module reference_rv32_rvc_frontend #(
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+%Warning-PINCONNECTEMPTY: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/bare_extraction_miter.sv:14:4: Cell pin connected by name with empty reference: 'serial_tx'
+   14 |   .serial_tx(),.gpio_output(),.status_code(),.maintenance_fault(),
+      |    ^~~~~~~~~
+%Warning-PINCONNECTEMPTY: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/bare_extraction_miter.sv:14:17: Cell pin connected by name with empty reference: 'gpio_output'
+   14 |   .serial_tx(),.gpio_output(),.status_code(),.maintenance_fault(),
+      |                 ^~~~~~~~~~~
+%Warning-PINCONNECTEMPTY: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/bare_extraction_miter.sv:14:32: Cell pin connected by name with empty reference: 'status_code'
+   14 |   .serial_tx(),.gpio_output(),.status_code(),.maintenance_fault(),
+      |                                ^~~~~~~~~~~
+%Warning-PINCONNECTEMPTY: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/bare_extraction_miter.sv:14:47: Cell pin connected by name with empty reference: 'maintenance_fault'
+   14 |   .serial_tx(),.gpio_output(),.status_code(),.maintenance_fault(),
+      |                                               ^~~~~~~~~~~~~~~~~
+%Warning-PINCONNECTEMPTY: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/bare_extraction_miter.sv:15:4: Cell pin connected by name with empty reference: 'trace_valid'
+   15 |   .trace_valid(),.trace_pc(),.trace_instruction(),.trap_valid(),.trap_cause(),
+      |    ^~~~~~~~~~~
+%Warning-PINCONNECTEMPTY: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/bare_extraction_miter.sv:15:19: Cell pin connected by name with empty reference: 'trace_pc'
+   15 |   .trace_valid(),.trace_pc(),.trace_instruction(),.trap_valid(),.trap_cause(),
+      |                   ^~~~~~~~
+%Warning-PINCONNECTEMPTY: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/bare_extraction_miter.sv:15:31: Cell pin connected by name with empty reference: 'trace_instruction'
+   15 |   .trace_valid(),.trace_pc(),.trace_instruction(),.trap_valid(),.trap_cause(),
+      |                               ^~~~~~~~~~~~~~~~~
+%Warning-PINCONNECTEMPTY: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/bare_extraction_miter.sv:15:52: Cell pin connected by name with empty reference: 'trap_valid'
+   15 |   .trace_valid(),.trace_pc(),.trace_instruction(),.trap_valid(),.trap_cause(),
+      |                                                    ^~~~~~~~~~
+%Warning-PINCONNECTEMPTY: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/bare_extraction_miter.sv:15:66: Cell pin connected by name with empty reference: 'trap_cause'
+   15 |   .trace_valid(),.trace_pc(),.trace_instruction(),.trap_valid(),.trap_cause(),
+      |                                                                  ^~~~~~~~~~
+%Warning-PINCONNECTEMPTY: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/bare_extraction_miter.sv:16:4: Cell pin connected by name with empty reference: 'cycle_count'
+   16 |   .cycle_count(),.retired_count());
+      |    ^~~~~~~~~~~
+%Warning-PINCONNECTEMPTY: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/bare_extraction_miter.sv:16:19: Cell pin connected by name with empty reference: 'retired_count'
+   16 |   .cycle_count(),.retired_count());
+      |                   ^~~~~~~~~~~~~
+%Warning-PINCONNECTEMPTY: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/bare_extraction_miter.sv:19:4: Cell pin connected by name with empty reference: 'serial_tx'
+   19 |   .serial_tx(),.gpio_output(),.status_code(),.maintenance_fault(),
+      |    ^~~~~~~~~
+%Warning-PINCONNECTEMPTY: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/bare_extraction_miter.sv:19:17: Cell pin connected by name with empty reference: 'gpio_output'
+   19 |   .serial_tx(),.gpio_output(),.status_code(),.maintenance_fault(),
+      |                 ^~~~~~~~~~~
+%Warning-PINCONNECTEMPTY: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/bare_extraction_miter.sv:19:32: Cell pin connected by name with empty reference: 'status_code'
+   19 |   .serial_tx(),.gpio_output(),.status_code(),.maintenance_fault(),
+      |                                ^~~~~~~~~~~
+%Warning-PINCONNECTEMPTY: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/bare_extraction_miter.sv:19:47: Cell pin connected by name with empty reference: 'maintenance_fault'
+   19 |   .serial_tx(),.gpio_output(),.status_code(),.maintenance_fault(),
+      |                                               ^~~~~~~~~~~~~~~~~
+%Warning-PINCONNECTEMPTY: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/bare_extraction_miter.sv:20:4: Cell pin connected by name with empty reference: 'trace_valid'
+   20 |   .trace_valid(),.trace_pc(),.trace_instruction(),.trap_valid(),.trap_cause(),
+      |    ^~~~~~~~~~~
+%Warning-PINCONNECTEMPTY: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/bare_extraction_miter.sv:20:19: Cell pin connected by name with empty reference: 'trace_pc'
+   20 |   .trace_valid(),.trace_pc(),.trace_instruction(),.trap_valid(),.trap_cause(),
+      |                   ^~~~~~~~
+%Warning-PINCONNECTEMPTY: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/bare_extraction_miter.sv:20:31: Cell pin connected by name with empty reference: 'trace_instruction'
+   20 |   .trace_valid(),.trace_pc(),.trace_instruction(),.trap_valid(),.trap_cause(),
+      |                               ^~~~~~~~~~~~~~~~~
+%Warning-PINCONNECTEMPTY: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/bare_extraction_miter.sv:20:52: Cell pin connected by name with empty reference: 'trap_valid'
+   20 |   .trace_valid(),.trace_pc(),.trace_instruction(),.trap_valid(),.trap_cause(),
+      |                                                    ^~~~~~~~~~
+%Warning-PINCONNECTEMPTY: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/bare_extraction_miter.sv:20:66: Cell pin connected by name with empty reference: 'trap_cause'
+   20 |   .trace_valid(),.trace_pc(),.trace_instruction(),.trap_valid(),.trap_cause(),
+      |                                                                  ^~~~~~~~~~
+%Warning-PINCONNECTEMPTY: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/bare_extraction_miter.sv:21:4: Cell pin connected by name with empty reference: 'cycle_count'
+   21 |   .cycle_count(),.retired_count());
+      |    ^~~~~~~~~~~
+%Warning-PINCONNECTEMPTY: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/bare_extraction_miter.sv:21:19: Cell pin connected by name with empty reference: 'retired_count'
+   21 |   .cycle_count(),.retired_count());
+      |                   ^~~~~~~~~~~~~
+%Warning-WIDTH: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/environment/rv32_cache.sv:201:36: Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's SHIFTR generates 9 bits.
+                                                                                                                                                                : ... In instance bare_extraction_miter.reference_soc.memory_system.caches[0].enabled.cache
+  201 |                     read_valid_bank<=read_set >> VALID_OFFSET_BITS;
+      |                                    ^~
+%Warning-WIDTH: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/environment/rv32_burst_ram.sv:46:21: Operator NEQ expects 96 bits on the RHS, but RHS's CONST '?1?h0' generates 1 bits.
+                                                                                                                                                                   : ... In instance bare_extraction_miter.reference_soc.memory_system.ram
+   46 |         if(INIT_FILE!="") $readmemh(INIT_FILE,memory);
+      |                     ^~
+%Warning-UNUSED: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/reference/rv32_core.sv:100:18: Signal is not used: 'wb_writes'
+                                                                                                                                                              : ... In instance bare_extraction_miter.reference_soc.core
+  100 |     reg wb_valid,wb_writes;
+      |                  ^~~~~~~~~
+%Warning-UNUSED: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/reference/rv32_core.sv:127:10: Signal is not used: 'muldiv_valid'
+                                                                                                                                                              : ... In instance bare_extraction_miter.reference_soc.core
+  127 |     wire muldiv_valid,muldiv_ready,muldiv_available;
+      |          ^~~~~~~~~~~~
+%Warning-UNUSED: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/reference/rv32_core.sv:161:26: Signal is not used: 'prediction_hit'
+                                                                                                                                                              : ... In instance bare_extraction_miter.reference_soc.core
+  161 |     wire predicted_taken,prediction_hit;
+      |                          ^~~~~~~~~~~~~~
+%Warning-UNUSED: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/reference/rv32_core.sv:343:10: Signal is not used: 'execute_prediction_miss'
+                                                                                                                                                              : ... In instance bare_extraction_miter.reference_soc.core
+  343 |     wire execute_prediction_miss=branch_taken ?
+      |          ^~~~~~~~~~~~~~~~~~~~~~~
+%Warning-UNUSED: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/environment/rv32_memory_system.sv:70:16: Bits of signal are not used: 'cache_pair_valid'[1]
+                                                                                                                                                                        : ... In instance bare_extraction_miter.reference_soc.memory_system
+   70 |     wire [1:0] cache_pair_valid;
+      |                ^~~~~~~~~~~~~~~~
+%Warning-UNUSED: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/environment/rv32_peripherals.sv:42:16: Signal is not used: 'tx_count'
+                                                                                                                                                                      : ... In instance bare_extraction_miter.reference_soc.peripherals
+   42 |     wire [4:0] tx_count,rx_count;
+      |                ^~~~~~~~
+%Warning-UNUSED: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/bare/rv32_core.sv:100:18: Signal is not used: 'wb_writes'
+                                                                                                                                                         : ... In instance bare_extraction_miter.environment.core.dut
+  100 |     reg wb_valid,wb_writes;
+      |                  ^~~~~~~~~
+%Warning-UNUSED: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/bare/rv32_core.sv:127:10: Signal is not used: 'muldiv_valid'
+                                                                                                                                                         : ... In instance bare_extraction_miter.environment.core.dut
+  127 |     wire muldiv_valid,muldiv_ready,muldiv_available;
+      |          ^~~~~~~~~~~~
+%Warning-UNUSED: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/bare/rv32_core.sv:161:26: Signal is not used: 'prediction_hit'
+                                                                                                                                                         : ... In instance bare_extraction_miter.environment.core.dut
+  161 |     wire predicted_taken,prediction_hit;
+      |                          ^~~~~~~~~~~~~~
+%Warning-UNUSED: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/bare/rv32_core.sv:343:10: Signal is not used: 'execute_prediction_miss'
+                                                                                                                                                         : ... In instance bare_extraction_miter.environment.core.dut
+  343 |     wire execute_prediction_miss=branch_taken ?
+      |          ^~~~~~~~~~~~~~~~~~~~~~~
+%Warning-UNUSED: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/reference/rv32_btb.sv:59:25: Signal is not used: 'pattern_prediction'
+                                                                                                                                                            : ... In instance bare_extraction_miter.reference_soc.core.predictor
+   59 |     wire [PATTERNS-1:0] pattern_prediction;
+      |                         ^~~~~~~~~~~~~~~~~~
+%Warning-UNUSED: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/reference/rv32_rvc_expand.sv:16:16: Bits of signal are not used: 'branch_immediate'[0]
+                                                                                                                                                                   : ... In instance bare_extraction_miter.reference_soc.core.expand
+   16 |     reg [12:0] branch_immediate;
+      |                ^~~~~~~~~~~~~~~~
+%Warning-UNUSED: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/reference/rv32_rvc_expand.sv:17:16: Bits of signal are not used: 'jump_immediate'[0]
+                                                                                                                                                                   : ... In instance bare_extraction_miter.reference_soc.core.expand
+   17 |     reg [20:0] jump_immediate;
+      |                ^~~~~~~~~~~~~~
+%Warning-UNUSED: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/reference/rv32_rvc_frontend.sv:60:17: Bits of signal are not used: 'following_data'[31:16]
+                                                                                                                                                                     : ... In instance bare_extraction_miter.reference_soc.core.frontend
+   60 |     wire [31:0] following_data=following_buffer_valid ? (pc[2] ? word0_data : word1_data) : following_pair ? i_rsp_pair_data : i_rsp_data;
+      |                 ^~~~~~~~~~~~~~
+%Warning-UNUSED: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/reference/rv32_rvc_frontend.sv:90:17: Bits of signal are not used: 'redirect_address'[31:16]
+                                                                                                                                                                     : ... In instance bare_extraction_miter.reference_soc.core.frontend
+   90 |     wire [31:0] redirect_address={redirect_pc[31:2],2'b0};
+      |                 ^~~~~~~~~~~~~~~~
+%Warning-UNUSED: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/environment/rv32_cache.sv:63:22: Signal is not used: 'dirty'
+                                                                                                                                                                : ... In instance bare_extraction_miter.reference_soc.memory_system.caches[1].enabled.cache
+   63 |     wire [LINES-1:0] dirty;
+      |                      ^~~~~
+%Warning-UNUSED: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/environment/rv32_cache.sv:99:58: Bits of signal are not used: 'word_data'[31:18,15:2]
+                                                                                                                                                                : ... In instance bare_extraction_miter.reference_soc.memory_system.caches[1].enabled.cache
+   99 |     function automatic [1:0] compact_halves(input [31:0] word_data);
+      |                                                          ^~~~~~~~~
+%Warning-UNUSED: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/environment/rv32_cache.sv:78:16: Signal is not used: 'request_data'
+                                                                                                                                                                : ... In instance bare_extraction_miter.reference_soc.memory_system.caches[0].enabled.cache
+   78 |     reg [31:0] request_data,victim_base;
+      |                ^~~~~~~~~~~~
+%Warning-UNUSED: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/environment/rv32_cache.sv:121:17: Signal is not used: 'byte_mask'
+                                                                                                                                                                 : ... In instance bare_extraction_miter.reference_soc.memory_system.caches[0].enabled.cache
+  121 |     wire [31:0] byte_mask={{8{request_strobe[3]}},{8{request_strobe[2]}},{8{request_strobe[1]}},{8{request_strobe[0]}}};
+      |                 ^~~~~~~~~
+%Warning-UNUSED: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/bare/rv32_btb.sv:59:25: Signal is not used: 'pattern_prediction'
+                                                                                                                                                       : ... In instance bare_extraction_miter.environment.core.dut.predictor
+   59 |     wire [PATTERNS-1:0] pattern_prediction;
+      |                         ^~~~~~~~~~~~~~~~~~
+%Warning-UNUSED: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/bare/rv32_rvc_expand.sv:16:16: Bits of signal are not used: 'branch_immediate'[0]
+                                                                                                                                                              : ... In instance bare_extraction_miter.environment.core.dut.expand
+   16 |     reg [12:0] branch_immediate;
+      |                ^~~~~~~~~~~~~~~~
+%Warning-UNUSED: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/bare/rv32_rvc_expand.sv:17:16: Bits of signal are not used: 'jump_immediate'[0]
+                                                                                                                                                              : ... In instance bare_extraction_miter.environment.core.dut.expand
+   17 |     reg [20:0] jump_immediate;
+      |                ^~~~~~~~~~~~~~
+%Warning-UNUSED: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/bare/rv32_rvc_frontend.sv:60:17: Bits of signal are not used: 'following_data'[31:16]
+                                                                                                                                                                : ... In instance bare_extraction_miter.environment.core.dut.frontend
+   60 |     wire [31:0] following_data=following_buffer_valid ? (pc[2] ? word0_data : word1_data) : following_pair ? i_rsp_pair_data : i_rsp_data;
+      |                 ^~~~~~~~~~~~~~
+%Warning-UNUSED: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/bare/rv32_rvc_frontend.sv:90:17: Bits of signal are not used: 'redirect_address'[31:16]
+                                                                                                                                                                : ... In instance bare_extraction_miter.environment.core.dut.frontend
+   90 |     wire [31:0] redirect_address={redirect_pc[31:2],2'b0};
+      |                 ^~~~~~~~~~~~~~~~
+%Warning-SYNCASYNCNET: /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/environment/rv32_memory_system.sv:17:16: Signal flopped as both synchronous and async: 'bare_extraction_miter.reference_soc.memory_system.rst_n'
+                                                                                                                                                                              : ... In instance bare_extraction_miter.reference_soc.memory_system
+                       /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/environment/rv32_memory_system.sv:182:13: ... Location of async usage
+  182 |         if(!rst_n) begin
+      |             ^~~~~
+                       /mnt/d/AAAFPGA/Bare_Core_Releases_20261101/analysis/extraction/Original_155250/20261031T173757Z-14ca1e17/inputs/environment/rv32_cache.sv:181:24: ... Location of sync usage
+  181 |                     if(rst_n && selected_bank) begin
+      |                        ^~~~~
