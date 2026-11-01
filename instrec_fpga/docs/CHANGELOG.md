@@ -1,5 +1,9 @@
 # InstRec-FPGA 变更日志
 
+## 2026-11-01 18:54 — 原生 DDR 联合 harness 激活写握手失败证据
+
+- 新增真实 `ddr3_ctrl_axi` + AXI model + bridge 联合测试；权重 16-beat 完成，激活写阶段卡死，保留失败实验并继续修复，未修改生产 RTL、未宣称 native 集成通过。
+
 > 每次会话结束前追加一条：时间、做了什么、结论、证据路径。倒序，最新在上。
 > 状态汇总见 `docs/STATUS.md`。
 

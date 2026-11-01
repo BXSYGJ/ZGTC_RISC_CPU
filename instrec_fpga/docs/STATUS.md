@@ -1,5 +1,10 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-01 18:54：原生 DDR 联合测试发现激活写握手卡点
+
+- 新增 `sim/experiments/npu_lifecycle/tb_npu_ddr3_lifecycle.sv` 与 `run_ddr3.py`，首次把 `ddr3_ctrl_axi`、DDR3 AXI model 和 bridge 放入同一测试平台。16-beat 权重读取已完成，但激活写入阶段出现 `act_wr_valid` 持续、bridge/controller 空闲的握手卡死；这是联合 harness 尚未闭环的失败证据，不能宣称 native DDR 集成通过，生产 RTL 未修改。
+- 抽象 bridge 70 事务回归仍 PASS；继续修复 activation write ready/valid 时序并补 watchdog/abort 场景。PDS 唯一路由已到 iteration283，未布6813，仍无 `.sbit` 或时序报告。
+
 ## 2026-11-01 18:31：四层 ping-pong 激活回放通过，下载器已重新枚举
 
 - `sim/experiments/npu_pingpong/` 持久化四层候选：conv1..conv4 全部输出及 pool1..pool3 激活回放逐字节 golden 一致，`build/sim/npu_pingpong/run.log`，30750042周期。双store A=0x00400000（pool1/pool3复用）、B=0x00440000（pool2），使用抽象DDR命令；不等同原生37-bit控制器、综合或上板。
