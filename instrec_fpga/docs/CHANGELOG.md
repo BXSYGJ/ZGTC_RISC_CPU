@@ -751,4 +751,5 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 - Monitored the sole PDS run `20261102-013400-e8658663`; detail routing stalled around 950-1026 unrouted nets after iteration 500 and was safely stopped with process, manifest, and log-hash evidence. No bitstream or timing report was produced, and no downloader/JTAG process was touched.
 - Re-ran the full Python suite during the idle window: 432 passed, 4 skipped, with only the two existing PyTorch FutureWarnings.
 - Added Verilator evidence for `rv_top_ctrl`, `mel_credit`, and `ui_render`; all passed with zero mismatches in their stated checks.
+- Added Verilator evidence for `ddr3_subsys` (15/15 scenarios), `ctrl_smoke`, and `npu_chain`; all passed. The DDR watchdog blind spot remains explicitly recorded as a known limitation.
 
