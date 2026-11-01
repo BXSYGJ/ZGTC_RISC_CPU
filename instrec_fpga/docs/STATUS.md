@@ -1,5 +1,11 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-02：权重加载与 AW timeout 补测通过
+
+- `python sim/run_sim.py weight_loader --verbose`：10 项 PASS，覆盖 4 个 256B chunk、32 拍读回 digest、完整 `WOK`、CRC 拒绝/NAK 与复位后重新接受。
+- `python sim/run_sim.py ddr3_aw_timeout --verbose`：6/6 场景 PASS，覆盖正常负载、S_AW 超时、m3 单独加载、16 命令、m0 饱和配额及板级 STS 归因复现。
+- 本轮未启动 PDS，未操作 `cdt_js`、`cdt_cfg` 或下载器；板级仍 NOT_RUN。
+
 ## 2026-11-02：RV 控制与 self-test 补测通过
 
 - `python sim/run_sim.py rv_top_ctrl --verbose`：17 项 PASS，覆盖物理 UART 解码、三生产者请求一次性消费、CPU 请求排队、安全 Mel 窗、权重上传/忙/DDR 失败/native fault 门控及 CPU-only 单次启动。

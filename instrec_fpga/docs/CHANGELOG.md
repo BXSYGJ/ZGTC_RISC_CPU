@@ -773,3 +773,8 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 - RV top control 17 项通过，包含请求排队、启动门控、故障阻断和 CPU-only 语义。
 - self-test 8 项通过，包含 4KB 读回、abort 错误和 abort 后恢复。
 
+## 2026-11-02 — 权重加载与 AW timeout 补测
+
+- weight loader 10 项通过，包含完整写入/读回、CRC 拒绝和复位恢复。
+- AW timeout 6/6 场景通过，包含 m0 饱和配额和 STS 归因复现。
+
