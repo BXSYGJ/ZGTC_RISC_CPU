@@ -726,3 +726,8 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 
 - 独立native控制器全链自然done31115245周期全部golden及计数通过，未移植生产或板测。
 - 按用户控制耗时要求，当前PDS观察截止20:43；届时仍停滞则保存证据后转串行资源gate，禁止操作JTAG服务。
+## 2026-11-02 — 修复版 PDS 路由监控与并行定向回归
+
+- 修复版唯一 PDS run `20261102-003406-7af1bf17` 已完成 compile/synthesize/dev_map 并进入 detail routing；未布网络从 62810 降至 16929（迭代 0→13），仍在收敛，尚无新位流或时序结论。
+- 并行验证通过：DDR 控制器模型 26 项、DDR/自检/契约 49 项、板级安全/串口 43 项、权重/NPU/Mel/特征页 78 项；loader/native timeout 与 owner/CRC/reset 路径通过。
+- reset-mid-read 同 `axi_rid` 旧响应误收风险继续保留；未操作下载器或 `cdt_js/cdt_cfg`。

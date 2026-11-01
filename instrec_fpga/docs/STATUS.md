@@ -1,5 +1,13 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-02：修复版 PDS detail routing 进行中，定向回归继续通过
+
+- 当前唯一 PDS run 为 `build/pds/20261102-003406-7af1bf17`，compile/synthesize/dev_map 已成功；PNR 父/子进程仍为同一 run（PID 42736/14920），未操作 `cdt_js`、`cdt_cfg` 或下载器。
+- detail routing 从 62810 个未布网络降至 16929（迭代 0→13），持续下降，尚未到最终 `Unrouted nets 0`，因此没有提前宣称布通、时序或位流成功。
+- 并行只读验证新增全部通过：DDR 控制器模型 26 passed；DDR/自检/契约组 49 passed；板级烧录安全/串口握手 43 passed；权重/NPU/Mel/特征页 78 passed（2 条 torch FutureWarning，无失败）。
+- loader/native 读超时 fail-closed/reset、owner early-done/CRC/复位恢复路径均通过，证据位于 `build/sim/loader_native_read_timeout/` 与 `build/sim/loader_owner/`。reset-mid-read 后同 `axi_rid` 的旧 `RVALID/RLAST` 误收仍是开放风险，未加入猜测性丢弃逻辑。
+- 下一步继续监控该 run 的 detail routing；只有同时出现最终 `Unrouted nets 0`、`placed and routed successfully`、timing 报告和位流后，才更新候选结论。板级仍 NOT_RUN。
+
 ## 2026-11-02：DDR 修复版资源门禁完成，未进入布线
 
 - 修复后的 `ddr3_ctrl_axi` 超时迟到响应隔离与 `instrec_top` 初始化门控已通过受控 `rv_core` PDS compile/synthesize/dev_map；本轮 run 为 `build/pds/20261102-001943-d6bfe5cb`，源清单已固定，PDS 正常退出 0。
