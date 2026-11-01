@@ -1,0 +1,62 @@
+{
+  "offline_only": true,
+  "board_result": "NOT_RUN",
+  "image": {
+    "path": "scripts\\outputs\\weights_image.bin",
+    "bytes": 691040,
+    "sha256": "19a74dbec29d3a0f16ab06dc30f70312849977de0c6b345710b046b1908f5d7a"
+  },
+  "data_frames": 2700,
+  "total_frames": 2701,
+  "last_payload_bytes": 96,
+  "wire_bytes": 712648,
+  "wire_sha256": "4be059fe4f80f4c398f00d099c87eb438dc1a25f43e99c6d699733ca9795fef4",
+  "crc_check": "all frames independently checked using binascii.crc_hqx init FFFF",
+  "expected_wok": "WOK FA0D5236",
+  "minimum_tx_seconds_115200_8n1": 61.862,
+  "minimum_ack_seconds_115200_8n1": 0.234,
+  "silence_model": {
+    "not_board_evidence": true,
+    "feature_shape": [
+      64,
+      258
+    ],
+    "feature_value": 49,
+    "top1": 1,
+    "fc2_logits": [
+      46,
+      68,
+      65,
+      53,
+      50,
+      45,
+      58,
+      60
+    ],
+    "probs_q16": [
+      85,
+      40299,
+      17333,
+      612,
+      263,
+      65,
+      2497,
+      4383
+    ],
+    "probability_pct": [
+      0,
+      61,
+      26,
+      1,
+      0,
+      0,
+      4,
+      7
+    ],
+    "last_class": 7,
+    "last_probability_pct": 7
+  },
+  "production_rom_sha256": "24d0b7fd4cb3e37f08cdfe4e3ab361321ba43f21ea6ec5367c3b2703b2dec294",
+  "assets": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\rv_board_smoke_offline",
+  "raw_blob_is_not_a_valid_unpaced_upload": true
+}
