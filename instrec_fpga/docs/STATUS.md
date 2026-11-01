@@ -13,6 +13,7 @@
 - 继续补跑 `self_test`、`weight_loader`、`ddr3_aw_timeout`：分别 8、10、6 项检查全部 PASS，覆盖 self-test 中止/恢复、权重 CRC 与写回读 digest、m0 饱和下 m3 AW 超时归因；watchdog blind spot 与 reset-mid-read 风险仍按已知限制保留。
 - 继续补跑 `rv_cpu`、`conv1`、`mel`：RV32 CPU 9/9 检查 PASS；conv1 输出 792576 项、mel 特征 16512 项均与 golden 逐值一致（0 mismatch）。
 - 本次心跳重新执行 `python scripts/check_rtl.py`：59 个 Verilog 文件、0 violation；无 PDS/JTAG/下载器操作。
+- 烧录安全回归 `tests/test_board_flash_safety.py tests/test_uart_debug_handshake.py`：21 passed；未连接或操作下载器。
 
 ## 2026-11-02：修复版 PDS 完成布线并产出候选位流，时序未闭合
 

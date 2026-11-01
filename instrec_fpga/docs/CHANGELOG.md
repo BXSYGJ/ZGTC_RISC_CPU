@@ -755,4 +755,5 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 - Added Verilator evidence for `self_test`, `weight_loader`, and `ddr3_aw_timeout`; all checks passed, including abort/recovery, CRC rejection, write/read digest, and multi-master timeout attribution.
 - Added Verilator evidence for `rv_cpu`, `conv1`, and `mel`; CPU checks passed and conv1/mel streams matched golden with zero mismatches.
 - Re-ran RTL lexical checks: 59 Verilog files, 0 violations.
+- Re-ran board flash safety and UART handshake guards: 21 passed; no JTAG or downloader operation.
 
