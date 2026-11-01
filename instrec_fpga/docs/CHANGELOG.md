@@ -558,3 +558,4 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 
 - PDS detail route 到 iteration 185，未布通网络 6608；仍无位流或时序报告。
 - RV/NPU/控制/DDR 关键仿真继续通过；全量 Python 回归 429 passed / 4 skipped，RTL 检查 53 个 `.v`、0 violation。
+- 后续 detail route 到 iteration 187，未布通网络 6600；`npu_chain`、`ddr3_subsys`、`ddr3_aw_timeout` 追加仿真 3/3 PASS，尚无位流或时序报告。

@@ -1,7 +1,7 @@
 # InstRec-FPGA 当前状态（STATUS）
 
 > 本文件是**唯一实时状态源**，优先于任何交接快照与记忆。每次会话结束前必须更新，
-> 并在 `CHANGELOG.md` 追加一条。最后更新：2026-11-01 17:04。
+> 并在 `CHANGELOG.md` 追加一条。最后更新：2026-11-01 17:07。
 
 ## 2026-11-01 15:56 RV 构建持续布线与并行验证
 
@@ -12,6 +12,7 @@
 - UART/sys_ctrl/烧录安全 Python 回归：35 passed。
 - 本次心跳检查：PDS detail route iteration 180，未布通 6949，持续运行；无新位流或时序报告。
 - 后续心跳：PDS detail route iteration 185，未布通 6608，仍在运行；无新位流或时序报告。新增 `rv_cpu`、`rv_top_ctrl`、`npu_completion`、`self_test`、`ctrl_smoke`、`weight_loader` 仿真均通过；全量 Python 回归 429 passed / 4 skipped，RTL 检查 53 个 .v、0 violation。
+- 最新 PDS 监控到 iteration 187，未布通 6600。额外重跑 `npu_chain`、`ddr3_subsys`、`ddr3_aw_timeout` 均 PASS（NPU 数值 bit-exact；DDR3 15/15、AW timeout 6/6 场景）；仍无新位流或时序报告。
 
 ## 2026-11-01 11:35 RV32 + AI 最小融合（最新，覆盖下文旧架构结论）
 
