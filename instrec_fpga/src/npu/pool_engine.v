@@ -39,13 +39,46 @@ module pool_engine (
     input  wire [15:0] h_in,
 
     input  wire        y_valid,
+    output wire        y_ready,
+    input wire         p_ready,
     input  wire [7:0]  y_u8,
 
-    output reg         p_valid,
-    output reg  [7:0]  p_u8,
-    output reg         p_last
+    output wire        p_valid,
+    output wire [7:0]  p_u8,
+    output wire        p_last
 );
 
+    reg p_valid_prod, p_last_prod;
+    reg [7:0] p_u8_prod;
+    reg [8:0] output_fifo [0:7];
+    reg [2:0] fifo_wr, fifo_rd;
+    reg [3:0] fifo_count, reserved;
+    wire accept_y=y_valid && y_ready;
+    wire pop=(fifo_count!=0) && p_ready;
+    assign y_ready=(reserved<8) && !layer_start;
+    assign p_valid=(fifo_count!=0);
+    assign p_u8=output_fifo[fifo_rd][7:0];
+    assign p_last=(fifo_count!=0) && output_fifo[fifo_rd][8];
+    always @(posedge clk or negedge rst_n) begin
+        if(!rst_n) begin fifo_wr<=0; fifo_rd<=0; fifo_count<=0; reserved<=0; end
+        else if(layer_start) begin fifo_wr<=0; fifo_rd<=0; fifo_count<=0; reserved<=0; end
+        else begin
+            if(p_valid_prod) begin
+                output_fifo[fifo_wr]<={p_last_prod,p_u8_prod}; fifo_wr<=fifo_wr+1'b1;
+            end
+            if(pop) fifo_rd<=fifo_rd+1'b1;
+            case({p_valid_prod,pop})
+                2'b10:fifo_count<=fifo_count+1'b1;
+                2'b01:fifo_count<=fifo_count-1'b1;
+                default:fifo_count<=fifo_count;
+            endcase
+            case({fire_c,pop})
+                2'b10:reserved<=reserved+1'b1;
+                2'b01:reserved<=reserved-1'b1;
+                default:reserved<=reserved;
+            endcase
+        end
+    end
     // Block RAM is limited to 4096 words at 8-bit width, while a bank is
     // cin*out_w (up to 6192 bytes). Split each bank into low/high halves and
     // select by address bit 12; otherwise PDS falls back to distributed RAM
@@ -89,7 +122,7 @@ module pool_engine (
     wire [11:0] wr_off = idx[11:0];
 
     always @(posedge clk) begin
-        if (y_valid && col_cnt <= col_last) begin
+        if (accept_y && col_cnt <= col_last) begin
             if (!row_hi) begin
                 if (!col_hi) begin
                     if (!wr_hi) ev0_lo[wr_off] <= y_u8;
@@ -111,7 +144,7 @@ module pool_engine (
     end
 
     always @(posedge clk) begin
-        if (y_valid && !col_hi && (col_cnt <= col_last)) cur_prev[lane_cnt] <= y_u8;
+        if (accept_y && !col_hi && (col_cnt <= col_last)) cur_prev[lane_cnt] <= y_u8;
     end
 
     // Synchronous window read (DRM has a 1-cycle read latency):
@@ -130,7 +163,7 @@ module pool_engine (
     // replicate the bank into distributed RAM.
     reg [7:0]  cur_prev [0:15];
 
-    wire fire_c = y_valid && row_hi && col_hi && (col_cnt <= col_last);
+    wire fire_c = accept_y && row_hi && col_hi && (col_cnt <= col_last);
     wire last_c = fire_c && (row_cnt == row_last) && (grp_cnt == grp_last[7:0]) &&
                   (col_cnt == col_last) && (lane_cnt == 4'd15);
 
@@ -141,10 +174,10 @@ module pool_engine (
         y_d2        <= y_d1;
         lane_d1     <= lane_cnt;
         lane_d2     <= lane_d1;
-        fire_d1     <= fire_c;
-        fire_d2     <= fire_d1;
-        last_d1     <= last_c;
-        last_d2     <= last_d1;
+        fire_d1     <= layer_start ? 1'b0 : fire_c;
+        fire_d2     <= layer_start ? 1'b0 : fire_d1;
+        last_d1     <= layer_start ? 1'b0 : last_c;
+        last_d2     <= layer_start ? 1'b0 : last_d1;
     end
 
     wire        rd_hi  = rd_idx_q[12];
@@ -173,9 +206,9 @@ module pool_engine (
             row_cnt  <= 16'd0;
             idx      <= 16'd0;
             grp_base <= 16'd0;
-            p_valid  <= 1'b0;
-            p_u8     <= 8'd0;
-            p_last   <= 1'b0;
+            p_valid_prod  <= 1'b0;
+            p_u8_prod     <= 8'd0;
+            p_last_prod   <= 1'b0;
         end else if (layer_start) begin
             lane_cnt <= 4'd0;
             col_cnt  <= 16'd0;
@@ -183,14 +216,14 @@ module pool_engine (
             row_cnt  <= 16'd0;
             idx      <= 16'd0;
             grp_base <= 16'd0;
-            p_valid  <= 1'b0;
-            p_last   <= 1'b0;
+            p_valid_prod  <= 1'b0;
+            p_last_prod   <= 1'b0;
         end else begin
-            p_valid <= fire_d2;
-            if (fire_d2) p_u8 <= p_max;
-            if (last_d2) p_last <= 1'b1;
+            p_valid_prod <= fire_d2;
+            if (fire_d2) p_u8_prod <= p_max;
+            if (last_d2) p_last_prod <= 1'b1;
 
-            if (y_valid) begin
+            if (accept_y) begin
                 if (lane_cnt == 4'd15) begin
                     lane_cnt <= 4'd0;
                     if (col_cnt == col_all) begin

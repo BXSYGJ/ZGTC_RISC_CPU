@@ -137,6 +137,7 @@ module tb_conv_layer #(
     wire done_sel = (LAYER == 1) ? done1 : (LAYER == 2) ? done2 : done3;
     wire adv_sel  = (LAYER == 1) ? adv1  : (LAYER == 2) ? adv2  : adv3;
 
+    wire [15:0] ingress_unused;
     conv_engine u_conv (
         .clk         (clk),
         .rst_n       (rst_n),
@@ -152,6 +153,7 @@ module tb_conv_layer #(
         .done1       (done1),
         .done2       (done2),
         .done3       (done3),
+        .x0_ingress_max_row(ingress_unused),
         .x0_valid    ((LAYER == 0) ? x0_valid : 1'b0),
         .x0_u8       ((LAYER == 0) ? x0_u8 : 8'd0),
         .x1_valid    ((LAYER == 1) ? x0_valid : 1'b0),
@@ -170,6 +172,7 @@ module tb_conv_layer #(
         .w_valid     (w_valid),
         .w_data      (w_data),
         .w_ready     (w_ready),
+        .y_ready      (1'b1),
         .y_valid     (y_valid),
         .y_u8        (y_u8),
         .adv0        (adv0),
@@ -491,6 +494,8 @@ module tb_conv_layer #(
         if (rst_n && (seq == S_END)) begin
             $display("TB DONE layer=%0d samples=%0d/%0d cyc=%0d", LAYER, n_samp, STREAM, cyc);
             $fclose(fd_y);
+            if(n_samp != STREAM) $fatal(1,"incomplete conv output stream");
+            $display("RESULT: PASS conv layer output count; numerical scoring is external");
             $finish;
         end
     end
@@ -522,7 +527,7 @@ module tb_conv_layer #(
                      cyc, seq, n_samp, STREAM, ing_row, row_done_cnt, use_grp,
                      gt_step, c_step, t_step);
             $fclose(fd_y);
-            $finish;
+            $fatal(1,"conv layer watchdog expired");
         end
     end
 

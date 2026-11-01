@@ -81,6 +81,7 @@ module tb_conv_engine;
     wire          w_valid = w_ready;
     wire [127:0]  w_data;
 
+    wire [15:0] ingress_unused;
     conv_engine dut (
         .clk          (clk),
         .rst_n        (rst_n),
@@ -96,6 +97,7 @@ module tb_conv_engine;
         .done1        (done1),
         .done2        (done2),
         .done3        (done3),
+        .x0_ingress_max_row(ingress_unused),
         .x0_valid     (x0_valid),
         .x0_u8        (x0_u8),
         .x1_valid     (1'b0),
@@ -114,6 +116,7 @@ module tb_conv_engine;
         .w_valid      (w_valid),
         .w_data       (w_data),
         .w_ready      (w_ready),
+        .y_ready      (1'b1),
         .y_valid      (y_valid),
         .y_u8         (y_u8),
         .adv0         (adv0),

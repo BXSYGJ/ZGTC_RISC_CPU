@@ -137,11 +137,16 @@ module ddr3_arbiter #(
     wire region_wgt   = (check_addr >= 28'h100000) && (check_addr <= 28'h1B7FFF);
     wire region_spec  = (check_addr >= 28'h200000) && (check_addr <= 28'h20FFFF);
     wire region_self  = (check_addr >= 28'h300000) && (check_addr <= 28'h30FFFF);
+    // Experimental activation scratch windows, m1 single-beat traffic only.
+    wire region_act_a = (check_addr >= 28'h0400000) && (check_addr <= 28'h043FFE0);
+    wire region_act_b = (check_addr >= 28'h0440000) && (check_addr <= 28'h045FFE0);
+    wire activation_legal = (sel_onehot == 4'b0010) && (grant_len == 8'd0) &&
+                            (region_act_a || region_act_b);
     wire addr_aligned = (check_addr[4:0] == 5'b00000);  // 32 B alignment
     wire len_legal    = (grant_len <= 8'd15);            // 16-beat max burst
     wire addr_legal   = addr_aligned && len_legal &&
                          (region_pcm_l || region_pcm_r ||
-                          region_wgt || region_spec || region_self);
+                          region_wgt || region_spec || region_self || activation_legal);
 
     // ------------------------------------------------------------------
     // Sequential logic: wait counters, P3 starvation counter, sticky errors

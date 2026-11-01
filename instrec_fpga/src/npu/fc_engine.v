@@ -52,7 +52,8 @@ module fc_engine #(
     // requantised result stream (16 beats per group, lane order)
     output reg         y_valid,
     output reg  [7:0]  y_u8,
-    output reg         done
+    output reg         done,
+    output wire        grp_advance
 );
 
     localparam GRP_NUM = (COUT + 15) / 16;   // fc2 = 8 channels -> 1 group
@@ -94,6 +95,7 @@ module fc_engine #(
     assign rq_shift = s_ram[grp_cnt * 16 + rq_cnt[3:0]];
     assign rq_in    = (state == S_RQ) && (rq_cnt < 5'd16);
     assign w_ready  = (state == S_MAC);
+    assign grp_advance = (state == S_NEXT) && (grp_cnt != GRP_LAST);
 
     requant_unit u_rq (
         .clk       (clk),
@@ -145,6 +147,13 @@ module fc_engine #(
             y_valid <= 1'b0;
             done    <= 1'b0;
 
+            if (layer_start) begin
+                b_cnt <= 0; m_cnt <= 0; s_cnt <= 0;
+            end else begin
+                if (b_valid && b_cnt < COUT) begin b_ram[b_cnt] <= bias_s32; b_cnt <= b_cnt + 1; end
+                if (m_valid && m_cnt < COUT) begin m_ram[m_cnt] <= m_s32; m_cnt <= m_cnt + 1; end
+                if (s_valid && s_cnt < COUT) begin s_ram[s_cnt] <= shift; s_cnt <= s_cnt + 1; end
+            end
             case (state)
                 S_X: begin
                     if (layer_start) x_cnt <= 8'd0;
@@ -152,9 +161,6 @@ module fc_engine #(
                         x_buf[x_cnt] <= x_s16;
                         if (x_cnt == CIN - 1) begin
                             x_cnt <= 8'd0;
-                            b_cnt <= 8'd0;
-                            m_cnt <= 8'd0;
-                            s_cnt <= 8'd0;
                             state <= S_C;
                         end else begin
                             x_cnt <= x_cnt + 8'd1;
@@ -163,23 +169,8 @@ module fc_engine #(
                 end
 
                 S_C: begin
-                    if (b_valid) begin
-                        b_ram[b_cnt] <= bias_s32;
-                        b_cnt <= b_cnt + 8'd1;
-                    end
-                    if (m_valid) begin
-                        m_ram[m_cnt] <= m_s32;
-                        m_cnt <= m_cnt + 8'd1;
-                    end
-                    if (s_valid) begin
-                        s_ram[s_cnt] <= shift;
-                        s_cnt <= s_cnt + 8'd1;
-                    end
-                    if ((b_cnt == COUT - 1) && (m_cnt == COUT - 1) &&
-                        (s_cnt == COUT - 1)) begin
-                        b_cnt   <= 8'd0;
-                        m_cnt   <= 8'd0;
-                        s_cnt   <= 8'd0;
+                    if ((b_cnt == COUT) && (m_cnt == COUT) &&
+                        (s_cnt == COUT)) begin
                         grp_cnt <= 8'd0;
                         k_cnt   <= 8'd0;
                         state   <= S_MAC;
@@ -225,6 +216,11 @@ module fc_engine #(
                 S_DONE: begin
                     done  <= 1'b1;
                     state <= S_X;
+                    // Retire the completed parameter epoch before preloading
+                    // the next input vector. Old counts must not arm S_MAC.
+                    b_cnt <= 8'd0;
+                    m_cnt <= 8'd0;
+                    s_cnt <= 8'd0;
                 end
 
                 default: state <= S_X;

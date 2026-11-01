@@ -180,6 +180,7 @@ module conv_engine #(
     // layer. Raster order: column-major within a row -- col 0 carries
     // ch 0..CIN-1, then col 1, etc. One beat per cycle, no backpressure
     // (producer rate <= 1 beat/cycle; row boundaries derived by count).
+    output wire [15:0] x0_ingress_max_row,
     input  wire               x0_valid,
     input  wire        [7:0]  x0_u8,
     input  wire               x1_valid,
@@ -215,6 +216,7 @@ module conv_engine #(
     // [pool_engine alignment point] egress: requantized u8 stream in
     // scan order (out_row, grp, col, lane 0..15 TDM). Valid only while
     // the selected layer is scanning.
+    input wire                y_ready,
     output wire               y_valid,
     output wire        [7:0]  y_u8,
 
@@ -308,6 +310,7 @@ module conv_engine #(
 
     reg  [1:0]        sel;            // 0..3: layer being scanned
     reg               run_reg;        // layer in progress
+    assign x0_ingress_max_row = out_row_cnt + 16'd1;
     reg [RR-1:0]      out_row_cnt;    // 0..H-1
     reg [RG-1:0]      grp_cnt;        // 0..GRP_NUM-1
     reg [RW-1:0]      out_col_cnt;    // 0..W-1
@@ -833,7 +836,7 @@ module conv_engine #(
     // phase transitions (requant drain must be idle before the snapshot
     // register is overwritten -- this stretches conv1 to 16 beats/px)
     wire snapshot_go  = run_reg && (phase_reg == PH_SNAP)
-                        && (rhe_busy_cnt == 5'd0) && boundary_ok;
+                        && (rhe_busy_cnt == 5'd0) && boundary_ok && (out_reserved==0);
     assign advance_now = snapshot_go && need_advance;
     wire load_go      = run_reg && (phase_reg == PH_LOAD)
                         && row_ready && grp_arm && !fin_latched;
@@ -844,7 +847,7 @@ module conv_engine #(
     // one more beat for the done register. Counting the tail avoids a
     // runtime H*W*COUT product comparator.
     wire fin_load     = snapshot_go && layer_end && (fin_cnt == 6'd0);
-    wire layer_done_comb = run_reg && (fin_cnt == 6'd1);
+    wire layer_done_comb = run_reg && (fin_cnt == 6'd1) && (out_reserved==0);
 
     // -----------------------------------------------------------------------
     // Weight stream alignment: lock the 16-lane tap word and the read
@@ -968,7 +971,7 @@ module conv_engine #(
         end else if (fin_load) begin
             fin_cnt     <= 6'd22;   // 16 drain beats + 5 latency + 1 register
             fin_latched <= 1'b1;
-        end else if (fin_cnt != 6'd0) begin
+        end else if (fin_cnt > 6'd1) begin
             fin_cnt <= fin_cnt - 6'd1;
         end
     end
@@ -1093,8 +1096,35 @@ module conv_engine #(
     assign rq_zp_out   = zp_out_reg;
     assign rq_in_valid = (rhe_busy_cnt != 5'd0);
 
-    assign y_valid     = rq_y_valid;
-    assign y_u8        = rq_y_u8;
+    // Reserve the complete non-stallable requant burst before snapshot.
+    reg [7:0] out_fifo [0:15];
+    reg [3:0] out_wr, out_rd;
+    reg [4:0] out_count;
+    reg [5:0] out_reserved;
+    wire out_pop=(out_count!=0) && y_ready;
+    assign y_valid=(out_count!=0);
+    assign y_u8=out_fifo[out_rd];
+    always @(posedge clk or negedge rst_n) begin
+        if(!rst_n) begin
+            out_wr<=0; out_rd<=0; out_count<=0; out_reserved<=0;
+        end else if(any_start) begin
+            out_wr<=0; out_rd<=0; out_count<=0; out_reserved<=0;
+        end else begin
+            if(rq_y_valid) begin out_fifo[out_wr]<=rq_y_u8; out_wr<=out_wr+1'b1; end
+            if(out_pop) out_rd<=out_rd+1'b1;
+            case({rq_y_valid,out_pop})
+                2'b10: out_count<=out_count+1'b1;
+                2'b01: out_count<=out_count-1'b1;
+                default: out_count<=out_count;
+            endcase
+            case({snapshot_go,out_pop})
+                2'b10: out_reserved<=out_reserved+6'd16;
+                2'b01: out_reserved<=out_reserved-1'b1;
+                2'b11: out_reserved<=out_reserved+6'd15;
+                default: out_reserved<=out_reserved;
+            endcase
+        end
+    end
     assign done0       = done_q && (sel == 2'd0);
     assign done1       = done_q && (sel == 2'd1);
     assign done2       = done_q && (sel == 2'd2);

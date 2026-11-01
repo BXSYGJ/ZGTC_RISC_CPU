@@ -177,6 +177,7 @@ module top_npu_conv1_test #(
     reg                start0;
     wire               done0;
     wire               done1, done2, done3;
+    wire [15:0]        x0_ingress_max_row_unused;
 
     wire               x0_valid;
     wire         [7:0] x0_u8;
@@ -503,6 +504,7 @@ module top_npu_conv1_test #(
         .done3       (done3),
         .x0_valid    (x0_valid),
         .x0_u8       (x0_u8),
+        .x0_ingress_max_row (x0_ingress_max_row_unused),
         .x1_valid    (1'b0),
         .x1_u8       (8'd0),
         .x2_valid    (1'b0),
@@ -520,6 +522,7 @@ module top_npu_conv1_test #(
         .w_data      (w_data),
         .w_ready     (w_ready),
         .y_valid     (y_valid),
+        .y_ready     (1'b1),
         .y_u8        (y_u8),
         .adv0        (adv0),
         .adv1        (adv1),

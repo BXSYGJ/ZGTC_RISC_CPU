@@ -1,6 +1,26 @@
 # InstRec-FPGA 当前状态（STATUS）
 
-## 2026-11-01 20:44：RV PDS 路由按时止损；scalar 资源 gate 运行中
+## 2026-11-01 21:57：RV+NPU 候选已推广主线；最终冻结两轮与 loader/native 争用通过
+
+- 最终冻结 `build/npu_production_candidate/20261101-215059`：18 项冻结 DUT/model 输入，完整 native+M1 owner 连续两轮不复位均 PASS；每轮 31,141,202 cycles，全 conv/pool/GAP/FC/softmax 逐值 golden exact。相比不含 owner 的31,115,245增加25,957周期；125MHz下约249.13ms，未达到旧200ms目标。
+- 同一冻结版本 CPU/ROM C1–C9 PASS；固件隔离重建与 ROM 字节一致。真实 RV32I 软核执行 MMIO 启动、状态/结果读取与清除，M扩展在此集成关闭；该CPU测试注入NPU返回，不等同完整CPU+音频+NPU联合实测。
+- 三个顶层 top_rv_core / top_core_only / instrec_top 结构展开 PASS（外围vendor wrapper stub）；59个候选.v词法0 violation。16个已核验文件已推广到生产 src：六compute、arbiter、六新增native/activation模块、三top；diag和仿真端口同步适配。生产真实源路径完整两轮也已 PASS（各31,141,202 cycles）；conv1–4全部输出0 mismatch、GAP/FC/softmax、两次完成、CPU C1–C9、顶层控制17项断言均PASS。
+- 真实 weight_loader+owner+生产 ddr3_ctrl_axi+full AXI model：4×256B上传、0x100000基址、32拍读回、完整WOK摘要、CRC拒绝、AW超时、读超时、复位恢复 PASS。owner延迟loader done到数据排空并等待registered native done，消除提前done死锁与超时误ACK；错误后需reset，未实现UART NAK恢复。
+- 四主口真实controller争用/超时隔离 PASS：m0/m1/m2/m3同时pending，完成计数4/4/3/4，PCM/Mel/权重/激活/自检payload与地址隔离正确；不是完整NPU推理与所有master持续竞争测试。异常UART长度/全镜像长度验证仍未覆盖。
+- 已启动唯一 exact combined topology 资源gate `build/resource_gate/native-20261101-215404-522126`，严格止于dev_map；45项真实rv_core RTL、2约束与完整IP冻结并校验hash，compile已完成（6m43s、peak502MB、0条E），现进入synthesize；尚无最终资源。215359 gate仅准备未启动。当前仍无新版RV位流/PDS时序/板级RV证据；不操作下载器或cdt进程。
+- 推广后Python 429 passed / 4 skipped（119.36s），主线59个.v词法0 violation；仅npu_top过时注释及WDMA尾空格随后清理，16文件无功能token差异，双SHA证据见reports/npu_production_promotion_20261101.json。
+- 后续：提交并同步GitHub；读取本轮真实资源，若可实现再启动单实例受控PNR并监控收敛，不能用旧WDMA-only gate估计完整新拓扑资源。
+
+## 2026-11-01 21:45：冻结顶层候选结构通过；重复推理与 loader 提前完成问题修复中
+
+- hardened 权重读对齐器定向通过（16-byte 偏移、17 物理 beat 拆包、边界拒绝、背压、early-done/abort）；完整 native 单轮仍为 31,115,245 cycles 全层 golden exact。
+- 两轮不复位回归暴露真实缺陷：第二轮 FC2 第 0 项 got29/expected202；FC2 在 FC1 阶段预装输入后，旧参数计数可使其提前进入 MAC，并误收共享权重。仅加权重门控仍失败（got6/expected202）；最终增加 FC 完成时清参数计数，两轮不复位均 PASS（各 31,115,245 cycles，全层 golden/输出计数一致）。独立延迟参数短测原版 FAIL、修复 PASS；中途 abort/restart 未宣称支持。
+- `build/npu_production_candidate/` 已生成生产命名的隔离 snapshot：补齐 activation/aligner/bridge/事务 owner、loader 0x100000 基址与 fault 传播。top_rv_core 和 instrec_top 的 Verilator 结构展开通过（audio/DDR/HDMI 外围使用 stub），不能等同真实 IP 或 PDS 通过。
+- M1 owner 初版定向回归通过，但进一步审查发现真实 loader 在 native done 时提前撤 rd_ready，可能导致剩余 FIFO 永不排空；修正后延迟 loader-facing done 到读数据交付完毕，真实 loader+owner 已通过 10 checks（4×256B、32拍读回、完整 WOK 42851062、CRC拒绝、复位恢复）。真实控制器 timeout 回归及最终冻结继续；旧 snapshot 不可作为最终构建输入。
+- 本轮复验 Python 429 passed / 4 skipped（99.16 s）、RTL 53 个 .v / 0 violation；uart_linebuf、rv_top_ctrl 均 PASS。UART 128 字节边界实际通过：旧记录仅按 7-bit ram_len 推断失败不成立，其 0 编码经 7-bit 减一比较终止于127，暂不做无反例改动。
+- 下一步：双轮修复与 owner 回归通过后重新冻结，使用冻结 DUT 源完整 native 两轮并含 owner；随后才对 exact combined topology 做单实例 dev_map。当前无 PDS 在运行、无新版 RV 位流；下载器与 cdt 进程未操作。
+
+## 2026-11-01 21:30：RV PDS 已止损；两项资源 gate 完成，继续整合审查
 
 - 唯一 RV 构建 `build/pds/20261101-130420-0ed52a5d` 在观察截止后仍无收敛：iteration 370，未布 7156；62 项 source manifest SHA256 全部一致，无 `.sbit`、时序报告或可发布位流。
 - 已仅结束该 run 的 PDS 子进程，随后确认 PDS 进程归零；未触碰 `cdt_js` PID 9040、`cdt_cfg` PID 46156 或下载器。失败/中断日志仍保留在原 run 目录。
@@ -8,7 +28,8 @@
 - scalar gate 已完成：LUT 40,206/66,600（61%）、FF 53,718/133,200（41%）、DRM 80.5/155（52%）、APM 90/240（38%）；未进入 PNR。该变体没有降低 DRM，LUT 高于当前约 35,840 基线。已串行启动 wide gate `build/resource_gate/20261101-202029-216909`，当前在 compile。
 - wide gate 已完成：LUT 29,409/66,600（45%）、FF 33,211/133,200（25%）、DRM 88.5/155（58%）、APM 90/240（38%）；同样未进入 PNR。wide 显著降低 LUT/FF，但增加 DRM，不能据此宣称能解决当前布线停滞；两个 gate 均无位流。
 - 验证更新：完整 native NPU 自然推理 PASS（31,115,245 cycles，全层 golden exact，证据 `build/sim/npu_full_native/run.log`）；抽象 DDR 全链 PASS（30,757,679 cycles）；全量 Python `429 passed, 4 skipped`，`check_rtl.py` 为 53 个 `.v`、0 violation。
-- 生产 WDMA 的 0 基址/16-byte 未对齐契约仍未合入；native PASS 使用实验 `weight_read_aligner`，不能外推为生产 RTL、PDS、PHY/CDC 或上板 PASS。下一步读取 scalar gate 资源后串行运行 wide gate，并据资源差异决定是否值得重新布线。
+- 生产 WDMA 的 0 基址/16-byte 未对齐契约仍未合入；native PASS 使用实验 `weight_read_aligner`，不能外推为生产 RTL、PDS、PHY/CDC 或上板 PASS。下一步完成生产接口修复及全链候选整合审查，再决定是否重新布线。
+- 资源判断纠正：没有证据表明 DRM 是本轮路由停滞根因。wide 相对 corrected-scalar 减少 10,797 LUT / 20,507 FF，代价是增加 8 DRM；DRM 仍低于容量，不能据 DRM 增长否定该优化。资源优势不等同路由/时序通过。
 
 ## 2026-11-01 20:34：完整native控制器NPU自然推理通过；布线截止20:43
 

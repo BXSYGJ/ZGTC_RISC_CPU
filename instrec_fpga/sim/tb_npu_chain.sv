@@ -119,6 +119,7 @@ module tb_npu_chain;
     wire        fc1_yv;
     wire [7:0]  fc1_yu;
     wire        fc1_done;
+    wire        fc1_grp_advance_unused;
 
     // gap result feeds fc1 directly (both are 1 beat/cycle streams)
     assign fc1_xv = gap_we;
@@ -146,7 +147,8 @@ module tb_npu_chain;
         .shift      (fc1_s),
         .y_valid    (fc1_yv),
         .y_u8       (fc1_yu),
-        .done       (fc1_done)
+        .done       (fc1_done),
+        .grp_advance(fc1_grp_advance_unused)
     );
 
     // -----------------------------------------------------------------
@@ -163,6 +165,7 @@ module tb_npu_chain;
     wire        fc2_yv;
     wire [7:0]  fc2_yu;
     wire        fc2_done;
+    wire        fc2_grp_advance_unused;
 
     assign fc2_xv = fc1_yv;
     assign fc2_xs = $signed({8'd0, fc1_yu});
@@ -189,7 +192,8 @@ module tb_npu_chain;
         .shift      (fc2_s),
         .y_valid    (fc2_yv),
         .y_u8       (fc2_yu),
-        .done       (fc2_done)
+        .done       (fc2_done),
+        .grp_advance(fc2_grp_advance_unused)
     );
 
     // -----------------------------------------------------------------

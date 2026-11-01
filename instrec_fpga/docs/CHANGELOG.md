@@ -1,5 +1,13 @@
 # InstRec-FPGA 变更日志
 
+## 2026-11-01 22:02 — 完整 native 两轮修复推广主线与 exact 资源 gate
+
+- 推广六compute、DDR arbiter、六新增activation/native模块、三顶层，修复权重基址/16-byte对齐、层间DDR激活回放、FC旧参数epoch与错层权重、m1事务owner/early done/timeout误ACK；同步diag与仿真端口。
+- 215059冻结与生产真实源路径分别连续两轮不复位完整golden PASS，各31,141,202cycles；conv1–4全量0 mismatch，GAP/FC/softmax、两次完成、CPU C1–C9与启动控制17项断言PASS。
+- 真实loader+owner+生产controller上传/读回/CRC拒绝、AW/读超时及四口争用隔离PASS。Python429 passed/4 skipped；59.v词法0 violation。保留原始FC2失败/门控不足/FC旧epoch/loader提前done证据。
+- 资源误判纠正：wide较corrected-scalar少10797 LUT/20507 FF，多8DRM；不能断言DRM为拥塞根因。新完整拓扑唯一gate native-20261101-215404-522126止于dev_map，compile完成，synthesize进行中；无新版RV位流、未上板，下载器未操作。
+- 证据：sim/experiments/{weight_read_aligner_hardened,npu_integration_review,conv_layers_mainline}/；reports/{wdma_resource_gate_assessment_20261101.md,npu_production_promotion_20261101.json}。后者记录主线只清注释/空白的双SHA及16文件功能文本不变。
+
 ## 2026-11-01 20:44 — 停止停滞 RV 路由并启动串行资源 gate
 
 - RV 构建 `20261101-130420-0ed52a5d` 在 iteration 370 仍有 7156 条未布网络，按观察规则结束该 run；62 项 manifest 零漂移，未产出位流/时序报告，日志保留。

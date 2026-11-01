@@ -71,8 +71,9 @@ module wbuf #(
     end
 
     always @(posedge clk) begin
-        rd_data_q <= mem[rd_cnt];
-        rd_vld_q  <= (state == S_RPY);
+        rd_data_q <= mem[(rd_valid && rd_ready) ? ((rd_cnt_p1 >= tap_num) ? 11'd0 : rd_cnt_p1) : rd_cnt];
+        if (!rst_n || grp_start) rd_vld_q <= 1'b0;
+        else rd_vld_q <= (state == S_RPY);
     end
 
     assign ld_ready    = (state == S_LOAD);
@@ -80,7 +81,7 @@ module wbuf #(
     // grp_start masks the replay beat on its own cycle: the state register
     // only leaves S_RPY on the next edge, so an un-masked rd_valid could
     // hand one stale tap to a MAC window that is already re-arming.
-    assign rd_valid    = rd_vld_q && !(grp_start && (tap_num != 16'd0));
+    assign rd_valid    = rd_vld_q && (state == S_RPY) && !grp_start;
     assign rd_data     = rd_data_q;
 
     // -----------------------------------------------------------------------
@@ -121,7 +122,7 @@ module wbuf #(
                 end
 
                 S_RPY: begin
-                    if (rd_vld_q && rd_ready) begin
+                    if (rd_valid && rd_ready) begin
                         if (rd_cnt_p1 >= tap_num) rd_cnt <= 11'd0;
                         else                      rd_cnt <= rd_cnt + 11'd1;
                     end

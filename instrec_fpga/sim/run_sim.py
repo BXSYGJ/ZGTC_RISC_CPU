@@ -130,6 +130,17 @@ UI_RTL = [
     "src/ui/ui_coord_delay.v",
 ]
 
+# Include the activation replay/lifecycle dependencies explicitly even while
+# a source promotion is in progress; the full-NPU case must compile them.
+NPU_RTL = list(dict.fromkeys(
+    [str(p.relative_to(ROOT)).replace("\\", "/")
+     for p in sorted((ROOT / "src/npu").glob("*.v"))] + [
+        "src/npu/activation_row_store_dynamic.v",
+        "src/npu/activation_store_mux.v",
+        "src/npu/npu_stage_lifecycle.v",
+    ]
+))
+
 CASES: dict[str, Case] = {}
 
 
@@ -247,7 +258,7 @@ register(Case(
 register(Case(
     name="npu_completion",
     tb="tb_npu_completion.sv",
-    rtl=[str(p.relative_to(ROOT)).replace("\\", "/") for p in sorted((ROOT / "src/npu").glob("*.v"))],
+    rtl=NPU_RTL,
     timeout=300,
     description="real npu_top completion and result drain protocol",
 ))
@@ -536,6 +547,7 @@ def prepare_rv_top_ctrl(work: Path) -> None:
     output wire wl_tx_ready, dbg_tx_ready, cpu_tx_ready, uart_tx,
     input wire sys_run, st_done, st_fail, safe_err, ddr_init_done,
     input wire weight_ok, weight_err, wl_busy, npu_busy_u,
+    input wire native_owner_idle, native_fault,
     input wire mel_npu_start, cpu_npu_start,
     output wire launch_out, pending_out
 );

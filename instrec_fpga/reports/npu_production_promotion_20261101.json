@@ -1,0 +1,123 @@
+{
+  "snapshot": "20261101-215059",
+  "validation": "Two complete production-path native+owner golden inferences passed before comment/whitespace cleanup. No functional token changes in 16 promoted files.",
+  "cycles_per_inference": 31141202,
+  "changes_after_validation": [
+    "npu_top header describes actual contracts, replacing stale zero-tieoff comments",
+    "wdma trailing whitespace removed"
+  ],
+  "sources": [
+    {
+      "path": "src/npu/conv_engine.v",
+      "snapshot_sha256": "da1e4e913ab8eb9ccff9bc057ef1489807e69e47f909670a4b4ad6144f24dea4",
+      "production_sha256": "da1e4e913ab8eb9ccff9bc057ef1489807e69e47f909670a4b4ad6144f24dea4",
+      "identical_text": true,
+      "comment_whitespace_normalized_equal": true
+    },
+    {
+      "path": "src/npu/pool_engine.v",
+      "snapshot_sha256": "fa2b81e0336f58b74d19f6e3ee1ad891a5881aecf056240ab00da7746e7025ea",
+      "production_sha256": "fa2b81e0336f58b74d19f6e3ee1ad891a5881aecf056240ab00da7746e7025ea",
+      "identical_text": true,
+      "comment_whitespace_normalized_equal": true
+    },
+    {
+      "path": "src/npu/npu_top.v",
+      "snapshot_sha256": "5992d7c1f801690d344df875ed70571f72d6091099a0a28ea9955fde8cc984f9",
+      "production_sha256": "73a76c14997cbfac9ad9377940949fbb5663a71f8a0825007dbecd8ce8c7b9ed",
+      "identical_text": false,
+      "comment_whitespace_normalized_equal": true
+    },
+    {
+      "path": "src/npu/fc_engine.v",
+      "snapshot_sha256": "bf24dca55d48ab81fd4ce61a6c0f9c4bc41f2fa7f28937972b4cf36294f448ae",
+      "production_sha256": "bf24dca55d48ab81fd4ce61a6c0f9c4bc41f2fa7f28937972b4cf36294f448ae",
+      "identical_text": true,
+      "comment_whitespace_normalized_equal": true
+    },
+    {
+      "path": "src/npu/wbuf.v",
+      "snapshot_sha256": "9ea29ab7629d89e7794742260835462930cabcc584db6e3b86be80b9cc5032bd",
+      "production_sha256": "9ea29ab7629d89e7794742260835462930cabcc584db6e3b86be80b9cc5032bd",
+      "identical_text": true,
+      "comment_whitespace_normalized_equal": true
+    },
+    {
+      "path": "src/npu/wdma.v",
+      "snapshot_sha256": "160b0d7f0c0a86e046469964f329f93007de04e9d7caa8f90660a6e7f949a732",
+      "production_sha256": "983c5e6cc76c0b26a8650810fe662efe8382558222caca85f163ba5f52211353",
+      "identical_text": false,
+      "comment_whitespace_normalized_equal": true
+    },
+    {
+      "path": "src/npu/activation_row_store_dynamic.v",
+      "snapshot_sha256": "606b424773ae32ab25387bfb8dfb9bf19a62980ac030824de2b8d6cc72534a7a",
+      "production_sha256": "606b424773ae32ab25387bfb8dfb9bf19a62980ac030824de2b8d6cc72534a7a",
+      "identical_text": true,
+      "comment_whitespace_normalized_equal": true
+    },
+    {
+      "path": "src/npu/activation_store_mux.v",
+      "snapshot_sha256": "c02117dc8345a6aa132e63ade9544d1c00cabd45296dc5686f1ede7b1cdc96f9",
+      "production_sha256": "c02117dc8345a6aa132e63ade9544d1c00cabd45296dc5686f1ede7b1cdc96f9",
+      "identical_text": true,
+      "comment_whitespace_normalized_equal": true
+    },
+    {
+      "path": "src/npu/npu_stage_lifecycle.v",
+      "snapshot_sha256": "8ed6d69866c1bd7d60951a25722c77006941d774420170811e636fe0c1bfca11",
+      "production_sha256": "8ed6d69866c1bd7d60951a25722c77006941d774420170811e636fe0c1bfca11",
+      "identical_text": true,
+      "comment_whitespace_normalized_equal": true
+    },
+    {
+      "path": "src/npu/weight_read_aligner_hardened.v",
+      "snapshot_sha256": "54ae62714044ae28676e00d40e8e78d420eba1e9b366cf6da9e8b6487df385cd",
+      "production_sha256": "54ae62714044ae28676e00d40e8e78d420eba1e9b366cf6da9e8b6487df385cd",
+      "identical_text": true,
+      "comment_whitespace_normalized_equal": true
+    },
+    {
+      "path": "src/npu/npu_m1_bridge.v",
+      "snapshot_sha256": "7510a232de647efa232a5bb11b2bc7229f9571d5f4b13fa57684bea2e2f3cab6",
+      "production_sha256": "7510a232de647efa232a5bb11b2bc7229f9571d5f4b13fa57684bea2e2f3cab6",
+      "identical_text": true,
+      "comment_whitespace_normalized_equal": true
+    },
+    {
+      "path": "src/npu/npu_m1_owner.v",
+      "snapshot_sha256": "ce99ef8e780b72d9205da8c9ef8762cb891ce1d8bbf4295fd38372755a3157ca",
+      "production_sha256": "ce99ef8e780b72d9205da8c9ef8762cb891ce1d8bbf4295fd38372755a3157ca",
+      "identical_text": true,
+      "comment_whitespace_normalized_equal": true
+    },
+    {
+      "path": "src/ddr3/ddr3_arbiter.v",
+      "snapshot_sha256": "059e0e1dbc581dab3a45a9773dd56d72c3e38eb97718e5e8f1208e3801ba7d81",
+      "production_sha256": "059e0e1dbc581dab3a45a9773dd56d72c3e38eb97718e5e8f1208e3801ba7d81",
+      "identical_text": true,
+      "comment_whitespace_normalized_equal": true
+    },
+    {
+      "path": "src/ctrl/top_rv_core.v",
+      "snapshot_sha256": "181e5e78a81b6d4dec8f5df7a8a43de236e441991b2ba2c93d2e4d8b6a87acd6",
+      "production_sha256": "181e5e78a81b6d4dec8f5df7a8a43de236e441991b2ba2c93d2e4d8b6a87acd6",
+      "identical_text": true,
+      "comment_whitespace_normalized_equal": true
+    },
+    {
+      "path": "src/ctrl/instrec_top.v",
+      "snapshot_sha256": "4fcba1b30a61b9573d0abffdab3dd9bea6b0d6fd45cbc5e0d505b91dc70d589b",
+      "production_sha256": "4fcba1b30a61b9573d0abffdab3dd9bea6b0d6fd45cbc5e0d505b91dc70d589b",
+      "identical_text": true,
+      "comment_whitespace_normalized_equal": true
+    },
+    {
+      "path": "src/ctrl/top_core_only.v",
+      "snapshot_sha256": "df546d734f15f935e408d92429a58724684f31a399d5a53cb9b4d5db51e241de",
+      "production_sha256": "df546d734f15f935e408d92429a58724684f31a399d5a53cb9b4d5db51e241de",
+      "identical_text": true,
+      "comment_whitespace_normalized_equal": true
+    }
+  ]
+}

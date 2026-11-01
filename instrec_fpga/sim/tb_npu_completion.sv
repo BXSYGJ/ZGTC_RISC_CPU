@@ -1,6 +1,7 @@
 `timescale 1ns/1ps
 // Real npu_top sequencer and softmax. Earlier layers are deliberately skipped;
-// this is a completion regression, not an end-to-end numerical inference test.
+// Only the sequencer is forced; activation DDR requests are not serviced.
+// This is a completion regression, not an end-to-end numerical inference test.
 module tb_npu_completion;
     reg clk = 0;
     always #5 clk = ~clk;
@@ -13,6 +14,9 @@ module tb_npu_completion;
     wire [36:0] rd_cmd;
     wire [7:0] pct;
     wire [3:0] idx, top1;
+    wire act_cmd_valid_unused, act_cmd_write_unused, act_wr_valid_unused;
+    wire [31:0] act_cmd_addr_unused;
+    wire [255:0] act_wr_data_unused;
     integer results = 0;
     integer completions = 0;
     npu_top dut (
@@ -21,6 +25,10 @@ module tb_npu_completion;
         .feat_rd_addr(feat_addr), .feat_rd_data(8'd49), .feat_rd_en(feat_en),
         .rd_cmd_valid(rd_cmd_valid), .rd_cmd(rd_cmd), .rd_ready(1'b0),
         .rd_data(256'd0), .rd_valid(1'b0), .rd_done(1'b0),
+        .act_cmd_valid(act_cmd_valid_unused), .act_cmd_write(act_cmd_write_unused),
+        .act_cmd_addr(act_cmd_addr_unused), .act_cmd_ready(1'b0),
+        .act_wr_valid(act_wr_valid_unused), .act_wr_data(act_wr_data_unused),
+        .act_wr_ready(1'b0), .act_rd_valid(1'b0), .act_rd_data(256'd0),
         .probs_valid(probs_valid), .probs_pct(pct), .probs_idx(idx), .top1(top1)
     );
     always @(posedge clk) begin

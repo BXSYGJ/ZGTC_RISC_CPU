@@ -10,6 +10,7 @@ module tb_rv_top_ctrl;
     reg sys_run = 0, st_done = 0, st_fail = 0, safe_err = 0;
     reg ddr_ready = 0, weight_ok = 0, weight_err = 0, wl_busy = 0;
     reg npu_busy = 0, mel_start = 0, cpu_start = 0;
+    reg native_owner_idle = 1, native_fault = 0;
     wire launch, pending;
     integer cpu_pops = 0, dbg_pops = 0, wl_pops = 0;
     integer errors = 0;
@@ -22,6 +23,7 @@ module tb_rv_top_ctrl;
         .sys_run(sys_run), .st_done(st_done), .st_fail(st_fail),
         .safe_err(safe_err), .ddr_init_done(ddr_ready),
         .weight_ok(weight_ok), .weight_err(weight_err), .wl_busy(wl_busy),
+        .native_owner_idle(native_owner_idle), .native_fault(native_fault),
         .npu_busy_u(npu_busy), .mel_npu_start(mel_start),
         .cpu_npu_start(cpu_start), .launch_out(launch), .pending_out(pending)
     );
@@ -68,7 +70,11 @@ module tb_rv_top_ctrl;
         #1; check("busy accelerator blocks launch", !launch);
         @(negedge clk); npu_busy = 0; st_fail = 1;
         #1; check("failed DDR self-test blocks launch", !launch);
-        @(negedge clk); st_fail = 0;
+        @(negedge clk); st_fail = 0; native_owner_idle = 0;
+        #1; check("owned native master blocks launch", !launch && pending);
+        native_owner_idle = 1; native_fault = 1;
+        #1; check("native fault blocks launch", !launch && pending);
+        native_fault = 0;
         #1; check("pending CPU request launches on safe complete window", launch);
         @(negedge clk); mel_start = 0;
         #1; check("successful launch consumes pending request", !pending && !launch);
