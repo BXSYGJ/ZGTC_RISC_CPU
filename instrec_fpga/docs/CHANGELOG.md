@@ -624,3 +624,7 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 
 - 持久化四层 conv + pool1/2/3 双store激活回放，30,750,042周期逐值 exact；仅抽象DDR候选，native/综合/板测未完成。
 - 下载器重插后FTDI与COM3/COM4/COM5只读枚举正常；PDS iteration252未布6619、无位流。
+
+## 2026-11-01 19:54 — 真实DDR联合仿真修复通过
+
+- 修正bridge本地写缓存ready及TB采样边沿，真实controller 16权重beat/4激活写回/timeout abort PASS；native四层接入继续。旧必然死锁判断修正为写ready契约与harness均有缺陷。

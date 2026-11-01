@@ -1,5 +1,12 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-01 19:54：真实 DDR 控制器联合验证通过，四层 native 接入继续
+
+- `sim/experiments/npu_lifecycle/run_ddr3.py` 现场PASS：真实生产 `ddr3_ctrl_axi` + 候选激活区arbiter + AXI模型 + 修复bridge，16-beat权重读取、4组激活写后读回、addr_err=0、cmd_to_err超时失败路径均通过。
+- 修复写缓存契约：act_wr_ready在ACT_DATA表示本地单拍缓存接收，后续才提交native命令；不表示DDR提交成功。联合TB原来过早撤command valid、未跨采样边沿，也已修正。此前“必然死锁”表述过强：已主动提供valid的客户端可推进缓存，但ready语义与harness均需修正。
+- bridge70事务回归复验通过，继续补缓存接收后写abort；四层pingpong接真实controller新case正在并行开发，尚未证明完整native NPU链或最终FC/softmax。
+- 唯一PDS iteration334未布7246，仍无时序/新位流。下载器未被操作，不并发PDS或JTAG。
+
 ## 2026-11-01 18:54：原生 DDR 联合测试发现激活写握手卡点
 
 - 新增 `sim/experiments/npu_lifecycle/tb_npu_ddr3_lifecycle.sv` 与 `run_ddr3.py`，首次把 `ddr3_ctrl_axi`、DDR3 AXI model 和 bridge 放入同一测试平台。16-beat 权重读取已完成，但激活写入阶段出现 `act_wr_valid` 持续、bridge/controller 空闲的握手卡死；这是联合 harness 尚未闭环的失败证据，不能宣称 native DDR 集成通过，生产 RTL 未修改。

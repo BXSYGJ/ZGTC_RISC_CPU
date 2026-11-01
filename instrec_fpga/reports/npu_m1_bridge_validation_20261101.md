@@ -50,3 +50,23 @@ alignment and a 28-bit address. The experiments use base `0x00400000`, not the
 existing `0x00200000` spectrum region. Geometry, address whitelist expansion,
 rowstore integration, implementation resources, timing and board behavior
 are not established by this isolated protocol test.
+
+## 2026-11-01 19:54 real-controller integration correction
+
+The bridge write-data ready now indicates ACT_DATA staging-buffer acceptance,
+not native controller write completion. Data is latched before native command
+submission; command acceptance remains blocked until the native transaction
+finishes. Buffered write acceptance can precede a later explicit fault.
+
+The joint harness also deasserted command valid before a sampling edge; it
+now holds requests through a real rising-edge handshake. Both harness timing
+and the staging-ready contract were corrected. The original failure does not
+by itself prove that all previous clients suffered a circular wait: clients
+that already asserted valid could have provided the staged data.
+
+`python sim/experiments/npu_lifecycle/run_ddr3.py` now passes with real
+production ddr3_ctrl_axi, candidate activation-region arbiter and AXI memory
+model: 16 weight beats, four activation writes/readbacks, addr_err zero, and
+controller timeout propagated through cmd_to_err to explicit bridge failure.
+This is controller-interface validation; four-layer native integration,
+physical DDR behavior, synthesis and board validation remain separate.

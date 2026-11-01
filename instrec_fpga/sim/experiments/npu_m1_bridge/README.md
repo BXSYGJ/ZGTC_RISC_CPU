@@ -16,8 +16,11 @@ Production top, DDR controller and production arbiter remain unchanged.
 - Activation side: `act_cmd_valid/write/addr[31:0]/ready` accepts one local
   command. Reads route `act_rd_valid/data` with no backpressure.
   Writes first wait for `act_wr_valid/data`, latch data, then issue the
-  native write command. `act_wr_ready` pulses on native write acceptance,
-  so the row store must hold its valid/data until then.
+  native write command. `act_wr_ready` is high in ACT_DATA and accepts the
+  data into the one-beat staging buffer; it does not indicate DDR completion.
+  The client holds valid/data until this handshake. Later commands wait until
+  the native transaction has completed. A later abort reports sticky failure
+  even if the write data was already accepted locally.
 - Native side: `m1_cmd_valid/cmd[36:0]/wdata/rd_ready` outputs connect to
   controller master 1; `m1_wready/rdata/rvalid/done` are controller responses.
   There is no native command-ready signal. The chosen command is held through
@@ -35,7 +38,8 @@ Production top, DDR controller and production arbiter remain unchanged.
   current transaction. It terminates command submission, pulses
   `transaction_failed`, latches `protocol_error`, and holds a quiescent FAULT
   state until reset. It never fabricates successful weight done or activation
-  data/write acknowledgement for a truncated transfer. An integration must
+  data for a truncated read. Local write-buffer acceptance is not a guarantee
+  of later DDR commit. An integration must
   connect this error path and respond to `protocol_error`; tying abort low
   cannot recover a watchdog that delivers fewer than the requested read beats.
 

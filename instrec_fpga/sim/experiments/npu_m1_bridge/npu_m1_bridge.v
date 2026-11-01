@@ -46,7 +46,11 @@ module npu_m1_bridge (
     assign wgt_done = state==WEIGHT && read_complete && !m1_abort;
     assign act_rd_data = m1_rdata;
     assign act_rd_valid = state==ACTIVATION && !cmd_q[36] && m1_rvalid && !m1_abort;
-    assign act_wr_ready = state==ACTIVATION && cmd_q[36] && m1_wready && !m1_abort;
+    // The client data beat is accepted before the native command is issued.
+    // ACT_DATA is the bridge's one-beat staging buffer; waiting for native
+    // m1_wready here deadlocks because the controller cannot assert wready
+    // until it has first seen the activation command.
+    assign act_wr_ready = state==ACT_DATA && !m1_abort;
     always @(posedge clk or negedge rst_n) begin
         if(!rst_n) begin
             state<=IDLE;cmd_q<=37'd0;write_q<=256'd0;protocol_error<=1'b0;prefer_act<=1'b0;

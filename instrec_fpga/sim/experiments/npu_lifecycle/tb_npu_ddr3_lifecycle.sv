@@ -125,6 +125,8 @@ module tb_npu_ddr3_lifecycle;
     always @(posedge clk) begin
         if (rst_n) begin
             cycles = cycles + 1;
+            if ((cycles < 60) && (cycles > 24))
+                $display("N cyc=%0d av=%b wrv=%b ac_rdy=%b aw=%b bridge=%0d cmdv=%b cmd=%h ctrl=%0d awv=%b awr=%b wready=%b wb=%b act_rdy=%b done=%b", cycles,n_av,n_wrvalid,n_acmd_ready,n_aw,n_bridge.state,n_mcmdvalid,n_mcmd,n_ctrl.state,n_awvalid,n_awready,n_axi_wready,n_wready_beat[1],n_wrready,n_done);
             if (n_wrdvalid && n_wready) begin
                 weight_count = weight_count + 1;
                 if (n_wrdata_o !== pattern(28'h100000 + (weight_count-1)*32)) $fatal(1,"weight mismatch %0d got=%h exp=%h",weight_count,n_wrdata_o,pattern(28'h100000 + (weight_count-1)*32));
@@ -133,27 +135,31 @@ module tb_npu_ddr3_lifecycle;
                 if (n_rdata !== saved_act) $fatal(1,"activation readback mismatch got=%h exp=%h",n_rdata,saved_act);
                 act_rcount = act_rcount + 1;
             end
-            if (cycles > 2000) $fatal(1,"normal lifecycle watchdog weight=%0d ctrl=%0d bridge=%0d cmd=%h fifo=%0d av=%0d wrv=%0d",weight_count,n_ctrl.state,n_bridge.state,n_mcmd,n_ctrl.rd_fifo_count,n_av,n_wrvalid);
+            if (cycles > 2000) $fatal(1,"normal lifecycle watchdog weight=%0d ctrl=%0d bridge=%0d cmd=%h fifo=%0d av=%0d wrv=%0d aw=%b done=%b m1w=%h",weight_count,n_ctrl.state,n_bridge.state,n_mcmd,n_ctrl.rd_fifo_count,n_av,n_wrvalid,n_awvalid,n_done_vec,n_mwdata);
         end
     end
 
     initial begin
         for (i = 0; i < 16; i = i + 1) n_model.mem[16'h8000+i] = pattern(28'h100000 + i*32);
         repeat (5) @(negedge clk); rst_n = 1'b1;
-        // Start a 16-beat weight read and an activation command together.
+        // Complete a native 16-beat weight read, then issue an activation
+        // write. Concurrent request arbitration is covered by the bridge TB.
         @(negedge clk); n_wcmd = {1'b0,28'h100000,8'd15}; n_wvalid = 1'b1;
-        n_aaddr = 32'h00400000; n_aw = 1'b1; n_av = 1'b1;
-        saved_act = pattern(32'h00500000); n_wrdata = saved_act; n_wrvalid = 1'b1;
         wait (n_done); @(negedge clk); n_wvalid = 1'b0;
-        wait (n_acmd_ready); @(negedge clk); n_av = 1'b0;
-        repeat (2) @(negedge clk);
-        wait (n_wrready); repeat (2) @(negedge clk); n_wrvalid = 1'b0; act_wcount = 1;
-        // Activation readback after the weight command has drained.
-        repeat (3) @(negedge clk); n_aw = 1'b0; n_av = 1'b1; n_aaddr = 32'h00400000;
-        wait (n_acmd_ready); @(negedge clk); n_av = 1'b0;
-        wait (n_rvalid); repeat (3) @(negedge clk);
-        if (n_protocol_error || weight_count != 16 || act_wcount != 1 || act_rcount != 1)
-            $fatal(1,"normal lifecycle failed weight=%0d aw=%0d ar=%0d protocol=%0d",weight_count,act_wcount,act_rcount,n_protocol_error);
+        wait (n_bridge.state == 3'd0);
+        for (i = 0; i < 4; i = i + 1) begin
+            @(negedge clk); n_aaddr = 32'h00400000 + i*32; n_aw = 1'b1; n_av = 1'b1;
+            wait (n_acmd_ready); @(posedge clk); #1; n_av = 1'b0;
+            saved_act = pattern(32'h00500000 + i*32); n_wrdata = saved_act; n_wrvalid = 1'b1;
+            wait (n_wrready); @(posedge clk); #1; n_wrvalid = 1'b0; act_wcount = act_wcount + 1;
+            wait (n_bridge.state == 3'd0);
+            @(negedge clk); n_aw = 1'b0; n_av = 1'b1;
+            wait (n_acmd_ready); @(posedge clk); #1; n_av = 1'b0;
+            wait (n_rvalid); wait (n_bridge.state == 3'd0);
+        end
+        if (n_protocol_error || weight_count != 16 || act_wcount != 4 || act_rcount != 4)
+            $fatal(1,"normal lifecycle failed weight=%0d aw=%0d ar=%0d protocol=%0d addr_err=%b",weight_count,act_wcount,act_rcount,n_protocol_error,n_addr_err);
+        if (n_addr_err != 4'b0000) $fatal(1,"candidate arbiter rejected activation regions: %b",n_addr_err);
         // Fault instance is independent and must explicitly fail.
         @(negedge clk); f_wvalid = 1'b1;
         wait (f_failed); @(negedge clk); f_wvalid = 1'b0;

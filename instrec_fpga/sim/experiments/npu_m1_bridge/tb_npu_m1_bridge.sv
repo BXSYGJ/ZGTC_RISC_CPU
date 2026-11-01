@@ -17,6 +17,7 @@ reg m1_abort=0;
 npu_m1_bridge dut(.*);
 integer native_state=0,beats=0,beat=0,wait_cycles=0,transactions=0,wgt_words=0,act_reads=0,act_writes=0;
 integer act_wait=0,wgt_wait=0,same_cycle_reads=0,delayed_done_reads=0,early_done_reads=0;
+integer native_writes=0, writes_before_abort=0;
 reg early_sent=0;
 reg [36:0] native_cmd;
 reg [255:0] memory[0:31];
@@ -38,6 +39,7 @@ always @(negedge clk)begin
   else if(native_cmd[36])begin
    if(native_cmd[35:8]<28'h400000 || beats!=1)$fatal(1,"bad activation write command");
    memory[(native_cmd[35:8]-28'h400000)>>5]=m1_wdata;
+   native_writes=native_writes+1;
    m1_wready=1;m1_done=1;native_state=2;
   end else if(transactions%3==0 && !early_sent)begin
    m1_done=1;early_sent=1;early_done_reads=early_done_reads+1;wait_cycles=2;
@@ -66,7 +68,10 @@ always @(posedge clk)if(rst_n)begin
  if(m1_rvalid && native_cmd[35:8]>=28'h400000)begin
   if(!act_rd_valid || wgt_rd_valid)$fatal(1,"activation route failure");
  end
- if(act_wr_ready && !act_wr_valid)$fatal(1,"write acknowledgement without valid");
+ // act_wr_ready is a level handshake indication, not an acknowledgement;
+ // it may remain high while the client prepares its data beat.  The actual
+ // transfer is only act_wr_ready && act_wr_valid, so a ready-only cycle is
+ // legal and must not be treated as a bridge error.
  if(act_cmd_valid && !act_cmd_ready)act_wait=act_wait+1;else act_wait=0;
  if(wgt_cmd_valid && !wgt_rd_valid && !wgt_done)wgt_wait=wgt_wait+1;else wgt_wait=0;
  if(act_wait>500 || wgt_wait>500)$fatal(1,"client starved actwait=%0d wgtwait=%0d",act_wait,wgt_wait);
@@ -130,7 +135,28 @@ initial begin
  @(negedge clk);m1_abort=0;wgt_cmd_valid=0;
  repeat(4)@(negedge clk);
  if(m1_cmd_valid || !protocol_error || transaction_failed)$fatal(1,"fault did not remain quiescent/sticky");
- $display("RESULT: PASS native m1 bridge 70 normal transactions plus truncated-read abort explicit failure");$finish;
+ $display("READ ABORT PASS explicit failure with sticky quiescent fault");
+ // Reset the fault, accept a write into the bridge buffer, then abort before
+ // the native controller commits it.  Client acceptance is not DDR success.
+ writes_before_abort=native_writes;
+ rst_n=0;act_cmd_valid=0;act_wr_valid=0;
+ repeat(3)@(negedge clk);rst_n=1;
+ @(negedge clk);act_cmd_addr=32'h4003e0;act_cmd_write=1;act_cmd_valid=1;
+ do @(posedge clk);while(!act_cmd_ready);
+ @(negedge clk);act_cmd_valid=0;act_wr_data=pattern(32'h556677);act_wr_valid=1;
+ do @(posedge clk);while(!act_wr_ready);
+ #1;
+ if(!m1_cmd_valid || m1_wdata!==pattern(32'h556677))$fatal(1,"accepted write not staged for native submission");
+ @(negedge clk);act_wr_valid=0;m1_abort=1;
+ @(posedge clk);#1;
+ if(!transaction_failed || !protocol_error || m1_cmd_valid || act_wr_ready || act_rd_valid)
+  $fatal(1,"buffered write abort did not produce explicit sticky fault");
+ @(negedge clk);m1_abort=0;act_cmd_valid=1;
+ repeat(4)@(negedge clk);
+ if(m1_cmd_valid || act_cmd_ready || !protocol_error || transaction_failed)
+  $fatal(1,"buffered write fault accepted more work without reset");
+ if(native_writes!=writes_before_abort)$fatal(1,"aborted cached write reached DDR commit");
+ $display("RESULT: PASS native m1 bridge 70 normal transactions plus read abort and buffered-write abort; cache acceptance is not DDR commit");$finish;
 end
 initial begin repeat(200000)@(negedge clk);$fatal(1,"watchdog");end
 endmodule
