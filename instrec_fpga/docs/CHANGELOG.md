@@ -553,3 +553,8 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 ## 2026-11-01 16:59 — RV PDS 路由进度
 
 - PDS detail route 到 iteration 180，未布通网络 6949，构建仍在运行，无位流、时序或板级新结论。
+
+## 2026-11-01 17:04 — RV 路由与验证心跳
+
+- PDS detail route 到 iteration 185，未布通网络 6608；仍无位流或时序报告。
+- RV/NPU/控制/DDR 关键仿真继续通过；全量 Python 回归 429 passed / 4 skipped，RTL 检查 53 个 `.v`、0 violation。
