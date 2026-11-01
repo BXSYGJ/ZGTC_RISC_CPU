@@ -11,7 +11,7 @@
 //   C2  MMIO ID read-back prints "RV32 MMIO OK"
 //   C3  the RV32I self-test prints "RV32 ISA OK"
 //   C4  mcycle/minstret measurement prints "RV32 BENCH cycles=..."
-//   C5  an injected probs event prints "NPU t=3 p=87"
+//   C5  an injected probs event prints distinct top1=5 and last_class=3
 //   C6  firmware issues a real MMIO NPU start write
 //   C7  DDR OK is decoded from the real status register
 //   C8  firmware acknowledges and clears the sticky NPU event
@@ -62,7 +62,7 @@ module tb_rv_cpu;
         .npu_probs_valid (npu_probs_valid),
         .npu_probs_pct   (npu_probs_pct),
         .npu_probs_idx   (npu_probs_idx),
-        .npu_top1        (npu_probs_idx),
+        .npu_top1        (4'd5),
         .npu_cycles      (npu_cycles),
         .ddr_ok          (1'b1),
         .ddr_err         (1'b0),
@@ -185,7 +185,7 @@ module tb_rv_cpu;
         else $display("CHECK PASS C3 ISA self-test");
         if (!has_prefix("RV32 BENCH cycles=")) begin $display("CHECK FAIL C4 no BENCH line"); nfail = nfail + 1; end
         else $display("CHECK PASS C4 mcycle/minstret measurement");
-        if (!has_prefix("NPU t=3 p=87")) begin $display("CHECK FAIL C5 no NPU event report"); nfail = nfail + 1; end
+        if (!has_prefix("NPU top1=5 last_class=3 last_p=87")) begin $display("CHECK FAIL C5 no NPU event report"); nfail = nfail + 1; end
         else $display("CHECK PASS C5 NPU event surfaced through MMIO");
         if (!cpu_triggered) begin $display("CHECK FAIL C6 firmware never pulsed CTRL[0]"); nfail = nfail + 1; end
         else $display("CHECK PASS C6 CPU-triggered NPU start (CTRL[0])");
@@ -194,7 +194,7 @@ module tb_rv_cpu;
         if (!cpu_acknowledged || dut.npu_done_st || dut.npu_probs_st || dut.npu_timeout_st) begin
             $display("CHECK FAIL C8 NPU event acknowledgement/clear"); nfail = nfail + 1;
         end else $display("CHECK PASS C8 firmware acknowledged and cleared NPU event");
-        if (!has_prefix("NPU t=3 p=87 c=12345")) begin $display("CHECK FAIL C9 result cycle snapshot"); nfail = nfail + 1; end
+        if (!has_prefix("NPU top1=5 last_class=3 last_p=87 c=12345")) begin $display("CHECK FAIL C9 result cycle snapshot"); nfail = nfail + 1; end
         else $display("CHECK PASS C9 result cycle snapshot survives live counter change");
 
         if (cpu_trap) begin

@@ -1,5 +1,12 @@
 # InstRec-FPGA 变更日志
 
+## 2026-11-01 22:29 — CPU/native 联合闭环、top1修复与容量阻塞
+
+- 真实CPU ROM启动→CTRL/Mel安全窗→完整native NPU golden→结果MMIO/UART→ACK联合PASS；修复生产固件把最后概率lane误称top1，改为分别输出硬件top1/last_class/last_p。CPU C1–C9与生产默认联合再次PASS；生产ROM两次重建与隔离联合ROM逐字节相同，579words，SHA256前缀24d0b7fd。
+- A/B不同输入连续两轮不复位PASS：16512 feature字节全部变化，两轮各31141202cycles，全部中间层/最终结果golden exact；持久化runner、输入golden哈希及剩余异常边界说明。
+- exact完整拓扑综合资源超器件：LUT115473/66600、FF133439/133200、DRM88.5/155、APM92/240，禁止进入PNR，无位流。激活行缓存单写口/窄位候选三geometry逐拍miter通过，等待当前gate退出后串行隔离资源probe，不并发PDS，不操作下载器。
+- 证据：reports/{cpu_native_joint_validation_20261101.json,activation_repeated_boundary_review_20261101.md,activation_store_resource_review_20261101.md}及sim/experiments/{cpu_native_joint,activation_store,npu_integration_review}/。
+
 ## 2026-11-01 22:02 — 完整 native 两轮修复推广主线与 exact 资源 gate
 
 - 推广六compute、DDR arbiter、六新增activation/native模块、三顶层，修复权重基址/16-byte对齐、层间DDR激活回放、FC旧参数epoch与错层权重、m1事务owner/early done/timeout误ACK；同步diag与仿真端口。

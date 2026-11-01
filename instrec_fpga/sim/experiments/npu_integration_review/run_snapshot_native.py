@@ -39,6 +39,8 @@ def main():
     parser.add_argument('--manifest-only', action='store_true')
     parser.add_argument('--production', action='store_true',
                         help='Use actual ROOT/src DUT only after exact snapshot hash match')
+    parser.add_argument('--ab-inputs', action='store_true',
+                        help='Use distinct A/B features and golden arrays without DUT reset')
     args = parser.parse_args()
     snapshot = args.snapshot.resolve()
     manifest = json.loads((snapshot / 'snapshot.json').read_text())
@@ -93,12 +95,54 @@ def main():
                          'generator_input': str(original),
                          'same_as_generator_input': path.read_bytes() == Path(original).read_bytes()})
         name = 'npu_production_native' if args.production else 'npu_snapshot_native'
+        if args.ab_inputs:
+            name += '_ab'
         output = ROOT / 'build/sim' / name / snapshot.name
         output.mkdir(parents=True, exist_ok=True)
         inputs = output / ('manifest_only_inputs.json' if args.manifest_only else 'inputs.json')
         inputs.write_text(json.dumps(rows, indent=2), encoding='ascii')
         tb = output / 'tb_npu_full_native.sv'
         text = Path(case.tb).read_text(encoding='ascii')
+        if args.ab_inputs:
+            import numpy as np
+            sys.path.insert(0, str(ROOT / 'scripts'))
+            import golden_pipeline as golden
+            original = np.frombuffer((HERE.parent / 'npu_conv1/feat_u8.bin').read_bytes(),
+                                     dtype=np.uint8).reshape(64, 258)
+            # Deterministic, independently recomputed frame; every feature changes.
+            feature_b = (255 - original).astype(np.uint8)
+            result_b = golden.npu_forward(feature_b, golden.load_layer_contract(),
+                                          golden.load_mel_tables()['exp_lut'])
+            values = {'feat': feature_b.reshape(-1), 'gap': result_b['gap'],
+                      'fc1': result_b['fc1'], 'fc2_logits': result_b['fc2'],
+                      'probs': result_b['probs_q16']}
+            for layer in ('conv1', 'conv2', 'conv3', 'conv4', 'pool1', 'pool2', 'pool3', 'pool4'):
+                array = result_b[layer]
+                channels, height, width = array.shape
+                values[layer] = array.reshape(channels//16,16,height,width).transpose(2,0,3,1).reshape(-1)
+            assets = output / 'frame_b'
+            assets.mkdir(exist_ok=True)
+            evidence = []
+            for asset, array in values.items():
+                path = assets / (asset + '.hex')
+                path.write_text(''.join(f'{int(value):08x}\n' for value in array), encoding='ascii')
+                evidence.append({'asset': asset, 'path': str(path),
+                                 'sha256': hashlib.sha256(path.read_bytes()).hexdigest()})
+            marker = '  start=1;@(negedge clk);start=0;'
+            if text.count(marker) != 1:
+                raise RuntimeError('Review A/B insertion before repeated inference start')
+            reloads = ['  if(inference==1) begin']
+            for asset in values:
+                target = 'feat' if asset == 'feat' else 'exp_' + asset
+                reloads.append('   $readmemh("%s",%s);' %
+                               ((assets / (asset + '.hex')).as_posix(), target))
+            reloads += ['   $display("AB frame B loaded: all feature bytes changed; independent golden");', '  end']
+            text = text.replace(marker, '\n'.join(reloads) + '\n' + marker)
+            (output / 'ab_golden_manifest.json').write_text(json.dumps({
+                'feature_a_sha256': hashlib.sha256(original.tobytes()).hexdigest(),
+                'feature_b_sha256': hashlib.sha256(feature_b.tobytes()).hexdigest(),
+                'changed_feature_bytes': int(np.count_nonzero(feature_b != original)),
+                'dut_reset_between_frames': False, 'frame_b_assets': evidence}, indent=2), encoding='ascii')
         substitutions = {
             "{2'b00,n_mcmdvalid,1'b0}": "{2'b00,owner_valid,1'b0}",
             "{2'b00,n_mrdready,1'b0}": "{2'b00,owner_ready,1'b0}",

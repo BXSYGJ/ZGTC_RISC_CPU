@@ -50,3 +50,14 @@ AXI model. Inputs and hashes are under `build/sim/npu_production_native/NAME/`;
 the simulation build/log directory is `build/sim/npu_production_native_NAME/`.
 It still inserts the real owner with loader/other masters idle, so this is a
 complete NPU/native-chain test rather than full production-top or board proof.
+# Distinct-frame repeat regression
+
+Run `python sim/experiments/npu_integration_review/run_snapshot_native.py build/npu_production_candidate/20261101-215059 --production --ab-inputs`
+to preserve DUT/native DDR state while changing every feature byte before
+the second inference. Frame B is `255-A` with independently generated golden
+arrays. Assets and their hashes are retained under
+`build/sim/npu_production_native_ab/20261101-215059/`.
+The run passed all intermediate and final golden comparisons for both
+31141202-cycle frames. See
+`reports/activation_repeated_boundary_review_20261101.md` for evidence and
+remaining fault/reset coverage limits.

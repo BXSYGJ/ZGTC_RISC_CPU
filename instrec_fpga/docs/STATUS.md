@@ -1,5 +1,15 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-01 22:24：完整拓扑综合超容量；禁止进入 PNR
+
+- exact combined gate `build/resource_gate/native-20261101-215404-522126` 已完成技术综合，资源表为 LUT **115473/66600 (173.38%)**、FF **133439/133200 (100.18%)**、DRM **88.5/155**、APM **92/240**。当前仍保存综合数据库，尚无最终 dev_map 结果；无位流，不能进入布线。
+- 综合层级表`top_rv_core.snr`已确认两个`activation_row_store_dynamic`未映射RAM：u_store0=42441 LUT/50140 FF/0 DRM，u_store1=42445 LUT/50140 FF/0 DRM；合计84886 LUT/100280 FF。不能把综合成功解释为可实现，修复候选仍需隔离映射及新全拓扑gate证明。
+- 已准备窄位/单写口候选，三种真实尺寸逐拍miter与逐字节重排均PASS（198144/98304/49152B）；当前gate完全退出后才串行运行original/narrow单模块映射probe，不并发PDS。证据与命令见 `reports/activation_store_resource_review_20261101.md`。
+- 真实RV CPU+完整native NPU联合仿真也已PASS：CPU执行ROM、CTRL请求等待Mel安全窗、各层golden比较、结果MMIO/UART及固件ACK。DDR PHY、真实音频采集和完整Mel计算仍为模型边界；见 `sim/experiments/cpu_native_joint/README.md`。
+- 新增A/B不同输入连续无复位native回归PASS：B=255-A，16512个feature字节全部改变，分别重算golden，两轮各31141202周期，conv/pool/GAP/FC/softmax全部逐值一致。见`reports/activation_repeated_boundary_review_20261101.md`；尚未证明异常事务后无需reset的恢复。
+- 发现并修复UART语义：旧固件的`t`为最后概率lane，不是top1；生产固件分别输出STATUS硬件top1和last_class/last_p。独立CPU注入top1=5/last_class=3及完整native联合均PASS；生产ROM两次`--no-m`重建与联合仿真ROM逐字节相同，SHA256 `24d0b7fd4cb3e37f08cdfe4e3ab361321ba43f21ea6ec5367c3b2703b2dec294`（2316 padded bytes/579 words）。冻结gate源不变，不包含此ROM更新。
+- GitHub已同步`34fa09b`；下载器与`cdt_js/cdt_cfg`未操作。下一步先解决容量超限，再做新完整拓扑gate；未获得新版RV位流、时序或板级RV证据。
+
 ## 2026-11-01 21:57：RV+NPU 候选已推广主线；最终冻结两轮与 loader/native 争用通过
 
 - 最终冻结 `build/npu_production_candidate/20261101-215059`：18 项冻结 DUT/model 输入，完整 native+M1 owner 连续两轮不复位均 PASS；每轮 31,141,202 cycles，全 conv/pool/GAP/FC/softmax 逐值 golden exact。相比不含 owner 的31,115,245增加25,957周期；125MHz下约249.13ms，未达到旧200ms目标。

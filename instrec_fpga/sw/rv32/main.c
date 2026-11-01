@@ -10,7 +10,7 @@
  *      plus the DDR3 self-test verdict reported by sys_ctrl.
  *
  * Output tokens used by scripts/board_check.py --expect:
- *   "RV32 BOOT"  "RV32 ISA OK"  "RV32 MMIO OK"  "RV32 BENCH"  "NPU t="
+ *   "RV32 BOOT"  "RV32 ISA OK"  "RV32 MMIO OK"  "RV32 BENCH"  "NPU top1="
  * ------------------------------------------------------------------------- */
 #include <stdint.h>
 
@@ -170,9 +170,11 @@ int main(void) {
         if (status & ST_PROBS) {
             uint32_t pr = SYS_PROBS;
             last_probs = pr;
-            puts_("NPU t=");
+            puts_("NPU top1=");
+            putdec((status >> 8) & 0x0fu);
+            puts_(" last_class=");
             putdec(pr & 0x0fu);
-            puts_(" p=");
+            puts_(" last_p=");
             putdec((pr >> 8) & 0xffu);
             puts_(" c=");
             putdec(NPU_CYCLES);
