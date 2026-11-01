@@ -757,3 +757,9 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 - Re-ran RTL lexical checks: 59 Verilog files, 0 violations.
 - Re-ran board flash safety and UART handshake guards: 21 passed; no JTAG or downloader operation.
 
+## 2026-11-02 — db_norm 平方位宽护栏与 reset-mid-read 复现
+
+- `db_norm` 平方路径改为显式 32 位符号扩展和 64 位乘积，取低 32 位写入既有流水寄存器；不改变接口或 golden 语义。
+- 词法检查 59 个 `.v` 零违规，DDR/契约定向回归 35 passed，`mel_credit` 16512 字节 golden 对拍 0 mismatch。
+- 定向模型复现 reset-mid-read 后旧 `RVALID/RLAST` 被同主口新读误收；现有 `S_R_DRAIN` 仅处理 watchdog 超时，因缺少 IP reset/flush 或事务 epoch，暂不加入猜测性丢弃逻辑。板级仍 NOT_RUN。
+

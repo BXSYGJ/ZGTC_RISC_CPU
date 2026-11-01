@@ -1,5 +1,12 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-02：db_norm 平方位宽显式化；reset-mid-read 风险复现确认
+
+- `src/mel/db_norm.v` 将平方路径改为显式符号扩展到 32 位、64 位乘积后取低 32 位，再进入原有 48 位累加器；保持端口、状态机和数值语义不变，避免综合器依赖隐式乘法表达式宽度。
+- 修复后 `python scripts/check_rtl.py` 为 **59 个 `.v` / 0 violation**；`tests/test_ddr3_ctrl_model.py tests/test_plan_contract_guards.py` 为 **35 passed**；`python sim/run_sim.py mel_credit --verbose` 为 **16512 特征、0 mismatch、PASS**。
+- 定向复现 reset-mid-read：读事务进入 `S_R` 后复位控制器、释放复位并发起同主口新读，注入旧 `0xDEADBEEF/RLAST`，模型观察到 `read_cmpl=True` 且旧数据进入 `r_beats`。这确认现有 `S_R_DRAIN` 只覆盖 watchdog 超时，不覆盖外部复位；由于 `axi_rid` 仅为 master ID，当前接口无法安全区分旧/新事务，继续保留为开放 IP/PHY 契约风险。
+- 本轮未启动 PDS，未操作 `cdt_js`、`cdt_cfg` 或下载器。下一步在无 PDS 时继续低风险回归；若重新布线，先确认单实例并读取 slow/fast timing，不能把本次位宽修复当作时序闭合证据。
+
 ## 2026-11-02：db_norm 候选回归通过；新 PDS 布线停滞并安全结束
 
 - 生产 `src/mel/db_norm.v` 当前候选保留原端口和同步 RAM 节拍，在平方累加前加入寄存/末项 flush；小几何边界对拍、真实 `mel_credit` 16,512 字节 golden、CPU/native frame-major 联合均通过。候选仍需关注 PDS 对乘法表达式位宽的推断，未宣称板级验证。

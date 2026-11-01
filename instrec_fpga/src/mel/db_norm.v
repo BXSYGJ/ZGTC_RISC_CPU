@@ -157,6 +157,12 @@ module db_norm #(
     reg        [31:0] db_sq_pipe;
     reg               db_sq_pipe_valid;
 
+    // Make the square width explicit.  The largest supported dB magnitude is
+    // 20480, so a 32-bit result is sufficient, but the widened product keeps
+    // the intent independent of Verilog expression sizing rules.
+    wire signed [31:0] db_value_ext = {{16{db_value_pipe[15]}}, db_value_pipe};
+    wire        [63:0] db_sq_product = db_value_ext * db_value_ext;
+
     // ------------------------------------------------------------------
     // dB datapath (combinational, golden db_convert bit-exact).
     // ------------------------------------------------------------------
@@ -233,7 +239,7 @@ module db_norm #(
                 end
                 // -------- scan 2: dB conversion + statistics -----------
                 S_DB_RD: begin
-                    db_sq_pipe <= db_value_pipe * db_value_pipe;
+                    db_sq_pipe <= db_sq_product[31:0];
                     db_sq_pipe_valid <= db_value_pipe_valid;
                     state <= S_DB_CALC;
                 end
@@ -254,7 +260,7 @@ module db_norm #(
                     end
                 end
                 S_DB_FLUSH: begin
-                    db_sq_pipe <= db_value_pipe * db_value_pipe;
+                    db_sq_pipe <= db_sq_product[31:0];
                     db_sq_pipe_valid <= db_value_pipe_valid;
                     state <= S_DB_SUM_FLUSH;
                 end
