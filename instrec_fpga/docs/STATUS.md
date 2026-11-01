@@ -1,5 +1,11 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-02：RV 控制与 self-test 补测通过
+
+- `python sim/run_sim.py rv_top_ctrl --verbose`：17 项 PASS，覆盖物理 UART 解码、三生产者请求一次性消费、CPU 请求排队、安全 Mel 窗、权重上传/忙/DDR 失败/native fault 门控及 CPU-only 单次启动。
+- `python sim/run_sim.py self_test --verbose`：8 项 PASS，覆盖 4KB 写读回、16 条命令保持、写/读 abort 失败地址，以及 abort 后重新运行恢复。
+- 本轮未启动 PDS，未操作 `cdt_js`、`cdt_cfg` 或下载器；板级仍 NOT_RUN。
+
 ## 2026-11-02：DDR3/NPU 共享路径补测通过
 
 - `python sim/run_sim.py ddr3_subsys --verbose`：15/15 场景 PASS，覆盖 self-test、四主争用、读命令保持、AW/W/AR/DW watchdog、abort recovery；watchdog blind spot 场景仍按预期复现并记录，不宣称已修复。

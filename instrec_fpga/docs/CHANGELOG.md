@@ -768,3 +768,8 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 - DDR3 子系统 15/15 场景通过，含四主争用、watchdog 各阶段和 abort recovery；watchdog blind spot 仍作为已知限制保留。
 - NPU chain 的 GAP/FC1/FC2/softmax 全部逐值通过，0 mismatch。
 
+## 2026-11-02 — RV 控制与 self-test 补测
+
+- RV top control 17 项通过，包含请求排队、启动门控、故障阻断和 CPU-only 语义。
+- self-test 8 项通过，包含 4KB 读回、abort 错误和 abort 后恢复。
+
