@@ -628,3 +628,8 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 ## 2026-11-01 19:54 — 真实DDR联合仿真修复通过
 
 - 修正bridge本地写缓存ready及TB采样边沿，真实controller 16权重beat/4激活写回/timeout abort PASS；native四层接入继续。旧必然死锁判断修正为写ready契约与harness均有缺陷。
+
+## 2026-11-01 20:24 — 完整abstract推理与native四层通过
+
+- 持久化全NPU自然done golden候选和native四层+权重对齐适配候选；生产地址/FC修复尚未合入。
+- 准备scalar/wide串行资源gate，未运行；确认核心125MHz源于DDR IP，不能单改FDC降频。PDS iteration355未布7182。

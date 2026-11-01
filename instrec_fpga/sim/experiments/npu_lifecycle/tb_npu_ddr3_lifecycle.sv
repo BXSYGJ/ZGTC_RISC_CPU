@@ -49,7 +49,7 @@ module tb_npu_ddr3_lifecycle;
         .act_wr_ready(n_wrready),.act_rd_valid(n_rvalid),.act_rd_data(n_rdata),
         .m1_cmd_valid(n_mcmdvalid),.m1_cmd(n_mcmd),.m1_wdata(n_mwdata),
         .m1_rd_ready(n_mrdready),.m1_wready(n_wready_beat[1]),.m1_rdata(n_rd1),
-        .m1_rvalid(n_rd_valid_vec[1]),.m1_done(n_done_vec[1]),.m1_abort(n_cmd_to_err[1]),
+        .m1_rvalid(n_rd_valid_vec[1]),.m1_done(n_done_vec[1]),.m1_abort(n_cmd_to_err[1] || n_addr_err[1]),
         .protocol_error(n_protocol_error),.transaction_failed(n_failed));
 
     ddr3_ctrl_axi #(.AXI_TO_LIMIT(64),.P3_QUOTA_TIMEOUT(32)) n_ctrl(
@@ -165,7 +165,17 @@ module tb_npu_ddr3_lifecycle;
         wait (f_failed); @(negedge clk); f_wvalid = 1'b0;
         if (!f_protocol_error || f_done || f_wrdvalid || f_mcmdvalid)
             $fatal(1,"timeout was not isolated as bridge failure");
-        $display("RESULT: PASS npu DDR3 lifecycle weight16 activation read/write concurrent early-done and abort");
+        // The arbiter address flag is diagnostic, not a traffic firewall.
+        // Feed it into bridge abort and retain the sticky protocol fault so
+        // an invalid submitted command can never certify an inference.
+        @(negedge clk); n_wcmd = {1'b0,28'h1c0000,8'd0}; n_wvalid = 1'b1;
+        wait (n_failed); @(negedge clk); n_wvalid = 1'b0;
+        if (!n_addr_err[1] || !n_protocol_error || n_done || n_wrdvalid || n_mcmdvalid)
+            $fatal(1,"address diagnostic did not invalidate bridge transaction");
+        repeat (4) @(negedge clk);
+        if (!n_protocol_error || n_mcmdvalid || n_acmd_ready || n_failed)
+            $fatal(1,"address failure did not remain sticky and quiescent");
+        $display("RESULT: PASS npu DDR3 lifecycle weight16 activation read/write addr-clean normal traffic, timeout abort and sticky address-error failure");
         $finish;
     end
     initial begin cycles = 0; weight_count = 0; act_wcount = 0; act_rcount = 0; repeat (5000) @(negedge clk); $fatal(1,"global watchdog"); end

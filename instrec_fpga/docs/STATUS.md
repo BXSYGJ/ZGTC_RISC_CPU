@@ -1,5 +1,13 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-01 20:24：完整abstract NPU通过，native四层通过，资源gate已准备
+
+- `sim/experiments/npu_full_end/run.py` 完整自然推理PASS：conv1..4、pool1..4、GAP256、FC1 128、FC2 8真实+8padding、softmax8全部golden及计数一致，30757679周期。修复FC参数跨输入加载并行采集/饱和计数、完成判断及消费者控制wbuf重装；仅独立候选，abstract DDR。
+- `sim/experiments/npu_pingpong_native/run.py` 真实controller四层两次PASS，31106081周期；完整8MiB地址索引避免原模型2MiB alias。新增实验weight_read_aligner将WDMA零基址/16B偏移重定位0x100000并32B对齐拼接。生产WDMA仍有此地址契约缺陷，未合入修复。最终权重命令min0x100200/max0x1a0180，Amax0x4307e0/Bmax0x457fe0。
+- native全链后半段继续合并验证；native四层PASS不能扩展为FC/softmax或生产/上板PASS。
+- 资源gate脚本 `sim/experiments/wdma_parameter_ram/prepare_resource_gate.py` 已准备corrected-scalar/wide公平对比冻结工程，严格止于dev_map且启动拒绝并发PDS，尚未运行/未证明资源下降。核心时钟来自DDR IP125MHz，单改FDC不改变实际频率，不能当作快速降频方案。
+- 当前唯一PDS iteration355未布7182，仍无时序/位流；未操作下载器。候选全部隔离在实验目录。
+
 ## 2026-11-01 19:54：真实 DDR 控制器联合验证通过，四层 native 接入继续
 
 - `sim/experiments/npu_lifecycle/run_ddr3.py` 现场PASS：真实生产 `ddr3_ctrl_axi` + 候选激活区arbiter + AXI模型 + 修复bridge，16-beat权重读取、4组激活写后读回、addr_err=0、cmd_to_err超时失败路径均通过。
