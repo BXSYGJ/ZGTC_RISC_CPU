@@ -1,5 +1,11 @@
 # InstRec-FPGA 变更日志
 
+## 2026-11-01 22:59 — 完整映射、CPU双轮及生产行缓存reset验证
+
+- 归档完整gate正常PASS最终32076LUT/33300FF/120.5DRM/90APM证据；续跑入口阶段恢复失败仍在修复，实际PNR未开始、无位流。
+- 生产RTL+隔离重复启动固件A/B无reset两轮联合PASS，各31141202cycles，全层golden及两次CPU请求/安全窗启动/UART/MMIO/ACK一致；生产ROM不变。
+- 直接生产行缓存八状态reset后新geometry完整回放PASS，明确DDR模型同时取消pending响应边界。新增隔离runner/TB/说明/报告，旧失败及候选证据保留，下载器未操作。
+
 ## 2026-11-01 22:52 — 生产新ROM+narrow联合证据与全量回归
 
 - 保存生产CPU/native联合PASS报告，27项输入hash均核验；完整各层golden、MMIO/UART与ACK通过，保留物理DDR/音频/Mel边界。

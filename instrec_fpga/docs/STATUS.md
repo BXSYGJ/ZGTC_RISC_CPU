@@ -1,5 +1,13 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-01 22:59：完整映射通过，CPU双轮与生产reset补测通过
+
+- 唯一完整gate正常exit0，compile/synthesize/dev_map全部PASS；最终映射**32076 LUT / 33300 FF / 120.5 DRM / 90 APM**。归档`reports/npu_narrow_full_gate_20261101/`含manifest、snr、dmr和日志hash；资源容量阻塞已解除，但尚无新版位流/时序。
+- 首次复用映射续跑暴露PDS入口问题：`-file`先初始化默认工程，后续open_project不能正确恢复阶段；`-project -run pnr`则从compile起重跑。失败日志及工程备份保留，精确停止误启动compile，不触碰JTAG；正在改用显式加载原工程+仅执行PNR的入口。**PNR尚未实际开始，45分钟计时尚未开始**。
+- 生产RTL的CPU驱动A/B两轮无复位联合PASS：全部16512输入字节改变，各31141202周期，完整各层golden、两次安全窗启动/MMIO/UART/ACK正确，requests=launches=acks=2。使用隔离重复启动固件候选（仅首次ACK后再发一次CTRL[0]），生产ROM仍为单次启动，未改冻结源。证据`reports/cpu_native_joint_repeat_ab_validation_20261101.json`。
+- 直接使用生产行缓存SHA05321eb0的八状态中途reset回归PASS：重新配置/写入/逐字节回放、行数及DDR命令数、无旧credit复用均通过。`reports/activation_narrow_reset_validation_20261101.json`保留候选及生产独立日志hash；模型协同取消未完成DDR响应，不覆盖未取消事务迟到R或完整top/板级reset。
+- 下载器与cdt进程未操作；继续修复续跑入口并限时观察布线。
+
 ## 2026-11-01 22:52：生产 CPU+narrow NPU 联合通过；全量回归完成
 
 - 新ROM与narrow行缓存同时在生产路径联合仿真PASS：真实CPU启动、CTRL请求等待模拟Mel安全窗、完整native各层golden exact、结果MMIO/UART、CTRL[1] ACK；31141202观测周期。27项输入SHA256复核与当前文件一致，证据`reports/cpu_native_joint_narrow_validation_20261101.json`。DDR PHY、完整音频/Mel前端及真实UART电气不在此仿真范围。
