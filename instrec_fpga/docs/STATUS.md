@@ -6,6 +6,10 @@
 - `build/npu_full/wdma_step3.v` 候选已修复 bias/M 每个 DDR beat 的索引步长（+8）、shift 索引步长（+32）及 `grp_mod * 16` 通道偏移；诊断确认参数 index 0 的 bias=-287、M=1762673006、shift=41 与合同一致。但完整 conv1 首点仍失败：`got=7 exp=4 cycle=535`，因此整链仍不正确。候选仅在 build 目录，主线 RTL 与冻结 PDS manifest 未修改；继续定位权重/激活选择或 MAC/量化数据通路。
 - 唯一 PDS run `build/pds/20261101-130420-0ed52a5d` 继续 detail route；iteration 220 未布网络 6756。最近 30 轮（191–220）未布网络 6572–6926、均值约 6772，呈高位震荡；仍无 `report_timing`、`.sbit` 或 RV 板级证据。父子 `pds_shell.exe` PID 36628/40640 属于同一 run，不得终止或另起 PDS。
 - 当前已验证：RV CPU C1-C9、RV 控制/MMIO、Mel/Mel credit、conv1 独立 golden、NPU 组件链、DDR3 子系统/AW timeout、UART line buffer、UI render/overlay、WDMA 原版/候选逐拍等价。未验证/有问题：CPU→NPU 真实数值端到端、完整 NPU 自然逐层通过、当前 RV 位流及板级 RV/权重上传。
+- 后续 step4 候选修复 `wbuf` 同步读地址推进：原版实际 MAC tap 序列为 0,0,1..7，重复首项遗漏末项。候选首点已为 `got=4 exp=4`，前 272 项通过；下一失败是 index272（row0/group0/col17/lane0）`got=17 exp=0 cycle=824`。日志 `build/sim/npu_full_step4/run.log`；正在检查无背压 feature replay 对三行 ring 的覆盖。独立代理补做 wbuf 随机背压/重载验证，以及共享 conv 核层间缓存容量审查。
+- 本次重新运行 `python scripts/check_rtl.py`：53 个文件、0 violation；`python -m pytest -q`：429 passed / 4 skipped（88.36 s）。最新状态提交 `58d8ebb` 已同步 `origin/XSY`。
+- step5 feature 行信用候选后，conv1 group0 整行 4128 个输出已通过，首次失败推进到 group1 首项：index4128 `got=0 exp=51 cycle=4926`；正在对照换组参数 shadow/active bank 与同步 RAM 预热。wbuf 候选独立 10797 次握手验证通过，详见 `reports/wbuf_candidate_validation_20261101.md`（含修复 diff 和 SHA256）。
+- 层间结构审查确认另有三项独立阻塞：下一层三行 bank 被整帧 pool 输出覆盖、下一层 start 清 row_done、pool 的 row/group/col/lane 顺序与 conv ingress 不同。片上全帧缓存余量不足；正在 build 目录开发 DDR 激活缓存/受信用重放协议候选，详见 `reports/npu_interlayer_storage_review_20261101.md`。当前 PDS 即使布通也不含这些修复，不能当作真实完整 NPU 推理已验证。
 
 > 本文件是**唯一实时状态源**，优先于任何交接快照与记忆。每次会话结束前必须更新，
 > 并在 `CHANGELOG.md` 追加一条。最后更新：2026-11-01 17:30。

@@ -583,3 +583,10 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 - build 候选 `wdma_step3.v` 将 bias/M 写入索引改为每 beat +8、shift 每 beat +32，并将通道组偏移改为 `grp_mod * 16`。首项 bias/M/shift 已与 `layer_contract.json` 的 index 0 相符。
 - 完整 conv1 golden 仍在首个输出失败：`got=7 exp=4 cycle=535`。该修复未进入主线，也不在当前冻结的 PDS 输入中；继续定位 MAC 前权重/激活与舍入数据通路。
 - PDS run `20261101-130420-0ed52a5d` 到 iteration 220，最近 30 轮未布网络 6572–6926、均值约 6772；没有时序报告或位流。父子 PID 36628/40640 仍运行，未启动第二个 PDS。
+
+### 后续 step4 权重读时序定位
+
+- 逐 tap 确认 wbuf 同步读在消费边沿才推进地址，导致 MAC 首 tap 重复、末 tap 遗漏。build 前瞻地址候选使首点 4/4，连续前 272 项通过，随后 index272 输出 17/0；继续检查 feature 行缓存覆盖，未修改主线。
+- 重跑 RTL 检查 53 文件 0 violation；Python 429 passed / 4 skipped，88.36 s。GitHub 已同步 58d8ebb。
+- step5 行信用候选保护后，conv1 第0组整行 4128 项通过；首次失败推进至第1组首项，继续定位参数 shadow bank。独立 wbuf 候选 10797 次握手验证通过，报告保留完整修复 diff 与 SHA256。
+- 新增层间存储审查报告：串行共享卷积核与三行缓存无法保留整帧 pool 输出，且有 start 清 row_done、输入顺序不一致；需要 DDR 激活缓存与受信用重放，build 协议候选继续开发，未改主线。
