@@ -731,3 +731,9 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 - 修复版唯一 PDS run `20261102-003406-7af1bf17` 已完成 compile/synthesize/dev_map 并进入 detail routing；未布网络从 62810 降至 16929（迭代 0→13），仍在收敛，尚无新位流或时序结论。
 - 并行验证通过：DDR 控制器模型 26 项、DDR/自检/契约 49 项、板级安全/串口 43 项、权重/NPU/Mel/特征页 78 项；loader/native timeout 与 owner/CRC/reset 路径通过。
 - reset-mid-read 同 `axi_rid` 旧响应误收风险继续保留；未操作下载器或 `cdt_js/cdt_cfg`。
+
+## 2026-11-02 — 修复版 PDS 完成 PNR，时序未闭合
+
+- `build/pds/20261102-003406-7af1bf17` detail routing 迭代149达到0，确认 placed/routed；完成 report_timing 和 gen_bit_stream，候选 `.sbit` 3,791,112 bytes，SHA256 `605C234FA2B14BB174C304B0B99FB7E5E7768643F999A97BEC70FA328B488CFB`。
+- 资源 LUT 32063、FF 33300、DRM 120.5、APM 90；slow ddrphy_sysclk WNS -4.462 ns/TNS -4036.195 ns，fast WNS -0.793 ns，仍有 setup 失败。bitstream 报告 SCBV 未设置警告，板级保持 NOT_RUN。
+- 未操作下载器、`cdt_js` 或 `cdt_cfg`；reset-mid-read 同 RID 旧响应风险仍开放。

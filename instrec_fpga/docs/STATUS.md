@@ -1,12 +1,15 @@
 # InstRec-FPGA 当前状态（STATUS）
 
-## 2026-11-02：修复版 PDS detail routing 进行中，定向回归继续通过
+## 2026-11-02：修复版 PDS 完成布线并产出候选位流，时序未闭合
 
-- 当前唯一 PDS run 为 `build/pds/20261102-003406-7af1bf17`，compile/synthesize/dev_map 已成功；PNR 父/子进程仍为同一 run（PID 42736/14920），未操作 `cdt_js`、`cdt_cfg` 或下载器。
-- detail routing 从 62810 个未布网络降至 16929（迭代 0→13），持续下降，尚未到最终 `Unrouted nets 0`，因此没有提前宣称布通、时序或位流成功。
+- 当前唯一 PDS run `build/pds/20261102-003406-7af1bf17` 已完成 compile/synthesize/dev_map/PNR/report_timing/gen_bit_stream；detail routing 在迭代149达到最终 `Unrouted nets 0`，并确认 `top_rv_core` placed and routed successfully。全流程已退出，未操作 `cdt_js`、`cdt_cfg` 或下载器。
+- 候选位流 `generate_bitstream/top_rv_core.sbit` 大小 3,791,112 bytes，SHA256 `605C234FA2B14BB174C304B0B99FB7E5E7768643F999A97BEC70FA328B488CFB`。源清单 SHA256 `491168B89E5348B12B6889045B3860C7870FDF7E95F55D0BCF3BEEAEF6BDFFA6`，run.log SHA256 `E7B0FB73CE8D7A81CF690A73DBC1DC600310D92B0989D07B50AA5CB14FCDE66E`。
+- 资源约为 LUT 32063/66600、FF 33300/133200、DRM 120.5/155、APM 90/240。detail routing 从 62810 收敛至0，但这不等于时序闭合。
+- `report_timing/top_rv_core.rtr`：slow `ddrphy_sysclk` WNS -4.462 ns、TNS -4036.195 ns、6015 个 setup endpoint 失败；fast WNS -0.793 ns、96 个失败；其余列出时钟 setup/hold 为正。报告结论为 `Some Constraints Violated`。
+- bitstream 日志有 `Bitstream-2001: SCBV has not been set` 警告；因此候选位流不得直接上板。
 - 并行只读验证新增全部通过：DDR 控制器模型 26 passed；DDR/自检/契约组 49 passed；板级烧录安全/串口握手 43 passed；权重/NPU/Mel/特征页 78 passed（2 条 torch FutureWarning，无失败）。
 - loader/native 读超时 fail-closed/reset、owner early-done/CRC/复位恢复路径均通过，证据位于 `build/sim/loader_native_read_timeout/` 与 `build/sim/loader_owner/`。reset-mid-read 后同 `axi_rid` 的旧 `RVALID/RLAST` 误收仍是开放风险，未加入猜测性丢弃逻辑。
-- 下一步继续监控该 run 的 detail routing；只有同时出现最终 `Unrouted nets 0`、`placed and routed successfully`、timing 报告和位流后，才更新候选结论。板级仍 NOT_RUN。
+- 板级仍 NOT_RUN；后续优先处理 DDR PHY 时序/SCBV 配置，再另行生成可上板候选。reset-mid-read 后同 `axi_rid` 的旧响应风险仍开放。
 
 ## 2026-11-02：DDR 修复版资源门禁完成，未进入布线
 
