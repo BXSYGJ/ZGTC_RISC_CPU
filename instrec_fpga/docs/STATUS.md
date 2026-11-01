@@ -1,5 +1,12 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-01 20:34：完整native控制器NPU自然推理通过；布线截止20:43
+
+- `sim/experiments/npu_full_native/run.py` 实际PASS，自然done=31115245周期：conv1..4、pool1..4、GAP256、FC1 128、FC2首8语义logits/16输出握手、softmax8全部golden及最终计数一致。
+- 真实生产ddr3_ctrl_axi + 候选arbiter/bridge/read aligner + full8MiB行为AXI模型；无protocol_error/timeout/addr_err。最终权重first0x1003a0/last0x1a8900/min0x100200/max0x1a8b40，Amax0x4307e0/Bmax0x457fe0。
+- 仅独立实验候选，生产WDMA基址/未对齐读取仍待采用适配，未证明PHY/CDC/PDS/上板或CPU协同完整推理。
+- 用户要求布线别无限等待：20:27 iteration358未布7226，观察截止20:43；20:34 iteration363未布7201，仍震荡。截止若无显著下降，保留日志/manifest并核验PID后结束此无位流PDS，串行scalar/wide资源gate。绝不触碰cdt_js/cdt_cfg或下载器。心跳已改每5分钟。
+
 ## 2026-11-01 20:24：完整abstract NPU通过，native四层通过，资源gate已准备
 
 - `sim/experiments/npu_full_end/run.py` 完整自然推理PASS：conv1..4、pool1..4、GAP256、FC1 128、FC2 8真实+8padding、softmax8全部golden及计数一致，30757679周期。修复FC参数跨输入加载并行采集/饱和计数、完成判断及消费者控制wbuf重装；仅独立候选，abstract DDR。

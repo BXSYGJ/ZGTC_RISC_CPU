@@ -633,3 +633,8 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 
 - 持久化全NPU自然done golden候选和native四层+权重对齐适配候选；生产地址/FC修复尚未合入。
 - 准备scalar/wide串行资源gate，未运行；确认核心125MHz源于DDR IP，不能单改FDC降频。PDS iteration355未布7182。
+
+## 2026-11-01 20:34 — 完整native NPU golden通过
+
+- 独立native控制器全链自然done31115245周期全部golden及计数通过，未移植生产或板测。
+- 按用户控制耗时要求，当前PDS观察截止20:43；届时仍停滞则保存证据后转串行资源gate，禁止操作JTAG服务。
