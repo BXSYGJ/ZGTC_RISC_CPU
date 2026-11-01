@@ -1,5 +1,11 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-01 18:31：四层 ping-pong 激活回放通过，下载器已重新枚举
+
+- `sim/experiments/npu_pingpong/` 持久化四层候选：conv1..conv4 全部输出及 pool1..pool3 激活回放逐字节 golden 一致，`build/sim/npu_pingpong/run.log`，30750042周期。双store A=0x00400000（pool1/pool3复用）、B=0x00440000（pool2），使用抽象DDR命令；不等同原生37-bit控制器、综合或上板。
+- 下载器物理重插后只读枚举成功：FTDI USB Composite、Converter A/B、COM3/COM4，CP2102 COM5 均为OK；`cdt_js` PID9040、`cdt_cfg` PID46156保持，未重启/终止/烧录。
+- 唯一PDS仍在运行至iteration252，未布6619，未生成timing或sbit；继续自然收敛，不能宣称布通。GitHub上一版本 `958a84d`，本轮pingpong证据提交后再推送。
+
 ## 2026-11-01 18:23：重复推理反例修复与 native bridge 增强通过
 
 - `sim/experiments/npu_lifecycle/` 三项真实RTL测试通过：GAP原版late-arm两帧只产256结果，early-arm+priority restart候选512结果逐值一致；真实pool两帧及accepted-last sticky完成保持；新A/B激活区17项边界/owner/len地址错误标志验证。arbiter只置addr_err，不拦截非法grant，未宣称地址保护。
@@ -48,7 +54,7 @@
 - WDMA 原候选反例与修复已持久化 `sim/experiments/wdma_handshake/`，现场重跑 baseline 预期 FAIL、fixed 4943 tap PASS，见 `reports/wdma_handshake_validation_20261101.md`。换组 MAC 错误进一步定位到 wbuf 装载首拍旧 valid 穿透：`grp_start` 边沿状态进 LOAD，但 `rd_vld_q` 从旧 RPY 仍保持 1 一拍。此前 10797 次测试仅检查 grp_start 当拍，未覆盖随后整个 LOAD；正在增强反例与状态/valid 修复。
 
 > 本文件是**唯一实时状态源**，优先于任何交接快照与记忆。每次会话结束前必须更新，
-> 并在 `CHANGELOG.md` 追加一条。最后更新：2026-11-01 18:23。
+> 并在 `CHANGELOG.md` 追加一条。最后更新：2026-11-01 18:31。
 
 ## 2026-11-01 17:18 新确认的整链阻塞（优先于组件 PASS）
 

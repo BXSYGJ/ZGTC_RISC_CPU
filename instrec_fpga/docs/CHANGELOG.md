@@ -615,3 +615,8 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 
 - 保存GAP第二帧丢失反例/early-arm修复，pool sticky两帧，激活区17项addr_err测试（不拦截grant）。
 - 保存bridge70正常事务+abort验证与earlydone截断反例，真实controller联合测试继续，未改主线或冻结PDS输入。
+
+## 2026-11-01 18:31 — 四层 ping-pong 候选通过
+
+- 持久化四层 conv + pool1/2/3 双store激活回放，30,750,042周期逐值 exact；仅抽象DDR候选，native/综合/板测未完成。
+- 下载器重插后FTDI与COM3/COM4/COM5只读枚举正常；PDS iteration252未布6619、无位流。
