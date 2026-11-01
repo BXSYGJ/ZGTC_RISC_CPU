@@ -763,3 +763,8 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 - 词法检查 59 个 `.v` 零违规，DDR/契约定向回归 35 passed，`mel_credit` 16512 字节 golden 对拍 0 mismatch。
 - 定向模型复现 reset-mid-read 后旧 `RVALID/RLAST` 被同主口新读误收；现有 `S_R_DRAIN` 仅处理 watchdog 超时，因缺少 IP reset/flush 或事务 epoch，暂不加入猜测性丢弃逻辑。板级仍 NOT_RUN。
 
+## 2026-11-02 — DDR3/NPU 补测
+
+- DDR3 子系统 15/15 场景通过，含四主争用、watchdog 各阶段和 abort recovery；watchdog blind spot 仍作为已知限制保留。
+- NPU chain 的 GAP/FC1/FC2/softmax 全部逐值通过，0 mismatch。
+

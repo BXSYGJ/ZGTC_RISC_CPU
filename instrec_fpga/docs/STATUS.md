@@ -1,5 +1,11 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-02：DDR3/NPU 共享路径补测通过
+
+- `python sim/run_sim.py ddr3_subsys --verbose`：15/15 场景 PASS，覆盖 self-test、四主争用、读命令保持、AW/W/AR/DW watchdog、abort recovery；watchdog blind spot 场景仍按预期复现并记录，不宣称已修复。
+- `python sim/run_sim.py npu_chain --verbose`：GAP 256、FC1 128、FC2 8、softmax 8 项均 0 mismatch，top1=0。
+- 两项补测均未启动 PDS，未操作 `cdt_js`、`cdt_cfg` 或下载器；板级仍 NOT_RUN。
+
 ## 2026-11-02：db_norm 平方位宽显式化；reset-mid-read 风险复现确认
 
 - `src/mel/db_norm.v` 将平方路径改为显式符号扩展到 32 位、64 位乘积后取低 32 位，再进入原有 48 位累加器；保持端口、状态机和数值语义不变，避免综合器依赖隐式乘法表达式宽度。
