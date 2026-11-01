@@ -1,5 +1,11 @@
 # InstRec-FPGA 变更日志
 
+## 2026-11-01 23:49 — 复核 frame-major PDS 产物并校正实时状态
+
+- 冻结 gate-manifest SHA256 `C2F3F1F4C5DCCBD55FDDE54A6A970F78C032C0D6E8E44EB5CD67A6E853C3581E`；最终 run.log SHA256 `69F3EFDAA5047F261FFE859FF2003F40096673EBAF5B973285D67767581481E`；timing报告 SHA256 `C1C1D8B19EA696E0968563A313621A03F97E51D1027397448DFBD3628B825853`。
+- 再核实 detail routing iteration105 未布0、成功完成布线和位流生成，PDS进程为0；不代表时序收敛或板级通过。将旧23:15/23:11“当前综合/无位流”改为历史说明，注明heartbeat中的224112 gate已过时。
+- 生产 frame-major CPU/native 联合仿真独立run-label复核PASS：真实RV固件MMIO启动，四层conv/pool/GAP/FC/softmax全golden exact，31141202 cycles，UART `top1=0,last_class=7,last_p=0`，ACK正确；日志保留在 `build/sim/cpu_native_joint_heartbeat-frame-major-20261101-1548/run.log`。物理DDR PHY、真实音频/Mel、完整top reset及异常事务恢复仍未覆盖。未触碰下载器、cdt服务、`cpu/`用户改动、PCB/PDF或obj_dir。
+
 ## 2026-11-01 23:43 — frame-major RV/NPU 位流候选完成布线
 
 - 完整冻结flow完成至位流生成，详细布线第105轮未布0；映射资源32075 LUT / 33300 FF / 120.5 DRM / 90 APM。

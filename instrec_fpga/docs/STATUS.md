@@ -6,21 +6,28 @@
 - 映射资源 LUT 32075/66600、FF 33300/133200、DRM 120.5/155、APM 90/240；最终路由逻辑 LUT 31968、FF 33300、DRM 120.5、APM 90。DRM占78%，余量有限。
 - 位流 `build/resource_gate/native-20261101-230932-136199/generate_bitstream/top_rv_core.sbit`，3,791,112 bytes，SHA256 `ED713818EFE9E5A616437D302A994B69984F66FCE9E8D43A8EE2AA8BF8509163`。不得覆盖既有release；此为新候选，尚未板测。
 - 时序不是全约束达标：slow-corner `ddrphy_sysclk` 125MHz estimated 75.6029MHz，WNS -5.227ns、TNS -8567.538ns、10261/112147 setup endpoints failing；`clk_nco` WNS +2.220ns、`rst_clk` +3.954ns，所有列出的hold WHS为正。主要负裕量路径位于DDR PHY sysclk域，路由成功不能表述为时序收敛。
-- 报告在该run的 `report_timing/top_rv_core.rtr`，详细布线和完整日志在该run目录。下一步先确认PDS父子进程正常退出并计算manifest/日志hash；不操作下载器。用户需知板测包已准备，但板级状态仍NOT_RUN。
+- 报告在该run的 `report_timing/top_rv_core.rtr`，详细布线和完整日志在该run目录；进程退出与manifest/日志hash已于23:49复核。下一步是处理负时序并在合适窗口执行板级 smoke；当前板级仍NOT_RUN，不操作下载器。
 
-## 2026-11-01 23:15：UI特征拷贝占口恢复与末尾重复写已修复
+## 2026-11-01 23:49：最新 PDS 产物与自动化状态复核
+
+- 复核确认 `native-20261101-230932-136199` 的 detail routing iteration 105 未布0，`placed and routed successfully`；PDS flow、timing报告和 `.sbit` 均存在，当前 `pds_shell.exe` 进程数为0。
+- SHA256：`gate-manifest.json` `C2F3F1F4C5DCCBD55FDDE54A6A970F78C032C0D6E8E44EB5CD67A6E853C3581E`；`run.log` `69F3EFDAA5047F261FFE859FF2003F40096673EBAF5B973285D67767581481E`；`top_rv_core.rtr` `C1C1D8B19EA696E0968563A313621A03F97E51D1027397448DFBD3628B825853`；位流 hash 见上。
+- 自动化提到的 `native-20261101-224112-909881` 已过时；它只完成 dev_map。后续以本文件顶部的 `native-20261101-230932-136199` 为唯一最新完整 flow。23:15/23:11条目中的“当前 synthesize/尚无位流”已标为历史状态。
+- 主线 frame-major CPU/native 联合仿真已用独立 run-label PASS：`build/sim/cpu_native_joint_heartbeat-frame-major-20261101-1548/run.log`；真实RV固件MMIO启动、conv/pool/GAP/FC/softmax全层golden exact，31,141,202 cycles，UART `top1=0,last_class=7,last_p=0`，ACK正确。仍未覆盖物理DDR PHY、真实音频/Mel、完整top reset和异常事务恢复。板级仍NOT_RUN，下载器及 `cdt_js`/`cdt_cfg` 未操作。
+
+## 2026-11-01 23:15：UI特征拷贝占口恢复与末尾重复写已修复（历史记录）
 
 - `feat_copy_engine`改为区分当前获准读请求与上一拍pending同步RAM响应：本拍NPU抢占时仍消费属于copy的旧响应，恢复时不会误收NPU数据；末尾最后字节只写一次，随后翻页，idle/tail地址夹到0。
 - 旧反例addr9应66却170且多写16513次；生产修复后连续/7拍抢占/随机暂停/末尾暂停四场景均0 mismatch，每轮严格0..16511各写一次，最后写完才flip。定向Python19 passed（0.36s），词法59.v零违规。证据`reports/mel_npu_interface_audit_20261101.json`，旧失败日志保留。
 - 独立审查量化与同步读延迟正确。正常3s窗口节奏下Mel后idle约2.95488s，大于实测NPU0.24913s；异常长时停顿跨下一窗时，单feature bank仍无硬件锁页，不宣称该错误恢复支持。
-- UI修复不在当前rv_core冻结源列表，不影响唯一`native-20261101-230932-136199`完整flow；当前synthesize正常推进，尚未进入PNR/无位流，不操作下载器。
+- UI修复不在当时rv_core冻结源列表；“当前synthesize/尚未进入PNR”是该时间点记录，已被顶部23:43的`native-20261101-230932-136199`完整flow结果取代。
 
-## 2026-11-01 23:11：Mel布局修复验证通过，正确冻结版本已重新构建
+## 2026-11-01 23:11：Mel布局修复验证通过，正确冻结版本已重新构建（历史记录）
 
 - `npu_top`新增显式`FEATURE_FRAME_MAJOR`读口模式，使用已有time/mel计数器拼接地址；三个生产top均设1。默认0只保留独立mel-major模型兼容，不增加除法电路；Mel内部+64偏移保持唯一。
 - 抽取实际NPU replay/Mel同步bank切片：旧直连16446/16512字节错，修复后0错、全地址双射，含8252个>=128字节。进一步使用frame-major RAM完成真实CPU/完整native NPU联合：全部各层golden exact，31141202cycles，UART/MMIO/ACK正确。uint8[0,255]/zp49契约核验正确。报告`reports/mel_feature_handoff_validation_20261101.json`；不等同完整音频/Mel计算或板级验证。
 - 修复后全量Python **429 passed / 4 skipped**（83.22s），59.v词法0 violation。续跑脚本增加真实ADF门槛、ADF备份与独立driver工程名；PS5.1解析与缺ADF提前拒绝PASS，完整成功续跑尚未验证，当前构建不用续跑。
-- 新唯一完整flow `build/resource_gate/native-20261101-230932-136199`于23:09:47启动，父32412/compile26456；snapshot `frame-major-20261101-230923`，manifest SHA`c2f3f1f4c5dccbd55fdde54a6a970f78c032c0d6e8e44eb5cd67a6e853c3581e`。45RTL/约束/ROM与生产逐字节一致，完整IP冻结核验通过，同一TCL直达PNR/timing/bit。实际PNR尚未开始，45分钟上限从进入PNR计时。
+- 新完整flow `build/resource_gate/native-20261101-230932-136199`于23:09:47启动；该时间点仍在前置阶段。最终结果以顶部23:43记录为准：已完成PNR/timing/bit并生成候选位流。
 - 并行发现UI copy在NPU占口后恢复会误收一拍，且末尾多写一次；仅影响UI路径，`feat_copy_engine`独立修复/边界回归中，不在当前rv_core源集合。无新版位流/时序/上板结论，下载器未操作。
 
 ## 2026-11-01 23:07：发现真实Mel/NPU布局错接，先修复再构建
