@@ -8,6 +8,7 @@
 - 停止前已保存 `stall-processes-20261102-024125.txt`、`stall-manifest-20261102-024125.txt`、`stall-log-sha256-20261102-024125.txt`；最终 `place_route/run.log` SHA256 为 `44569FD964C92F35C4E2BA15C6DA672E9A3BAEB6D73EB66E3AAEA9D01B06A6BB`。未操作 `cdt_js`/`cdt_cfg`/下载器；`cdt_js` PID 9040 仍在。
 - 板级仍 **NOT_RUN**。reset-mid-read 后同 `axi_rid` 的迟到 `RVALID/RLAST` 误收风险仍开放，不能把 Python/Verilator PASS 写成物理 DDR PHY 或完整顶层复位证明。下一步应先处理 db_norm 关键路径和 PDS 布局候选，再单实例重跑并读取 slow/fast timing。
 - 本次心跳重新执行全量 `python -m pytest -q`：**432 passed / 4 skipped**，仅 2 条既有 PyTorch FutureWarning；未启动 PDS，未操作下载器或 JTAG 服务。
+- 本次继续补跑 Verilator：`rv_top_ctrl` PASS（CPU 请求排队、安全 Mel 窗、DDR/NPU/故障门控）；`mel_credit` PASS（132096 命令、16512 特征、0 mismatch）；`ui_render` PASS（64 active pixels、层优先级和 RGB/DE 对齐 0 mismatch）。
 
 ## 2026-11-02：修复版 PDS 完成布线并产出候选位流，时序未闭合
 
