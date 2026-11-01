@@ -2,6 +2,14 @@
 
 ## 2026-11-02：修复版 PDS 完成布线并产出候选位流，时序未闭合
 
+### 心跳补充（2026-11-02）
+
+- 重新执行 `sim/experiments/cpu_native_joint/run.py --frame-major --run-label heartbeat-20261102-uncovered`：真实 RV 固件 MMIO 启动、conv1 792576 项、四层 conv+DDR activation replay、完整 native NPU golden 均逐值通过；31,141,202 cycles，UART `top1=0,last_class=7,last_p=0`，CPU ACK 正确。日志保留在 `build/sim/cpu_native_joint_heartbeat-20261102-uncovered/run.log`。
+- `python sim/run_sim.py mel_credit` 通过（16,512 个特征逐字节 golden 对拍）；`python scripts/check_rtl.py` 通过，59 个 `.v`、0 violation。未启动 PDS，未操作 `cdt_js`、`cdt_cfg` 或下载器。
+- 时序复核确认最差路径为 `spec_bank_7` DRM → `u_db_norm` dB 转换/平方 → `sum_db_sq`，slow WNS -4.462 ns、fast WNS -0.793 ns；当前生产 RTL 尚未修改。正在隔离评估平方寄存与末项 flush，语义通过后才决定是否进行下一轮单实例 PDS。
+- 隔离候选 `build/experiments/db_norm_pipeline/db_norm_pipelined.v` 已完成 Verilator 小几何同步 RAM TB：`N_MELS=2, SPEC_FRAME_COUNT=3, OUT_FRAME_COUNT=2`，覆盖首帧丢弃、写地址/数值及末项 flush；结果 `sum_db=-1513, sum_db_sq=1190489`，`RESULT: PASS`。候选未进入生产 RTL，尚未做候选全链 PDS或板测。
+- 同一候选替换到真实 `mel_credit` 仿真入口后，全链 16,512-byte feature golden 对拍通过（`mel_credit_dbnorm_candidate`，25.6 s）。这证明当前候选在生产几何和标准化交接下语义一致，但仍不等价于 PDS 时序或板级验证。
+
 - 当前唯一 PDS run `build/pds/20261102-003406-7af1bf17` 已完成 compile/synthesize/dev_map/PNR/report_timing/gen_bit_stream；detail routing 在迭代149达到最终 `Unrouted nets 0`，并确认 `top_rv_core` placed and routed successfully。全流程已退出，未操作 `cdt_js`、`cdt_cfg` 或下载器。
 - 候选位流 `generate_bitstream/top_rv_core.sbit` 大小 3,791,112 bytes，SHA256 `605C234FA2B14BB174C304B0B99FB7E5E7768643F999A97BEC70FA328B488CFB`。源清单 SHA256 `491168B89E5348B12B6889045B3860C7870FDF7E95F55D0BCF3BEEAEF6BDFFA6`，run.log SHA256 `E7B0FB73CE8D7A81CF690A73DBC1DC600310D92B0989D07B50AA5CB14FCDE66E`。
 - 资源约为 LUT 32063/66600、FF 33300/133200、DRM 120.5/155、APM 90/240。detail routing 从 62810 收敛至0，但这不等于时序闭合。

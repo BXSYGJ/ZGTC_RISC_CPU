@@ -1,5 +1,12 @@
 # InstRec-FPGA 变更日志
 
+## 2026-11-02 — 心跳回归与 db_norm 时序定位
+
+- 重新完成 frame-major 真实 RV+native NPU 联合回归：31,141,202 cycles，conv1/四层 activation replay/完整 golden、MMIO/UART/ACK 全部通过；`mel_credit` 16,512 特征逐字节对拍通过。
+- RTL 检查保持 59 个 `.v`、0 violation。时序最差路径定位到 `db_norm` 的 dB 平方与 `sum_db_sq` 累加链；仅在隔离副本评估寄存平方和末项 flush，未改生产 RTL、未启动 PDS、未操作下载器。
+- 隔离 `db_norm` 流水候选通过 Verilator 小几何同步 RAM TB（首帧丢弃、写回、最后平方项 flush；`sum_db=-1513`、`sum_db_sq=1190489`）。候选只保留在 `build/experiments/db_norm_pipeline/`，尚未推广或重新布线。
+- 该候选进一步替换到真实 `mel_credit` 入口，16,512-byte feature golden 对拍通过（25.6 s）；仍未推广生产或启动 PDS。
+
 ## 2026-11-02 — DDR 修复版资源门禁与联合回归
 
 - 修复后的 `rv_core` 通过 PDS compile/synthesize/dev_map，资源为 32063 LUT、33300 FF、120.5 DRM、90 APM；未进入 PNR，无新位流/时序/板测结论。
