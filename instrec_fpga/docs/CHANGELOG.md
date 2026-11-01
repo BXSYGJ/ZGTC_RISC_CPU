@@ -1,5 +1,12 @@
 # InstRec-FPGA 变更日志
 
+## 2026-11-02：控制冒烟与 RV CPU C1-C9 回归
+
+- `ctrl_smoke` 6 项全部 PASS，覆盖 BOOT、DDR3 SELFTEST、DDROK、STS=00 与 RUN 控制路径。
+- `rv_cpu` C1-C9 全部 PASS，覆盖真实 RV32 固件启动、MMIO/ISA/mcycle、NPU 触发、DDR 状态、ACK 和结果快照；UART `NPU top1=5 last_class=3 last_p=87 c=12345`。
+- 仅为模型/RTL 仿真证据；板级仍 NOT_RUN，未启动 PDS，未操作下载器或 cdt 服务。
+- 追加 98 项定向 Python 回归（Mel/conv1/contract/golden/table/plan guards），全部通过。
+
 ## 2026-11-02 — 心跳回归与 db_norm 时序定位
 
 - 重新完成 frame-major 真实 RV+native NPU 联合回归：31,141,202 cycles，conv1/四层 activation replay/完整 golden、MMIO/UART/ACK 全部通过；`mel_credit` 16,512 特征逐字节对拍通过。

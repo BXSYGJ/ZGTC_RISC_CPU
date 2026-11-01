@@ -1,5 +1,12 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-02：控制冒烟与真实 RV CPU 回归通过
+
+- `python sim/run_sim.py ctrl_smoke --verbose`：6 项 PASS，覆盖 BOOT、DDR3 SELFTEST、DDROK、STS=00、RUN 及控制状态收敛。
+- `python sim/run_sim.py rv_cpu --verbose`：C1-C9 全部 PASS，覆盖 RV32 BOOT/MMIO/ISA/mcycle、NPU 触发、DDR 状态、ACK 与结果快照；UART 观测 `NPU top1=5 last_class=3 last_p=87 c=12345`。
+- 以上为 RTL/模型仿真证据，不等价于真实 DDR PHY、音频输入或板级 RV+NPU 证明；板级仍 `NOT_RUN`。本轮未启动 PDS，未操作 `cdt_js`、`cdt_cfg` 或下载器。
+- 追加定向回归：`tests/test_golden_mel.py tests/test_conv1_debug_vectors.py tests/test_contract_stream.py` 为 44 passed；`tests/test_golden_refs.py tests/test_mel_tables.py tests/test_plan_contract_guards.py` 为 54 passed。覆盖 Mel/conv1 golden、frame-major contract、表完整性和计划护栏。
+
 ## 2026-11-02：UART line buffer 与 NPU completion 补测通过
 
 - `python sim/run_sim.py uart_linebuf --verbose`：PASS，覆盖满 128 字节/无换行、短行/空行、blocked-write 丢弃、TX backpressure 及 busy/ready 恢复。
