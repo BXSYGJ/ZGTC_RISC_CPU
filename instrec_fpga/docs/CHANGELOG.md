@@ -578,3 +578,8 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 - 半 beat 末 tap 候选已越过原先 WDMA 死锁，但完整 NPU 仿真仍在 conv1 第 0 项 `got=16 exp=4` 失败；继续定位参数起始、索引与通道组契约。
 - PDS 唯一路由 run 继续 iteration 200，未布网络 6851；无位流、时序或板级 RV 证据。
 
+## 2026-11-01 17:30 — 参数地址候选修正后 conv1 仍不匹配；路由持续高位震荡
+
+- build 候选 `wdma_step3.v` 将 bias/M 写入索引改为每 beat +8、shift 每 beat +32，并将通道组偏移改为 `grp_mod * 16`。首项 bias/M/shift 已与 `layer_contract.json` 的 index 0 相符。
+- 完整 conv1 golden 仍在首个输出失败：`got=7 exp=4 cycle=535`。该修复未进入主线，也不在当前冻结的 PDS 输入中；继续定位 MAC 前权重/激活与舍入数据通路。
+- PDS run `20261101-130420-0ed52a5d` 到 iteration 220，最近 30 轮未布网络 6572–6926、均值约 6772；没有时序报告或位流。父子 PID 36628/40640 仍运行，未启动第二个 PDS。

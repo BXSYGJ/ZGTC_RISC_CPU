@@ -1,10 +1,10 @@
 # InstRec-FPGA 当前状态（STATUS）
 
-## 2026-11-01 17:30 心跳：WDMA 等价通过，NPU 数值仍阻塞，PDS 持续布线
+## 2026-11-01 17:30 心跳：参数首项错位已修，conv1 仍有 mismatch，PDS 高拥塞
 
 - `build/sim/wdma_wide_diff/run.log`：原版与宽口候选在 layer 0..5 各 350000 周期逐拍比较通过；覆盖 `rd_cmd`、权重/参数流、`grp_start`、`busy`、`done` 及随机响应间隙/背压。该结果只证明候选与原版等价，不证明原版功能正确，也未证明资源下降。
-- `build/sim/npu_full_step2/run.log`：半 beat 末 tap 修复候选已越过原先 WDMA 死锁，但首个完整 conv1 对拍仍失败：`index=0 got=16 exp=4 cycle=535`。候选仍在 build 目录，主线 RTL 和当前 PDS manifest 未改；正在定位参数起始时序、`cfg_idx` beat 更新及通道组索引。
-- 唯一 PDS run `build/pds/20261101-130420-0ed52a5d` 继续 detail route；iteration 200 未布网络 6851（前一轮 6822），仍在震荡，无 `report_timing`、`.sbit` 或 RV 板级证据。父子 `pds_shell.exe` PID 36628/40640 属于同一 run，不得终止或另起 PDS。
+- `build/npu_full/wdma_step3.v` 候选已修复 bias/M 每个 DDR beat 的索引步长（+8）、shift 索引步长（+32）及 `grp_mod * 16` 通道偏移；诊断确认参数 index 0 的 bias=-287、M=1762673006、shift=41 与合同一致。但完整 conv1 首点仍失败：`got=7 exp=4 cycle=535`，因此整链仍不正确。候选仅在 build 目录，主线 RTL 与冻结 PDS manifest 未修改；继续定位权重/激活选择或 MAC/量化数据通路。
+- 唯一 PDS run `build/pds/20261101-130420-0ed52a5d` 继续 detail route；iteration 220 未布网络 6756。最近 30 轮（191–220）未布网络 6572–6926、均值约 6772，呈高位震荡；仍无 `report_timing`、`.sbit` 或 RV 板级证据。父子 `pds_shell.exe` PID 36628/40640 属于同一 run，不得终止或另起 PDS。
 - 当前已验证：RV CPU C1-C9、RV 控制/MMIO、Mel/Mel credit、conv1 独立 golden、NPU 组件链、DDR3 子系统/AW timeout、UART line buffer、UI render/overlay、WDMA 原版/候选逐拍等价。未验证/有问题：CPU→NPU 真实数值端到端、完整 NPU 自然逐层通过、当前 RV 位流及板级 RV/权重上传。
 
 > 本文件是**唯一实时状态源**，优先于任何交接快照与记忆。每次会话结束前必须更新，
