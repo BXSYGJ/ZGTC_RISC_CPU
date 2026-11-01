@@ -610,3 +610,8 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 
 - direct replay_row修复行信用旧计数，conv1/pool1/DDR/conv2共12242761周期，conv1 792576和conv2 396288项golden exact；抽象DDR，不扩展为全NPU或板级结论。
 - native bridge新增done早于FIFO排空契约审查，继续修复并补异常测试；PDS iteration247未布6653、无新位流。
+
+## 2026-11-01 18:23 — 重复推理生命周期与增强native bridge
+
+- 保存GAP第二帧丢失反例/early-arm修复，pool sticky两帧，激活区17项addr_err测试（不拦截grant）。
+- 保存bridge70正常事务+abort验证与earlydone截断反例，真实controller联合测试继续，未改主线或冻结PDS输入。

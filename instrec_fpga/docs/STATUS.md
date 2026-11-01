@@ -1,5 +1,12 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-01 18:23：重复推理反例修复与 native bridge 增强通过
+
+- `sim/experiments/npu_lifecycle/` 三项真实RTL测试通过：GAP原版late-arm两帧只产256结果，early-arm+priority restart候选512结果逐值一致；真实pool两帧及accepted-last sticky完成保持；新A/B激活区17项边界/owner/len地址错误标志验证。arbiter只置addr_err，不拦截非法grant，未宣称地址保护。
+- `sim/experiments/npu_m1_bridge/run.py` 持久runner实际PASS：70正常事务（480权重beat、20激活写/20读），early-done16/same14/delayed20；额外不完整读abort显式失败，FAULT静默到复位。旧bridge early-done在905ns截断读的反例已保留，见 `reports/npu_m1_bridge_validation_20261101.md`。
+- bridge现按valid&&ready计数读beat，native done后撤请求但保留owner到读完；新增m1_abort/transaction_failed，仍需真实控制器cmd_to_err接线与联合仿真，不将独立模型等同实际DDR通过。
+- 已推送 `7c19441`：前两层真实激活链基线持久runner含每读命令credit断言并现场通过12242761周期。继续扩conv3/4双store/mux，同时补bridge+真实controller联合验证。主线与唯一PDS输入继续冻结。
+
 ## 2026-11-01 18:17：真实前两层 DDR 激活链候选通过
 
 - 修复store行切换与顶层计数错一拍的信用漏洞：CREDIT曾使用上一行号提前回放未来行，覆盖conv仍读取的bank。改用动态store直接输出replay_row后通过。
@@ -41,7 +48,7 @@
 - WDMA 原候选反例与修复已持久化 `sim/experiments/wdma_handshake/`，现场重跑 baseline 预期 FAIL、fixed 4943 tap PASS，见 `reports/wdma_handshake_validation_20261101.md`。换组 MAC 错误进一步定位到 wbuf 装载首拍旧 valid 穿透：`grp_start` 边沿状态进 LOAD，但 `rd_vld_q` 从旧 RPY 仍保持 1 一拍。此前 10797 次测试仅检查 grp_start 当拍，未覆盖随后整个 LOAD；正在增强反例与状态/valid 修复。
 
 > 本文件是**唯一实时状态源**，优先于任何交接快照与记忆。每次会话结束前必须更新，
-> 并在 `CHANGELOG.md` 追加一条。最后更新：2026-11-01 18:17。
+> 并在 `CHANGELOG.md` 追加一条。最后更新：2026-11-01 18:23。
 
 ## 2026-11-01 17:18 新确认的整链阻塞（优先于组件 PASS）
 
