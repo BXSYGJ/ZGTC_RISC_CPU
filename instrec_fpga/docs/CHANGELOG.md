@@ -590,3 +590,5 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 - 重跑 RTL 检查 53 文件 0 violation；Python 429 passed / 4 skipped，88.36 s。GitHub 已同步 58d8ebb。
 - step5 行信用候选保护后，conv1 第0组整行 4128 项通过；首次失败推进至第1组首项，继续定位参数 shadow bank。独立 wbuf 候选 10797 次握手验证通过，报告保留完整修复 diff 与 SHA256。
 - 新增层间存储审查报告：串行共享卷积核与三行缓存无法保留整帧 pool 输出，且有 start 清 row_done、输入顺序不一致；需要 DDR 激活缓存与受信用重放，build 协议候选继续开发，未改主线。
+- WDMA 组合 valid/data 修复经 4943 个真实 tap 随机背压/半 beat 跨层对拍通过；接入 conv1 后 group1 cache 正确但首输出仍 72/51，剩余为换组 MAC 窗口对齐。激活缓存候选持久化至 `sim/experiments/activation_store/`，Python 真实尺寸和 RTL 小几何通过，未接主线。
+- WDMA 实验已持久化并复跑 baseline FAIL/fixed PASS（4943 taps），报告明确叠加修复边界；wbuf 新确认 LOAD 首拍旧 valid 穿透，10797 次旧测试未覆盖该拍，补反例测试中。

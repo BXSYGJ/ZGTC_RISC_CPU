@@ -10,6 +10,9 @@
 - 本次重新运行 `python scripts/check_rtl.py`：53 个文件、0 violation；`python -m pytest -q`：429 passed / 4 skipped（88.36 s）。最新状态提交 `58d8ebb` 已同步 `origin/XSY`。
 - step5 feature 行信用候选后，conv1 group0 整行 4128 个输出已通过，首次失败推进到 group1 首项：index4128 `got=0 exp=51 cycle=4926`；正在对照换组参数 shadow/active bank 与同步 RAM 预热。wbuf 候选独立 10797 次握手验证通过，详见 `reports/wbuf_candidate_validation_20261101.md`（含修复 diff 和 SHA256）。
 - 层间结构审查确认另有三项独立阻塞：下一层三行 bank 被整帧 pool 输出覆盖、下一层 start 清 row_done、pool 的 row/group/col/lane 顺序与 conv ingress 不同。片上全帧缓存余量不足；正在 build 目录开发 DDR 激活缓存/受信用重放协议候选，详见 `reports/npu_interlayer_storage_review_20261101.md`。当前 PDS 即使布通也不含这些修复，不能当作真实完整 NPU 推理已验证。
+- WDMA 随机背压原候选已在 layer0/group0/tap1 复现失败；修复候选用当前 FIFO 指针组合派生 `w_valid/w_data`、仅真实握手推进，4943 个真实 tap（conv1/2/4/fc2、长 stall、随机 ready、半 beat）通过。接入 conv1 step7 后 group1 cache 已匹配镜像，但首输出仍 `index4128 got=72 exp=51`，继续定位换组 MAC 窗口对齐，未改主线。
+- 激活缓存协议候选已持久化到 `sim/experiments/activation_store/`：真实 pool1/2/3 尺寸 Python 重排/32B 读写通过，RTL 小几何 288B 精确读回通过，覆盖命令/数据/R 延迟、背压、行信用和输出停顿；明确尚未接入现有无 ready 的 pool、原生 DDR 控制器或 PDS，不能宣称整链修复。
+- WDMA 原候选反例与修复已持久化 `sim/experiments/wdma_handshake/`，现场重跑 baseline 预期 FAIL、fixed 4943 tap PASS，见 `reports/wdma_handshake_validation_20261101.md`。换组 MAC 错误进一步定位到 wbuf 装载首拍旧 valid 穿透：`grp_start` 边沿状态进 LOAD，但 `rd_vld_q` 从旧 RPY 仍保持 1 一拍。此前 10797 次测试仅检查 grp_start 当拍，未覆盖随后整个 LOAD；正在增强反例与状态/valid 修复。
 
 > 本文件是**唯一实时状态源**，优先于任何交接快照与记忆。每次会话结束前必须更新，
 > 并在 `CHANGELOG.md` 追加一条。最后更新：2026-11-01 17:30。
