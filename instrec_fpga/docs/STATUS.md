@@ -15,7 +15,13 @@
 正在恢复音频前端后重出。`DDR3 PHY` 专用硬核确在网表（`DDR_PHY 7/24`、`PPLL 2/6`、
 `TSERDES 14/48`），`DRM=0` 与 PHY 无关（DRM 是通用分布式 RAM）。
 
-## 一句话
+> **架构事实（2026-11-01 交接补充）**：本工程 `instrec_fpga/` 是**纯硬件管线，不含 RISC-V 软核**。
+> `instrec_top` 只例化 audio / mel / npu / ui / ddr3 / uart 各组模块，`src/` 下**没有 `cpu/` 目录**。
+> 软核及其工具链、bootloader 在独立的 `cpu/` 项目（RV32IM，120 MHz / 383.0 CoreMark），
+> 与 InstRec **当前未融合**。赛题要求「RISC-V CPU + AI 加速」，故**总线级融合是首要缺口**，
+> 不是接线级工作。详见 `docs/HANDOFF_SNAPSHOT_20261101.md` 的「一点五」节。
+
+## 历史一句话（2026-10-31，R1 尚未达成时）
 
 InstRec 8 类乐器识别（INT8 CNN）正在移植到盘古 100Pro+（PG2L100H-6IFBG676）纯 FPGA 管线。
 **全功能位流 m3d（音频→DDR3→Mel→NPU 全链→概率条+波形+文字+谱图四层 UI）已布通归档**：

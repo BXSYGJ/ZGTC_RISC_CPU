@@ -21,6 +21,56 @@ DDR3、conv1~4、Mel、fc/softmax 的正确性才第一次被真正验证。
 
 ---
 
+## 一点五、架构现状与赛题要求的差距（交接必读）
+
+**这一节回答一个容易被误会的根本问题：本工程里没有 RISC-V 软核。**
+
+### 现状
+
+`instrec_fpga/` 是**纯硬件流水线**。`instrec_top` 的全部例化只有：
+`audio_pll / i2s_clk_gen / i2s_rx / audio_cdc_fifo / audio_sink / mel_engine / npu_top
+(conv·pool·gap·fc·softmax) / ddr3_ctrl_axi / weight_loader / self_test / sys_ctrl /
+ui_renderer / hdmi_tx_if / uart_tx / uart_rx / uart_debug`。
+`src/` 下只有 `audio / ctrl / ddr3 / diag / hdmi / ip / mel / npu / ui`，**没有 cpu 目录**；
+全树 grep `riscv|rv32|cpu_core` 仅命中一处注释（`ddr3_wrapper.v` 说明结构参照了
+`cpu/fpga/rv32_ddr3_ip_wrapper.sv`）。
+
+**因此「软核的配套软件」在 `instrec_fpga/` 内并不存在**——它现在的配套软件是纯 Python 上位机
+（见 5.4 节）：烧录判读、权重上传、逐层对拍、Verilator 仿真。
+
+### RISC-V 软核在另一个项目里
+
+`cpu/` 才是 RV32IM 软核项目（历史已交付，120 MHz / 383.0 CoreMark），配套完整：
+
+| 类别 | 位置 |
+|---|---|
+| 软件源码 | `cpu/sw/` |
+| 构建脚本 | `cpu/scripts/build_app.ps1`、`bin_to_hex.py` |
+| 工具链 | `riscv32-unknown-elf-gcc` |
+| 加载/启动 | `cpu/build/bootloader.{bin,elf,hex,map}`、`cpu/docs/FLASH_BOOT.md`、串口流控加载 `ram_load.py` |
+| 基准 | CoreMark v1.0 |
+
+### 差距（这是交接的首要风险）
+
+- 两套 RTL **非同源**：`cpu/rtl`（XSY 旧 CPU，含 SPI Flash）与 `cpu/experiments/`（DYH 高性能版）
+  互不相同；`instrec_fpga/` 为全新独立工程。
+- 赛题要求是「**基于紫光同创 RISC-V 指令集 CPU** + AI 加速」，而 InstRec 当前是**无 CPU 的纯硬件
+  NPU 管线** ⇒ **「RISC-V CPU」这一项目前无法体现**。
+- 要让作品符合赛题，需要做**总线级融合**（二选一）：
+  1. **NPU 作为 CPU 的外设**：把 `npu_top` 挂在 CPU 的 AXI（或自定义）总线上，由软核写描述符/读结果；
+     工程量集中在 CPU 侧总线互联与地址映射，`instrec_fpga` 的 NPU 逻辑可复用。
+  2. **CPU 作为 NPU 的控制核**：在 `instrec_top` 内嵌一个最小 RV32I 核，只负责配置与调度。
+- **不要**把「两套工程各自能跑」当成「融合完成」——赛题看的是**统一系统**（同一份可烧录位流内
+  CPU 与加速器协同工作，并有对应的软件栈）。
+
+### 交接时向接手人明确的三句话
+
+1. `instrec_fpga` 是纯硬件管线，**没有软核**；
+2. 软核及其工具链/bootloader 在 `cpu/`，**当前未与 InstRec 融合**；
+3. 若参赛，**融合是必须补的最大缺口**，且这不是「接线」级工作，是总线架构级工作。
+
+---
+
 ## 二、需求达成矩阵
 
 | 需求 | 状态 | 证据（可复核） |
