@@ -5,6 +5,7 @@
 - `src/ddr3/ddr3_ctrl_axi.v` 新增 `S_R_DRAIN`：读 watchdog 超时后禁止新事务，丢弃迟到 `RVALID` 数据，收到 `RVALID && RLAST` 后才恢复仲裁；普通写/地址阶段超时语义保持不变。
 - 周期模型与回归同步更新，新增 timeout → late `RLAST` → queued read 场景，验证迟到数据不进入 FIFO、不会误完成下一笔读；DDR/仲裁/自检定向 48 项通过，全量 Python 回归 **430 passed / 4 skipped**，RTL 词法检查 59 文件 0 violation。
 - 该修复尚未重新综合、布线或上板；当前候选位流仍对应修复前 RTL，不能宣称硬件已验证。若 DDR 永久不返回 `RLAST`，控制器会保持隔离并需外部复位恢复。
+- 新增静态复位边界风险：顶层 `rst_n` 会同步复位 `ddr3_ctrl_axi` 与 DDR3 IP，但源码未证明 IP 已清空已接受事务，wrapper 也未屏蔽复位释放后的旧 `RVALID`。因此“读事务中复位 → 旧响应跨释放 → 新读”仍未验证，暂不宣称完整 reset recovery；需模型 directed case 和后续硬件/PHY证据。
 
 ## 2026-11-01 23:43：frame-major CPU+NPU 候选已完成布线并生成位流
 

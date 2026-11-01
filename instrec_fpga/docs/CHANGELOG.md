@@ -4,6 +4,7 @@
 
 - 修复 DDR 读 watchdog 超时后的迟到响应误归属问题，增加 `S_R_DRAIN` 隔离状态及周期模型回归。
 - 验证：DDR/仲裁/自检定向 48 passed；全量回归 430 passed / 4 skipped；RTL 词法检查 59 文件 0 violation。未启动 PDS、未操作下载器；修复后的 RTL 尚未重新生成位流。
+- 复位静态审查发现 DDR3 IP 旧事务是否跨复位释放仍无源码证据；新增“reset-mid-read + stale RVALID”模型场景待验证，不把当前 timeout drain 修复外推为完整 reset recovery。
 
 ## 2026-11-01 23:49 — 复核 frame-major PDS 产物并校正实时状态
 
