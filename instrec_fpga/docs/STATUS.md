@@ -7,6 +7,7 @@
 - 以上为 RTL/模型仿真证据，不等价于真实 DDR PHY、音频输入或板级 RV+NPU 证明；板级仍 `NOT_RUN`。本轮未启动 PDS，未操作 `cdt_js`、`cdt_cfg` 或下载器。
 - 追加定向回归：`tests/test_golden_mel.py tests/test_conv1_debug_vectors.py tests/test_contract_stream.py` 为 44 passed；`tests/test_golden_refs.py tests/test_mel_tables.py tests/test_plan_contract_guards.py` 为 54 passed。覆盖 Mel/conv1 golden、frame-major contract、表完整性和计划护栏。
 - 本轮完整 `python -m pytest -q`：**432 passed / 4 skipped**；追加 `tests/test_npu_stream_model.py tests/test_wdma_param_pipeline.py tests/test_board_e2e_order.py`：**34 passed**。均为离线模型/编排验证，不等价 PDS 或板级通过。
+- `tests/test_board_flash_safety.py tests/test_uart_debug_handshake.py`：**21 passed**，验证复用既有 `cdt_js`、禁止重复实例/强杀及 UART 握手保护；本轮未执行烧录。
 
 ## 2026-11-02：UART line buffer 与 NPU completion 补测通过
 

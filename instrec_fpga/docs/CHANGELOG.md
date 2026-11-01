@@ -7,6 +7,7 @@
 - 仅为模型/RTL 仿真证据；板级仍 NOT_RUN，未启动 PDS，未操作下载器或 cdt 服务。
 - 追加 98 项定向 Python 回归（Mel/conv1/contract/golden/table/plan guards），全部通过。
 - 完整 Python 回归复核为 432 passed / 4 skipped；新增 NPU stream、WDMA parameter pipeline、board_e2e_order 三组共 34 passed，未启动 PDS/JTAG。
+- 烧录安全与 UART 握手回归 21 passed；仅验证脚本保护逻辑，未执行烧录、未触碰下载器。
 
 ## 2026-11-02 — 心跳回归与 db_norm 时序定位
 
