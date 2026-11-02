@@ -4,7 +4,7 @@
 
 - bca1fce8源的完整资源门控PASS（33447LUT/35106FF/133.5DRM/90APM、27路HDMI OFF），功能回归通过；但run171830-91e7a308首轮默认PNR到18:55仍有未布通连接，停止前最后采样1163轮/275条。布局估算+0.541ns不是最终时序PASS，本轮无位流、无最终时序。18:35仅补回监控19m22s暂停窗口后未再延长。
 - 已归档完整place_route、原始stage日志、源清单、监控和hash至该run/bounded-stop-20261102-1855；报告dynamic_ui_pnr_bounded_stop_20261102_1855.json。PDS零残留、monitor正常退出、临时防休眠请求释放，cdt_js9040/cdt_cfg46156未动。
-- 为避免同默认布局重复陷入局部拥塞，run_pds_stage新增可选PlacementSeed，仅From=pnr可用；默认行为不变。PowerShell解析PASS，构建令牌测试24passed。下一步同源同映射数据库单路seed1 PNR（此前工程记录存在该种子），不改生产RTL、不重综合；新一轮独立限时审查20:00，前次完整证据不覆盖。
+- 为避免同默认布局重复陷入局部拥塞，run_pds_stage新增可选PlacementSeed，仅From=pnr可用；默认行为不变。PowerShell解析PASS，构建令牌测试24passed。18:58:14同源同映射数据库单路seed1 PNR已启动（stage-20261102-185814-d54f1838，子进程明确-gplace_seed 1）；19:00第一轮全局布局有CPU/日志进展。不改生产RTL、不重综合；新一轮独立限时审查20:00，前次完整证据不覆盖；15秒监控含临时防休眠请求。
 - 板上仍CDE1D2F6诊断版：CPU/DDR/WOK与6次推理完成有证据，用户UI可见但动态花屏FAIL；FTDI离线，尚无外部音源。完整链路能运行，但不是稳定交付或准确率验收通过。
 
 ## 2026-11-02 17:33：完整UI可见但动态内容花屏；修复布局/换页/快照与dB转换分拍，回归通过
