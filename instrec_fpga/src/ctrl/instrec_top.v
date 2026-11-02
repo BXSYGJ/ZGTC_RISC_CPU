@@ -2,7 +2,7 @@
 // File    : instrec_top.v
 // Module  : instrec_top
 // Project : InstRec-FPGA (PG2L100H-6IFBG676, PDS 2022.2-SP6.4)
-// Purpose : M0 top-level integration: I2S capture -> CDC -> DDR3 -> HDMI
+// Purpose : RV32 control + I2S capture -> CDC -> DDR3 -> NPU -> HDMI
 //           waveform display with the debug / self-test chain
 //           (design doc sections 1.1 / 2.2.1, REQ-VER-001 M0 scope).
 //
@@ -41,9 +41,9 @@
 `timescale 1ns / 1ps
 
 module instrec_top #(
-    // 1 = full system (Mel -> NPU -> UI). Weights are loaded over UART
-    // before sys_ctrl reaches RUN; the NPU starts on mel's window pulse.
-    parameter NPU_ENABLE = 1
+    // 0 = CPU-controlled launch; 1 = automatic Mel -> NPU launch. Weights load
+    // before sys_ctrl reaches RUN; CPU requests launch at a Mel boundary.
+    parameter NPU_ENABLE = 0
 ) (
     // ---- board pins ----
     input  wire        clk,          // 27 MHz crystal (D18)
@@ -56,6 +56,7 @@ module instrec_top #(
     output wire        i2s_bck,      // bit clock 1.4112 MHz (U20)
     output wire        i2s_lrck,     // frame clock 44.1 kHz (T20)
     input  wire        i2s_sd,       // serial data (V16)
+    output wire        hdmi_rst_n,   // board MS7210 reset (G25)
     // ---- HDMI transmitter pins (demo fdc pinout) ----
     output wire        iic_tx_scl,   // I2C clock (K22)
     inout  wire        iic_tx_sda,   // I2C data (K23)
@@ -307,13 +308,16 @@ module instrec_top #(
     );
 
     // ---- PCM ring-buffer writer / DDR3 master 0 / waveform columns ----
+    // Keep master 0 quiet until DDR self-test and weight loading finish.
+    wire fifo_rd_valid_run = fifo_rd_valid & sys_run;
+    wire fifo_empty_run = sys_run ? fifo_empty : 1'b0;
     audio_sink u_audio_sink (
         .clk           (core_clk),
         .rst_n         (core_clk_rst_n),
         .fifo_rd_en    (fifo_rd_en),
         .fifo_rd_data  (fifo_rd_data),
-        .fifo_rd_valid (fifo_rd_valid),
-        .fifo_empty    (fifo_empty),
+        .fifo_rd_valid (fifo_rd_valid_run),
+        .fifo_empty    (fifo_empty_run),
         .sd_idle       (sd_idle),
         .m0_cmd_valid  (m0_cmd_valid),
         .m0_cmd        (m0_cmd),
@@ -383,6 +387,7 @@ module instrec_top #(
 
     // ---- HDMI transmitter front end (GPLL_B + I2C config + pads) ----
     hdmi_tx_if u_hdmi_tx_if (
+        .hdmi_rst_n     (hdmi_rst_n),
         .clk_27m        (clk),
         .rst_n          (rst_n),
         .pix_clk        (pix_clk),
@@ -863,17 +868,40 @@ module instrec_top #(
     wire       dbg_tx_valid;
     wire       dbg_tx_ready;
 
-    assign wl_tx_ready   = tx_byte_ready;
-    assign dbg_tx_ready  = tx_byte_ready & ~wl_tx_valid;
+    reg tx_accept_hold;
+    wire tx_accept_ready = tx_byte_ready & ~tx_accept_hold;
+    always @(posedge core_clk or negedge core_clk_rst_n) begin
+        if (!core_clk_rst_n) tx_accept_hold <= 1'b0;
+        else if (!tx_byte_ready) tx_accept_hold <= 1'b0;
+        else if (tx_accept_ready && (wl_tx_valid | dbg_tx_valid | cpu_tx_valid))
+            tx_accept_hold <= 1'b1;
+    end
+    assign wl_tx_ready   = tx_accept_ready;
+    assign dbg_tx_ready  = tx_accept_ready & ~wl_tx_valid;
+
+    // ---- RV32 control core (lowest-priority UART source) ----
+    wire        cpu_tx_valid;
+    wire [7:0]  cpu_tx_data;
+    wire [7:0]  cpu_led;
+    wire        cpu_alive;
+    wire        cpu_trap;
+    wire [31:0] cpu_trap_cause;
+    wire        cpu_npu_start;
+    wire        cpu_tx_ready;
 
     uart_tx u_uart_tx (
         .clk         (core_clk),
         .rst_n       (core_clk_rst_n),
-        .byte_wdata  (wl_tx_valid ? wl_tx_data : dbg_tx_data),
-        .byte_wvalid (wl_tx_valid | dbg_tx_valid),
+        .byte_wdata  (wl_tx_valid ? wl_tx_data :
+                      (dbg_tx_valid ? dbg_tx_data : cpu_tx_data)),
+        .byte_wvalid ((wl_tx_valid | dbg_tx_valid | cpu_tx_valid) & ~tx_accept_hold),
         .byte_wready (tx_byte_ready),
         .uart_txd    (uart_tx)
     );
+
+    // The CPU may only pop its FIFO when the multiplexer actually selects it,
+    // otherwise a byte would be consumed while wl/dbg data goes out instead.
+    assign cpu_tx_ready = tx_accept_ready & ~wl_tx_valid & ~dbg_tx_valid;
 
     uart_rx u_uart_rx (
         .clk         (core_clk),
@@ -918,7 +946,17 @@ module instrec_top #(
     wire [7:0]  npu_probs_pct_u;
     wire [3:0]  npu_probs_idx_u;
     wire        npu_feat_rd_en_u;
-    wire npu_start = NPU_ENABLE && mel_npu_start && ddr_init_done && weight_ok && !weight_err && !wl_busy && !npu_busy_u && native_owner_idle && !native_fault;
+    reg cpu_npu_pending;
+    wire npu_launch_ready = sys_run && st_done && !st_fail && !safe_err &&
+                            ddr_init_done && weight_ok && !weight_err &&
+                            !wl_busy && !npu_busy_u && native_owner_idle && !native_fault;
+    wire npu_start = mel_npu_start && npu_launch_ready &&
+                     (NPU_ENABLE || cpu_npu_pending || cpu_npu_start);
+    always @(posedge core_clk or negedge core_clk_rst_n) begin
+        if (!core_clk_rst_n) cpu_npu_pending <= 1'b0;
+        else if (npu_start) cpu_npu_pending <= 1'b0;
+        else if (cpu_npu_start) cpu_npu_pending <= 1'b1;
+    end
 
     npu_top #(.FEATURE_FRAME_MAJOR(1)) u_npu (
         .clk          (core_clk),
@@ -965,14 +1003,44 @@ module instrec_top #(
         .rx_byte_cnt    (uart_rx_byte_cnt)
     );
 
+    rv32_cpu_subsys #(
+        .ENABLE_M         (0),      // RV32I: saves ~600 LUT against the cliff
+        .ENABLE_PREDICTOR (0),
+        .RESET_VECTOR     (32'h0000_0000),
+        .PROG_HEX         ("src/cpu/prog.hex")
+    ) u_cpu (
+        .clk             (core_clk),
+        .rst_n           (core_clk_rst_n),
+        .npu_busy        (npu_busy_u),
+        .npu_done        (npu_done_u),
+        .npu_timeout     (npu_timeout_u),
+        .npu_probs_valid (npu_probs_valid_u),
+        .npu_probs_pct   (npu_probs_pct_u),
+        .npu_probs_idx   (npu_probs_idx_u),
+        .npu_top1        (npu_top1_u),
+        .npu_cycles      (npu_cycles_u),
+        .ddr_ok          (ddr_init_done & st_done & ~st_fail & ~safe_err),
+        .ddr_err         (safe_err),
+        .ddr_sts         ({8'h00, 8'h00, ddr_cmd_to_err, ddr_to_err,
+                           ddr_dbg_to_state, st_fail, st_done, 6'h00}),
+        .uart_valid      (cpu_tx_valid),
+        .uart_data       (cpu_tx_data),
+        .uart_ready      (cpu_tx_ready),
+        .cpu_led         (cpu_led),
+        .cpu_alive       (cpu_alive),
+        .cpu_trap        (cpu_trap),
+        .cpu_trap_cause  (cpu_trap_cause),
+        .npu_soft_start  (cpu_npu_start)
+    );
+
     // ==================================================================
     // LED assembly (design doc section 2.2.9 / sys_ctrl contract):
     //   led[7:6] self-test stage code
     //   led[5]   CDC FIFO overflow warning (sticky)
     //   led[4]   SAFE_ERR latched state
-    //   led[3:1] reserved for the M2 stats exporter
+    //   led[3:1] NPU busy / CPU trap / CPU alive
     //   led[0]   1 Hz heartbeat (active after RUN)
     // ==================================================================
-    assign led = {stage_code, overflow_warn, safe_err, 3'b000, heartbeat};
+    assign led = {stage_code, overflow_warn, safe_err, npu_busy_u, cpu_trap, cpu_alive, heartbeat};
 
 endmodule

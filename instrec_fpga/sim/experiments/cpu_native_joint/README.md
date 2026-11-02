@@ -9,12 +9,16 @@ Use `--run-label unique-label` to preserve existing evidence.
 
     python sim/experiments/cpu_native_joint/run_repeat.py --run-label unique-repeat-label
 
-The production firmware deliberately issues only one request. This experiment
-builds an isolated firmware candidate from production main.c: after reporting
-and acknowledging the first result, it issues exactly one more CTRL[0] request.
-The candidate stays under build/, and the production ROM and RTL are unchanged.
-The runner refuses an existing run directory. Its generator is tracked here so
-the isolated C and ROM are reproducible.
+The current production firmware requests the next complete Mel window after
+acknowledging each result. Verify its unchanged production ROM with:
+
+    python sim/experiments/cpu_native_joint/run_repeat.py --production-rom --frame-major --run-label unique-continuous-label
+
+This runs two different feature frames without resetting CPU, NPU or DDR. A
+third CPU request remains pending after the second result; no third safe window
+is supplied. Frame-major mode uses the actual Mel bank layout for both inputs.
+The default mode retains an isolated firmware limited to exactly two requests,
+for reproducing historical experiments. Existing run directories are refused.
 
 Current production RTL, including the narrow row RAM template, passes both A/B
 frames without DUT/DDR reset. B=255-A changes all 16512 feature bytes; all golden
@@ -32,8 +36,9 @@ testbench failures are retained and described in the report.
 
 DDR AXI memory, Mel safe windows and UART byte acceptance are modeled. Physical
 DDR PHY, full audio/Mel frontend, board UART/JTAG, CDC and timing are excluded.
-This establishes repeated control with the isolated firmware candidate; it
-does not claim the current production ROM automatically requests twice.
+The historical evidence used an isolated firmware candidate. The production
+continuous-ROM run is recorded separately in
+`reports/cpu_native_continuous_validation_20261102.json`.
 
 ## Real Mel feature layout
 

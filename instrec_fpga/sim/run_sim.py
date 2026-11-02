@@ -298,6 +298,16 @@ register(Case(
     description="exact top_rv_core UART arbitration and NPU launch control slice",
 ))
 
+
+register(Case(
+    name="full_top_ctrl",
+    tb="tb_rv_top_ctrl.sv",
+    rtl=["build/sim/full_top_ctrl/rv_top_ctrl_slice.sv", "src/ctrl/uart_tx.v"],
+    prepare="full_top_ctrl",
+    timeout=180,
+    description="exact instrec_top UART arbitration and NPU launch control slice",
+))
+
 register(Case(
     name="ui_render",
     tb="tb_ui_render.sv",
@@ -553,9 +563,9 @@ def prepare_weight_loader(work: Path) -> None:
     (work / "digest.txt").write_text("%08X\n" % digest, encoding="ascii")
 
 
-def prepare_rv_top_ctrl(work: Path) -> None:
+def prepare_rv_top_ctrl(work: Path, top_source: str = "src/ctrl/top_rv_core.v") -> None:
     """Extract actual top-level control logic, never a reimplementation."""
-    source = (ROOT / "src/ctrl/top_rv_core.v").read_text(encoding="utf-8")
+    source = (ROOT / top_source).read_text(encoding="utf-8")
 
     def section(start: str, end: str) -> str:
         return source.split(start, 1)[1].split(end, 1)[0]
@@ -584,12 +594,17 @@ def prepare_rv_top_ctrl(work: Path) -> None:
     (work / "rv_top_ctrl_slice.sv").write_text(body, encoding="ascii", newline="\n")
 
 
+def prepare_full_top_ctrl(work: Path) -> None:
+    prepare_rv_top_ctrl(work, "src/ctrl/instrec_top.v")
+
+
 PREPARERS = {
     "conv1": prepare_conv1,
     "mel": prepare_mel,
     "npu_chain": prepare_npu_chain,
     "weight_loader": prepare_weight_loader,
     "rv_top_ctrl": prepare_rv_top_ctrl,
+    "full_top_ctrl": prepare_full_top_ctrl,
 }
 
 

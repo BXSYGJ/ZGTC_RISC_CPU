@@ -180,6 +180,7 @@ int main(void) {
             putdec(NPU_CYCLES);
             puts_("\r\n");
             NPU_CTRL = 0x2u;               /* clear stickies */
+            NPU_CTRL = 0x1u;               /* request the next complete Mel window */
             LED_REG = (uint32_t)(0x80u | (pr & 0x0fu) << 4);
         } else if (status & ST_NPU_TIMEOUT) {
             puts_("NPU TIMEOUT\r\n");

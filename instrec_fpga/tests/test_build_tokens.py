@@ -109,7 +109,7 @@ def expected_files(patterns):
 
 
 def as_posix_lower(paths):
-    return {Path(str(p)).as_posix().lower() for p in paths}
+    return {Path(str(p)).resolve().as_posix().lower() for p in paths}
 
 
 def tcl_lines(tcl, pattern, group='path'):
@@ -256,7 +256,7 @@ def test_full_design_list_matches_glob_expansion(dry_runs):
     tcl = dry_runs['full']['tcl']
 
     design_paths = tcl_lines(tcl, ADD_DESIGN_RE)
-    design_verilog = [p for p in design_paths if Path(p).suffix == '.v']
+    design_verilog = [p for p in design_paths if Path(p).suffix in ('.v', '.sv')]
     ip_cores = [p for p in design_paths if Path(p).suffix == '.idf']
 
     assert as_posix_lower(design_verilog) == as_posix_lower(expected_design), \
@@ -344,7 +344,7 @@ def test_all_generated_paths_are_absolute_under_the_project(dry_runs):
     repo_prefix = ROOT.parent.as_posix().lower() + '/'
     for name, run in dry_runs.items():
         for path in tcl_lines(run['tcl'], ADD_DESIGN_RE) + tcl_lines(run['tcl'], ADD_CONSTRAINT_RE):
-            allowed = path.lower().startswith(prefix) or (name == 'rv_core' and path.lower().startswith(repo_prefix))
+            allowed = path.lower().startswith(prefix) or (name in ('rv_core', 'full') and path.lower().startswith(repo_prefix + 'cpu/rtl/'))
             assert allowed, \
                 '{0}: {1} is not under the project root'.format(name, path)
             assert '\\' not in path, 'build.tcl must use forward slashes'

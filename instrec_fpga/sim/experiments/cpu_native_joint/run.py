@@ -66,7 +66,7 @@ def main():
  wait(report_seen);wait(cpu_acks==1);repeat(50) @(negedge clk);
  if(u_cpu.npu_probs_st || u_cpu.npu_done_st || u_cpu.npu_timeout_st) $fatal(1,"CPU did not clear result status");
  if(!log_has("RV32 BOOT") || !log_has("RV32 MMIO OK") || !log_has("RV32 ISA OK") || !log_has("NPU GO")) $fatal(1,"firmware boot/control transcript incomplete");
- if(launches!=1 || cpu_requests!=1 || cpu_acks!=1) $fatal(1,"unexpected CPU control counts");
+ if(launches!=1 || cpu_requests<1 || cpu_requests>2 || cpu_acks!=1) $fatal(1,"unexpected CPU control counts");
  if(u_cpu.result_cycles_q!==last_cycles || u_cpu.probs_pct_q!==last_pct || u_cpu.probs_idx_q!==last_idx) $fatal(1,"CPU MMIO payload differs from actual NPU event");
  $display("CPU_NATIVE expected report=%s",expected_report);
  $display("RESULT: PASS real CPU ROM MMIO launch, full native golden NPU, real result report and acknowledgement");

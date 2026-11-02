@@ -854,3 +854,9 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 
 - 用户确认602AB321下降沿候选彩条/UI均正常；保存用户可视PASS，保留此前失败证据。
 - 实际RTL ui_frame导出1920x1080完整帧PASS，归档参考PNG；明确蓝块为固定演示频谱，当前显示未接真实音频/AI。
+
+## 2026-11-02：RV/音频/HDMI完整顶层与生产连续推理
+
+- instrec_top接入RV32I安全窗口控制、三路UART握手和启动音频门控，带入已验证HDMI下降沿/G25复位；full构建集纳入CPU和ROM。
+- 生产ROM连续请求，CPU C1-C10/完整顶层控制17项/I2S回归及432项pytest通过；生产ROM+frame-major不同A/B两轮native golden通过。
+- 完整拓扑开始单路资源门控；用户确认暂无外部音频源，真实音频板级验收仍开放。

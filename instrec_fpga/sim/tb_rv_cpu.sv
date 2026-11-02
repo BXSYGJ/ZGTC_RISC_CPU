@@ -16,6 +16,7 @@
 //   C7  DDR OK is decoded from the real status register
 //   C8  firmware acknowledges and clears the sticky NPU event
 //   C9  result cycle count remains associated with the captured event
+//   C10 completion acknowledgement queues a second CPU launch
 // Self-validation: change a token in main.c (or drop the injected event) and
 // the matching check must fail.
 // ---------------------------------------------------------------------------
@@ -171,6 +172,8 @@ module tb_rv_cpu;
 
         wait (nline >= 8);      // + "NPU GO" + the NPU report
         wait (cpu_acknowledged);
+        wait (npu_soft_start === 1'b1);
+        $display("CHECK PASS C10 firmware requested next inference after acknowledgement");
         repeat (50) @(posedge clk);
 
         $display("---- UART log (%0d lines) ----", nline);

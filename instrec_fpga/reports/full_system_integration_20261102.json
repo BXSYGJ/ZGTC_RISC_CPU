@@ -1,0 +1,50 @@
+{
+  "result": "OFFLINE_PASS_PDS_IN_PROGRESS",
+  "top": "instrec_top",
+  "cpu_controlled": true,
+  "external_i2s_pads": true,
+  "hdmi_physical_reset": "G25",
+  "hdmi_launch_edge": "negedge",
+  "pytest": {
+    "passed": 432,
+    "skipped": 4
+  },
+  "full_top_ctrl_checks": 17,
+  "rv_cpu_checks": 10,
+  "i2s_words": 16,
+  "board_audio_source": "NOT_CONNECTED_USER_CONFIRMED",
+  "pds_run": "build/pds/20261102-140426-6c67b772",
+  "new_bitstream": false,
+  "board_bitstream_sha256": "602AB321075B25F0F9931C99CC7369AB1223E3A27A0177953F20F2DDFE60A17C",
+  "limits": [
+    "Full PHY and integrated board run pending",
+    "No external audio source connected",
+    "Native DDR/Mel-safe-window simulation uses models"
+  ],
+  "sources": [
+    {
+      "path": "src/ctrl/instrec_top.v",
+      "sha256": "63360c3b5cd16dd50bd996d5e1f3130758851b937643be8b745288cac6063df9"
+    },
+    {
+      "path": "src/hdmi/hdmi_tx_if.v",
+      "sha256": "d616d2236b8f460f3be2cfcd14f66b4aed55a4c60b4e217cab5680b01e40bd3a"
+    },
+    {
+      "path": "src/cpu/prog.hex",
+      "sha256": "8757babe8ece9173b4c34fe38025c4cdc1e0b033cbd05e4358b1a222ac408f30"
+    },
+    {
+      "path": "sw/rv32/main.c",
+      "sha256": "2fc6e40e48b82f030b7f16d792ef61319ffe203fa6b4df9887a8038d113ff8fd"
+    },
+    {
+      "path": "scripts/build_sets.json",
+      "sha256": "e16f73134c1a9557097fd6635ae1228be587ead3ec0dac961042223883be84ec"
+    },
+    {
+      "path": "constraints/instrec_top.fdc",
+      "sha256": "7c3fe61f1bc6b2768738ba0790192d14dfe29b625930b2a9c41df3c3bb9379ee"
+    }
+  ]
+}

@@ -12,7 +12,14 @@
         "src/ui/*.v",
         "src/hdmi/*.v",
         "src/ctrl/*.v",
-        "src/ip/*.v"
+        "src/ip/*.v",
+        "src/cpu/rv32_cpu_subsys.sv",
+        "../cpu/rtl/rv32_core.sv",
+        "../cpu/rtl/rv32_decode.sv",
+        "../cpu/rtl/rv32_alu.sv",
+        "../cpu/rtl/rv32_muldiv.sv",
+        "../cpu/rtl/rv32_btb.sv",
+        "../cpu/rtl/rv32_machine.sv"
       ],
       "ip_cores": [
         "ipcore/pll/pll.idf",
@@ -26,7 +33,8 @@
       ],
       "hex_dirs": [
         "src/mel",
-        "src/ui"
+        "src/ui",
+        "src/cpu"
       ]
     },
     "ddr3_diag": {

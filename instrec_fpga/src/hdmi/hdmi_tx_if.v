@@ -110,6 +110,7 @@ module hdmi_tx_if #(
     // -----------------------------------------------------------------
     // HDMI connector pins (demo fdc pinout, LVCMOS33).
     // -----------------------------------------------------------------
+    output wire        hdmi_rst_n,   // pin G25, board MS7210/MS7200 reset
     output wire        vout_clk,     // pin T24 (directly driven by pix_clk)
     output wire        vout_de,      // pin N19
     output wire        vout_hs,      // pin R20
@@ -198,6 +199,8 @@ module hdmi_tx_if #(
     end
 
     wire cfg_rstn = (rstn_1ms == RSTN_DELAY_CYCLES);
+    // Restore the physical transmitter reset driven by the vendor demo.
+    assign hdmi_rst_n = cfg_rstn;
 
     // -----------------------------------------------------------------
     // I2C init watchdog (spec section 5.5.3 scenario 1).
@@ -351,7 +354,10 @@ module hdmi_tx_if #(
     reg        vout_vs_r;
     reg        vout_de_r;
 
-    always @(posedge pix_clk_w) begin
+    // Launch on the falling edge so the receiver has a half pixel period
+    // of setup before the forwarded rising clock edge. Board verification
+    // is required; internal-only timing does not cover the MS7210 input.
+    always @(negedge pix_clk_w) begin
         if (!rstn_pix) begin
             vout_data_r <= 24'h00_00_00;
             vout_hs_r   <= 1'b0;

@@ -30,6 +30,8 @@ def once(text, old, new):
 
 parser=argparse.ArgumentParser()
 parser.add_argument('--run-label',default='narrow-repeat-ab-20261101')
+parser.add_argument('--production-rom',action='store_true',help='Run checked-in continuous firmware without candidate edits')
+parser.add_argument('--frame-major',action='store_true')
 args=parser.parse_args()
 if not args.run_label.replace('-','').replace('_','').isalnum():raise ValueError('Invalid label')
 name='cpu_native_joint_'+args.run_label
@@ -37,24 +39,28 @@ work=ROOT/'build/sim'/name
 if work.exists():raise RuntimeError('Choose a new run-label to preserve evidence')
 firmware=work/'firmware';firmware.mkdir(parents=True)
 for file in ('start.S','link.ld'):shutil.copyfile(ROOT/'sw/rv32'/file,firmware/file)
-source=(ROOT/'sw/rv32/main.c').read_text(encoding='ascii')
-source=once(source,'    NPU_CTRL = 0x1u;','    uint32_t requests_sent = 1u;\n    NPU_CTRL = 0x1u;')
-source=once(source,'            NPU_CTRL = 0x2u;               /* clear stickies */', '''            NPU_CTRL = 0x2u;               /* clear stickies */
-            if (requests_sent < 2u) {
-                requests_sent++;
-                NPU_CTRL = 0x1u;
-                puts_("NPU GO AGAIN\\r\\n");
-            }''')
-(firmware/'main.c').write_text(source,encoding='ascii')
-builder=load('repeat_firmware_builder',ROOT/'scripts/build_rv32_sw.py')
-builder.SW=firmware;builder.OUT=firmware;builder.HEX=firmware/'prog.hex'
-sys.argv=['build_rv32_sw.py','--no-m']
-if builder.main()!=0:raise RuntimeError('Firmware build failed')
-
+if args.production_rom:
+    shutil.copyfile(ROOT/'src/cpu/prog.hex',firmware/'prog.hex')
+    shutil.copyfile(ROOT/'sw/rv32/main.c',firmware/'main.c')
+else:
+    source=(ROOT/'sw/rv32/main.c').read_text(encoding='ascii')
+    source=source.replace('            NPU_CTRL = 0x1u;               /* request the next complete Mel window */\n','')
+    source=once(source,'    NPU_CTRL = 0x1u;','    uint32_t requests_sent = 1u;\n    NPU_CTRL = 0x1u;')
+    source=once(source,'            NPU_CTRL = 0x2u;               /* clear stickies */', '''            NPU_CTRL = 0x2u;               /* clear stickies */
+                if (requests_sent < 2u) {
+                    requests_sent++;
+                    NPU_CTRL = 0x1u;
+                    puts_("NPU GO AGAIN\\r\\n");
+                }''')
+    (firmware/'main.c').write_text(source,encoding='ascii')
+    builder=load('repeat_firmware_builder',ROOT/'scripts/build_rv32_sw.py')
+    builder.SW=firmware;builder.OUT=firmware;builder.HEX=firmware/'prog.hex'
+    sys.argv=['build_rv32_sw.py','--no-m']
+    if builder.main()!=0:raise RuntimeError('Firmware build failed')
 feature_a=np.frombuffer((HERE.parent/'npu_conv1/feat_u8.bin').read_bytes(),dtype=np.uint8).reshape(64,258)
 feature_b=(255-feature_a).astype(np.uint8)
 result_b=golden.npu_forward(feature_b,golden.load_layer_contract(),golden.load_mel_tables()['exp_lut'])
-values={'feat':feature_b.reshape(-1),'gap':result_b['gap'],'fc1':result_b['fc1'],
+values={'feat':(feature_b.T if args.frame_major else feature_b).reshape(-1),'gap':result_b['gap'],'fc1':result_b['fc1'],
         'fc2_logits':result_b['fc2'],'probs':result_b['probs_q16']}
 for layer in ('conv1','conv2','conv3','conv4','pool1','pool2','pool3','pool4'):
     array=result_b[layer];c,h,w=array.shape
@@ -85,7 +91,7 @@ def repeat_case(case, tool, options):
     text=text.replace('launches!=1','launches!=inference+1')
     text=text.replace('wait(cpu_acks==1)','wait(cpu_acks==inference+1)')
     text=text.replace('cpu_acks!=1','cpu_acks!=inference+1')
-    text=once(text,'if(launches!=inference+1 || cpu_requests!=inference+1 || cpu_acks!=inference+1)',
+    text=once(text,'if(launches!=inference+1 || cpu_requests<1 || cpu_requests>2 || cpu_acks!=inference+1)',
               'if(launches!=inference+1 || cpu_requests<inference+1 || cpu_requests>2 || cpu_acks!=inference+1)')
     text=once(text,' $finish;\nend\ninitial begin repeat(51000000)', ''' $display("CPU_REPEAT COMPLETE inference=%0d requests=%0d launches=%0d acks=%0d cycles=%0d",inference+1,cpu_requests,launches,cpu_acks,cycles);
  end
@@ -95,6 +101,9 @@ def repeat_case(case, tool, options):
 end
 integer inference=0;
 initial begin repeat(110000000)''')
+    if args.production_rom:
+        text=text.replace('cpu_requests>2', 'cpu_requests>inference+2')
+        text=text.replace(' if(!log_has("NPU GO AGAIN"))$fatal(1,"second request not issued by firmware");', '')
     tb=work/'tb_repeat.sv';tb.write_text(text,encoding='ascii')
     rows=json.loads((work/'inputs.json').read_text())
     rows=[row for row in rows if Path(row['path'])!=ROOT/'src/cpu/prog.hex']
@@ -103,7 +112,7 @@ initial begin repeat(110000000)''')
     (work/'repeat_inputs.json').write_text(json.dumps(rows,indent=2)+'\n',encoding='ascii')
     result=actual_run(replace(case,tb=str(tb),timeout=480),tool,options)
     if not result.ok:return result
-    if 'CPU_REPEAT COMPLETE inference=2 requests=2 launches=2 acks=2' not in result.output:
+    if not any('CPU_REPEAT COMPLETE inference=2 requests=%d launches=2 acks=2'%n in result.output for n in ((2,3) if args.production_rom else (2,))):
         raise RuntimeError('Missing second CPU lifecycle completion')
     expected_b=int(np.argmax(result_b['probs_q16']))
     if 'CPU_NATIVE expected report=NPU top1=%d last_class=7 '%expected_b not in result.output:
@@ -112,16 +121,17 @@ initial begin repeat(110000000)''')
         if hashlib.sha256(Path(row['path']).read_bytes()).hexdigest()!=row['sha256']:
             raise RuntimeError('Source drift during simulation')
     report={'result':'PASS','label':args.run_label,'production_rtl':True,'production_rom_modified':False,
-            'firmware_candidate':'production main.c plus exactly one CTRL[0] after first result ACK',
+            'firmware_candidate':('none: checked-in continuous ROM' if args.production_rom else 'production main.c limited to two requests'),
+            'production_rom':args.production_rom,
             'inferences':2,'dut_reset_between_inferences':False,'changed_feature_bytes':int(np.count_nonzero(feature_a!=feature_b)),
-            'requests':2,'launches':2,'acks':2,'cycles_each':31141202,'top1_b':expected_b,
+            'requests':('2 completed plus next queued' if args.production_rom else 2),'launches':2,'acks':2,'cycles_each':31141202,'top1_b':expected_b,
             'inputs':rows,'log':str(result.log_path),'log_sha256':hashlib.sha256(Path(result.log_path).read_bytes()).hexdigest(),
-            'limits':['modeled DDR AXI memory, Mel safe window and UART acceptance','physical DDR PHY, CDC, board and timing excluded','production ROM intentionally launches once; repeated launch uses isolated firmware candidate']}
-    (ROOT/'reports/cpu_native_joint_repeat_ab_validation_20261101.json').write_text(json.dumps(report,indent=2)+'\n',encoding='ascii')
+            'limits':['modeled DDR AXI memory, Mel safe window and UART acceptance','physical DDR PHY, CDC, board and timing excluded','production ROM continues requesting at completion; model supplies two Mel windows' if args.production_rom else 'isolated firmware candidate limited to two requests']}
+    (ROOT/('reports/cpu_native_continuous_validation_20261102.json' if args.production_rom else 'reports/cpu_native_joint_repeat_ab_validation_20261101.json')).write_text(json.dumps(report,indent=2)+'\n',encoding='ascii')
     return result
 
 
 sim.run_case=repeat_case
 base=load('cpu_joint_repeat_base',HERE/'run.py')
-sys.argv=['run.py','--run-label',args.run_label]
+sys.argv=['run.py','--run-label',args.run_label]+(['--frame-major'] if args.frame_major else [])
 raise SystemExit(base.main())
