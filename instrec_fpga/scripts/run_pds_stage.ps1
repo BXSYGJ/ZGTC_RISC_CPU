@@ -87,7 +87,7 @@ $stageCommands = @($stages[$startIdx..($stages.Count - 1)] | ForEach-Object {
     if ($_ -eq 'pnr' -and $PlacementSeed -ge 0) { 'pnr -gplace_seed ' + $PlacementSeed }
     else { $_ }
 })
-$body = 'if {[llength [info commands open_project]]} {open_project {' + $prjTcl + '}}' + "`n" + ($stageCommands -join "`n") + "`nexit"
+$body = 'if {[llength [info commands open_project]]} {open_project {' + $prjTcl + '}}' + "`n" + ($stageCommands -join "`n") + "`n" + 'if {[llength [info commands open_project]]} {exit}'
 
 $tclPath = Join-Path $run ("stage-$stamp.tcl")
 $logPath = Join-Path $run ("stage-$stamp.log")

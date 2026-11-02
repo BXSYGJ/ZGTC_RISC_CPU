@@ -1,4 +1,4 @@
-﻿# One-button InstRec-FPGA PDS build: expand build_full.tcl tokens, run the
+# One-button InstRec-FPGA PDS build: expand build_full.tcl tokens, run the
 # six-stage batch flow (compile -> synthesize -> dev_map -> pnr ->
 # report_timing -> gen_bit_stream) through pds_shell.exe, scan the logs for
 # tool errors, verify the sbit, and archive logs to reports/ (REQ-BLD-001).
@@ -213,7 +213,7 @@ try {
         if ($idx -gt 0) { $head = $lines[0..($idx - 1)] }
         $tail = @()
         if ($idx -lt $lines.Count) { $tail = $lines[$idx..($lines.Count - 1)] }
-        $tcl = (@($head) + @('exit') + @($tail)) -join "`n"
+        $tcl = (@($head) + @('if {[llength [info commands open_project]]} {exit}') + @($tail)) -join "`n"
         Write-Output ("StopAfter={0}: build.tcl will exit before '{1}'." -f $StopAfter, $nextStage)
     }
 

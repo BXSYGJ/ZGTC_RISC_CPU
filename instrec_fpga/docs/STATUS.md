@@ -1,5 +1,13 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-02 21:16：用户恢复板子上线，完整新版资源门控进行中；FTDI待恢复
+
+- 用户明确授权开始烧录调试，离线阶段限制解除。COM5已出现且可读，6秒只读捕获0字节；FTDI PnP仍缺失，已请用户仅重插下载器电脑端USB，尚未收到回复。既有cdt_js9040端口正常/cdt_cfg46156保留，未终止、重启或新建JTAG服务；尚未烧录新位流。
+- 新UI源7d143626首次资源门控run210140-5c55ca93在PDS预解析子进程退出清理挂起：CPU4.53s长期不变、无compile目录；等待链/栈为Tcl_Exit/onexit/Thrd_join等待处于LdrShutdownThread的工作线程。21:10保存日志/清单/hash后只结束该run的两个PDS进程；无编译/无位流。未将外部DLL加载或许可证即将到期提示推断为根因。
+- 修复run_pds_full的StopAfter：exit仅在正式执行阶段存在open_project命令时执行，预解析跳过退出；同样保护run_pds_stage末尾exit，避免后续PNR预解析重现。实际生成TCL分别在预解析/执行命令环境验证继续扫描与正确止于dev_map；tests/test_build_tokens.py共25passed，stage PowerShell5.1解析PASS。证据reports/pds_preparser_exit_fix_20261102.json。
+- 唯一新run build/pds/20261102-211104-aedccc03于21:11启动，仅compile/synthesize/dev_map。compile21:13:31 PASS，目前综合tech-mapping2；15秒监控阶段/CPU/RSS/日志，临时防休眠随进程退出释放，截止21:41审查。源码清单冻结，不并发PDS。读取完整容量/字体与图块DRM推断后才决定PNR；当前无新资源结论、无新位流。
+- 继续原八类模型；新UI实际仿真PNG已通过，不等于时序或板测通过。旧HDMI fallback/两轮PNR失败证据保留；外部I2S音源尚未接，不能宣称识别准确率。
+
 ## 2026-11-02 20:07：中文仪表盘改版已实现并通过实际RTL全帧仿真
 
 - 按用户要求仅做离线UI优化：左上“输入波形”解释声音振幅/时间，左下独立Mel频谱说明时间/高低频带/能量色阶，右侧最近完整识别结果及带中文类别名、数字百分比的八条置信度；深色卡片/青色高亮，原八类单标签模型不变。设计及重建说明见docs/UI_DASHBOARD.md。

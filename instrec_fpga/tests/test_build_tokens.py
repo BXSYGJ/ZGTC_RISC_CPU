@@ -506,3 +506,34 @@ def test_ps_script_parses():
     )
     assert proc.returncode == 0, proc.stdout + proc.stderr
     assert 'PARSE OK' in proc.stdout
+
+
+def test_resource_gate_exit_skips_preparser_but_stops_execution():
+    """PDS parses Tcl before execution; exit must not kill its parser worker."""
+    if shutil.which('powershell') is None:
+        pytest.skip('Windows PowerShell is not available')
+    import tkinter
+    proc = subprocess.run(
+        ['powershell', '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File',
+         str(PS_SCRIPT), '-BuildSet', 'full', '-StopAfter', 'dev_map', '-DryRun'],
+        capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=120,
+    )
+    assert proc.returncode == 0, proc.stdout + proc.stderr
+    match = TCL_PATH_RE.search(proc.stdout)
+    assert match, proc.stdout
+    source = Path(match['path']).read_text(encoding='utf-8')
+    # Execute the real generated flow with harmless Tcl stage stubs. In the
+    # parser pass, all stages remain visible and exit must not be evaluated.
+    for execution_pass in (False, True):
+        interp = tkinter.Tcl()
+        interp.eval('set reached {}; proc exit {} {error GATE_STOP}; proc unknown {args} {}')
+        for command in ('compile', 'synthesize', 'dev_map', 'pnr', 'report_timing', 'gen_bit_stream'):
+            interp.eval('proc %s {args} {global reached; lappend reached %s}' % (command, command))
+        if execution_pass:
+            interp.eval('proc open_project {args} {}')
+            with pytest.raises(tkinter.TclError, match='GATE_STOP'):
+                interp.eval(source)
+            assert interp.eval('set reached') == 'compile synthesize dev_map'
+        else:
+            interp.eval(source)
+            assert interp.eval('set reached') == 'compile synthesize dev_map pnr report_timing gen_bit_stream'
