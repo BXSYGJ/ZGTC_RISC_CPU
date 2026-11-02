@@ -878,3 +878,9 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 - 新增两组PCM逐采样反射/Hann/环形回绕及out_ready stall回归，复现旧版valid粘住与第二窗口读基址未归零，分别修复；隔离候选1060864采样逐值PASS。
 - 资源门控映射PASS：32236LUT/35057FF/133DRM/90APM，head/tail同步读推断DRM。按设计无PNR/无位流；边界修复需新建完整候选，不复用旧netlist。
 - 21项RTL及额外requant_reset、两轮真实CPU/native/golden通过，原始失败和资源证据保留hash。
+
+## 2026-11-02：完整修复候选构建与音频验收边界
+
+- bd295a96完整候选20261102-155516-512e7322启动单路PDS，17:10截止审查；无新位流/时序结论。
+- 核对扩展I2S引脚与16bit/32BCK协议，记录底板HDMI RX音频路径尚未接入，真实音频验收仍需兼容输入；五组迁移文档标记deferred。
+- CPU native新报告单独命名保存，原连续推理报告不覆盖。

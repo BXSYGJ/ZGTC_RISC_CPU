@@ -1,0 +1,30 @@
+{
+  "schematics": {
+    "..\\docs\\盘古100Pro+开发板（MES2L676-100HP）配套资料\\3_Hardware\\原理图\\MES2L676-BASE-V1.2原理图.pdf": "f78e8252682dcac8eea1ad4933e2f5bcc97c65079a76cb8385dfff1bedcb1b61",
+    "..\\docs\\盘古100Pro+开发板（MES2L676-100HP）配套资料\\3_Hardware\\原理图\\MES2L676-CORE-V1.2原理图(100K).pdf": "cb0be5954057be31fa714f31b7d1659deb6ce69a83941bdd9bc53c02575128ec"
+  },
+  "core_page": 6,
+  "base_expansion_page": 9,
+  "base_hdmi_rx_page": 5,
+  "visual_review": "base pages5/9 rendered and inspected; core pin-to-net rows extracted",
+  "pins": {
+    "U20": {
+      "fpga_net": "L6_G2_14N_DQS",
+      "base_net": "FMC_LPC_LA07_N",
+      "direction": "output BCK"
+    },
+    "T20": {
+      "fpga_net": "L6_G2_14P_DQS",
+      "base_net": "FMC_LPC_LA07_P",
+      "direction": "output LRCK"
+    },
+    "V16": {
+      "fpga_net": "L6_G3_23P",
+      "base_net": "FMC_LPC_LA03_P",
+      "direction": "input SD"
+    }
+  },
+  "board_audio_source": "NOT_CONNECTED_USER_CONFIRMED",
+  "evidence_dir": "build/board-audio-review",
+  "acceptance": "NOT_RUN with physical source"
+}

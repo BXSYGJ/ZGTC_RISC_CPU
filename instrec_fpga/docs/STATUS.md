@@ -1,5 +1,12 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-02 16:02：最终完整候选单路构建中，音频接口核对完成
+
+- 源提交bd295a96，run20261102-155516-512e7322，15:55启动完整compile/synthesize/dev_map/pnr/report/bitstream流；compile与综合已完成主体，当前保存综合数据库。唯一PDS flow，父子进程属于同一工程；full-monitor.jsonl每15秒记录阶段日志/CPU/RSS，17:10为完整流截止审查，不能无限等待。尚无本轮位流或时序结论。
+- 生产framer两处边界修复后，mel/mel_credit/framer_repeat三项PASS；后一项带间歇out_ready并检查两个不同PCM窗口的1060864样本。native CPU A/B报告独立归档为cpu_native_timing_resume_20261102.json，原先full-continuous报告保留，避免覆盖旧证据。
+- 已核对100Pro核心原理图p6、底板p9/p5并渲染检查：U20/T20/V16分别扩展网FMC_LPC_LA07_N/LA07_P/LA03_P，当前16bit紧凑Philips主机I2S44.1kHz；不是底板现成模拟音频口。MS7200 HDMI RX另有I2S，但本设计未接入其从机时钟采集，不能直接当已支持音源。docs/AUDIO_BOARD_ACCEPTANCE.md与reports/audio_pin_review_20261102.json记录协议/引脚/PDFhash。真实音源仍未接。
+- 维持用户已选原八类版本，GROUP5_MIGRATION已标注暂缓。下一步等待本轮映射容量与完整setup/hold/recovery报告，再按证据决定候选烧录；保留HDMI fallback及当前489EF753诊断版WOK/CPU循环证据。
+
 ## 2026-11-02 15:53：资源门控完成；补齐连续窗口原有缺陷，准备最终候选重建
 
 - run20261102-153838-0eeebb9d compile/synthesize/dev_map全PASS，结束时SourcesUnchanged=true；32236LUT/35057FF/133DRM/90APM，head/tail各1Kx16确认为GTP_DRM18K_E1，比上一完整候选减少1012LUT、增加1DRM。监控记录阶段/CPU/RSS/日志；该run按设计止于映射，无PNR、无位流，禁止当完整时序通过。报告reports/timing_resource_gate_20261102.json。

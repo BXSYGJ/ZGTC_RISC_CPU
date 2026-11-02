@@ -1,9 +1,14 @@
 # Five-group activity target correction (2026-11-02)
 
-The user explicitly requires simultaneous instrument-group activity, not the
-legacy eight-instrument single-label classifier. This correction supersedes
-older requirements describing eight classes. Do not upload legacy weights or
-claim its softmax probabilities implement activity.
+> DEFERRED: the user subsequently chose to keep the original eight-class
+> version and continue delivery. This document and frozen five-group assets
+> are retained for future work; they do not authorize an active migration.
+> STATUS.md records the latest decision.
+
+The user identified simultaneous instrument-group activity as the originally
+intended feature, then deferred migration because of its implementation cost.
+If this migration is resumed, do not claim eight-class softmax probabilities
+implement independent group activity.
 
 ## Frozen source of truth
 
