@@ -907,3 +907,8 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 - CDE诊断版WOK/6轮CPU完成通过，用户实屏有UI但动态图形撕裂/花块，内容验收FAIL；FTDI再次离线使演示恢复未开始，板上仍CDE，失败证据留档。
 - 修复特征frame-major转置、完整页有效/帧边界换页、概率与类别完整bundle CDC、bars/spectrum图层对齐；新增动态双窗口/停顿/逐像素/快照复位RTL验收PASS。
 - db_norm差值/乘法进一步分拍，Mel16512项0差异且约41.2ms；新增HDMI输出IO寄存器约束待实际验证。全量pytest432passed4skipped、RTL7项PASS、lint0违规。旧label资源门控通过止于映射，无位流；新源需重建。
+
+## 2026-11-02 17:25：动态显示修复后单路资源门控
+
+- bca1fce8已push，run171830-91e7a308仅至dev_map；compile成功，综合进行中，17:45截止审查，监控日志/CPU/RSS。尚无新位流，不以仿真通过替代实屏验收。
+- 当前板仍CDE1D2F6，有UI但动态内容FAIL；FTDI再次离线，17:07恢复保底未执行program，既有cdt保持不动。

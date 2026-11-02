@@ -8,7 +8,7 @@
 - 已修复实际UI接线问题：frame-major特征复制时转为64x258行布局；频谱首次完整页前屏蔽，经toggle同步后只在vsync换页；概率流收齐8类后以held bundle/request-ack传递，类别与8路概率同帧提交，拒绝部分流、百分比钳位。bars采用两拍坐标+一拍绘制，spectrum直接原坐标、地址/RAM/色彩三拍，valid同延迟，均与waveform三拍对齐。HDMI27个数据/同步输出增加PAP_IO_REGISTER约束，实际打包与物理采样仍待PDS/板测。
 - 路径详细预算显示RAM/dB转换自身仍长，因此db_norm再分RAM读/差值/乘法/舍入写四拍，统计沿用上拍寄存累加；payload无reset，FSM保证初始化后才使用。Mel5144053cycles、16512特征golden0差异，实际125MHz约41.2ms，低于150ms需求。
 - dynamic_ui新RTL测试PASS：两窗口33024页字节/转置/读口stall/帧边界换页/初始化屏蔽，概率完整快照/部分流拒绝/饱和/复位及帧中稳定；16000坐标逐像素RGB/on三拍对齐PASS。mel/mel_credit/db_norm_stats/text_pipeline/ui_render/full_top_ctrl另6项PASS；pytest432passed/4skipped，lint59/0。证据dynamic_ui_fix_validation_20261102.json。新源尚无PDS时序/新位流。
-- 下一步提交后单PDS资源门控，核验IO寄存打包、DRM容量，再受控PNR。显示恢复与整机动态验收未完成；真实音源仍未接。
+- 源bca1fce8已提交并push；唯一PDS run20261102-171830-91e7a308于17:18:30启动，仅compile/synthesize/dev_map门控。compile于17:21:02成功（2m24s），当前综合日志/CPU持续推进；full-monitor.jsonl每15秒记录，17:45截止审查。核验完整资源及IO寄存实际打包后再决定受控PNR，无新位流。显示恢复与整机动态验收未完成；真实音源仍未接。
 
 ## 2026-11-02 16:50：完整修正版时序未过，已针对剩余两条路径修复并完成功能回归
 
