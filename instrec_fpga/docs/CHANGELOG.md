@@ -825,3 +825,7 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 - `rv_cpu` C1-C9、`rv_top_ctrl` 17 项、构建护栏 pytest 45 项和 59 个 Verilog 的词法检查均通过。
 - 最新 RV 位流虽已布线完成，但 DDR PHY 时序未闭合（slow WNS -4.462 ns、fast WNS -0.793 ns，SCBV 警告），继续保持板级 `NOT_RUN`，未触碰下载器。
 
+
+## 显示专用CDC约束
+
+- 首候选发现脚本摘要漏跨时钟负裕量；保存Some Constraints Violated报告，按实际双拍同步路径补cfg_clk/pix_clk CDC分组，待重新验证。

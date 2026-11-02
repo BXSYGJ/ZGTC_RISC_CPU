@@ -31,7 +31,7 @@
 ### The audio NCO clock does not exist here, so the asynchronous clock-group
 ### line only names clk and pix_clk. cfg_clk keeps its generated relationship
 ### to clk, exactly as in the full build, so the I2C and reset synchronizer
-### paths inside hdmi_tx_if are analyzed the same way.
+### paths inside hdmi_tx_if use the explicit CDC grouping below.
 
 # ---- 27 MHz board clock (same period and waveform as the full build) ----
 create_clock -name {clk} [get_ports {clk}] -period {37.037} -waveform {0.000 18.519}
@@ -46,7 +46,11 @@ create_generated_clock -name {cfg_clk} -source [get_ports {clk}] [get_pins {u_hd
 # ---- clock domain asynchronicity (design doc section 1.4 CDC table) ----
 # Board clk and the pixel clock are independent roots. This is the same group
 # set as instrec_top.fdc minus the audio NCO clock (no audio PLL here).
-set_clock_groups -asynchronous -group [get_clocks {clk}] -group [get_clocks {pix_clk}]
+# cfg_clk -> pix_clk carries only reset release and quasi-static status.
+# Each signal is consumed through a two-flop synchronizer; no transfer relies
+# on the relative phase of the two PLL outputs. Keep clk/cfg related, and
+# model the intentional synchronized crossing to the pixel domain.
+set_clock_groups -asynchronous -group [get_clocks {clk cfg_clk}] -group [get_clocks {pix_clk}]
 
 
 # ---- 27 MHz board clock, board reset and the reserved KEY1 ----

@@ -1,5 +1,10 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 显示候选 CDC 约束复核
+
+- 123646-c2b262b4完成六阶段，位流BEAB3C31...3BF70C3，资源1003LUT/948FF/1DRM。像素域setup+1.077，但完整报告cfg_clk->pix_clk setup -1.944/8端点，Some Constraints Violated；脚本摘要未覆盖跨时钟最差路径，不能据此宣称时序收敛。
+- 8端点为rstn_pix_meta及init_over/init_fail双拍同步器首级，只有复位释放和准静态状态跨域，不依赖PLL相位。显示专用约束将cfg_clk与clk置同组，与pix_clk作CDC隔离，保留域内时序检查；下一run验证约束生效和全报告。
+
 ## codex/display-demo：待验证的显示专用候选
 
 - 恢复G25外部MS7210/MS7200复位，随PLL稳定后cfg_rstn释放；与原厂示例接法一致，尚未证明能修复无信号。
