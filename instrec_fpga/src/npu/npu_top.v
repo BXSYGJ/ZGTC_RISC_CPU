@@ -336,8 +336,25 @@ module npu_top #(
     );
 
     wire s0_row_done,s1_row_done;
-    wire s0_in_ready,s1_in_ready,s0_out_valid,s1_out_valid;
-    wire [7:0] s0_out_data,s1_out_data;
+    wire s0_in_ready,s1_in_ready;
+    wire s0_replay_valid,s1_replay_valid;
+    wire [7:0] s0_replay_data,s1_replay_data;
+    reg s0_out_valid,s1_out_valid;
+    reg [7:0] s0_out_data,s1_out_data;
+    // Both replay sinks are always ready. Register the selected lane byte
+    // before the conv input RAM to split the distant RAM/mux/RAM path.
+    // Payload is qualified by valid; only control needs reset.
+    always @(posedge clk) begin
+        s0_out_data <= s0_replay_data;
+        s1_out_data <= s1_replay_data;
+    end
+    always @(posedge clk or negedge rst_n) begin
+        if(!rst_n) begin s0_out_valid<=0;s1_out_valid<=0;end
+        else begin
+            s0_out_valid <= s0_replay_valid && !(conv1_start || conv2_start || conv3_start || conv4_start);
+            s1_out_valid <= s1_replay_valid && !(conv2_start || conv3_start);
+        end
+    end
     wire [15:0] s0_replay_row,s1_replay_row;
     wire s0_store_done,s1_store_done,s0_error,s1_error,mux_error;
     reg s0_write_complete,s1_write_complete;
@@ -364,7 +381,7 @@ module npu_top #(
         .cmd_valid(s0_cmd_valid),.cmd_write(s0_cmd_write),.cmd_addr(s0_cmd_addr),.cmd_ready(s0_cmd_ready),
         .wr_valid(s0_wr_valid),.wr_data(s0_wr_data),.wr_ready(s0_wr_ready),
         .rd_valid(s0_rd_valid),.rd_data(s0_rd_data),
-        .out_valid(s0_out_valid),.out_data(s0_out_data),.out_ready(1'b1),
+        .out_valid(s0_replay_valid),.out_data(s0_replay_data),.out_ready(1'b1),
         .row_done(s0_row_done),.done(s0_store_done),.protocol_error(s0_error)
     );
     activation_row_store_dynamic u_store1 (
@@ -375,7 +392,7 @@ module npu_top #(
         .cmd_valid(s1_cmd_valid),.cmd_write(s1_cmd_write),.cmd_addr(s1_cmd_addr),.cmd_ready(s1_cmd_ready),
         .wr_valid(s1_wr_valid),.wr_data(s1_wr_data),.wr_ready(s1_wr_ready),
         .rd_valid(s1_rd_valid),.rd_data(s1_rd_data),
-        .out_valid(s1_out_valid),.out_data(s1_out_data),.out_ready(1'b1),
+        .out_valid(s1_replay_valid),.out_data(s1_replay_data),.out_ready(1'b1),
         .row_done(s1_row_done),.done(s1_store_done),.protocol_error(s1_error)
     );
     activation_store_mux u_act_mux (.clk(clk),.rst_n(rst_n),.protocol_error(mux_error),

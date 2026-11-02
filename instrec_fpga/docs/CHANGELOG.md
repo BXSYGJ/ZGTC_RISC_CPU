@@ -989,3 +989,8 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 ## 2026-11-02 22:28：新版完整系统中文UI实屏通过
 
 - 用户确认2673246E中文仪表盘正常且稳定，602AB321彩条/KEY1 UI亦正常；对应板级报告更新实屏PASS。不把视觉确认当时序收敛、长期稳定或准确率验收，继续原八类完整系统时序修复。
+
+## 2026-11-02 22:39：NPU激活重放字节流水
+
+- 两路store字节lane选择后寄存payload/valid，拆分至conv RAM路由路径；生产CPU/native不同A/B无reset两轮全部中间golden PASS，每轮实测31141255cycles。回归报告改用实测周期并支持独立报告文件。
+- npu_completion/full_top_ctrl PASS，pytest433passed/4skipped、lint61/0；新源未PDS/未烧录，现有正常中文显示保持。

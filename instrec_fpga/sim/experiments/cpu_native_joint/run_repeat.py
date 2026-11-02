@@ -3,6 +3,7 @@ import argparse
 import hashlib
 import importlib.util
 import json
+import re
 import shutil
 import sys
 from dataclasses import replace
@@ -32,6 +33,7 @@ parser=argparse.ArgumentParser()
 parser.add_argument('--run-label',default='narrow-repeat-ab-20261101')
 parser.add_argument('--production-rom',action='store_true',help='Run checked-in continuous firmware without candidate edits')
 parser.add_argument('--frame-major',action='store_true')
+parser.add_argument('--report',type=Path,help='Unique evidence path, relative to instrec root')
 args=parser.parse_args()
 if not args.run_label.replace('-','').replace('_','').isalnum():raise ValueError('Invalid label')
 name='cpu_native_joint_'+args.run_label
@@ -120,14 +122,16 @@ initial begin repeat(110000000)''')
     for row in rows:
         if hashlib.sha256(Path(row['path']).read_bytes()).hexdigest()!=row['sha256']:
             raise RuntimeError('Source drift during simulation')
+    completed_cycles=[int(v) for v in re.findall(r'CPU_REPEAT COMPLETE inference=\d+ requests=\d+ launches=\d+ acks=\d+ cycles=(\d+)',result.output)]
+    if len(completed_cycles)!=2:raise RuntimeError('Missing measured cycle counts')
     report={'result':'PASS','label':args.run_label,'production_rtl':True,'production_rom_modified':False,
             'firmware_candidate':('none: checked-in continuous ROM' if args.production_rom else 'production main.c limited to two requests'),
             'production_rom':args.production_rom,
             'inferences':2,'dut_reset_between_inferences':False,'changed_feature_bytes':int(np.count_nonzero(feature_a!=feature_b)),
-            'requests':('2 completed plus next queued' if args.production_rom else 2),'launches':2,'acks':2,'cycles_each':31141202,'top1_b':expected_b,
+            'requests':('2 completed plus next queued' if args.production_rom else 2),'launches':2,'acks':2,'cycles_each':completed_cycles[0] if len(set(completed_cycles))==1 else completed_cycles,'measured_cycles':completed_cycles,'top1_b':expected_b,
             'inputs':rows,'log':str(result.log_path),'log_sha256':hashlib.sha256(Path(result.log_path).read_bytes()).hexdigest(),
             'limits':['modeled DDR AXI memory, Mel safe window and UART acceptance','physical DDR PHY, CDC, board and timing excluded','production ROM continues requesting at completion; model supplies two Mel windows' if args.production_rom else 'isolated firmware candidate limited to two requests']}
-    (ROOT/('reports/cpu_native_continuous_validation_20261102.json' if args.production_rom else 'reports/cpu_native_joint_repeat_ab_validation_20261101.json')).write_text(json.dumps(report,indent=2)+'\n',encoding='ascii')
+    (ROOT/(args.report or Path('reports/cpu_native_continuous_validation_20261102.json' if args.production_rom else 'reports/cpu_native_joint_repeat_ab_validation_20261101.json'))).write_text(json.dumps(report,indent=2)+'\n',encoding='ascii')
     return result
 
 

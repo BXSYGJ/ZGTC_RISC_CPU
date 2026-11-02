@@ -1,5 +1,12 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-02 22:39：NPU重放到卷积输入分拍，真实CPU/native两轮golden通过
+
+- npu_top在两路activation store的字节lane选择后寄存8bit payload与valid，再进入conv输入RAM，切断长距离RAM/mux/RAM路由链；两接收端原本固定ready=1，吞吐仍每拍1字节。payload无reset，valid在复位及对应layer start清空。store本体/DDR契约/八类算术不变。
+- 生产ROM+frame-major真实布局、native DDR模型、不同A/B全16512特征字节改变、无reset两轮：所有conv/pool/GAP/FC/logits/probs中间结果逐值golden PASS，CPU两次请求/ACK闭环且第三次请求排队。每轮实际31141255cycles（较原31141202增加53拍），CPU报告31141254；run_repeat改为从日志提取实测周期数，新增--report保存独立证据，避免硬编码旧周期或覆盖历史报告。reports/cpu_native_store_replay_pipeline_20261102.json含完整源hash。
+- npu_completion/full_top_ctrl实际RTL PASS；pytest433passed/4skipped，lint61/0，reports/store_replay_pipeline_validation_20261102.json保存hash。当前修复源尚未PDS/无新位流，不能宣称负裕量已消除。
+- 当前板上仍2673246E中文完整诊断版，用户实屏已确认正常稳定；不重复烧录，602AB321 fallback保留。下一步对包含glyph/self_test/store三项分拍的新源建唯一完整资源门控，容量允许后受控PNR核验十表。既有cdt未动，未接外部音源，不宣称识别准确率。
+
 ## 2026-11-02 22:28：用户确认新版中文仪表盘正常且稳定
 
 - 用户同时补回三项反馈：已重插下载器；此前602AB321显示保底彩条及KEY1 UI均正常；当前2673246E完整系统中文仪表盘正常且稳定。两份对应板级报告已记录实屏PASS，反馈不再待到；无需再次要求重插或重复询问。
