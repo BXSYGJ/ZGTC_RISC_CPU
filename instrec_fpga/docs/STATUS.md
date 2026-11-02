@@ -1,5 +1,12 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-02：未覆盖 NPU activation/full-end 补测通过
+
+- `python sim/experiments/npu_activation/run.py`：conv1、pool1、DDR activation replay、conv2 全部逐值匹配 golden；conv1 792576 outputs，最终 cycles `12242761`。
+- `python sim/experiments/npu_full_end/run.py`：四层卷积与 DDR activation replay、GAP/FC/softmax 全链逐值匹配 golden；`full npu_top` PASS，cycles `30757679`。
+- 日志保留于 `build/sim/npu_activation/run.log` 与 `build/sim/npu_full_end/run.log`。本轮未修改生产 RTL，未启动 PDS，未操作 `cdt_js`、`cdt_cfg` 或下载器；板级仍 `NOT_RUN`。
+- 最新完整位流候选仍因 `ddrphy_sysclk` slow/fast 时序负裕量及 `SCBV has not been set` 警告禁止上板；reset-mid-read 同 `axi_rid` 迟到响应风险继续开放。
+
 ## 2026-11-02：收尾核对与 RV 轻量集成确认
 
 - 按 `HANDOFF_SNAPSHOT_20261101.md` 复核当前主线：`top_rv_core` 已真实例化 `rv32_cpu_subsys`，CPU 通过 MMIO 发起 NPU 请求、读取 DDR/NPU 状态与结果，并复用共享 UART；`rv_core` 构建集包含 CPU RTL 与 `src/cpu/prog.hex`。

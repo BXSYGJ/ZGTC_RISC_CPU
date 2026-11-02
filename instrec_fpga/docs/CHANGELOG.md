@@ -1,5 +1,11 @@
 # InstRec-FPGA 变更日志
 
+## 2026-11-02：未覆盖 NPU activation/full-end 补测
+
+- `npu_activation` Verilator 补测通过：conv1 792576 项、pool1/DDR/conv2 golden exact，最终 12242761 cycles。
+- `npu_full_end` Verilator 补测通过：四层卷积、DDR activation replay、GAP/FC/softmax full npu_top golden exact，30757679 cycles。
+- 未修改生产 RTL、未启动 PDS、未操作 JTAG/下载器；板级仍 NOT_RUN，最新位流的 DDR PHY 时序和 SCBV 问题保持不变。
+
 ## 2026-11-02：控制冒烟与 RV CPU C1-C9 回归
 
 - `ctrl_smoke` 6 项全部 PASS，覆盖 BOOT、DDR3 SELFTEST、DDROK、STS=00 与 RUN 控制路径。
