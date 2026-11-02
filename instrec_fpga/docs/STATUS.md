@@ -1,5 +1,14 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-02 12:14：RV 板级启动已确认；UART RX 首帧阻塞已定位修复
+
+- 用户已明确要求烧录调试。诊断下载既有 `20261102-003406-7af1bf17` 位流（SHA256 `605C234F...B488CFB`），复用 `cdt_js` PID9040；配置客户端正常退出，原 `cdt_cfg` PID46156 未终止/重启。JTAG `0x081ffca0`、done=1、crc_err=0，COM5 捕获 136 bytes，包含 `RV32 BOOT`、`RV32 MMIO OK`、`DDR OK STS 0x00000040`、`NPU GO`；部分字节损坏，不能宣称 UART 或推理全链通过。
+- 权重上传实测首帧 seq0 无 ACK（2 次重试后失败），尚无板级 WOK 或 NPU 结果。原始日志/UART/TCL 已保存在 `build/board_rv_20261102_1208/`，结构化烧录证据为 `reports/rv_board_smoke_20261102.json`；该 JSON PASS 只代表烧录与 BOOT token。
+- 明确 RTL 根因：`uart_rx` 原先在 1.5bit 检查 START，再等 1bit 才采 bit0，采样整体晚一位。修复为 `(BAUD_DIV+1)/2`（默认543周期）检查 START，随后每1085周期采样。旧 RTL 串行回归首字节 AA 收成20而 FAIL；修复后264字节、全字节值/连续帧/坏停止位/毛刺/复位恢复 PASS。
+- 新增物理串行模式 `weight_loader_serial`：真实 uart_rx 接真实 loader，4x256B、32拍读回、`KKKKWOK 42851062`、CRC NAK、复位恢复10项全部 PASS；原直接字节注入 `weight_loader` 仍10项 PASS。板级问题尚需修复位流重烧验证。
+- RTL59文件0 violation，UART/烧录/构建定向pytest57 passed。下一步单实例构建当前 UART RX 修复和已有 db_norm 流水候选，受控监控布线与slow/fast timing，再回板重试权重。
+- 更正历史阻塞表述：板卡技能与 `run_pds_full.ps1` 明确将 `SCBV has not been set` 列为原厂缺省PCB参数的正常提示，**不是禁止下载的错误**；仍需如实记录时序负裕量，不能以板上启动代替时序达标。reset-mid-read 同RID迟到响应风险继续开放。
+
 ## 2026-11-02：未覆盖 NPU activation/full-end 补测通过
 
 - `python sim/experiments/npu_activation/run.py`：conv1、pool1、DDR activation replay、conv2 全部逐值匹配 golden；conv1 792576 outputs，最终 cycles `12242761`。

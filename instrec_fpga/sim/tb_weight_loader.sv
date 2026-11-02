@@ -39,8 +39,16 @@ module tb_weight_loader;
     // -----------------------------------------------------------------
     // DUT
     // -----------------------------------------------------------------
+`ifdef PHYSICAL_UART_RX
+    reg serial_rxd = 1'b1;
+    wire rx_valid;
+    wire [7:0] rx_data;
+    uart_rx u_physical_rx(.clk(clk), .rst_n(rst_n), .uart_rxd(serial_rxd),
+                          .byte_rdata(rx_data), .byte_rvalid(rx_valid));
+`else
     reg         rx_valid = 1'b0;
     reg  [7:0]  rx_data  = 8'd0;
+`endif
 
     wire        tx_valid;
     wire [7:0]  tx_data;
@@ -94,7 +102,11 @@ module tb_weight_loader;
     reg [31:0] mem32   [0:255];
 
     initial begin
+`ifdef PHYSICAL_UART_RX
+        $readmemh("build/sim/weight_loader_serial/payload.hex", payload);
+`else
         $readmemh("build/sim/weight_loader/payload.hex", payload);
+`endif
         $display("=== tb_weight_loader start ===");
     end
 
@@ -309,12 +321,25 @@ module tb_weight_loader;
 
     task automatic send_byte;
         input [7:0] b;
+        integer bit_index;
         begin
+`ifdef PHYSICAL_UART_RX
+            @(negedge clk);
+            serial_rxd = 1'b0;
+            repeat(1085) @(negedge clk);
+            for(bit_index=0;bit_index<8;bit_index=bit_index+1) begin
+                serial_rxd = b[bit_index];
+                repeat(1085) @(negedge clk);
+            end
+            serial_rxd = 1'b1;
+            repeat(1085) @(negedge clk);
+`else
             rx_data  <= b;
             rx_valid <= 1'b1;
             @(posedge clk);
             rx_valid <= 1'b0;
             @(posedge clk);
+`endif
         end
     endtask
 
@@ -396,7 +421,11 @@ module tb_weight_loader;
     task automatic reset_dut;
         begin
             rst_n <= 1'b0;
+`ifdef PHYSICAL_UART_RX
+            serial_rxd <= 1'b1;
+`else
             rx_valid <= 1'b0;
+`endif
             repeat (5) @(posedge clk);
             rst_n <= 1'b1;
             repeat (3) @(posedge clk);
@@ -534,7 +563,11 @@ module tb_weight_loader;
     end
 
     initial begin : watchdog
+`ifdef PHYSICAL_UART_RX
+        #(250ms);
+`else
         #(50ms);
+`endif
         $display("ERROR: tb_weight_loader watchdog (weight_ok=%0b weight_err=%0b frame_cnt=%0d busy=%0b)",
                  weight_ok, weight_err, frame_cnt, busy);
         $fatal(1, "tb_weight_loader timeout");

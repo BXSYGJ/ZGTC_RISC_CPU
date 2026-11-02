@@ -210,6 +210,16 @@ register(Case(
 ))
 
 register(Case(
+    name="weight_loader_serial",
+    tb="tb_weight_loader.sv",
+    rtl=["src/ctrl/uart_rx.v", "src/ctrl/weight_loader.v"],
+    extra_flags=["-DPHYSICAL_UART_RX"],
+    timeout=300,
+    prepare="weight_loader",
+    description="physical serial frames through uart_rx to loader DDR readback/WOK",
+))
+
+register(Case(
     name="ctrl_smoke",
     tb="tb_ctrl_smoke.sv",
     rtl=["src/ctrl/sys_ctrl.v", "src/ctrl/uart_debug.v"],
@@ -261,6 +271,14 @@ register(Case(
     rtl=NPU_RTL,
     timeout=300,
     description="real npu_top completion and result drain protocol",
+))
+
+register(Case(
+    name="uart_rx",
+    tb="tb_uart_rx.sv",
+    rtl=["src/ctrl/uart_rx.v"],
+    timeout=120,
+    description="physical UART RX bit sampling, byte sweep and recovery",
 ))
 
 register(Case(

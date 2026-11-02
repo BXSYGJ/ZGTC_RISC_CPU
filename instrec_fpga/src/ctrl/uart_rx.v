@@ -9,7 +9,7 @@
 //     edge is seen, wait 1.5 bit periods and sample bit0 at its center,
 //     then sample every 1 bit period. At 115200 baud a bit lasts 8.68 us
 //     (1085 core_clk cycles), so glitches far shorter than a bit cannot
-//     pass the 1.5-bit qualification;
+//     pass the half-bit start qualification;
 //   * START re-validation: at the start-bit midpoint the line must still
 //     be low, otherwise the detection is discarded as a glitch;
 //   * STOP check: the stop bit is sampled at its midpoint; a low level
@@ -18,9 +18,9 @@
 //
 // Baud divider (self-check, same math as uart_tx):
 //   BAUD_DIV = round(125e6 / 115200) = 1085 -> +0.0064% (64 ppm) error.
-//   Mid-bit sample positions: start-bit center at 1.5 x 1085 = 1627.5
-//   -> 1628 cycles after the synced falling edge; every following bit
-//   center 1085 cycles later. Accumulated TX/RX divider mismatch over a
+//   Mid-bit sample positions: start-bit center at 0.5 x 1085 = 542.5
+//   -> 543 cycles after the synced falling edge; bit0 is sampled one
+//   bit period later, at 1.5 bits. Accumulated TX/RX divider mismatch over a
 //   10-bit frame is 10 x 0.0064% = 0.064% of a bit period (5.6 ns),
 //   negligible against the half-bit sampling margin (4.34 us).
 //
@@ -63,10 +63,10 @@ module uart_rx #(
 
     // ------------------------------------------------------------------
     // Sampler: mid-bit positions relative to the synced START edge.
-    //   start midpoint : 1.5 x BAUD_DIV = 1627.5 -> 1628 cycles
+    //   start midpoint : 0.5 x BAUD_DIV = 542.5 -> 543 cycles
     //   each data bit  : 1 x BAUD_DIV  = 1085 cycles after previous sample
     // ------------------------------------------------------------------
-    localparam integer START_MID = 1628;   // 1.5 x 1085, rounded
+    localparam integer START_MID = (BAUD_DIV + 1) / 2;
 
     reg [1:0]  state;
     reg [10:0] samp_cnt;

@@ -1,5 +1,11 @@
 # InstRec-FPGA 变更日志
 
+## 2026-11-02：板级启动与 UART RX 采样修复
+
+- 既有 RV 位流诊断烧录成功（done=1、CRC=0），实收 RV32 BOOT/MMIO、DDR OK、NPU GO；权重首帧无ACK，未宣称板级推理通过。
+- 修复 UART START 检查从1.5bit提前到0.5bit，使bit0正确落在1.5bit；新增264字节真实串行波形回归和接收器到loader的完整串行WOK/CRC/复位联测。旧RTL可复现AA误收20，修复版两项均PASS，直接字节loader回归保持通过。
+- 修正SCBV正常提示被误当作下载阻塞的判断；时序负裕量仍开放，板级运行不代表时序闭合。
+
 ## 2026-11-02：未覆盖 NPU activation/full-end 补测
 
 - `npu_activation` Verilator 补测通过：conv1 792576 项、pool1/DDR/conv2 golden exact，最终 12242761 cycles。

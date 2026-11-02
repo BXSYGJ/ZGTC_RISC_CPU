@@ -1,0 +1,62 @@
+{
+  "scope": "board boot and UART RX fix; repaired board upload not yet run",
+  "sbit_sha256": "605C234FA2B14BB174C304B0B99FB7E5E7768643F999A97BEC70FA328B488CFB",
+  "program": {
+    "done": 1,
+    "crc_err": 0,
+    "status": "0x081ffca0",
+    "uart_hex": "490d0a5256333220424f4f540d0a52563332204d4d494f204f4b0d0a5256333220c95341204f4b0d0a52ac33322042454e4348206379636c65733d34363030313220696e73743d313830303038206163633d307866326438383838620d0a444452204f4b2053545320307830303030303034300d0a4e505520474f0d0a445233205354532030300a"
+  },
+  "weight_upload_before_fix": "FAIL seq0 no ACK after retries",
+  "old_rx": "FAIL byte0 got20 expectedAA",
+  "fixed_rx": "PASS264bytes all values, framing/glitch/reset",
+  "physical_loader": "PASS10 checks KKKKWOK42851062 and CRC/reset",
+  "board_fixed_rx": "NOT_RUN",
+  "timing_closed": false,
+  "files": [
+    {
+      "path": "src/ctrl/uart_rx.v",
+      "sha256": "bd1700de878f472963b81ba55df7d958b98ed932ba096997cdd6a6e7bbf58dcb"
+    },
+    {
+      "path": "sim/tb_uart_rx.sv",
+      "sha256": "7f4a9a49a69dbfe44b79c05ac14050cad9106d19bcd64d200d86f49f73595ff7"
+    },
+    {
+      "path": "sim/tb_weight_loader.sv",
+      "sha256": "759e1b0e67f22c30f3a978ae57d4c18f93a1ac81dd1e92c5be41e16e209658cd"
+    },
+    {
+      "path": "sim/run_sim.py",
+      "sha256": "0ddc39df8a1f4db54eab5284b5ef63ea6973a9ae1375fab8f4b31bf7b9e5488a"
+    },
+    {
+      "path": "build/board_rv_20261102_1208/uart_last.bin",
+      "sha256": "8d7d860a7de89bfa741b988c591376dbc0f65eb1cfa90b6e1713f7cc5939c45f"
+    },
+    {
+      "path": "build/board_rv_20261102_1208/board_check_program.log",
+      "sha256": "292ca37d87e8901c478988784d005196f08041709f1b3dfd191749a37eccb4a0"
+    },
+    {
+      "path": "build/board_rv_20261102_1208/rv-weight-upload-20261102.log",
+      "sha256": "24093f84ac883fad1edaac2886f0847bf3584559af41229e0ecfbb7627c112e5"
+    },
+    {
+      "path": "build/board_rv_20261102_1208/uart_rx_before_fix.log",
+      "sha256": "d7d8b26d984659a1ba1bfa84576eb93a94af7300695d13759f330a22974c2605"
+    },
+    {
+      "path": "build/sim/uart_rx/run.log",
+      "sha256": "b2380860cb47c8046285cfab890ed510dee3df2b1297a57fbc1a91d93aa91697"
+    },
+    {
+      "path": "build/sim/weight_loader_serial/run.log",
+      "sha256": "1973e57ee492afc5c4bce9655aa11477c7d5c9c26db240397600e0cff4edd887"
+    },
+    {
+      "path": "build/sim/weight_loader/run.log",
+      "sha256": "89c05af14d65d98c1d52fa32539d211888d6396d1bdd673e652a9863d91bc18e"
+    }
+  ]
+}
