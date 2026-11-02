@@ -1012,3 +1012,9 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 ## 2026-11-02 23:10：Flash脱机启动评估
 
 - 核对100Pro两颗16MiB标称Flash及共享专用CFG_CLK，发现GTP_CFGCLK候选而未假设已可用；给出位流固化、Flash到DDR权重加载与UART恢复的分阶段方案/条件工时。仅评估和证据，无擦写或硬件修改。
+
+## 2026-11-02：Flash固化与五类主奏识别双任务交接
+
+- 新增docs/HANDOFF_FLASH_AND_GROUP5_20261102.md，统一两项工作的目标、已完成/未执行状态、资产位置、复用边界、CPU职责、实施顺序和验收标准。
+- 明确Flash先持久位流再验证用户读/流式权重加载；五类先训练split校准与双头INT8评估，再130帧RTL/MMIO/CPU/UI迁移，最终集成冷启动。
+- 保留八类板级基线、时序FAIL及未接音源限制。本轮仅文档，引用检查通过，无PDS/Flash/烧录或功能回归重跑。
