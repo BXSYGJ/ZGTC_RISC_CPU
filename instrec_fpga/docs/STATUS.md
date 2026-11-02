@@ -1,5 +1,13 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-02 12:51：外部 I2S 波形补测复现并修复一位采样偏移
+
+- 新增i2s_capture Verilator入口：真实i2s_clk_gen接i2s_rx，测试源只观察物理BCK下降沿输出Philips I2S 16bit紧凑帧，不使用接收器内部phase驱动数据。旧RTL明确FAIL：左声道发送0x1235却收到0x091A，证据build/sim/i2s_capture/before_fix.log保留。
+- 根因是发生器同时寄存tick与新phase；接收器消费tick时看到的是边沿后的phase，却按边沿前even phase判断上升沿。改为odd phase采样，MSB通道标签由phase2改3、LSB完成由phase0改1。
+- 修复后左右交替16个字逐值匹配，包括正负/零/全1/交替位；静态SD idle置位、活动清除、帧中复位与重新接收全部PASS。RTL59文件0 violation，完整pytest432 passed/4 skipped；结构化证据reports/i2s_capture_validation_20261102.json。
+- 本次未运行PDS、未烧录、未操作cdt；板上仍为显示分支20B31B08候选，等待用户屏幕反馈。此结论仅证明16bit紧凑Philips帧RTL功能，不能称真实麦克风/音频板级通过；top_rv_core的SD仍接0，外部I2S引脚整合尚待完成。
+- 下一步保持显示候选供验收，同时继续RV外部音频接线与完整位流时序、UART修复版权重WOK验证；不要把当前I2S修复已包含在旧位流中。
+
 ## 2026-11-02 12:44：显示专用修复位流已完成并烧录，待屏幕验收
 
 - codex/display-demo（源提交8d5382a2）补接底板G25物理HDMI复位，固定piano演示柱与文本一致，烧录脚本缺失program成功证据时不再误报PASS。RTL59文件0 violation，烧录契约/安全39项PASS。

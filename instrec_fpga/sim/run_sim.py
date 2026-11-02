@@ -274,6 +274,14 @@ register(Case(
 ))
 
 register(Case(
+    name="i2s_capture",
+    tb="tb_i2s_capture.sv",
+    rtl=["src/audio/i2s_clk_gen.v", "src/audio/i2s_rx.v"],
+    timeout=120,
+    description="physical Philips I2S source into generated clocks and receiver",
+))
+
+register(Case(
     name="uart_rx",
     tb="tb_uart_rx.sv",
     rtl=["src/ctrl/uart_rx.v"],

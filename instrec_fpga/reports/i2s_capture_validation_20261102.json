@@ -1,0 +1,42 @@
+{
+  "time": "2026-11-02T12:50:08.846469",
+  "scope": "RTL simulation only; board remains display-demo 20B31B08",
+  "stimulus": "External Philips I2S source changes SD on physical BCK falling edges, independent of internal phase/tick",
+  "before_fix": {
+    "first_left_expected": "0x1235",
+    "first_left_received": "0x091A",
+    "verdict": "FAIL"
+  },
+  "fix": "Consume registered post-edge phase: sample odd phase; MSB tag phase3; LSB complete phase1",
+  "after_fix": {
+    "words": 16,
+    "channels": "alternating L/R",
+    "patterns": [
+      "1235",
+      "ABCD",
+      "8001",
+      "7FFE",
+      "0000",
+      "FFFF",
+      "A55A",
+      "5AA5"
+    ],
+    "idle_assert": true,
+    "activity_recovery": true,
+    "mid_frame_reset_recovery": true,
+    "verdict": "PASS"
+  },
+  "board_audio": "NOT_VERIFIED",
+  "rv_external_i2s": "NOT_CONNECTED (current top_rv_core SD tied zero)",
+  "hashes": {
+    "instrec_fpga\\src\\audio\\i2s_rx.v": "b9664a02cc88309f0a1483291754d68fe207917650b73ca0585126d55648e033",
+    "instrec_fpga\\sim\\tb_i2s_capture.sv": "b0a2c812061bcaf9ff887d80656d960997cfe7a7ae06a07ef2cc8578c6fa33a2",
+    "instrec_fpga\\build\\sim\\i2s_capture\\before_fix.log": "54ba131a4e16758aaedcd8e9a00632288a47994ce36fe446a3aa15ed504ce3e3",
+    "instrec_fpga\\build\\sim\\i2s_capture\\run.log": "290293ef2ea607cdcbd415420508d100ca46df9aa4a6bbeadd8e55571de4f782"
+  },
+  "pytest": {
+    "passed": 432,
+    "skipped": 4
+  },
+  "rtl_violations": 0
+}

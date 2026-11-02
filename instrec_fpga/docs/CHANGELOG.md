@@ -824,3 +824,8 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 ## 2026-11-02 12:44：显示修复候选构建与板级冒烟
 
 - G25复位/CDC显示分支六阶段完成，All Constraints Met，+1.191ns；20B31B08...605854BE成功烧录，UIDEMO/G07。实际屏幕仍待用户反馈，未宣称显示通过。
+
+## 2026-11-02 12:51：I2S实际BCK边沿回归与采样修复
+
+- 外部串行源复现0x1235误收0x091A，按registered post-edge phase修正上升沿采样、MSB通道标签及LSB完成点。
+- 新增i2s_capture，16字/idle/活动恢复/帧中复位PASS；RTL0违规，全量432 passed/4 skipped，板级未重烧。

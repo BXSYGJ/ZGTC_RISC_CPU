@@ -17,7 +17,9 @@
 //
 // Sample point: the BCK rising edge happens on the tick where bck_phase
 // goes even -> odd, so the sample enable is:
-//     sample_en = bck_tick & ~bck_phase[0]
+//     sample_en = bck_tick & bck_phase[0]
+// Both signals are registered by the generator; bck_phase is the NEW
+// phase when the receiver consumes the tick one clk_nco cycle later.
 //
 // Bit-to-phase mapping (Philips I2S, 16-bit compact, MSB first, delayed
 // 1 BCK after the LRCK edge - bit-level self-check table):
@@ -29,12 +31,12 @@
 //   The serial stream is therefore continuous across the frame boundary
 //   (the phase 0->1 sample of a half frame is the previous word's LSB),
 //   and a plain 16-bit shift register left-shifting on every sample_en
-//   captures each word seamlessly: when bit0 is shifted in at phase==0,
+//   captures each word seamlessly: when bit0 is shifted in at post-edge phase==1,
 //   sr holds the complete 16-bit word of the PREVIOUS half frame
 //   (the frame whose channel level was latched at its MSB sample).
 //
 // Channel tagging: i2s_lrck is latched at the MSB sample instant
-// (phase==2 && sample_en); at that moment lrck already carries the
+// (phase==3 && sample_en); at that moment lrck already carries the
 // current half frame's level. word_ch=0 -> LEFT (pcm_l), 1 -> RIGHT.
 //
 // Word completion timing (T/T+1 registered output): at the bit0 sample
@@ -88,9 +90,10 @@ module i2s_rx (
     end
 
     // ------------------------------------------------------------------
-    // Sample enable: BCK rising-edge tick (phase even -> odd).
+    // Tick and phase are registered together by i2s_clk_gen. The consumer
+    // sees the POST-edge phase: odd means the physical BCK rising edge.
     // ------------------------------------------------------------------
-    wire sample_en = bck_tick & ~bck_phase[0];
+    wire sample_en = bck_tick & bck_phase[0];
 
     // ------------------------------------------------------------------
     // Serial-to-parallel: continuous 16-bit shift register.
@@ -121,14 +124,14 @@ module i2s_rx (
                 // Shift the sampled bit (MSB first, continuous stream).
                 sr <= {sr[14:0], sd_sync};
 
-                if (bck_phase == 5'd2) begin
+                if (bck_phase == 5'd3) begin
                     // bit15 sample instant: latch the channel level of
                     // the word now being received (LRCK has already
                     // settled to this half frame's level).
                     word_ch <= i2s_lrck;
                 end
 
-                if (bck_phase == 5'd0) begin
+                if (bck_phase == 5'd1) begin
                     // bit0 sample instant: the shift register now holds
                     // the complete word of the previous half frame.
                     // Stage it; emit on the next clk_nco cycle.
