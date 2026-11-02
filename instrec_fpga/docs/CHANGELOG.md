@@ -975,3 +975,8 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 ## 2026-11-02 21:34：恢复JTAG与显示保底
 
 - FTDI恢复，读状态确认上电未配置；安全复用服务烧回已验收602AB321，done1/CRC0、UIDEMO38129字节，本次屏幕反馈待确认。新版完整PNR详细布线中，无最终时序/新位流。
+
+## 2026-11-02 22:02：新dashboard完整诊断版烧录与文字路径修复
+
+- 2673246E完整位流产出并安全烧录，CPU/MMIO/ISA/DDR/WOK与12秒6轮推理完成PASS；新版实屏待用户确认。最终十表时序仍FAIL，报告保留全部证据/hash，不宣称稳定或识别准确。
+- 百分比glyph在tile选择前并行寄存，四拍视频与五状态实际RTL全帧逐字节一致，dashboard_ui PASS、lint61/0；新源尚未PDS。PDS及监控正常退出，fallback保留。

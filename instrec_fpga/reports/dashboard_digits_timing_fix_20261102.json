@@ -1,0 +1,17 @@
+{
+  "change": "Register formatted percentage glyphs before tile selection; video latency unchanged",
+  "rtl_test": "dashboard_ui PASS 23.1s",
+  "all_five_rasters_byte_identical": true,
+  "frame_sha256": {
+    "waiting": "657bf95d3351b5adb9881c23bb6766bd8a337b9722cc4eea07ba439e7c5f0349",
+    "ready": "2f3b19c23cc0439c66392fada18ef54b7392233b4c3f2587e8b71349f08b14ed",
+    "full_scale": "712251a9bc7e06170fb2cf7de2d17659ab08bbab51e668580eea676a227f092a",
+    "zero": "ddfbdf3a03294240d4316af202b3482668b590165ecbf9effc968f8d614c3997",
+    "clamped": "712251a9bc7e06170fb2cf7de2d17659ab08bbab51e668580eea676a227f092a"
+  },
+  "rtl_sha256": "8237f05100f7cf5ec1a2b3d6f05ee09440a1c58013cf1404ce58a2cacaf1bc50",
+  "log_sha256": "d2871acdab0155eaf04ee981fb40246a640be0d7a80c0bf0cacd581a522d8b56",
+  "lint": "61 files / 0 violations",
+  "pds_validation": "NOT RUN for new source",
+  "currently_programmed_bitstream": "2673246ECAC0ECB3E00721C53EFD6B941CC0E8CA44022064AE36C21941D89318"
+}

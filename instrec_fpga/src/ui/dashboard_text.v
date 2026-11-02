@@ -30,9 +30,29 @@ module dashboard_text #(parameter SIMULATION = 0) (
     reg de_s1, de_s2, enabled;
     reg wave_s1, feature_s1, result_s1;
     reg [3:0] class_s1;
-    reg [63:0] percentages_s1;
+    // Format all lanes before tile selection to shorten the tile-to-font path.
+    // This register replaces percentages_s1; video latency stays unchanged.
+    reg [31:0] formatted_pct [0:7];
+    integer pct_lane;
+    function [31:0] format_percent;
+        input [7:0] value;
+        input valid;
+        reg [7:0] clamped;
+        reg [6:0] hundreds, tens, ones;
+        begin
+            clamped = value > 100 ? 8'd100 : value;
+            hundreds = valid && clamped == 100 ? 7'd49 : 7'd32;
+            tens = !valid ? 7'd45 : (clamped >= 10 ? 7'd48 + (clamped/10)%10 : 7'd32);
+            ones = !valid ? 7'd45 : 7'd48 + clamped%10;
+            format_percent = {ascii_ids[37],ascii_ids[ones],ascii_ids[tens],ascii_ids[hundreds]};
+        end
+    endfunction
+    always @(posedge pix_clk) begin
+        for (pct_lane = 0; pct_lane < 8; pct_lane = pct_lane + 1)
+            formatted_pct[pct_lane] <= format_percent(percentages[pct_lane*8 +: 8],result_ready && class_idx < 8);
+    end
     reg [23:0] color_s2, selected_color;
-    reg [7:0] glyph, ascii_code, pct;
+    reg [7:0] glyph;
     reg [3:0] slot;
     reg [4:0] selected_row;
     reg [3:0] selected_bit;
@@ -41,9 +61,7 @@ module dashboard_text #(parameter SIMULATION = 0) (
         selected_row = row_s1;
         selected_bit = bit_s1;
         enabled = 1'b1;
-        ascii_code = 7'd32;
         slot = tile_s1[7:4];
-        pct = 0;
         case (tile_s1[15:12])
             4'd1: selected_color = 24'heaf0f7;
             4'd3: selected_color = 24'h36d6c5;
@@ -59,15 +77,8 @@ module dashboard_text #(parameter SIMULATION = 0) (
             end
             4'd2: begin
                 if (slot == 8) slot = class_s1;
-                if (slot < 8) pct = percentages_s1[slot*8 +: 8];
-                if (pct > 100) pct = 100;
-                case (tile_s1[3:0])
-                    0: ascii_code = (result_s1 && pct == 100) ? 7'd49 : 7'd32;
-                    1: ascii_code = !result_s1 ? 7'd45 : (pct >= 10 ? (7'd48 + (pct/10)%10) : 7'd32);
-                    2: ascii_code = !result_s1 ? 7'd45 : (7'd48 + pct%10);
-                    default: ascii_code = 7'd37;
-                endcase
-                glyph = ascii_ids[ascii_code[6:0]];
+                if (slot < 8) glyph = formatted_pct[slot][tile_s1[1:0]*8 +: 8];
+                else glyph = formatted_pct[0][tile_s1[1:0]*8 +: 8];
                 if (result_s1 && slot == class_s1) selected_color = 24'h36d6c5;
             end
             4'd4: enabled = !wave_s1;
@@ -86,7 +97,6 @@ module dashboard_text #(parameter SIMULATION = 0) (
         feature_s1 <= feature_ready;
         result_s1 <= result_ready && class_idx < 8;
         class_s1 <= class_idx;
-        percentages_s1 <= percentages;
         bits_s2 <= font_bits[{glyph,selected_row}];
         bit_s2 <= selected_bit;
         color_s2 <= selected_color;

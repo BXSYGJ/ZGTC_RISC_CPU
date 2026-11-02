@@ -1,5 +1,14 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-02 22:02：新版完整系统已烧录，启动/DDR/WOK/六轮推理PASS；时序仍FAIL
+
+- run211104的PNR/report/bitstream均正常结束，21:55:03生成2673246ECAC0ECB3E00721C53EFD6B941CC0E8CA44022064AE36C21941D89318；PDS/monitor零残留，临时防休眠已释放。报告ui_dashboard_full_build_20261102.json保存位流/完整时序/源清单/阶段日志/监控hash。
+- 完整十表时序FAIL：slow pix setup -2.708ns/32端点，core setup -1.267ns/1393端点；slow/fast core hold -0.011/-0.009ns各1端点。仅诊断候选，不是稳定交付。具体路径为tiles RAM经百分比格式化到font RAM、DDR FIFO读经256-bit self_test比较到状态、NPU store到conv RAM写入；后两项待修复。
+- 安全复用JS9040/cfg46156烧录该完整新UI候选，program成功/done1/CRC0，实收RV32 BOOT/MMIO OK/ISA OK/DDROK；691040B权重2700帧上传返回WOK FA0D5236、UPLOAD OK。随后12秒6次NPU完成/CPU回读，每轮约3236万cycles。reports/board_dashboard_20261102_2155.json含唯一raw/TCL/UART/上传日志hash。启动捕获含烧录前UIDEMO残留，不能将其当新设计输出；上述启动token与上传后NPU行均来自新完整设计。
+- 当前板上为2673246E完整系统，已询问新版中文dashboard是否稳定，用户屏幕反馈待到；此前602AB321显示fallback完整保留，不覆盖。外部音源未接，不宣称识别准确率。
+- 已推广预先验证的文字时序修复：八路百分比先并行寄存为glyph包，再由tile选择，移除tile读后十进制算术，视频仍四拍。dashboard_ui实际RTL重跑PASS23.1s，五状态全帧与原始输出逐字节/hash一致；lint61/0，报告dashboard_digits_timing_fix_20261102.json。此修改尚未PDS，当前烧录位流不包含它，不能声称像素负裕量已消除。
+- 下一步先收实屏反馈，异常时恢复602AB321；继续修复self_test比较与store/conv路径，跑相关回归。新RTL须新建唯一完整资源门控，再限时PNR读取全部时序；旧映射库不得冒充新源。当前无PDS运行，既有cdt均未动。
+
 ## 2026-11-02 21:34：FTDI恢复，显示保底已重新烧录；新版PNR详细布线
 
 - 21:30系统已枚举FTDI A/B与COM16/17，COM5亦正常；安全复用JS9040/cfg46156读取状态done0/CRC0，确认重新上电后未配置，报告board_online_status_20261102_2130.json。无需继续要求下载器重插。
