@@ -10,7 +10,9 @@
 // with npu_feat_rd_en (NPU priority). start only when the NPU is idle.
 // ---------------------------------------------------------------------------
 
-module feat_copy_engine (
+module feat_copy_engine #(
+    parameter integer SOURCE_FRAME_MAJOR = 0
+) (
     input  wire        core_clk,
     input  wire        core_rst_n,
 
@@ -36,6 +38,9 @@ module feat_copy_engine (
     reg        run;
     reg        fin;       // last byte written; flip page on the next beat
     reg        rd_pending;
+    wire [14:0] display_addr = {idx_q[5:0], 8'd0} +
+                              {8'd0, idx_q[5:0], 1'd0} +
+                              {6'd0, idx_q[14:6]};
 
     // The address is sampled by the shared synchronous RAM on this edge.
     // Its response belongs to us on the following edge even if the NPU
@@ -75,7 +80,7 @@ module feat_copy_engine (
                     idx <= idx + 15'd1;
                 end
                 if (rd_pending) begin
-                    dst_addr <= idx_q;
+                    dst_addr <= SOURCE_FRAME_MAJOR ? display_addr : idx_q;
                     dst_data <= src_data;
                     dst_we   <= 1'b1;
                     if (idx_q == DEPTH - 1) fin <= 1'b1;

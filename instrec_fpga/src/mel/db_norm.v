@@ -90,13 +90,11 @@
 //     start, so the consumer (standardize, start wireable to
 //     stats_valid) may sample them on any later cycle as well.
 //
-// Cycle budget (125 MHz core_clk, REQ-FTR-007 / design.md Sec. 3.8):
-//   scan 1 (max):      2 cycles/element * 16576 = 33152 cycles
-//   scan 2 (dB+sums):  2 cycles/element * 16576 = 33152 cycles
-//   total ~66.3k cycles = 0.53 ms, inside the Sec. 3.5/3.8 second-pass
-//   budget (2x16512x4 = 132k cycles for both scans) with 2x headroom.
-//   Full second pass (db_norm + standardize) ~ 116k cycles = 0.93 ms,
-//   far below the 3 s window cadence (21x margin on the whole engine).
+// Cycle budget at 125 MHz: max scan is 2 beats/element; conversion uses
+// four beats (RAM read, difference, multiply, clamp/write), followed by
+// the registered-statistic flush. This is about 99.5k clocks / 0.8 ms.
+// Together with standardize the second pass is about 1.6 ms. The complete
+// Mel extraction requirement REQ-FTR-007 is 150 ms, including the first pass.
 // -----------------------------------------------------------------------------
 
 module db_norm #(
@@ -140,16 +138,20 @@ module db_norm #(
     // ------------------------------------------------------------------
     // consumes spec_rd_data one cycle later (sync RAM latency).
     // ------------------------------------------------------------------
-    localparam [2:0] S_IDLE      = 3'd0;
-    localparam [2:0] S_MAX_RD    = 3'd1;
-    localparam [2:0] S_MAX_CALC  = 3'd2;
-    localparam [2:0] S_DB_RD     = 3'd3;
-    localparam [2:0] S_DB_CALC   = 3'd4;
-    localparam [2:0] S_DB_FLUSH  = 3'd5;
-    localparam [2:0] S_DB_SQ_FLUSH = 3'd6;
-    localparam [2:0] S_DB_SUM_FLUSH = 3'd7;
+    localparam [3:0] S_IDLE      = 4'd0;
+    localparam [3:0] S_MAX_RD    = 4'd1;
+    localparam [3:0] S_MAX_CALC  = 4'd2;
+    localparam [3:0] S_DB_RD     = 4'd3;
+    localparam [3:0] S_DB_CALC   = 4'd4;
+    localparam [3:0] S_DB_FLUSH  = 4'd5;
+    localparam [3:0] S_DB_SQ_FLUSH = 4'd6;
+    localparam [3:0] S_DB_SUM_FLUSH = 4'd7;
 
-    reg [2:0]        state;
+    localparam [3:0] S_DB_DIFF = 4'd8;
+    localparam [3:0] S_DB_MUL = 4'd9;
+    reg [3:0]        state;
+    reg signed [16:0] diff_pipe;
+    reg signed [26:0] mul_pipe;
     reg [14:0]       elem_cnt;      // current element address (frame-major)
     reg signed [15:0] max_l2;       // running max of log2_q88 (s16 init min)
     reg signed [15:0] db_value_pipe;
@@ -167,9 +169,9 @@ module db_norm #(
     // dB datapath (combinational, golden db_convert bit-exact).
     // ------------------------------------------------------------------
     wire signed [16:0] diff_s17 = spec_rd_data - max_l2;      // <= 0
-    wire signed [26:0] db_mul_s27 = diff_s17 * DB_NUM_S;      // diff * 775
+    wire signed [26:0] db_mul_s27 = diff_pipe * DB_NUM_S;      // diff * 775
     // rhu_shift(db_mul, 8) = floor((db_mul + 128) / 256)
-    wire signed [26:0] db_rhu_s27 = $signed(db_mul_s27 + 27'sd128) >>> 8;
+    wire signed [26:0] db_rhu_s27 = $signed(mul_pipe + 27'sd128) >>> 8;
     // merged sat16 + top_db floor + upper clamp (proof in header)
     wire signed [15:0] db_s16 =
         (db_rhu_s27 < $signed({{11{DB_TOP_S[15]}}, DB_TOP_S})) ? DB_TOP_S :
@@ -191,6 +193,12 @@ module db_norm #(
     assign db_wr_data   = db_s16;
 
     assign busy = (state != S_IDLE);
+
+    // DSP payload needs no reset; the sequencer gates every use.
+    always @(posedge clk) begin
+        if (state == S_DB_DIFF) diff_pipe <= diff_s17;
+        if (state == S_DB_MUL) mul_pipe <= db_mul_s27;
+    end
 
     // ------------------------------------------------------------------
     // Scan sequencer.
@@ -245,6 +253,12 @@ module db_norm #(
                     end
                     db_sq_pipe <= db_sq_product[31:0];
                     db_sq_pipe_valid <= db_value_pipe_valid;
+                    state <= S_DB_DIFF;
+                end
+                S_DB_DIFF: begin
+                    state <= S_DB_MUL;
+                end
+                S_DB_MUL: begin
                     state <= S_DB_CALC;
                 end
                 S_DB_CALC: begin

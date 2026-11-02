@@ -7,7 +7,9 @@
 // cycles before colouring. This module is that shift register.
 // ---------------------------------------------------------------------------
 
-module ui_coord_delay (
+module ui_coord_delay #(
+    parameter integer DELAY = 3
+) (
     input  wire        pix_clk,
     input  wire        rst_pix_n,
     input  wire [10:0] x,
@@ -28,9 +30,12 @@ module ui_coord_delay (
             y_p1 <= 11'd0; y_p2 <= 11'd0; y_d <= 11'd0;
             de_p1 <= 1'b0; de_p2 <= 1'b0; de_d <= 1'b0;
         end else begin
-            x_p1 <= x;  x_p2 <= x_p1;  x_d <= x_p2;
-            y_p1 <= y;  y_p2 <= y_p1;  y_d <= y_p2;
-            de_p1 <= de; de_p2 <= de_p1; de_d <= de_p2;
+            x_p1 <= x;  x_p2 <= x_p1;
+            y_p1 <= y;  y_p2 <= y_p1;
+            de_p1 <= de; de_p2 <= de_p1;
+            x_d <= (DELAY == 1) ? x : (DELAY == 2) ? x_p1 : x_p2;
+            y_d <= (DELAY == 1) ? y : (DELAY == 2) ? y_p1 : y_p2;
+            de_d <= (DELAY == 1) ? de : (DELAY == 2) ? de_p1 : de_p2;
         end
     end
 

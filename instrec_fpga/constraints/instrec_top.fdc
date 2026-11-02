@@ -394,3 +394,32 @@ define_attribute {p:hdmi_rst_n} {PAP_IO_STANDARD} {LVCMOS33}
 define_attribute {p:hdmi_rst_n} {PAP_IO_DRIVE} {4}
 define_attribute {p:hdmi_rst_n} {PAP_IO_SLEW} {FAST}
 define_attribute {p:hdmi_rst_n} {PAP_IO_NONE} {TRUE}
+
+# Pack HDMI data and sync launch registers next to their output pads.
+define_attribute {p:vout_de} {PAP_IO_REGISTER} {TRUE}
+define_attribute {p:vout_hs} {PAP_IO_REGISTER} {TRUE}
+define_attribute {p:vout_vs} {PAP_IO_REGISTER} {TRUE}
+define_attribute {p:vout_data[0]} {PAP_IO_REGISTER} {TRUE}
+define_attribute {p:vout_data[1]} {PAP_IO_REGISTER} {TRUE}
+define_attribute {p:vout_data[2]} {PAP_IO_REGISTER} {TRUE}
+define_attribute {p:vout_data[3]} {PAP_IO_REGISTER} {TRUE}
+define_attribute {p:vout_data[4]} {PAP_IO_REGISTER} {TRUE}
+define_attribute {p:vout_data[5]} {PAP_IO_REGISTER} {TRUE}
+define_attribute {p:vout_data[6]} {PAP_IO_REGISTER} {TRUE}
+define_attribute {p:vout_data[7]} {PAP_IO_REGISTER} {TRUE}
+define_attribute {p:vout_data[8]} {PAP_IO_REGISTER} {TRUE}
+define_attribute {p:vout_data[9]} {PAP_IO_REGISTER} {TRUE}
+define_attribute {p:vout_data[10]} {PAP_IO_REGISTER} {TRUE}
+define_attribute {p:vout_data[11]} {PAP_IO_REGISTER} {TRUE}
+define_attribute {p:vout_data[12]} {PAP_IO_REGISTER} {TRUE}
+define_attribute {p:vout_data[13]} {PAP_IO_REGISTER} {TRUE}
+define_attribute {p:vout_data[14]} {PAP_IO_REGISTER} {TRUE}
+define_attribute {p:vout_data[15]} {PAP_IO_REGISTER} {TRUE}
+define_attribute {p:vout_data[16]} {PAP_IO_REGISTER} {TRUE}
+define_attribute {p:vout_data[17]} {PAP_IO_REGISTER} {TRUE}
+define_attribute {p:vout_data[18]} {PAP_IO_REGISTER} {TRUE}
+define_attribute {p:vout_data[19]} {PAP_IO_REGISTER} {TRUE}
+define_attribute {p:vout_data[20]} {PAP_IO_REGISTER} {TRUE}
+define_attribute {p:vout_data[21]} {PAP_IO_REGISTER} {TRUE}
+define_attribute {p:vout_data[22]} {PAP_IO_REGISTER} {TRUE}
+define_attribute {p:vout_data[23]} {PAP_IO_REGISTER} {TRUE}

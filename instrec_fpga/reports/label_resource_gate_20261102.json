@@ -1,0 +1,28 @@
+{
+  "run": "instrec_fpga\\build\\pds\\20261102-165021-256e7b77",
+  "source_commit": "416c9b6d",
+  "compile_synthesize_dev_map": "PASS",
+  "source_validation": {
+    "CheckedUtc": "2026-11-02T09:05:59.0027954Z",
+    "Unchanged": true,
+    "ChangedFiles": []
+  },
+  "resources": {
+    "lut": 32156,
+    "ff": 35073,
+    "drm": 133.5,
+    "drm_capacity": 155,
+    "apm": 90
+  },
+  "label_rom": "256x6 GTP_DRM18K_E1 inferred",
+  "pnr": "NOT_RUN",
+  "bitstream": "NONE",
+  "decision": "No PNR: user identified dynamic UI corruption; add display fixes and deeper dB conversion pipeline before a new source build",
+  "hashes": {
+    "source-manifest.json": "9e7675ef4ea34e944b488f1f85404caf8d60b3fdde99095cd1c94bd9a445d7ea",
+    "source-validation.json": "7f2ce260b6a0c9844cf01cba70fa6ad6f4b260506721e6172f5a5b95449ca145",
+    "manifest.json": "8f208ba513aa35defbf5130e5692c36e5a53604a604653570993f74cffb0a73f",
+    "device_map/instrec_top.dmr": "17e9dd8da89965c3dec9af1ddd4e08bdfcf00189237cfeca6db3a319d3496908",
+    "synthesize/apm_drm_lutram_utilization.log": "e5a3b7e75bb594d78f74a7886775081ad40e66097f66f871131c9b387d574f6f"
+  }
+}

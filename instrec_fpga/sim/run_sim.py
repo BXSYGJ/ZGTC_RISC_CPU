@@ -306,6 +306,15 @@ register(Case(
 ))
 
 register(Case(
+    name="dynamic_ui",
+    tb="tb_dynamic_ui.sv",
+    rtl=["src/ui/bars_data.v", "src/ui/bars_disp.v", "src/ui/ui_coord_delay.v",
+         "src/ui/feat_copy_engine.v", "src/ui/feat_page_buf.v", "src/ui/spectrum_disp.v"],
+    timeout=120,
+    description="coherent frame snapshots, transposed feature pages and pixel alignment",
+))
+
+register(Case(
     name="requant_reset",
     tb="tb_requant_reset.sv",
     rtl=["src/npu/requant_unit.v"],

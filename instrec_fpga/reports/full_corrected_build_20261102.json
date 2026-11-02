@@ -10,8 +10,7 @@
   "full_timing": "FAIL",
   "timing_report": "reports/full_timing_corrected_20261102.json",
   "bitstream_sha256": "CDE1D2F660CA0A44D3BF212D5EF0DC8DA0B40B19F12C1CDDA3E4390A17A2B4F9",
-  "bitstream_programmed": false,
-  "reason_not_programmed": "Setup violations remain; user-confirmed display fallback retained on board",
+  "bitstream_programmed": true,
   "post_pnr_resources": [
     "LUT total: 32074/66600 (48%)",
     "FF total: 35059/133200 (26%)",
@@ -50,5 +49,7 @@
     "place_route/instrec_top.prr": "d7934e141a70a8db00b1ec89754d6da3948c9e11146fe0e4b09f52c95a5ae838",
     "report_timing/instrec_top.rtr": "81f89ade9166908627912afc0a503cc67158961225a7f92d9a338fad5eb344b4",
     "full-monitor.jsonl": "055adba358a33971d7923fcc0357a567115d6f352beaf29636b50cdf13927784"
-  }
+  },
+  "programming_scope": "Diagnostic only at16:55 after FTDI USB replug; negative timing remains, not accepted as stable delivery",
+  "board_report": "reports/full_cde_diagnostic_board_20261102_1655.json"
 }

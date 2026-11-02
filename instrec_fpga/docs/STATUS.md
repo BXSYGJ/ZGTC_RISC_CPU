@@ -1,5 +1,15 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-02 17:18：完整UI可见但动态内容花屏；修复布局/换页/快照与dB转换分拍，回归通过
+
+- 用户重插FTDI USB后，CDE1D2F6诊断位流成功program/done1/CRC0，实收RV32 BOOT/MMIO/ISA/DDROK；权重2700帧、WOK FA0D5236成功，12秒6次NPU完成/CPU回读。用户确认有UI，但频谱/置信度出现错位、撕裂、花块或条纹，属于显示内容验收FAIL，不再是无信号。报告full_cde_diagnostic_board_20261102_1655.json含唯一raw archive/hash。此版时序仍FAIL，未接音源，不宣称准确率。
+- 下载器随后再次从PnP消失（CM_PROB_PHANTOM），17:07恢复演示尝试在烧录前被阻止；板上目前仍CDE1D2F6，不是显示保底。既有cdt_js9040/cdt_cfg46156保持，未终止/重启。无需现在反复重插，下一次烧录前再处理。
+- run165021-256e7b77单路compile/synthesize/dev_map成功，SourcesUnchanged=true，32156LUT/35073FF/133.5DRM/90APM；label256x6已推断DRM18K。按门控止于映射，无PNR/无位流；新增显示修复后不能复用此旧源数据库。报告label_resource_gate_20261102.json。
+- 已修复实际UI接线问题：frame-major特征复制时转为64x258行布局；频谱首次完整页前屏蔽，经toggle同步后只在vsync换页；概率流收齐8类后以held bundle/request-ack传递，类别与8路概率同帧提交，拒绝部分流、百分比钳位。bars采用两拍坐标+一拍绘制，spectrum直接原坐标、地址/RAM/色彩三拍，valid同延迟，均与waveform三拍对齐。HDMI27个数据/同步输出增加PAP_IO_REGISTER约束，实际打包与物理采样仍待PDS/板测。
+- 路径详细预算显示RAM/dB转换自身仍长，因此db_norm再分RAM读/差值/乘法/舍入写四拍，统计沿用上拍寄存累加；payload无reset，FSM保证初始化后才使用。Mel5144053cycles、16512特征golden0差异，实际125MHz约41.2ms，低于150ms需求。
+- dynamic_ui新RTL测试PASS：两窗口33024页字节/转置/读口stall/帧边界换页/初始化屏蔽，概率完整快照/部分流拒绝/饱和/复位及帧中稳定；16000坐标逐像素RGB/on三拍对齐PASS。mel/mel_credit/db_norm_stats/text_pipeline/ui_render/full_top_ctrl另6项PASS；pytest432passed/4skipped，lint59/0。证据dynamic_ui_fix_validation_20261102.json。新源尚无PDS时序/新位流。
+- 下一步提交后单PDS资源门控，核验IO寄存打包、DRM容量，再受控PNR。显示恢复与整机动态验收未完成；真实音源仍未接。
+
 ## 2026-11-02 16:50：完整修正版时序未过，已针对剩余两条路径修复并完成功能回归
 
 - run20261102-155516-512e7322六阶段正常结束，SourcesUnchanged=true，位流CDE1D2F660CA0A44D3BF212D5EF0DC8DA0B40B19F12C1CDDA3E4390A17A2B4F9；post-PNR32074LUT/35059FF/133DRM/90APM。完整10表报告FAIL：slow core setup -2.933ns/6584端点，pix setup -0.456ns/6端点；其他检查均PASS，音频与recovery旧违例消除。未烧此版，板上保留用户确认正常的602AB321彩条/UI。报告full_corrected_build_20261102.json、full_timing_corrected_20261102.json；PDS/monitor均正常退出。

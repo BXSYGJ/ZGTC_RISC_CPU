@@ -51,6 +51,8 @@ module spectrum_disp (
 
     // 5-stop heat map on the 8-bit value.
     reg [23:0] colour;
+    reg on_p1;
+    reg on_p2;
     always @* begin
         if (ram_data < 8'd32)        colour = 24'h00_00_20;
         else if (ram_data < 8'd96)   colour = 24'h00_20_80;
@@ -64,11 +66,15 @@ module spectrum_disp (
             ram_addr <= 15'd0;
             rgb      <= 24'd0;
             spec_on  <= 1'b0;
+            on_p1 <= 1'b0;
+            on_p2 <= 1'b0;
         end else begin
             if (in_region && de) ram_addr <= addr_c;
-            // The read data arrives one cycle after the address; keep the
-            // on-flag aligned with that returned byte.
-            spec_on <= de && in_region && page_ready;
+            // Address register, external RAM read, then colour register.
+            // Delay validity by the same three pixel edges.
+            on_p1 <= de && in_region && page_ready;
+            on_p2 <= on_p1;
+            spec_on <= on_p2;
             rgb     <= colour;
         end
     end

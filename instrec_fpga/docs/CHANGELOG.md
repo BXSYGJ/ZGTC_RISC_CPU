@@ -901,3 +901,9 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 - 完整CDE1D2F6候选六阶段完成，但core -2.933ns/pix -0.456ns；未烧录，失败报告与hash保留。显示保底保持用户实屏PASS。
 - db_norm累加改吃上拍dB寄存，文字标签改同步ROM/独立百分比寄存，原周期契约不变；Mel/反压/文字像素/新六窗口统计测试全PASS，pytest432passed/4skipped，lint0违规。
 - 修正构建WNS/WHS只取首clock行的误导字段，现取最差clock；资源门控与完整时序待新构建。补充音频验收文档的失败重烧与权重实际大小。
+
+## 2026-11-02 17:18：动态显示数据与像素链修复
+
+- CDE诊断版WOK/6轮CPU完成通过，用户实屏有UI但动态图形撕裂/花块，内容验收FAIL；FTDI再次离线使演示恢复未开始，板上仍CDE，失败证据留档。
+- 修复特征frame-major转置、完整页有效/帧边界换页、概率与类别完整bundle CDC、bars/spectrum图层对齐；新增动态双窗口/停顿/逐像素/快照复位RTL验收PASS。
+- db_norm差值/乘法进一步分拍，Mel16512项0差异且约41.2ms；新增HDMI输出IO寄存器约束待实际验证。全量pytest432passed4skipped、RTL7项PASS、lint0违规。旧label资源门控通过止于映射，无位流；新源需重建。

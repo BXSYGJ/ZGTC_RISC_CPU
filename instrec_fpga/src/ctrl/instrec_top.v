@@ -421,7 +421,7 @@ module instrec_top #(
     wire [23:0] bars_rgb;
     wire        bars_on;
 
-    ui_coord_delay u_bars_delay (
+    ui_coord_delay #(.DELAY(2)) u_bars_delay (
         .pix_clk   (pix_clk),
         .rst_pix_n (rst_pix_n),
         .x         (pix_x),
@@ -432,12 +432,16 @@ module instrec_top #(
         .de_d      (bars_de)
     );
 
+    wire [3:0] frame_class;
     bars_data u_bars_data (
         .core_clk    (core_clk),
         .core_rst_n  (core_clk_rst_n),
         .probs_valid (npu_probs_valid_u),
         .probs_pct   (npu_probs_pct_u),
         .probs_idx   (npu_probs_idx_u),
+        .top1        (npu_top1_u),
+        .frame_start (vsync_pulse),
+        .frame_class (frame_class),
         .pix_clk     (pix_clk),
         .pix_rst_n   (rst_pix_n),
         .pct0(b0), .pct1(b1), .pct2(b2), .pct3(b3),
@@ -456,29 +460,12 @@ module instrec_top #(
         .bars_on   (bars_on)
     );
 
-    // ---- Class label text overlay (M3): top-1 name + percentage ----
-    // top1 is quasi-static (one result per 3 s window), so a plain 2FF
-    // synchronizer into the pixel domain is adequate (same argument as
-    // bars_data; the frame may briefly mix old/new values, invisible at
-    // 0.33 Hz).
-    reg [3:0] top1_s0;
-    reg [3:0] top1_s1;
-
-    always @(posedge pix_clk or negedge rst_pix_n) begin
-        if (!rst_pix_n) begin
-            top1_s0 <= 4'd0;
-            top1_s1 <= 4'd0;
-        end else begin
-            top1_s0 <= npu_top1_u;
-            top1_s1 <= top1_s0;
-        end
-    end
-
+    // Class and percentages share one coherent frame-boundary snapshot.
     // Percentage of the top-1 class, selected from the eight latched bar
     // values already synchronized into the pixel domain by bars_data.
     reg [7:0] text_pct;
     always @* begin
-        case (top1_s1)
+        case (frame_class)
             4'd0:    text_pct = b0;
             4'd1:    text_pct = b1;
             4'd2:    text_pct = b2;
@@ -506,15 +493,13 @@ module instrec_top #(
         .pix_x     (pix_x),
         .pix_y     (pix_y),
         .de        (pix_de),
-        .class_idx ({4'd0, top1_s1}),
+        .class_idx ({4'd0, frame_class}),
         .pct       (text_pct),
         .rgb       (text_rgb),
         .text_on   (text_on)
     );
 
     wire [14:0] npu_feat_rd_addr;
-    wire [10:0] spec_x, spec_y;
-    wire        spec_de;
 
     // ---- Mel spectrogram chain (M3): copy the window into a double page,
     // then shade it in the pixel domain ----
@@ -526,7 +511,7 @@ module instrec_top #(
     wire        copy_dst_page;
     wire        copy_done_u;
 
-    feat_copy_engine u_feat_copy (
+    feat_copy_engine #(.SOURCE_FRAME_MAJOR(1)) u_feat_copy (
         .core_clk   (core_clk),
         .core_rst_n (core_clk_rst_n),
         .start      (mel_npu_start),
@@ -548,6 +533,7 @@ module instrec_top #(
     wire [14:0] spec_ram_addr;
     wire [7:0]  spec_ram_data;
 
+    wire spec_page_ready;
     feat_page_buf u_feat_page (
         .core_clk   (core_clk),
         .core_rst_n (core_clk_rst_n),
@@ -555,6 +541,9 @@ module instrec_top #(
         .wr_addr    (copy_dst_addr),
         .wr_data    (copy_dst_data),
         .wr_page    (copy_dst_page),
+        .copy_done  (copy_done_u),
+        .frame_start(vsync_pulse),
+        .page_ready (spec_page_ready),
         .pix_clk    (pix_clk),
         .pix_rst_n  (rst_pix_n),
         .rd_addr    (spec_ram_addr),
@@ -567,27 +556,16 @@ module instrec_top #(
     spectrum_disp u_spectrum (
         .pix_clk    (pix_clk),
         .rst_pix_n  (rst_pix_n),
-        .x          (spec_x),
-        .y          (spec_y),
-        .de         (spec_de),
+        .x          (pix_x),
+        .y          (pix_y),
+        .de         (pix_de),
         .ram_addr   (spec_ram_addr),
         .ram_data   (spec_ram_data),
-        .page_ready (1'b1),
+        .page_ready (spec_page_ready),
         .rgb        (spec_rgb),
         .spec_on    (spec_on)
     );
 
-
-    ui_coord_delay u_spec_delay (
-        .pix_clk   (pix_clk),
-        .rst_pix_n (rst_pix_n),
-        .x         (pix_x),
-        .y         (pix_y),
-        .de        (pix_de),
-        .x_d       (spec_x),
-        .y_d       (spec_y),
-        .de_d      (spec_de)
-    );
 
     ui_renderer u_ui_renderer (
         .pix_clk       (pix_clk),

@@ -1,0 +1,20 @@
+{
+  "ftdi_present": false,
+  "jtagserver_pids": [
+    9040
+  ],
+  "cdt_cfg_pids": [
+    46156
+  ],
+  "program_ok": false,
+  "status_raw": null,
+  "done": null,
+  "crc_err": null,
+  "uart_bytes": 0,
+  "uart_file": "D:/0000/111/001/Pango/ZGTC_RISC_CPU/instrec_fpga/build/uart_last.bin",
+  "expect": [
+    "DDROK"
+  ],
+  "expect_missing": [],
+  "verdict": "FAIL"
+}
