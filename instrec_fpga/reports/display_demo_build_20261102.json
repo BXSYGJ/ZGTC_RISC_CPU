@@ -1,0 +1,63 @@
+{
+  "branch": "codex/display-demo",
+  "source_commit": "8d5382a2",
+  "build_run": "20261102-124002-c2bc537c",
+  "source_unchanged": true,
+  "timing_summary": "All Constraints Met",
+  "slow_setup_wns_ns": 1.191,
+  "slow_hold_whs_ns": 0.338,
+  "resources": {
+    "LUT": 1035,
+    "FF": 948,
+    "DRM": 1,
+    "APM": 0
+  },
+  "physical_reset_pin": "G25",
+  "connector": "baseboard J9 HDMI OUT",
+  "display_confirmation": "PENDING_USER_FOR_FIXED_CANDIDATE",
+  "real_inference": false,
+  "files": {
+    "build\\pds\\20261102-124002-c2bc537c\\source-manifest.json": {
+      "sha256": "f718a656b7f6e50c77d30b45f0e3dd6e32e0130e82be249aeb895ab3c9aab22b",
+      "bytes": 10553
+    },
+    "build\\pds\\20261102-124002-c2bc537c\\report_timing\\top_ui_demo.rtr": {
+      "sha256": "796e30d46eb1c0b4119c9688d3ce8105ac0cbfac252bf8a11afab0b3e31020d2",
+      "bytes": 347076
+    },
+    "build\\pds\\20261102-124002-c2bc537c\\generate_bitstream\\top_ui_demo.sbit": {
+      "sha256": "20b31b08c7d56982e580a709a26a9e965780437a4bdb79bf6db04093605854be",
+      "bytes": 3791112
+    }
+  },
+  "program": {
+    "done": 1,
+    "crc_err": 0,
+    "program_ok": true,
+    "uart_bytes": 27300,
+    "frames": 300,
+    "first": {
+      "tag": "UIDEMO",
+      "a": 2,
+      "b": 3074826,
+      "c": 3068418,
+      "d": 8000,
+      "e": 148,
+      "f": 262144,
+      "g": 3,
+      "h": 17
+    },
+    "last": {
+      "tag": "UIDEMO",
+      "a": 450,
+      "b": 933120000,
+      "c": 931176000,
+      "d": 3600000,
+      "e": 66600,
+      "f": 58982400,
+      "g": 7,
+      "h": 1
+    },
+    "raw_sha256": "3fd08f75b0e7eee76435e98d56ba77c764bd005f1062fc1cf320806119c07cf5"
+  }
+}

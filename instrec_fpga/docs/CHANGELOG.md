@@ -829,3 +829,7 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 ## 显示专用CDC约束
 
 - 首候选发现脚本摘要漏跨时钟负裕量；保存Some Constraints Violated报告，按实际双拍同步路径补cfg_clk/pix_clk CDC分组，待重新验证。
+
+## 2026-11-02 12:44：显示修复候选构建与板级冒烟
+
+- G25复位/CDC显示分支六阶段完成，All Constraints Met，+1.191ns；20B31B08...605854BE成功烧录，UIDEMO/G07。实际屏幕仍待用户反馈，未宣称显示通过。
