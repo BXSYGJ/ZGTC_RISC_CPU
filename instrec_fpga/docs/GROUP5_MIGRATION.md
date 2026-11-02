@@ -1,12 +1,12 @@
 # Five-group activity target correction (2026-11-02)
 
-> DEFERRED: the user subsequently chose to keep the original eight-class
-> version and continue delivery. This document and frozen five-group assets
-> are retained for future work; they do not authorize an active migration.
-> STATUS.md records the latest decision.
+> RESUMED FOR ASSESSMENT (2026-11-02): the user now requests the five-group
+> dominant result as the main output, alongside all five independent activity
+> scores. Preserve the accepted eight-class board baseline. See
+> GROUP5_REUSE_AND_CPU_ASSESSMENT_20261102.md and STATUS.md for the current plan.
 
 The user identified simultaneous instrument-group activity as the originally
-intended feature, then deferred migration because of its implementation cost.
+intended feature, previously deferred migration, and has now resumed it with dominance as the primary result.
 If this migration is resumed, do not claim eight-class softmax probabilities
 implement independent group activity.
 
@@ -45,8 +45,7 @@ implement independent group activity.
    GAP consumes 4 x 8 per channel (32 rather than 64 values). Update replay,
    dimensions, counts, DDR layout and FC2 five-output scheduling coherently.
 4. Implement independent activity sigmoid with its own integer contract.
-   Preserve the optional separate dominance head assets; activity delivery is
-   the priority. Update CPU/MMIO/UART and five UI bars to carry group identity
+   Preserve the optional separate dominance head assets; dominance is the primary displayed result, with activity retained alongside. Update CPU/MMIO/UART and five UI bars to carry group identity
    and activity without top1/normalization assumptions.
 5. Verify full CPU + Mel + native NPU against new golden, including multi-active
    and no-active cases, different consecutive windows and reset/ACK behavior.
@@ -55,7 +54,7 @@ implement independent group activity.
    DDR and board-verified HDMI transport. One PDS at a time; board boot PASS is
    not inference PASS. External audio remains unconnected per user.
 
-## Current board and fallback
+## Historical board note (superseded by STATUS.md)
 
 Full diagnostic bitstream `489EF753...26F2E5EF` programs successfully and boots
 RV32/MMIO/ISA plus DDR SELFTEST/DDROK, but has negative setup/recovery margins

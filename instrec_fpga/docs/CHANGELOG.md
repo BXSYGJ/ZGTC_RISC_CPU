@@ -994,3 +994,8 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 
 - 两路store字节lane选择后寄存payload/valid，拆分至conv RAM路由路径；生产CPU/native不同A/B无reset两轮全部中间golden PASS，每轮实测31141255cycles。回归报告改用实测周期并支持独立报告文件。
 - npu_completion/full_top_ctrl PASS，pytest433passed/4skipped、lint61/0；新源未PDS/未烧录，现有正常中文显示保持。
+
+## 2026-11-02 22:50：恢复五类主导组与活跃度迁移评估
+
+- 用户确认主导组为主、同时显示五组activity。核验冻结float双head资产精确一致，记录逐模块复用及MAC/纯权重预算。
+- 核对CPU实际RV32I控制请求/ACK、最后事件回读及UI直通限制，制定NPU双FC＋CPU定点后处理/同帧快照/UI提交方案。仅文档和评估证据，无生产RTL迁移或五类位流。

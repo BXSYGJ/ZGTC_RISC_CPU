@@ -1,0 +1,111 @@
+{
+  "target": "dominant group plus independent five-group activities",
+  "asset_hashes_valid": true,
+  "float_frozen_vectors_exact": true,
+  "fixture_count": 5,
+  "heldout_accuracy_evaluation": false,
+  "group_order": [
+    "strings",
+    "woodwinds",
+    "brass",
+    "percussion",
+    "keys"
+  ],
+  "conv_channels": [
+    1,
+    48,
+    96,
+    192,
+    256
+  ],
+  "group5_spatial": [
+    [
+      64,
+      130
+    ],
+    [
+      32,
+      65
+    ],
+    [
+      16,
+      32
+    ],
+    [
+      8,
+      16
+    ],
+    [
+      4,
+      8
+    ]
+  ],
+  "old_conv_macs": 461445120,
+  "new_conv_macs": 231413760,
+  "new_backbone_int8_weight_bytes": 650160,
+  "new_both_heads_int8_weight_bytes": 66816,
+  "new_total_int8_weight_bytes_excluding_bias_and_requant": 716976,
+  "each_head_macs": 33408,
+  "new_heads_parameters": [
+    {
+      "name": "fc1.weight",
+      "shape": [
+        128,
+        256
+      ]
+    },
+    {
+      "name": "fc2.weight",
+      "shape": [
+        5,
+        128
+      ]
+    },
+    {
+      "name": "dom_fc1.weight",
+      "shape": [
+        128,
+        256
+      ]
+    },
+    {
+      "name": "dom_fc2.weight",
+      "shape": [
+        5,
+        128
+      ]
+    }
+  ],
+  "quantization_status": "NOT EXPORTED: frozen float only",
+  "board_status": "8-class 2673246E kept; no group5 deployment",
+  "cpu_current": "RV32I production (ENABLE_M=0), 8KiB ROM/8KiB RAM, MMIO request/ACK/result/UART; scalar last-result interface only",
+  "cpu_recommended": "fixed-point sigmoid/softmax, activity mask, dominance renormalization/argmax, optional temporal smoothing, publish coherent UI bundle; NPU retains conv and both dense heads",
+  "sources": {
+    "src/ctrl/instrec_top.v": "e55c389b965d587474c063cc762151ce4d68d10995906264bc52874a635524d3",
+    "src/cpu/rv32_cpu_subsys.sv": "be33b7c296bc52778a7428200a2faf3e6cff69c7d3ffb2c521ece135320a40ec",
+    "sw/rv32/main.c": "2fc6e40e48b82f030b7f16d792ef61319ffe203fa6b4df9887a8038d113ff8fd",
+    "models/group5_v3_float_20261102/model_source.py": "4d3399ab2980fec032c12ccb33ccb6186a56979cd55beee91d4066a3da46c383",
+    "models/group5_v3_float_20261102/train_config.json": "49299ad6fcf4f295138ee8dc527b80969b72b7acab8cc2cabd9cfd8522b95366"
+  },
+  "calibration_cache_available": {
+    "features_shape": [
+      44091,
+      64,
+      130
+    ],
+    "dtype": "float32",
+    "labels_shape": [
+      44091,
+      5
+    ],
+    "dominance_shape": [
+      44091,
+      5
+    ],
+    "split_sizes": {
+      "train_indices": 35185,
+      "val_indices": 8906
+    },
+    "policy": "training split calibration only; held-out validation separate; original dataset read-only"
+  }
+}

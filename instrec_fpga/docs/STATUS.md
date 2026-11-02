@@ -1,5 +1,18 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-02 22:50：用户恢复五类迁移，确认“主导组为主＋五组活跃度”；复用与CPU评估完成
+
+- 用户认为八类阶段基本可用，要求开始五类迁移并先评估复用与CPU作用；已明确五类主导组为主，同时显示五组活跃度。不再维持“迁移暂缓”的任务设定。保留八类2673246E已验收中文显示基线，不在本轮评估中改生产数据通路。
+- docs/GROUP5_REUSE_AND_CPU_ASSESSMENT_20261102.md给出逐模块复用、CPU现状/限制、新分工与实施顺序；GROUP5_MIGRATION已标记恢复。冻结float资产全部hash重核，严格重载后5参考样本的双head logits逐值完全一致；不是量化或精度新验收。报告group5_reuse_assessment_20261102.json。
+- 卷积核/通道与旧NPU相同，64x130窗口使理论卷积MAC为旧50.2%；GAP4x8/32。双独立FC头可串行复用硬件；纯INT8权重716976B（不含bias/量化/对齐），比旧纯权重增加33024B。前端FFT/Mel核心复用，但66150样本、130帧/统计域、输入量化与replay/GAP/FC调度必须重做契约。主导head不得用activity argmax替代，无活跃时不强选。
+- CPU生产实例实际RV32I（ENABLE_M=0），8KiB ROM/8KiB RAM；默认NPU_ENABLE=0，CPU真实请求/ACK并请求下一轮，RTL守卫Mel/DDR安全条件。当前只回读最后概率事件与top1并串口报告，UI直接由NPU驱动，尚无完整向量/业务后处理；作为控制核合理但职责偏薄。建议NPU算卷积与双FC，CPU读取同帧10logits，定点sigmoid/softmax/mask/归一/主导决策/可选平滑/超时有限重试并原子提交UI。需扩MMIO完整快照，不能只改固件。
+- 当前唯一八类三项分拍资源门控run224004-e25e4ce6仍在synth保存数据库，CPU有推进、compile已PASS；23:10审查不变，未启PNR/未烧录。保留八类门控结果作为基线；五类后续先新量化契约与留出精度评估，不复用旧8类量化参数或以理论MAC承诺完成时刻。
+
+## 2026-11-02 22:41：三项分拍修复新源唯一资源门控启动
+
+- 冻结3ea8f787，run build/pds/20261102-224004-e25e4ce6于22:40:04启动，StopAfter=dev_map；exec12001、monitor76991、父33492及同run编译子进程，不是并发工程。15秒CPU/RSS/阶段/日志监控及临时防休眠，23:10截止审查；不修改冻结RTL。当前编译中，无资源/时序结论，无新位流。
+- 读取完整映射容量后再决定受控PNR；已有2673246E板上中文UI已验收，保持运行，不重复烧录。既有cdt不动。
+
 ## 2026-11-02 22:39：NPU重放到卷积输入分拍，真实CPU/native两轮golden通过
 
 - npu_top在两路activation store的字节lane选择后寄存8bit payload与valid，再进入conv输入RAM，切断长距离RAM/mux/RAM路由链；两接收端原本固定ready=1，吞吐仍每拍1字节。payload无reset，valid在复位及对应layer start清空。store本体/DDR契约/八类算术不变。
