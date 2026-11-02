@@ -884,3 +884,8 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 - bd295a96完整候选20261102-155516-512e7322启动单路PDS，17:10截止审查；无新位流/时序结论。
 - 核对扩展I2S引脚与16bit/32BCK协议，记录底板HDMI RX音频路径尚未接入，真实音频验收仍需兼容输入；五组迁移文档标记deferred。
 - CPU native新报告单独命名保存，原连续推理报告不覆盖。
+
+## 2026-11-02：完整时序汇总与PNR跟踪
+
+- 最终候选映射32206LUT/35057FF/133DRM/90APM，约16:10进入PNR、16:13全局布局完成，尚无最终时序/位流。
+- 新增summarize_timing.py，核对slow/fast的setup/hold/recovery/removal/pulse-width全部10表；完整负例、显示正例及缺表伪正例验证通过，避免只取第一时钟WNS漏报。
