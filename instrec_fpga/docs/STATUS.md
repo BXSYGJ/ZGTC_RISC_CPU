@@ -1,5 +1,11 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-02 21:34：FTDI恢复，显示保底已重新烧录；新版PNR详细布线
+
+- 21:30系统已枚举FTDI A/B与COM16/17，COM5亦正常；安全复用JS9040/cfg46156读取状态done0/CRC0，确认重新上电后未配置，报告board_online_status_20261102_2130.json。无需继续要求下载器重插。
+- 21:33已烧此前用户验收的602AB321显示保底（hash再次核对），program成功/done1/CRC0、COM5实收38129字节UIDEMO；raw/TCL/日志单独保存在build/board-fallback-20261102-2133，报告board_fallback_20261102_2133.json含hash。用户当前彩条/KEY1 UI反馈待到；这不是新版dashboard，也不是完整AI系统。既有cdt实例保持，下载器烧后仍在线。
+- 新版run211104 PNR已进入详细布线，placement估算WNS -1.387ns/TNS -28.950ns（非最终报告），全局布线21:34到0后详细布线起始1857未布通。继续同源单路、22:10截止审查，无新位流/最终时序，不以placement估算作为验收。
+
 ## 2026-11-02 21:27：新版完整资源门控PASS，唯一PNR限时进行
 
 - run211104-aedccc03 compile/synthesize/dev_map全PASS，21:23:57正常退出，SourcesUnchanged=true；完整映射33462LUT/35118FF/147.5DRM(155容量)/90APM。新font_bits4个DRM36K、tiles2个DRM36K，HDMI27路输出全部实测OFF打包。reports/ui_dashboard_resource_gate_20261102.json含原始map数据库/日志/源hash；容量PASS不等于可布性或时序PASS。
