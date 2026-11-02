@@ -20,10 +20,14 @@ param(
     [Parameter(Mandatory = $true)][string]$RunDir,
     [ValidateSet('dev_map', 'pnr', 'report_timing', 'gen_bit_stream')][string]$From = 'pnr',
     [string]$TopModule = 'instrec_top',
-    [string]$ProjectName = 'instrec_fpga'
+    [string]$ProjectName = 'instrec_fpga',
+    [ValidateRange(-1, 2147483647)][int]$PlacementSeed = -1
 )
 
 $ErrorActionPreference = 'Stop'
+if ($PlacementSeed -ge 0 -and $From -ne 'pnr') {
+    throw 'PlacementSeed is only valid when resuming from pnr.'
+}
 $project = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
 $run = (Resolve-Path $RunDir).Path
 if (@(Get-Process -Name pds_shell -ErrorAction SilentlyContinue).Count -gt 0) {
@@ -79,7 +83,11 @@ $prjTcl = $prj.Replace('\', '/')
 # The script pre-parser does not expose open_project. The execution pass does.
 # Use a distinct driver project name: -file initializes its named project before
 # executing TCL, so using the target name destroys the saved stage state.
-$body = 'if {[llength [info commands open_project]]} {open_project {' + $prjTcl + '}}' + "`n" + (($stages[$startIdx..($stages.Count - 1)]) -join "`n") + "`nexit"
+$stageCommands = @($stages[$startIdx..($stages.Count - 1)] | ForEach-Object {
+    if ($_ -eq 'pnr' -and $PlacementSeed -ge 0) { 'pnr -gplace_seed ' + $PlacementSeed }
+    else { $_ }
+})
+$body = 'if {[llength [info commands open_project]]} {open_project {' + $prjTcl + '}}' + "`n" + ($stageCommands -join "`n") + "`nexit"
 
 $tclPath = Join-Path $run ("stage-$stamp.tcl")
 $logPath = Join-Path $run ("stage-$stamp.log")

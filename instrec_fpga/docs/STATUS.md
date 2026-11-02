@@ -1,5 +1,12 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-02 18:58：显示修复候选首轮PNR未完成，已按截止保存并结束；准备单种子替代布局
+
+- bca1fce8源的完整资源门控PASS（33447LUT/35106FF/133.5DRM/90APM、27路HDMI OFF），功能回归通过；但run171830-91e7a308首轮默认PNR到18:55仍有未布通连接，停止前最后采样1163轮/275条。布局估算+0.541ns不是最终时序PASS，本轮无位流、无最终时序。18:35仅补回监控19m22s暂停窗口后未再延长。
+- 已归档完整place_route、原始stage日志、源清单、监控和hash至该run/bounded-stop-20261102-1855；报告dynamic_ui_pnr_bounded_stop_20261102_1855.json。PDS零残留、monitor正常退出、临时防休眠请求释放，cdt_js9040/cdt_cfg46156未动。
+- 为避免同默认布局重复陷入局部拥塞，run_pds_stage新增可选PlacementSeed，仅From=pnr可用；默认行为不变。PowerShell解析PASS，构建令牌测试24passed。下一步同源同映射数据库单路seed1 PNR（此前工程记录存在该种子），不改生产RTL、不重综合；新一轮独立限时审查20:00，前次完整证据不覆盖。
+- 板上仍CDE1D2F6诊断版：CPU/DDR/WOK与6次推理完成有证据，用户UI可见但动态花屏FAIL；FTDI离线，尚无外部音源。完整链路能运行，但不是稳定交付或准确率验收通过。
+
 ## 2026-11-02 17:33：完整UI可见但动态内容花屏；修复布局/换页/快照与dB转换分拍，回归通过
 
 - 用户重插FTDI USB后，CDE1D2F6诊断位流成功program/done1/CRC0，实收RV32 BOOT/MMIO/ISA/DDROK；权重2700帧、WOK FA0D5236成功，12秒6次NPU完成/CPU回读。用户确认有UI，但频谱/置信度出现错位、撕裂、花块或条纹，属于显示内容验收FAIL，不再是无信号。报告full_cde_diagnostic_board_20261102_1655.json含唯一raw archive/hash。此版时序仍FAIL，未接音源，不宣称准确率。
