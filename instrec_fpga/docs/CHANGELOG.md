@@ -833,3 +833,7 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 ## 2026-11-02 12:44：显示修复候选构建与板级冒烟
 
 - G25复位/CDC显示分支六阶段完成，All Constraints Met，+1.191ns；20B31B08...605854BE成功烧录，UIDEMO/G07。实际屏幕仍待用户反馈，未宣称显示通过。
+
+## 2026-11-02：用户要求重烧显示候选
+
+- 20B31B08候选再次program成功、done1/CRC0、UIDEMO可读；当前屏幕待确认。保留本次独立烧录证据，未改RTL。

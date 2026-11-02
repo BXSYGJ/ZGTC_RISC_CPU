@@ -1,5 +1,11 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-02 13:18：按用户要求重新烧录显示候选
+
+- 用户说明HDMI此前已测试，要求重新烧录。再次下载20B31B08...605854BE显示专用位流；复用cdt_js9040，原cdt_cfg46156保持，临时配置客户端正常退出。
+- program明确成功，JTAG0x081ffca0、done1、CRC0，捕获67876字节/744帧UIDEMO，最终G=7。仍等待本次重烧后的实际屏幕反馈，不以用户对硬件的判断代替当前画面验收。
+- 报告reports/ui_reflash_20261102_1318.json；原始UART/TCL/日志在显示工作树build/board_ui_reflash_20261102_1318。未运行PDS，未换入RV或I2S位流。
+
 ## 2026-11-02 12:44：显示专用修复位流已完成并烧录，待屏幕验收
 
 - codex/display-demo（源提交8d5382a2）补接底板G25物理HDMI复位，固定piano演示柱与文本一致，烧录脚本缺失program成功证据时不再误报PASS。RTL59文件0 violation，烧录契约/安全39项PASS。
