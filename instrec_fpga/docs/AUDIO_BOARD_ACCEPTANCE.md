@@ -40,15 +40,23 @@ capture. This proves weight transfer/readback and observed inference/control
 progress on the diagnostic bitstream. It does not prove recognition accuracy
 for an acoustic input, or timing closure.
 
-A subsequent reflash of the same diagnostic image failed weight reload at frame
-814, and the user confirmed HDMI no signal. It has been replaced on the board
-by the fixed display demo; the user confirmed its colorbars and UI both work.
-The earlier transfer/completion evidence remains historical, not proof of the
-current full system state. See `reports/full_system_reflash_20261102_1614.json`
-and `reports/display_fallback_restore_20261102_1620.json`.
+The older 489EF753 diagnostic reflash failed weight reload at frame 814 and
+HDMI showed no signal. The fixed 602AB321 display demo was restored and confirmed
+by the user at 16:25; those records remain historical. At 16:55, the newer
+CDE1D2F6 full-system diagnostic was programmed successfully: fresh CPU/DDR boot,
+2700 weight frames with WOK FA0D5236, and six completion reports in 12 seconds.
+The user confirmed a visible UI but displaced/tearing/blocked dynamic graphics,
+so display content acceptance failed. A 17:07 fallback restoration attempt
+was blocked before programming because the downloader was absent; the board
+therefore still runs CDE1D2F6. See
+`reports/full_cde_diagnostic_board_20261102_1655.json` and
+`reports/display_fallback_restore_20261102_1707.json`.
 
 Complete audio acceptance requires a compatible source, known instrument test
 clips, correct PCM capture, Mel/golden comparison, NPU results and corresponding
 HDMI bars. Record input identity, sample rate, slot format, bitstream and weight
-hashes with the result. The diagnostic 489EF753 bitstream still has negative
-setup/recovery margins; use the final timing report to assess its replacement.
+hashes with the result. The current CDE1D2F6 diagnostic has negative core/pixel setup margins;
+its observed progress does not establish timing closure. The bca1fce8 source
+fixes dynamic display alignment/publication and dB pipeline timing. Resource
+gate 20261102-171830-91e7a308 passed with all 27 HDMI output registers packed
+into OFF; full PNR/timing and a fresh board acceptance are still pending.
