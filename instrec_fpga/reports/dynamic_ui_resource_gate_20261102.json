@@ -1,0 +1,63 @@
+{
+  "run": "build\\pds\\20261102-171830-91e7a308",
+  "source_commit": "bca1fce8",
+  "compile_synthesize_dev_map": "PASS",
+  "source_validation": {
+    "CheckedUtc": "2026-11-02T09:32:31.8868614Z",
+    "Unchanged": true,
+    "ChangedFiles": []
+  },
+  "resources": {
+    "lut": 33447,
+    "ff": 35106,
+    "drm": 133.5,
+    "drm_capacity": 155,
+    "apm": 90
+  },
+  "hdmi_off_packing": {
+    "count": 27,
+    "expected": 27,
+    "lines": [
+      "I: Flip-Flop \"u_hdmi_tx_if/vout_data_r[0]/opit_0_inv\" has been packed in \"OFF\" of IOL \"vout_data_obuf[0]/opit_1\" success.",
+      "I: Flip-Flop \"u_hdmi_tx_if/vout_data_r[1]/opit_0_inv\" has been packed in \"OFF\" of IOL \"vout_data_obuf[1]/opit_1\" success.",
+      "I: Flip-Flop \"u_hdmi_tx_if/vout_data_r[2]/opit_0_inv\" has been packed in \"OFF\" of IOL \"vout_data_obuf[2]/opit_1\" success.",
+      "I: Flip-Flop \"u_hdmi_tx_if/vout_data_r[3]/opit_0_inv\" has been packed in \"OFF\" of IOL \"vout_data_obuf[3]/opit_1\" success.",
+      "I: Flip-Flop \"u_hdmi_tx_if/vout_data_r[4]/opit_0_inv\" has been packed in \"OFF\" of IOL \"vout_data_obuf[4]/opit_1\" success.",
+      "I: Flip-Flop \"u_hdmi_tx_if/vout_data_r[5]/opit_0_inv\" has been packed in \"OFF\" of IOL \"vout_data_obuf[5]/opit_1\" success.",
+      "I: Flip-Flop \"u_hdmi_tx_if/vout_data_r[6]/opit_0_inv\" has been packed in \"OFF\" of IOL \"vout_data_obuf[6]/opit_1\" success.",
+      "I: Flip-Flop \"u_hdmi_tx_if/vout_data_r[7]/opit_0_inv\" has been packed in \"OFF\" of IOL \"vout_data_obuf[7]/opit_1\" success.",
+      "I: Flip-Flop \"u_hdmi_tx_if/vout_data_r[8]/opit_0_inv_1\" has been packed in \"OFF\" of IOL \"vout_data_obuf[8]/opit_1\" success.",
+      "I: Flip-Flop \"u_hdmi_tx_if/vout_data_r[8]/opit_0_inv_1\" has been packed in \"OFF\" of IOL \"vout_data_obuf[9]/opit_1\" success.",
+      "I: Flip-Flop \"u_hdmi_tx_if/vout_data_r[8]/opit_0_inv\" has been packed in \"OFF\" of IOL \"vout_data_obuf[10]/opit_1\" success.",
+      "I: Flip-Flop \"u_hdmi_tx_if/vout_data_r[11]/opit_0_inv\" has been packed in \"OFF\" of IOL \"vout_data_obuf[11]/opit_1\" success.",
+      "I: Flip-Flop \"u_hdmi_tx_if/vout_data_r[12]/opit_0_inv\" has been packed in \"OFF\" of IOL \"vout_data_obuf[12]/opit_1\" success.",
+      "I: Flip-Flop \"u_hdmi_tx_if/vout_data_r[13]/opit_0_inv\" has been packed in \"OFF\" of IOL \"vout_data_obuf[13]/opit_1\" success.",
+      "I: Flip-Flop \"u_hdmi_tx_if/vout_data_r[14]/opit_0_inv\" has been packed in \"OFF\" of IOL \"vout_data_obuf[14]/opit_1\" success.",
+      "I: Flip-Flop \"u_hdmi_tx_if/vout_data_r[15]/opit_0_inv\" has been packed in \"OFF\" of IOL \"vout_data_obuf[15]/opit_1\" success.",
+      "I: Flip-Flop \"u_hdmi_tx_if/vout_data_r[16]/opit_0_inv_1\" has been packed in \"OFF\" of IOL \"vout_data_obuf[16]/opit_1\" success.",
+      "I: Flip-Flop \"u_hdmi_tx_if/vout_data_r[16]/opit_0_inv_1\" has been packed in \"OFF\" of IOL \"vout_data_obuf[17]/opit_1\" success.",
+      "I: Flip-Flop \"u_hdmi_tx_if/vout_data_r[16]/opit_0_inv\" has been packed in \"OFF\" of IOL \"vout_data_obuf[18]/opit_1\" success.",
+      "I: Flip-Flop \"u_hdmi_tx_if/vout_data_r[19]/opit_0_inv\" has been packed in \"OFF\" of IOL \"vout_data_obuf[19]/opit_1\" success.",
+      "I: Flip-Flop \"u_hdmi_tx_if/vout_data_r[20]/opit_0_inv\" has been packed in \"OFF\" of IOL \"vout_data_obuf[20]/opit_1\" success.",
+      "I: Flip-Flop \"u_hdmi_tx_if/vout_data_r[21]/opit_0_inv\" has been packed in \"OFF\" of IOL \"vout_data_obuf[21]/opit_1\" success.",
+      "I: Flip-Flop \"u_hdmi_tx_if/vout_data_r[22]/opit_0_inv\" has been packed in \"OFF\" of IOL \"vout_data_obuf[22]/opit_1\" success.",
+      "I: Flip-Flop \"u_hdmi_tx_if/vout_data_r[23]/opit_0_inv\" has been packed in \"OFF\" of IOL \"vout_data_obuf[23]/opit_1\" success.",
+      "I: Flip-Flop \"u_hdmi_tx_if/vout_de_r/opit_0_inv\" has been packed in \"OFF\" of IOL \"vout_de_obuf/opit_1\" success.",
+      "I: Flip-Flop \"u_hdmi_tx_if/vout_hs_r/opit_0_inv\" has been packed in \"OFF\" of IOL \"vout_hs_obuf/opit_1\" success.",
+      "I: Flip-Flop \"u_hdmi_tx_if/vout_vs_r/opit_0_inv\" has been packed in \"OFF\" of IOL \"vout_vs_obuf/opit_1\" success."
+    ]
+  },
+  "label_rom": "256x6 GTP_DRM18K_E1 inferred",
+  "pnr": "NOT_RUN_AT_GATE",
+  "bitstream": "NONE_AT_GATE",
+  "decision": "Resources fit and HDMI27 OFF packing confirmed; resume single PNR with source frozen; deadline review 18:35 local. Full timing and board acceptance pending.",
+  "hashes": {
+    "source-manifest.json": "6b5c90b44084b2dde784661b10fe4fbfbbd83b11d4d8a5d1ce1277ad2a9247b1",
+    "source-validation.json": "4fe43589319e95dccc6343cb4c922a65a9eb41124c4b92afe8dc5876d2691dbf",
+    "manifest.json": "9ad798bb31722f96772550225b28cf6bd813a3bef5defe5c0500a0376f6e2795",
+    "device_map/instrec_top.dmr": "dc07ee814a8a5304db5cb2e54f74ebedee521592c06c749ce15c88d43aef4bb8",
+    "device_map/run.log": "cf81371d5e3aea2044756f92bded91dc18de8dcc1feb742b0e2bd8cefc179f23",
+    "device_map/instrec_top_map.adf": "042b1ff4b1fe3eecca47570cc0ca166804ceecd104217d3f31b57e2b1bda1d02",
+    "synthesize/apm_drm_lutram_utilization.log": "9c5301cc25b8c5d28a1720e7377c4bbd7caeee64ed058c5edb536537c71fc6de"
+  }
+}

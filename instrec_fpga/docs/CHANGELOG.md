@@ -912,3 +912,7 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 
 - bca1fce8已push，run171830-91e7a308仅至dev_map；compile成功，综合进行中，17:45截止审查，监控日志/CPU/RSS。尚无新位流，不以仿真通过替代实屏验收。
 - 当前板仍CDE1D2F6，有UI但动态内容FAIL；FTDI再次离线，17:07恢复保底未执行program，既有cdt保持不动。
+
+## 2026-11-02 17:33：资源与HDMI IO寄存打包核验通过
+
+- run171830-91e7a308门控三阶段PASS、源码不变，33447LUT/35106FF/133.5DRM/90APM，27路HDMI全打包OFF，label DRM保留。报告含映射数据库hash，准备单路PNR、18:35截止审查；尚无新位流或完整时序结论。
