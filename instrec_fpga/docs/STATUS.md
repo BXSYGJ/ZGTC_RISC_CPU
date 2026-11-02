@@ -1,5 +1,12 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-02 16:25：完整诊断版显示失败，已恢复显示保底；修正版详细布线中
+
+- 用户要求重烧489EF753完整诊断位流，program/done1/CRC0及RV32 BOOT/MMIO/ISA/DDROK实收通过；但权重重载第814帧无ACK失败，后续8秒UART无输出，用户明确确认默认HDMI无信号。完整系统显示验收FAIL，不能沿用早先WOK/6轮完成证明当前运行正常。报告full_system_reflash_20261102_1614.json与build/pds/20261102-140426-6c67b772/board_reflash_20261102_1614保留证据。根因未确定，旧位流已有负时序。
+- 已恢复曾获用户确认的602AB321显示保底，program/done1/CRC0、49868字节UIDEMO实收通过；原始UART/TCL/log独立冻结build/board_display_fallback_20261102_1620，hash在display_fallback_restore_20261102_1620.json。用户已确认本次恢复后彩条和UI均正常；板上当前为固定演示数据，非完整AI系统。
+- 修正版run20261102-155516-512e7322仍是唯一PDS flow，16:24全局布线第78轮至0未布线网后进入详细布线，日志/CPU有进展。完整时序/位流尚未产出；17:10截止审查不变。未修改构建冻结生产源码，未终止/重启既有cdt。
+- 更正文档：八类权重镜像实际691040字节，2700帧是末帧含填充的传输帧数，不能将2700x256当实际文件长度。保留早先成功与此次失败两份证据。
+
 ## 2026-11-02 16:13：最终完整候选进入PNR，音频接口核对完成
 
 - 源提交bd295a96，run20261102-155516-512e7322，15:55启动完整compile/synthesize/dev_map/pnr/report/bitstream流；compile/synthesize/dev_map均已完成，映射32206LUT/35057FF/133DRM/90APM；约16:10进入PNR，16:13已完成全局布局，正在post-global placement。唯一PDS flow，父子进程属于同一工程；full-monitor.jsonl每15秒记录阶段日志/CPU/RSS，17:10为完整流截止审查，不能无限等待。尚无本轮位流或时序结论。
@@ -18,7 +25,7 @@
 ## 2026-11-02：用户决定维持原八类版本，继续时序与完整板级闭环（当前有效目标）
 
 - 用户明确“维持原来的吧，继续工作”：恢复八类单标签识别交付，暂缓五组活跃度迁移；五组float资产保留，旧目标纠正条目仅作历史。巡检已同步更新，不再等待模型方向选择。
-- 板上489EF753诊断候选完成691200B/2700帧权重上传和DDR读回，真实回复WOK FA0D5236、UPLOAD OK。随后12秒UART捕获6次NPU完成/CPU回读，约3236万cycles/轮；报告reports/board_weights_resume_20261102.json含image/日志/捕获hash。未接外部音频，不能以悬空/静态输入完成代替真实音频识别准确率验收。
+- 板上489EF753诊断候选完成691040B/2700帧权重上传和DDR读回，真实回复WOK FA0D5236、UPLOAD OK。随后12秒UART捕获6次NPU完成/CPU回读，约3236万cycles/轮；报告reports/board_weights_resume_20261102.json含image/日志/捕获hash。未接外部音频，不能以悬空/静态输入完成代替真实音频识别准确率验收。
 - 时序修复候选：standardize将RAM读后减法/乘法/舍入/量化分为6拍，保持全部定点舍入；framer head/tail改同步读并推迟一拍ring写元数据，移除异步大mux；audio FIFO注册next-pointer full，移除Gray比较到WEA路径；full文字内部寄存char/font地址前级，替换原坐标延迟，整体三拍不变，显示fallback默认路径不变。
 - framer/requant仅移除DSP payload复位，valid/control保持异步清空，针对此前DSP recovery高扇出路径；requant独立1000输入/27次中途异步复位黄金算术PASS。FIFO容量/丢弃/计数饱和/回绕/并行双时钟/复位PASS，文字8类/6种百分比/区域逐像素延迟对拍PASS，修改后Mel16512特征0差异PASS。pytest432 passed/4 skipped；全RTL回归正在运行，尚未有本次候选完整PDS时序结果或新位流。
 - 下一步完整回归后单PDS容量门控，核验head/tail DRM推断和资源，再受控PNR读取全部setup/hold/recovery；保留旧诊断位流与失败证据，严禁以功能PASS代替时序闭合。外部音频源仍未接。

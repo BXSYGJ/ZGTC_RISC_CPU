@@ -1,0 +1,44 @@
+{
+  "ftdi_present": true,
+  "jtagserver_pids": [
+    9040
+  ],
+  "cdt_cfg_pids": [
+    46156
+  ],
+  "program_ok": true,
+  "status_raw": "0x081ffca0",
+  "done": 1,
+  "crc_err": 0,
+  "uart_bytes": 387,
+  "uart_file": "D:/0000/111/001/Pango/ZGTC_RISC_CPU/instrec_fpga/build/uart_last.bin",
+  "expect": [
+    "RV32 BOOT",
+    "RV32 MMIO OK",
+    "RV32 ISA OK",
+    "DDROK"
+  ],
+  "expect_missing": [],
+  "verdict": "PASS",
+  "raw_evidence": {
+    "path": "instrec_fpga\\build\\pds\\20261102-140426-6c67b772\\board_reflash_20261102_1614",
+    "sha256": {
+      "uart_last.bin": "b0bf4ed36443552aea9c9b51014374be64c72df343b9aa894067e16e40a4a480",
+      "board_check_program.log": "3615a935d79b8b17d9f8204494fd28fff80eb062c267e029ee815d4a56b8b6ae",
+      "board_check_program.tcl": "f1a260fcb1556d6e7213b506676c720b5e3a2096d0408eb8ae931a30bd2d4d7a",
+      "configuration_tcl.log": "0abc05f4855843bcf1043f8ae3896a6b03c3f33d83feddd11e1aaad13ee52a60"
+    }
+  },
+  "bitstream_sha256": "489EF753C45A2F10315230B95E3AC004B17BDC6D503A468279BFCD9E26F2E5EF",
+  "physical_hdmi_acceptance": "FAIL_USER_NO_SIGNAL",
+  "limitations": [
+    "Existing diagnostic bitstream; final corrected candidate still in PNR",
+    "Known setup/recovery timing violations; boot PASS is not stable delivery"
+  ],
+  "weight_reload": {
+    "result": "FAIL",
+    "failed_frame": 814,
+    "log": "build/weight-upload-20261102-reflash-1614.log"
+  },
+  "board_current_image": "Replaced by display fallback 602AB321 at 16:20"
+}

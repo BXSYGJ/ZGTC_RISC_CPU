@@ -1,0 +1,30 @@
+{
+  "ftdi_present": true,
+  "jtagserver_pids": [
+    9040
+  ],
+  "cdt_cfg_pids": [
+    46156
+  ],
+  "program_ok": true,
+  "status_raw": "0x081ffca0",
+  "done": 1,
+  "crc_err": 0,
+  "uart_bytes": 49868,
+  "uart_file": "D:/0000/111/001/Pango/ZGTC_RISC_CPU/instrec_fpga/build/uart_last.bin",
+  "expect": [
+    "UIDEMO"
+  ],
+  "expect_missing": [],
+  "verdict": "PASS",
+  "raw_evidence": {
+    "path": "instrec_fpga\\build\\board_display_fallback_20261102_1620",
+    "sha256": {
+      "uart_last.bin": "140e64cc9b7db68fd36eb3278990dd397cd952e9e0a46ac3bf3ce04a382a258c",
+      "board_check_program.log": "accbc0d41f399733b9993b840d439da41b125ad9c29f3bdf09be2113350f15a7",
+      "board_check_program.tcl": "6cdb908e4194a84956b8a8c499210ab5a87903aedfe1fafdbbf1bc0b40c7f0ca"
+    }
+  },
+  "bitstream_sha256": "602AB321075B25F0F9931C99CC7369AB1223E3A27A0177953F20F2DDFE60A17C",
+  "physical_hdmi_acceptance": "PASS_USER_COLORBARS_AND_UI"
+}
