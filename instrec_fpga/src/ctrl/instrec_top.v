@@ -490,23 +490,8 @@ module instrec_top #(
         endcase
     end
 
-    // One-cycle coordinate delay: text_disp already costs 2 cycles, so the
-    // text layer lands on the same pixel as the 3-cycle waveform base
-    // (ui_renderer samples its layers with de_pipe[2] and adds stage 4).
-    reg [10:0] text_x, text_y;
-    reg        text_de;
-
-    always @(posedge pix_clk or negedge rst_pix_n) begin
-        if (!rst_pix_n) begin
-            text_x  <= 11'd0;
-            text_y  <= 11'd0;
-            text_de <= 1'b0;
-        end else begin
-            text_x  <= pix_x;
-            text_y  <= pix_y;
-            text_de <= pix_de;
-        end
-    end
+    // Register character selection inside text_disp instead of delaying
+    // coordinates here. Total text latency remains three pixel clocks.
 
     wire [23:0] text_rgb;
     wire        text_on;
@@ -515,12 +500,12 @@ module instrec_top #(
     // the wdma parameter tables into a synchronous block RAM (53.57% -> 51.1%),
     // so the LUT-only part of M3 goes back in first; the spectrogram chain
     // (which costs 6.5 DRAM) follows separately.
-    text_disp u_text_disp (
+    text_disp #(.REGISTER_CHAR(1)) u_text_disp (
         .pix_clk   (pix_clk),
         .rst_pix_n (rst_pix_n),
-        .pix_x     (text_x),
-        .pix_y     (text_y),
-        .de        (text_de),
+        .pix_x     (pix_x),
+        .pix_y     (pix_y),
+        .de        (pix_de),
         .class_idx ({4'd0, top1_s1}),
         .pct       (text_pct),
         .rgb       (text_rgb),

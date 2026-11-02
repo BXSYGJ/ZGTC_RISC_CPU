@@ -866,3 +866,9 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 - 按用户纠正，目标从旧8类单标签分类改为strings/woodwinds/brass/percussion/keys五组独立sigmoid活跃度；停止旧权重部署。
 - 新增freeze_group5_reference脚本、可追溯float权重/源/配置/真实留出参考与GROUP5_MIGRATION清单；冻结重载双head logits exact PASS，未宣称量化或FPGA迁移完成。
 - 补记完整系统PNR完成但setup/recovery FAIL，以及489EF753诊断候选板级RV32/DDR启动PASS；冻结原始板级证据与hash，保留显示fallback。
+
+## 2026-11-02：按用户决定恢复八类版本，权重WOK与时序路径修复
+
+- 用户选择维持原八类版本，暂缓五组迁移；板上2700帧权重上传/DDR读回WOK FA0D5236，随后6轮NPU完成回报，未接真实音源，不宣称准确率通过。
+- 分拍standardize，framer反射缓存同步读，FIFO注册full，full文字增加char寄存并保持总体延迟；DSP payload去异步复位但valid保留清空。
+- 新增FIFO压力、文字像素等价、requant中途复位仿真；各单项及Mel完整特征PASS。候选时序待PDS检验。

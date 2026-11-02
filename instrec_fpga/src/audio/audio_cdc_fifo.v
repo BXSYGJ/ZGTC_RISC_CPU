@@ -190,23 +190,29 @@ module audio_cdc_fifo #(
         end
     endfunction
 
-    // Full flag (write-domain view): synchronized read Gray pointer with
-    // the two MSBs inverted equals the write Gray pointer.
+    // Registered full flag. Compute from the accepted next write pointer
+    // so the final free entry is accepted and the following write is blocked.
+    // The Gray comparison no longer lies on the high-speed RAM write enable.
     wire [PTR_W-1:0] rd_gray_wsync;
-    wire full_w = (wr_gray == {~rd_gray_wsync[PTR_W-1:PTR_W-2],
-                               rd_gray_wsync[PTR_W-3:0]});
+    reg full_w;
 
     // Actual write strobe: drop the new sample when full (audio stream
     // is never back-pressured, overflow counted instead).
     wire wr_fire = wr_req & ~full_w;
+    wire [PTR_W-1:0] wr_bin_next = wr_bin + wr_fire;
+    wire [PTR_W-1:0] wr_gray_next = bin2gray(wr_bin_next);
+    wire full_next = (wr_gray_next == {~rd_gray_wsync[PTR_W-1:PTR_W-2],
+                                      rd_gray_wsync[PTR_W-3:0]});
 
     always @(posedge clk_nco or negedge wr_rst_n) begin
         if (!wr_rst_n) begin
             wr_bin  <= {PTR_W{1'b0}};
             wr_gray <= {PTR_W{1'b0}};
-        end else if (wr_fire) begin
-            wr_bin  <= wr_bin + {{(PTR_W-1){1'b0}}, 1'b1};
-            wr_gray <= bin2gray(wr_bin + {{(PTR_W-1){1'b0}}, 1'b1});
+            full_w  <= 1'b0;
+        end else begin
+            wr_bin  <= wr_bin_next;
+            wr_gray <= wr_gray_next;
+            full_w  <= full_next;
         end
     end
 

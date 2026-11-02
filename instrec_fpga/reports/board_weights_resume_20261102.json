@@ -1,0 +1,22 @@
+{
+  "model": "legacy_8class_single_label_user_selected",
+  "board_bitstream_sha256": "489EF753C45A2F10315230B95E3AC004B17BDC6D503A468279BFCD9E26F2E5EF",
+  "image_sha256": "19a74dbec29d3a0f16ab06dc30f70312849977de0c6b345710b046b1908f5d7a",
+  "image_bytes": 691040,
+  "frames": 2700,
+  "weight_upload_pass": true,
+  "reply": "WOK FA0D5236",
+  "capture_seconds": 12,
+  "capture_bytes": 270,
+  "completion_lines": 6,
+  "uart_text": "NPU top1=6 last_class=7 last_p=0 c=32359289\r\nNPU top1=6 last_class=7 last_p=0 c=32359277\r\nNPU top1=6 last_class=7 last_p=0 c=32360411\r\nNPU top1=6 last_class=7 last_p=0 c=32359255\r\nNPU top1=6 last_class=7 last_p=0 c=32360383\r\nNPU top1=6 last_class=7 last_p=0 c=32359305\r\n",
+  "evidence": {
+    "instrec_fpga\\build\\weight-upload-20261102-resume.log": "1997d6cb498938115d2d4d67a9ca2c5ed70b34f9cf8b35f37c484f0e44bc7099",
+    "instrec_fpga\\build\\board-after-wok-20261102.bin": "0eadcdaa950fe03924c3be01b52986d3ca1ed46fb21505ea52f642bde047fbb8"
+  },
+  "limitations": [
+    "Diagnostic board build has setup/recovery timing violations",
+    "No external audio source connected; completion is not recognition accuracy validation",
+    "Current source timing fixes are not yet programmed"
+  ]
+}

@@ -282,6 +282,30 @@ register(Case(
 ))
 
 register(Case(
+    name="audio_fifo",
+    tb="tb_audio_fifo.sv",
+    rtl=["src/audio/audio_cdc_fifo.v"],
+    timeout=120,
+    description="dual-clock FIFO capacity, overflow saturation, wrap and reset",
+))
+
+register(Case(
+    name="text_pipeline",
+    tb="tb_text_pipeline.sv",
+    rtl=["src/ui/text_disp.v", "src/ui/font_rom.v"],
+    timeout=120,
+    description="character pipeline vs legacy pixels across all class labels",
+))
+
+register(Case(
+    name="requant_reset",
+    tb="tb_requant_reset.sv",
+    rtl=["src/npu/requant_unit.v"],
+    timeout=120,
+    description="requant golden arithmetic and asynchronous mid-flight reset flush",
+))
+
+register(Case(
     name="uart_rx",
     tb="tb_uart_rx.sv",
     rtl=["src/ctrl/uart_rx.v"],

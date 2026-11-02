@@ -32,7 +32,11 @@
 // text_on is de-gated so it can be used directly as a compositor key.
 // ---------------------------------------------------------------------------
 
-module text_disp (
+// REGISTER_CHAR adds a character/geometry register before the font ROM.
+// Its latency is three clocks; the default legacy path remains two clocks.
+module text_disp #(
+    parameter integer REGISTER_CHAR = 0
+) (
     input  wire        pix_clk,
     input  wire        rst_pix_n,
 
@@ -154,11 +158,28 @@ module text_disp (
 
     // ---- Glyph ROM (synchronous read, one cycle) -------------------------
     wire [7:0] glyph_bits;
+    reg [7:0] char_code_r;
+    reg [3:0] glyph_row_r;
+    reg region_r;
+    reg [2:0] bit_idx_r;
+    always @(posedge pix_clk or negedge rst_pix_n) begin
+        if (!rst_pix_n) begin
+            char_code_r <= 8'd32;
+            glyph_row_r <= 4'd0;
+            region_r <= 1'b0;
+            bit_idx_r <= 3'd0;
+        end else begin
+            char_code_r <= char_code;
+            glyph_row_r <= glyph_row;
+            region_r <= in_region;
+            bit_idx_r <= bit_idx;
+        end
+    end
 
     font_rom u_font_rom (
         .pix_clk   (pix_clk),
-        .char_code (char_code),
-        .row       (glyph_row),
+        .char_code (REGISTER_CHAR ? char_code_r : char_code),
+        .row       (REGISTER_CHAR ? glyph_row_r : glyph_row),
         .bits      (glyph_bits)
     );
 
@@ -171,8 +192,8 @@ module text_disp (
             px_valid <= 1'b0;
             px_bit   <= 3'd0;
         end else begin
-            px_valid <= in_region;
-            px_bit   <= bit_idx;
+            px_valid <= REGISTER_CHAR ? region_r : in_region;
+            px_bit   <= REGISTER_CHAR ? bit_idx_r : bit_idx;
         end
     end
 

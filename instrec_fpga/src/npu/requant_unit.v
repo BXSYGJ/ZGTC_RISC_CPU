@@ -63,7 +63,8 @@
 // a defensive bypass only: rounding is skipped and prod passes through
 // (identity), which equals round_half_even(x, 0) = x.
 //
-// Reset: asynchronous-active-low, all pipeline stages flushed.
+// Reset: asynchronous-active-low, validity/control flushed. DSP payload
+// registers are resetless and cannot become visible without fresh valid data.
 // ---------------------------------------------------------------------------
 
 module requant_unit (
@@ -175,15 +176,18 @@ module requant_unit (
                                    y_sum[7:0];
 
     // -----------------------------------------------------------------------
-    // Pipeline sequencing (single always block, no hazard: every stage
-    // consumes only the previous stage register).
+    // DSP payload does not need reset: the asynchronously cleared valid
+    // pipeline masks it until fresh operands have crossed every stage.
+    // Removing reset here avoids high-fanout DSP reset recovery paths.
     // -----------------------------------------------------------------------
+    always @(posedge clk) begin
+        p11_q <= a1_c * b1_c;
+        p10_q <= a1_c * b0s_c;
+        p01_q <= a0s_c * b1_c;
+        p00_q <= a0_c * b0_c;
+    end
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
-            p11_q     <= 32'sd0;
-            p10_q     <= 32'sd0;
-            p01_q     <= 32'sd0;
-            p00_q     <= 32'd0;
             shift_q   <= 7'd0;
             zp_q      <= 8'd0;
             shift_q2  <= 7'd0;
@@ -197,11 +201,7 @@ module requant_unit (
             y_u8      <= 8'd0;
             out_valid <= 1'b0;
         end else begin
-            // S1: four parallel 16x16 partial products
-            p11_q   <= a1_c * b1_c;
-            p10_q   <= a1_c * b0s_c;
-            p01_q   <= a0s_c * b1_c;
-            p00_q   <= a0_c * b0_c;
+            // S1: align parameters/valid with the resetless DSP payload.
             shift_q <= shift;
             zp_q    <= zp_out;
             v1_q    <= in_valid;

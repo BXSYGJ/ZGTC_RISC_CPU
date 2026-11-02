@@ -1,5 +1,13 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-02：用户决定维持原八类版本，继续时序与完整板级闭环（当前有效目标）
+
+- 用户明确“维持原来的吧，继续工作”：恢复八类单标签识别交付，暂缓五组活跃度迁移；五组float资产保留，旧目标纠正条目仅作历史。巡检已同步更新，不再等待模型方向选择。
+- 板上489EF753诊断候选完成691200B/2700帧权重上传和DDR读回，真实回复WOK FA0D5236、UPLOAD OK。随后12秒UART捕获6次NPU完成/CPU回读，约3236万cycles/轮；报告reports/board_weights_resume_20261102.json含image/日志/捕获hash。未接外部音频，不能以悬空/静态输入完成代替真实音频识别准确率验收。
+- 时序修复候选：standardize将RAM读后减法/乘法/舍入/量化分为6拍，保持全部定点舍入；framer head/tail改同步读并推迟一拍ring写元数据，移除异步大mux；audio FIFO注册next-pointer full，移除Gray比较到WEA路径；full文字内部寄存char/font地址前级，替换原坐标延迟，整体三拍不变，显示fallback默认路径不变。
+- framer/requant仅移除DSP payload复位，valid/control保持异步清空，针对此前DSP recovery高扇出路径；requant独立1000输入/27次中途异步复位黄金算术PASS。FIFO容量/丢弃/计数饱和/回绕/并行双时钟/复位PASS，文字8类/6种百分比/区域逐像素延迟对拍PASS，修改后Mel16512特征0差异PASS。pytest432 passed/4 skipped；全RTL回归正在运行，尚未有本次候选完整PDS时序结果或新位流。
+- 下一步完整回归后单PDS容量门控，核验head/tail DRM推断和资源，再受控PNR读取全部setup/hold/recovery；保留旧诊断位流与失败证据，严禁以功能PASS代替时序闭合。外部音频源仍未接。
+
 ## 2026-11-02：用户纠正目标，切换五组多标签活跃度（最高优先级）
 
 - 用户明确要弦乐、铜管、木管、键盘、打击的活跃度；旧8类具体乐器softmax不是目标。此前模型选择有误，停止旧模型权重上传（尚未上传），旧golden PASS只保留为历史硬件证据，不作为目标任务验收。

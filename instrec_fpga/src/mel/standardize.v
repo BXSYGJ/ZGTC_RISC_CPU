@@ -87,14 +87,11 @@
 //     cycles per window (design.md Sec. 3.6 "3 x 16-cycle divisions"
 //     is optimistic about the shared-divider reuse cost; at 3 s per
 //     window the difference is irrelevant).
-//   * Quantization scan: 3 cycles/element (read -> z -> quantize+write)
-//     x 16512 = 49536 cycles; the z and quantize beats each carry one
-//     DSP multiply (17b x 22b, then 16b x 32b) - never both in one
-//     cycle, comfortably inside 8 ns at 125 MHz.
-//   * Module total ~ 49.7k cycles = 0.40 ms @ 125 MHz, matching the
-//     design.md Sec. 3.8 "standardize + quantize output 0.4 ms" budget.
-//     Whole second pass (db_norm 0.53 ms + this 0.40 ms) = 0.93 ms,
-//     far below the 3 s window cadence.
+//   * Quantization scan: 6 cycles/element (read -> difference -> multiply
+//     -> z round/clamp -> quantization multiply -> quantize/write).
+//     Registered DSP inputs and products remove the RAM-to-subtract-to-DSP
+//     path and separate multiplication from rounding without changing bits.
+//     Total ~99.3k cycles = 0.80 ms @ 125 MHz, below the 3 s cadence.
 //
 // Storage / INTEGRATION ALIGNMENT POINTS (buffers NOT instantiated here):
 //   * The dB spectrum (64 x 258 int16 Q8.8, frame-major, addresses
@@ -155,8 +152,7 @@ module standardize #(
 
     // ------------------------------------------------------------------
     // Main FSM. Statistics phase (shared divider + sqrt), then a
-    // 3-beat scan pipeline: RD (issue read) -> Z (compute z, register)
-    // -> Q (quantize, write feature).
+    // Six-beat scan, with stable scan_cnt until the final feature write.
     // ------------------------------------------------------------------
     localparam [3:0] S_IDLE     = 4'd0;
     localparam [3:0] S_DIV_MU   = 4'd1;
@@ -169,6 +165,9 @@ module standardize #(
     localparam [3:0] S_SCAN_RD  = 4'd8;
     localparam [3:0] S_SCAN_Z   = 4'd9;
     localparam [3:0] S_SCAN_Q   = 4'd10;
+    localparam [3:0] S_SCAN_D   = 4'd11;
+    localparam [3:0] S_SCAN_M   = 4'd12;
+    localparam [3:0] S_SCAN_QM  = 4'd13;
 
     reg [3:0]         state;
 
@@ -180,6 +179,9 @@ module standardize #(
     reg [23:0]        sigma_u24;    // Q8.8 floor sqrt of var
     reg [20:0]        inv_sigma_u21;// 2^20 / sigma_eff multiplier
     reg signed [15:0] z_reg;        // Q4.12 standardized value
+    reg signed [16:0] d_reg;
+    reg signed [38:0] z_prod_reg;
+    reg signed [47:0] qprod_reg;
 
     // scan position (feature-element index 0..16511)
     reg [14:0]        scan_cnt;
@@ -236,8 +238,8 @@ module standardize #(
     // ------------------------------------------------------------------
     wire signed [16:0] d_s17 = db_rd_data - mu_q88;
     wire signed [21:0] inv_sigma_s22 = {1'b0, inv_sigma_u21}; // positive
-    wire signed [38:0] z_prod_s39 = d_s17 * inv_sigma_s22;
-    wire signed [38:0] z_rhu_s39 = $signed(z_prod_s39 + 39'sd128) >>> 8;
+    wire signed [38:0] z_prod_s39 = d_reg * inv_sigma_s22;
+    wire signed [38:0] z_rhu_s39 = $signed(z_prod_reg + 39'sd128) >>> 8;
     wire signed [15:0] z_sat_s16 =
         (z_rhu_s39 > 39'sd32767)   ? 16'sd32767  :
         (z_rhu_s39 < -39'sd32768)  ? -16'sd32768 :
@@ -248,8 +250,8 @@ module standardize #(
     // bitwise round-half-to-even (golden round_half_even_shift).
     // ------------------------------------------------------------------
     wire signed [47:0] qprod_s48 = z_reg * INV_S_IN_S;
-    wire               q_neg = qprod_s48[47];
-    wire [47:0]        q_abs = q_neg ? (~qprod_s48 + 48'd1) : qprod_s48;
+    wire               q_neg = qprod_reg[47];
+    wire [47:0]        q_abs = q_neg ? (~qprod_reg + 48'd1) : qprod_reg;
     wire [23:0]        q_shift = q_abs[47:24];
     wire [23:0]        q_rem = q_abs[23:0];
     // tie threshold 2^23: rem > half, or rem == half and q odd -> +1
@@ -288,6 +290,9 @@ module standardize #(
             sigma_u24    <= 24'd0;
             inv_sigma_u21<= 21'd0;
             z_reg        <= 16'sd0;
+            d_reg        <= 17'sd0;
+            z_prod_reg   <= 39'sd0;
+            qprod_reg    <= 48'sd0;
             scan_cnt     <= 15'd0;
             feat_done    <= 1'b0;
             div_n        <= 48'd0;
@@ -402,11 +407,23 @@ module standardize #(
                 end
                 // ---- scan beat 1: issue the dB read -----------------
                 S_SCAN_RD: begin
+                    state <= S_SCAN_D;
+                end
+                S_SCAN_D: begin
+                    d_reg <= d_s17; // synchronous RAM result from RD
+                    state <= S_SCAN_M;
+                end
+                S_SCAN_M: begin
+                    z_prod_reg <= z_prod_s39;
                     state <= S_SCAN_Z;
                 end
                 // ---- scan beat 2: z = sat16((dB-mu)*inv_sigma >> 8) -
                 S_SCAN_Z: begin
-                    z_reg <= z_sat_s16;  // db_rd_data valid this beat
+                    z_reg <= z_sat_s16;
+                    state <= S_SCAN_QM;
+                end
+                S_SCAN_QM: begin
+                    qprod_reg <= qprod_s48;
                     state <= S_SCAN_Q;
                 end
                 // ---- scan beat 3: quantize + feature write -----------

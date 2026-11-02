@@ -246,7 +246,8 @@ module stft_framer #(
     wire [11:0] next_push_slot = (push_slot == RING_LAST)
                                ? 12'd0 : (push_slot + 12'd1);
 
-    // Push data multiplexer (combinational).
+    // Synchronous head/tail reads. Delay the push metadata alongside them
+    // so the reflect memories can infer DRM instead of a large async mux.
     // Left reflect: abs a (0..1023) -> pcm[1024-a]; a = 0 taps pcm[1024]
     // (head_extra), a >= 1 taps head_ram[1024-a].
     wire [10:0] vleft_full     = PAD_W - push_cnt[10:0];  // 1..1024
@@ -254,28 +255,37 @@ module stft_framer #(
     // Right reflect: abs 133120+vr -> pcm[132094-vr] = tail_ram[1023-vr].
     wire [9:0]  vright_ram_idx = 10'd1023 - vright_cnt[9:0];
 
-    reg [15:0] push_data;
-    always @* begin
-        case (phase)
-            PH_VLEFT: begin
-                push_data = (push_cnt[10:0] == 11'd0) ? head_extra
-                          : head_ram[vleft_ram_idx];
-            end
-            PH_REPLAY: begin
-                // abs 1024+r -> pcm[r]; r = 1024 taps head_extra.
-                push_data = (replay_cnt == PAD_W) ? head_extra
-                          : head_ram[replay_cnt[9:0]];
-            end
-            PH_STREAM: begin
-                push_data = pcm_rd_data[15:0];
-            end
-            PH_VRIGHT: begin
-                push_data = tail_ram[vright_ram_idx];
-            end
-            default: begin
-                push_data = 16'd0;
-            end
-        endcase
+    wire [9:0] head_read_idx = (phase == PH_REPLAY)
+                               ? replay_cnt[9:0] : vleft_ram_idx;
+    reg [15:0] head_q;
+    reg [15:0] tail_q;
+    reg push_pending;
+    reg [11:0] push_slot_d;
+    reg use_head_d;
+    reg use_tail_d;
+    reg [15:0] direct_data_d;
+    wire use_head = ((phase == PH_VLEFT) && (push_cnt[10:0] != 11'd0)) ||
+                    ((phase == PH_REPLAY) && (replay_cnt != PAD_W));
+    wire [15:0] push_data = use_tail_d ? tail_q :
+                            use_head_d ? head_q : direct_data_d;
+    always @(posedge clk) begin
+        head_q <= head_ram[head_read_idx];
+        tail_q <= tail_ram[vright_ram_idx];
+    end
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            push_pending <= 1'b0;
+            push_slot_d <= 12'd0;
+            use_head_d <= 1'b0;
+            use_tail_d <= 1'b0;
+            direct_data_d <= 16'd0;
+        end else begin
+            push_pending <= push_fire;
+            push_slot_d <= push_slot;
+            use_head_d <= use_head;
+            use_tail_d <= (phase == PH_VRIGHT);
+            direct_data_d <= (phase == PH_STREAM) ? pcm_rd_data[15:0] : head_extra;
+        end
     end
 
     // ------------------------------------------------------------------
@@ -406,8 +416,8 @@ module stft_framer #(
     reg  [11:0] rd_addr;                  // output-engine read address
 
     always @(posedge clk) begin
-        if (push_fire) begin
-            win_ring[push_slot] <= push_data;
+        if (push_pending) begin
+            win_ring[push_slot_d] <= push_data;
         end
         ring_q <= win_ring[rd_addr];
     end
@@ -439,6 +449,13 @@ module stft_framer #(
     wire signed [31:0] rhu_w  = stage_mult + 32'sd16384;
     wire signed [16:0] win_n  = rhu_w[31:15];
 
+    // Payload is consumed only when v_mult is asserted. Keep reset on the
+    // validity pipeline, not the DSP payload, to avoid reset recovery fanout.
+    always @(posedge clk) begin
+        if (out_run && v_data)
+            stage_mult <= mult_w;
+    end
+
     assign han_addr = out_k;
 
     always @(posedge clk or negedge rst_n) begin
@@ -451,7 +468,6 @@ module stft_framer #(
             out_beat     <= 11'd0;
             v_data       <= 1'b0;
             v_mult       <= 1'b0;
-            stage_mult   <= 32'sd0;
             win_s17      <= 17'd0;
             win_valid    <= 1'b0;
             frame_start  <= 1'b0;
@@ -493,9 +509,6 @@ module stft_framer #(
                 v_data    <= !addr_done;
                 v_mult    <= v_data;
                 win_valid <= v_mult;
-                if (v_data) begin
-                    stage_mult <= mult_w;
-                end
 
                 if (v_mult) begin
                     win_s17  <= win_n;
