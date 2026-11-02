@@ -1,12 +1,21 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-02：用户纠正目标，切换五组多标签活跃度（最高优先级）
+
+- 用户明确要弦乐、铜管、木管、键盘、打击的活跃度；旧8类具体乐器softmax不是目标。此前模型选择有误，停止旧模型权重上传（尚未上传），旧golden PASS只保留为历史硬件证据，不作为目标任务验收。
+- 已核对兄弟InstRec工程网页端与真实训练checkpoint：group5_v3/best_model.pth，epoch22，DualHeadInstrumentCNN；SHA256 5ada8db602427af8b5c7ba01aa581f5852ebf2b884d94932c821fe44cf22b636。训练顺序strings/woodwinds/brass/percussion/keys；五个独立sigmoid可同时活跃，主导度另有独立head，禁止混淆。
+- 正确输入44100Hz/66150样本/64x130 Mel，当前64x258、GAP64和8类softmax契约需整体迁移。已冻结正确float权重、模型源、配置、真实留出特征和双head参考输出到models/group5_v3_float_20261102；独立从冻结NPZ重载，资产hash与双head logits逐值完全一致PASS。尚无新INT8契约或五组RTL推理PASS。迁移清单见docs/GROUP5_MIGRATION.md。
+- full run20261102-140426-6c67b772已完成PNR/位流，33248LUT/34986FF/132DRM/90APM；SHA256 489EF753C45A2F10315230B95E3AC004B17BDC6D503A468279BFCD9E26F2E5EF。Some Constraints Violated：slow core setup -2.811ns、pix -0.881ns、audio -0.413ns，另有recovery负裕量；仅诊断候选。
+- 已烧录该完整候选，done1/CRC0，真实RV32 BOOT/MMIO OK/ISA OK/DDR3 SELFTEST/DDROK均实收；报告reports/full_system_board_20261102.json。原始UART/TCL/log已冻结至该run的board_boot_20261102，hash在full_system_integration报告。板上没有正确五组模型，不宣称识别成功。PDS已退出，既有cdt未终止或重启。
+- HDMI固定数据保底已由用户实屏确认，codex/display-demo保留；用户尚未接音频源。下一步先正确checkpoint的BN折叠/INT8校准与新golden，再130帧特征/空间尺寸/GAP/五路sigmoid/CPU/UI联动迁移，同时处理完整系统时序；不得继续旧模型上板部署。
+
 ## 2026-11-02 14:13：回归完整系统，RV接入音频与HDMI全拓扑
 
 - 用户确认显示参考图与实屏完全一致，保留codex/display-demo作为可回退演示；按要求恢复完整项目。用户另确认尚未接外部音频源，真实音频板级验收目前缺输入硬件。
 - full/instrec_top接入真实RV32I子系统、MMIO安全窗口请求/结果回读、三路共享UART握手保护，保留外部I2S与Mel/NPU/实时UI链；新增G25物理HDMI复位并迁入已上板通过的下降沿输出。audio_sink在sys_run前屏蔽样本，避免启动自检被m0写入干扰。
 - 生产固件在每次结果ACK后请求下一Mel窗口，ROM2320B；真实CPU C1-C10 PASS。full_top_ctrl直接抽取本次完整顶层逻辑，17项PASS；I2S外部波形16字/idle/复位PASS；RTL59文件0违规。完整pytest432 passed/4 skipped，构建清单测试已适配full所需共享CPU源和.sv文件。
 - 当前生产ROM + frame-major真实Mel布局 + native DDR/NPU不同A/B两轮无reset golden全链PASS；每轮31141202cycles，16512个输入字节全部改变，2次完成/ACK后第3次请求保持待发。证据reports/cpu_native_continuous_validation_20261102.json；不等价真实PHY/音频/板级。
-- 唯一PDS run build/pds/20261102-140426-6c67b772，full资源门控只到dev_map；compile2m19s成功，综合资源33253LUT/34997FF/132DRM/90APM，等待映射完成后决定受控PNR。尚无完整新位流，板上仍为已验收602AB321显示候选。
+- 唯一PDS run build/pds/20261102-140426-6c67b772，full资源门控只到dev_map；compile2m19s成功，综合资源33253LUT/34997FF/132DRM/90APM，映射完成为33248LUT/34986FF/132DRM/90APM、SourcesUnchanged=true；14:19复用数据库开始单路PNR，14:24已完成全局布局，15:04截止审查。整套RTL仿真19/19 PASS。尚无完整新位流，板上仍为已验收602AB321显示候选。
 - 下一步读完整dev_map资源，容量可用则复用数据库单路PNR并监控进展/时序；完整候选出来后板级启动、权重WOK与推理回读。保留所有失败记录，不操作或重启既有cdt进程。
 
 ## 2026-11-02 14:00：用户确认彩条与UI均正常，导出实际RTL参考帧

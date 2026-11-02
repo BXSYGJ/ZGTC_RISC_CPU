@@ -860,3 +860,9 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 - instrec_top接入RV32I安全窗口控制、三路UART握手和启动音频门控，带入已验证HDMI下降沿/G25复位；full构建集纳入CPU和ROM。
 - 生产ROM连续请求，CPU C1-C10/完整顶层控制17项/I2S回归及432项pytest通过；生产ROM+frame-major不同A/B两轮native golden通过。
 - 完整拓扑开始单路资源门控；用户确认暂无外部音频源，真实音频板级验收仍开放。
+
+## 2026-11-02：纠正五组活跃度目标并冻结正确v3参考
+
+- 按用户纠正，目标从旧8类单标签分类改为strings/woodwinds/brass/percussion/keys五组独立sigmoid活跃度；停止旧权重部署。
+- 新增freeze_group5_reference脚本、可追溯float权重/源/配置/真实留出参考与GROUP5_MIGRATION清单；冻结重载双head logits exact PASS，未宣称量化或FPGA迁移完成。
+- 补记完整系统PNR完成但setup/recovery FAIL，以及489EF753诊断候选板级RV32/DDR启动PASS；冻结原始板级证据与hash，保留显示fallback。
