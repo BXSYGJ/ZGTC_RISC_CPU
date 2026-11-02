@@ -1,5 +1,13 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-02 13:52：下降沿HDMI输出候选已烧录，待UI实测
+
+- 用户进一步明确：9F0181AD彩条可见，按住KEY1后显示器明确提示无信号；原厂1080p60可见。UI路径尚未修复，不宣称仅内容异常。
+- 全帧ui_raster逐拍HS/VS/DE对拍两帧PASS；物理输出边沿候选源f4757301，run20261102-134737-7cc2b17b六阶段成功，完整All Constraints Met，slow setup+0.544ns/hold+0.346ns，1030LUT/952FF/1DRM。
+- 位流602AB321075B25F0F9931C99CC7369AB1223E3A27A0177953F20F2DDFE60A17C已program成功、done1/CRC0，UART 64025字节，末帧G07/H81；默认彩条、按住KEY1切UI。外部采样相位是假设，尚待用户反馈，不能据内部时序称物理MS7210输入时序已证明。
+- reports/hdmi_halfcycle_board_20261102.json保存本次摘要，原始UART/TCL/日志在显示工作树build/board_hdmi_halfcycle_20261102。PDS已全部退出，cdt_js9040/原cdt_cfg46156未终止重启。
+- 若仍UI丢信号，下一步用已通过的原始同步时序仅切RGB，继续隔离UI控制与像素路径，不再重复原厂或同版本烧录。
+
 ## 2026-11-02 13:47：彩条可见，切UI异常；全帧逻辑对拍通过
 
 - 用户确认9F0181AD同一位流默认彩条有画面，按住KEY1切UI后异常或无信号。板卡/PHY配置与原始视频模式可工作；UI显示仍FAIL，具体黑屏/丢信号细节待用户反馈。
