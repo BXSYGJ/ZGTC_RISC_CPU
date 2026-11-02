@@ -291,6 +291,17 @@ register(Case(
 ))
 
 register(Case(
+    name="ui_frame",
+    tb="tb_ui_frame.sv",
+    rtl=list(UI_RTL) + ["src/ui/demo_wave_source.v", "src/ui/demo_spec_source.v",
+        "src/diag/top_ui_demo.v", "src/diag/diag_uart_report.v", "src/ctrl/uart_tx.v",
+        "src/hdmi/hdmi_tx_if.v", "src/hdmi/sync_vg.v", "src/hdmi/ms72xx_ctl.v",
+        "src/hdmi/ms7200_ctl.v", "src/hdmi/ms7210_ctl.v", "src/hdmi/iic_dri.v"],
+    timeout=180,
+    description="export complete UI demo pin-level raster with behavioral PLL",
+))
+
+register(Case(
     name="ui_raster",
     tb="tb_ui_raster.sv",
     rtl=list(UI_RTL) + ["src/hdmi/sync_vg.v"],

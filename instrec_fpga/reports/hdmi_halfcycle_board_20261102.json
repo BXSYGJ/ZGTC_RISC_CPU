@@ -35,6 +35,8 @@
     "g": 7,
     "h": 129
   },
-  "visible_result": "PENDING_USER",
-  "root_cause": "NOT_CONFIRMED: testing physical launch phase"
+  "visible_result": "PASS_USER_CONFIRMED_BARS_AND_UI",
+  "root_cause": "Falling-edge launch candidate restored visible bars and UI in board comparison; external electrical timing not independently certified",
+  "user_feedback": "都正常，但是UI我不知道对不对，左上方有一块蓝色的像是不太对",
+  "ui_reference": "reports/ui_demo_expected_20261102.png"
 }
