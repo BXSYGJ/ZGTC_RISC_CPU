@@ -1,5 +1,12 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-02 23:10：位流/权重Flash固化任务难度评估
+
+- 用户提出增加位流与权重固化并评估难度。本轮仅评估，无Flash扫描/擦写/新RTL/PDS/板级操作，不改变当前2673246E运行配置与五类迁移方向。
+- 已视觉核对100Pro核心原理图p3：U15/SPI0、U9/SPI1两颗标称128Mbit(各16MiB)，共用SPI_CLK至专用CFG_CLK H13；实际焊接/JEDEC待核。现有3.79MB位流与0.69MB权重容量不是主要障碍，先不增加器件。
+- 历史CPU软SPI的H13普通IO限制不可照搬占位约束。PDS确有GTP_CFGCLK原语与Logos2映射，是用户模式读Flash候选，尚无PG100映射/实板读回结论。位流固化低中难，权重自动加载中高难；条件估计0.5-1工作日及额外1-3工作日，不承诺当天。
+- docs/FLASH_BOOT_FEASIBILITY_20261102.md与reports/flash_boot_feasibility_20261102.json记录方案/原理图及库文件hash。建议先持久位流，再验证用户Flash读，有限缓冲至DDR＋CRC/模型契约核验＋weight_ok门控，保留UART恢复；CPU固件已在位流中，CPU监督、硬件搬运，不复制整份权重到片内RAM。不在评估阶段扩展在线A/B更新。
+
 ## 2026-11-02：PaceRV应用部分中文竞赛报告v0.1（文档工作）
 
 - 新增docs/competition/application-report/APPLICATION_REPORT.md，依据用户Word模板与DYH提交4ef1ea1b的CPU_REPORT，按完整五部分起草应用正文，附四个Mermaid图、实际RTL界面截图及证据索引；SOURCES.json保存模板hash与远程来源身份。报告事实截点为本日22:55记录。
