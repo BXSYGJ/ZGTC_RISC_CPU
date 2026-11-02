@@ -306,6 +306,14 @@ register(Case(
 ))
 
 register(Case(
+    name="framer_repeat",
+    tb="tb_framer_repeat.sv",
+    rtl=["src/mel/stft_framer.v", "src/mel/hann_rom.v"],
+    timeout=120,
+    description="two no-reset PCM windows, all reflect and Hann samples exact",
+))
+
+register(Case(
     name="uart_rx",
     tb="tb_uart_rx.sv",
     rtl=["src/ctrl/uart_rx.v"],

@@ -1,0 +1,132 @@
+{
+  "source_commit": "47152475",
+  "rtl_suite_passed": 21,
+  "additional_requant_reset_passed": true,
+  "pytest": {
+    "passed": 432,
+    "skipped": 4
+  },
+  "lint": {
+    "files": 59,
+    "violations": 0
+  },
+  "cpu_native_two_frames": {
+    "pass": true,
+    "cycles_per_inference": 31141202,
+    "path": "instrec_fpga\\build\\sim\\cpu_native_joint_timing-resume-20261102\\run.log",
+    "sha256": "96cd730ea963de09261dc68a92140641afcdafb7d178a26f8efe3b8ac47e81dd"
+  },
+  "logs": [
+    {
+      "case": "self_test",
+      "path": "instrec_fpga\\build\\sim\\self_test\\run.log",
+      "sha256": "6de37d43d140cfd6a85166f55f16e2c1dc153f377740fb1e7f64012d865e06c1"
+    },
+    {
+      "case": "conv1",
+      "path": "instrec_fpga\\build\\sim\\conv1\\run.log",
+      "sha256": "ada34b641417411ebc88f57ad1bcf67265d06f9a6ba60fd602216be00fd92db8"
+    },
+    {
+      "case": "mel",
+      "path": "instrec_fpga\\build\\sim\\mel\\run.log",
+      "sha256": "e80b99d561abf7f08788b8712ff3262d9eb58fec037332140ae8f517a6724b3e"
+    },
+    {
+      "case": "mel_credit",
+      "path": "instrec_fpga\\build\\sim\\mel_credit\\run.log",
+      "sha256": "c31e5f1c18a9eb7e2b6c12750358f148d06dce5e7a8915570f300829c7cf70fd"
+    },
+    {
+      "case": "weight_loader",
+      "path": "instrec_fpga\\build\\sim\\weight_loader\\run.log",
+      "sha256": "e142459da08d13406f41ddb49ae196229c99778db5f4c3a0313b6c9b6792d7ba"
+    },
+    {
+      "case": "weight_loader_serial",
+      "path": "instrec_fpga\\build\\sim\\weight_loader_serial\\run.log",
+      "sha256": "cbf90633c645f937ce136d9c288fca46715e4a4741aa955f63b2ec9ce06d04b0"
+    },
+    {
+      "case": "ctrl_smoke",
+      "path": "instrec_fpga\\build\\sim\\ctrl_smoke\\run.log",
+      "sha256": "9d2efcaf1f23e87722a787ff50d3a6207d773c4d983b579b9222ce578c23ce40"
+    },
+    {
+      "case": "uart_linebuf",
+      "path": "instrec_fpga\\build\\sim\\uart_linebuf\\run.log",
+      "sha256": "e6a9af34293e6c82579c52b237e180596c2c0ea32bbf56862cadb2187604a388"
+    },
+    {
+      "case": "npu_chain",
+      "path": "instrec_fpga\\build\\sim\\npu_chain\\run.log",
+      "sha256": "6b72bd364fdb854033fe504f636a0f4e585b22af3aa50d89ed80d652b798cb0a"
+    },
+    {
+      "case": "rv_cpu",
+      "path": "instrec_fpga\\build\\sim\\rv_cpu\\run.log",
+      "sha256": "224a00c287c597bee804688335d792515e042ea9e2c3e8f62b14498e248d3451"
+    },
+    {
+      "case": "npu_completion",
+      "path": "instrec_fpga\\build\\sim\\npu_completion\\run.log",
+      "sha256": "1b3e2c4d281f1c826314ee9003eb4b48fe0bad7f5b169812a4eb6c6f760b00a6"
+    },
+    {
+      "case": "i2s_capture",
+      "path": "instrec_fpga\\build\\sim\\i2s_capture\\run.log",
+      "sha256": "44ad435095c49e9b8d8635f89a7e43efa6bdec8ccdf48768b35decb97993cfe0"
+    },
+    {
+      "case": "audio_fifo",
+      "path": "instrec_fpga\\build\\sim\\audio_fifo\\run.log",
+      "sha256": "18655c18bdb6215d68a38bd1340aacab0596c23a87bc2c3cd7603d067d9cb40c"
+    },
+    {
+      "case": "text_pipeline",
+      "path": "instrec_fpga\\build\\sim\\text_pipeline\\run.log",
+      "sha256": "2a4522765f852c04eb814a00eba293ca0a54435b7864ba025a6a4bf8a1b32cf9"
+    },
+    {
+      "case": "uart_rx",
+      "path": "instrec_fpga\\build\\sim\\uart_rx\\run.log",
+      "sha256": "72d2d9552b46a28bb2f5e10d96f0157e987a700f40b7b1258541755a0d34f95c"
+    },
+    {
+      "case": "rv_top_ctrl",
+      "path": "instrec_fpga\\build\\sim\\rv_top_ctrl\\run.log",
+      "sha256": "10384501d72c543c35135741ed7c15f932ac4ef1e02812fda59a2e5a09087ad3"
+    },
+    {
+      "case": "full_top_ctrl",
+      "path": "instrec_fpga\\build\\sim\\full_top_ctrl\\run.log",
+      "sha256": "0f4827c5206418cf8208fd07cbb95314732098c88fda076d7a229dfd0e2d0c04"
+    },
+    {
+      "case": "ui_render",
+      "path": "instrec_fpga\\build\\sim\\ui_render\\run.log",
+      "sha256": "547ef4f4b2a79a812ba3677d156513643db9ec352d9b625e8d729a7acffa479e"
+    },
+    {
+      "case": "ui_overlay",
+      "path": "instrec_fpga\\build\\sim\\ui_overlay\\run.log",
+      "sha256": "9f5ca93000316dcefcdba044d7961c0ce8d5144af331a7fd7cb16379c2de88cf"
+    },
+    {
+      "case": "ddr3_subsys",
+      "path": "instrec_fpga\\build\\sim\\ddr3_subsys\\run.log",
+      "sha256": "8a899cff19f1d398e7d944cfccb90d328751d26439a9d2cfa50d30fc8675172f"
+    },
+    {
+      "case": "ddr3_aw_timeout",
+      "path": "instrec_fpga\\build\\sim\\ddr3_aw_timeout\\run.log",
+      "sha256": "75251efa97fd46da34dc6f8fc90a55ce67556fa6414c72709dfd9b7863feb131"
+    },
+    {
+      "case": "requant_reset",
+      "path": "instrec_fpga\\build\\sim\\requant_reset\\run.log",
+      "sha256": "29cd58f53e4d4b13db0381e6acf0c73c7b1bcd9a753855ab5f251cfb1b177cd8"
+    }
+  ],
+  "caveat": "New framer repeat checker found pre-existing idle-valid and window-base defects; isolated combined fix PASS, production merge after first resource gate exits."
+}

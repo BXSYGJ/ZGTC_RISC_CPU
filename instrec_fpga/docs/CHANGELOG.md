@@ -872,3 +872,9 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 - 用户选择维持原八类版本，暂缓五组迁移；板上2700帧权重上传/DDR读回WOK FA0D5236，随后6轮NPU完成回报，未接真实音源，不宣称准确率通过。
 - 分拍standardize，framer反射缓存同步读，FIFO注册full，full文字增加char寄存并保持总体延迟；DSP payload去异步复位但valid保留清空。
 - 新增FIFO压力、文字像素等价、requant中途复位仿真；各单项及Mel完整特征PASS。候选时序待PDS检验。
+
+## 2026-11-02：framer跨帧valid与跨窗口ring基址修复
+
+- 新增两组PCM逐采样反射/Hann/环形回绕及out_ready stall回归，复现旧版valid粘住与第二窗口读基址未归零，分别修复；隔离候选1060864采样逐值PASS。
+- 资源门控映射PASS：32236LUT/35057FF/133DRM/90APM，head/tail同步读推断DRM。按设计无PNR/无位流；边界修复需新建完整候选，不复用旧netlist。
+- 21项RTL及额外requant_reset、两轮真实CPU/native/golden通过，原始失败和资源证据保留hash。

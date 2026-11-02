@@ -1,5 +1,12 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-02 15:53：资源门控完成；补齐连续窗口原有缺陷，准备最终候选重建
+
+- run20261102-153838-0eeebb9d compile/synthesize/dev_map全PASS，结束时SourcesUnchanged=true；32236LUT/35057FF/133DRM/90APM，head/tail各1Kx16确认为GTP_DRM18K_E1，比上一完整候选减少1012LUT、增加1DRM。监控记录阶段/CPU/RSS/日志；该run按设计止于映射，无PNR、无位流，禁止当完整时序通过。报告reports/timing_resource_gate_20261102.json。
+- 新framer_repeat反例明确复现ff3548bd原始基线帧尾win_valid粘住；仅清空valid后继续复现第二窗口frame_base未重置。生产现已两处修复：idle清空有效流水，win_start时环形读基址归零；DSP payload无需复位，valid/control清空。隔离候选对两组不同PCM共1060864个Hann/reflect样本逐值PASS，额外out_ready间歇stall版本PASS；原始反例/单修复源/组合修复源与hash保留，见framer_repeat_validation报告。
+- 先前21项RTL suite + 新requant_reset PASS；真实生产ROM/真实frame-major/native DDR不同A/B两轮无reset各31141202cycles、全部中间层与结果golden exact，报告timing_resume_validation_20261102.json。合入边界修复后mel/mel_credit/framer_repeat三项全PASS，真实Mel16512特征0差异；lint59文件0违规。
+- 下一步只用包含边界修复的新源码新建单PDS完整流；旧映射数据库不复用为修复版。完整候选时序仍未验收，板上仍489EF753诊断版，已WOK且6轮CPU回读；未接音源，不宣称真实音频识别准确。
+
 ## 2026-11-02：用户决定维持原八类版本，继续时序与完整板级闭环（当前有效目标）
 
 - 用户明确“维持原来的吧，继续工作”：恢复八类单标签识别交付，暂缓五组活跃度迁移；五组float资产保留，旧目标纠正条目仅作历史。巡检已同步更新，不再等待模型方向选择。

@@ -475,12 +475,21 @@ module stft_framer #(
             all_done_reg <= 1'b0;
             frame_idx    <= 9'd0;
         end else begin
+            // Do not repeat the last payload while idle between frames.
+            // Active-frame assignments below advance the valid pipeline.
+            win_valid <= 1'b0;
+            v_data <= 1'b0;
+            v_mult <= 1'b0;
             // Single-cycle pulses.
             frame_start  <= 1'b0;
             frame_done   <= 1'b0;
             all_done_reg <= 1'b0;
 
             if (!out_run) begin
+                // Each PCM window restarts at ring slot zero. The previous
+                // final frame leaves frame_base at a nonzero ring offset.
+                if (win_start && !started)
+                    frame_base <= 12'd0;
                 if (frame_go) begin
                     out_run   <= 1'b1;
                     addr_done <= 1'b0;
