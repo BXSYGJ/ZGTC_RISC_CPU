@@ -967,3 +967,7 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 
 - 用户板子上线，开始新UI完整系统资源门控。首次run预解析Tcl_Exit清理挂起，保存证据后受控结束，无位流。
 - StopAfter与stage resume退出仅在执行pass生效；新增实际生成TCL双环境回归，25构建测试PASS，stage PS解析PASS。新run211104已通过编译，综合中；资源/PNR/位流尚未完成。COM5恢复，FTDI仍待用户重插，未操作cdt。
+
+## 2026-11-02 21:27：中文仪表盘完整资源门控通过
+
+- 完整源映射33462LUT/35118FF/147.5DRM/90APM，SourcesUnchanged=true，字体/图块6DRM36K、27HDMI输出OFF确认；保存数据库与日志hash。复用数据库单路PNR，22:10截止审查，尚无新位流/时序结论，FTDI仍待恢复。

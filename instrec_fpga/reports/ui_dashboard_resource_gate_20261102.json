@@ -1,0 +1,118 @@
+{
+  "status": "COMPILE_SYNTHESIZE_MAP_PASS_NO_BITSTREAM",
+  "run": "build/pds/20261102-211104-aedccc03",
+  "resources": {
+    "APM": {
+      "used": 90.0,
+      "available": 240.0
+    },
+    "FF": {
+      "used": 35118.0,
+      "available": 133200.0
+    },
+    "LUT": {
+      "used": 33462.0,
+      "available": 66600.0
+    },
+    "Distributed RAM": {
+      "used": 938.0,
+      "available": 19900.0
+    },
+    "DRM": {
+      "used": 147.5,
+      "available": 155.0
+    },
+    "IO": {
+      "used": 120.0,
+      "available": 300.0
+    },
+    "RCKB": {
+      "used": 2.0,
+      "available": 24.0
+    },
+    "SCANCHAIN": {
+      "used": 0.0,
+      "available": 1.0
+    },
+    "USCM": {
+      "used": 5.0,
+      "available": 32.0
+    },
+    "CCS": {
+      "used": 1.0,
+      "available": 1.0
+    },
+    "ADC": {
+      "used": 0.0,
+      "available": 1.0
+    },
+    "DDR_PHY": {
+      "used": 7.0,
+      "available": 24.0
+    },
+    "HSSTLP": {
+      "used": 0.0,
+      "available": 2.0
+    },
+    "GPLL": {
+      "used": 4.0,
+      "available": 6.0
+    },
+    "PPLL": {
+      "used": 2.0,
+      "available": 6.0
+    },
+    "DDRPHY_CPD": {
+      "used": 1.0,
+      "available": 12.0
+    },
+    "HCKB": {
+      "used": 0.0,
+      "available": 96.0
+    },
+    "IOCKB": {
+      "used": 0.0,
+      "available": 24.0
+    },
+    "MRCKB": {
+      "used": 1.0,
+      "available": 12.0
+    },
+    "PCIE": {
+      "used": 0.0,
+      "available": 1.0
+    },
+    "DDRPHY_IOCLK_DIV": {
+      "used": 2.0,
+      "available": 6.0
+    },
+    "ANALOG": {
+      "used": 0.0,
+      "available": 1.0
+    },
+    "TSERDES": {
+      "used": 14.0,
+      "available": 48.0
+    },
+    "KEYRAM": {
+      "used": 0.0,
+      "available": 1.0
+    }
+  },
+  "hdmi_off_packed": 27,
+  "font_rom": "4 GTP_DRM36K_E1",
+  "tile_rom": "2 GTP_DRM36K_E1",
+  "source_unchanged": true,
+  "hashes": {
+    "source-manifest.json": "d262db75c191cba8498da20c7aa8ca4bb64fad9aa811f439ee898a46505ee966",
+    "source-validation.json": "77615b4530408500f69dadda481a5747d18e1082e92967822d38587514bde8fb",
+    "manifest.json": "89e84cca3fd7480dd58af0d891ccd24a2da8bd5bfbab8a11487941b55bf796a0",
+    "device_map/instrec_top_map.adf": "ccd79037e7110b8b35f62ecf110c00a588cfdaca9f680ad9ee055fa2b6624955",
+    "device_map/run.log": "816c9e0310604be02957e304d82cdce8db9ed60bac33128009d1f9e0c9a651bd",
+    "synthesize/apm_drm_lutram_utilization.log": "a61061110a9e3ae54c60a5e58145e6a450491708e47c34d7859d276b006bd4e7",
+    "compile/run.log": "7dd849fb3a432140f8a9f7f90085214e289ac6708c3f34adb4be624b1fa3f589"
+  },
+  "pnr": "Started 21:25:09; stage-20261102-212509-a0cc741c; deadline review22:10",
+  "bitstream": null,
+  "board_flash": "NOT_RUN_FTDI_ABSENT"
+}

@@ -1,5 +1,10 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-02 21:27：新版完整资源门控PASS，唯一PNR限时进行
+
+- run211104-aedccc03 compile/synthesize/dev_map全PASS，21:23:57正常退出，SourcesUnchanged=true；完整映射33462LUT/35118FF/147.5DRM(155容量)/90APM。新font_bits4个DRM36K、tiles2个DRM36K，HDMI27路输出全部实测OFF打包。reports/ui_dashboard_resource_gate_20261102.json含原始map数据库/日志/源hash；容量PASS不等于可布性或时序PASS。
+- 21:25:09复用同映射库启动唯一PNR（stage-20261102-212509-a0cc741c）；使用plain pnr，无种子覆盖。当前全局布局进行中，15秒监控阶段/CPU/RSS/日志，临时防休眠；22:10截止审查，不无限等待。无新位流/最终时序；FTDI缺失重插回复仍待，COM5存在，cdt未动。
+
 ## 2026-11-02 21:16：用户恢复板子上线，完整新版资源门控进行中；FTDI待恢复
 
 - 用户明确授权开始烧录调试，离线阶段限制解除。COM5已出现且可读，6秒只读捕获0字节；FTDI PnP仍缺失，已请用户仅重插下载器电脑端USB，尚未收到回复。既有cdt_js9040端口正常/cdt_cfg46156保留，未终止、重启或新建JTAG服务；尚未烧录新位流。
