@@ -291,6 +291,14 @@ register(Case(
 ))
 
 register(Case(
+    name="ui_raster",
+    tb="tb_ui_raster.sv",
+    rtl=list(UI_RTL) + ["src/hdmi/sync_vg.v"],
+    timeout=120,
+    description="two complete 1080p UI raster control alignment",
+))
+
+register(Case(
     name="ui_render",
     tb="tb_ui_render.sv",
     rtl=list(UI_RTL),

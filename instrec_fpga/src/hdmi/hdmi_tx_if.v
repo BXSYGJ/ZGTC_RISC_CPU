@@ -354,7 +354,10 @@ module hdmi_tx_if #(
     reg        vout_vs_r;
     reg        vout_de_r;
 
-    always @(posedge pix_clk_w) begin
+    // Launch on the falling edge so the receiver has a half pixel period
+    // of setup before the forwarded rising clock edge. Board verification
+    // is required; internal-only timing does not cover the MS7210 input.
+    always @(negedge pix_clk_w) begin
         if (!rstn_pix) begin
             vout_data_r <= 24'h00_00_00;
             vout_hs_r   <= 1'b0;
