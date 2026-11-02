@@ -414,24 +414,9 @@ module instrec_top #(
     );
 
     // ---- UI renderer (waveform region; instantiates waveform_disp) ----
-    // ---- Probability bar overlay (M3) ----
-    wire [10:0] bars_x, bars_y;
-    wire        bars_de;
-    wire [7:0]  b0, b1, b2, b3, b4, b5, b6, b7;
-    wire [23:0] bars_rgb;
-    wire        bars_on;
-
-    ui_coord_delay #(.DELAY(2)) u_bars_delay (
-        .pix_clk   (pix_clk),
-        .rst_pix_n (rst_pix_n),
-        .x         (pix_x),
-        .y         (pix_y),
-        .de        (pix_de),
-        .x_d       (bars_x),
-        .y_d       (bars_y),
-        .de_d      (bars_de)
-    );
-
+    // Frame-coherent probability snapshot and labeled dashboard.
+    wire [7:0] b0, b1, b2, b3, b4, b5, b6, b7;
+    wire result_frame_ready;
     wire [3:0] frame_class;
     bars_data u_bars_data (
         .core_clk    (core_clk),
@@ -442,61 +427,11 @@ module instrec_top #(
         .top1        (npu_top1_u),
         .frame_start (vsync_pulse),
         .frame_class (frame_class),
+        .frame_ready (result_frame_ready),
         .pix_clk     (pix_clk),
         .pix_rst_n   (rst_pix_n),
         .pct0(b0), .pct1(b1), .pct2(b2), .pct3(b3),
         .pct4(b4), .pct5(b5), .pct6(b6), .pct7(b7)
-    );
-
-    bars_disp u_bars_disp (
-        .pix_clk   (pix_clk),
-        .rst_pix_n (rst_pix_n),
-        .x         (bars_x),
-        .y         (bars_y),
-        .de        (bars_de),
-        .pct0(b0), .pct1(b1), .pct2(b2), .pct3(b3),
-        .pct4(b4), .pct5(b5), .pct6(b6), .pct7(b7),
-        .rgb       (bars_rgb),
-        .bars_on   (bars_on)
-    );
-
-    // Class and percentages share one coherent frame-boundary snapshot.
-    // Percentage of the top-1 class, selected from the eight latched bar
-    // values already synchronized into the pixel domain by bars_data.
-    reg [7:0] text_pct;
-    always @* begin
-        case (frame_class)
-            4'd0:    text_pct = b0;
-            4'd1:    text_pct = b1;
-            4'd2:    text_pct = b2;
-            4'd3:    text_pct = b3;
-            4'd4:    text_pct = b4;
-            4'd5:    text_pct = b5;
-            4'd6:    text_pct = b6;
-            default: text_pct = b7;
-        endcase
-    end
-
-    // Register character selection inside text_disp instead of delaying
-    // coordinates here. Total text latency remains three pixel clocks.
-
-    wire [23:0] text_rgb;
-    wire        text_on;
-
-    // 2026-10-31: text layer re-enabled.  LUT headroom was recovered by moving
-    // the wdma parameter tables into a synchronous block RAM (53.57% -> 51.1%),
-    // so the LUT-only part of M3 goes back in first; the spectrogram chain
-    // (which costs 6.5 DRAM) follows separately.
-    text_disp #(.REGISTER_CHAR(1)) u_text_disp (
-        .pix_clk   (pix_clk),
-        .rst_pix_n (rst_pix_n),
-        .pix_x     (pix_x),
-        .pix_y     (pix_y),
-        .de        (pix_de),
-        .class_idx ({4'd0, frame_class}),
-        .pct       (text_pct),
-        .rgb       (text_rgb),
-        .text_on   (text_on)
     );
 
     wire [14:0] npu_feat_rd_addr;
@@ -550,46 +485,19 @@ module instrec_top #(
         .rd_data    (spec_ram_data)
     );
 
-    wire [23:0] spec_rgb;
-    wire        spec_on;
-
-    spectrum_disp u_spectrum (
-        .pix_clk    (pix_clk),
-        .rst_pix_n  (rst_pix_n),
-        .x          (pix_x),
-        .y          (pix_y),
-        .de         (pix_de),
-        .ram_addr   (spec_ram_addr),
-        .ram_data   (spec_ram_data),
-        .page_ready (spec_page_ready),
-        .rgb        (spec_rgb),
-        .spec_on    (spec_on)
-    );
-
-
-    ui_renderer u_ui_renderer (
-        .pix_clk       (pix_clk),
-        .rst_pix_n     (rst_pix_n),
-        .pix_x         (pix_x),
-        .pix_y         (pix_y),
-        .pix_de        (pix_de),
-        .pix_hs        (pix_hs),
-        .pix_vs        (pix_vs),
-        .wave_rd_addr  (wave_rd_addr),
-        .wave_min      (wave_min),
-        .wave_max      (wave_max),
-        .wave_valid    (wave_valid),
-        .mute_flag_sync(mute_flag_sync),
-        .spec_rgb      (spec_rgb),
-        .spec_on       (spec_on),
-        .text_rgb      (text_rgb),
-        .text_on       (text_on),
-        .bars_rgb      (bars_rgb),
-        .bars_on       (bars_on),
-        .vsync_pulse   (vsync_pulse),
-        .rgb           (ui_rgb),
-        .de_out        (ui_de),
-        .hs_out        (ui_hs),
+    dashboard_renderer u_ui_renderer (
+        .pix_clk(pix_clk), .rst_pix_n(rst_pix_n),
+        .pix_x(pix_x), .pix_y(pix_y), .pix_de(pix_de),
+        .pix_hs(pix_hs), .pix_vs(pix_vs),
+        .wave_rd_addr(wave_rd_addr), .wave_min(wave_min), .wave_max(wave_max),
+        .wave_valid(wave_valid), .mute_flag_sync(mute_flag_sync),
+        .spec_ram_addr(spec_ram_addr), .spec_ram_data(spec_ram_data),
+        .feature_ready(spec_page_ready), .result_ready(result_frame_ready),
+        .class_idx(frame_class),
+        .pct0(b0), .pct1(b1), .pct2(b2), .pct3(b3),
+        .pct4(b4), .pct5(b5), .pct6(b6), .pct7(b7),
+        .vsync_pulse(vsync_pulse), .rgb(ui_rgb),
+        .de_out(ui_de), .hs_out(ui_hs),
         .vs_out        (ui_vs)
     );
 

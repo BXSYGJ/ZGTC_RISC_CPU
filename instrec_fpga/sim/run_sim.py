@@ -306,6 +306,14 @@ register(Case(
 ))
 
 register(Case(
+    name="dashboard_ui",
+    tb="tb_dashboard_ui.sv",
+    rtl=["src/ui/dashboard_renderer.v", "src/ui/dashboard_text.v"],
+    timeout=180,
+    description="1080p actual RTL raster, controls, RAM geometry and empty/0/100 percent states",
+))
+
+register(Case(
     name="dynamic_ui",
     tb="tb_dynamic_ui.sv",
     rtl=["src/ui/bars_data.v", "src/ui/bars_disp.v", "src/ui/ui_coord_delay.v",

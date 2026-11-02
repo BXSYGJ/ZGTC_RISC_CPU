@@ -7,11 +7,12 @@ module tb_dynamic_ui;
     reg pv=0; reg [7:0] pp=0; reg [3:0] pi=0, top1=0;
     wire [7:0] b0,b1,b2,b3,b4,b5,b6,b7;
     wire [3:0] frame_class;
+    wire frame_ready;
     bars_data bars(.core_clk(core_clk),.core_rst_n(rst_n),.probs_valid(pv),
         .probs_pct(pp),.probs_idx(pi),.top1(top1),.pix_clk(pix_clk),
         .pix_rst_n(rst_n),.frame_start(frame_start),.pct0(b0),.pct1(b1),
         .pct2(b2),.pct3(b3),.pct4(b4),.pct5(b5),.pct6(b6),.pct7(b7),
-        .frame_class(frame_class));
+        .frame_class(frame_class),.frame_ready(frame_ready));
     reg copy_start=0, busy=0;
     wire [14:0] src_addr,dst_addr; wire src_en,dst_we,wr_page,copy_done;
     reg [7:0] src_data=0; wire [7:0] dst_data;
@@ -73,9 +74,12 @@ module tb_dynamic_ui;
     end
     reg [67:0] old_bars=0;
     reg frame_at_edge;
+    reg old_ready=0;
     always @(posedge pix_clk) begin
         frame_at_edge=frame_start;
         #1;
+        if(rst_n && frame_ready && !frame_at_edge && !old_ready) $fatal(1,"ready changed inside frame");
+        old_ready=frame_ready;
         if(rst_n && {frame_class,b7,b6,b5,b4,b3,b2,b1,b0}!==old_bars && !frame_at_edge)
             $fatal(1,"probability snapshot changed inside frame");
         old_bars={frame_class,b7,b6,b5,b4,b3,b2,b1,b0};
@@ -114,9 +118,9 @@ module tb_dynamic_ui;
         end
         @(negedge core_clk);pv=0;
         repeat(20) @(negedge pix_clk);
-        if({b7,b6,b5,b4,b3,b2,b1,b0}!==64'd0) $fatal(1,"early snapshot");
+        if(frame_ready || {b7,b6,b5,b4,b3,b2,b1,b0}!==64'd0) $fatal(1,"early snapshot");
         commit_frame();
-        if(b0!=10 || b7!=17 || frame_class!=7) $fatal(1,"snapshot commit");
+        if(!frame_ready || b0!=10 || b7!=17 || frame_class!=7) $fatal(1,"snapshot commit");
         for(i=0;i<8;i=i+1) begin
             @(negedge core_clk);pv=1;pi=i;pp=200+i;top1=2;
         end

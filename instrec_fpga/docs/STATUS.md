@@ -1,5 +1,14 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-02 20:07：中文仪表盘改版已实现并通过实际RTL全帧仿真
+
+- 按用户要求仅做离线UI优化：左上“输入波形”解释声音振幅/时间，左下独立Mel频谱说明时间/高低频带/能量色阶，右侧最近完整识别结果及带中文类别名、数字百分比的八条置信度；深色卡片/青色高亮，原八类单标签模型不变。设计及重建说明见docs/UI_DASHBOARD.md。
+- 新dashboard_renderer/dashboard_text接入instrec_top；保留完整特征页/概率快照的帧边界提交。bars_data增加frame_ready，首次完整结果前显示“等待识别”及--%，不把复位类别0冒充识别结果。视频RGB/DE/HS/VS统一四拍；字图及图块为同步ROM、无payload reset。旧显示演示分支/已确认位流保持。
+- 实际RTL生成1920x1080等待/正常/0%/100%/越界五帧，共10368000有效像素；每帧计数、同步四拍、波形缩放、64x258频谱方向与完整范围、RAM边界、卡片边界、2000个条形内部像素PASS；100与255输入完整帧逐字节相同。五项RTL回归dashboard_ui/dynamic_ui/text_pipeline/ui_render/full_top_ctrl全部PASS；dynamic_ui含首次ready/帧中稳定检查。lint61文件0违规，pytest432passed/4skipped。
+- reports/ui_dashboard_ready_20261102.png及waiting/full_scale/zero/clamped均来自实际RTL的PPM，已视觉检查等待/正常/满量程；示例波形/频谱/概率为合成夹具，显示“仿真演示”，不是实采或准确率证据。报告ui_dashboard_validation_20261102.json含RTL/ROM/PNG及仿真日志SHA256。gen_dashboard_assets.py重生成逐字节相同；冻结字图纳管，无需字体即可仿真，scripts/render_dashboard.py可一键重建实际预览。
+- 本轮未启动PDS/未烧录/无新位流；新UI资源推断与最终时序尚未验证，不能用仿真PASS宣称动态花屏板测已修复。板子按用户要求暂不上线，无外部音源。前两轮PNR失败证据保留，cdt/下载器未操作。
+- 下一步：板子可用前继续离线开发；重新进入硬件阶段时，先对这版新源做唯一PDS资源门控（旧133.5DRM映射不能复用），容量允许后受控PNR并核验完整时序，再进行实际动态显示及外部I2S验收。原有core-only生成脚本已有LED区域旧锚点失配，本轮未改它或重生成历史top。
+
 ## 2026-11-02 19:50：用户转向仿真优化UI；板子暂时断电/拔线，不上板
 
 - seed1在约2717 CPU秒仍剩3638连接，默认布局约2715秒时剩916；未见可布性改善，19:40提前保存完整布局/TCL/日志/hash后结束，报告dynamic_ui_seed1_stop_20261102_1940.json。两轮均无新位流/最终时序。PDS与监控零残留，防休眠请求释放，既有cdt未动。
