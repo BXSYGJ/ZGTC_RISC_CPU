@@ -1,0 +1,20 @@
+{
+  "ftdi_present": true,
+  "jtagserver_pids": [
+    9040
+  ],
+  "cdt_cfg_pids": [
+    46156
+  ],
+  "program_ok": true,
+  "status_raw": "0x081ffca0",
+  "done": 1,
+  "crc_err": 0,
+  "uart_bytes": 37211,
+  "uart_file": "D:/0000/111/001/Pango/ZGTC_RISC_CPU/instrec_fpga/build/uart_last.bin",
+  "expect": [],
+  "expect_missing": [],
+  "verdict": "PASS",
+  "visible_screen_confirmation": "PASS_USER_CONFIRMED_VENDOR_IMAGE",
+  "sbit_sha256": "5D1FE82ECD2F2D9A2C85BAFC4A3BBC34D99F19668BA432EBED55A4F811D7A5C6"
+}
