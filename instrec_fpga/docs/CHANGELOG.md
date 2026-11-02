@@ -829,3 +829,7 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 
 - 外部串行源复现0x1235误收0x091A，按registered post-edge phase修正上升沿采样、MSB通道标签及LSB完成点。
 - 新增i2s_capture，16字/idle/活动恢复/帧中复位PASS；RTL0违规，全量432 passed/4 skipped，板级未重烧。
+
+## 2026-11-02：用户要求重烧显示候选
+
+- 20B31B08候选再次program成功、done1/CRC0、UIDEMO可读；当前屏幕待确认。保留本次独立烧录证据，未改RTL。

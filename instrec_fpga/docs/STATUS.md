@@ -1,5 +1,11 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-02 13:18：按用户要求重新烧录显示候选
+
+- 用户说明HDMI此前已测试，要求重新烧录。再次下载20B31B08...605854BE显示专用位流；复用cdt_js9040，原cdt_cfg46156保持，临时配置客户端正常退出。
+- program明确成功，JTAG0x081ffca0、done1、CRC0，捕获67876字节/744帧UIDEMO，最终G=7。仍等待本次重烧后的实际屏幕反馈，不以用户对硬件的判断代替当前画面验收。
+- 报告reports/ui_reflash_20261102_1318.json；原始UART/TCL/日志在显示工作树build/board_ui_reflash_20261102_1318。未运行PDS，未换入RV或I2S位流。
+
 ## 2026-11-02 12:51：外部 I2S 波形补测复现并修复一位采样偏移
 
 - 新增i2s_capture Verilator入口：真实i2s_clk_gen接i2s_rx，测试源只观察物理BCK下降沿输出Philips I2S 16bit紧凑帧，不使用接收器内部phase驱动数据。旧RTL明确FAIL：左声道发送0x1235却收到0x091A，证据build/sim/i2s_capture/before_fix.log保留。
