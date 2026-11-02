@@ -137,27 +137,33 @@ module text_disp #(
     wire [2:0] bit_idx   = ~dx[2:0];           // MSB is the leftmost pixel
 
     // ---- Character selection ---------------------------------------------
-    reg [7:0] char_code;
+    reg [7:0] pct_code;
+    wire is_label = (char_col < name_len);
+    wire [7:0] char_code = is_label ? label_rom[{cls, char_col}] : pct_code;
     always @* begin
-        if (char_col < name_len) begin
-            char_code = label_rom[{cls, char_col}];
-        end else if ({1'b0, char_col} == col_sep) begin
-            char_code = 8'd32;                                  // ' '
+        if ({1'b0, char_col} == col_sep) begin
+            pct_code = 8'd32;                                  // ' '
         end else if ({1'b0, char_col} == col_hund) begin
-            char_code = pct_hi ? 8'd49 : 8'd32;                 // '1' or ' '
+            pct_code = pct_hi ? 8'd49 : 8'd32;                 // '1' or ' '
         end else if ({1'b0, char_col} == col_tens) begin
-            char_code = show_tens ? {4'd3, pct_tens} : 8'd32;   // digit or ' '
+            pct_code = show_tens ? {4'd3, pct_tens} : 8'd32;   // digit or ' '
         end else if ({1'b0, char_col} == col_ones) begin
-            char_code = {4'd3, pct_ones};                       // '0'..'9'
+            pct_code = {4'd3, pct_ones};                       // '0'..'9'
         end else if ({1'b0, char_col} == col_pct) begin
-            char_code = 8'd37;                                  // '%'
+            pct_code = 8'd37;                                  // '%'
         end else begin
-            char_code = 8'd32;
+            pct_code = 8'd32;
         end
     end
 
     // ---- Glyph ROM (synchronous read, one cycle) -------------------------
     wire [7:0] glyph_bits;
+    reg [7:0] label_char_r;
+    reg label_select_r;
+    // A synchronous label read isolates the class/column ROM decode.
+    always @(posedge pix_clk) begin
+        label_char_r <= label_rom[{cls, char_col}];
+    end
     reg [7:0] char_code_r;
     reg [3:0] glyph_row_r;
     reg region_r;
@@ -165,11 +171,13 @@ module text_disp #(
     always @(posedge pix_clk or negedge rst_pix_n) begin
         if (!rst_pix_n) begin
             char_code_r <= 8'd32;
+            label_select_r <= 1'b0;
             glyph_row_r <= 4'd0;
             region_r <= 1'b0;
             bit_idx_r <= 3'd0;
         end else begin
-            char_code_r <= char_code;
+            char_code_r <= pct_code;
+            label_select_r <= is_label;
             glyph_row_r <= glyph_row;
             region_r <= in_region;
             bit_idx_r <= bit_idx;
@@ -178,7 +186,7 @@ module text_disp #(
 
     font_rom u_font_rom (
         .pix_clk   (pix_clk),
-        .char_code (REGISTER_CHAR ? char_code_r : char_code),
+        .char_code (REGISTER_CHAR ? (label_select_r ? label_char_r : char_code_r) : char_code),
         .row       (REGISTER_CHAR ? glyph_row_r : glyph_row),
         .bits      (glyph_bits)
     );

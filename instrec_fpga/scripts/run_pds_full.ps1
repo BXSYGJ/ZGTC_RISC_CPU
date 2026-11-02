@@ -372,7 +372,7 @@ try {
     # 9) extract WNS/WHS from the post-PnR timing report (.rtr). The setup
     #    table line ends with four numbers (WNS TNS failing total); the row
     #    may carry the clock names on the same line or on preceding lines,
-    #    so anchor on the line ending.
+    #    so anchor on the line ending and take the worst clock row.
     $wns = ''
     $whs = ''
     $rtrPath = [System.IO.Path]::Combine($buildRoot, 'report_timing', ($topModule + '.rtr'))
@@ -382,8 +382,10 @@ try {
         $holdIdx = $rtr.IndexOf('Hold Summary(Slow Corner):')
         if ($setupIdx -ge 0 -and $holdIdx -gt $setupIdx) {
             $setupBlock = $rtr.Substring($setupIdx, $holdIdx - $setupIdx)
-            $m = [regex]::Match($setupBlock, '(?m)^.*?(-?\d+\.\d+)\s+(-?\d+\.\d+)\s+\d+\s+\d+\s*$')
-            if ($m.Success) { $wns = $m.Groups[1].Value }
+            $matches = [regex]::Matches($setupBlock, '(?m)^.*?(-?\d+\.\d+)\s+(-?\d+\.\d+)\s+\d+\s+\d+\s*$')
+            if ($matches.Count -gt 0) {
+                $wns = ($matches | ForEach-Object { [double]::Parse($_.Groups[1].Value, [Globalization.CultureInfo]::InvariantCulture) } | Measure-Object -Minimum).Minimum
+            }
         }
         if ($holdIdx -ge 0) {
             $recoveryIdx = $rtr.IndexOf('Recovery Summary(Slow Corner):')
@@ -392,8 +394,10 @@ try {
             } else {
                 $holdBlock = $rtr.Substring($holdIdx)
             }
-            $m = [regex]::Match($holdBlock, '(?m)^.*?(-?\d+\.\d+)\s+(-?\d+\.\d+)\s+\d+\s+\d+\s*$')
-            if ($m.Success) { $whs = $m.Groups[1].Value }
+            $matches = [regex]::Matches($holdBlock, '(?m)^.*?(-?\d+\.\d+)\s+(-?\d+\.\d+)\s+\d+\s+\d+\s*$')
+            if ($matches.Count -gt 0) {
+                $whs = ($matches | ForEach-Object { [double]::Parse($_.Groups[1].Value, [Globalization.CultureInfo]::InvariantCulture) } | Measure-Object -Minimum).Minimum
+            }
         }
     }
     if ($wns -ne '') { Write-Output "WNS (setup, slow corner): $wns ns" } else { Write-Output 'WNS (setup, slow corner): not found' }

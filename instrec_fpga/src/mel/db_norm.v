@@ -239,6 +239,10 @@ module db_norm #(
                 end
                 // -------- scan 2: dB conversion + statistics -----------
                 S_DB_RD: begin
+                    // Accumulate the registered prior value, not the RAM datapath.
+                    if (db_value_pipe_valid) begin
+                        sum_db <= sum_db + {{32{db_value_pipe[15]}}, db_value_pipe};
+                    end
                     db_sq_pipe <= db_sq_product[31:0];
                     db_sq_pipe_valid <= db_value_pipe_valid;
                     state <= S_DB_CALC;
@@ -249,9 +253,6 @@ module db_norm #(
                     end
                     db_value_pipe <= db_s16;
                     db_value_pipe_valid <= is_out_now;
-                    if (is_out_now) begin
-                        sum_db    <= sum_db + {{32{db_s16[15]}}, db_s16};
-                    end
                     if (elem_cnt == SPEC_ELEM_LAST) begin
                         state <= S_DB_FLUSH;
                     end else begin
@@ -260,6 +261,9 @@ module db_norm #(
                     end
                 end
                 S_DB_FLUSH: begin
+                    if (db_value_pipe_valid) begin
+                        sum_db <= sum_db + {{32{db_value_pipe[15]}}, db_value_pipe};
+                    end
                     db_sq_pipe <= db_sq_product[31:0];
                     db_sq_pipe_valid <= db_value_pipe_valid;
                     state <= S_DB_SUM_FLUSH;

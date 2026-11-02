@@ -298,6 +298,14 @@ register(Case(
 ))
 
 register(Case(
+    name="db_norm_stats",
+    tb="tb_db_norm_stats.sv",
+    rtl=["src/mel/db_norm.v"],
+    timeout=120,
+    description="six no-reset dB windows, dropped-head statistics and final flush",
+))
+
+register(Case(
     name="requant_reset",
     tb="tb_requant_reset.sv",
     rtl=["src/npu/requant_unit.v"],

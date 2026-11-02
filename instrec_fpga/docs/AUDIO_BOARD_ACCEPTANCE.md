@@ -34,11 +34,18 @@ are recorded in `reports/audio_pin_review_20261102.json`.
 
 ## What has passed and what remains
 
-The board has accepted the 691200-byte legacy weight image in 2700 UART frames
+The board has accepted the 691040-byte legacy weight image in 2700 UART frames
 with `WOK FA0D5236`, and the CPU has reported six NPU completions in a 12-second
 capture. This proves weight transfer/readback and observed inference/control
 progress on the diagnostic bitstream. It does not prove recognition accuracy
 for an acoustic input, or timing closure.
+
+A subsequent reflash of the same diagnostic image failed weight reload at frame
+814, and the user confirmed HDMI no signal. It has been replaced on the board
+by the fixed display demo; the user confirmed its colorbars and UI both work.
+The earlier transfer/completion evidence remains historical, not proof of the
+current full system state. See `reports/full_system_reflash_20261102_1614.json`
+and `reports/display_fallback_restore_20261102_1620.json`.
 
 Complete audio acceptance requires a compatible source, known instrument test
 clips, correct PCM capture, Mel/golden comparison, NPU results and corresponding

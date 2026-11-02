@@ -1,5 +1,13 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-02 16:50：完整修正版时序未过，已针对剩余两条路径修复并完成功能回归
+
+- run20261102-155516-512e7322六阶段正常结束，SourcesUnchanged=true，位流CDE1D2F660CA0A44D3BF212D5EF0DC8DA0B40B19F12C1CDDA3E4390A17A2B4F9；post-PNR32074LUT/35059FF/133DRM/90APM。完整10表报告FAIL：slow core setup -2.933ns/6584端点，pix setup -0.456ns/6端点；其他检查均PASS，音频与recovery旧违例消除。未烧此版，板上保留用户确认正常的602AB321彩条/UI。报告full_corrected_build_20261102.json、full_timing_corrected_20261102.json；PDS/monitor均正常退出。
+- 精确失败路径为spec_bank_0输出到db_norm.sum_db、top1_s0到text_disp.char_code_r。db_norm改在RD与末尾flush累加上拍寄存dB，避免RAM/dB转换/48位加法串联，统计脉冲及周期数不变。文字REGISTER_CHAR路径改同步label ROM读及独立百分比寄存，三拍/legacy两拍不变。尚未有这两项修改的PDS结论。
+- 新db_norm_stats六组不同窗口无reset：零、正负极值、斜坡、末值最大与丢弃头帧最大，保留区12写/有符号sum/square-sum/末尾flush逐项PASS；mel16512特征golden、mel_credit、text_pipeline全部PASS。lint59文件0违规，pytest432passed/4skipped。证据timing_path_fix_validation_20261102.json。
+- 构建脚本WNS/WHS修正为slow corner所有clock行最小值，避免首行音频+0.867掩盖core -2.933；实际完整负例/显示正例验证PASS。完整验收仍以summarize_timing十表为准。HDMI管脚属性对照无差异，但外部接收器时序未证明，见hdmi_full_vs_display_review_20261102.json。
+- 下一步提交后只启单路compile/synthesize/dev_map门控，核验同步label ROM推断和完整资源，再受控PNR；不以功能仿真代替时序闭合。真实音源仍未接。
+
 ## 2026-11-02 16:25：完整诊断版显示失败，已恢复显示保底；修正版详细布线中
 
 - 用户要求重烧489EF753完整诊断位流，program/done1/CRC0及RV32 BOOT/MMIO/ISA/DDROK实收通过；但权重重载第814帧无ACK失败，后续8秒UART无输出，用户明确确认默认HDMI无信号。完整系统显示验收FAIL，不能沿用早先WOK/6轮完成证明当前运行正常。报告full_system_reflash_20261102_1614.json与build/pds/20261102-140426-6c67b772/board_reflash_20261102_1614保留证据。根因未确定，旧位流已有负时序。
