@@ -985,3 +985,7 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 
 - FIFO读payload/valid与abort witness对齐寄存，切断读mux到256bit比较再到状态的长路径；读done按状态限定，保护写转读边界。端口与读吞吐不变，结果晚一拍。
 - 实际RTL self_test新增末beat高位破坏与无reset恢复，12检查PASS；ddr3_subsys/ddr3_aw_timeout PASS，全pytest433passed/4skipped、lint61/0。原始日志/hash归档；新源未PDS/未烧录，板级状态不变。
+
+## 2026-11-02 22:28：新版完整系统中文UI实屏通过
+
+- 用户确认2673246E中文仪表盘正常且稳定，602AB321彩条/KEY1 UI亦正常；对应板级报告更新实屏PASS。不把视觉确认当时序收敛、长期稳定或准确率验收，继续原八类完整系统时序修复。

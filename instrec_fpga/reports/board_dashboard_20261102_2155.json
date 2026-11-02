@@ -22,8 +22,8 @@
   "verdict": "PASS",
   "bitstream_sha256": "2673246ecac0ecb3e00721c53efd6b941cc0e8ca44022064ae36c21941d89318",
   "bitstream": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\pds\\20261102-211104-aedccc03\\generate_bitstream\\instrec_top.sbit",
-  "timing_acceptance": "FAIL: diagnostic only",
-  "physical_hdmi_acceptance": "AWAITING_USER_CONFIRMATION",
+  "timing_acceptance": "FAIL: diagnostic only; visual confirmation does not close static timing",
+  "physical_hdmi_acceptance": "PASS: user confirms Chinese dashboard normal and stable",
   "external_audio_source_connected": false,
   "weights": {
     "bytes": 691040,
@@ -44,5 +44,7 @@
     "build\\board-dashboard-20261102-2155\\configuration_tcl.log": "74414d660401b30f26b701b673d183731ea1a41e600076c7279f7e6019e4a620",
     "build\\board-dashboard-20261102-2155\\uart_last.bin": "49536e4d8af560d803d685fcc500e2cf9bda231a71d4e4fc08e91a8b19ee1826",
     "build\\board-dashboard-20261102-2155\\weight-upload.log": "1997d6cb498938115d2d4d67a9ca2c5ed70b34f9cf8b35f37c484f0e44bc7099"
-  }
+  },
+  "physical_hdmi_user_feedback": "中文仪表盘正常且稳定",
+  "feedback_recorded_local": "2026-11-02 22:28"
 }
