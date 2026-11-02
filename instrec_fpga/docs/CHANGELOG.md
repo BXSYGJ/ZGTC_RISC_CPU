@@ -980,3 +980,8 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 
 - 2673246E完整位流产出并安全烧录，CPU/MMIO/ISA/DDR/WOK与12秒6轮推理完成PASS；新版实屏待用户确认。最终十表时序仍FAIL，报告保留全部证据/hash，不宣称稳定或识别准确。
 - 百分比glyph在tile选择前并行寄存，四拍视频与五状态实际RTL全帧逐字节一致，dashboard_ui PASS、lint61/0；新源尚未PDS。PDS及监控正常退出，fallback保留。
+
+## 2026-11-02 22:14：DDR自检读比较流水
+
+- FIFO读payload/valid与abort witness对齐寄存，切断读mux到256bit比较再到状态的长路径；读done按状态限定，保护写转读边界。端口与读吞吐不变，结果晚一拍。
+- 实际RTL self_test新增末beat高位破坏与无reset恢复，12检查PASS；ddr3_subsys/ddr3_aw_timeout PASS，全pytest433passed/4skipped、lint61/0。原始日志/hash归档；新源未PDS/未烧录，板级状态不变。

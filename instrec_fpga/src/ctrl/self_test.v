@@ -52,11 +52,11 @@
 //     raises the last wready_beat and done on the SAME cycle (S1/S2), so
 //     the order must never be inverted or a healthy burst would be
 //     reported as an abort.
-//   * ST_RDATA tests rd_valid BEFORE done_q (F4). The read fifo count
-//     only reflects a push on the next cycle (S5), hence the beat that
-//     carries rlast is offered with rd_valid exactly one cycle after
-//     done: done_q is that one-cycle delayed copy of done, and a done_q
-//     with no rd_valid can only mean an AXI watchdog abort.
+//   * ST_RDATA tests registered rd_valid_q BEFORE done_qq (F4).
+//     The FIFO can offer its last beat one cycle after done (S5).
+//     Register read payload/valid and the abort witness together so
+//     that the final beat still wins, with one extra internal cycle.
+//     Qualify raw done by ST_RDATA to exclude write completions.
 //   * st_done and st_fail are mutually exclusive and both stick in
 //     ST_END until the next st_start (F6/F7).
 //
@@ -156,7 +156,16 @@ module self_test #(
     localparam [2:0] ST_END  = 3'd5;
 
     reg [2:0] state;
-    reg       done_q;   // done delayed by one cycle (read abort guard)
+    reg       done_q;   // Raw completion delayed to match the controller FIFO.
+    reg       done_qq;  // Completion aligned with registered read data.
+    reg       rd_valid_q;
+    reg [255:0] rd_data_q;
+
+    // Break the FIFO pointer/mux -> wide compare -> status path.
+    // Payload has no reset; the valid bit gates every use.
+    always @(posedge clk) begin
+        rd_data_q <= rd_data;
+    end
 
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
@@ -169,6 +178,8 @@ module self_test #(
             wrd_idx      <= 7'd0;
             exp_idx      <= 10'd0;
             done_q       <= 1'b0;
+            done_qq      <= 1'b0;
+            rd_valid_q   <= 1'b0;
             st_done      <= 1'b0;
             st_fail      <= 1'b0;
             st_fail_addr <= 28'd0;
@@ -176,7 +187,9 @@ module self_test #(
             // One-cycle delayed copy of done (F4). The read fifo count is
             // updated on the cycle after a push (S5), so the beat carrying
             // rlast appears with rd_valid exactly one cycle after done.
-            done_q <= done;
+            done_q <= done && state == ST_RDATA;
+            done_qq <= done_q;
+            rd_valid_q <= rd_valid;
 
             case (state)
                 ST_IDLE: begin
@@ -251,10 +264,9 @@ module self_test #(
                     // 16 beats of 8 words; the last beat of command i is
                     // recognized by exp_idx[6:0] == 120 (word index
                     // i*128 + 120 .. i*128 + 127).
-                    // rd_valid is tested before done_q (F4): on a normal
-                    // last beat both are high on the same cycle.
-                    if (rd_valid) begin
-                        if (rd_data != exp_beat) begin
+                    // Registered data wins over its aligned abort witness (F4).
+                    if (rd_valid_q) begin
+                        if (rd_data_q != exp_beat) begin
                             // First failing beat: report its byte
                             // address (beat granularity; word position
                             // inside the beat is not resolved further).
@@ -275,8 +287,8 @@ module self_test #(
                         end else begin
                             exp_idx <= exp_idx + 10'd8;
                         end
-                    end else if (done_q) begin
-                        // done arrived one cycle ago and still no beat is
+                    end else if (done_qq) begin
+                        // Read done arrived two cycles ago and still no beat is
                         // available: the read burst was aborted by the
                         // AXI watchdog (AR/S_R timeout, empty fifo).
                         st_done      <= 1'b0;

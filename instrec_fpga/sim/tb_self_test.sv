@@ -19,7 +19,9 @@
 //   T1  16 commands issued, each cmd_valid LEVEL-held at least 10 cycles
 //   T2  write aborted after 5 beats                    -> st_fail, addr base
 //   T3  read aborted (done, never any rd_valid)        -> st_fail, addr base
-//   T4  recovered run after abort                      -> st_done again
+//   T4  recover after abort without reset              -> st_done again
+//   T5  final read beat high-bit corruption             -> sticky fail
+//   T6  recover from corruption without reset          -> st_done again
 //
 // Self-validation: set `wb_abort_at = 3` (or `rb_abort = 1`) and T1 *must*
 // fail; the abort checks then prove the checker itself can see a broken FSM.
@@ -75,6 +77,7 @@ module tb_self_test;
 
     // responder knobs (set by the test sequence)
     integer wb_abort_at = -1;    // >=0: stop after this many write beats
+    integer corrupt_last = 0;
     integer rb_abort    = 0;     // 1: never return read data
     integer rsp_delay   = 3;     // command -> first beat latency
     integer k;
@@ -104,7 +107,8 @@ module tb_self_test;
         end else begin
             case (rsp_state)
                 R_IDLE: begin
-                    if (cmd_valid) begin
+                    // Do not regrant the just-completed held command on done.
+                    if (cmd_valid && !done) begin
                         c_cmd     <= cmd;
                         c_addr    <= cmd[35:8];
                         consumed  <= 5'd0;
@@ -189,6 +193,8 @@ module tb_self_test;
             mem_beat = {mem32[base + 7], mem32[base + 6], mem32[base + 5],
                         mem32[base + 4], mem32[base + 3], mem32[base + 2],
                         mem32[base + 1], mem32[base + 0]};
+            if (corrupt_last && addr == BASE + 28'd4064)
+                mem_beat[255] = ~mem_beat[255];
         end
     endfunction
 
@@ -256,6 +262,7 @@ module tb_self_test;
             st_start <= 1'b1;
             @(posedge clk);
             st_start <= 1'b0;
+            @(negedge clk);
         end
     endtask
 
@@ -327,11 +334,23 @@ module tb_self_test;
         // -------------------------------------------------------------
         wb_abort_at = -1;
         rb_abort    = 0;
-        reset_dut();
         start_test();
         wait_result(20000);
         $display("OBS T4: st_done=%0b st_fail=%0b", st_done, st_fail);
         check("T4 re-run after abort passes", st_done === 1'b1 && st_fail === 1'b0);
+
+        // A final-beat error must win over the otherwise successful finish.
+        corrupt_last = 1;
+        start_test();
+        wait_result(20000);
+        check("T5 final read beat corruption fails", st_fail && !st_done);
+        check("T5 failing command address", st_fail_addr == BASE + 28'd3584);
+        repeat (8) @(posedge clk);
+        check("T5 failure stays sticky", st_fail && !st_done);
+        corrupt_last = 0;
+        start_test();
+        wait_result(20000);
+        check("T6 recover from corrupt read without reset", st_done && !st_fail);
 
         $display("=== tb_self_test done: %0d checks, %0d errors ===", checks, errors);
         if (errors == 0) begin

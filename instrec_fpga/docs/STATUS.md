@@ -1,5 +1,12 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-02 22:14：DDR自检长路径分拍，三项RTL与全量Python回归通过
+
+- self_test在FIFO读数据后新增256bit无reset payload寄存及valid，比较/状态独立下一拍；读完成abort witness同步增加一拍，原始done仅在ST_RDATA采集，避免上次写完成残留误报读abort。外部端口/4KB模式/命令保持/读流吞吐不变；结果内部晚一拍，最后beat优先于abort契约保持。Python cycle model与源优先级断言同步调整。
+- self_test实际RTL扩为12项检查：完整128beat、写/读abort、无reset恢复、最终beat最高bit翻转失败及正确命令地址、sticky结果和再次无reset恢复；最终PASS。修正测试响应器在done周期重复grant旧held命令及restart采样时机；中间失败摘要保留，不掩盖首次尝试失败。ddr3_subsys与ddr3_aw_timeout实际RTL均PASS，23项模型/契约PASS；全pytest433passed/4skipped，lint61/0。
+- reports/self_test_read_pipeline_validation_20261102.json包含RTL/TB/模型与原始日志hash。尚未PDS/无新位流，不能宣称core负裕量已消除。当前板上仍2673246E诊断完整系统，新中文UI实屏反馈待用户；没有重复烧录/要求重插，既有cdt未动，无PDS运行。
+- 下一步处理NPU store到conv RAM路由长路径，再对包含文字glyph与self_test分拍的新源建立唯一完整资源门控并受控PNR；保留602AB321 fallback及所有失败时序证据。未接外部音源，不宣称准确率。
+
 ## 2026-11-02 22:02：新版完整系统已烧录，启动/DDR/WOK/六轮推理PASS；时序仍FAIL
 
 - run211104的PNR/report/bitstream均正常结束，21:55:03生成2673246ECAC0ECB3E00721C53EFD6B941CC0E8CA44022064AE36C21941D89318；PDS/monitor零残留，临时防休眠已释放。报告ui_dashboard_full_build_20261102.json保存位流/完整时序/源清单/阶段日志/监控hash。

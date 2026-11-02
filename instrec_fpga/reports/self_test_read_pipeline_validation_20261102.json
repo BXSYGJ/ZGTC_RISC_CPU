@@ -1,0 +1,27 @@
+{
+  "purpose": "Break FIFO mux to 256-bit compare/status timing path",
+  "change": "Register read payload/valid and delay the abort witness equally; qualify read done to prevent stale write completion abort",
+  "rtl_results": {
+    "self_test": "PASS; 12 checks including final-beat bit255 corruption, sticky failure, no-reset recovery",
+    "ddr3_subsys": "PASS",
+    "ddr3_aw_timeout": "PASS"
+  },
+  "python_results": "433 passed / 4 skipped",
+  "targeted_model_contract": "23 passed",
+  "lint": "61 files / 0 violations",
+  "timing_status": "NOT VALIDATED: new source has no PDS result",
+  "board_status": "UNCHANGED: 2673246E diagnostic system; awaiting user HDMI feedback",
+  "failed_iterations": "Initial unqualified done pipeline exposed stale write completion; read-state qualification fixed it. Extended testbench exposed responder duplicate grant on done and monitor replacement error; both corrected before final self_test PASS. Intermediate summary retained; no failed candidate programmed.",
+  "hashes": {
+    "src/ctrl/self_test.v": "2f97ebaeedc75cf3418fdc2ed08af95e6932e833d39c09c62eb2c90cc1c903f9",
+    "sim/tb_self_test.sv": "4f602076076441bc091a0a1a60b103c8f3b0582ffa2c1e7e1f0b484e95545cde",
+    "tests/test_self_test_model.py": "e20e8bbc93da64812bec25d7de73a790887a901a17cd9e1b2e94a589eb49774a",
+    "build/selftest-pipeline-validation.log": "661cd8682c422b6ec10b0cd4870cb512d8aea1215ab9b38d5bd53dbbe5302a87",
+    "build/selftest-extra-validation.log": "f7c2f963e2f36b4bb8ba0f2c829143a2b359e76788759b6611f11e453329b7cc",
+    "build/selftest-pipeline-pytest.log": "29b08b0260f9f9d6918374afb39593a1d86bb2572b4e36306010986d51bc8d2f",
+    "build/selftest-pipeline-full-pytest.log": "3f0068aed1170c59200322df5606144a09c4136471ccaac3a5944e7faf918132",
+    "build/sim/self_test/run.log": "2cfc1bbe4858bdc6434638fb2942e009dd032de36766828203fb0086329c8937",
+    "build/sim/ddr3_subsys/run.log": "ad45e9c662727056049efd0b1efec5ada30912274ca461011ee27d1a84f01cd5",
+    "build/sim/ddr3_aw_timeout/run.log": "5537614139e3914f6b57e7800410859c4483e55951bcd4c12b04de51140167eb"
+  }
+}

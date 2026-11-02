@@ -356,6 +356,9 @@ class SelfTestModel:
         self.wrd_idx = 0
         self.exp_idx = 0
         self.done_q = 0
+        self.done_qq = 0
+        self.rd_valid_q = 0
+        self.rd_data_q = 0
         self.st_done = 0
         self.st_fail = 0
         self.st_fail_addr = 0
@@ -390,7 +393,7 @@ class SelfTestModel:
         st_done_n = self.st_done
         st_fail_n = self.st_fail
         st_fail_addr_n = self.st_fail_addr
-        done_q_n = fb['done']
+        done_q_n = fb['done'] and self.state == ST_RDATA
 
         if state == ST_IDLE:
             if st_start:
@@ -435,8 +438,8 @@ class SelfTestModel:
             state = ST_RDATA
 
         elif state == ST_RDATA:
-            if fb['rd_valid']:
-                if fb['rd_data'] != self.exp_beat():
+            if self.rd_valid_q:
+                if self.rd_data_q != self.exp_beat():
                     st_done_n = 0
                     st_fail_n = 1
                     st_fail_addr_n = addr
@@ -451,7 +454,7 @@ class SelfTestModel:
                         state = ST_RCMD
                 else:
                     exp_idx_n = self.exp_idx + 8
-            elif self.done_q:
+            elif self.done_qq:
                 st_done_n = 0
                 st_fail_n = 1
                 st_fail_addr_n = addr
@@ -478,6 +481,9 @@ class SelfTestModel:
         self.beat_idx = beat_idx_n
         self.wrd_idx = wrd_idx_n
         self.exp_idx = exp_idx_n
+        self.done_qq = self.done_q
+        self.rd_valid_q = fb['rd_valid']
+        self.rd_data_q = fb['rd_data']
         self.done_q = done_q_n
         self.st_done = st_done_n
         self.st_fail = st_fail_n
@@ -636,8 +642,8 @@ def test_read_last_beat_done_then_data_one_cycle_later_passes():
     assert trace[rlast_done + 1]['done_q'] == 1, (
         'done_q must guard exactly that cycle')
     # rd_valid wins over done_q: the boundary is a pass, not an abort
-    assert trace[rlast_done + 2]['st_done'] == 1
-    assert trace[rlast_done + 2]['st_fail'] == 0
+    assert trace[rlast_done + 3]['st_done'] == 1
+    assert trace[rlast_done + 3]['st_fail'] == 0
 
 
 def test_read_abort_with_empty_fifo_flags_fail_after_done_q():
@@ -653,9 +659,9 @@ def test_read_abort_with_empty_fifo_flags_fail_after_done_q():
     assert trace[done_i]['rd_valid'] == 0
     assert trace[done_i + 1]['done_q'] == 1, 'done_q must be done delayed 1 cycle'
     assert trace[done_i + 1]['rd_valid'] == 0
-    assert trace[done_i + 2]['st_fail'] == 1, (
-        'st_fail must rise 1 cycle after done_q')
-    assert trace[done_i + 2]['st_fail_addr'] == 0x0030_0000
+    assert trace[done_i + 3]['st_fail'] == 1, (
+        'st_fail must rise after the aligned done_qq witness')
+    assert trace[done_i + 3]['st_fail_addr'] == 0x0030_0000
     assert model.st_done == 0
 
 
@@ -841,7 +847,7 @@ def test_source_holds_cmd_valid_until_done():
 
 
 def test_source_keeps_fsm_priority_order():
-    """F2/F4: wready_beat precedes done, rd_valid precedes done_q in source."""
+    """F2/F4: beats precede the matching completion witness in source."""
     text = SRC_PATH.read_text(encoding='utf-8')
 
     wdata = state_block(text, 'ST_WDATA')
@@ -850,6 +856,6 @@ def test_source_keeps_fsm_priority_order():
     assert wdata.index('if (wready_beat)') < wdata.index('else if (done)')
 
     rdata = state_block(text, 'ST_RDATA')
-    assert 'if (rd_valid)' in rdata
-    assert 'else if (done_q)' in rdata
-    assert rdata.index('if (rd_valid)') < rdata.index('else if (done_q)')
+    assert 'if (rd_valid_q)' in rdata
+    assert 'else if (done_qq)' in rdata
+    assert rdata.index('if (rd_valid_q)') < rdata.index('else if (done_qq)')
