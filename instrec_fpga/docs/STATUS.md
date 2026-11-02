@@ -1,5 +1,11 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-02：PaceRV应用部分中文竞赛报告v0.1（文档工作）
+
+- 新增docs/competition/application-report/APPLICATION_REPORT.md，依据用户Word模板与DYH提交4ef1ea1b的CPU_REPORT，按完整五部分起草应用正文，附四个Mermaid图、实际RTL界面截图及证据索引；SOURCES.json保存模板hash与远程来源身份。报告事实截点为本日22:55记录。
+- 八类已有实现与五组双头/CPU后处理目标明确分开；保留外部音源未接、诊断位流时序FAIL、NPU249.1ms超200ms预算、新分拍源153.5DRM且未PNR等边界，不引用CPU历史CoreMark作为应用成绩。
+- 文档检查通过：章节、主要篇幅、图链/证据路径、461445120 MAC与周期/资源值复核；本轮未修改RTL/约束/脚本，未启动PDS或板级操作。后续以真实音源、五组量化与新完整时序结果修订。开发下一步仍按22:55及后续实现状态推进。
+
 ## 2026-11-02 22:55：八类三项分拍资源门控完成，DRM余量仅1.5；五类评估已提交
 
 - run224004-e25e4ce6 compile/synthesize/dev_map全PASS，22:53:40正常退出，SourcesUnchanged=true；33640LUT/35394FF/153.5DRM(155容量)/90APM。报告replay_pipeline_resource_gate_20261102.json包含数据库/源/日志/监控hash；PDS与monitor退出，临时防休眠释放。
