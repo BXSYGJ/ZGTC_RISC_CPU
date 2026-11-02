@@ -1,5 +1,14 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-02 12:38：显示保底分支与 HDMI 无信号实测
+
+- 用户要求评估今日交付并优先准备显示演示。完整 RV+AI+真实 I2S+HDMI 今日完成置信度低：当前 top_rv_core 无 HDMI，i2s_sd 接常0；独立 instrec_top 有外部接口但尚未与 RV 合并，不能称完整系统已交付。
+- 已建 codex/display-demo 分支与隔离工作树 build/ui-wt。既有 UI 位流 D1EF2594...CE9B1A9 烧录 done1/CRC0，339帧 UIDEMO、G07及像素计数递增；用户明确确认底板 J9/HDMI OUT 仍无信号，显示验收 FAIL。内部计数/I2C init_over 不等价显示器有图。
+- 核对 BASE 原理图：J8=HDMI_IN/MS7200，J9=HDMI_OUT/MS7210；T24=HD_TX_PCLK，K22/K23=HSP_SCL/SDA，G25=RSTN_OUT。例程虽位于 FMC 目录，HDMI 使用底板接口，不能据目录认定接错扩展卡。
+- 原厂同器件 HDMI 位流 SHA256 5D1FE82ECD2F2D9A2C85BAFC4A3BBC34D99F19668BA432EBED55A4F811D7A5C6 已烧入，program明确成功/done1/CRC0；等待用户可视反馈。初次中文路径指定失败的日志保留，随后复制ASCII路径成功；不得用旧done状态证明program成功。
+- 独立显示候选补接原厂G25物理复位，并使72%柱与piano文本一致；尚未PDS/板级验证。构建将优先于RV，禁止并发PDS。
+- RV run build/pds/20261102-121546-d902b356 已compile/synthesize/dev_map并进入PNR，布局CPU持续推进；为优先显示交付而受控停止父37344/子32688，非工具失败，**无新位流、无时序结论**。日志哈希与进程证据在priority-stop-evidence.json/priority-stop-processes.json。未终止或重启cdt_js9040/cdt_cfg46156。
+
 ## 2026-11-02 12:14：RV 板级启动已确认；UART RX 首帧阻塞已定位修复
 
 - 用户已明确要求烧录调试。诊断下载既有 `20261102-003406-7af1bf17` 位流（SHA256 `605C234F...B488CFB`），复用 `cdt_js` PID9040；配置客户端正常退出，原 `cdt_cfg` PID46156 未终止/重启。JTAG `0x081ffca0`、done=1、crc_err=0，COM5 捕获 136 bytes，包含 `RV32 BOOT`、`RV32 MMIO OK`、`DDR OK STS 0x00000040`、`NPU GO`；部分字节损坏，不能宣称 UART 或推理全链通过。
