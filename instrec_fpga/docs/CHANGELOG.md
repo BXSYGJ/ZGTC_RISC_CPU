@@ -820,3 +820,7 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 - `rv_cpu` C1-C9、`rv_top_ctrl` 17 项、构建护栏 pytest 45 项和 59 个 Verilog 的词法检查均通过。
 - 最新 RV 位流虽已布线完成，但 DDR PHY 时序未闭合（slow WNS -4.462 ns、fast WNS -0.793 ns，SCBV 警告），继续保持板级 `NOT_RUN`，未触碰下载器。
 
+
+## 2026-11-02 12:44：显示修复候选构建与板级冒烟
+
+- G25复位/CDC显示分支六阶段完成，All Constraints Met，+1.191ns；20B31B08...605854BE成功烧录，UIDEMO/G07。实际屏幕仍待用户反馈，未宣称显示通过。

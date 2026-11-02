@@ -1,5 +1,13 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-02 12:44：显示专用修复位流已完成并烧录，待屏幕验收
+
+- codex/display-demo（源提交8d5382a2）补接底板G25物理HDMI复位，固定piano演示柱与文本一致，烧录脚本缺失program成功证据时不再误报PASS。RTL59文件0 violation，烧录契约/安全39项PASS。
+- PDS run 20261102-124002-c2bc537c 六阶段成功、SourcesUnchanged=true；完整slow/fast报告All Constraints Met，slow setup+1.191ns、hold+0.338ns；1035LUT/948FF/1DRM/0APM。cfg与pix之间仅有复位/准静态双拍同步路径，显示分支补了对应CDC时钟分组，域内时序仍检查；原始负裕量首候选与报告保留。
+- 位流SHA256 20B31B08C7D56982E580A709A26A9E965780437A4BDB79BF6DB04093605854BE。已复用cdt_js9040烧入，program明确成功、done1/CRC0、27300字节UIDEMO，G最终07；未终止/重启原cdt_cfg46156。PDS已全部退出。
+- 现在板上是这个修复UI候选（不再是原厂对照版）。**用户尚未确认最新候选屏幕画面，显示未验收**；旧UI位流在底板J9无信号为明确失败证据。原厂对照版成功烧录后未收到屏幕反馈，因此不作硬件链路通过结论。
+- 报告reports/display_demo_build_20261102.json、ui_reset_board_20261102.json；原始UART/TCL/日志在显示工作树build/board_ui_reset_20261102。当前只演示固定数据，无真实音频或推理。完整项目今日交付仍低置信度，待显示验收后回到RV串口权重WOK、真实I2S和HDMI整合。
+
 ## 2026-11-02 12:38：显示保底分支与 HDMI 无信号实测
 
 - 用户要求评估今日交付并优先准备显示演示。完整 RV+AI+真实 I2S+HDMI 今日完成置信度低：当前 top_rv_core 无 HDMI，i2s_sd 接常0；独立 instrec_top 有外部接口但尚未与 RV 合并，不能称完整系统已交付。
