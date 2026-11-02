@@ -114,7 +114,7 @@ module top_ui_demo (
     input  wire        clk,
     // KEY0 asynchronous board reset (pin C22, active low).
     input  wire        rst_n,
-    // KEY1 (pin C23): reserved, not used by this design.
+    // KEY1 (pin C23): hold to select UI instead of diagnostic color bars.
     input  wire        key1_n,
 
     // Status LEDs (A20 / C18 / C19 / E18 / A17 / A18 / C17 / B17).
@@ -258,6 +258,36 @@ module top_ui_demo (
     wire        fire_due;
     wire        fire_req;
 
+    // Physical HDMI bisection: default to raw timing/color bars. Hold KEY1
+    // to select rendered UI; latch selection only at the frame boundary.
+    reg key1_meta;
+    reg key1_sync;
+    reg raw_video;
+    reg [23:0] raw_rgb;
+    always @(posedge pix_clk or negedge rst_pix_n) begin
+        if (!rst_pix_n) begin
+            key1_meta <= 1'b1;
+            key1_sync <= 1'b1;
+            raw_video <= 1'b1;
+        end else begin
+            key1_meta <= key1_n;
+            key1_sync <= key1_meta;
+            if (vs_rise) raw_video <= key1_sync;
+        end
+    end
+    always @* begin
+        case (pix_x[10:8])
+            3'd0: raw_rgb = 24'hFFFFFF;
+            3'd1: raw_rgb = 24'hFFFF00;
+            3'd2: raw_rgb = 24'h00FFFF;
+            3'd3: raw_rgb = 24'h00FF00;
+            3'd4: raw_rgb = 24'hFF00FF;
+            3'd5: raw_rgb = 24'hFF0000;
+            3'd6: raw_rgb = 24'h0000FF;
+            default: raw_rgb = 24'h202020;
+        endcase
+    end
+
     // ==================================================================
     // HDMI transmitter front end (GPLL_B + I2C configuration + video pads).
     // ==================================================================
@@ -271,10 +301,10 @@ module top_ui_demo (
         .pix_de         ( pix_de          ),
         .pix_hs         ( pix_hs          ),
         .pix_vs         ( pix_vs          ),
-        .rgb_in         ( ui_rgb          ),
-        .de_in          ( ui_de           ),
-        .hs_in          ( ui_hs           ),
-        .vs_in          ( ui_vs           ),
+        .rgb_in         ( raw_video ? raw_rgb : ui_rgb ),
+        .de_in          ( raw_video ? pix_de : ui_de ),
+        .hs_in          ( raw_video ? pix_hs : ui_hs ),
+        .vs_in          ( raw_video ? pix_vs : ui_vs ),
         .hdmi_rst_n     ( hdmi_rst_n      ),
         .vout_clk       ( vout_clk        ),
         .vout_de        ( vout_de         ),
@@ -492,10 +522,10 @@ module top_ui_demo (
     assign f_g = { 4'd0, init_fail_pix, init_over_pix, pll_lock_pix, rst_pix_n };
 
     // H field, contract packing:
-    //   {3'd0, pix_de, pix_hs, pix_vs, pix_clk, rst_pix_n}
+    //   {raw_video, 2'd0, pix_de, pix_hs, pix_vs, pix_clk, rst_pix_n}
     // The pix_clk bit observes the clock level only; no functional logic
     // consumes it. Every other bit is a pix_clk-domain register output.
-    assign f_h = { 3'd0, pix_de, pix_hs, pix_vs, pix_clk, rst_pix_n };
+    assign f_h = { raw_video, 2'd0, pix_de, pix_hs, pix_vs, pix_clk, rst_pix_n };
 
     // LED report: init flags plus a frame-rate heartbeat.
     assign led = { init_over_pix, init_fail_pix, 5'b00000, vsync_cnt[6] };
