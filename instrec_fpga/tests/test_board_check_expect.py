@@ -433,3 +433,12 @@ def test_metadata_constants_are_exposed(board):
     assert board_check.EXIT_CFG_HUNG == 4
     assert board_check.EXIT_EXPECT_FAIL == 5
     assert board_check.EVIDENCE_KEYS == CONTRACT_KEYS
+
+def test_failed_program_cannot_pass_with_previous_done_status(board):
+    board.program = ("cfg_program command can't be exec.\nStatus Register: 0x081FFCA0\n", 0)
+    target = board.tmp / 'failed-program.json'
+    rc = board.run('--sbit', str(board.sbit), '--json', str(target))
+    assert rc == board_check.EXIT_PROGRAM_FAIL
+    evidence = board.evidence(target)
+    assert evidence['program_ok'] is False
+    assert evidence['verdict'] != 'PASS'

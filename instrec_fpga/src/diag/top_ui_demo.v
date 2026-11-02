@@ -123,6 +123,7 @@ module top_ui_demo (
     output wire        uart_tx,
 
     // HDMI transmitter I2C configuration pads (K22 / K23).
+    output wire        hdmi_rst_n,   // G25, baseboard HDMI reset
     output wire        iic_tx_scl,
     inout  wire        iic_tx_sda,
 
@@ -142,11 +143,11 @@ module top_ui_demo (
     localparam [21:0] FIRE_PERIOD = 22'd3712500;
 
     // Latched class probabilities, percent (single dominant class 4).
-    localparam [7:0] PCT_CLASS0 = 8'd72;
+    localparam [7:0] PCT_CLASS0 = 8'd2;
     localparam [7:0] PCT_CLASS1 = 8'd15;
     localparam [7:0] PCT_CLASS2 = 8'd6;
     localparam [7:0] PCT_CLASS3 = 8'd3;
-    localparam [7:0] PCT_CLASS4 = 8'd2;
+    localparam [7:0] PCT_CLASS4 = 8'd72;
     localparam [7:0] PCT_CLASS5 = 8'd1;
     localparam [7:0] PCT_CLASS6 = 8'd1;
     localparam [7:0] PCT_CLASS7 = 8'd0;
@@ -274,6 +275,7 @@ module top_ui_demo (
         .de_in          ( ui_de           ),
         .hs_in          ( ui_hs           ),
         .vs_in          ( ui_vs           ),
+        .hdmi_rst_n     ( hdmi_rst_n      ),
         .vout_clk       ( vout_clk        ),
         .vout_de        ( vout_de         ),
         .vout_hs        ( vout_hs         ),

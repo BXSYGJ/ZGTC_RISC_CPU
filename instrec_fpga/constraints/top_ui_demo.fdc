@@ -390,3 +390,12 @@ define_attribute {p:vout_data[0]} {PAP_IO_STANDARD} {LVCMOS33}
 define_attribute {p:vout_data[0]} {PAP_IO_DRIVE} {4}
 define_attribute {p:vout_data[0]} {PAP_IO_SLEW} {FAST}
 define_attribute {p:vout_data[0]} {PAP_IO_NONE} {TRUE}
+
+# Physical MS7210/MS7200 reset, matching the vendor board demo.
+define_attribute {p:hdmi_rst_n} {PAP_IO_DIRECTION} {OUTPUT}
+define_attribute {p:hdmi_rst_n} {PAP_IO_LOC} {G25}
+define_attribute {p:hdmi_rst_n} {PAP_IO_VCCIO} {3.3}
+define_attribute {p:hdmi_rst_n} {PAP_IO_STANDARD} {LVCMOS33}
+define_attribute {p:hdmi_rst_n} {PAP_IO_DRIVE} {4}
+define_attribute {p:hdmi_rst_n} {PAP_IO_SLEW} {FAST}
+define_attribute {p:hdmi_rst_n} {PAP_IO_NONE} {TRUE}

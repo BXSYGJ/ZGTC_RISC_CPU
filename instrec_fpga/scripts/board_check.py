@@ -376,6 +376,8 @@ def run_check(args):
         prog_ok = ('PROGRAM FLOW DONE' in text or
                    'COMMAND[Program] execute successfully' in text or
                    'The done bit is 1' in text)
+        if sbit and not prog_ok and rc == EXIT_OK:
+            rc = EXIT_PROGRAM_FAIL
         evidence['program_ok'] = prog_ok
         print(f'program: {prog_ok}')
         done = parse_done(text)
