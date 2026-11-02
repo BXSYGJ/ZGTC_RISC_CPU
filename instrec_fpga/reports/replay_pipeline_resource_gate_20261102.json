@@ -1,0 +1,121 @@
+{
+  "status": "COMPILE_SYNTHESIZE_MAP_PASS_NO_BITSTREAM",
+  "run": "build\\pds\\20261102-224004-e25e4ce6",
+  "source_commit": "3ea8f787",
+  "source_unchanged": true,
+  "resources": {
+    "APM": {
+      "used": 90.0,
+      "available": 240.0
+    },
+    "FF": {
+      "used": 35394.0,
+      "available": 133200.0
+    },
+    "LUT": {
+      "used": 33640.0,
+      "available": 66600.0
+    },
+    "Distributed RAM": {
+      "used": 938.0,
+      "available": 19900.0
+    },
+    "DRM": {
+      "used": 153.5,
+      "available": 155.0
+    },
+    "IO": {
+      "used": 120.0,
+      "available": 300.0
+    },
+    "RCKB": {
+      "used": 2.0,
+      "available": 24.0
+    },
+    "SCANCHAIN": {
+      "used": 0.0,
+      "available": 1.0
+    },
+    "USCM": {
+      "used": 5.0,
+      "available": 32.0
+    },
+    "CCS": {
+      "used": 1.0,
+      "available": 1.0
+    },
+    "ADC": {
+      "used": 0.0,
+      "available": 1.0
+    },
+    "DDR_PHY": {
+      "used": 7.0,
+      "available": 24.0
+    },
+    "HSSTLP": {
+      "used": 0.0,
+      "available": 2.0
+    },
+    "GPLL": {
+      "used": 4.0,
+      "available": 6.0
+    },
+    "PPLL": {
+      "used": 2.0,
+      "available": 6.0
+    },
+    "DDRPHY_CPD": {
+      "used": 1.0,
+      "available": 12.0
+    },
+    "HCKB": {
+      "used": 0.0,
+      "available": 96.0
+    },
+    "IOCKB": {
+      "used": 0.0,
+      "available": 24.0
+    },
+    "MRCKB": {
+      "used": 1.0,
+      "available": 12.0
+    },
+    "PCIE": {
+      "used": 0.0,
+      "available": 1.0
+    },
+    "DDRPHY_IOCLK_DIV": {
+      "used": 2.0,
+      "available": 6.0
+    },
+    "ANALOG": {
+      "used": 0.0,
+      "available": 1.0
+    },
+    "TSERDES": {
+      "used": 14.0,
+      "available": 48.0
+    },
+    "KEYRAM": {
+      "used": 0.0,
+      "available": 1.0
+    }
+  },
+  "drm_headroom": 1.5,
+  "pnr": "NOT_RUN: resource gate deliberately stopped before PNR; user now prioritizes five-group reuse assessment",
+  "timing": "NOT_RUN",
+  "bitstream": null,
+  "pds_exit": 0,
+  "monitor_exited": true,
+  "sleep_inhibition_released": true,
+  "hashes": {
+    "source-manifest.json": "a8d8ab6e731bd0a538fec1b18d20748568d0a3ade8cf8e5f02dc1615c8202f81",
+    "source-validation.json": "db2c48841b130b850fa9e853107816f3feeec8fb91806f56527eac24b529ef2b",
+    "manifest.json": "77f98bf115761e0c84f3451b3330cc0dad2101d73b11c6aa72ffdac4223fddcb",
+    "compile/run.log": "b8af77ff0569026676cb909bf086f2643527df7dd7ef4efc9bbbca576bb9c25e",
+    "synthesize/run.log": "8c92a5855a3aa3ae53ac2dacd811c4b4f796ad6659c390d951531ff1f2acf57b",
+    "device_map/run.log": "1a96845781beb805a6593426dd77f9a77fc038c21b7f91017efda3b32b9a3aa0",
+    "device_map/instrec_top_map.adf": "909f8c14bcfb5134fc9f8da560ac0eb44cdb05e01e21f0fafe7eec0465464e5e",
+    "full-monitor.jsonl": "8a67b922adedfbd39104fb98dee80b71100a30496af7943b53d3619ea0fc3fea"
+  }
+}
