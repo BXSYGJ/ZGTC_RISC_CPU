@@ -1,0 +1,145 @@
+﻿{
+  "date": "2026-11-02",
+  "result": "PASS",
+  "report_sha256": "82a874be3774fbca0112203bc4a4e7d756aade155514f57a76a01b2b9a55df74",
+  "measured_metrics_recalculated": true,
+  "source_hashes_unchanged": true,
+  "figures": [
+    {
+      "path": "assets/cpu-architecture.png",
+      "png_sha256": "4b546c9c3b1d77277c75d0c6fa4880daf4caff3fc3d3cf92473c0dd107c115ea",
+      "size": [
+        2992,
+        1188
+      ],
+      "svg_sha256": "ced6d426fd9d15e49d16c50709386a1382a7a0f8cbf9018c6ac77413bf5e232c",
+      "chinese_labels": true
+    },
+    {
+      "path": "assets/coremark-list.png",
+      "png_sha256": "b1b8ec27707c69542889de6384a023fca091e28c0d2e1614f7ab1b9477c660ca",
+      "size": [
+        3080,
+        1716
+      ],
+      "svg_sha256": "fcf230d65f931befa9856199964ec67e32d674d896758590151d9a787760fa79",
+      "chinese_labels": true
+    },
+    {
+      "path": "assets/coremark-matrix.png",
+      "png_sha256": "16dc9d69fc8cc66dce82e0168b2204bfb3df26d4d3f7554c5eef1c05b149abc2",
+      "size": [
+        3080,
+        1716
+      ],
+      "svg_sha256": "061cfb7bd0190eb1d805200fe53e4156aa78a5cb96391c6529f63f4ee62bc75d",
+      "chinese_labels": true
+    },
+    {
+      "path": "assets/coremark-state.png",
+      "png_sha256": "d96b61bd0e22eaf93073def7bcc5b00b0e9b92a0d452a249aff711952576306c",
+      "size": [
+        3080,
+        1716
+      ],
+      "svg_sha256": "3453448f777808324a0dbf6113fb6635023b412ccf29102973dfa4a82c4202dd",
+      "chinese_labels": true
+    }
+  ],
+  "full_window_statistics": [
+    {
+      "algorithm": "list",
+      "samples": 1024,
+      "wb_idheld_exheld_memheld": [
+        604,
+        163,
+        159,
+        158
+      ]
+    },
+    {
+      "algorithm": "matrix",
+      "samples": 1024,
+      "wb_idheld_exheld_memheld": [
+        675,
+        123,
+        117,
+        117
+      ]
+    },
+    {
+      "algorithm": "state",
+      "samples": 1024,
+      "wb_idheld_exheld_memheld": [
+        674,
+        106,
+        96,
+        94
+      ]
+    }
+  ],
+  "template_chinese_character_counts": [
+    {
+      "section": "摘要",
+      "chinese_characters": 301,
+      "template_limit": 800
+    },
+    {
+      "section": "1.1",
+      "chinese_characters": 140,
+      "template_limit": 400
+    },
+    {
+      "section": "1.2",
+      "chinese_characters": 114,
+      "template_limit": 400
+    },
+    {
+      "section": "1.3",
+      "chinese_characters": 127,
+      "template_limit": 400
+    },
+    {
+      "section": "1.4",
+      "chinese_characters": 161,
+      "template_limit": 200
+    },
+    {
+      "section": "1.5",
+      "chinese_characters": 116,
+      "template_limit": 200
+    },
+    {
+      "section": "1.6",
+      "chinese_characters": 104,
+      "template_limit": 200
+    },
+    {
+      "section": "4.1",
+      "chinese_characters": 104,
+      "template_limit": 300
+    },
+    {
+      "section": "4.2",
+      "chinese_characters": 239,
+      "template_limit": 1000
+    }
+  ],
+  "references": 7,
+  "tables": 4,
+  "prose_diagnostic": {
+    "scope": "section",
+    "word_count": 4908,
+    "em_dash_count": 0,
+    "em_dash_limit": 0,
+    "issue_count": 0,
+    "issues": [],
+    "interpretation": "Contextual prose diagnostics; not an AI-authorship or detector assessment. Counts do not measure information density or validate scientific claims."
+  },
+  "visual_inspection": "All four PNG exports inspected; Chinese characters legible; no observed text/connector overlaps.",
+  "evidence_scope": {
+    "sota": "verified public single-issue five-stage in-order RV32IMC FPGA implementations",
+    "waveforms": "local RTL simulation",
+    "publication": "MCSoC 2026 accepted"
+  }
+}

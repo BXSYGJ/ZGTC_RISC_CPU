@@ -1,0 +1,170 @@
+﻿{
+  "date": "2026-11-02",
+  "artifact": "CPU_REPORT.md",
+  "scope": "CPU subsystem report for integration with teammates competition report",
+  "board_measurements": [
+    {
+      "release": "H3_Base_145125",
+      "isa": "RV32IMC",
+      "configuration": "V0",
+      "iterations": 6000,
+      "clock_hz": 145125000,
+      "cycles": 1743221870,
+      "retired": 1649428429,
+      "coremark": 499.5061242548546,
+      "coremark_per_mhz": 3.441902664977465,
+      "lut": 6097,
+      "ff": 2541,
+      "drm": 25.0,
+      "apm": 4,
+      "setup_slack_ns": 0.047,
+      "clock_uncertainty_ns": 0.15,
+      "coremark_per_lut": 0.08192654161962516,
+      "coremark_per_mhz_per_klut": 0.5645239732618443,
+      "board_captures": 3,
+      "board_evidence": "board-references/V0",
+      "physical_evidence": "evidence/physical/V0",
+      "ila": false,
+      "elapsed_seconds": 12.011864737295435
+    },
+    {
+      "release": "H3_Retained_145125",
+      "isa": "RV32IMC",
+      "configuration": "V0",
+      "iterations": 6000,
+      "clock_hz": 145125000,
+      "cycles": 1743134699,
+      "retired": 1649428429,
+      "coremark": 499.53110364880644,
+      "coremark_per_mhz": 3.442074788277736,
+      "lut": 6150,
+      "ff": 2541,
+      "drm": 25.0,
+      "apm": 4,
+      "setup_slack_ns": 0.016,
+      "clock_uncertainty_ns": 0.15,
+      "coremark_per_lut": 0.08122456969899292,
+      "coremark_per_mhz_per_klut": 0.5596869574435342,
+      "board_captures": 3,
+      "board_evidence": "board-references/V0",
+      "physical_evidence": "evidence/physical/V0",
+      "ila": false,
+      "elapsed_seconds": 12.011264075796728
+    }
+  ],
+  "comparisons": {
+    "vex_coremark_per_mhz": 2.7425142213863425,
+    "pacerv_retained_gain_percent": 25.508001432997673,
+    "retention_demand_reduction_percent": 98.83406254415925,
+    "vex_cycle_source": "native RTL simulation",
+    "pacerv_cycle_source": "archived board measurements"
+  },
+  "assets": [
+    {
+      "file": "assets/cpu-architecture.png",
+      "source": "Attend_an_academic_conference/camera-ready/manuscript/figures/fig1_architecture.pdf",
+      "source_sha256": "c76738d8366bf99a44f7798b70a2daeb20b08ba9a7b5bb935b03e870dff7aaaa",
+      "operation": "Chinese vector reconstruction; source architecture connections retained"
+    },
+    {
+      "file": "assets/coremark-list.png",
+      "source": "ILA_Core_Releases_20261101/H3_Retained_145125/waveforms/core_bench_list.decoded.csv",
+      "source_sha256": "447a440edf1ff715fc066e522ded982bbafc7390c32ec6e4001506a6315c5c80",
+      "sha256": "b1b8ec27707c69542889de6384a023fca091e28c0d2e1614f7ab1b9477c660ca",
+      "operation": "Chinese waveform redrawn from archived decoded CSV; trigger-relative 32-edge slice; local RTL simulation"
+    },
+    {
+      "file": "assets/coremark-matrix.png",
+      "source": "ILA_Core_Releases_20261101/H3_Retained_145125/waveforms/core_bench_matrix.decoded.csv",
+      "source_sha256": "a8299ecc250dddb5793363a2b51d0e31e5b13497f9078d9503e60d681a742213",
+      "sha256": "16dc9d69fc8cc66dce82e0168b2204bfb3df26d4d3f7554c5eef1c05b149abc2",
+      "operation": "Chinese waveform redrawn from archived decoded CSV; trigger-relative 32-edge slice; local RTL simulation"
+    },
+    {
+      "file": "assets/coremark-state.png",
+      "source": "ILA_Core_Releases_20261101/H3_Retained_145125/waveforms/core_bench_state.decoded.csv",
+      "source_sha256": "f630267db5491e3275628f9dc3eaf65c9e279ce880fa7ec0a0001a0d403e82ce",
+      "sha256": "d96b61bd0e22eaf93073def7bcc5b00b0e9b92a0d452a249aff711952576306c",
+      "operation": "Chinese waveform redrawn from archived decoded CSV; trigger-relative 32-edge slice; local RTL simulation"
+    }
+  ],
+  "higher_reported_rv32im_result": {
+    "title": "Design of a Configurable Five-Stage Pipeline Processor Core Based on RV32IM",
+    "doi": "10.3390/electronics13010120",
+    "url": "https://www.mdpi.com/2079-9292/13/1/120",
+    "verified_on": "2026-11-02",
+    "table_2_coremark_per_mhz": 3.51,
+    "fpga_reported_in_section_4": "Xilinx Artix7",
+    "fpga_frequency_mhz_reported": 200,
+    "lut_ff_bram_counts": "not reported in acquired full article text/tables",
+    "score_to_board_configuration_binding": "not explicitly established by the reported benchmark and FPGA-prototype paragraphs",
+    "isa": "RV32IM; exact RV32IMC comparison class differs",
+    "acquisition": "rendered publisher full text and tables; NJU inspect_source page acquisition; no PDF download",
+    "interpretation": "FPGA implementation cannot be excluded; resource cost cannot be inferred as high from missing counts."
+  },
+  "sources": [
+    {
+      "path": "PaceRV/cpu/H3_Base_145125/PERFORMANCE.json",
+      "sha256": "8b5633655b9d0a34cb05984d68fb94fca292f0507641c53ef76aa3d5ec83a220"
+    },
+    {
+      "path": "PaceRV/cpu/H3_Retained_145125/PERFORMANCE.json",
+      "sha256": "e8d085e8b71968521576c229f08e35b0eb9cc49591d93b1a244d3a656825e771"
+    },
+    {
+      "path": "PaceRV-MCSoC2026/data/implementation/vex.json",
+      "sha256": "3e3a80f908eb91c9214e025407b9a3cdcb75ffd858a2f3afd85c0206c9338202"
+    },
+    {
+      "path": "PaceRV/docs/architecture.md",
+      "sha256": "b1b0fcb17729ef50505ea5dbfe959ebaf53964173e81733359092a67ca63857c"
+    },
+    {
+      "path": "PaceRV/docs/reproducibility.md",
+      "sha256": "0a8cbae977de342bc1d840a1b2736782a62e65701d752099eb1df0f423514e42"
+    },
+    {
+      "path": "PaceRV/docs/performance-context.md",
+      "sha256": "ed93e5022d4a74a1fd68c4daff280678c2b341d5ceb895a5835d210ad62d070e"
+    },
+    {
+      "path": "PaceRV-MCSoC2026/docs/EVIDENCE.md",
+      "sha256": "a85fb47836cdabcd964a55d304c14f861a17692e2642dae04a10aef8c4bc435c"
+    },
+    {
+      "path": "PaceRV-MCSoC2026/paper.json",
+      "sha256": "fccafada8df10cc5b8a73b655affca51d3486d9aae51d6f434030034eb5ce778"
+    },
+    {
+      "path": "ILA_Core_Releases_20261101/analysis/IMPLEMENTATION_RESULTS.md",
+      "sha256": "d7a581b2b31dc986ee147a15d66eb096b24e88f2fe81b62ec7c65fc4ce26131b"
+    },
+    {
+      "path": "ILA_Core_Releases_20261101/analysis/README.md",
+      "sha256": "8cfeb1fc06360fb6254032cce2502c46534e454e202b79ffc7c02c3fcaf34e41"
+    },
+    {
+      "path": "Attend_an_academic_conference/camera-ready/manuscript/main.tex",
+      "sha256": "bc380af2b18a3004a924deca65e268fc7d24afa1b44860974814cf89b00024fa"
+    },
+    {
+      "path": "ccfa-workfiles/competition/fpga-submission-study/downloads/cases/ultra-vision-2024/00-README.md",
+      "sha256": "4262088ef65e89ae997548c85166e2a2cceea802fba8814c779a50b38c236367"
+    },
+    {
+      "path": "ccfa-workfiles/competition/fpga-submission-study/downloads/cases/anlu-first-prize-2025/00-README.md",
+      "sha256": "97858785f4d9db9c376a6d65687b263a0831f93f174cfb9b659469b3e14a9454"
+    },
+    {
+      "path": "ccfa-workfiles/competition/fpga-submission-study/cache/2026-design-report-template.md",
+      "sha256": "7191c75332c17791ef3ac8e3d278b5e9dc12ac534236addfb3683ec1c2a1220a"
+    }
+  ],
+  "style_transfer": "Ultra-Vision: specifications first, architectural decisions linked to benefits, concrete results and figures; Anlu: system/module relations and reproducibility. Original phrasing and engineering-status chatter not copied.",
+  "claim_choices": {
+    "sota_scope": "verified publicly reported single-issue five-stage in-order RV32IMC FPGA implementations",
+    "publication": "MCSoC 2026 accepted; no assertion of DOI assignment or IEEE indexing",
+    "frequency": "qualified operating points and routed closure; no claim to an unmeasured physical maximum",
+    "ila_waveforms": "local RTL simulation; no physical-board ILA acquisition claimed"
+  }
+}

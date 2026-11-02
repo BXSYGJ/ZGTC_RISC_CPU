@@ -2,6 +2,14 @@
 
 RV32IMC soft-core releases for the Pango PG2L200H FPGA, with sources, firmware, physical implementation reports and validation evidence.
 
+## PaceRV中文竞赛报告 — 2026-11-02
+
+[CPU部分完整报告](docs/competition/cpu-report/CPU_REPORT.md)介绍PaceRV的架构、执行效率、物理实现、板级验证、MCSoC论文录用和开源成果，包含**4张中文图、4张中文表**。
+
+PaceRV实现**3.442 CoreMark/MHz**，达到已核实公开实现中单发射五级顺序RV32IMC FPGA软核的SOTA执行效率。完整系统在**145.125 MHz**下获得约**499.5 CoreMark**，基础版使用**6,097 LUT / 2,541 FF**，结果保持版使用6,150 LUT / 2,541 FF，均保留缓存、外设和动态监测。相关研究已获**IEEE MCSoC 2026录用**。
+
+[报告资料索引](docs/competition/cpu-report/README.md)同时提供中文PNG/SVG图、指标来源和核验记录。正式处理器开源入口为[PaceRV](https://github.com/BXSYGJ/PaceRV)，论文复现材料见[PaceRV-MCSoC2026](https://github.com/BXSYGJ/PaceRV-MCSoC2026)。
+
 ## New: minimal ILA and bare-core results — 2026-11-01
 
 The [new release collection](cpu/validated-extensions-20261101/README.md) adds independent minimal-ILA versions of **Original 155.25 MHz**, **H3 Retained 145.125 MHz**, and **H3 Base 145.125 MHz**, plus their separately routed bare-core extractions.
