@@ -1,5 +1,13 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-02 13:34：HDMI二分诊断位流已烧录，待彩条/KEY1画面结果
+
+- 用户确认原厂画面输入为1920x1080 60Hz，与自研目标相同；现阶段已有原厂板级显示PASS，自研20B31B08无信号FAIL，未确定软件根因。
+- 显示分支源81191c71，run20261102-132721-a565919a六阶段成功，SourcesUnchanged=true，完整报告All Constraints Met，slow setup+0.406ns/hold+0.338ns；1031LUT/952FF/1DRM/0APM。位流SHA2569F0181AD711D49541C8BE69C4531655754483476F9B57A1B64D3E4311DB475F2。
+- 已烧录该诊断候选，program成功/done1/CRC0，27300字节、300帧UIDEMO，末帧G07/H81，确认默认选择原始sync_vg+彩条。按住KEY1下一帧切UI，松开回彩条；选择经双拍同步并在帧边界锁存。
+- 当前板上是9F0181AD诊断版，不再是原厂位流；尚待用户确认默认彩条和按住KEY1的UI各自结果。若两者都无信号，重点转新HDMI封装/配置/物理输出；若彩条正常且UI异常，重点查UI输出同步。不得将UART/H81代替实际画面证明。
+- 报告reports/hdmi_bisect_board_20261102.json；原始日志/UART/TCL在显示工作树build/board_hdmi_bisect_20261102。未终止或重启cdt进程，PDS已退出。
+
 ## 2026-11-02 13:27：原厂 HDMI 已由用户确认有画面，定位自研显示链路
 
 - 用户明确报告重烧UI仍无信号；再次烧原厂5D1FE82E...1D7A5C6，program成功/done1/CRC0，用户随即确认“原厂例程有画面”。这确认同板J9/线缆/显示器链路可工作，修复UI候选20B31B08实际显示FAIL，不能宣称G25修复已解决。
