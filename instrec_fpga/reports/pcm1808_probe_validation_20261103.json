@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "status": "DIAGNOSTIC_PROGRAM_PASS_EXTERNAL_AUDIO_PENDING",
+  "status": "REAL_PCM1808_CAPTURE_AND_FIR_BOARD_PASS_FULL_SYSTEM_PENDING",
   "build": {
     "Schema": 1,
     "BuildSet": "pcm1808_diag",
@@ -164,5 +164,104 @@
       "run": "build/pcm1808_probe/run-20261103-134330",
       "result": "Custom resume parser/project mismatch; no bitstream, not programmed"
     }
-  ]
+  ],
+  "external_audio": {
+    "user_confirmation": "Powered PCM1808; corrected J3 wiring to J2; line audio playing",
+    "uart_ascii": "DIAG UIDEMO   A=50434D38 B=0000BB80 C=0000AC44 D=0000BAF7 E=EBF21452 F=FFBBFFBC G=00 H=1B \nDIAG UIDEMO   A=50434D38 B=0000BB80 C=0000AC44 D=0000BB76 E=EFA1148B F=02450241 G=00 H=1B \nDIAG UIDEMO   A=50434D38 B=0000BB80 C=0000AC45 D=0000BB77 E=EF5D0CC9 F=FC09FC10 G=00 H=1B \nDIAG UIDEMO   A=50434D38 B=0000BB80 C=0000AC44 D=0000BB70 E=EE17185D F=FFB7FFB6 G=00 H=1B \nDIAG UIDEMO   A=50434D38 B=0000BB80 C=0000AC44 D=0000B826 E=EDF01245 F=02FE02F9 G=00 H=1B \nDIAG UIDEMO   A=50434D38 B=0000BB81 C=0000AC44 D=0000BB77 E=F1120D67 F=02EA02E5 G=00 H=1B \nDIAG UIDEMO   A=50434D38 B=0000BB80 C=0000AC44 D=0000BB78 E=F2211124 F=FDCCFDCF G=00 H=1B \nDIAG UIDEMO   A=50434D38 B=0000BB80 C=0000AC45 D=0000BB3C E=F2A50DBB F=FD52FD57 G=00 H=1B \nDIAG UIDEMO   A=50434D38 B=0000BB80 C=0000AC44 D=0000BB75 E=E98617EF F=0626061A G=00 H=1B \nDIAG UIDEMO   A=50434D38 B=0000BB80 C=0000AC44 D=0000BB74 E=EBA81CE2 F=00BC00BA G=00 H=1B \n",
+    "uart_sha256": "c457c6c89124f1f7b3d37e7dca19728cd7186112020554840acd7ab21087bc65",
+    "rows": [
+      {
+        "input_pairs": 48000,
+        "output_pairs": 44100,
+        "nonzero_pairs": 47863,
+        "left_min": -5134,
+        "left_max": 5202,
+        "filtered_pair_hex": "FFBBFFBC",
+        "flags": 0
+      },
+      {
+        "input_pairs": 48000,
+        "output_pairs": 44100,
+        "nonzero_pairs": 47990,
+        "left_min": -4191,
+        "left_max": 5259,
+        "filtered_pair_hex": "02450241",
+        "flags": 0
+      },
+      {
+        "input_pairs": 48000,
+        "output_pairs": 44101,
+        "nonzero_pairs": 47991,
+        "left_min": -4259,
+        "left_max": 3273,
+        "filtered_pair_hex": "FC09FC10",
+        "flags": 0
+      },
+      {
+        "input_pairs": 48000,
+        "output_pairs": 44100,
+        "nonzero_pairs": 47984,
+        "left_min": -4585,
+        "left_max": 6237,
+        "filtered_pair_hex": "FFB7FFB6",
+        "flags": 0
+      },
+      {
+        "input_pairs": 48000,
+        "output_pairs": 44100,
+        "nonzero_pairs": 47142,
+        "left_min": -4624,
+        "left_max": 4677,
+        "filtered_pair_hex": "02FE02F9",
+        "flags": 0
+      },
+      {
+        "input_pairs": 48001,
+        "output_pairs": 44100,
+        "nonzero_pairs": 47991,
+        "left_min": -3822,
+        "left_max": 3431,
+        "filtered_pair_hex": "02EA02E5",
+        "flags": 0
+      },
+      {
+        "input_pairs": 48000,
+        "output_pairs": 44100,
+        "nonzero_pairs": 47992,
+        "left_min": -3551,
+        "left_max": 4388,
+        "filtered_pair_hex": "FDCCFDCF",
+        "flags": 0
+      },
+      {
+        "input_pairs": 48000,
+        "output_pairs": 44101,
+        "nonzero_pairs": 47932,
+        "left_min": -3419,
+        "left_max": 3515,
+        "filtered_pair_hex": "FD52FD57",
+        "flags": 0
+      },
+      {
+        "input_pairs": 48000,
+        "output_pairs": 44100,
+        "nonzero_pairs": 47989,
+        "left_min": -5754,
+        "left_max": 6127,
+        "filtered_pair_hex": "0626061A",
+        "flags": 0
+      },
+      {
+        "input_pairs": 48000,
+        "output_pairs": 44100,
+        "nonzero_pairs": 47988,
+        "left_min": -5208,
+        "left_max": 7394,
+        "filtered_pair_hex": "00BC00BA",
+        "flags": 0
+      }
+    ],
+    "result": "10 consecutive one-second snapshots: 48000/48001 input, 44100/44101 output, nonzero signed audio, idle=0 and overrun=0",
+    "limits": "Diagnostic only; no DDR/Mel/NPU inference or recognition accuracy acceptance"
+  }
 }

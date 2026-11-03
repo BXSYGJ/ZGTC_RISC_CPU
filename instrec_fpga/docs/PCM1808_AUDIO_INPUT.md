@@ -44,3 +44,7 @@
 UART 格式为 `DIAG UIDEMO A=50434D38 ...`，字段均十六进制：B=每秒输入 stereo pair 数，C=每秒滤波输出数，D=非零输入对数，E=左声道有符号 16bit 最小/最大值，F=最近一对实际滤波后的左右样本，G bit0=idle、bit1=overrun，H=1B（27MHz）。稳定 48kHz 音源应约 B=48000、C=44100（这里为十进制描述），G=0；拔线 G=1/计数归零。数字静音可有正常计数但 D=0，不应据此认定识别准确。
 
 复现：`powershell -NoProfile -ExecutionPolicy Bypass -File scripts/run_pds_full.ps1 -BuildSet pcm1808_diag`（先确认无其他 PDS）；`python sim/run_sim.py pcm1808_27mhz` 和 `python sim/run_sim.py pcm1808` 分别验证诊断/生产频率。构建、十表与初始上板证据见 `reports/pcm1808_probe_validation_20261103.json`。当前还未验收外部音源。
+
+### 真实音源验收更新
+
+2026-11-03 14:43，用户补供电并纠正 J3→J2 后，无需复位恢复实际音频。十个连续秒窗输入 48000/48001、输出 44100/44101 对，有正负非零音频、无 idle/overrun。仅独立 I2S/FIR 诊断板测通过，完整识别系统待集成。
