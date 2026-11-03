@@ -1277,6 +1277,35 @@
     "remaining_timing_paths": [
       "npu_m1_bridge/reads_left -> weight_read_aligner state enable (-1.071ns)",
       "fc1/rq_cnt -> requant multiplier (-0.953ns)"
-    ]
+    ],
+    "board_retry": {
+      "ftdi_present": false,
+      "jtagserver_pids": [
+        9040
+      ],
+      "cdt_cfg_pids": [
+        46156
+      ],
+      "program_ok": false,
+      "status_raw": null,
+      "done": null,
+      "crc_err": null,
+      "uart_bytes": 0,
+      "uart_file": "D:/0000/111/001/Pango/ZGTC_RISC_CPU/instrec_fpga/build/board-pcm1808-mel-split-20261103/uart_last.bin",
+      "expect": [
+        "RV32 BOOT",
+        "DDROK"
+      ],
+      "expect_missing": [],
+      "verdict": "FAIL",
+      "user_reinsert_confirmed": true,
+      "independent_pnp_check": {
+        "present_ftdi": false,
+        "present_uart": "COM5",
+        "historical_ftdi_status": "Unknown/non-present",
+        "existing_js_pid": 9040,
+        "existing_cfg_pid": 46156
+      }
+    }
   }
 }
