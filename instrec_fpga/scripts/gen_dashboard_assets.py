@@ -10,8 +10,11 @@ CLASSES = ['单簧管', '失真电吉他', '女声', '长笛', '钢琴', '次中
 ENGLISH = ['clarinet', 'distorted electric guitar', 'female singer', 'flute', 'piano', 'tenor saxophone', 'trumpet', 'violin']
 
 
-def generate():
-    assert json.loads((ROOT / 'scripts/outputs/layer_contract.json').read_text(encoding='utf-8'))['classes']['names'] == ENGLISH
+def generate(demo=None):
+    global OUT, CLASSES
+    if demo is not None:
+        CLASSES = demo["classes_zh"] + ["等待播放"]
+    assert demo is not None or json.loads((ROOT / 'scripts/outputs/layer_contract.json').read_text(encoding='utf-8'))['classes']['names'] == ENGLISH
     font_path = Path('C:/Windows/Fonts/msyh.ttc')
     ascii_path = Path('C:/Windows/Fonts/consola.ttf')
     chinese = ImageFont.truetype(str(font_path), 27)
@@ -49,7 +52,7 @@ def generate():
 
     put(64, 64, 'INSTREC / 乐器识别', 3)
     put(64, 112-16, '观察声音  ·  查看频谱  ·  了解识别结果', 2)
-    put(1632, 64, '仿真演示', 4, 6)
+    put(1632, 64, '曲线演示' if demo else '仿真演示', 4, 0 if demo else 6)
     put(96, 192, '01 输入波形')
     put(96, 224, '声音振幅随时间变化', 2)
     put(80, 288, '+1', 2)
@@ -70,10 +73,10 @@ def generate():
     put(768, 960, '能量', 2)
     put(864, 960, '弱', 2)
     put(1120, 960, '强', 2)
-    put(1248, 192, '03 最近识别结果')
+    put(1248, 192, '03 预设置信度回放' if demo else '03 最近识别结果')
     put(1280, 336-16, '置信度', 2)
     put(1280, 384, '类别置信度', 2)
-    put(1280, 960, '百分比表示模型置信度', 2)
+    put(1280, 960, 'KEY1 重播 / 预设曲线' if demo else '百分比表示模型置信度', 2)
     for i, label in enumerate(CLASSES[:8]):
         put(1280, 448+64*i, label, 1)
     # Dynamic large class: each 16x32 source tile occupies 32x64 pixels.
@@ -96,13 +99,13 @@ def generate():
     class_ids.extend([0]*(256-len(class_ids)))
 
     def write(name, values, width):
-        (OUT / name).write_text(''.join(f'{v:0{width}x}\n' for v in values), encoding='ascii')
+        (OUT / (("demo_" if demo else "") + name)).write_text(''.join(f'{v:0{width}x}\n' for v in values), encoding='ascii')
     write('dashboard_font.hex', [v for g in glyphs for v in g], 4)
     write('dashboard_tiles.hex', tiles, 4)
     write('dashboard_ascii.hex', ascii_ids, 2)
     write('dashboard_classes.hex', class_ids, 2)
     metadata = dict(classes=CLASSES, texts=texts, glyph_chunks=len(lookup), font_sha256=hashlib.sha256(font_path.read_bytes()).hexdigest(), ascii_sha256=hashlib.sha256(ascii_path.read_bytes()).hexdigest())
-    (OUT / 'dashboard_assets.json').write_text(json.dumps(metadata, ensure_ascii=False, indent=2)+'\n', encoding='utf-8')
+    (OUT / ('demo_dashboard_assets.json' if demo else 'dashboard_assets.json')).write_text(json.dumps(metadata, ensure_ascii=False, indent=2)+'\n', encoding='utf-8')
     print('Dashboard ROM assets generated:', len(lookup), 'characters')
 
 

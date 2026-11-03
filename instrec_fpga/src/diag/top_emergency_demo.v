@@ -479,7 +479,7 @@ module top_emergency_demo #(
         .rd_data    (spec_ram_data)
     );
 
-    dashboard_renderer u_ui_renderer (
+    demo_dashboard_renderer u_ui_renderer (
         .pix_clk(pix_clk), .rst_pix_n(rst_pix_n),
         .pix_x(pix_x), .pix_y(pix_y), .pix_de(pix_de),
         .pix_hs(pix_hs), .pix_vs(pix_vs),

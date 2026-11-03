@@ -149,6 +149,18 @@ def register(case: Case) -> None:
 
 
 register(Case(
+    name="demo_dashboard", tb="tb_demo_dashboard.sv",
+    rtl=["src/ui/demo_dashboard_renderer.v", "src/ui/demo_dashboard_text.v"], timeout=180,
+    description="demo-only labels, five 1080p rasters, video alignment and bars",
+))
+
+register(Case(
+    name="demo_timeline", tb="tb_demo_timeline.sv",
+    rtl=["src/ui/demo_confidence_player.v"], timeout=120,
+    description="supplied montage: all 581 ROM rows, top1, final hold and replay",
+))
+
+register(Case(
     name="demo_player", tb="tb_demo_player.sv",
     rtl=["src/ui/demo_confidence_player.v"], timeout=120,
     description="scripted demo: idle, debounce, complete bundles, hold and replay",

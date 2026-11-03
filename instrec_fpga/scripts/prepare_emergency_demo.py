@@ -3,6 +3,7 @@ from pathlib import Path
 import re
 ROOT = Path(__file__).resolve().parents[1]
 s = (ROOT/'src/ctrl/instrec_top.v').read_text(encoding='utf-8')
+s = s.replace('dashboard_renderer u_ui_renderer', 'demo_dashboard_renderer u_ui_renderer')
 s = s.replace('module instrec_top #(', 'module top_emergency_demo #(', 1)
 s = '// top_emergency_demo: DEMO ONLY: real audio and video, scripted results, no inference.\n' + s
 start = s.index('    npu_top #(')
@@ -33,3 +34,9 @@ s = s.replace('.weight_err   (weight_err),', ".weight_err   (1'b0),", 1)
 s = s.replace('.key1_n          (key1_n)', ".key1_n          (1'b1)")
 (ROOT/'src/diag/top_emergency_demo.v').write_text(s, encoding='utf-8')
 print('Generated top_emergency_demo; no NPU instance; KEY1 replay only.')
+
+for name in ['dashboard_renderer', 'dashboard_text']:
+    source = (ROOT/'src/ui'/f'{name}.v').read_text(encoding='utf-8')
+    source = source.replace('dashboard_renderer', 'demo_dashboard_renderer').replace('dashboard_text', 'demo_dashboard_text')
+    source = source.replace('src/ui/dashboard_', 'src/ui/demo_dashboard_')
+    (ROOT/'src/ui'/f'demo_{name}.v').write_text(source, encoding='utf-8')

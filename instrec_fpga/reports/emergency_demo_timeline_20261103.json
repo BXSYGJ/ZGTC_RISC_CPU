@@ -1,0 +1,46 @@
+{
+  "source": "instrec_fpga\\data\\demo\\confidence_timeline.json",
+  "source_sha256": "3846ed13e6c2697eec64cfd13f176741cb7ca9fac69d525a0d8885679c6cdbda",
+  "windows": 114,
+  "centers_seconds": [
+    1.485,
+    57.985
+  ],
+  "sample_count": 581,
+  "tick_hz": 10,
+  "first_window_policy": "hold first vector from WAV t=0 to first center",
+  "interpolation": "linear; round percent to nearest integer",
+  "classes": [
+    "piano",
+    "violin",
+    "clarinet",
+    "flute",
+    "saxophone",
+    "trumpet",
+    "guitar_acoustic",
+    "guitar_electric"
+  ],
+  "no_inference": true,
+  "resource_run": "build/pds/20261103-175125-bc930d4f",
+  "tests": {
+    "pytest": "48 passed",
+    "demo_player": "PASS",
+    "demo_timeline": "PASS 581 rows plus hold/replay",
+    "lint": "69 files / 0",
+    "demo_dashboard": "PASS 5 full 1080p RTL rasters / 2000 bar checks"
+  },
+  "bitstream": null,
+  "board_flashed": false,
+  "preview_sha256": "d7f63dc307b3e743cd77d20972cbd05c3778a9b37b50211b64c02ef8faef6de3",
+  "hardware_preflight": "FTDI present / JS9040 TCP65420 open / existing cfg46156 preserved",
+  "resource_gate": {
+    "result": "PASS",
+    "duration_seconds": 572.1,
+    "lut": 20886,
+    "ff": 18148,
+    "drm": 74.5,
+    "apm": 31,
+    "evidence": "build/emergency-demo-gate-20261103-175124/result.json"
+  },
+  "pnr": "running; bounded 120 minutes; same frozen source"
+}

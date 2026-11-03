@@ -2,7 +2,7 @@
 module demo_confidence_player #(
     parameter TICK_CYCLES = 12500000,
     parameter DEBOUNCE_CYCLES = 2500000,
-    parameter SAMPLE_COUNT = 1,
+    parameter SAMPLE_COUNT = 581,
     parameter TABLE_FILE = "src/ui/demo_confidence.hex"
 ) (
     input wire clk, rst_n, key_n,

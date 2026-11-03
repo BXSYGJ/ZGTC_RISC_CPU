@@ -1,6 +1,12 @@
 # InstRec-FPGA 当前状态（STATUS）
 
 
+## 2026-11-03 17:54：用户时间曲线已冻结，八类演示新源资源门控中
+
+- 用户提供confidence_timeline.json已原字节冻结data/demo/，114窗/1.485–57.985秒；581个10Hz采样点。类别与旧模型不同，演示专用dashboard标签与glyph独立改为钢琴/小提琴/单簧管/长笛/萨克斯/小号/原声吉他/电吉他，正式模型及显示ROM不改。曲线演示标记常显；KEY1从WAV起点计时，第一窗前保持首值、按中心线性插值、末帧保持/再按重播。仍保留真实PCM1808/Mel/波形/HDMI，无NPU/无权重依赖。
+- 相关pytest48passed；demo_player和用户曲线581行/全类别/保持/重播实际RTL均PASS，lint69/0。新演示显示五帧RTL验证亦PASS（完整1080p/2000条柱宽检查）。证据reports/emergency_demo_timeline_20261103.json。
+- 唯一新源run20261103-175125-bc930d4f于17:51启动compile/synth/dev_map，30分钟硬截止、CPU/日志监控build/emergency-demo-gate-20261103-175124。门控572.1秒正常退出PASS，20886LUT/18148FF/74.5DRM/31APM、SourcesUnchanged；18:02起同冻结源唯一限时120分钟PNR→十表→位流。尚无演示位流/烧录，板上仍1497FAF4；FTDI在线、JS9040/65420可复用。未操作JS/cfg、保护CPU用户diff/PCB/obj_dir/group5资产。
+
 ## 2026-11-03 17:44：按用户紧急要求建立无推理演示版，待置信度曲线
 
 - 用户中止恒小号诊断，优先独立演示：八类现界面、真实PCM1808/波形/Mel频谱/HDMI保持，KEY1播放预设置信度，不再推理。XSY新增emergency_demo/top_emergency_demo，正式full顶层不改；移除演示顶层NPU实例、禁止启动，sys_ctrl不等权重，KEY1与DDR自检解除。KEY0仍复位。板上仍1497FAF4，本轮没有烧录。
