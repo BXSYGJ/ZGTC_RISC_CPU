@@ -1,0 +1,1275 @@
+{
+  "report": "npu_probe_baseline_20261104",
+  "date": "2026-11-04",
+  "purpose": "M0 localizable baseline: fixed feature vectors driven through the full native NPU chain with per-layer numeric snapshots; first board-side comparison judge is logits_int32_rtl / probs_q16_rtl of each vector, layer walk-back via conv/pool/gap snapshots",
+  "golden_truth": "scripts/golden_pipeline.py bit-level path only; torch is never used (fbgemm tile noise 21..67 LSB)",
+  "rtl_set": "identical to sim/experiments/npu_full_native (npu_full_end candidates + native DDR plumbing); production src/ untouched",
+  "input_assets": {
+    "weights_image": {
+      "path": "scripts/outputs/weights_image.bin",
+      "sha256": "19a74dbec29d3a0f16ab06dc30f70312849977de0c6b345710b046b1908f5d7a"
+    },
+    "layer_contract": {
+      "path": "scripts/outputs/layer_contract.json",
+      "sha256": "284faf38af30bcee761677e22193ebe96a3d42707dc70bdd90486051774f87b2"
+    },
+    "mel_tables": {
+      "path": "scripts/outputs/mel_tables.json",
+      "sha256": "5a2bc66d550a3484ee58aaab975eaf079c22a7c1083ba98cab33fef7737a712f"
+    }
+  },
+  "layouts": {
+    "feat_u8.bin": "(64,258) row-major mel-major: offset = mel*258 + frame; uint8 quint8 domain, zp_in = 49",
+    "conv/pool snapshots": "RTL output stream order (row, group, col, lane): offset = ((row*(C/16) + group)*W + col)*16 + lane; uint8 container",
+    "gap_s32.bin": "256 x int32 little-endian, channel order",
+    "fc1_u8.bin": "128 x uint8 (ReLU rail domain, zp_out = 0)",
+    "fc2_u8.bin": "8 x uint8 container values (zp_out = 57)",
+    "logits_int32_rtl": "fc2_u8 - 57 per element (s8 domain)",
+    "probs_q16.bin": "8 x uint16 little-endian Q0.16",
+    "sha256_semantics": "sha256 of the raw .bin byte content"
+  },
+  "vectors": [
+    {
+      "name": "sine440",
+      "kind": "mel_sine_440",
+      "source": "tests/fixtures/sine_440_full.wav via golden_pipeline.run_mel_pipeline (bit-exact, cross-checked against reports/golden_ref/sine_440_full/feat.npy)",
+      "feat": {
+        "file": "build/sim/npu_probe/sine440/feat_u8.bin",
+        "sha256": "27159bac59e9273c04a9d2809104191f4b38538af7de680120d86605e86a302f",
+        "shape": [
+          64,
+          258
+        ],
+        "dtype": "uint8",
+        "zp_in": 49,
+        "elements": 16512,
+        "first": 255,
+        "last": 0,
+        "min": 0,
+        "max": 255,
+        "sum_int64": 621945
+      },
+      "cycles": 31115245,
+      "sim_seconds": 65.0,
+      "top1_rtl": 0,
+      "top1_golden": 0,
+      "logits_int32_rtl": [
+        145,
+        -57,
+        0,
+        33,
+        5,
+        -57,
+        -57,
+        38
+      ],
+      "logits_int32_golden": [
+        145,
+        -57,
+        0,
+        33,
+        5,
+        -57,
+        -57,
+        38
+      ],
+      "logits_dequant_rtl": [
+        40.69933474063873,
+        -15.999048829078674,
+        0.0,
+        9.262607216835022,
+        1.4034253358840942,
+        -15.999048829078674,
+        -15.999048829078674,
+        10.666032552719116
+      ],
+      "probs_q16_rtl": [
+        65535,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "probs_q16_golden": [
+        65535,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "probs_float_rtl": [
+        0.9999847412109375,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "percent_rtl": [
+        100,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "layers": {
+        "conv1": {
+          "file": "build/sim/npu_probe/sine440/conv1_u8.bin",
+          "sha256": "ba65eb21d639a871a369d425fb9761092e58d971ccc7cb332fc43e8a270c0828",
+          "container": "u8",
+          "elements": 792576,
+          "first": 4,
+          "last": 0,
+          "min": 0,
+          "max": 255,
+          "sum_int64": 8925475
+        },
+        "conv2": {
+          "file": "build/sim/npu_probe/sine440/conv2_u8.bin",
+          "sha256": "4be8d2135d502c7e84c6d54570ae13cf7cb93ae1759760ef1dd15d03021dfd75",
+          "container": "u8",
+          "elements": 396288,
+          "first": 70,
+          "last": 17,
+          "min": 0,
+          "max": 255,
+          "sum_int64": 5452780
+        },
+        "conv3": {
+          "file": "build/sim/npu_probe/sine440/conv3_u8.bin",
+          "sha256": "d22c48816b8f10db3b7a338ed5c6c6a8ae49f04a8eddc76fe423b05c4dc45035",
+          "container": "u8",
+          "elements": 196608,
+          "first": 17,
+          "last": 0,
+          "min": 0,
+          "max": 255,
+          "sum_int64": 2590535
+        },
+        "conv4": {
+          "file": "build/sim/npu_probe/sine440/conv4_u8.bin",
+          "sha256": "8642d95464bf9ac44d64225031dfb39e91b589b7d1b4542b505d908237449ce4",
+          "container": "u8",
+          "elements": 65536,
+          "first": 0,
+          "last": 1,
+          "min": 0,
+          "max": 255,
+          "sum_int64": 1505962
+        },
+        "pool1": {
+          "file": "build/sim/npu_probe/sine440/pool1_u8.bin",
+          "sha256": "5cf34ca09530f091b77bdee82b2b3aed039138bd189cad298e01ffbfffe2ad07",
+          "container": "u8",
+          "elements": 198144,
+          "first": 57,
+          "last": 5,
+          "min": 0,
+          "max": 255,
+          "sum_int64": 2622094
+        },
+        "pool2": {
+          "file": "build/sim/npu_probe/sine440/pool2_u8.bin",
+          "sha256": "613909592d1a90ee9c31d45759db14fdb4e35e675b23afeecd3a9ffa9f813767",
+          "container": "u8",
+          "elements": 98304,
+          "first": 70,
+          "last": 0,
+          "min": 0,
+          "max": 255,
+          "sum_int64": 1776603
+        },
+        "pool3": {
+          "file": "build/sim/npu_probe/sine440/pool3_u8.bin",
+          "sha256": "55332c3d514ccd5119dcdec90e1286723d4c5fee3294cedae84b7c9cd5ad60c0",
+          "container": "u8",
+          "elements": 49152,
+          "first": 17,
+          "last": 10,
+          "min": 0,
+          "max": 255,
+          "sum_int64": 998563
+        },
+        "pool4": {
+          "file": "build/sim/npu_probe/sine440/pool4_u8.bin",
+          "sha256": "3bf6ada251056e7b9aa2f5d64e1246bc9f89bdc47a28eac6e9faef27b6c1682f",
+          "container": "u8",
+          "elements": 16384,
+          "first": 0,
+          "last": 1,
+          "min": 0,
+          "max": 255,
+          "sum_int64": 604594
+        },
+        "gap": {
+          "file": "build/sim/npu_probe/sine440/gap_s32.bin",
+          "sha256": "29a84fdbbc1a45ce5cf9766f2f85a452261c3d29bbb3346962c5e41d1c002868",
+          "container": "s32",
+          "elements": 256,
+          "first": 0,
+          "last": 12,
+          "min": 0,
+          "max": 119,
+          "sum_int64": 9441
+        },
+        "fc1": {
+          "file": "build/sim/npu_probe/sine440/fc1_u8.bin",
+          "sha256": "3f6c7c212962b5f20e4d894dd23a63e5a0026e459533109f3ab88f3f9ff0300b",
+          "container": "u8",
+          "elements": 128,
+          "first": 0,
+          "last": 114,
+          "min": 0,
+          "max": 255,
+          "sum_int64": 9610
+        },
+        "fc2": {
+          "file": "build/sim/npu_probe/sine440/fc2_u8.bin",
+          "sha256": "90f87b8b6975fb052f3a534840015e473e03bc035ae1b2a09b00cc1cf81f0706",
+          "container": "u8",
+          "elements": 8,
+          "first": 202,
+          "last": 95,
+          "min": 0,
+          "max": 202,
+          "sum_int64": 506
+        },
+        "probs_q16": {
+          "file": "build/sim/npu_probe/sine440/probs_q16_u16.bin",
+          "sha256": "c9473276fe8062bdfabc6a610f8bfdfceedddeafb5fbc5ab445281c5586e7969",
+          "container": "u16",
+          "elements": 8,
+          "first": 65535,
+          "last": 0,
+          "min": 0,
+          "max": 65535,
+          "sum_int64": 65535
+        }
+      },
+      "golden_match": {
+        "conv1": {
+          "max_lsb": 0,
+          "n_diff": 0,
+          "identical": true
+        },
+        "conv2": {
+          "max_lsb": 0,
+          "n_diff": 0,
+          "identical": true
+        },
+        "conv3": {
+          "max_lsb": 0,
+          "n_diff": 0,
+          "identical": true
+        },
+        "conv4": {
+          "max_lsb": 0,
+          "n_diff": 0,
+          "identical": true
+        },
+        "pool1": {
+          "max_lsb": 0,
+          "n_diff": 0,
+          "identical": true
+        },
+        "pool2": {
+          "max_lsb": 0,
+          "n_diff": 0,
+          "identical": true
+        },
+        "pool3": {
+          "max_lsb": 0,
+          "n_diff": 0,
+          "identical": true
+        },
+        "pool4": {
+          "max_lsb": 0,
+          "n_diff": 0,
+          "identical": true
+        },
+        "gap": {
+          "max_lsb": 0,
+          "n_diff": 0,
+          "identical": true
+        },
+        "fc1": {
+          "max_lsb": 0,
+          "n_diff": 0,
+          "identical": true
+        },
+        "fc2": {
+          "max_lsb": 0,
+          "n_diff": 0,
+          "identical": true
+        },
+        "probs_q16": {
+          "max_lsb": 0,
+          "n_diff": 0,
+          "identical": true
+        },
+        "logits": {
+          "max_lsb": 0,
+          "n_diff": 0,
+          "identical": true
+        },
+        "all_identical": true
+      },
+      "golden_ref_crosscheck": {
+        "conv1": {
+          "identical": true
+        },
+        "conv2": {
+          "identical": true
+        },
+        "conv3": {
+          "identical": true
+        },
+        "conv4": {
+          "identical": true
+        },
+        "pool1": {
+          "identical": true
+        },
+        "pool2": {
+          "identical": true
+        },
+        "pool3": {
+          "identical": true
+        },
+        "pool4": {
+          "identical": true
+        },
+        "gap": {
+          "identical": true
+        },
+        "fc1": {
+          "identical": true
+        },
+        "fc2": {
+          "identical": true
+        },
+        "probs": {
+          "identical": true
+        },
+        "all_identical": true
+      }
+    },
+    {
+      "name": "zeros49",
+      "kind": "const_zp_in",
+      "source": "all-49 constant: zp_in-domain zero (digital silence anchor; librosa-parity all-silent path also yields all-49)",
+      "feat": {
+        "file": "build/sim/npu_probe/zeros49/feat_u8.bin",
+        "sha256": "ee852fcfc7f0fa171ea5a8373ca82792dc93fa5192d06b39f5acd6c171a141a1",
+        "shape": [
+          64,
+          258
+        ],
+        "dtype": "uint8",
+        "zp_in": 49,
+        "elements": 16512,
+        "first": 49,
+        "last": 49,
+        "min": 49,
+        "max": 49,
+        "sum_int64": 809088
+      },
+      "cycles": 31115245,
+      "sim_seconds": 43.0,
+      "top1_rtl": 1,
+      "top1_golden": 1,
+      "logits_int32_rtl": [
+        -11,
+        11,
+        8,
+        -4,
+        -7,
+        -12,
+        1,
+        3
+      ],
+      "logits_int32_golden": [
+        -11,
+        11,
+        8,
+        -4,
+        -7,
+        -12,
+        1,
+        3
+      ],
+      "logits_dequant_rtl": [
+        -3.0875357389450073,
+        3.0875357389450073,
+        2.245480537414551,
+        -1.1227402687072754,
+        -1.964795470237732,
+        -3.368220806121826,
+        0.28068506717681885,
+        0.8420552015304565
+      ],
+      "probs_q16_rtl": [
+        85,
+        40299,
+        17333,
+        612,
+        263,
+        65,
+        2497,
+        4383
+      ],
+      "probs_q16_golden": [
+        85,
+        40299,
+        17333,
+        612,
+        263,
+        65,
+        2497,
+        4383
+      ],
+      "probs_float_rtl": [
+        0.0012969970703125,
+        0.6149139404296875,
+        0.2644805908203125,
+        0.00933837890625,
+        0.0040130615234375,
+        0.0009918212890625,
+        0.0381011962890625,
+        0.0668792724609375
+      ],
+      "percent_rtl": [
+        0,
+        61,
+        26,
+        1,
+        0,
+        0,
+        4,
+        7
+      ],
+      "layers": {
+        "conv1": {
+          "file": "build/sim/npu_probe/zeros49/conv1_u8.bin",
+          "sha256": "29af5d8aed4040bcee7268f1aa3f887eaef4be57370ce5e6d31005fb94aca1c2",
+          "container": "u8",
+          "elements": 792576,
+          "first": 0,
+          "last": 0,
+          "min": 0,
+          "max": 1,
+          "sum_int64": 49536
+        },
+        "conv2": {
+          "file": "build/sim/npu_probe/zeros49/conv2_u8.bin",
+          "sha256": "eca99c8e77a70100458be375c5a7b14452a4a4b87e06d11bded9d785b77a5f99",
+          "container": "u8",
+          "elements": 396288,
+          "first": 6,
+          "last": 10,
+          "min": 0,
+          "max": 22,
+          "sum_int64": 2793061
+        },
+        "conv3": {
+          "file": "build/sim/npu_probe/zeros49/conv3_u8.bin",
+          "sha256": "27cffaa3fb0f5b1afb79a3b8e8205c6c681ee7be37d9a34c7e3934f3f4e8c618",
+          "container": "u8",
+          "elements": 196608,
+          "first": 25,
+          "last": 10,
+          "min": 0,
+          "max": 36,
+          "sum_int64": 1081296
+        },
+        "conv4": {
+          "file": "build/sim/npu_probe/zeros49/conv4_u8.bin",
+          "sha256": "1b22f3a304591a246711d26e2c8a9f38b54c41e384799899e902149cd1b6ecb6",
+          "container": "u8",
+          "elements": 65536,
+          "first": 0,
+          "last": 0,
+          "min": 0,
+          "max": 35,
+          "sum_int64": 170538
+        },
+        "pool1": {
+          "file": "build/sim/npu_probe/zeros49/pool1_u8.bin",
+          "sha256": "48075844af11d0d1208bdea051edb688b7d6f0761df22832d469b8aa7239c4dd",
+          "container": "u8",
+          "elements": 198144,
+          "first": 0,
+          "last": 0,
+          "min": 0,
+          "max": 1,
+          "sum_int64": 12384
+        },
+        "pool2": {
+          "file": "build/sim/npu_probe/zeros49/pool2_u8.bin",
+          "sha256": "575cf186daf2185ed1504d85db6ee8b0aaa268a9fbd5031a9a194a3f380ab5d4",
+          "container": "u8",
+          "elements": 98304,
+          "first": 7,
+          "last": 10,
+          "min": 0,
+          "max": 22,
+          "sum_int64": 694327
+        },
+        "pool3": {
+          "file": "build/sim/npu_probe/zeros49/pool3_u8.bin",
+          "sha256": "85fcb9dae293f9546aff35554b5688d94971b66a9c31f43aca9d6f3900a30582",
+          "container": "u8",
+          "elements": 49152,
+          "first": 25,
+          "last": 12,
+          "min": 0,
+          "max": 36,
+          "sum_int64": 315972
+        },
+        "pool4": {
+          "file": "build/sim/npu_probe/zeros49/pool4_u8.bin",
+          "sha256": "afc9baddf6e67803f048a162ec0b973c51ed232337786cbcbcb33f8ad26213d2",
+          "container": "u8",
+          "elements": 16384,
+          "first": 10,
+          "last": 1,
+          "min": 0,
+          "max": 35,
+          "sum_int64": 62580
+        },
+        "gap": {
+          "file": "build/sim/npu_probe/zeros49/gap_s32.bin",
+          "sha256": "48ae69e93ae27e030197374025f1f13682e821994a08a5aa1665e4a91c8f5852",
+          "container": "s32",
+          "elements": 256,
+          "first": 13,
+          "last": 0,
+          "min": 0,
+          "max": 23,
+          "sum_int64": 978
+        },
+        "fc1": {
+          "file": "build/sim/npu_probe/zeros49/fc1_u8.bin",
+          "sha256": "0cf3b2014ab1adf9a9c7c814744ded6da661aea57734a1d84d641ab669057abd",
+          "container": "u8",
+          "elements": 128,
+          "first": 2,
+          "last": 28,
+          "min": 0,
+          "max": 39,
+          "sum_int64": 1102
+        },
+        "fc2": {
+          "file": "build/sim/npu_probe/zeros49/fc2_u8.bin",
+          "sha256": "66c511d3b8c03300c451b73c5fb5e79b3720fd1cda54ed4d711c317d97eb688d",
+          "container": "u8",
+          "elements": 8,
+          "first": 46,
+          "last": 60,
+          "min": 45,
+          "max": 68,
+          "sum_int64": 445
+        },
+        "probs_q16": {
+          "file": "build/sim/npu_probe/zeros49/probs_q16_u16.bin",
+          "sha256": "365c39410992df3043d4c94c65d5265b5d33302bc7dc0b1fdd316bfea9dd4920",
+          "container": "u16",
+          "elements": 8,
+          "first": 85,
+          "last": 4383,
+          "min": 65,
+          "max": 40299,
+          "sum_int64": 65537
+        }
+      },
+      "golden_match": {
+        "conv1": {
+          "max_lsb": 0,
+          "n_diff": 0,
+          "identical": true
+        },
+        "conv2": {
+          "max_lsb": 0,
+          "n_diff": 0,
+          "identical": true
+        },
+        "conv3": {
+          "max_lsb": 0,
+          "n_diff": 0,
+          "identical": true
+        },
+        "conv4": {
+          "max_lsb": 0,
+          "n_diff": 0,
+          "identical": true
+        },
+        "pool1": {
+          "max_lsb": 0,
+          "n_diff": 0,
+          "identical": true
+        },
+        "pool2": {
+          "max_lsb": 0,
+          "n_diff": 0,
+          "identical": true
+        },
+        "pool3": {
+          "max_lsb": 0,
+          "n_diff": 0,
+          "identical": true
+        },
+        "pool4": {
+          "max_lsb": 0,
+          "n_diff": 0,
+          "identical": true
+        },
+        "gap": {
+          "max_lsb": 0,
+          "n_diff": 0,
+          "identical": true
+        },
+        "fc1": {
+          "max_lsb": 0,
+          "n_diff": 0,
+          "identical": true
+        },
+        "fc2": {
+          "max_lsb": 0,
+          "n_diff": 0,
+          "identical": true
+        },
+        "probs_q16": {
+          "max_lsb": 0,
+          "n_diff": 0,
+          "identical": true
+        },
+        "logits": {
+          "max_lsb": 0,
+          "n_diff": 0,
+          "identical": true
+        },
+        "all_identical": true
+      }
+    },
+    {
+      "name": "rand20261104",
+      "kind": "prng_uint8",
+      "source": "numpy PCG64 default_rng(seed=20261104).integers(0,256,(64,258),uint8)",
+      "feat": {
+        "file": "build/sim/npu_probe/rand20261104/feat_u8.bin",
+        "sha256": "a258850c6ffc61779568b262d35a82c933c8cbebbe2bca196014f6c72928a43d",
+        "shape": [
+          64,
+          258
+        ],
+        "dtype": "uint8",
+        "zp_in": 49,
+        "elements": 16512,
+        "first": 86,
+        "last": 130,
+        "min": 0,
+        "max": 255,
+        "sum_int64": 2106405
+      },
+      "cycles": 31115245,
+      "sim_seconds": 42.3,
+      "top1_rtl": 7,
+      "top1_golden": 7,
+      "logits_int32_rtl": [
+        104,
+        -57,
+        -25,
+        -21,
+        -7,
+        -57,
+        -57,
+        150
+      ],
+      "logits_int32_golden": [
+        104,
+        -57,
+        -25,
+        -21,
+        -7,
+        -57,
+        -57,
+        150
+      ],
+      "logits_dequant_rtl": [
+        29.19124698638916,
+        -15.999048829078674,
+        -7.017126679420471,
+        -5.894386410713196,
+        -1.964795470237732,
+        -15.999048829078674,
+        -15.999048829078674,
+        42.10276007652283
+      ],
+      "probs_q16_rtl": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        65535
+      ],
+      "probs_q16_golden": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        65535
+      ],
+      "probs_float_rtl": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.9999847412109375
+      ],
+      "percent_rtl": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        100
+      ],
+      "layers": {
+        "conv1": {
+          "file": "build/sim/npu_probe/rand20261104/conv1_u8.bin",
+          "sha256": "898c07d473c0e52189373f3fc5301600a4a9b17473839812915df9dc7d43707d",
+          "container": "u8",
+          "elements": 792576,
+          "first": 16,
+          "last": 0,
+          "min": 0,
+          "max": 255,
+          "sum_int64": 16616309
+        },
+        "conv2": {
+          "file": "build/sim/npu_probe/rand20261104/conv2_u8.bin",
+          "sha256": "001185f6371c25b16145018d6fea2fd7572c1319d84ff683e870e01674585cb2",
+          "container": "u8",
+          "elements": 396288,
+          "first": 48,
+          "last": 123,
+          "min": 0,
+          "max": 255,
+          "sum_int64": 15161029
+        },
+        "conv3": {
+          "file": "build/sim/npu_probe/rand20261104/conv3_u8.bin",
+          "sha256": "560f77aa6f979e74c505f85b2471d9e9efad606286098e556d6dd885aefca440",
+          "container": "u8",
+          "elements": 196608,
+          "first": 0,
+          "last": 89,
+          "min": 0,
+          "max": 255,
+          "sum_int64": 6122843
+        },
+        "conv4": {
+          "file": "build/sim/npu_probe/rand20261104/conv4_u8.bin",
+          "sha256": "24cc1317f5de813ceb1af677bd7d78e92ccb4cb0d9adb828b2e4feaa57e01f44",
+          "container": "u8",
+          "elements": 65536,
+          "first": 0,
+          "last": 0,
+          "min": 0,
+          "max": 255,
+          "sum_int64": 3556841
+        },
+        "pool1": {
+          "file": "build/sim/npu_probe/rand20261104/pool1_u8.bin",
+          "sha256": "579d2275375205d06b63b2f5c4f546438d30c7d8a4e7e7511fe01933c508d96a",
+          "container": "u8",
+          "elements": 198144,
+          "first": 36,
+          "last": 49,
+          "min": 0,
+          "max": 255,
+          "sum_int64": 10059886
+        },
+        "pool2": {
+          "file": "build/sim/npu_probe/rand20261104/pool2_u8.bin",
+          "sha256": "6550c3e72c967c676ba7f7eb0f1abec0578b8a5ba87ae93507fe9511cd2cda9a",
+          "container": "u8",
+          "elements": 98304,
+          "first": 48,
+          "last": 15,
+          "min": 0,
+          "max": 255,
+          "sum_int64": 5133525
+        },
+        "pool3": {
+          "file": "build/sim/npu_probe/rand20261104/pool3_u8.bin",
+          "sha256": "18755cec2f60e418d7736c53746735fa703861d375c4312f16218b6f441b665a",
+          "container": "u8",
+          "elements": 49152,
+          "first": 0,
+          "last": 155,
+          "min": 0,
+          "max": 255,
+          "sum_int64": 1859143
+        },
+        "pool4": {
+          "file": "build/sim/npu_probe/rand20261104/pool4_u8.bin",
+          "sha256": "2a04a9b3c8cb1695d71ae27eccf83bbfb7ebd9ee8911702ba296ac2e83798d1b",
+          "container": "u8",
+          "elements": 16384,
+          "first": 0,
+          "last": 0,
+          "min": 0,
+          "max": 255,
+          "sum_int64": 1091109
+        },
+        "gap": {
+          "file": "build/sim/npu_probe/rand20261104/gap_s32.bin",
+          "sha256": "62e1695b06c6ff9181bdad921517a8dbc9297c292ccb4fe49fc1c70f86588818",
+          "container": "s32",
+          "elements": 256,
+          "first": 4,
+          "last": 0,
+          "min": 0,
+          "max": 255,
+          "sum_int64": 17047
+        },
+        "fc1": {
+          "file": "build/sim/npu_probe/rand20261104/fc1_u8.bin",
+          "sha256": "89122ca0aada09c5d4406df56ab1146272302444cb07abbe4a89b430257ed499",
+          "container": "u8",
+          "elements": 128,
+          "first": 0,
+          "last": 159,
+          "min": 0,
+          "max": 255,
+          "sum_int64": 14540
+        },
+        "fc2": {
+          "file": "build/sim/npu_probe/rand20261104/fc2_u8.bin",
+          "sha256": "6fffaffb0ea7c7943449b39f3050eee399968149030f216f2193fa71c7c773f8",
+          "container": "u8",
+          "elements": 8,
+          "first": 161,
+          "last": 207,
+          "min": 0,
+          "max": 207,
+          "sum_int64": 486
+        },
+        "probs_q16": {
+          "file": "build/sim/npu_probe/rand20261104/probs_q16_u16.bin",
+          "sha256": "4b7f9b12e71e443054cddf6e3972739d4dfc7e0d1dcf6701d9807bfe4fefdc49",
+          "container": "u16",
+          "elements": 8,
+          "first": 0,
+          "last": 65535,
+          "min": 0,
+          "max": 65535,
+          "sum_int64": 65535
+        }
+      },
+      "golden_match": {
+        "conv1": {
+          "max_lsb": 0,
+          "n_diff": 0,
+          "identical": true
+        },
+        "conv2": {
+          "max_lsb": 0,
+          "n_diff": 0,
+          "identical": true
+        },
+        "conv3": {
+          "max_lsb": 0,
+          "n_diff": 0,
+          "identical": true
+        },
+        "conv4": {
+          "max_lsb": 0,
+          "n_diff": 0,
+          "identical": true
+        },
+        "pool1": {
+          "max_lsb": 0,
+          "n_diff": 0,
+          "identical": true
+        },
+        "pool2": {
+          "max_lsb": 0,
+          "n_diff": 0,
+          "identical": true
+        },
+        "pool3": {
+          "max_lsb": 0,
+          "n_diff": 0,
+          "identical": true
+        },
+        "pool4": {
+          "max_lsb": 0,
+          "n_diff": 0,
+          "identical": true
+        },
+        "gap": {
+          "max_lsb": 0,
+          "n_diff": 0,
+          "identical": true
+        },
+        "fc1": {
+          "max_lsb": 0,
+          "n_diff": 0,
+          "identical": true
+        },
+        "fc2": {
+          "max_lsb": 0,
+          "n_diff": 0,
+          "identical": true
+        },
+        "probs_q16": {
+          "max_lsb": 0,
+          "n_diff": 0,
+          "identical": true
+        },
+        "logits": {
+          "max_lsb": 0,
+          "n_diff": 0,
+          "identical": true
+        },
+        "all_identical": true
+      }
+    },
+    {
+      "name": "sine440_twolevel",
+      "kind": "mel_sine_440_twolevel",
+      "source": "tests/fixtures/sine_440_twolevel.wav via golden_pipeline.run_mel_pipeline",
+      "feat": {
+        "file": "build/sim/npu_probe/sine440_twolevel/feat_u8.bin",
+        "sha256": "e673679024c063321df63b1618d2ae6dc988326b999f9aa577776f128afec626",
+        "shape": [
+          64,
+          258
+        ],
+        "dtype": "uint8",
+        "zp_in": 49,
+        "elements": 16512,
+        "first": 255,
+        "last": 0,
+        "min": 0,
+        "max": 255,
+        "sum_int64": 613676
+      },
+      "cycles": 31115245,
+      "sim_seconds": 41.3,
+      "top1_rtl": 0,
+      "top1_golden": 0,
+      "logits_int32_rtl": [
+        169,
+        -57,
+        1,
+        38,
+        -12,
+        -57,
+        -57,
+        46
+      ],
+      "logits_int32_golden": [
+        169,
+        -57,
+        1,
+        38,
+        -12,
+        -57,
+        -57,
+        46
+      ],
+      "logits_dequant_rtl": [
+        47.435776352882385,
+        -15.999048829078674,
+        0.28068506717681885,
+        10.666032552719116,
+        -3.368220806121826,
+        -15.999048829078674,
+        -15.999048829078674,
+        12.911513090133667
+      ],
+      "probs_q16_rtl": [
+        65535,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "probs_q16_golden": [
+        65535,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "probs_float_rtl": [
+        0.9999847412109375,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "percent_rtl": [
+        100,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "layers": {
+        "conv1": {
+          "file": "build/sim/npu_probe/sine440_twolevel/conv1_u8.bin",
+          "sha256": "3c695c79775bee63407bfb5118f2fa3f6ad04ccebe5ef8d7a8115239a5bd5553",
+          "container": "u8",
+          "elements": 792576,
+          "first": 4,
+          "last": 0,
+          "min": 0,
+          "max": 255,
+          "sum_int64": 9027285
+        },
+        "conv2": {
+          "file": "build/sim/npu_probe/sine440_twolevel/conv2_u8.bin",
+          "sha256": "8371f2dad855b92095ffb37ef89ae3462c260bf83b3750e5b8f2501826cd0c0f",
+          "container": "u8",
+          "elements": 396288,
+          "first": 22,
+          "last": 17,
+          "min": 0,
+          "max": 255,
+          "sum_int64": 5774859
+        },
+        "conv3": {
+          "file": "build/sim/npu_probe/sine440_twolevel/conv3_u8.bin",
+          "sha256": "05d092eab73002c37df32eba3597921c27f664b182149b11c9cdcf47f68f700b",
+          "container": "u8",
+          "elements": 196608,
+          "first": 3,
+          "last": 0,
+          "min": 0,
+          "max": 255,
+          "sum_int64": 2841900
+        },
+        "conv4": {
+          "file": "build/sim/npu_probe/sine440_twolevel/conv4_u8.bin",
+          "sha256": "d260a27b2a779080edfeb1998cb2a1b638c41a3c17e1ab2095bb76e85b8d3a70",
+          "container": "u8",
+          "elements": 65536,
+          "first": 0,
+          "last": 0,
+          "min": 0,
+          "max": 255,
+          "sum_int64": 1730744
+        },
+        "pool1": {
+          "file": "build/sim/npu_probe/sine440_twolevel/pool1_u8.bin",
+          "sha256": "bf704eeec3ef5e645105c27d5114ed800bcdaa214f252a632fe9add9469fb0fa",
+          "container": "u8",
+          "elements": 198144,
+          "first": 25,
+          "last": 5,
+          "min": 0,
+          "max": 255,
+          "sum_int64": 2749153
+        },
+        "pool2": {
+          "file": "build/sim/npu_probe/sine440_twolevel/pool2_u8.bin",
+          "sha256": "d233978cb75448668e32acf11191d0ad372f49f462b47f58f10c034ab95846d9",
+          "container": "u8",
+          "elements": 98304,
+          "first": 35,
+          "last": 0,
+          "min": 0,
+          "max": 255,
+          "sum_int64": 1965190
+        },
+        "pool3": {
+          "file": "build/sim/npu_probe/sine440_twolevel/pool3_u8.bin",
+          "sha256": "f6d9f01673b34b85a6431c0c7be290d25b3ba2c35adf41b944a0a5a0daa78c05",
+          "container": "u8",
+          "elements": 49152,
+          "first": 3,
+          "last": 20,
+          "min": 0,
+          "max": 255,
+          "sum_int64": 1096229
+        },
+        "pool4": {
+          "file": "build/sim/npu_probe/sine440_twolevel/pool4_u8.bin",
+          "sha256": "266560fd14bbea8d954238eb6a53d0071327d6bb96b7da51b676e384b2679432",
+          "container": "u8",
+          "elements": 16384,
+          "first": 0,
+          "last": 0,
+          "min": 0,
+          "max": 255,
+          "sum_int64": 699283
+        },
+        "gap": {
+          "file": "build/sim/npu_probe/sine440_twolevel/gap_s32.bin",
+          "sha256": "6680ca28b6d40b0d9a159bc1e302539fe072ab2ff1b9a1c8a7755048402a864d",
+          "container": "s32",
+          "elements": 256,
+          "first": 10,
+          "last": 15,
+          "min": 0,
+          "max": 134,
+          "sum_int64": 10926
+        },
+        "fc1": {
+          "file": "build/sim/npu_probe/sine440_twolevel/fc1_u8.bin",
+          "sha256": "96aead14e3a03cacf935d69951ca24c1dbaa76745dba7d5bd178eadea12e13bc",
+          "container": "u8",
+          "elements": 128,
+          "first": 0,
+          "last": 140,
+          "min": 0,
+          "max": 255,
+          "sum_int64": 11023
+        },
+        "fc2": {
+          "file": "build/sim/npu_probe/sine440_twolevel/fc2_u8.bin",
+          "sha256": "bc28102f334b7880781df5d0511a9c6c74dba7d1f51485f2d299820973993b3f",
+          "container": "u8",
+          "elements": 8,
+          "first": 226,
+          "last": 103,
+          "min": 0,
+          "max": 226,
+          "sum_int64": 527
+        },
+        "probs_q16": {
+          "file": "build/sim/npu_probe/sine440_twolevel/probs_q16_u16.bin",
+          "sha256": "c9473276fe8062bdfabc6a610f8bfdfceedddeafb5fbc5ab445281c5586e7969",
+          "container": "u16",
+          "elements": 8,
+          "first": 65535,
+          "last": 0,
+          "min": 0,
+          "max": 65535,
+          "sum_int64": 65535
+        }
+      },
+      "golden_match": {
+        "conv1": {
+          "max_lsb": 0,
+          "n_diff": 0,
+          "identical": true
+        },
+        "conv2": {
+          "max_lsb": 0,
+          "n_diff": 0,
+          "identical": true
+        },
+        "conv3": {
+          "max_lsb": 0,
+          "n_diff": 0,
+          "identical": true
+        },
+        "conv4": {
+          "max_lsb": 0,
+          "n_diff": 0,
+          "identical": true
+        },
+        "pool1": {
+          "max_lsb": 0,
+          "n_diff": 0,
+          "identical": true
+        },
+        "pool2": {
+          "max_lsb": 0,
+          "n_diff": 0,
+          "identical": true
+        },
+        "pool3": {
+          "max_lsb": 0,
+          "n_diff": 0,
+          "identical": true
+        },
+        "pool4": {
+          "max_lsb": 0,
+          "n_diff": 0,
+          "identical": true
+        },
+        "gap": {
+          "max_lsb": 0,
+          "n_diff": 0,
+          "identical": true
+        },
+        "fc1": {
+          "max_lsb": 0,
+          "n_diff": 0,
+          "identical": true
+        },
+        "fc2": {
+          "max_lsb": 0,
+          "n_diff": 0,
+          "identical": true
+        },
+        "probs_q16": {
+          "max_lsb": 0,
+          "n_diff": 0,
+          "identical": true
+        },
+        "logits": {
+          "max_lsb": 0,
+          "n_diff": 0,
+          "identical": true
+        },
+        "all_identical": true
+      }
+    }
+  ],
+  "summary": {
+    "vectors_run": 4,
+    "vector_order": [
+      "sine440",
+      "zeros49",
+      "rand20261104",
+      "sine440_twolevel"
+    ],
+    "total_cycles": 124460980,
+    "total_sim_seconds": 191.5,
+    "total_wall_seconds": 197.3,
+    "all_layers_identical_all_vectors": true,
+    "other_class_samples": "none available: reports/golden_ref/ holds only sine_440_full and tests/fixtures/ only sine variants + silence; recorded as-is. v3 sine_440_twolevel added as an additional real mel variant, not a different class",
+    "determinism": "feat vectors fixed by seed/fixture; RTL dumps are functions of (weights_image, feat) only; rerun reproduces identical sha256 per layer"
+  }
+}
