@@ -1,5 +1,16 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-04：按总规划启动并行开发，四工作包首批最小交付完成（M0 数值真源 + M1 双半程）
+
+- 用户指令「按 DUAL_MODE 规划完成开发、注意版本管理、调用子智能体并行」；按 HANDOFF_DEVELOPMENT_MASTER_PLAN_20261104 第 6 节分工并行分派 A/B/C/D 四个子智能体，主线任集成负责人。先修复基线缺口（emergency_demo 漏第 4 处登记致 1 failed），回到 443 passed / 4 skipped。
+- **B 线 M0 可定位基线已产出**：`sim/experiments/npu_probe/` 固定 feature→NPU 探针，4 确定性向量（sine440/zeros49/rand/twolevel）×12 层快照，RTL=golden_pipeline=golden_ref 三方逐位一致，每向量 31,115,245 cycles；`reports/npu_probe_baseline_20261104.json` 为未来板上 feature/PCM/I2S 三层注入比对的第一判据真源（比对 fc2_u8/logits_int32/probs_q16，逐层回溯用 conv/pool/gap 快照）。缺口：尚无不同类别真实样本向量。
+- **C 线 UART APP 协议 v0 已实现**：`src/boot/uart_app_boot.v`（chunk≤512B/CRC32/seq 严格递增/EXEC 三重校验/ABORT，4KiB IRAM 试写零提交）复用生产 uart_rx/tx；TB 六场景 52 检查 PASS（坏 CRC 重传恢复、seq 跳号、坏 EXEC 拒绝、ABORT 重载、超容量）。独立实验模块，未接线生产顶层。
+- **D 线软件 UI 场景 ABI v0 已实现**：`src/ui_scene/` 双 bank 描述符表（32 槽×8 word）+ glyph 序列 RAM + 四拍渲染器（640×360 等比几何）；TB 两场景 921,600 像素与 Python 参考帧逐拍一致，bank 隔离/帧边界原子 commit 验证 PASS。ASCII 去重评估：现状 12 份 DRM18K 复制（format_percent 并行端口），glyph-ID 预格式化可省 6.0 DRM36K 当量（`reports/ui_ascii_dedup_plan_20261104.md`）。
+- **A 线前端对照管线已建立**：`experiments/audio_frontend/` F0/F1/F2/F2b 四路线（F1 原生 48k 删重采样、F2 24k/1024FFT 抗混叠 FIR 阻带 81.2dB）；14 输入对照 F1 logits 漂移最小（|Δ|≈1.24、翻转 1/14）但**三路线均不可沿用旧权重，重训是硬前提**；无 Medley-solos-DB 验证集（仅 IRMAS demo 切片缺 2 类）如实记缺口。
+- **v0 接口契约文档**：`docs/INTERFACE_CONTRACTS_V0_20261104.md`——UART APP/UI 场景已实现契约固化（含实现偏差澄清），MMIO logits 快照（0x8000_0030–0x8000_003C 锁存握手）、DDR 地址图、模型描述符为 v0 草案待下轮集成冻结。
+- 验证基线：check_rtl 73 .v / 0 violation（+4 新文件）；run_sim 新增 ui_scene（14.4s）/uart_app_boot（42.2s）均 PASS；pytest 443 passed / 4 skipped。本轮零 PDS、零 JTAG/串口、零烧录；生产 src 既有文件零改动（src/cpu、src/ui、src/ctrl 未动）；CPU 用户 diff/PCB/obj_dir/deploy/group5 未跟踪资产保持。分支 XSY 本地提交未 push。
+- 下一步（按 MASTER_PLAN 顺序）：①MMIO logits 快照 RTL 实现 + rv_cpu_subsys 集成设计 ②uart_app_boot/ui_scene 接入集成实验顶层 ③取得真实八类样本扩充 probe 向量集 ④五组 INT8 契约评审（未跟踪 group5_* 资产转正评审）⑤存储共享/16/8lane 对照启动。
+
 ## 2026-11-04：正式开发交接总规划完成
 
 - 用户要求完成规划供交接；新增docs/HANDOFF_DEVELOPMENT_MASTER_PLAN_20261104.md，作为后续架构/任务优先级入口，实时状态仍认本文件。统一双模式、存储优先、性能换资源、软件UI、UART应用启动、音频对照与并行分工。与前规划冲突时认新总规划和软件/存储修订。

@@ -1,5 +1,14 @@
 # InstRec-FPGA 变更日志
 
+## 2026-11-04：按总规划启动并行开发，四工作包首批最小交付落地
+
+- 修复基线缺口：emergency_demo 构建集补第 4 处登记（test_plan_contract_guards SET_NAMES），全量回到 443 passed / 4 skipped。
+- A 音频/模型：experiments/audio_frontend 四路线（F0 基线/F1 原生48k/F2 24k/F2b 16k）对照管线 + 14 输入报告；F1 漂移最小但三路线均需重训，无 Medley 验证集如实记缺口。
+- B 数值定位：sim/experiments/npu_probe 固定 feature 探针，4 向量×12 层快照真源（RTL=golden=golden_ref 逐位一致，31,115,245 cycles），产出 M0 可定位基线报告。
+- C CPU 启动：src/boot/uart_app_boot.v（UART APP 协议 v0：chunk/CRC32/seq/EXEC 门控/ABORT，4KiB IRAM）+ 物理 115200 TB 六场景 52 检查 PASS。
+- D 软件 UI：src/ui_scene 双 bank 描述符+四拍渲染器 + glyph ROM + Python 参考帧逐像素 TB（两场景 921,600 像素）PASS；ASCII 去重评估报告（可省 6.0 DRM36K 当量）。
+- 新增 docs/INTERFACE_CONTRACTS_V0_20261104.md：UART APP/UI 场景已实现契约固化，MMIO logits 快照/DDR 地址图/模型描述符 v0 草案。本轮零 PDS、零板级、生产 src 既有文件零改动。
+
 ## 2026-11-04：完成正式开发交接总规划
 
 - 汇总并最终确定存储优先/性能换资源、双模式、CPU软件UI与UART应用启动方向，细化并行责任、第一批任务、16/8lane实验和阶段DoD。
