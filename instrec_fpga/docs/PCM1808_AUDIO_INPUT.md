@@ -21,10 +21,10 @@
 
 ## 数据路径与契约
 
-1. `i2s_slave_rx` 在 216MHz 域对三个输入分别两级同步，仅检测同步后的 BCK 上升沿，不将外部 BCK 当作 FPGA 布线时钟。LRCK=0 左、1 右；跳过 LRCK 翻转时仍属上一槽的延迟位，捕获后续 24 位中的高 16 位，低 8 位截去。
+1. `i2s_slave_rx` 在 27MHz 域对三个输入分别两级同步，仅检测同步后的 BCK 上升沿，不将外部 BCK 当作 FPGA 布线时钟。LRCK=0 左、1 右；跳过 LRCK 翻转时仍属上一槽的延迟位，捕获后续 24 位中的高 16 位，低 8 位截去。
 2. 只在左右都完整接收后发一次 stereo pair-valid；启动时不完整帧丢弃。完整帧缺失约 1ms 后 idle，覆盖 BCK 停止和 LRCK 卡死；恢复不需要整机复位。数据本身全零不视为时钟故障，静音沿用 audio_sink 零样本检测。
 3. `pcm1808_resampler` 按 147/160 精确计数，把 48kHz 转为模型要求的 44.1kHz。每相 96 抽头低通、147 相、Q1.15 系数，左右同相；有符号乘加、round-half-even、16 位饱和。初始历史补零，滤波延迟约 1ms。
-4. 每次输入最多进行 288 个 216MHz 时钟的计算，远小于一个输入帧约 4500 时钟。overrun 锁存后向现有 idle/mute 通路报告，完整帧中断后重建历史并清除。
+4. 每次输入最多进行 288 个 27MHz 时钟的计算，远小于一个输入帧约 562.5 时钟。overrun 锁存后向现有 idle/mute 通路报告，完整帧中断后重建历史并清除。
 5. 重采样后每个 pair-valid 直接写 audio_cdc_fifo，FIFO 的旧 LRCK 选相输入固定为零，避免将与输出无固定相位关系的外部 LRCK 错用为帧过滤条件。DDR/Mel/NPU 保持原采样率契约；八类和未来五类均可使用此通路。
 
 系数用 `python scripts/gen_pcm1808_filter.py` 确定性重建。首轮完整映射中系数占 6 DRM、历史为寄存器，整机 39749 LUT、39576 FF、154.5/155 DRM、92 APM；该轮布线在 50 分钟截止时仍未完成，无新位流。当前精简源以 7104 项基表加 73 相整数校正精确重建全部 14112 项，历史改两路 128x16 同步 block RAM，以有效计数补零；联合 RTL 再次通过，实际映射资源与完整时序须以新源构建为准。
@@ -43,8 +43,12 @@
 
 UART 格式为 `DIAG UIDEMO A=50434D38 ...`，字段均十六进制：B=每秒输入 stereo pair 数，C=每秒滤波输出数，D=非零输入对数，E=左声道有符号 16bit 最小/最大值，F=最近一对实际滤波后的左右样本，G bit0=idle、bit1=overrun，H=1B（27MHz）。稳定 48kHz 音源应约 B=48000、C=44100（这里为十进制描述），G=0；拔线 G=1/计数归零。数字静音可有正常计数但 D=0，不应据此认定识别准确。
 
-复现：`powershell -NoProfile -ExecutionPolicy Bypass -File scripts/run_pds_full.ps1 -BuildSet pcm1808_diag`（先确认无其他 PDS）；`python sim/run_sim.py pcm1808_27mhz` 和 `python sim/run_sim.py pcm1808` 分别验证诊断/生产频率。构建、十表与初始上板证据见 `reports/pcm1808_probe_validation_20261103.json`。当前还未验收外部音源。
+复现：`powershell -NoProfile -ExecutionPolicy Bypass -File scripts/run_pds_full.ps1 -BuildSet pcm1808_diag`（先确认无其他 PDS）；`python sim/run_sim.py pcm1808_27mhz` 和 `python sim/run_sim.py pcm1808` 分别验证当前 27MHz 与历史 216MHz 配置。构建、十表与初始上板证据见 `reports/pcm1808_probe_validation_20261103.json`。当前还未验收外部音源。
 
 ### 真实音源验收更新
 
 2026-11-03 14:43，用户补供电并纠正 J3→J2 后，无需复位恢复实际音频。十个连续秒窗输入 48000/48001、输出 44100/44101 对，有正负非零音频、无 idle/overrun。仅独立 I2S/FIR 诊断板测通过，完整识别系统待集成。
+
+## 2026-11-03 17:04 完整新位流已生成，等待下载器恢复
+
+XSY 完整系统现已改用实测 27MHz 接收/FIR 域，Mel scratch bank 按 16K 边界拆分。新 run20261103-152639-fb2ffc99 完成 PNR/十表/位流，SHA256 1497FAF47B83B64A62027C38B6BF94D12112002C250FC5278C3C28AD2FA46ABE。像素 setup +0.041ns；核心慢角 setup -1.071ns/338端点，其余检查通过，尚未收敛。烧录前 FTDI 检查缺席，未执行下载；不能把已生成当已上板。详见 STATUS 和 pcm1808_mel_split_timing_20261103.json。

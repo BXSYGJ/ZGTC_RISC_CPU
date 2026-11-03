@@ -1,5 +1,12 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-03 17:04：PCM1808 完整整机位流生成，最终时序仍 FAIL；下载器缺席未烧录
+
+- XSY 唯一 run20261103-152639-fb2ffc99 已正常完成 PNR→report_timing→gen_bit_stream；监控 normal/exit0、4614.5秒，PDS/monitor 均退出。Mel 宏放置/详细布线成功，完整位流3791112B、SHA256 1497FAF47B83B64A62027C38B6BF94D12112002C250FC5278C3C28AD2FA46ABE。103项冻结输入逐文件hash未变；证据 build/pcm1808-mel-split-pnr-20261103-154653/result.json。不是旧映射或诊断位流。
+- 最终十表完整，Some Constraints Violated：唯一负项为核心ddrphy_sysclk慢角setup -1.071ns/TNS -88.874ns/338端点；pix setup +0.041ns，全部hold/recovery/removal/min-pulse无负项。最差路径reads_left→weight_read_aligner状态CE，其次FC1 rq_cnt→requant APM (-0.953ns)。reports/pcm1808_mel_split_timing_20261103.json存完整表与报告hash；不把PNR成功当时序收敛。
+- 复用JS9040/65420的烧录前检查报告FTDI ABSENT，安全退出，未执行program；cfg46156保持，不新建/重启/终止JS。已仅请用户重插下载器电脑端USB，保持板电源/JTAG/PCM1808/HDMI；等回复后重新核验并烧入本次输入方向位流，确认done/CRC/BOOT/DDROK→691040B权重WOK FA0D5236→真实音频连续NPU/CPU回读与中文HDMI。报告pcm1808_mel_split_board_20261103.json为FAIL，不是烧录成功。
+- 板卡最近只读done0/UART0，当前没有新整机板测结论或准确率结论。旧输出BCK/LRCK位流禁止在PCM1808接着时恢复。更新PCM1808说明中的27MHz实际域；保护CPU用户diff、PCB、obj_dir、未跟踪group5资产。下一步除恢复下载外仍需修复核心长路径、新源单路构建/最终时序，Flash和五类工作不混入本次位流。
+
 ## 2026-11-03 16:26：Mel split 宏放置通过，详细布线持续收敛；板卡当前 done=0
 
 - 唯一PNR run20261103-152639-fb2ffc99已通过前轮失败的RAM宏放置；详细放置完成，工具放置估计slack +0.500ns/TNS0（非最终STA）。详细布线第71轮未布通5302，较初始65872持续下降，CPU持续推进；硬截止仍17:46:55，不启动第二条PDS。实际监控目录为build/pcm1808-mel-split-pnr-20261103-154653，已修正文档/报告中的154655误记。
