@@ -1,5 +1,5 @@
 {
-  "status": "27MHZ_MACRO_PLACEMENT_FAILED_MEL_SPLIT_NEW_GATE_RUNNING_NO_NEW_FULL_BITSTREAM",
+  "status": "MEL_SPLIT_FULL_GATE_PASS_PNR_RUNNING_NO_NEW_FULL_BITSTREAM",
   "contract": {
     "source": "PCM1808 onboard oscillator, I2S master",
     "input_hz": 48000,
@@ -417,7 +417,7 @@
   },
   "mel_bank_split": {
     "run": "build/pds/20261103-152639-fb2ffc99",
-    "status": "NEW_SOURCE_COMPILE_SYNTH_MAP_RUNNING",
+    "status": "FULL_GATE_PASS_PNR_RUNNING",
     "gate_deadline_minutes": 30,
     "old_bank": "16576x16 inferred 16 DRM36, allocation padded to 32768",
     "new_bank": "16384x16 plus 192x16, synchronous read latency preserved",
@@ -430,6 +430,88 @@
       "lint": "65 files, 0 violations",
       "cpu_native_ab": "PASS production ROM, frame-major, two different inputs without reset, full layers golden exact, CPU ACK/report; reports/cpu_native_pcm27_melsplit_20261103.json"
     },
-    "rtl_sha256": "913c84630a1cce3a36f5c76e6cc51dcc3d0b0ad7467c31fb96b1ada259a37508"
+    "rtl_sha256": "913c84630a1cce3a36f5c76e6cc51dcc3d0b0ad7467c31fb96b1ada259a37508",
+    "source_commit": "782e880e",
+    "resources": {
+      "LUT": 33967,
+      "FF": 35466,
+      "DRM": 150.5,
+      "DRM_available": 155,
+      "APM": 92
+    },
+    "sources_unchanged": true,
+    "map_sha256": "6b9ca28a0d2a3322e5a53a8e844f4ac2abd8deda169b58a731ca35b757e723a1",
+    "gate_result": {
+      "reason": "normal",
+      "exit_code": 0,
+      "run": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\pds\\20261103-152639-fb2ffc99",
+      "duration_seconds": 1130.5,
+      "archive": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\pcm1808-mel-split-gate-20261103-152638",
+      "files": [
+        {
+          "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\pds\\20261103-152639-fb2ffc99\\compile\\instrec_top_comp.adf",
+          "sha256": "8bdd3435755d8649c19fbd364e3933b253666fe0137d357130e7fed7a4351bf2",
+          "size": 5505353
+        },
+        {
+          "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\pds\\20261103-152639-fb2ffc99\\compile\\run.log",
+          "sha256": "e33c5a2f9dce4542c57787d0451182bc82195397dd5896f06c17e78897e4dc9f",
+          "size": 1262412
+        },
+        {
+          "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\pds\\20261103-152639-fb2ffc99\\synthesize\\add_sub_carrychain.log",
+          "sha256": "2941cf89692ffe4260af00a5abf8b0bb93ce8e33e5eb2a3113065394837e1fa9",
+          "size": 234585
+        },
+        {
+          "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\pds\\20261103-152639-fb2ffc99\\synthesize\\apm_drm_lutram_utilization.log",
+          "sha256": "450da2a9bd397d589f88921774e8aac0519015b49e978e9066ec0bcae91d41f8",
+          "size": 167711
+        },
+        {
+          "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\pds\\20261103-152639-fb2ffc99\\synthesize\\instrec_top_syn.adf",
+          "sha256": "b1a88f69803fdea11298c8cb37eff3cea4b8651b57ec059c40df667ef6f9776a",
+          "size": 8792390
+        },
+        {
+          "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\pds\\20261103-152639-fb2ffc99\\synthesize\\run.log",
+          "sha256": "00e11f25483d130bac47234caef98cf7dcc5f5489f9270175300fcdc4eca9f3f",
+          "size": 1018362
+        },
+        {
+          "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\pds\\20261103-152639-fb2ffc99\\device_map\\instrec_top_map.adf",
+          "sha256": "6b9ca28a0d2a3322e5a53a8e844f4ac2abd8deda169b58a731ca35b757e723a1",
+          "size": 7623145
+        },
+        {
+          "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\pds\\20261103-152639-fb2ffc99\\device_map\\run.log",
+          "sha256": "d7bb859d86a9fc7e99ea829071337bbd0c6370702078f1662009ded8a756c709",
+          "size": 123626
+        },
+        {
+          "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\pds\\20261103-152639-fb2ffc99\\pds.stdout.log",
+          "sha256": "517fafaf2de423d3833b6b6818ad22eb0efc550d5248389668e13171f2483689",
+          "size": 2471665
+        },
+        {
+          "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\pds\\20261103-152639-fb2ffc99\\pds.stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        {
+          "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\pds\\20261103-152639-fb2ffc99\\manifest.json",
+          "sha256": "91fde0c5e7d0231cc325b7c403788bfc41476810b56323a88beeb62c47b8ee38",
+          "size": 2464
+        },
+        {
+          "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\pds\\20261103-152639-fb2ffc99\\source-manifest.json",
+          "sha256": "31ff0523f467b8052f2a79328c17a076d79352161467e136129fbbc733957df1",
+          "size": 34260
+        }
+      ]
+    },
+    "pnr_archive": "build/pcm1808-mel-split-pnr-20261103-154655",
+    "pnr_started_local": "2026-11-03 15:46:55",
+    "pnr_deadline_local": "2026-11-03 17:46:55"
   }
 }

@@ -1,5 +1,11 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-03 15:47：Mel split 整机资源门控通过，唯一新映射 PNR 中
+
+- run20261103-152639-fb2ffc99 compile/synthesize/dev_map全PASS，SourcesUnchanged=true，正常退出；33967LUT/35466FF/150.5of155DRM/92APM。Mel主bank实推8DRM36+尾1DRM18；整机净省4.5DRM（工具对其他RAM重新分配），不拿局部7.5节省代替整机结果。完整map7623145B，hash见reports/pcm1808_validation_20261103.json；门控证据build/pcm1808-mel-split-gate-20261103-152638。
+- 核验源hash未变及无其他PDS后，15:46:55从新库启动唯一PNR→十表→位流，17:46:55硬截止，15秒CPU/RSS/阶段监控存build/pcm1808-mel-split-pnr-20261103-154655。manifest中StopAfter后的FAIL占位是未执行，不能当本轮PNR结论。结束前读取实际stage日志/最终十表，保留所有失败证据。
+- 修复与全量回归已push XSY/782e880e；生产ROM A/B连续native golden/CPU回读ACK回归证据005bacf5已push。板上仍输入诊断2856BB4D，最近COM5只读10秒0字节，烧录前需只读核验当前状态；未改既有JS/cfg。当前无新完整位流、不声明整机完成。
+
 ## 2026-11-03 15:27：27MHz 整机宏放置失败，Mel 存储边界拆分回归通过，新源门控中
 
 - 上轮 PNR 于 15:18 正常报 Place-0006：u_mel_engine/spec_bank_0/gopdrm_36k cannot be placed，无路由/最终十表/位流/烧录。失败日志与 hash 保留 build/pcm1808-27m-pnr-20261103-151232/result.json；更正旧条目的 archive 尾号151234为151232。板上仍2856BB4D输入诊断，PCM1808接线保持。

@@ -1059,3 +1059,7 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 ## 2026-11-03：新源CPU/native连续A/B联合回归
 
 - 生产ROM、frame-major真实native控制器两种不同输入无reset回归PASS，所有层golden精确、CPU请求/报告/ACK通过；物理DDR/CDC/板测和时序不在此回归范围。
+
+## 2026-11-03：Mel split整机新源资源门控PASS并进入PNR
+
+- 正常完整映射33967LUT/35466FF/150.5DRM/92APM，源hash一致；新库唯一限时120分钟PNR于15:46:55开始，尚无新完整位流。
