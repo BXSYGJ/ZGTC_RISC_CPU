@@ -1,5 +1,10 @@
 # InstRec-FPGA 变更日志
 
+## 2026-11-03：Flash 固化工具流程与第一版烧写镜像
+
+- 研究并实测 PDS 位流→SPI Flash 全流程：`cfg_gen_sfc` 离线转换（X1 下 sfc≡sbit 逐字节）、JTAG 间接烧写命令族（cfg_jtag_flash_*）、MSPI 001 启动模式与 4K 对齐布局、GTP_CFGCLK/`persist_pin` 用户模式评估。产出 `build/flash_boot/instrec_top_w25q128q.sfc`（2673246E…）。
+- 新增 `docs/FLASH_PROGRAM_FLOW_20261103.md`（操作手册：转换/烧写/冷启动验收/风险回退/探针设计）与 `reports/flash_program_flow_20261103.json`。零 JTAG、零板级、零 GUI、未改既有 RTL/约束/脚本。
+
 ## 2026-11-02：HDMI显示保底与真实板级失败记录
 
 - UI烧录和内部计数通过，但用户确认J9无信号，显示验收FAIL；原厂同板例程已对照烧录，待屏幕反馈。

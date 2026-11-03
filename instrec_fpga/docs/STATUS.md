@@ -1,5 +1,14 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-03 00:10：Flash 固化工具流程打通，第一版烧写镜像已产出（文件层）
+
+- 完成 PDS 位流→SPI Flash 固化的全工具链研究并**实际离线转换**出第一版可烧写镜像 `build/flash_boot/instrec_top_w25q128q.sfc`（3,791,112 B，SHA256 `2673246E…`）。手册 `docs/FLASH_PROGRAM_FLOW_20261103.md`、结构化记录 `reports/flash_program_flow_20261103.json`。
+- **格式转换结论**：流程要求 .sbit→.sfc（`cfg_gen_sfc`，cdt_cfg `-file` 批处理可完全离线运行，已实测）；但 X1 模式（opcode 0x0B、`W25Q128Q`）下输出与源 sbit **逐字节相同**——.sbit 即 Flash 线性镜像，仅 X2/X4/X8/偏移/附加数据时才有差异（偏移试验 0x1000→头部 4096×FF 实证）。坑：`-device_name` 必须用 cfl 确切名 `W25Q128Q`（填 `W25Q128` 被拒）。
+- **烧写通路**：JTAG 间接烧写（原厂《下载与固化》同路径）：`cfg_jtag_flash_scan_device→readback(备份)→assign_file→erase→program→verify`，复用 cdt_js:65420。MSPI 启动已由原理图实证（`001,MSPI` 标注+R14 上拉 M0），CFG_CLK=H13，Logos2 主 SPI 有 FCS_N/FCS2_N 双片选对应 U15/U9。
+- **GTP_CFGCLK 用户模式评估更新**：原语仅 CLKIN/CE_N（时钟通路）；PG2L100H ini 默认 `persist_pin="Release For USER"`——配置复用 IO 用户态释放，用户模式读 Flash 可行性上调，仍需探针实证；最小 JEDEC 读回探针设计已写入手册 §8.3。
+- 本轮**零 JTAG/零板级/零 GUI/未改 RTL 约束脚本**；烧录安全回归 16 passed。工作区存在先前遗留改动（cpu/fpga、cpu/rtl 两个 .sv、golden_pipeline_group5.py 未跟踪等），非本轮产生，未代为处置。
+- 下一步（上板，按序）：①复用 cdt_js 扫外挂 Flash 读 JEDEC（确认实装型号+哪颗是 FCS_N）→ ②两颗全量 readback 备份 → ③擦写 instrec_top_w25q128q.sfc → verify → ④断电冷启动验收（done=1/crc=0 + COM5 启动横幅 + HDMI 仪表盘）；失败回退 JTAG 直载（jtag_program_latest.tcl 永远可用）。
+
 ## 2026-11-02：Flash固化与五类主奏识别双任务交接文档
 
 - 按用户要求新增docs/HANDOFF_FLASH_AND_GROUP5_20261102.md，集中记录两项目标、已有资产与证据、CPU现状/目标分工、实施顺序、风险及验收条件，作为接手入口；实时状态仍以本文最新记录为准。

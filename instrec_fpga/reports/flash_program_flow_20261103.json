@@ -1,0 +1,101 @@
+{
+  "task": "PDS bitstream to onboard SPI Flash programming flow, first flashable image",
+  "date": "2026-11-03",
+  "author_session": "flash program flow research (no JTAG / no board ops performed)",
+  "source_bitstream": {
+    "path": "build/pds/20261102-211104-aedccc03/generate_bitstream/instrec_top.sbit",
+    "size_bytes": 3791112,
+    "sha256": "2673246ECAC0ECB3E00721C53EFD6B941CC0E8CA44022064AE36C21941D89318",
+    "header_ascii": "PANGO MICROSYSTEMS, INC.  @#% Logos2-PG2L100H--6-FBG676 ... instrec_top ... 2026/11/02"
+  },
+  "format_conversion": {
+    "required_by_flow": true,
+    "tool": "cdt_cfg.exe -file <tcl> with cfg_gen_sfc (PDS 2022.2-SP6.4, Fabric_Configuration_User_Guide.pdf section 4.5.6-1)",
+    "tool_path": "H:/GG/pango/PDS_2022.2-SP6.4/bin/cdt_cfg.exe",
+    "offline_run": true,
+    "offline_evidence": "ran without cfg_connect, no JTAG touched, cdt_cfg exited by itself (M_PROCESS_FINISH_STARTED)",
+    "command_tcl": "build/flash_boot/gen_sfc_w25q128q.tcl",
+    "command_line": "H:/GG/pango/PDS_2022.2-SP6.4/bin/cdt_cfg.exe -file D:/0000/111/001/Pango/ZGTC_RISC_CPU/instrec_fpga/build/flash_boot/gen_sfc_w25q128q.tcl",
+    "params": { "opcode": "11 (0x0B Fast Read, X1 24-bit)", "device_name": "W25Q128Q", "sbit_start_address": "default 0" },
+    "output": {
+      "path": "build/flash_boot/instrec_top_w25q128q.sfc",
+      "size_bytes": 3791112,
+      "sha256": "2673246ECAC0ECB3E00721C53EFD6B941CC0E8CA44022064AE36C21941D89318",
+      "identical_to_source_sbit": true
+    },
+    "key_finding": "X1 mode cfg_gen_sfc output is byte-identical to source .sbit; .sbit is itself the linear flash image (PANGO header included). Differences only arise with X2/X4/X8, start offset, or appended user data.",
+    "offset_semantics_test": "with -sbit_start_address 0x1000 output was 3795208 B = 4096 x 0xFF prefix + original sbit (file deleted after test, logged)",
+    "device_name_pitfall": "name 'W25Q128' is rejected ('W25Q128 is not supported' warning, ignored); exact cfl entry is W25Q128Q (JEDEC EF4018) or W25Q128M (EF7018). flash_list_cd.cfl located at H:/GG/pango/PDS_2022.2-SP6.4/arch/vendor/pango/arch/cdt/flash_list_cd.cfl",
+    "gui_equivalent": "Configuration tool -> Operations -> Convert File -> Generate Flash Programming File (vendor manual 05_FPGA&CPLD download/flash doc)"
+  },
+  "programming_path": {
+    "chosen": "JTAG indirect external flash programming via FPGA configuration engine (Fabric_Configuration_UG section 4.3.26; vendor manual section 2)",
+    "tcl_commands": [
+      "cfg_jtag_flash_scan_device -device_index 0",
+      "cfg_jtag_flash_readback -file <backup.sfc> -device_index 0",
+      "cfg_jtag_flash_assign_file -file <image.sfc> -device_index 0",
+      "cfg_jtag_flash_erase -device_index 0",
+      "cfg_jtag_flash_program -device_index 0",
+      "cfg_jtag_flash_verify -device_index 0"
+    ],
+    "connection": "cfg_connect -ip 127.0.0.1 -port 65420 (reuse running cdt_js PID 9040; never spawn/kill)",
+    "existing_jtag_load_reference": "scripts/jtag_program_latest.tcl (volatile cfg_program - separate operation, kept as rollback path)",
+    "not_used": "cfg_flash_* direct SPI mode (no debugger-to-flash wiring on this board)"
+  },
+  "boot_mode": {
+    "mode_pins": "M[2:0]=001 MSPI (schematic p3 literal label '001,MSPI'; R14 1K pull-up on FPGA_M0 installed, R13/R15 NC)",
+    "cfg_clk": "H13 dedicated CFG_CLK, shared by both flashes, external net SPI_CLK (schematic p3: CFG_CLK next to pin H13)",
+    "chip_selects": "SPI0_CS (U15) and SPI1_CS (U9) independent nets; Logos2 master SPI has FCS_N and FCS2_N (DS04001 table 4-11) matching dual-flash design",
+    "image_layout": "bitstream at flash address 0, linear, no padding; 3791112 B ~ 926 x 4K sectors (~3.62 MiB) of 16 MiB; future weight partition suggested at 0x400000 (4K-aligned)",
+    "master_spi_timing": "CFG_CLK max 40 MHz (low 15.38 MHz, daisy 25 MHz, initial 2.99 MHz); TPL<=11ms TPOR<=71ms TICCK>=400ns (DS04001 table 4-10/4-11)"
+  },
+  "gtp_cfgclk_user_mode": {
+    "primitive": "GTP_CFGCLK(CLKIN, CE_N) - clock-only, no data ports; sim model arch/vendor/pango/verilog/simulation/GTP_CFGCLK.v, synthesis lib logos2/common/lib/gtp_lib.v line 141",
+    "pg2l100h_ini_defaults": {
+      "persist_pin": "Release For USER (config-reuse pins released to user logic after config; other option Persist For Configuration; maps to ctrl0_data[2])",
+      "persist_slave_spi_pin": "No",
+      "flash_read_mode": "X124-bit",
+      "create_mask_file": "True",
+      "bitstream_security": "enable reconfigure, enable readback",
+      "encrypt_bitstream": "No"
+    },
+    "ini_file": "H:/GG/pango/PDS_2022.2-SP6.4/arch/vendor/pango/logos2/pg2l100h/data/config/ini_data/Logos2-PG2L100H.ini lines 83-110",
+    "updated_assessment": "user-mode flash access plausible via GTP_CFGCLK(clock to H13) + released config-reuse IOs for CS/DI/DO; unproven on PG2L100H (needs UG040005 + probe bitstream)",
+    "probe_design": "minimal JEDEC(0x9F) reader: 25MHz PLL -> GTP_CFGCLK, CS/DI/DO on released pins, print JED via UART; identifies U15 vs U9 and vendor"
+  },
+  "artifacts_produced": [
+    "build/flash_boot/instrec_top_w25q128q.sfc (3791112 B, sha256 2673246E...)",
+    "build/flash_boot/gen_sfc_w25q128q.tcl",
+    "build/flash_boot/gen_sfc_w25q128q.log",
+    "build/flash_boot/configuration_tcl.log (cdt_cfg auto log: 1 failed attempt with wrong device name + 2 successes)",
+    "docs/FLASH_PROGRAM_FLOW_20261103.md (operation manual)"
+  ],
+  "vendor_docs_used": [
+    "H:/GG/pango/PDS_2022.2-SP6.4/doc/Fabric_Configuration_User_Guide.pdf (sections 4.3.11-4.3.26, 4.5.4, 4.5.6-1, 5.4 table 21)",
+    "D:/0000/111/001/Pango/docs/盘古100Pro+开发板（MES2L676-100HP）配套资料/1_Demo_document/工具使用篇/05_FPGA&CPLD的下载与固化_v1.1.pdf",
+    "D:/0000/111/001/Pango/docs/盘古100Pro+开发板（MES2L676-100HP）配套资料/4_IC_datasheet/FPGA/DS04001_Logos2系列FPGA器件数据手册.pdf",
+    "D:/0000/111/001/Pango/docs/盘古100Pro+开发板（MES2L676-100HP）配套资料/3_Hardware/原理图/MES2L676-CORE-V1.2原理图(100K).pdf page 3 (text+coordinate extraction)"
+  ],
+  "unconfirmed_items": [
+    "actual mounted flash model per slot (W25Q128JV JEDEC EF4018 vs XT25BF128F 0B4018) - confirm via cfg_jtag_flash_scan_device",
+    "which flash is FCS_N primary boot source (U15/SPI0 vs U9/SPI1) - schematic graphic-only wiring; confirm via scan + backup content comparison; 200HP history suggests U15 config / U9 user",
+    "whether second flash is reachable through cdt indirect programming",
+    "XTX custom flash addition is GUI-only per vendor manual; TCL equivalent not documented in section 4.5",
+    "GTP_CFGCLK user-mode usability and exact released pin numbers on PG2L100H (needs UG040005 + probe)",
+    "cold-boot stability of full NPU/DDR/HDMI chain under non-JTAG power sequence"
+  ],
+  "next_board_steps": [
+    "1. reuse cdt_js at 127.0.0.1:65420, cfg_scan_chain + cfg_jtag_flash_scan_device (read JEDEC, resolve unconfirmed #1/#2)",
+    "2. cfg_jtag_flash_readback full backup of both flashes before any erase",
+    "3. assign instrec_top_w25q128q.sfc -> erase -> program -> verify",
+    "4. full power-cycle, check done=1 crc_err=0 via read-only status, expect UART boot banner on COM5",
+    "5. on failure rollback to JTAG volatile load via existing scripts/jtag_program_latest.tcl"
+  ],
+  "discipline": {
+    "jtag_ops_performed": false,
+    "gui_started": false,
+    "cdt_processes_touched": false,
+    "existing_rtl_constraints_modified": false,
+    "new_files_only_under": ["instrec_fpga/build/flash_boot/", "instrec_fpga/docs/FLASH_PROGRAM_FLOW_20261103.md", "instrec_fpga/reports/flash_program_flow_20261103.json"]
+  }
+}
