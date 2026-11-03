@@ -466,6 +466,29 @@ register(Case(
 ))
 
 
+register(Case(
+    name="ui_scene",
+    tb="tb_ui_scene.sv",
+    rtl=["src/ui_scene/ui_scene_top.v",
+         "src/ui_scene/ui_scene_table.v",
+         "src/ui_scene/ui_scene_render.v"],
+    timeout=300,
+    prepare="ui_scene",
+    description="scene descriptor double-bank atomic commit vs Python reference frames",
+))
+
+
+register(Case(
+    name="uart_app_boot",
+    tb="tb_uart_app_boot.sv",
+    rtl=["src/boot/uart_app_boot.v",
+         "src/ctrl/uart_rx.v",
+         "src/ctrl/uart_tx.v"],
+    timeout=600,
+    description="UART app loader v0: chunks + CRC32 + seq + EXEC gating + abort",
+))
+
+
 # ---------------------------------------------------------------------------
 # Small helpers
 # ---------------------------------------------------------------------------
@@ -709,6 +732,18 @@ PREPARERS = {
     "rv_top_ctrl": prepare_rv_top_ctrl,
     "full_top_ctrl": prepare_full_top_ctrl,
 }
+
+
+# D software-UI work package: regenerate the reference frames and the
+# scene descriptor/glyph tables consumed by tb_ui_scene (hex output goes
+# to build/sim/ui_scene/, which the TB reads with $readmemh).
+def prepare_ui_scene(work: Path) -> None:
+    script = ROOT / "experiments" / "ui_scene" / "gen_expected_frames.py"
+    subprocess.run([sys.executable, str(script)], cwd=str(ROOT), check=True,
+                   capture_output=True)
+
+
+PREPARERS["ui_scene"] = prepare_ui_scene
 
 
 # ---------------------------------------------------------------------------
