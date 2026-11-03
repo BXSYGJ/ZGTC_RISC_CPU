@@ -29,8 +29,12 @@
     "lint": "69 files / 0",
     "demo_dashboard": "PASS 5 full 1080p RTL rasters / 2000 bar checks"
   },
-  "bitstream": null,
-  "board_flashed": false,
+  "bitstream": {
+    "path": "build\\pds\\20261103-175125-bc930d4f\\generate_bitstream\\top_emergency_demo.sbit",
+    "sha256": "ce2e2205f4f17c28a5af2e9e16d8b2ed0df73f48f8dbe3bd783cf698e2667a88",
+    "size": 3791112
+  },
+  "board_flashed": true,
   "preview_sha256": "d7f63dc307b3e743cd77d20972cbd05c3778a9b37b50211b64c02ef8faef6de3",
   "hardware_preflight": "FTDI present / JS9040 TCP65420 open / existing cfg46156 preserved",
   "resource_gate": {
@@ -42,5 +46,32 @@
     "apm": 31,
     "evidence": "build/emergency-demo-gate-20261103-175124/result.json"
   },
-  "pnr": "running; bounded 120 minutes; same frozen source"
+  "pnr": {
+    "reason": "normal",
+    "exit_code": 0,
+    "duration_seconds": 871.6,
+    "evidence": "build/emergency-demo-pnr-20261103-180146/result.json"
+  },
+  "source_unchanged": true,
+  "timing": {
+    "report": "reports/emergency_demo_timing_20261103.json",
+    "complete_ten_tables": true,
+    "meets_constraints": false,
+    "pixel_setup_ns": -0.005,
+    "pixel_failing_endpoints": 1,
+    "core_setup_ns": -0.399,
+    "core_failing_endpoints": 34,
+    "other_checks": "PASS"
+  },
+  "board": {
+    "report": "reports/emergency_demo_board_20261103.json",
+    "done": 1,
+    "crc_err": 0,
+    "boot": "PASS",
+    "ddr_selftest": "PASS",
+    "display_playback_acceptance": "pending user",
+    "weights_uploaded": false,
+    "uart_sha256": "fa1fb3a037911da8377a24bc0678acb45e97fd7ba5d6b93374e17c16e003be74",
+    "uart_note": "Capture includes pre-program old NPU lines. After RV32 BOOT, NPU GO/top1 reports are retained CPU firmware reading demo stub/UI registers, cycles=0; no NPU instance or inference."
+  }
 }
