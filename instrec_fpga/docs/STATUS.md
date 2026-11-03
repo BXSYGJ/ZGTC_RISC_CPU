@@ -1,5 +1,18 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-03 15:13：27MHz 完整映射库恢复成功，唯一新源 PNR 已启动
+
+- 同源 dev_map 恢复于 15:12:05 正常完成，PDS exit0、Executing dev_map successfully；完整 map 7890600B、SHA256 762c19fc9596a8d3d7bae455fa1ac445922ee94f8430988cf007827d42dcd6e8，资源仍 35743 LUT/35504 FF/155 DRM/92 APM。临时 map-only wrapper 因复用末尾“必须有位流”检查而 exit1，此为 wrapper 条件不匹配，非工具映射失败；该轮从设计上没有 PNR/位流。原超时不完整 map 证据保留。
+- 核验全部源 hash 未变、无残留 PDS，15:12:34 从本次新完整 map 启动唯一 PNR→十表→位流流程，17:12:34 硬截止；15秒记录 CPU/RSS/路由日志，存 build/pcm1808-27m-pnr-20261103-151234。不得拿同目录旧门控 FAIL 占位当已执行 PNR 失败，最终以此次 stage 日志、十表及新位流 hash 为准。
+- 当前没有新完整位流，板上仍 PCM1808 2856BB4D 诊断；烧录、权重 WOK、真实音频 NPU/CPU 回读、HDMI 联合验收仍待后续，不声明整机完成。详见 reports/pcm1808_validation_20261103.json。
+
+## 2026-11-03 15:09：27MHz 整机资源报告通过，门控截止打断映射库保存，正在仅恢复 dev_map
+
+- XSY/fc675565 新源 run20261103-144754-6578ad23 compile/synthesize 已完成；dev_map 资源报告为 35743 LUT、35504 FF、155/155 DRM、92 APM，容量未超限但 DRM 已满。dev_map 于保存数据库期间触及 20 分钟截止并安全停止，不能将资源报告当作可恢复的完整映射库，更不能称 PNR/时序/位流通过。
+- 不完整 map 2396160B、SHA256 acfd6a5a5ab7bcbeadabb94e54551700e08ee82475215e477925d55f62be4d99 已另存 .adf.deadline-incomplete；原门控 result.json 保留 build/pcm1808-27m-gate-20261103-144753。完整 synth 9089353B、SHA256 fd94803ba8e051c8c4ef8dc229c5cb9888588c337a6861163652ed19199962c4 保留。
+- 核验冻结源逐文件 hash 全部一致、无 PDS 残留后，15:08:49 使用独立 driver、同一完整综合库只恢复 dev_map；20 分钟新截止，监控存 build/pcm1808-27m-map-recovery-20261103-150848。不执行并发 PDS，不修改源、不复用旧源库。映射完整保存后才进入最长 120 分钟受控 PNR，并检查十表，再决定板级烧录。
+- 当前板上仍 2856BB4D 真实 PCM1808 采集诊断；没有新完整位流/烧录。cdt_js/cdt_cfg 未操作，接线无需改动。保护 CPU 用户 diff 与其他未跟踪资产。
+
 ## 2026-11-03 14:48：按用户要求回到 XSY，完整系统改用已实测 27MHz 音频域
 
 - 用户明确要求继续完整系统并放在 XSY，XSY2 暂不用。已切换 XSY，将 XSY2 的 9d2940f9..8f902aec 五个仅 instrec_fpga 提交 fast-forward 合入，并推送 origin/XSY；上游改为 origin/XSY。未修改/暂存 CPU 两项用户 diff、PCB、obj_dir 或另一组未跟踪 group5 资产；不再向 XSY2 续交。

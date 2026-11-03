@@ -1,5 +1,5 @@
 {
-  "status": "OPTIMIZED_GATE_PASS_PNR_DEADLINE_NO_BITSTREAM",
+  "status": "27MHZ_FULL_MAP_RECOVERED_PNR_RUNNING_NO_NEW_FULL_BITSTREAM",
   "contract": {
     "source": "PCM1808 onboard oscillator, I2S master",
     "input_hz": 48000,
@@ -334,5 +334,36 @@
     "build/sim/pcm1808/run.log": "5a51d35e17cee9d19d6ecf1ee1280e1e758842161640ceb5f9766199315f83d6",
     "build/sim/pcm1808/input.hex": "d806a84e4e8040c4cfaa7e0d32d6d36dcaf711b5be48414493640e3620e2df54",
     "build/sim/pcm1808/expected.hex": "9dcab4ffcc4771d0b5e49a2c34efe48911e48e175ce297e6b11894fd6a63a195"
+  },
+  "full_audio_27mhz": {
+    "branch": "XSY",
+    "source_commit": "fc675565",
+    "run": "build/pds/20261103-144754-6578ad23",
+    "initial_gate": "20 minute deadline during map DB save; incomplete map preserved",
+    "map_recovery": "PDS dev_map successfully; tool exit 0; wrapper exit 1 only because generic resume wrapper expects bitstream after deliberately map-only flow",
+    "map_recovery_archive": "build/pcm1808-27m-map-recovery-20261103-150848",
+    "resources": {
+      "LUT": 35743,
+      "FF": 35504,
+      "DRM": 155,
+      "DRM_available": 155,
+      "APM": 92
+    },
+    "map_sha256": "762c19fc9596a8d3d7bae455fa1ac445922ee94f8430988cf007827d42dcd6e8",
+    "sources_unchanged": true,
+    "pnr_started_local": "2026-11-03 15:12:34",
+    "pnr_deadline_local": "2026-11-03 17:12:34",
+    "pnr_archive": "build/pcm1808-27m-pnr-20261103-151234",
+    "pnr_result": "PENDING",
+    "new_full_bitstream": false,
+    "tests": {
+      "serial_fir_cdc_27mhz": "PASS",
+      "audio_fifo": "PASS",
+      "rv_top_ctrl": "PASS",
+      "full_top_ctrl": "PASS",
+      "lint": "65 files, zero violations",
+      "full_pytest_first": "435 passed, 4 skipped, 1 failed (build-set guard omitted pcm1808_diag)",
+      "corrected_guard_suite": "9 passed"
+    }
   }
 }
