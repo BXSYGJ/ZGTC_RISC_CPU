@@ -1,0 +1,45 @@
+{
+  "ftdi_present": false,
+  "jtagserver_pids": [
+    9040
+  ],
+  "cdt_cfg_pids": [
+    46156
+  ],
+  "program_ok": true,
+  "status_raw": "0x081ffca0",
+  "done": 1,
+  "crc_err": 0,
+  "uart_bytes": 7952,
+  "uart_file": "D:/0000/111/001/Pango/ZGTC_RISC_CPU/instrec_fpga/build/board-emergency-demo-repeat-20261103-194446/uart_last.bin",
+  "expect": [
+    "RV32 BOOT",
+    "DDROK"
+  ],
+  "expect_missing": [],
+  "verdict": "FAIL",
+  "bitstream_sha256": "0EBF9448533FD958676B376295F1A23D571DD64E881B9C7813C0E036FA12A584",
+  "note": "Program/status/BOOT/DDROK PASS; overall FAIL because FTDI disappeared after programming. Demo stub logs are not inference.",
+  "evidence": [
+    {
+      "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\board-emergency-demo-repeat-20261103-194446\\board_check_program.log",
+      "sha256": "87f087b0de670c2f1210841be44ec0cd6ef7b2d59a93efdd37ae2d2d6d5fd01c",
+      "size": 3808
+    },
+    {
+      "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\board-emergency-demo-repeat-20261103-194446\\board_check_program.tcl",
+      "sha256": "b10ad5a1e1b199351b45228eae445cea8c3013e108862356cbcc32aa4a08309a",
+      "size": 448
+    },
+    {
+      "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\board-emergency-demo-repeat-20261103-194446\\configuration_tcl.log",
+      "sha256": "6d2dd4be7ef6b0f5934487941ad065715b04a53747012cd4f9c0153ef9d92af4",
+      "size": 493
+    },
+    {
+      "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\board-emergency-demo-repeat-20261103-194446\\uart_last.bin",
+      "sha256": "117bda5c41a07edc8d43eb4a865a6908e5eb594b87b0e2898cab401e71ae367f",
+      "size": 7952
+    }
+  ]
+}

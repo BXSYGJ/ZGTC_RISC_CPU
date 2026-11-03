@@ -1,5 +1,9 @@
 # InstRec-FPGA 变更日志
 
+## 2026-11-03：重插后重烧成功并归档下载器掉线
+
+- 同版0EBF9448 program/done/CRC/BOOT/DDROK通过；FTDI随后掉线导致overall FAIL，分项证据保留，不重复烧录或操作服务。
+
 ## 2026-11-03：再次重烧前发现 FTDI 缺席
 
 - 同位流hash已核对，PnP无下载器而安全退出、未program；保存独立FAIL报告，等待用户重插电脑端USB，不操作JS/cfg。

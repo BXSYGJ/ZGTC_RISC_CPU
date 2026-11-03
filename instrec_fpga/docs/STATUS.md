@@ -1,5 +1,10 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-03 19:50：重插后同版重烧成功，BOOT/DDROK通过，下载器随后掉线
+
+- 用户回复重插后安全复用JS9040/65420烧录同一0EBF9448，program=true、done1/CRC0，7952B串口含RV32 BOOT/MMIO/ISA与DDROK；演示stub输出非真实推理。置信度曲线/去提示保持，未上传权重。
+- FTDI在本轮结束检查时再次从PnP消失，故自动overall FAIL，仅下载器在线条件失败，不抹除实际program/启动/DDR成功证据。未重启/终止/新建JS，既有cfg46156保持；不要求为已完成烧录再重插。证据reports/emergency_demo_nohint_repeat_retry_20261103.json及原文hash。保护CPU用户diff/PCB/obj_dir/group5；当前板上去提示演示已启动，后续需要JTAG时再处理连接。
+
 ## 2026-11-03 19:45：再次请求烧录，FTDI 缺席，未执行 program
 
 - 用户再次要求重烧同一去提示0EBF9448，位流hash已核对。烧录前PnP无FTDI，自动安全退出，未执行program；JS9040/65420与既有cfg46156保持，未重启或终止服务。独立证据reports/emergency_demo_nohint_repeat_board_20261103.json。
