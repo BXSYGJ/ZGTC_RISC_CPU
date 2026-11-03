@@ -1,0 +1,238 @@
+{
+  "report_id": "group5_int8_calibration_20261103",
+  "date": "2026-11-03",
+  "purpose": "five-group dual-head model INT8 contract acceptance evaluation on the held-out val split",
+  "inputs": {
+    "contract": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\scripts\\outputs\\group5_contract.json",
+    "contract_sha256": "4c097ba7b48ed28e94c348cb2cc7b78b8e06cca3627059f4260317f2bfc65943",
+    "weights_image": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\scripts\\outputs\\group5_weights_image.bin",
+    "weights_image_sha256": "2c59459a71a9070bc88f10e2da2f6021a0583910081136a6f2fa6c954bfb9354",
+    "float_state_sha256": "0fb659348612629a91818cba45280e38b721047f3d8122e0726fa4a6e8ac4826",
+    "reference_vectors_sha256": "584fb765a5270a869db855e8c4b9c6d803d906fcbcd470c8e3795c6097f9acaa",
+    "features_sha256": "2fda04f6d3c6182131eb0dbc3a7fe2c06ecd5c2a94414abef4b3adfc36852559",
+    "split_json_sha256": "ed1b830d766ad7af3a22a72c27df5a049f186a490b78312d2bd6e8884af4a0f9",
+    "val_rows": 8906,
+    "val_rows_full": 8906,
+    "val_subset_note": "full val split",
+    "calib_rows_used": 8001,
+    "calib_method": "minmax + semantic saturation clip on the output heads (fc2: +/-14 sigmoid bound, dom_fc2: 24-wide softmax span anchored at the observed max; lossless for prediction semantics, monotone clip preserves argmax); interior layers plain minmax (fbgemm observer parity, 0 kept representable)"
+  },
+  "commands": [
+    "python scripts/golden_pipeline_group5.py",
+    "python scripts/eval_group5_int8.py"
+  ],
+  "environment": {
+    "python": "3.12.7",
+    "numpy": "2.1.2",
+    "torch": "2.14.1+cpu",
+    "platform": "Windows-11-10.0.26300-SP0"
+  },
+  "timing_sec": {
+    "float_forward": 63.1,
+    "int8_forward": 728.3
+  },
+  "metrics": {
+    "activity": {
+      "float": {
+        "per_class": {
+          "strings": {
+            "precision": 0.9784562926224426,
+            "recall": 0.956370246932283,
+            "f1": 0.9672872136673561,
+            "n_positive": 6601
+          },
+          "woodwinds": {
+            "precision": 0.8435555555555555,
+            "recall": 0.8393278301886793,
+            "f1": 0.8414363824442147,
+            "n_positive": 3392
+          },
+          "brass": {
+            "precision": 0.7044270833333334,
+            "recall": 0.7540069686411149,
+            "f1": 0.7283742847526086,
+            "n_positive": 1435
+          },
+          "percussion": {
+            "precision": 1.0,
+            "recall": 0.8663239074550129,
+            "f1": 0.928374655647383,
+            "n_positive": 389
+          },
+          "keys": {
+            "precision": 0.8460076045627376,
+            "recall": 0.9611231101511879,
+            "f1": 0.8998988877654196,
+            "n_positive": 1389
+          }
+        },
+        "micro_f1": 0.8997130342848513,
+        "macro_f1": 0.8730742848553964,
+        "subset_accuracy": 0.7539860768021559
+      },
+      "int8": {
+        "per_class": {
+          "strings": {
+            "precision": 0.977895392278954,
+            "recall": 0.9516739887895773,
+            "f1": 0.9646065259117083,
+            "n_positive": 6601
+          },
+          "woodwinds": {
+            "precision": 0.8777419354838709,
+            "recall": 0.8021816037735849,
+            "f1": 0.8382624768946396,
+            "n_positive": 3392
+          },
+          "brass": {
+            "precision": 0.6847624922887107,
+            "recall": 0.7735191637630662,
+            "f1": 0.7264397905759162,
+            "n_positive": 1435
+          },
+          "percussion": {
+            "precision": 1.0,
+            "recall": 0.8174807197943444,
+            "f1": 0.8995756718528997,
+            "n_positive": 389
+          },
+          "keys": {
+            "precision": 0.8490083173384517,
+            "recall": 0.9553635709143269,
+            "f1": 0.8990514905149051,
+            "n_positive": 1389
+          }
+        },
+        "micro_f1": 0.8964623360780726,
+        "macro_f1": 0.8655871911500137,
+        "subset_accuracy": 0.7492701549517179
+      },
+      "macro_f1_delta": -0.007487093705382697,
+      "per_class": {
+        "strings": {
+          "n_positive": 6601,
+          "precision": {
+            "float": 0.9784562926224426,
+            "int8": 0.977895392278954
+          },
+          "recall": {
+            "float": 0.956370246932283,
+            "int8": 0.9516739887895773
+          },
+          "f1": {
+            "float": 0.9672872136673561,
+            "int8": 0.9646065259117083,
+            "delta": -0.0026806877556478925
+          }
+        },
+        "woodwinds": {
+          "n_positive": 3392,
+          "precision": {
+            "float": 0.8435555555555555,
+            "int8": 0.8777419354838709
+          },
+          "recall": {
+            "float": 0.8393278301886793,
+            "int8": 0.8021816037735849
+          },
+          "f1": {
+            "float": 0.8414363824442147,
+            "int8": 0.8382624768946396,
+            "delta": -0.0031739055495750845
+          }
+        },
+        "brass": {
+          "n_positive": 1435,
+          "precision": {
+            "float": 0.7044270833333334,
+            "int8": 0.6847624922887107
+          },
+          "recall": {
+            "float": 0.7540069686411149,
+            "int8": 0.7735191637630662
+          },
+          "f1": {
+            "float": 0.7283742847526086,
+            "int8": 0.7264397905759162,
+            "delta": -0.0019344941766923363
+          }
+        },
+        "percussion": {
+          "n_positive": 389,
+          "precision": {
+            "float": 1.0,
+            "int8": 1.0
+          },
+          "recall": {
+            "float": 0.8663239074550129,
+            "int8": 0.8174807197943444
+          },
+          "f1": {
+            "float": 0.928374655647383,
+            "int8": 0.8995756718528997,
+            "delta": -0.028798983794483313
+          }
+        },
+        "keys": {
+          "n_positive": 1389,
+          "precision": {
+            "float": 0.8460076045627376,
+            "int8": 0.8490083173384517
+          },
+          "recall": {
+            "float": 0.9611231101511879,
+            "int8": 0.9553635709143269
+          },
+          "f1": {
+            "float": 0.8998988877654196,
+            "int8": 0.8990514905149051,
+            "delta": -0.0008473972505145255
+          }
+        }
+      },
+      "percussion_callout": {
+        "note": "sparse class: ~157 train / 389 val positives",
+        "f1_float": 0.928374655647383,
+        "f1_int8": 0.8995756718528997,
+        "recall_float": 0.8663239074550129,
+        "recall_int8": 0.8174807197943444
+      },
+      "row_level_active_set_agreement": 0.9406018414551988
+    },
+    "dominance": {
+      "masked_rows": 7934,
+      "mae_float_vs_gt": 0.054530952125787735,
+      "mae_int8_vs_gt": 0.054154621866330174,
+      "mae_int8_vs_float": 0.00935283709989677,
+      "max_abs_err_float_vs_gt": 1.0,
+      "max_abs_err_int8_vs_gt": 1.0
+    },
+    "dominant_group": {
+      "definition": "dominance softmax masked by activity>0.5 and renormalized; no active group -> -1 ('no dominant', never forced)",
+      "accuracy_float": 0.8666498613561886,
+      "accuracy_int8": 0.8743382908999244,
+      "agreement_all_val_rows": 0.970581630361554
+    },
+    "no_active": {
+      "ratio_float": 0.010891533797439928,
+      "ratio_int8": 0.014035481697731866,
+      "binary_agreement": 0.9950595104423984,
+      "n_no_active_float": 97,
+      "n_no_active_int8": 125
+    },
+    "logit_domain": {
+      "max_abs_dlogit_activity": 66.1411734786688,
+      "mean_abs_dlogit_activity": 3.955398131531069,
+      "max_abs_dlogit_dominance": 48.66023869233973,
+      "mean_abs_dlogit_dominance": 2.979386317686636
+    }
+  },
+  "acceptance": {
+    "criteria": "dominant-group agreement >= 0.97 AND macro F1 drop <= 0.02",
+    "dominant_agreement": 0.970581630361554,
+    "macro_f1_float": 0.8730742848553964,
+    "macro_f1_int8": 0.8655871911500137,
+    "macro_f1_delta": -0.007487093705382697,
+    "passed": true
+  }
+}
