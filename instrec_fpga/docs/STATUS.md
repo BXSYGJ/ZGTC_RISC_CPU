@@ -1,5 +1,11 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-03：规划修订为存储优化优先、软件UI与UART应用启动
+
+- 用户指出共享NPU缩模型不必然省资源，要求评估F2音频、CPU软件可改UI、应用UART加载启动及DRM外移。已新增docs/SOFTWARE_UI_BOOT_AND_MEMORY_ARCHITECTURE_20261103.md并修订双模式规划入口；本轮仅审计/设计，未改RTL/未训练/未PDS/未烧录。
+- 对1497FAF4完整综合逐memory原语统计总数150.5/155，与map一致：Mel32、store0/1共32、conv19.5、显示谱16、文字12、pool/wbuf/wdma各8、CPU6、重采样4.5、波形3、其余1.5。证据reports/drm_storage_audit_20261103.json含报告hash；这些是片上DRM，不是DDR容量。优先小bank碎片/跨层复用/ASCII并行复制/显示页边界，权重/PCM整窗/整层activation已有DDR驻留。
+- 不强制缩模型；先24k/1024FFT与48k对照，16k作为高频精度实验，降采样仍需抗混叠、训练前端重核。推荐CPU scene/tile/glyph MMIO原子提交，最小boot ROM+UART应用加载+可执行RAM/DDR桥/取指cache，不能用现有权重loader冒充CPU可执行DDR。DDR预算/总线/ABI先冻结，后并行CPU启动、UI仿真、存储/NPU和音频实验。新范围按2–4周工程量级规划非承诺；当前演示及冻结release保持。
+
 ## 2026-11-03：恢复正式开发，硬件适配模型与双模式规划完成
 
 - 用户要求重新规划硬件适配/简化架构，支持八类识别与五类独立活跃度双模式，要求并行调度、仿真优先及板上模拟I2S完成真实推理验收。已生成docs/DUAL_MODE_HARDWARE_MODEL_DEVELOPMENT_PLAN_20261103.md，作为后续实施计划；本轮未启动训练/PDS/烧录，板上演示保持。
