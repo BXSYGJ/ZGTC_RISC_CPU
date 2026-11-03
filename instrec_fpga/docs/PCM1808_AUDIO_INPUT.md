@@ -52,3 +52,7 @@ UART 格式为 `DIAG UIDEMO A=50434D38 ...`，字段均十六进制：B=每秒�
 ## 2026-11-03 17:04 完整新位流已生成，等待下载器恢复
 
 XSY 完整系统现已改用实测 27MHz 接收/FIR 域，Mel scratch bank 按 16K 边界拆分。新 run20261103-152639-fb2ffc99 完成 PNR/十表/位流，SHA256 1497FAF47B83B64A62027C38B6BF94D12112002C250FC5278C3C28AD2FA46ABE。像素 setup +0.041ns；核心慢角 setup -1.071ns/338端点，其余检查通过，尚未收敛。烧录前 FTDI 检查缺席，未执行下载；不能把已生成当已上板。详见 STATUS 和 pcm1808_mel_split_timing_20261103.json。
+
+## 2026-11-03 17:17 完整系统上板更新
+
+下载器恢复后1497FAF4完整新位流已烧入，done1/CRC0、CPU启动与DDROK、691040B权重WOK FA0D5236通过。30秒10轮NPU完成/CPU回读，无超时；HDMI动态显示待用户反馈，识别准确率未验收，核心静态setup仍FAIL。完整报告pcm1808_mel_split_full_board_20261103.json；当前使用本次输入方向位流，PCM1808接线保持。
