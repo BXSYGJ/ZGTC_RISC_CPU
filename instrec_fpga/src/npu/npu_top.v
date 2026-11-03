@@ -1,23 +1,6 @@
-// ---------------------------------------------------------------------------
-// npu_top.v -- InstRec INT8 NPU top level (T-M2-06 integration skeleton)
-//
-// Chain: conv1 -> pool1 -> conv2 -> pool2 -> conv3 -> pool3 -> conv4 ->
-//        pool4 -> gap -> fc1 -> fc2 -> softmax.
-//
-// Fully wired here: activation stream between stages, layer sequencer,
-// GAP result capture, FC input replay, fc2 -> softmax logits bus.
-//
-// WDMA supplies layer-specific bias/multiplier/shift contracts and weights.
-// Convolution stages replay pooled activations through DDR row stores.
-// FC input preloading is allowed; parameter counters retire on completion,
-// and the shared weight stream is visible only to its selected FC layer.
-//
-// Budget: 200 ms at 125 MHz = 25,000,000 cycles; timeout_flag latches at
-// 2x that (REQ-REL-002).
-// ---------------------------------------------------------------------------
-
+// npu_top.v
 module npu_top #(
-    // 0: mel-major fixture RAM; 1: mel_engine frame-major feature bank.
+
     parameter FEATURE_FRAME_MAJOR = 0
 ) (
     input  wire        clk,
@@ -29,8 +12,6 @@ module npu_top #(
     output reg  [31:0] npu_cycles,
     output reg         timeout_flag,
 
-    // Mel feature read port: address now, data next cycle (mel_engine's
-    // bank is a 1-cycle synchronous read).
     output wire [14:0] feat_rd_addr,
     input  wire [7:0]  feat_rd_data,
     output wire        feat_rd_en,
@@ -108,8 +89,6 @@ module npu_top #(
     wire signed [31:0] wl_bias, wl_m;
     wire [6:0]  wl_shift;
 
-    // Only the conv instance owning the current layer may consume the
-    // 48-beat contract; all four share the same data bus.
     wire cb1 = wl_b_valid && (layer == L_CONV1);
     wire cm1 = wl_m_valid && (layer == L_CONV1);
     wire cs1 = wl_s_valid && (layer == L_CONV1);
@@ -139,12 +118,6 @@ module npu_top #(
     wire [3:0]  conv_grpadv;
     wire [15:0] gap_unused_rdata;
 
-    // Tap-stream back-pressure: the engine that owns the current layer is
-    // the only one whose MAC window may consume w_data. Conv/fc engines all
-    // publish w_ready = (their own MAC window), and exactly one of them runs
-    // per layer, so the layer select below picks the live one. FC layers
-    // reuse conv_wready[0]/[1] (fc1/fc2 drive those two bits); the remaining
-    // layers never stream weights (wdma_start only arms the six weight layers).
     wire conv_wready_mux = (layer == L_CONV1) ? conv_wready[0] :
                            (layer == L_CONV2) ? conv_wready[1] :
                            (layer == L_CONV3) ? conv_wready[2] :
@@ -152,13 +125,6 @@ module npu_top #(
                            (layer == L_FC1)   ? fc_wready[0] :
                            (layer == L_FC2)   ? fc_wready[1] : 1'b0;
 
-    // -----------------------------------------------------------------------
-    // Weight group cache (wbuf). wdma streams each (row, group) weight group
-    // once; conv_engine needs the same group once per output pixel, so wbuf
-    // holds the group on chip and replays it. tap_num tracks the layer's
-    // tap count (9 / 432 / 864 / 1728 / 256 / 128); the memory depth is
-    // fixed at the deepest group (1728 taps).
-    // -----------------------------------------------------------------------
     wire [15:0] wbuf_tap_num = (layer == L_CONV1) ? 16'd9    :
                                (layer == L_CONV2) ? 16'd432  :
                                (layer == L_CONV3) ? 16'd864  :
@@ -170,10 +136,6 @@ module npu_top #(
                         (layer == L_CONV3) || (layer == L_CONV4) ||
                         (layer == L_FC1)   || (layer == L_FC2);
 
-    // Conv layers own one weight group per (row, group) boundary, so wbuf
-    // reloads on the conv group-boundary pulse (grp_advance). fc_engine keeps
-    // a 1:1 group rhythm with wdma, so its reload follows wdma's grp_start.
-    // The layer-start pulse seeds group 0 for both cases.
     wire wbuf_grp_start = (layer_pulse && stream_layer) ? 1'b1 :
                           (layer == L_FC1) ? fc_grp_advance[0] :
                           (layer == L_FC2) ? fc_grp_advance[1] :
@@ -185,14 +147,8 @@ module npu_top #(
     wire         wbuf_load_done;
     wire         wbuf_load_active;
 
-    // Only wbuf can back-pressure wdma. Non-stream layers (pool/gap/softmax)
-    // release the DMA so its group walk always reaches S_DONE instead of
-    // stalling on a cache that is not loading.
     wire wdma_w_ready = stream_layer ? wbuf_ld_ready : 1'b1;
 
-    // wdma numbers its layer geometries 0..5 (conv1..conv4, fc1, fc2), which
-    // is NOT the sequencer's layer encoding (0/2/4/6/9/10). Map before the
-    // instantiation so the tap count of one group matches wbuf_tap_num.
     wire [3:0] wdma_layer_id = (layer == L_CONV1) ? 4'd0 :
                                (layer == L_CONV2) ? 4'd1 :
                                (layer == L_CONV3) ? 4'd2 :
@@ -200,8 +156,6 @@ module npu_top #(
                                (layer == L_FC1)   ? 4'd4 :
                                (layer == L_FC2)   ? 4'd5 : 4'd0;
 
-    // Only the six weight layers arm the DMA; pool/gap/softmax must not,
-    // otherwise the group walk starts from a geometry that has no consumer.
     wire wdma_start = layer_pulse && ((layer == L_CONV1) ||
                                       (layer == L_CONV2) ||
                                       (layer == L_CONV3) ||
@@ -232,9 +186,6 @@ module npu_top #(
         .done         (wdma_done)
     );
 
-    // Shared weight group cache: exactly one conv/fc engine streams weights
-    // per layer, so a single cache serves all six weight consumers. The
-    // replay side is flow-controlled by the active engine's w_ready.
     wbuf u_wbuf (
         .clk         (clk),
         .rst_n       (rst_n),
@@ -250,7 +201,6 @@ module npu_top #(
         .load_done   (wbuf_load_done)
     );
 
-    // Feature replay: 64x258 uint8 stream read from mel_engine.
     reg [14:0] feat_addr;
     reg        feat_run, feat_dv;
     reg [6:0] feat_row;
@@ -282,23 +232,10 @@ module npu_top #(
             feat_dv <= 1'b0;
         end
     end
-    // Conv ingress remains mel-major. Mel stores time*64+mel, with its
-    // physical +64 head-frame offset applied internally by mel_engine.
+
     assign feat_rd_addr = FEATURE_FRAME_MAJOR ? {feat_col, feat_row[5:0]} : feat_addr;
     assign feat_rd_en   = feat_run && feat_safe;
 
-    // -----------------------------------------------------------------------
-    // Single shared conv core: conv1..conv4 all time-share one 16-lane
-    // MAC/requant core. The sequencer is serial, so no two layers ever scan
-    // at the same time; every layer still owns its own line buffer and
-    // ingress counters, because the pool egress of layer i overlaps the scan
-    // of layer i and feeds conv i+1 (see the conv_engine.v header). Only the
-    // compute core is time-shared, never the row buffers.
-    // conv_sel picks the layer's compile-time shape set and its own
-    // three-bank row-buffer group; the core latches it at the layer start.
-    // The layer-dependent zero point rides the shared cfg port: conv1 is
-    // the only layer with a non-zero zp_in, latched at layer_start.
-    // -----------------------------------------------------------------------
     wire       core_y_valid;
     wire [7:0] core_y_u8;
     wire       core_w_ready;
@@ -341,9 +278,7 @@ module npu_top #(
     wire [7:0] s0_replay_data,s1_replay_data;
     reg s0_out_valid,s1_out_valid;
     reg [7:0] s0_out_data,s1_out_data;
-    // Both replay sinks are always ready. Register the selected lane byte
-    // before the conv input RAM to split the distant RAM/mux/RAM path.
-    // Payload is qualified by valid; only control needs reset.
+
     always @(posedge clk) begin
         s0_out_data <= s0_replay_data;
         s1_out_data <= s1_replay_data;
@@ -424,22 +359,12 @@ module npu_top #(
         .act_rd_valid(act_rd_valid),
         .act_rd_data(act_rd_data)
     );
-    // Every conv layer shares the one core's tap window (w_ready is the
-    // MAC issue window of the layer currently scanning, and only one layer
-    // scans at a time).
+
     assign conv_wready[0] = core_w_ready;
     assign conv_wready[1] = core_w_ready;
     assign conv_wready[2] = core_w_ready;
     assign conv_wready[3] = core_w_ready;
 
-    // -----------------------------------------------------------------------
-    // Single shared pool_engine. The sequencer runs exactly one layer at a
-    // time, so the four pooling stages can share one instance instead of
-    // keeping four sets of line banks. The select window spans the producing
-    // conv layer and the following pool layer: the pool consumes the conv
-    // egress stream while that conv layer is still active and finishes its
-    // two-beat drain inside the pool layer.
-    // -----------------------------------------------------------------------
     wire pool_sel1 = (layer == L_CONV1) || (layer == L_POOL1);
     wire pool_sel2 = (layer == L_CONV2) || (layer == L_POOL2);
     wire pool_sel3 = (layer == L_CONV3) || (layer == L_POOL3);
@@ -449,9 +374,6 @@ module npu_top #(
     reg [15:0] pool_win;
     reg [15:0] pool_hin;
 
-    // Geometry of the pooling stage that owns the select window (same shape
-    // as the conv layer feeding it). The shared bank capacity in pool_engine
-    // covers the deepest stage: conv1's 48 * 129 = 6192 bytes.
     always @* begin
         if (pool_sel1) begin
             pool_cin = 16'd48;
@@ -491,9 +413,6 @@ module npu_top #(
         .p_valid(pool_p_valid), .p_u8(pool_p_u8), .p_last(pool_p_last)
     );
 
-    // Route the shared pool output back to the stage that owns the current
-    // window. The four select windows are mutually exclusive, so each
-    // consumer sees exactly the stream its own pool stage used to produce.
     assign p1_v       = pool_p_valid && pool_sel1;
     assign p1_d       = pool_p_u8;
     assign pool1_done = s0_write_complete;
@@ -507,9 +426,6 @@ module npu_top #(
     assign p4_d       = pool_p_u8;
     assign pool4_done = pool_complete[3];
 
-    // The single shared core emits its egress while the owning layer's
-    // select window is open, so c1..c4 all alias the one core stream. The
-    // pool select gates below keep each stage on its own layer window.
     assign c1_v = core_y_valid;
     assign c1_d = core_y_u8;
     assign c2_v = core_y_valid;
@@ -539,7 +455,6 @@ module npu_top #(
         .gap_waddr(gap_waddr), .gap_we(gap_we), .gap_wdata(gap_wdata)
     );
 
-    // Capture GAP results, then replay them into fc1 (256 beats).
     reg [15:0] gap_buf [0:255];
     always @(posedge clk) begin
         if (gap_we) gap_buf[gap_waddr] <= gap_wdata;
@@ -586,7 +501,6 @@ module npu_top #(
         .y_valid(fc2_y_valid), .y_u8(fc2_y), .done(fc2_done), .grp_advance(fc_grp_advance[1])
     );
 
-    // fc2 produces 16 lanes (8 real + 8 padding); softmax consumes 8.
     reg [255:0] logits_bus;
     reg [3:0]   fc2_lane;
     always @(posedge clk or negedge rst_n) begin

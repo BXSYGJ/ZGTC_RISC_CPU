@@ -1,71 +1,17 @@
-// ---------------------------------------------------------------------------
-// File    : rv32_cpu_subsys.sv
-// Module  : rv32_cpu_subsys
-// Project : InstRec-FPGA (PG2L100H-6IFBG676, PDS 2022.2-SP6.4)
-// Purpose : RV32IM control core inside the InstRec system clock domain.
-//
-// WHY THIS MODULE EXISTS
-//   instrec_top / top_core_only are pure hardware pipelines: the competition
-//   entry ("RISC-V CPU + AI acceleration") had no soft core at all.  This
-//   module adds the smallest honest integration that still leaves the proven
-//   InstRec datapath untouched:
-//
-//     * the CPU fetches from an 8 KiB on-chip ROM that holds the firmware,
-//     * it reads/writes an 8 KiB data RAM (byte strobes supported),
-//     * it observes the accelerator (npu_busy/done/timeout/top1/probs/cycles,
-//       DDR3 self-test status) through a 32-bit MMIO window,
-//     * it drives the shared 115200 UART transmitter through a 16-byte FIFO,
-//     * it may issue an NPU soft start (CTRL[0]) so the control relationship
-//       is real in both directions, not just observation.
-//
-//   Everything here runs in the core_clk (DDR3 user clock) domain, which is
-//   the same domain as npu_top / mel_engine / uart_tx, so no CDC is added.
-//
-// MEMORY MAP (CPU byte addresses)
-//   0x0000_0000 .. 0x0000_1FFF  ROM  8 KiB  (firmware, read-only, $readmemh)
-//   0x2000_0000 .. 0x2000_1FFF  RAM  8 KiB  (data/bss/stack, byte strobes)
-//   0x8000_0000 +                MMIO (see the decoder below)
-//   anything else                       -> bus error (i_rsp_error/d_rsp_error)
-//
-// BUS PROTOCOL
-//   One outstanding request per channel, 1-cycle latency, response held with
-//   rsp_valid until rsp_ready (rv32_core drops a response if rsp_ready is low,
-//   so the hold is mandatory, not a nicety).
-//
-// MMIO MAP
-//   0x8000_0000 R  ID          0x52564331 ("RVC1")
-//   0x8000_0004 R  STATUS      [0] npu_busy      [1] npu_done sticky
-//                              [2] npu_timeout   [3] probs sticky
-//                              [5] ddr_ok        [6] ddr_err
-//                              [11:8] npu_top1   [15:12] probs_idx
-//                              [23:16] probs_pct
-//   0x8000_0008 R  PROBS       {8'h0, pct[7:0], 4'h0, idx[3:0]}
-//   0x8000_000C W  UART_TX     byte to transmit (stalls if the FIFO is full)
-//   0x8000_0010 R  UART_ST     [0] tx_ready, [5:1] FIFO occupancy
-//   0x8000_0014 W  LED         [7:0] board LEDs
-//   0x8000_0018 R  CYCLE_LO    mcycle[31:0]
-//   0x8000_001C R  INSTRET_LO  minstret[31:0]
-//   0x8000_0020 R  DDR_STS     {8'h0, stage[1:0], err, ok, 4'h0, npu_timeout,
-//                               dbg_to_state[2:0], cmd_to_err[3:0], to_err}
-//   0x8000_0024 W  CTRL        [0] NPU soft start (1-cycle pulse)
-//                              [1] clear the sticky status bits
-//   0x8000_0028 R  NPU_CYCLES  npu_top cycle counter
-// ---------------------------------------------------------------------------
+// rv32_cpu_subsys.sv
 `timescale 1ns / 1ps
-
 
 module rv32_cpu_subsys #(
     parameter integer ENABLE_M         = 1,
     parameter integer ENABLE_PREDICTOR = 0,
     parameter [31:0]  RESET_VECTOR     = 32'h0000_0000,
-    parameter integer IMEM_WORDS       = 2048,   // 8 KiB
-    parameter integer DMEM_WORDS       = 2048,   // 8 KiB
+    parameter integer IMEM_WORDS       = 2048,
+    parameter integer DMEM_WORDS       = 2048,
     parameter PROG_HEX                 = "src/cpu/prog.hex"
 ) (
     input  wire        clk,
     input  wire        rst_n,
 
-    // accelerator / system observation (core_clk domain)
     input  wire        npu_busy,
     input  wire        npu_done,
     input  wire        npu_timeout,
@@ -78,12 +24,10 @@ module rv32_cpu_subsys #(
     input  wire        ddr_err,
     input  wire [31:0] ddr_sts,
 
-    // byte stream into the shared UART transmitter
     output wire        uart_valid,
     output wire [7:0]  uart_data,
     input  wire        uart_ready,
 
-    // board / status
     output reg  [7:0]  cpu_led,
     output reg         cpu_alive,
     output wire        cpu_trap,
@@ -96,11 +40,8 @@ module rv32_cpu_subsys #(
     localparam [31:13] DMEM_BASE_HI = 19'h10000;
     localparam [DAW-1:0] DMEM_LAST = DMEM_WORDS - 1;
 
-    localparam [31:0] CPU_ID = 32'h5256_4331;   // "RVC1"
+    localparam [31:0] CPU_ID = 32'h5256_4331;
 
-    // =====================================================================
-    // Core
-    // =====================================================================
     wire        i_req_valid, i_req_ready;
     wire [31:0] i_req_address;
     wire        i_rsp_valid, i_rsp_ready;
@@ -117,8 +58,6 @@ module rv32_cpu_subsys #(
     wire        maintenance_valid;
     wire [63:0] cycle_count, retired_count;
 
-    // PDS's front end rejects an empty '.port()' connection, so every unused
-    // observer output is parked on a named, deliberately unread net.
     wire        trace_valid_u, trace_write_u;
     wire [31:0] trace_pc_u, trace_instruction_u, trace_data_u;
     wire [4:0]  trace_rd_u;
@@ -170,14 +109,8 @@ module rv32_cpu_subsys #(
         .retired_count    (retired_count)
     );
 
-    // =====================================================================
-    // Instruction ROM (8 KiB, one synchronous read port)
-    // =====================================================================
     reg [31:0] imem [0:IMEM_WORDS-1];
-    // Second copy of the same image for the DATA port.  A load from a ROM
-    // address is a normal RISC-V access (".data load source", string literals),
-    // and giving it its own array keeps both ports single-read: no true-dual-
-    // port inference, no arbitration, no stall.  Costs 2 extra BRAM blocks.
+
     reg [31:0] rom_d [0:IMEM_WORDS-1];
 
     initial begin
@@ -185,18 +118,11 @@ module rv32_cpu_subsys #(
         $readmemh(PROG_HEX, rom_d);
     end
 
-    // =====================================================================
-    // Data RAM (8 KiB, four byte lanes so the byte strobes map onto BRAM
-    // byte-write enables without a 32-bit read-modify-write shim)
-    // =====================================================================
     reg [7:0] dmem0 [0:DMEM_WORDS-1];
     reg [7:0] dmem1 [0:DMEM_WORDS-1];
     reg [7:0] dmem2 [0:DMEM_WORDS-1];
     reg [7:0] dmem3 [0:DMEM_WORDS-1];
 
-    // =====================================================================
-    // MMIO registers and sticky status
-    // =====================================================================
     reg        npu_done_st, npu_probs_st, npu_timeout_st;
     reg [7:0]  probs_pct_q;
     reg [3:0]  probs_idx_q;
@@ -223,7 +149,7 @@ module rv32_cpu_subsys #(
                 npu_probs_st   <= 1'b0;
                 npu_timeout_st <= 1'b0;
             end
-            // A simultaneous new event wins over software acknowledgement.
+
             if (npu_done)          npu_done_st    <= 1'b1;
             if (npu_timeout)       npu_timeout_st <= 1'b1;
             if (npu_probs_valid) begin
@@ -235,8 +161,6 @@ module rv32_cpu_subsys #(
         end
     end
 
-    // Board LEDs / "the CPU is running" indicator: a firmware MMIO write is
-    // the proof of life (no free-running counter needed).
     wire led_write = d_req_valid && d_req_ready && d_req_write &&
                      (d_req_address == 32'h8000_0014);
 
@@ -250,9 +174,6 @@ module rv32_cpu_subsys #(
         end
     end
 
-    // =====================================================================
-    // UART transmit FIFO (16 bytes)
-    // =====================================================================
     reg [7:0]  txq [0:15];
     reg [4:0]  tx_wr, tx_rd;
 
@@ -279,10 +200,6 @@ module rv32_cpu_subsys #(
         end
     end
 
-    // =====================================================================
-    // MMIO read mux (combinationally selected at request accept, registered
-    // into the response register so the 1-cycle latency is uniform)
-    // =====================================================================
     reg [31:0] mmio_rdata;
 
     always @(*) begin
@@ -302,13 +219,10 @@ module rv32_cpu_subsys #(
         endcase
     end
 
-    // =====================================================================
-    // Instruction channel: ROM only, anything else is a bus error
-    // =====================================================================
     reg        i_pend;
     reg [31:0] i_rsp_q;
     reg        i_err_q;
-    reg [9:0]  i_wait;      // orphan-response watchdog (see below)
+    reg [9:0]  i_wait;
 
     assign i_req_ready = !i_pend;
 
@@ -332,10 +246,7 @@ module rv32_cpu_subsys #(
             i_pend <= 1'b0;
             i_wait <= 10'd0;
         end else if (i_rsp_valid) begin
-            // A trap flushes the pipeline while a response is still held, and
-            // the core then never asserts rsp_ready again.  Dropping the
-            // orphan after 1024 cycles keeps a taken trap printable instead of
-            // turning it into a silent bus deadlock.
+
             if (i_wait == 10'h3ff) begin
                 i_pend <= 1'b0;
                 i_wait <= 10'd0;
@@ -349,13 +260,10 @@ module rv32_cpu_subsys #(
     assign i_rsp_data  = i_rsp_q;
     assign i_rsp_error = i_err_q;
 
-    // =====================================================================
-    // Data channel: RAM / MMIO / bus error
-    // =====================================================================
     reg        d_pend;
     reg [31:0] d_rsp_q;
     reg        d_err_q;
-    reg [9:0]  d_wait;      // orphan-response watchdog (see below)
+    reg [9:0]  d_wait;
 
     wire d_acc      = d_req_valid && d_req_ready;
     wire d_is_mmio  = d_req_address[31];
@@ -365,8 +273,6 @@ module rv32_cpu_subsys #(
     wire [DAW-1:0] d_word = d_req_address[DAW+1:2];
     wire [IAW-1:0] d_rom_word = d_req_address[IAW+1:2];
 
-    // Preserve UART stores under backpressure, even for firmware which does
-    // not poll UART_ST before every write.
     assign d_req_ready = !d_pend &&
                          !(d_req_write && d_req_address == 32'h8000_000C && !tx_ready);
 
@@ -410,8 +316,6 @@ module rv32_cpu_subsys #(
     assign d_rsp_data  = d_rsp_q;
     assign d_rsp_error = d_err_q;
 
-    // Byte-strobed writes: one lane per byte, so each array is a plain
-    // single-port RAM with a byte-wide write enable.
     always @(posedge clk) begin
         if (d_acc && d_is_ram && d_req_write) begin
             if (d_req_strobe[0]) dmem0[d_word] <= d_req_data[7:0];

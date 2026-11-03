@@ -1,35 +1,6 @@
+// sync_vg.v
 `timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company:Meyesemi 
-// Engineer: Will
-// 
-// Create Date: 2023-01-29 20:31  
-// Design Name:  
-// Module Name: 
-// Project Name: 
-// Target Devices: Pango
-// Tool Versions: 
-// Description: 
-//      
-// Dependencies: 
-//    VS     ______                                       ______
-//HS  __    |      |_______________¡­¡­____________________|      |
-//   |       h_sync  h_bp       h_act                h_fp
-//   |__                    _______________________
-//DE    |   _______________|                       |_____________
-//      |
-//      .
-//      |
-//    __|
-//   |  
-//   |__ 
-//      |
-// 
-// Revision:
-// Revision 1.0 - File Created
-// Additional Comments:
-// 
-//////////////////////////////////////////////////////////////////////////////////
+
 `define UD #1
 module sync_vg # (
     parameter               X_BITS=4'd12,
@@ -53,11 +24,10 @@ module sync_vg # (
     output reg [X_BITS-1:0] x_act,
     output reg [Y_BITS-1:0] y_act
 );
-//    parameter               HV_OFFSET = 12'd0 ;
+
     reg [X_BITS-1:0]        h_count = 'd0;
     reg [Y_BITS-1:0]        v_count = 'd0;
-    
-    /* horizontal counter */
+
     always @(posedge clk)
     begin
         if (!rstn)
@@ -70,8 +40,7 @@ module sync_vg # (
                 h_count <= `UD 0;
         end
     end
-    
-    /* vertical counter */
+
     always @(posedge clk)
     begin
         if (!rstn)
@@ -85,20 +54,20 @@ module sync_vg # (
                 v_count <= `UD v_count + 1;
         end
     end
-    
+
     always @(posedge clk)
     begin
         if (!rstn)
             hs_out <= `UD 4'b0;
-        else 
+        else
             hs_out <= `UD ((h_count < H_SYNC));
     end
-    
+
     always @(posedge clk)
     begin
         if (!rstn)
             vs_out <= `UD 4'b0;
-        else 
+        else
         begin
             if (v_count == 0)
                 vs_out <= `UD 1'b1;
@@ -108,43 +77,42 @@ module sync_vg # (
                 vs_out <= `UD vs_out;
         end
     end
-    
+
     always @(posedge clk)
     begin
         if (!rstn)
             de_out <= `UD 4'b0;
         else
-            de_out <= (((v_count >= V_SYNC + V_BP) && (v_count <= V_TOTAL - V_FP - 1)) && 
+            de_out <= (((v_count >= V_SYNC + V_BP) && (v_count <= V_TOTAL - V_FP - 1)) &&
                       ((h_count >= H_SYNC + H_BP) && (h_count <= H_TOTAL - H_FP - 1)));
     end
-    
-    // active pixels counter output
+
     always @(posedge clk)
     begin
         if (!rstn)
             x_act <= `UD 'd0;
-        else 
+        else
         begin
-        /* X coords ¨C for a backend pattern generator */
+
             if(h_count > (H_SYNC + H_BP - 1'b1))
                 x_act <= `UD (h_count - (H_SYNC + H_BP));
             else
                 x_act <= `UD 'd0;
         end
     end
-    
+
     always @(posedge clk)
     begin
         if (!rstn)
             y_act <= `UD 'd0;
-        else 
+        else
         begin
-            /* Y coords ¨C for a backend pattern generator */
+
             if(v_count > (V_SYNC + V_BP - 1'b1))
                 y_act <= `UD (v_count - (V_SYNC + V_BP));
             else
                 y_act <= `UD 'd0;
         end
     end
-    
+
 endmodule

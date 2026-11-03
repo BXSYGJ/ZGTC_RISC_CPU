@@ -1,17 +1,3 @@
-/* ---------------------------------------------------------------------------
- * main.c -- InstRec control-core firmware (RV32IM)
- *
- * What it demonstrates on the board, in order:
- *   1. the core executes from ROM and talks to the system over MMIO,
- *   2. an ISA self-test (RV32I ALU/branch/load-store, RV32M when ENABLE_M),
- *   3. a self-measured cycle/instruction count (mcycle / minstret),
- *   4. live supervision of the InstRec NPU: every finished inference is read
- *      back (top-1 class + percentage) and printed over the shared UART,
- *      plus the DDR3 self-test verdict reported by sys_ctrl.
- *
- * Output tokens used by scripts/board_check.py --expect:
- *   "RV32 BOOT"  "RV32 ISA OK"  "RV32 MMIO OK"  "RV32 BENCH"  "NPU top1="
- * ------------------------------------------------------------------------- */
 #include <stdint.h>
 
 #define MMIO(a) (*(volatile uint32_t *)(a))
@@ -73,18 +59,15 @@ void trap_handler(void) {
     for (;;) { }
 }
 
-/* --- ISA self-test: returns 0 on pass, otherwise the failing test id ---- */
 static uint32_t isa_test(void) {
     volatile uint32_t *ram = (volatile uint32_t *)0x20000000u;
     volatile uint8_t  *ram8 = (volatile uint8_t *)0x20000000u;
     uint32_t i, sum = 0;
     int32_t s;
 
-    /* 1: arithmetic + branch */
     for (i = 1; i <= 100u; i++) sum += i;
     if (sum != 5050u) return 1u;
 
-    /* 2: word / half / byte store-load with sign extension */
     ram[4] = 0x12345678u;
     if (ram[4] != 0x12345678u) return 2u;
     ram8[20] = 0xa5u;
@@ -92,14 +75,13 @@ static uint32_t isa_test(void) {
     ram[6] = 0xdeadbeefu;
     if ((uint16_t)ram[6] != 0xbeefu) return 4u;
 
-    /* 3: shift / compare / logic */
     if ((0x80000000u >> 1) != 0x40000000u) return 5u;
     s = (int32_t)0x80000000u;
     if ((s >> 1) != (int32_t)0xc0000000u) return 6u;
     if (!(0xf0f0u ^ 0xffffu) || ((0x0f0fu & 0x3c3cu) != 0x0c0cu)) return 7u;
 
 #ifdef ENABLE_M
-    /* 4: RV32M multiply / divide / remainder */
+
     if (7u * 6u != 42u) return 8u;
     if ((100u / 7u) != 14u || (100u % 7u) != 2u) return 9u;
     if ((int32_t)(-100) / 7 != -14 || (int32_t)(-100) % 7 != -2) return 10u;
@@ -112,7 +94,7 @@ static uint32_t isa_test(void) {
 int main(void) {
     uint32_t t0, t1, i0, i1, i, acc = 0, status, last_probs = 0xffffffffu;
 
-    LED_REG = 0x01u;                       /* proof of life for led[0] */
+    LED_REG = 0x01u;
     puts_("\r\nRV32 BOOT\r\n");
 
     if (SYS_ID != 0x52564331u) {
@@ -134,7 +116,6 @@ int main(void) {
         }
     }
 
-    /* mcycle / minstret self-measurement over a fixed integer workload */
     t0 = read_mcycle();
     i0 = read_minstret();
     for (i = 0; i < 20000u; i++) {
@@ -158,9 +139,6 @@ int main(void) {
     puthex(DDR_STS);
     puts_("\r\n");
 
-    /* The control core owns one explicit accelerator launch.  The normal
-     * audio-window path may also start inference, but this command proves the
-     * CPU-to-NPU MMIO control path independently of the audio producer. */
     NPU_CTRL = 0x1u;
     puts_("NPU GO\r\n");
 
@@ -179,14 +157,14 @@ int main(void) {
             puts_(" c=");
             putdec(NPU_CYCLES);
             puts_("\r\n");
-            NPU_CTRL = 0x2u;               /* clear stickies */
-            NPU_CTRL = 0x1u;               /* request the next complete Mel window */
+            NPU_CTRL = 0x2u;
+            NPU_CTRL = 0x1u;
             LED_REG = (uint32_t)(0x80u | (pr & 0x0fu) << 4);
         } else if (status & ST_NPU_TIMEOUT) {
             puts_("NPU TIMEOUT\r\n");
             NPU_CTRL = 0x2u;
         } else {
-            /* idle heartbeat: keep led[0] blinking so a dead loop is visible */
+
             for (i = 0; i < 200000u; i++) { }
             LED_REG = (LED_REG == 0x01u) ? 0x03u : 0x01u;
         }

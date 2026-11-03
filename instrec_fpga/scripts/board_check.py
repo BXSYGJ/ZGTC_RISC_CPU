@@ -1,54 +1,3 @@
-#!/usr/bin/env python3
-"""One-shot board check: FTDI present -> program -> read status -> capture UART.
-
-The script automates the sequence that was previously done by hand:
-  1. confirm the FTDI downloader (VID_0403) is present;
-  2. reuse an already-listening jtagserver, or start one and keep it;
-  3. open the UART *before* programming so the boot banner is not missed;
-  4. program the given .sbit through cdt_cfg and let it exit on its own;
-  5. scan the chain and read the device status register (mode 3);
-  6. capture N seconds of UART and print a compact report.
-
-FTDI drop protection (2026-10-29, root cause confirmed)
-------------------------------------------------------
-Every previous run of this script killed cdt_cfg with a ``Popen`` terminate
-call as soon as "PROGRAM FLOW DONE" appeared in the log.  That banner is
-printed
-*before* the TCL interpreter reaches ``cfg_disconnect``/``exit``, so the
-terminate always landed while the D2XX handle was still open.  A killed
-D2XX process never releases the handle, the FT2232H stops responding on the
-USB bus and disappears from PnP (``CM_PROB_PHANTOM``) until the cable is
-physically re-plugged.  That is the "it drops the moment you touch the
-board" behaviour.
-
-Therefore this script now enforces three rules:
-  R1. the generated TCL always ends with ``exit`` so cdt_cfg finishes by
-      itself (a normal run is over in a few seconds);
-  R2. no code path terminates or kills cdt_cfg / cdt_js -- a stuck
-      cdt_cfg is reported with its PID and left alone;
-  R3. an already-open 127.0.0.1:65420 is reused instead of starting a
-      second jtagserver (restarting the server also desynchronises USB).
-
-It also records the FTDI device count before and after each step, so if the
-downloader ever disappears again the exact step is named in the report.
-
-Usage:
-  python scripts/board_check.py --sbit build/instrec-latest.sbit --port COM5 --seconds 12
-  python scripts/board_check.py --sbit releases/m1-20261027/instrec_top.sbit --status-only
-  python scripts/board_check.py --diag-only
-  python scripts/board_check.py --sbit build/top_ddr3_diag-latest.sbit --seconds 12
-      --expect "DDR3DIAG" "DDR3SW" "DDR3RS" --json reports/board_check.json
-
-Exit codes: 0 ok, 2 no downloader / port, 3 program failed, 4 cdt_cfg hung,
-            5 one or more --expect tokens were not seen in the UART capture.
-            A code of 2/3/4 is never downgraded to 5: the more severe state
-            wins, so a missing token cannot hide a programming failure.
-
-The --json record is UTF-8 without a BOM and always uses the same twelve keys
-(see EVIDENCE_KEYS), so downstream build and board tasks can decide pass/fail
-from the file alone instead of parsing stdout (C-BOARD-CHECK@1).
-"""
-
 import argparse
 import json
 import re
@@ -62,16 +11,12 @@ PDS = Path(r'H:/GG/pango/PDS_2022.2-SP6.4/bin')
 ROOT = Path(__file__).resolve().parents[1]
 LOG_DIR = ROOT / 'build'
 
-# C-BOARD-CHECK@1 exit codes.  EXIT_EXPECT_FAIL (5) is only reported from a
-# clean run; 2/3/4 already describe a more severe failure (see run_check).
 EXIT_OK = 0
 EXIT_NO_HW = 2
 EXIT_PROGRAM_FAIL = 3
 EXIT_CFG_HUNG = 4
 EXIT_EXPECT_FAIL = 5
 
-# Exact key set of the --json evidence record (C-BOARD-CHECK@1 B2).  The tuple
-# order is the contract order; write_evidence_json never adds or drops a key.
 EVIDENCE_KEYS = (
     'ftdi_present',
     'jtagserver_pids',
@@ -87,7 +32,6 @@ EVIDENCE_KEYS = (
     'verdict',
 )
 
-# Fallback values used when a key is absent from an evidence record.
 EVIDENCE_DEFAULTS = {
     'ftdi_present': False,
     'jtagserver_pids': [],
@@ -103,11 +47,9 @@ EVIDENCE_DEFAULTS = {
     'verdict': 'FAIL',
 }
 
-
 def run_ps(cmd):
     return subprocess.run(['powershell', '-NoProfile', '-Command', cmd],
                           capture_output=True, text=True)
-
 
 def jtag_procs():
     """PIDs of every running jtagserver (cdt_js)."""
@@ -119,7 +61,6 @@ def jtag_procs():
             pids.append(int(line))
     return sorted(pids)
 
-
 def cfg_procs():
     """PIDs of every running cdt_cfg (programmer UI/console)."""
     out = run_ps("Get-Process cdt_cfg -ErrorAction SilentlyContinue | ForEach-Object { $_.Id }")
@@ -130,10 +71,8 @@ def cfg_procs():
             pids.append(int(line))
     return sorted(pids)
 
-
 def tools_running():
     return bool(jtag_procs())
-
 
 def ftdi_present():
     out = run_ps("(Get-PnpDevice -PresentOnly | Where-Object { $_.InstanceId -match 'VID_0403' } | Measure-Object).Count")
@@ -142,14 +81,12 @@ def ftdi_present():
     except Exception:
         return False
 
-
 def port_listening(timeout=0.5):
     try:
         with socket.create_connection(('127.0.0.1', 65420), timeout=timeout):
             return True
     except OSError:
         return False
-
 
 def start_server(timeout=15.0):
     """Start the ONE jtagserver instance and wait for its TCP port.
@@ -174,7 +111,6 @@ def start_server(timeout=15.0):
         time.sleep(0.5)
     return None
 
-
 def ensure_server(wait_existing=30.0):
     """Return ('reused'|'started'|'broken', pid).
 
@@ -198,7 +134,6 @@ def ensure_server(wait_existing=30.0):
         return 'broken', None
     return 'started', pid
 
-
 def run_tcl(name, body, timeout=180):
     """Run a TCL file through cdt_cfg and wait for it to exit on its own.
 
@@ -219,7 +154,6 @@ def run_tcl(name, body, timeout=180):
         rc = None
     return log.read_text(errors='replace'), rc
 
-
 def status_body(sbit=None, freq='10Mhz'):
     lines = [
         'cfg_set_tcl_break -flag false',
@@ -238,12 +172,10 @@ def status_body(sbit=None, freq='10Mhz'):
         'puts "== STATUS DONE =="',
         'catch {cfg_read_device_property -device_index 0 -mode 3}',
         'cfg_disconnect',
-        # R1: cdt_cfg must terminate itself; the previous flow relied on
-        # terminate() here, which is exactly what dropped the FTDI device.
+
         'exit',
     ]
     return '\n'.join(lines) + '\n'
-
 
 def parse_done(text):
     m = re.search(r'Status Register: (0x[0-9A-Fa-f]+)', text)
@@ -252,7 +184,6 @@ def parse_done(text):
     val = int(m.group(1), 16)
     return {'raw': m.group(1), 'done': (val >> 12) & 1, 'crc_err': (val >> 1) & 1}
 
-
 def uart_file_path():
     """Absolute POSIX path of the UART capture this script writes.
 
@@ -260,7 +191,6 @@ def uart_file_path():
     when a caller or a test redirects it.
     """
     return (LOG_DIR / 'uart_last.bin').resolve().as_posix()
-
 
 def initial_evidence(args):
     """Baseline evidence record holding every C-BOARD-CHECK@1 key."""
@@ -272,11 +202,9 @@ def initial_evidence(args):
     record['expect'] = list(args.expect or [])
     return record
 
-
 def verdict_for(rc, missing):
     """Machine-readable verdict: PASS only for a clean run with no misses."""
     return 'PASS' if rc == EXIT_OK and not missing else 'FAIL'
-
 
 def write_evidence_json(path, evidence):
     """Write the evidence record as UTF-8 JSON without a BOM.
@@ -293,11 +221,10 @@ def write_evidence_json(path, evidence):
     for key in EVIDENCE_KEYS:
         value = EVIDENCE_DEFAULTS[key]
         record[key] = evidence.get(key, list(value) if isinstance(value, list) else value)
-    # encoding='utf-8' writes no BOM; newline='\n' keeps the file diffable.
+
     with open(target, 'w', encoding='utf-8', newline='\n') as fh:
         fh.write(json.dumps(record, indent=2) + '\n')
     return target
-
 
 def run_check(args):
     """Run the FTDI -> program -> status -> UART sequence.
@@ -346,8 +273,6 @@ def run_check(args):
             print(f'cannot open {args.port}: {exc}')
             return EXIT_NO_HW, evidence
 
-    # R3: exactly ONE jtagserver. Reuse whatever is already running (it owns
-    # the FTDI handle); start a server only when no cdt_js exists at all.
     procs_before = jtag_procs()
     cfg_before = cfg_procs()
     state, pid = ensure_server()
@@ -397,14 +322,12 @@ def run_check(args):
         if ser is not None:
             ser.close()
 
-    # R2 evidence: name the step if the downloader vanished during the run.
     present_after = ftdi_present()
     evidence['ftdi_present'] = present_after
     if not present_after:
         print('!! FTDI disappeared during this run (device no longer in PnP).')
         rc = EXIT_NO_HW
 
-    # Instance hygiene: this run must not have added a second UI/server.
     procs_after = jtag_procs()
     cfg_after = cfg_procs()
     evidence['jtagserver_pids'] = procs_after
@@ -438,9 +361,6 @@ def run_check(args):
     else:
         print('uart: 0 bytes')
 
-    # B1/B5: a missing token reports 5 only from an otherwise clean run.  An
-    # expected token that is absent from a zero-byte capture counts as missing,
-    # so "the board printed nothing" can never look like success.
     expect_tokens = list(args.expect or [])
     evidence['expect'] = expect_tokens
     evidence['expect_missing'] = []
@@ -455,7 +375,6 @@ def run_check(args):
             print(f'boot: PASS (all {len(expect_tokens)} expected lines seen)')
 
     return rc, evidence
-
 
 def main():
     ap = argparse.ArgumentParser()
@@ -477,8 +396,7 @@ def main():
     rc, evidence = run_check(args)
     evidence['verdict'] = verdict_for(rc, evidence['expect_missing'])
     if args.json_path:
-        # A bad --json target must not hide the hardware result: report the
-        # write failure and keep the exit code that the board state produced.
+
         try:
             target = write_evidence_json(args.json_path, evidence)
         except OSError as exc:
@@ -486,7 +404,6 @@ def main():
         else:
             print(f'json: {target.as_posix()} verdict={evidence["verdict"]}')
     return rc
-
 
 if __name__ == '__main__':
     sys.exit(main())

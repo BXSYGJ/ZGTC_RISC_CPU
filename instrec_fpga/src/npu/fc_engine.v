@@ -1,26 +1,4 @@
-// ---------------------------------------------------------------------------
-// fc_engine.v -- INT8 fully-connected layer (fc1 ReLU / fc2 logits)
-//
-// Bit truth: golden_pipeline.fc_int8() + requant_u8().
-//   acc[c] = sum_k (x[k] - zp_in) * w[c][k] + bias[c]
-//   y_u8[c] = sat_u8(rhe_shift(acc[c] * M[c], shift[c]) + zp_out)
-// fc1 uses zp_out == 0, which is the fused ReLU rail in the quint8 domain.
-// fc2 uses zp_out == 57; the downstream softmax consumes (y_u8 - 57) as the
-// int32 logits container (design.md 4.3/4.5).
-//
-// Architecture: 16 output channels per group, one shared input value per
-// beat broadcast to 16 s8 weights (128-bit w_data), CIN beats per group.
-// The input vector is buffered (CIN x s16) so every group re-reads it.
-// After each group the 16 s32 accumulators drain through the shared
-// time-multiplexed requant_unit (16 beats).
-//
-// Weight stream contract (wdma alignment point):
-//   one beat per (group, k), lane i = w[group*16+i][k], 16 lanes s8.
-//   Group order is the natural output-channel order.
-// Contract stream: c_valid + m_s32 + shift, one beat per output channel,
-//   loaded before the first group (COUT beats).
-// ---------------------------------------------------------------------------
-
+// fc_engine.v
 module fc_engine #(
     parameter CIN    = 256,
     parameter COUT   = 128,
@@ -31,17 +9,13 @@ module fc_engine #(
     input  wire        rst_n,
     input  wire        layer_start,
 
-    // input vector stream (CIN beats)
     input  wire        x_valid,
     input  wire signed [15:0] x_s16,
 
-    // weight stream: 16 lanes per beat, CIN beats per group
     input  wire        w_valid,
     input  wire [127:0] w_data,
     output wire        w_ready,
 
-    // per-output-channel bias/M/shift contract, three independent streams
-    // (COUT beats each, before the groups; design.md 4.3).
     input  wire        b_valid,
     input  wire signed [31:0] bias_s32,
     input  wire        m_valid,
@@ -49,14 +23,13 @@ module fc_engine #(
     input  wire        s_valid,
     input  wire [6:0]  shift,
 
-    // requantised result stream (16 beats per group, lane order)
     output reg         y_valid,
     output reg  [7:0]  y_u8,
     output reg         done,
     output wire        grp_advance
 );
 
-    localparam GRP_NUM = (COUT + 15) / 16;   // fc2 = 8 channels -> 1 group
+    localparam GRP_NUM = (COUT + 15) / 16;
     localparam [7:0] GRP_LAST = GRP_NUM - 1;
 
     reg signed [15:0] x_buf [0:CIN-1];
@@ -82,7 +55,6 @@ module fc_engine #(
     localparam [2:0] S_DONE = 3'd5;
     reg [2:0] state;
 
-    // requant_unit instance (shared, 1 channel per cycle, 16 per group)
     wire signed [31:0] rq_acc;
     wire signed [31:0] rq_m;
     wire        [6:0]  rq_shift;
@@ -109,7 +81,6 @@ module fc_engine #(
         .out_valid (rq_ok)
     );
 
-    // 16-lane MAC: lane i is output channel (group*16+i).
     wire signed [15:0] x_eff = $signed(x_buf[k_cnt]) - $signed({7'd0, ZP_IN});
 
     genvar g;
@@ -120,7 +91,7 @@ module fc_engine #(
             always @(posedge clk or negedge rst_n) begin
                 if (!rst_n) acc[g] <= 32'sd0;
                 else if (state == S_MAC && w_valid) begin
-                    // First beat of a group seeds the accumulator with bias.
+
                     if (k_cnt == 8'd0)
                         acc[g] <= b_ram[grp_cnt * 16 + g] + x_eff * w_lane;
                     else
@@ -191,9 +162,7 @@ module fc_engine #(
                 end
 
                 S_RQ: begin
-                    // Present 16 channels (rq_cnt 0..15); the unit has a
-                    // 4-cycle latency and 1/cycle throughput, so collect
-                    // 16 out_valid pulses before advancing.
+
                     if (rq_cnt < 5'd16) rq_cnt <= rq_cnt + 5'd1;
                     if (rq_ok) begin
                         y_valid    <= 1'b1;
@@ -216,8 +185,7 @@ module fc_engine #(
                 S_DONE: begin
                     done  <= 1'b1;
                     state <= S_X;
-                    // Retire the completed parameter epoch before preloading
-                    // the next input vector. Old counts must not arm S_MAC.
+
                     b_cnt <= 8'd0;
                     m_cnt <= 8'd0;
                     s_cnt <= 8'd0;

@@ -1,6 +1,6 @@
 OUTPUT_ARCH(riscv)
 ENTRY(_start)
-/* ROM 8 KiB at 0x0 (firmware), RAM 8 KiB at 0x2000_0000 (data/bss/stack). */
+
 MEMORY {
     ROM (rx)  : ORIGIN = 0x00000000, LENGTH = 8K
     RAM (rw)  : ORIGIN = 0x20000000, LENGTH = 8K

@@ -1,34 +1,3 @@
-#!/usr/bin/env python3
-"""check_rtl.py - SV-2005 static lint for the InstRec-FPGA RTL sources.
-
-Implements the REQ-BLD-003 lint checklist (task T-GP-06, design doc
-section 12.1):
-
-  1. SV-2012 syntax blacklist (project style is SV-2005, PREFERENCE):
-       always_ff / always_comb / always_latch
-       'logic' type declarations (use wire / reg explicitly)
-       empty instance connections like '.port()'
-       interface / modport constructs
-       unique / priority prefixes
-  2. Identifier naming: module names and signal names must be snake_case,
-     parameter names must be UPPER_SNAKE_CASE.
-  3. Comments must be pure ASCII (English-only comments).
-  4. Combinational always blocks must use '@*' sensitivity; an explicit
-     signal list without posedge/negedge edges is a violation.
-  5. File header must carry the module name in a comment block, the module
-     name must equal the file name, and one file holds exactly one module.
-
-Scans src/**/*.v recursively. The src/hdmi/ demo files are copied
-third-party code kept verbatim (see reports/asset_trace.md) and are
-excluded from the scan by default.
-
-Usage:
-    python scripts/check_rtl.py [--src <dir>] [--exclude <name> ...]
-
-Exit codes: 0 = no violations, 1 = violations found, 2 = usage error.
-Output format: <file>:<line>:<rule>:<description> per violation.
-"""
-
 from __future__ import annotations
 
 import argparse
@@ -37,15 +6,10 @@ import sys
 from dataclasses import dataclass
 from pathlib import Path
 
-# --------------------------------------------------------------------------- #
-# Constants and rule definitions
-# --------------------------------------------------------------------------- #
-
 DEFAULT_SRC = Path(__file__).resolve().parents[1] / 'src'
 DEFAULT_EXCLUDES = ('hdmi',)
-HEADER_SCAN_LINES = 30  # comment block considered as the "file header"
+HEADER_SCAN_LINES = 30
 
-# SV-2012 blacklist keywords: (rule code, regex, message).
 SV2012_BLACKLIST = (
     ('SV2012_ALWAYS_FF', re.compile(r'\balways_ff\b'),
      "SV-2012 keyword 'always_ff' is blacklisted (use 'always @(posedge ...)')"),
@@ -83,7 +47,6 @@ PARAM_DECL_RE = re.compile(r'\b(?:parameter|localparam)\b')
 GENVAR_DECL_RE = re.compile(r'\bgenvar\s+([A-Za-z_]\w*)')
 ALWAYS_RE = re.compile(r'\balways\s*@\s*(\*|\(\s*\*\s*\)|\(([^)]*)\))')
 
-
 @dataclass(frozen=True)
 class Violation:
     """One lint finding, rendered as file:line:rule:description."""
@@ -95,11 +58,6 @@ class Violation:
 
     def format(self) -> str:
         return f'{self.file}:{self.line}:{self.rule}:{self.message}'
-
-
-# --------------------------------------------------------------------------- #
-# Comment / string masking
-# --------------------------------------------------------------------------- #
 
 def mask_source(text: str) -> tuple[str, list[tuple[int, str]]]:
     """Blank out comments and string literals, preserving line structure.
@@ -138,10 +96,7 @@ def mask_source(text: str) -> tuple[str, list[tuple[int, str]]]:
                 continue
             if ch == '"':
                 state = 'string'
-                # Keep the quote itself: a string-literal argument such as
-                # .TW_FILE("path.hex") must NOT collapse into an empty
-                # parenthesized connection ".TW_FILE(   )" after masking,
-                # which would falsely trip SV2012_EMPTY_PORT.
+
                 out.append('"')
                 i += 1
                 continue
@@ -171,14 +126,14 @@ def mask_source(text: str) -> tuple[str, list[tuple[int, str]]]:
             else:
                 comment_chars.append(ch)
                 out.append(' ')
-        else:  # string literal
+        else:
             if ch == '\\' and nxt:
                 out.append('  ')
                 i += 2
                 continue
             if ch == '"':
                 state = 'code'
-                # Keep the closing quote (see the opening-quote note above).
+
                 out.append('"')
             else:
                 if ch == '\n':
@@ -189,15 +144,9 @@ def mask_source(text: str) -> tuple[str, list[tuple[int, str]]]:
         comments.append((comment_start_line, ''.join(comment_chars)))
     return ''.join(out), comments
 
-
 def line_of_offset(masked: str, offset: int) -> int:
     """1-based line number of a character offset inside masked text."""
     return masked.count('\n', 0, offset) + 1
-
-
-# --------------------------------------------------------------------------- #
-# Per-rule check helpers
-# --------------------------------------------------------------------------- #
 
 def check_blacklist(masked: str, rel: str) -> list[Violation]:
     """Rule 1: SV-2012 keyword / construct blacklist."""
@@ -206,7 +155,6 @@ def check_blacklist(masked: str, rel: str) -> list[Violation]:
         for m in regex.finditer(masked):
             found.append(Violation(rel, line_of_offset(masked, m.start()), rule, message))
     return found
-
 
 def check_always_sensitivity(masked: str, rel: str) -> list[Violation]:
     """Rule 4: combinational always blocks must use '@*' sensitivity.
@@ -219,16 +167,15 @@ def check_always_sensitivity(masked: str, rel: str) -> list[Violation]:
     for m in ALWAYS_RE.finditer(masked):
         signals = m.group(2)
         if signals is None:
-            continue  # '@*' or @(*)' form is the accepted style
+            continue
         if 'posedge' in signals or 'negedge' in signals:
-            continue  # sequential block, edge-driven
+            continue
         found.append(Violation(
             rel, line_of_offset(masked, m.start()), 'ALWAYS_SENSITIVITY',
             "combinational always block must use '@*' sensitivity, not an "
             "explicit signal list",
         ))
     return found
-
 
 def check_comments_ascii(comments: list[tuple[int, str]], rel: str) -> list[Violation]:
     """Rule 3: comments must be pure ASCII (English comments only)."""
@@ -244,7 +191,6 @@ def check_comments_ascii(comments: list[tuple[int, str]], rel: str) -> list[Viol
                 break
     return found
 
-
 def _split_declarator_list(chunk: str) -> list[str]:
     """Extract declared identifiers from 'a, b[3:0], c = ...' style chunks."""
     names: list[str] = []
@@ -255,7 +201,6 @@ def _split_declarator_list(chunk: str) -> list[str]:
             names.append(m.group(0))
     return names
 
-
 def _check_name(name: str, pattern: re.Pattern, no_double_underscore: bool) -> bool:
     if not pattern.match(name):
         return False
@@ -263,13 +208,11 @@ def _check_name(name: str, pattern: re.Pattern, no_double_underscore: bool) -> b
         return False
     return True
 
-
 def check_naming_and_header(masked: str, comments: list[tuple[int, str]],
                             rel: str, stem: str) -> list[Violation]:
     """Rules 2 and 5: identifier naming, file header, module/file identity."""
     found: list[Violation] = []
 
-    # ---- module declarations ----
     modules = [(m.group(1), line_of_offset(masked, m.start()))
                for m in MODULE_RE.finditer(masked)]
     if not modules:
@@ -296,7 +239,6 @@ def check_naming_and_header(masked: str, comments: list[tuple[int, str]],
                 f"module name '{name}' does not match file name '{stem}.v'",
             ))
 
-    # ---- rule 5: header comment must mention the module name ----
     header_text = ' '.join(ctext for line_no, ctext in comments
                            if line_no <= HEADER_SCAN_LINES)
     if not any(re.search(r'\b' + re.escape(name) + r'\b', header_text)
@@ -308,9 +250,6 @@ def check_naming_and_header(masked: str, comments: list[tuple[int, str]],
             f"module name '{modules[0][0]}'",
         ))
 
-    # ---- rule 2: signal identifiers (ports, nets, registers, genvars) ----
-    # Port / net / parameter declarations are matched line by line so that a
-    # trailing comma in an ANSI port list cannot swallow the next line.
     for line_no, line in enumerate(masked.split('\n'), start=1):
         for m in PORT_DECL_RE.finditer(line):
             for name in _split_declarator_list(m.group(1)):
@@ -321,10 +260,7 @@ def check_naming_and_header(masked: str, comments: list[tuple[int, str]],
                     ))
     for m in NET_DECL_RE.finditer(masked):
         line_no = line_of_offset(masked, m.start())
-        # Net declarations may carry an initializer ("wire [2:0] a = b + C;").
-        # Only the declarator list (left of '=') holds declared names; the
-        # initializer expression may legitimately reference UPPER_CASE
-        # parameters, so cut it off before splitting.
+
         decl_list = m.group(1).split('=', 1)[0]
         for name in _split_declarator_list(decl_list):
             if not _check_name(name, SNAKE_RE, True):
@@ -340,7 +276,6 @@ def check_naming_and_header(masked: str, comments: list[tuple[int, str]],
                 f"genvar name '{m.group(1)}' is not snake_case",
             ))
 
-    # ---- rule 2: parameter identifiers (UPPER_SNAKE_CASE) ----
     for line_no, line in enumerate(masked.split('\n'), start=1):
         m = PARAM_DECL_RE.search(line)
         if not m:
@@ -351,7 +286,7 @@ def check_naming_and_header(masked: str, comments: list[tuple[int, str]],
         for name in _split_declarator_list(chunk):
             if name in ('wire', 'reg', 'signed', 'integer',
                         'input', 'output', 'inout'):
-                continue  # type/direction keywords, not the parameter name
+                continue
             if not _check_name(name, UPPER_RE, True):
                 found.append(Violation(
                     rel, line_no, 'NAMING_PARAM',
@@ -359,18 +294,12 @@ def check_naming_and_header(masked: str, comments: list[tuple[int, str]],
                 ))
     return found
 
-
-# --------------------------------------------------------------------------- #
-# File / tree scanning
-# --------------------------------------------------------------------------- #
-
 def lint_file(path: Path, rel: str) -> list[Violation]:
     """Run all lint rules over one Verilog source file."""
     try:
         text = path.read_text(encoding='utf-8')
     except UnicodeDecodeError:
-        # Non-UTF-8 files are themselves suspect; decode leniently so the
-        # comment rule can still flag the non-ASCII content.
+
         text = path.read_text(encoding='utf-8', errors='replace')
     masked, comments = mask_source(text)
     violations: list[Violation] = []
@@ -379,7 +308,6 @@ def lint_file(path: Path, rel: str) -> list[Violation]:
     violations += check_comments_ascii(comments, rel)
     violations += check_naming_and_header(masked, comments, rel, path.stem)
     return sorted(violations, key=lambda v: (v.line, v.rule))
-
 
 def lint_tree(src_root: Path, excludes: tuple[str, ...] = DEFAULT_EXCLUDES) -> list[Violation]:
     """Lint every .v file under src_root, skipping excluded directories."""
@@ -392,7 +320,6 @@ def lint_tree(src_root: Path, excludes: tuple[str, ...] = DEFAULT_EXCLUDES) -> l
             continue
         violations += lint_file(path, rel)
     return violations
-
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
@@ -421,7 +348,6 @@ def main(argv: list[str] | None = None) -> int:
     print(f'checked {len(scanned)} .v file(s) under {src_root}: '
           f'{len(violations)} violation(s) in {len(dirty)} file(s)')
     return 0 if not violations else 1
-
 
 if __name__ == '__main__':
     sys.exit(main())

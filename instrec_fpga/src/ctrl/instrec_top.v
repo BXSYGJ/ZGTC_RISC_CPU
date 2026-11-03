@@ -1,72 +1,32 @@
-// -----------------------------------------------------------------------------
-// File    : instrec_top.v
-// Module  : instrec_top
-// Project : InstRec-FPGA (PG2L100H-6IFBG676, PDS 2022.2-SP6.4)
-// Purpose : RV32 control + I2S capture -> CDC -> DDR3 -> NPU -> HDMI
-//           waveform display with the debug / self-test chain
-//           (design doc sections 1.1 / 2.2.1, REQ-VER-001 M0 scope).
-//
-// Clock domains (design doc section 1.2):
-//   clk       27 MHz board crystal (D18), reference of video GPLL
-//   clk_nco   27 MHz audio processing clock (alias of board clk)
-//   pix_clk   148.5 MHz pixel clock (hdmi_tx_if / demo GPLL_B IP)
-//   core_clk  125 MHz DDR3 controller user clock (ddr3_wrapper IP output)
-//
-// Reset tree (design doc section 1.3):
-//   rst_n     asynchronous board reset (KEY0, C22)
-//   rst_sync_nco   clk_nco domain, two-FF synchronous reset release
-//   rst_pix_n      pix_clk domain, sync release (hdmi_tx_if)
-//   rst_sync_core  = rst_n directly; feeds ONLY ddr3_wrapper.resetn.
-//                  Must not depend on core_clk (the IP GPLL produces it,
-//                  so a core_clk-based release counter deadlocks).
-//   core_clk_rst_n core_clk domain, sync release (ddr3_wrapper IP)
-//
-// CDC points (producers synchronize internally, the top level only wires):
-//   * pcm path        clk_nco -> core_clk  : audio_cdc_fifo dual-clock FIFO
-//   * sd_idle         clk_nco -> core_clk  : 2FF inside audio_sink/sys_ctrl
-//   * vsync_pulse     pix_clk -> core_clk  : 2FF + edge detect in audio_sink
-//   * wave_rd channel pix_clk -> pix_clk   : same domain, direct wiring
-//   * overflow_cnt    clk_nco -> core_clk  : 2FF in sys_ctrl (quasi-static)
-//
-// Observation taps left unconnected at this milestone (consumed by the
-// T-M2-07 UART stats exporter; synthesis prunes them): wait_cnt_0..3,
-// addr_err, to_err, cmd_to_err, dbg_to_state, wlast_miss_cnt, win_tick,
-// win_id, mute_flag, err_cnt, fifo_full, sys_run, rx_byte_cnt,
-// dbg_line_wready.
-//
-// The DDR3 IP instance hierarchy is instrec_top.ddr3_wrapper.I_ips_ddr_top
-// (constraint paths in ddr3_100h.fdc depend on it, REQ-MEM-001).
-// -----------------------------------------------------------------------------
-
+// instrec_top.v
 `timescale 1ns / 1ps
 
 module instrec_top #(
-    // 0 = CPU-controlled launch; 1 = automatic Mel -> NPU launch. Weights load
-    // before sys_ctrl reaches RUN; CPU requests launch at a Mel boundary.
+
     parameter NPU_ENABLE = 0
 ) (
-    // ---- board pins ----
-    input  wire        clk,          // 27 MHz crystal (D18)
-    input  wire        rst_n,        // KEY0, active low (C22)
-    input  wire        key1_n,       // KEY1, export trigger (C23)
-    output wire [7:0]  led,          // status LEDs (A20..B17)
-    input  wire        uart_rx,      // CP2102 RX (B24)
-    output wire        uart_tx,      // CP2102 TX (C24)
-    // ---- I2S audio pins ----
-    input  wire        i2s_bck,      // PCM1808 bit clock 3.072 MHz (U20)
-    input  wire        i2s_lrck,     // PCM1808 frame clock 48 kHz (T20)
-    input  wire        i2s_sd,       // serial data (V16)
-    output wire        hdmi_rst_n,   // board MS7210 reset (G25)
-    // ---- HDMI transmitter pins (demo fdc pinout) ----
-    output wire        iic_tx_scl,   // I2C clock (K22)
-    inout  wire        iic_tx_sda,   // I2C data (K23)
-    output wire        vout_clk,     // pixel clock (T24)
-    output wire        vout_de,      // data enable (N19)
-    output wire        vout_hs,      // horizontal sync (R20)
-    output wire        vout_vs,      // vertical sync (R21)
-    output wire [23:0] vout_data,    // parallel RGB (demo 24-pin map)
-    // ---- DDR3 physical side (ddr3_wrapper pass-through, N3/N2 + 73 pins) ----
-    input  wire        ref_clk_p,    // 125 MHz differential reference
+
+    input  wire        clk,
+    input  wire        rst_n,
+    input  wire        key1_n,
+    output wire [7:0]  led,
+    input  wire        uart_rx,
+    output wire        uart_tx,
+
+    input  wire        i2s_bck,
+    input  wire        i2s_lrck,
+    input  wire        i2s_sd,
+    output wire        hdmi_rst_n,
+
+    output wire        iic_tx_scl,
+    inout  wire        iic_tx_sda,
+    output wire        vout_clk,
+    output wire        vout_de,
+    output wire        vout_hs,
+    output wire        vout_vs,
+    output wire [23:0] vout_data,
+
+    input  wire        ref_clk_p,
     input  wire        ref_clk_n,
     output wire        mem_cs_n,
     output wire        mem_rst_n,
@@ -85,37 +45,22 @@ module instrec_top #(
     output wire [3:0]  mem_dm
 );
 
-    // ==================================================================
-    // Clock and reset nets
-    // ==================================================================
-    wire clk_nco;            // 27 MHz board-clock alias
-    wire pll_audio_locked;   // audio reset-release readiness
-    wire rst_sync_nco;       // 27 MHz synchronized reset release
-    wire pix_clk;            // 148.5 MHz pixel clock
-    wire rst_pix_n;          // pix_clk domain reset
-    wire core_clk;           // 125 MHz DDR3 user clock
-    wire core_clk_rst_n;     // core_clk domain reset
-    wire ddr_init_done;      // DDR3 initialization done
-    wire ddr_pll_lock;       // DDR3 controller PLL lock
-    wire ddrphy_cpd_lock;    // DDR3 PHY CPD lock
-    wire hdmi_init_over;     // HDMI I2C configuration done
-    wire hdmi_init_fail;     // HDMI I2C retries exhausted
-    wire hdmi_pll_lock;      // HDMI GPLL_B lock
+    wire clk_nco;
+    wire pll_audio_locked;
+    wire rst_sync_nco;
+    wire pix_clk;
+    wire rst_pix_n;
+    wire core_clk;
+    wire core_clk_rst_n;
+    wire ddr_init_done;
+    wire ddr_pll_lock;
+    wire ddrphy_cpd_lock;
+    wire hdmi_init_over;
+    wire hdmi_init_fail;
+    wire hdmi_pll_lock;
 
-    // ==================================================================
-    // DDR3 IP reset: drive resetn straight from the board reset.
-    // The IP's GPLL produces core_clk, so a reset-release counter that
-    // runs on core_clk would deadlock (no reset -> no GPLL clock ->
-    // counter never advances -> reset never releases). The validated
-    // 100H CPU top (pds_cpu_top_100h.v.in) also ties .resetn(rst_n);
-    // the IP's internal ips2l_rst_sync_v1_3 releases core_clk_rst_n
-    // synchronously, so all core_clk logic still gets a clean reset.
-    // ==================================================================
-    wire rst_sync_core = rst_n;   // DDR3 IP reset, active low
+    wire rst_sync_core = rst_n;
 
-    // ==================================================================
-    // Audio chain (clk_nco / core_clk domains)
-    // ==================================================================
     wire [15:0] pcm_l;
     wire [15:0] pcm_r;
     wire        pcm_valid;
@@ -124,21 +69,18 @@ module instrec_top #(
     wire [31:0] fifo_rd_data;
     wire        fifo_rd_valid;
     wire        fifo_empty;
-    wire        fifo_full;       // observation tap (unused in M0)
+    wire        fifo_full;
     wire [15:0] overflow_cnt;
     wire        m0_cmd_valid;
     wire [36:0] m0_cmd;
     wire [255:0] m0_wdata;
     wire        m0_done;
-    wire        m0_wready_beat;  // observation tap (audio single-beat cmds)
-    wire        win_tick;        // observation tap (T0.2 board check)
-    wire [15:0] win_id;         // observation tap
-    wire        mute_flag;       // observation tap
-    wire [15:0] audio_err_cnt;  // observation tap
+    wire        m0_wready_beat;
+    wire        win_tick;
+    wire [15:0] win_id;
+    wire        mute_flag;
+    wire [15:0] audio_err_cnt;
 
-    // ==================================================================
-    // Video chain (pix_clk domain)
-    // ==================================================================
     wire [10:0] pix_x;
     wire [10:0] pix_y;
     wire        pix_de;
@@ -154,20 +96,15 @@ module instrec_top #(
     wire        wave_valid;
     wire        mute_flag_sync;
     wire        vsync_pulse;
-    // NPU top-1 class index (core_clk domain, quasi-static per window).
+
     wire [3:0]  npu_top1_u;
 
-    // ==================================================================
-    // DDR3 controller user side (core_clk domain)
-    // ==================================================================
-    // master 0: audio_sink PCM writes; master 1: NPU wdma (M2, tied off);
-    // master 2: mel_engine (M1, wired below); master 3: self_test.
     wire [3:0]   ddr_cmd_valid;
-    wire [36:0]  m1_cmd;          // tied off (T-M2-02 wdma alignment point)
-    wire [36:0]  m2_cmd;          // mel_engine
+    wire [36:0]  m1_cmd;
+    wire [36:0]  m2_cmd;
     wire [36:0]  m3_cmd;
-    wire [255:0] m1_wdata;        // tied off (T-M2-02)
-    wire [255:0] m2_wdata;        // mel_engine
+    wire [255:0] m1_wdata;
+    wire [255:0] m2_wdata;
     wire [255:0] m3_wdata;
     wire [3:0]   ddr_wready_beat;
     wire [3:0]   ddr_rd_valid;
@@ -176,20 +113,14 @@ module instrec_top #(
     wire [255:0] rd_data_2;
     wire [255:0] rd_data_3;
     wire [3:0]   ddr_done;
-    // 2026-10-31: m0_done was declared but never driven. PDS only emitted
-    // "Verilog-2036: Net m0_done ... has no driver, tie it to 0" and silently
-    // tied it low, so audio_sink held m0_cmd_valid high forever (its FSM waits
-    // for m0_done before releasing). With fixed-priority arbitration, master 0
-    // then starved master 3: self_test aborted its first write after 4096
-    // cycles and reported DDR3 ERR @00300000 on board.
+
     assign m0_done = ddr_done[0];
-    // mel_engine master-2 port nets (per-master signals, packed into the
-    // shared ctrl_axi buses exactly like audio_sink does for master 0)
+
     wire         mel_m2_cmd_valid;
     wire [36:0]  mel_m2_cmd;
     wire [255:0] mel_m2_wdata;
     wire         mel_m2_rd_ready;
-    // AXI nets between ddr3_ctrl_axi and ddr3_wrapper
+
     wire [27:0]  axi_awaddr;
     wire         axi_awuser_ap;
     wire [3:0]   axi_awuser_id;
@@ -212,7 +143,7 @@ module instrec_top #(
     wire         axi_rlast;
     wire         axi_rvalid;
     wire         axi_rvalid_ctrl;
-    // observation taps (M0: unconsumed, T-M2-07 UART exporter)
+
     wire [31:0]  wait_cnt_0;
     wire [31:0]  wait_cnt_1;
     wire [31:0]  wait_cnt_2;
@@ -223,9 +154,6 @@ module instrec_top #(
     wire [2:0]   ddr_dbg_to_state;
     wire [7:0]   ddr_wlast_miss_cnt;
 
-    // ==================================================================
-    // Control / debug chain (core_clk domain)
-    // ==================================================================
     wire        st_start;
     wire        st_cmd_valid;
     wire        st_done;
@@ -237,7 +165,7 @@ module instrec_top #(
     wire [31:0] dbg_line_arg;
     wire        dbg_line_fire;
     wire        dbg_busy;
-    wire        sys_run;           // observation tap (pipeline gate)
+    wire        sys_run;
     wire        safe_err;
     wire [1:0]  stage_code;
     wire        heartbeat;
@@ -247,15 +175,9 @@ module instrec_top #(
     wire        tx_byte_ready;
     wire [7:0]  rx_byte_data;
     wire        rx_byte_valid;
-    wire        dbg_line_wready;   // observation tap (no text writer in M0)
-    wire [15:0] uart_rx_byte_cnt;  // observation tap
+    wire        dbg_line_wready;
+    wire [15:0] uart_rx_byte_cnt;
 
-    // ==================================================================
-    // Module instances
-    // ==================================================================
-
-    // PCM1808 supplies its own clocks; the board clock has ample FIR budget.
-    // 288 processing cycles fit within 562.5 cycles per 48 kHz stereo pair.
     reg [1:0] audio_reset_sync;
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) audio_reset_sync <= 2'b00;
@@ -265,7 +187,6 @@ module instrec_top #(
     assign rst_sync_nco = audio_reset_sync[1];
     assign pll_audio_locked = audio_reset_sync[1];
 
-    // PCM1808 owns both clocks. Convert coherent stereo pairs to 44.1 kHz.
     wire [15:0] capture_l, capture_r;
     wire capture_valid, capture_idle, resample_overrun;
     assign sd_idle = capture_idle | resample_overrun;
@@ -282,14 +203,13 @@ module instrec_top #(
         .overrun(resample_overrun)
     );
 
-    // ---- 27 MHz -> 125 MHz stereo sample CDC FIFO ----
     audio_cdc_fifo u_audio_cdc_fifo (
         .clk_nco     (clk_nco),
         .wr_rst_n    (rst_sync_nco),
         .pcm_valid   (pcm_valid),
         .pcm_l       (pcm_l),
         .pcm_r       (pcm_r),
-        .i2s_lrck    (1'b0), // Pair-valid is already once per stereo frame.
+        .i2s_lrck    (1'b0),
         .clk_core    (core_clk),
         .rd_rst_n    (core_clk_rst_n),
         .rd_en       (fifo_rd_en),
@@ -300,8 +220,6 @@ module instrec_top #(
         .overflow_cnt(overflow_cnt)
     );
 
-    // ---- PCM ring-buffer writer / DDR3 master 0 / waveform columns ----
-    // Keep master 0 quiet until DDR self-test and weight loading finish.
     wire fifo_rd_valid_run = fifo_rd_valid & sys_run;
     wire fifo_empty_run = sys_run ? fifo_empty : 1'b0;
     audio_sink u_audio_sink (
@@ -329,17 +247,9 @@ module instrec_top #(
         .mute_flag_sync(mute_flag_sync)
     );
 
-    // ---- Mel feature engine (M1): PCM window -> log2 mel -> int8 feat ----
-    // Master 2 of ddr3_ctrl_axi; starts on audio_sink win_tick (window
-    // complete in DDR3). Feature export (npu_start/feat_rd_*) is the
-    // T-M2 NPU alignment point - observation taps until the NPU lands.
-    // Hex tables: PDS resolves $readmemh paths against the -work_dir
-    // root (probe-verified in T-M1-06), so the "src/mel/..." prefix
-    // form is used here (matching the fft twiddle ROM hardcodes) and
-    // build_full.tcl copies src/mel/*.hex into <work_dir>/src/mel/.
     wire        mel_npu_start;
     wire        mel_feat_page;
-    wire [14:0] mel_feat_rd_addr;   // NPU read request (tied 0 until M2)
+    wire [14:0] mel_feat_rd_addr;
     wire [7:0]  mel_feat_rd_data;
     wire        mel_done;
     wire [31:0] mel_cycles;
@@ -375,10 +285,6 @@ module instrec_top #(
         .busy          (mel_busy)
     );
 
-    // The NPU drives mel_feat_rd_addr and consumes the synchronous read
-    // data one cycle later.
-
-    // ---- HDMI transmitter front end (GPLL_B + I2C config + pads) ----
     hdmi_tx_if u_hdmi_tx_if (
         .hdmi_rst_n     (hdmi_rst_n),
         .clk_27m        (clk),
@@ -406,8 +312,6 @@ module instrec_top #(
         .pll_lock       (hdmi_pll_lock)
     );
 
-    // ---- UI renderer (waveform region; instantiates waveform_disp) ----
-    // Frame-coherent probability snapshot and labeled dashboard.
     wire [7:0] b0, b1, b2, b3, b4, b5, b6, b7;
     wire result_frame_ready;
     wire [3:0] frame_class;
@@ -429,8 +333,6 @@ module instrec_top #(
 
     wire [14:0] npu_feat_rd_addr;
 
-    // ---- Mel spectrogram chain (M3): copy the window into a double page,
-    // then shade it in the pixel domain ----
     wire [14:0] copy_src_addr;
     wire        copy_src_en;
     wire [14:0] copy_dst_addr;
@@ -454,8 +356,6 @@ module instrec_top #(
         .done       (copy_done_u)
     );
 
-    // The NPU has priority on the mel feature port; the copy engine runs
-    // only while the NPU is idle.
     assign mel_feat_rd_addr = npu_feat_rd_en_u ? npu_feat_rd_addr : copy_src_addr;
 
     wire [14:0] spec_ram_addr;
@@ -494,7 +394,6 @@ module instrec_top #(
         .vs_out        (ui_vs)
     );
 
-    // ---- DDR3 arbitration + IP contract adaptation ----
     wire        wl_tx_valid, wl_tx_ready;
     wire [7:0]  wl_tx_data;
     wire        wl_cmd_valid, wl_done, wl_wready;
@@ -509,7 +408,6 @@ module instrec_top #(
     wire [36:0] npu_rd_cmd_u;
     wire        npu_rd_ready_u;
 
-    // Snapshot-only native NPU integration. Owner locks each transaction.
     wire wl_busy;
     wire native_owner_idle,native_owner_error,native_fault;
     wire loader_m1_wready,loader_m1_rvalid,loader_m1_done;
@@ -616,7 +514,6 @@ module instrec_top #(
         .axi_rvalid     (axi_rvalid_ctrl)
     );
 
-    // ---- DDR3 IP shell (instance hierarchy: ddr3_wrapper.I_ips_ddr_top) ----
     ddr3_wrapper ddr3_wrapper (
         .ref_clk_p      (ref_clk_p),
         .ref_clk_n      (ref_clk_n),
@@ -664,11 +561,6 @@ module instrec_top #(
         .mem_dm         (mem_dm)
     );
 
-    // ---- DDR3 write-read self test (master 3, self-test pattern area) ----
-    // master-3 write-beat pulse (C-SELFTEST@1 F2/S1/S2).  Without this tap
-    // PDS reports "Verilog-2036: Net st_wready_beat ... has no driver, tie
-    // it to 0"; self_test then never sees a beat handshake and the first
-    // write command aborts with st_fail at SELFTEST_BASE.
     assign st_wready_beat = ddr_wready_beat[3];
 
     self_test u_self_test (
@@ -687,8 +579,6 @@ module instrec_top #(
         .st_fail      (st_fail),
         .st_fail_addr (st_fail_addr)
     );
-
-    // ---- System controller (boot self-test chain + LED encoding) ----
 
     wire weight_start_unused;
 
@@ -709,9 +599,7 @@ module instrec_top #(
         .st_done         (st_done),
         .st_fail         (st_fail),
         .st_fail_addr    (st_fail_addr),
-        // DDR3 AXI diagnostic taps: consumed by sys_ctrl for the
-        // "DDR3 STS <hex8>" line (T21).  These nets were left dangling
-        // (no consumer) until now.
+
         .ddr_dbg_to_state(ddr_dbg_to_state),
         .ddr_to_err      (ddr_to_err),
         .ddr_cmd_to_err  (ddr_cmd_to_err),
@@ -727,7 +615,6 @@ module instrec_top #(
         .key1_n          (key1_n)
     );
 
-    // ---- UART physical byte layer ----
     wire [7:0] dbg_tx_data;
     wire       dbg_tx_valid;
     wire       dbg_tx_ready;
@@ -743,7 +630,6 @@ module instrec_top #(
     assign wl_tx_ready   = tx_accept_ready;
     assign dbg_tx_ready  = tx_accept_ready & ~wl_tx_valid;
 
-    // ---- RV32 control core (lowest-priority UART source) ----
     wire        cpu_tx_valid;
     wire [7:0]  cpu_tx_data;
     wire [7:0]  cpu_led;
@@ -763,8 +649,6 @@ module instrec_top #(
         .uart_txd    (uart_tx)
     );
 
-    // The CPU may only pop its FIFO when the multiplexer actually selects it,
-    // otherwise a byte would be consumed while wl/dbg data goes out instead.
     assign cpu_tx_ready = tx_accept_ready & ~wl_tx_valid & ~dbg_tx_valid;
 
     uart_rx u_uart_rx (
@@ -774,8 +658,6 @@ module instrec_top #(
         .byte_rdata  (rx_byte_data),
         .byte_rvalid (rx_byte_valid)
     );
-
-    // ---- Weight loader (T-M2-01): UART frames -> DDR3 master 1 ----
 
     weight_loader #(.BASE_ADDR(28'h100000)) u_weight_loader (
         .clk         (core_clk),
@@ -801,9 +683,6 @@ module instrec_top #(
         .digest      (wl_digest_unused)
     );
 
-    // ---- NPU top (T-M2-06): instantiated but gated off until the mel
-    // feat read port and m1 arbitration are finalized. Keeping the instance
-    // here fixes the top-level topology and lets PDS elaborate the chain.
     wire        npu_busy_u, npu_done_u, npu_timeout_u;
     wire [31:0] npu_cycles_u;
     wire        npu_probs_valid_u;
@@ -848,7 +727,6 @@ module instrec_top #(
         .top1         (npu_top1_u)
     );
 
-    // ---- Debug line formatter (M0: status lines only, no text writer) ----
     uart_debug u_uart_debug (
         .clk            (core_clk),
         .rst_n          (core_clk_rst_n),
@@ -868,7 +746,7 @@ module instrec_top #(
     );
 
     rv32_cpu_subsys #(
-        .ENABLE_M         (0),      // RV32I: saves ~600 LUT against the cliff
+        .ENABLE_M         (0),
         .ENABLE_PREDICTOR (0),
         .RESET_VECTOR     (32'h0000_0000),
         .PROG_HEX         ("src/cpu/prog.hex")
@@ -897,14 +775,6 @@ module instrec_top #(
         .npu_soft_start  (cpu_npu_start)
     );
 
-    // ==================================================================
-    // LED assembly (design doc section 2.2.9 / sys_ctrl contract):
-    //   led[7:6] self-test stage code
-    //   led[5]   CDC FIFO overflow warning (sticky)
-    //   led[4]   SAFE_ERR latched state
-    //   led[3:1] NPU busy / CPU trap / CPU alive
-    //   led[0]   1 Hz heartbeat (active after RUN)
-    // ==================================================================
     assign led = {stage_code, overflow_warn, safe_err, npu_busy_u, cpu_trap, cpu_alive, heartbeat};
 
 endmodule

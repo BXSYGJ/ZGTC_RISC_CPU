@@ -1,7 +1,0 @@
-{
-  "observed_at": "2026-09-11T03:51:57.783Z",
-  "released": true,
-  "device_id": 12,
-  "device": "实验箱1",
-  "evidence": "Dashboard shows no allocated device after confirmed release."
-}

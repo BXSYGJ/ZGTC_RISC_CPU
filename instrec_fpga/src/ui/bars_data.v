@@ -1,5 +1,4 @@
-// bars_data: complete probability snapshots use a held bundle plus request/ack.
-// Pixel outputs and class change only at a frame boundary.
+// bars_data.v
 module bars_data (
     input wire core_clk, core_rst_n,
     input wire probs_valid,

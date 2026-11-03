@@ -1,28 +1,11 @@
+// ms7210_ctl.v
 `timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company:Meyesemi 
-// Engineer: Will
-// 
-// Create Date: 2023-01-29 20:31  
-// Design Name:  
-// Module Name: 
-// Project Name: 
-// Target Devices: Pango
-// Tool Versions: 
-// Description: 
-//      
-// Dependencies: 
-// 
-// Revision:
-// Revision 1.0 - File Created
-// Additional Comments:
-// 
-//////////////////////////////////////////////////////////////////////////////////
+
 `define UD #1
 module ms7210_ctl(
     input               clk,
     input               rstn,
-                        
+
     output reg          init_over,
     output        [7:0] device_id,
     output reg          iic_trig ,
@@ -31,7 +14,7 @@ module ms7210_ctl(
     output reg   [ 7:0] data_in  ,
     input               busy     ,
     input        [ 7:0] data_out ,
-    input               byte_over 
+    input               byte_over
 );
     assign device_id = 8'hB2;
 function [23:0] cmd_data;
@@ -39,60 +22,58 @@ input [5:0] index;
     begin
         case(index)
             6'd0     : cmd_data = {16'h1281,8'h04};
-            6'd1     : cmd_data = {16'h0016,8'h04};//
-            6'd2     : cmd_data = {16'h0009,8'h01};//
-            6'd3     : cmd_data = {16'h0007,8'h09};//
-            6'd4     : cmd_data = {16'h0008,8'hF0};//
-            6'd5     : cmd_data = {16'h000A,8'hF0};//
-            6'd6     : cmd_data = {16'h0006,8'h11};//
-            6'd7     : cmd_data = {16'h0531,8'h84};//
-            6'd8     : cmd_data = {16'h0900,8'h20};//
-            6'd9     : cmd_data = {16'h0901,8'h47};//
+            6'd1     : cmd_data = {16'h0016,8'h04};
+            6'd2     : cmd_data = {16'h0009,8'h01};
+            6'd3     : cmd_data = {16'h0007,8'h09};
+            6'd4     : cmd_data = {16'h0008,8'hF0};
+            6'd5     : cmd_data = {16'h000A,8'hF0};
+            6'd6     : cmd_data = {16'h0006,8'h11};
+            6'd7     : cmd_data = {16'h0531,8'h84};
+            6'd8     : cmd_data = {16'h0900,8'h20};
+            6'd9     : cmd_data = {16'h0901,8'h47};
             6'd10    : cmd_data = {16'h0904,8'h09};
-            6'd11    : cmd_data = {16'h0923,8'h07};//
-            6'd12    : cmd_data = {16'h0924,8'h44};//
-            6'd13    : cmd_data = {16'h0925,8'h44};//
-            6'd14    : cmd_data = {16'h090F,8'h80};//
-            6'd15    : cmd_data = {16'h091F,8'h07};//
-            6'd16    : cmd_data = {16'h0920,8'h1E};//  INT EN
-            6'd17    : cmd_data = {16'h0018,8'h20};//
-            6'd18    : cmd_data = {16'h05c0,8'hFE};//
-            6'd19    : cmd_data = {16'h000B,8'h00};//  seting
+            6'd11    : cmd_data = {16'h0923,8'h07};
+            6'd12    : cmd_data = {16'h0924,8'h44};
+            6'd13    : cmd_data = {16'h0925,8'h44};
+            6'd14    : cmd_data = {16'h090F,8'h80};
+            6'd15    : cmd_data = {16'h091F,8'h07};
+            6'd16    : cmd_data = {16'h0920,8'h1E};
+            6'd17    : cmd_data = {16'h0018,8'h20};
+            6'd18    : cmd_data = {16'h05c0,8'hFE};
+            6'd19    : cmd_data = {16'h000B,8'h00};
             6'd20    : cmd_data = {16'h0507,8'h06};
-            6'd21    : cmd_data = {16'h0906,8'h04};//
-            6'd22    : cmd_data = {16'h0920,8'h5E};//
-            6'd23    : cmd_data = {16'h0926,8'hDD};//
-            6'd24    : cmd_data = {16'h0927,8'h0D};//
-            6'd25    : cmd_data = {16'h0928,8'h88};//
-            6'd26    : cmd_data = {16'h0929,8'h08};//
-            6'd27    : cmd_data = {16'h0910,8'h01};//
-            6'd28    : cmd_data = {16'h000B,8'h11};//
-            6'd29    : cmd_data = {16'h050E,8'h00};//
+            6'd21    : cmd_data = {16'h0906,8'h04};
+            6'd22    : cmd_data = {16'h0920,8'h5E};
+            6'd23    : cmd_data = {16'h0926,8'hDD};
+            6'd24    : cmd_data = {16'h0927,8'h0D};
+            6'd25    : cmd_data = {16'h0928,8'h88};
+            6'd26    : cmd_data = {16'h0929,8'h08};
+            6'd27    : cmd_data = {16'h0910,8'h01};
+            6'd28    : cmd_data = {16'h000B,8'h11};
+            6'd29    : cmd_data = {16'h050E,8'h00};
             6'd30    : cmd_data = {16'h050A,8'h82};
-            6'd31    : cmd_data = {16'h0509,8'h02};//
-            6'd32    : cmd_data = {16'h050B,8'h0D};//
-            6'd33    : cmd_data = {16'h050D,8'h06};//
-            6'd34    : cmd_data = {16'h050D,8'h11};//
-            6'd35    : cmd_data = {16'h050D,8'h58};//
-            6'd36    : cmd_data = {16'h050D,8'h00};//
-            6'd37    : cmd_data = {16'h050D,8'h00};//
-            6'd38    : cmd_data = {16'h050D,8'h00};//
-            6'd39    : cmd_data = {16'h050D,8'h00};//
+            6'd31    : cmd_data = {16'h0509,8'h02};
+            6'd32    : cmd_data = {16'h050B,8'h0D};
+            6'd33    : cmd_data = {16'h050D,8'h06};
+            6'd34    : cmd_data = {16'h050D,8'h11};
+            6'd35    : cmd_data = {16'h050D,8'h58};
+            6'd36    : cmd_data = {16'h050D,8'h00};
+            6'd37    : cmd_data = {16'h050D,8'h00};
+            6'd38    : cmd_data = {16'h050D,8'h00};
+            6'd39    : cmd_data = {16'h050D,8'h00};
             6'd40    : cmd_data = {16'h050D,8'h00};
-            6'd41    : cmd_data = {16'h050D,8'h00};//
-            6'd42    : cmd_data = {16'h050D,8'h00};//
-            6'd43    : cmd_data = {16'h050D,8'h00};//
-            6'd44    : cmd_data = {16'h050D,8'h00};//
-            6'd45    : cmd_data = {16'h050D,8'h00};//
-            6'd46    : cmd_data = {16'h050D,8'h00};//
-            6'd47    : cmd_data = {16'h050E,8'h40};//
-            6'd48    : cmd_data = {16'h0507,8'h00};//
-       endcase 
+            6'd41    : cmd_data = {16'h050D,8'h00};
+            6'd42    : cmd_data = {16'h050D,8'h00};
+            6'd43    : cmd_data = {16'h050D,8'h00};
+            6'd44    : cmd_data = {16'h050D,8'h00};
+            6'd45    : cmd_data = {16'h050D,8'h00};
+            6'd46    : cmd_data = {16'h050D,8'h00};
+            6'd47    : cmd_data = {16'h050E,8'h40};
+            6'd48    : cmd_data = {16'h0507,8'h00};
+       endcase
     end
 endfunction
-    //===========================================================================
-    //  MS7210 driver control FSM
-    //===========================================================================
+
     parameter    IDLE   = 6'b00_0001;
     parameter    CONECT = 6'b00_0010;
     parameter    INIT   = 6'b00_0100;
@@ -107,14 +88,13 @@ endfunction
 
     reg          busy_1d;
     wire         busy_falling;
-    
+
     assign busy_falling = ((~busy) & busy_1d);
     always @(posedge clk)
     begin
         busy_1d <= busy;
     end
-    //===========================================================================
-    //  MS7210 driver control FSM    First Step
+
     always @(posedge clk)
     begin
         if(!rstn)
@@ -122,9 +102,7 @@ endfunction
         else
             state <= state_n;
     end
-    
-    //===========================================================================
-    //  MS7210 driver control FSM    Second Step
+
     always @(*)
     begin
         state_n = state;
@@ -145,7 +123,7 @@ endfunction
                     state_n = state;
             end
             WAIT     : begin
-                if(delay_cnt == 22'h30D399)//)//
+                if(delay_cnt == 22'h30D399)
                     state_n = SETING;
                 else
                     state_n = state;
@@ -164,9 +142,7 @@ endfunction
             end
         endcase
     end
-    
-    //===========================================================================
-    //  MS7210 driver control FSM    Third Step
+
     always @(posedge clk)
     begin
         if(!rstn)
@@ -214,7 +190,7 @@ endfunction
             endcase
         end
     end
-    
+
     always @(posedge clk)
     begin
         if(state == WAIT)
@@ -227,7 +203,7 @@ endfunction
         else
             delay_cnt <= 22'd0;
     end
-    
+
     always @(posedge clk)
     begin
         if(!rstn)
@@ -245,7 +221,7 @@ endfunction
             endcase
         end
     end
-    
+
     always @(posedge clk)
     begin
         if(!rstn)
@@ -275,7 +251,7 @@ endfunction
             endcase
         end
     end
-    
+
     always @(posedge clk)
     begin
         if(!rstn)
@@ -298,7 +274,7 @@ endfunction
             endcase
         end
     end
-    
+
     reg [23:0] cmd_iic;
     always@(posedge clk)
 	begin
@@ -306,10 +282,10 @@ endfunction
 			cmd_iic <= 0;
 		else if(state == IDLE)
 			cmd_iic <= 24'd0;
-        else //if(state == WAIT || state == SETING)
+        else
             cmd_iic <= cmd_data(cmd_index);
 	end
-    
+
     always @(posedge clk)
     begin
         if(!rstn)
@@ -358,7 +334,7 @@ endfunction
     begin
     	if(!rstn)
     	    init_over <= 1'b0;
-    	else if(state == STA_RD)// && busy_falling)
+    	else if(state == STA_RD)
     	    init_over <= 1'b1;
     end
 

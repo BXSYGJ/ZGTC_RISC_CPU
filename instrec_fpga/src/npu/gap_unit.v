@@ -1,20 +1,4 @@
-// ---------------------------------------------------------------------------
-// gap_unit.v -- global average pooling for the InstRec NPU (T-M2-05)
-//
-// Bit truth: golden_pipeline.gap_s32():
-//   total[c] = sum over the 4x16 spatial map of the u8 container values
-//   gap[c]   = round_half_even_shift(total[c], 6)
-// The sum is taken on the raw uint8 values (no zero-point subtraction);
-// the fc1 input quantization is applied later by fc_engine.
-//
-// Input stream (from pool4): one beat per cycle, order
-// (row, grp, col, lane 0..15); 4 rows x 16 groups x 16 cols x 16 lanes.
-//
-// Storage: 256 x s32 accumulators (8,192 FF), then a 256 x 16 result RAM
-// written one channel per cycle after the last beat. The fc stage reads
-// the RAM through the exported read port.
-// ---------------------------------------------------------------------------
-
+// gap_unit.v
 module gap_unit #(
     parameter CIN  = 256,
     parameter H_IN = 4,
@@ -27,13 +11,11 @@ module gap_unit #(
     input  wire        y_valid,
     input  wire [7:0]  y_u8,
 
-    // result RAM read port (for the fc stage)
     input  wire [7:0]  g_raddr,
     output reg  [15:0] g_rdata,
 
-    output reg         gap_done,     // pulse after all 256 results are stored
+    output reg         gap_done,
 
-    // streaming status for the downstream fc stage
     output reg  [7:0]  gap_waddr,
     output reg         gap_we,
     output reg  [15:0] gap_wdata
@@ -61,7 +43,6 @@ module gap_unit #(
                            (grp_cnt == GRP_LAST) && (col_cnt == W_IN - 1) &&
                            (lane_cnt == 4'd15);
 
-    // round-half-even divide by 64 for a non-negative s32 value.
     function [15:0] rhe_shift6;
         input signed [31:0] v;
         reg signed [31:0] q;
@@ -98,7 +79,7 @@ module gap_unit #(
                     busy <= 1'b1;
                     if (y_valid) begin
                         if (row_cnt == 2'd0 && col_cnt == 4'd0)
-                            acc[ch] <= {{24{1'b0}}, y_u8};   // first visit
+                            acc[ch] <= {{24{1'b0}}, y_u8};
                         else
                             acc[ch] <= acc[ch] + {{24{1'b0}}, y_u8};
                         if (lane_cnt == 4'd15) begin
@@ -125,7 +106,7 @@ module gap_unit #(
                 end
 
                 S_CONV: begin
-                    // 256 cycles: store one channel result per cycle.
+
                     result[conv_cnt[7:0]] <= rhe_shift6(acc[conv_cnt[7:0]]);
                     gap_we    <= 1'b1;
                     gap_waddr <= conv_cnt[7:0];
@@ -153,7 +134,6 @@ module gap_unit #(
                 lane_cnt <= 4'd0;
             end
 
-            // result RAM read port (1-cycle synchronous read)
             g_rdata <= result[g_raddr];
         end
     end

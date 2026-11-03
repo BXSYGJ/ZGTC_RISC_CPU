@@ -1,6 +1,4 @@
-// weight_read_aligner_hardened -- Frozen candidate; PDS and board validation pending.
-// Read-only adapter from image byte offsets to native aligned weight reads.
-// One command at a time; hold up_valid until up_done, then release it.
+// weight_read_aligner_hardened.v
 module weight_read_aligner_hardened (
     input wire clk, rst_n,
     input wire up_valid,

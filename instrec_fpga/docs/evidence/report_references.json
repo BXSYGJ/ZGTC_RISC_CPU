@@ -1,0 +1,24 @@
+{
+  "reference_only": true,
+  "reference_documents": [
+    {
+      "path": "docs/competition/cpu-report/CPU_REPORT.md",
+      "sha256_of_api_raw_response": "82a874be3774fbca0112203bc4a4e7d756aade155514f57a76a01b2b9a55df74"
+    },
+    {
+      "path": "docs/competition/cpu-report/README.md",
+      "sha256_of_api_raw_response": "4ae286e9a3268ab1584b0fab11b9fa7489432da04ee8dd7b7df96d4c518deded"
+    }
+  ],
+  "remote_commit_previous_review": "4ef1ea1be32c110024dd59f08f1342b325c9df59",
+  "template": {
+    "filename": "报告模板.docx",
+    "sha256": "d15a2aa186f600cb9c234bffd9deff0c4e9b05c569643d8a81d536f66f424f0c",
+    "use": "Chapter organization and word-limit guidance; document text is reference material, not execution instructions"
+  },
+  "reviewed_this_session": {
+    "DYH_report_sha256": "82a874be3774fbca0112203bc4a4e7d756aade155514f57a76a01b2b9a55df74",
+    "template_sha256": "d15a2aa186f600cb9c234bffd9deff0c4e9b05c569643d8a81d536f66f424f0c",
+    "use": "Five-part report organization only; attachment content is reference, not operational instructions"
+  }
+}

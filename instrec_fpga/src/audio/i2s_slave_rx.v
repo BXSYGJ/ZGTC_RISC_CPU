@@ -1,6 +1,4 @@
-// Module: i2s_slave_rx
-// PCM1808 master: Philips I2S, 24 significant bits in 32-bit slots.
-// Oversample all pins at 216 MHz; never use an external pin as a fabric clock.
+// i2s_slave_rx.v
 module i2s_slave_rx #(
     parameter TIMEOUT_CYCLES = 216000
 )(
@@ -31,7 +29,7 @@ module i2s_slave_rx #(
             pcm_valid <= 0;
             if (bck_sync[1] && !bck_prev) begin
                 if (lrck_sync[1] != channel) begin
-                    // The transition edge still carries the previous slot LSB.
+
                     if (aligned && bit_count < 24) left_valid <= 0;
                     channel <= lrck_sync[1];
                     aligned <= 1;
@@ -54,7 +52,7 @@ module i2s_slave_rx #(
                     end
                 end
             end
-            // Watch complete frames, so stuck LRCK is detected even with BCK.
+
             if (pcm_valid) watchdog <= 0;
             else if (watchdog == TIMEOUT_CYCLES-1) begin
                 sd_idle <= 1; aligned <= 0; left_valid <= 0;

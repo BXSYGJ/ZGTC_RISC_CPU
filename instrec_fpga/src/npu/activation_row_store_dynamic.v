@@ -1,6 +1,4 @@
-// activation_row_store_dynamic -- Isolated narrow equivalent candidate.
-// Candidate only. Single-row reorder, serialized 32-byte DDR transfers.
-// Native bridge must map addresses to byte-addressed len=0 commands.
+// activation_row_store_dynamic.v
 module activation_row_store_dynamic (
     input wire clk, rst_n, start, read_mode, row_credit,
     input wire [1:0] cfg_layer, input wire [31:0] cfg_base,
@@ -82,7 +80,7 @@ module activation_row_store_dynamic (
                 end
                 FILL: if(in_valid) begin
                     if(count==row_bytes-1) begin
-                        // Only the final half beat can be partial (C multiple 16).
+
                         count<=0; beat<=0; state<=WCMD;
                     end else count<=count+1;
                     if(lane==15) begin
@@ -101,7 +99,7 @@ module activation_row_store_dynamic (
                 end
                 CREDIT: if(row_credit) begin beat<=0; state<=RCMD; end
                 RCMD: if(cmd_ready) begin
-                    // Zero-latency R response is accepted as well.
+
                     if(rd_valid) begin
                         if(beat==beats-1) begin count<=0; state<=PREFETCH; end
                         else begin beat<=beat+1; state<=RCMD; end

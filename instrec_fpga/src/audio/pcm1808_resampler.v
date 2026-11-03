@@ -1,7 +1,4 @@
-// Module: pcm1808_resampler
-// Exact output count 147/160; causal 96-tap bandlimited stereo FIR.
-// Q1.15 coefficients, signed 16-bit input, round-half-even and saturation.
-// One pair every ~4500 clocks; a convolution takes 288 clocks.
+// pcm1808_resampler.v
 module pcm1808_resampler (
     input wire clk, input wire rst_n, input wire stream_idle,
     input wire in_valid, input wire [15:0] in_l, input wire [15:0] in_r,
@@ -23,7 +20,7 @@ module pcm1808_resampler (
     wire signed [47:0] sum_l = acc_l + {{16{product_l[31]}}, product_l};
     wire signed [47:0] sum_r = acc_r + {{16{product_r[31]}}, product_r};
     pcm1808_coeff_rom u_coeff (.clk(clk), .phase(phase), .tap(tap), .coeff(coeff));
-    // No memory reset: valid count supplies zero padding after reset/idle.
+
     always @(posedge clk) begin
         if (rst_n && !stream_idle && in_valid && state == 0) begin
             history_l[wr_ptr] <= in_l;

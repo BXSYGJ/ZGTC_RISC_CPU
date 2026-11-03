@@ -1,1 +1,0 @@
-set_clock_groups -asynchronous -group [get_clocks {clk}] -group [get_clocks {pix_clk}] -group [get_clocks {cfg_clk}] -group [get_clocks {ref_clk}] -group [get_clocks {rst_clk}] -group [get_clocks {ddrphy_sysclk}] -group [get_clocks {phy_dq_clk_0}] -group [get_clocks {phy_dq_sysclk_0}] -group [get_clocks {phy_dq_clk_1}] -group [get_clocks {phy_dq_sysclk_1}]

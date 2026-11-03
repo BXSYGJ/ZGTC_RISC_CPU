@@ -1,53 +1,10 @@
-# One-button InstRec-FPGA PDS build: expand build_full.tcl tokens, run the
-# six-stage batch flow (compile -> synthesize -> dev_map -> pnr ->
-# report_timing -> gen_bit_stream) through pds_shell.exe, scan the logs for
-# tool errors, verify the sbit, and archive logs to reports/ (REQ-BLD-001).
-#
-# Build sets (C-BUILD-TOKENS@1): the design sources, IP cores, constraints and
-# $readmemh table directories are read from scripts/build_sets.json, so one
-# six-stage TCL drives every build line:
-#   full       instrec_top      the whole SoC (~1.5 h place and route)
-#   ddr3_diag  top_ddr3_diag    DDR3 bring-up scope only (minutes)
-#   ui_demo    top_ui_demo      HDMI + UI scope only (minutes)
-#   conv1_test top_npu_conv1_test  conv1 layer, BRAM weights (minutes)
-#   mel_test   top_mel_test     mel engine, fake PCM source (minutes)
-#   core_only  top_core_only    DDR3 + NPU + Mel + control, no video half
-#                               (the LUT-reduced full top, T36)
-#   rv_core    top_rv_core      core_only plus RV32I control firmware/CPU
-#
-# Parameters:
-#   -BuildSet <full|ddr3_diag|ui_demo|conv1_test|mel_test|core_only|rv_core>
-#       build set to run (default: full).
-#   -TopModule <name>  explicit override of the set's top_module.  A mismatch
-#       throws, because the artifact name is derived from the top module and a
-#       silent mismatch would publish a bitstream under the wrong name.
-#   -DryRun  read the set, expand the globs, substitute the eight tokens and
-#       write build/pds/<run>/build.tcl, then print a one-line summary and
-#       exit 0.  pds_shell.exe is NEVER started.  This is how the pipeline is
-#       verified without spending the single build slot.
-#
-# Artifact names: "full" keeps the historical build/instrec-latest.sbit and
-# build/instrec-latest.json (backward compatible); every other set writes
-# build/<TopModule>-latest.sbit / build/<TopModule>-latest.json so the three
-# build lines coexist under build/.
-#
-# PowerShell 5.1 compatibility rules (hard constraints):
-#   - Start-Process is ALWAYS called with -Wait: without it $process.ExitCode
-#     stays $null on PS5.1 and the failure check misfires.
-#   - All generated text files are written via [System.IO.File]::WriteAllText
-#     with an explicit BOM-less UTF8 encoding; "Set-Content -Encoding UTF8"
-#     is avoided because it emits a BOM on PS5.1.
-#   - No PS7-only operators (ternary / null-coalescing / chain operators).
 [CmdletBinding()]
 param(
-    [ValidateSet('full', 'ddr3_diag', 'ui_demo', 'conv1_test', 'mel_test', 'core_only', 'rv_core', 'pcm1808_diag', 'emergency_demo')]
+    [ValidateSet('full', 'ddr3_diag', 'ui_demo', 'conv1_test', 'mel_test', 'core_only', 'rv_core', 'pcm1808_diag')]
     [string]$BuildSet = 'full',
 
     [string]$TopModule = '',
 
-    # Stop after one stage and skip the bitstream checks.  Used for the
-    # resource gate (synthesize): the LUT total decides whether a two-hour
-    # place-and-route is worth starting, and synth+dev_map cost ~20 minutes.
     [ValidateSet('', 'compile', 'synthesize', 'dev_map')]
     [string]$StopAfter = '',
 
@@ -57,13 +14,6 @@ param(
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 $ErrorActionPreference = 'Stop'
 
-# Expand one build-set file list into absolute paths.  Entries containing a
-# wildcard are globbed (a missing directory expands to nothing, so a milestone
-# tree that does not have every directory yet still produces a valid list);
-# entries without a wildcard are kept verbatim even when the file does not
-# exist yet, because the build sets reference assets other tasks deliver in
-# parallel and the -DryRun check only validates the generated path strings.
-# Order is preserved (constraint order is semantic) and duplicates are dropped.
 function Expand-BuildSetFiles {
     param(
         [string]$Root,
@@ -89,8 +39,6 @@ function Expand-BuildSetFiles {
     return ,$ordered.ToArray()
 }
 
-# Join a path list into "add_design "<abs>"" / "add_constraint "<abs>"" TCL
-# lines.  Paths use forward slashes so the generated TCL never needs escaping.
 function ConvertTo-TclLines {
     param(
         [string[]]$Files,
@@ -118,8 +66,6 @@ function Get-SourceDigest {
 try {
     $project = [System.IO.Path]::GetFullPath([System.IO.Path]::Combine($PSScriptRoot, '..'))
 
-    # 0) resolve the build set before creating any directory, so a bad set name
-    #    or a conflicting -TopModule leaves no empty build/ run behind.
     $setsPath = [System.IO.Path]::Combine($PSScriptRoot, 'build_sets.json')
     if (-not (Test-Path -LiteralPath $setsPath -PathType Leaf)) { throw "Build set manifest not found: $setsPath" }
     $setsDoc = [System.IO.File]::ReadAllText($setsPath) | ConvertFrom-Json
@@ -142,7 +88,6 @@ try {
     }
     $projectName = $topModule + '_pds'
 
-    # 0b) expand the design / IP / constraint lists of the set
     $designFiles = Expand-BuildSetFiles -Root $project -Patterns @($setDef.sources)
     $ipFiles = Expand-BuildSetFiles -Root $project -Patterns @($setDef.ip_cores)
     $constraintFiles = Expand-BuildSetFiles -Root $project -Patterns @($setDef.constraints)
@@ -151,18 +96,14 @@ try {
         throw "Build set '$BuildSet' expands to zero design files; check its 'sources' globs in build_sets.json."
     }
 
-    # 1) timestamped build directory (provenance; build/ is git-ignored)
     $runName = (Get-Date -Format 'yyyyMMdd-HHmmss') + '-' + ([guid]::NewGuid().ToString('N').Substring(0, 8))
     $buildRoot = [System.IO.Path]::Combine($project, 'build', 'pds', $runName)
     [void](New-Item -ItemType Directory -Path $buildRoot -Force)
 
-    # 2) expand the PDS TCL template (eight tokens, C-BUILD-TOKENS@1)
     $tclTemplatePath = [System.IO.Path]::Combine($PSScriptRoot, 'build_full.tcl')
     if (-not (Test-Path -LiteralPath $tclTemplatePath -PathType Leaf)) { throw "PDS build template not found: $tclTemplatePath" }
     $tclTemplate = [System.IO.File]::ReadAllText($tclTemplatePath)
 
-    # $readmemh tables: copy every table of each hex_dir into <build>/<hex_dir>
-    # so the work_dir-relative "src/mel/..." / "src/ui/..." prefixes resolve.
     $hexLines = New-Object System.Collections.Generic.List[string]
     $hexSourceFiles = New-Object System.Collections.Generic.List[string]
     $hexCount = 0
@@ -180,8 +121,6 @@ try {
         }
     }
 
-    # Block tokens are substituted before the scalar ones so that a block which
-    # happens to reference __BUILD_ROOT__ / __PROJECT_ROOT__ is expanded too.
     $tokenValues = [ordered]@{
         '__DESIGN_FILES__'     = (ConvertTo-TclLines -Files $designFiles -Verb 'add_design')
         '__IP_FILES__'         = (ConvertTo-TclLines -Files $ipFiles -Verb 'add_design')
@@ -199,8 +138,6 @@ try {
     }
     if ($tcl.Contains('__')) { throw 'build.tcl still contains an unexpanded __TOKEN__ placeholder.' }
 
-    # -StopAfter: insert an 'exit' line in front of the next stage instead of
-    # editing build_full.tcl (the template stays the single six-stage source).
     if ($StopAfter -ne '') {
         $nextStage = @{ compile = 'synthesize'; synthesize = 'dev_map'; dev_map = 'pnr' }[$StopAfter]
         $lines = $tcl -split "`r?`n"
@@ -220,8 +157,6 @@ try {
     $scriptPath = [System.IO.Path]::Combine($buildRoot, 'build.tcl')
     [System.IO.File]::WriteAllText($scriptPath, $tcl, [System.Text.UTF8Encoding]::new($false))
 
-    # 2b) -DryRun: the tokenisation is proven by build.tcl alone, so stop here
-    #     and never touch pds_shell.exe, the license or the JTAG chain.
     if ($DryRun) {
         Write-Output ('DRYRUN top={0} set={1} design={2} ip={3} constraint={4} hex={5}' -f $topModule, $BuildSet, $designFiles.Count, $ipFiles.Count, $constraintFiles.Count, $hexCount)
         Write-Output ('DRYRUN build.tcl: ' + $scriptPath)
@@ -233,8 +168,6 @@ try {
         throw 'A pds_shell process already exists; only one PDS build is allowed.'
     }
 
-    # Record inputs before PDS reads live source paths. A later change makes
-    # this run unsuitable for publication even if PDS produces a bitstream.
     $sourceRecords = @()
     $sourcePaths = @($designFiles) + @($ipFiles) + @($constraintFiles) + @($hexSourceFiles.ToArray()) + @($setsPath, $tclTemplatePath, $PSCommandPath)
     foreach ($sourcePath in @($sourcePaths | Sort-Object -Unique)) {
@@ -249,7 +182,6 @@ try {
     $sourceManifest = [ordered]@{ Schema = 1; BuildSet = $BuildSet; CapturedUtc = [datetime]::UtcNow.ToString('o'); Files = $sourceRecords }
     [System.IO.File]::WriteAllText($sourceManifestPath, ($sourceManifest | ConvertTo-Json -Depth 5), [System.Text.UTF8Encoding]::new($false))
 
-    # 3) locate PDS and the license, both hard-checked before the run
     $pdsRoot = [Environment]::GetEnvironmentVariable('PDS_ROOT', 'Process')
     if ([string]::IsNullOrWhiteSpace($pdsRoot)) { $pdsRoot = 'H:\GG\pango\PDS_2022.2-SP6.4' }
     $pdsShell = [System.IO.Path]::Combine($pdsRoot, 'bin', 'pds_shell.exe')
@@ -260,7 +192,6 @@ try {
     if (-not (Test-Path -LiteralPath $licenseFile -PathType Leaf)) { throw "PANGO license file not found: $licenseFile" }
     $env:PANGO_LICENSE_FILE = $licenseFile
 
-    # 4) run the PDS batch flow (-Wait is mandatory so ExitCode is reliable)
     $stdout = [System.IO.Path]::Combine($buildRoot, 'pds.stdout.log')
     $stderr = [System.IO.Path]::Combine($buildRoot, 'pds.stderr.log')
     $arguments = @('-file', ('"' + $scriptPath + '"'), '-work_dir', ('"' + $buildRoot + '"'), '-project_name', $projectName)
@@ -291,8 +222,6 @@ try {
         throw ("Build inputs changed during PDS; refusing publication: " + ($changedSources -join ', '))
     }
 
-    # 5) scan for tool errors; "SCBV has not been set" / Bitstream-2001 is a
-    #    known benign notice on boards without PCB SCBV data, not an error.
     $errorLines = @()
     foreach ($line in ($outputText -split "`r?`n")) {
         if ($line -match '^E:') {
@@ -306,10 +235,6 @@ try {
         throw 'PDS reported tool errors; inspect the build logs.'
     }
 
-    # 6) per-stage success check (six stages of design doc section 12.2).
-    #    The completion banner repeats the full command line ("Executing :
-    #    compile -system_verilog -top_module instrec_top successfully."),
-    #    so match the stage keyword followed by anything up to successfully.
     $stages = @('compile', 'synthesize', 'dev_map', 'pnr', 'report_timing', 'gen_bit_stream')
     $stageStatus = @()
     foreach ($stage in $stages) {
@@ -320,13 +245,12 @@ try {
     Write-Output '--- stage status ---'
     foreach ($s in $stageStatus) { Write-Output ("{0}: {1}" -f $s.Stage, $s.Status) }
 
-    # 7) verify the bitstream (fresh file + sha256, REQ-BLD-001)
     $bitstream = [System.IO.Path]::Combine($buildRoot, 'generate_bitstream', ($topModule + '.sbit'))
     $sbitHash = ''
     if ($StopAfter -eq '') {
         if (-not (Test-Path -LiteralPath $bitstream -PathType Leaf)) { throw "PDS did not produce the expected bitstream: $bitstream" }
         if ((Get-Item -LiteralPath $bitstream).LastWriteTimeUtc -lt $started.AddSeconds(-1)) { throw 'Bitstream is stale (older than this run).' }
-        # Get-FileHash is not available in every PS 5.1 installation; use .NET.
+
         $sha256 = [System.Security.Cryptography.SHA256]::Create()
         $shaStream = [System.IO.File]::OpenRead($bitstream)
         try {
@@ -339,10 +263,6 @@ try {
         Write-Output ("StopAfter={0}: no bitstream expected." -f $StopAfter)
     }
 
-    # 8) extract the post-PnR device utilization summary from the log.
-    #    The table splits FF/LUT rows per logic-array segment (CLMA/CLMS),
-    #    so FF/LUT are summed to the device totals; other key resources are
-    #    reported once (first occurrence wins).
     $lutUsed = 0; $lutAvail = 0; $ffUsed = 0; $ffAvail = 0
     $utilSummary = @()
     $seenNames = @()
@@ -369,10 +289,6 @@ try {
     Write-Output '--- device utilization (post-PnR) ---'
     if ($utilSummary.Count -gt 0) { $utilSummary | ForEach-Object { Write-Output $_ } } else { Write-Output '(utilization summary not found in log)' }
 
-    # 9) extract WNS/WHS from the post-PnR timing report (.rtr). The setup
-    #    table line ends with four numbers (WNS TNS failing total); the row
-    #    may carry the clock names on the same line or on preceding lines,
-    #    so anchor on the line ending and take the worst clock row.
     $wns = ''
     $whs = ''
     $rtrPath = [System.IO.Path]::Combine($buildRoot, 'report_timing', ($topModule + '.rtr'))
@@ -403,9 +319,6 @@ try {
     if ($wns -ne '') { Write-Output "WNS (setup, slow corner): $wns ns" } else { Write-Output 'WNS (setup, slow corner): not found' }
     if ($whs -ne '') { Write-Output "WHS (hold, slow corner): $whs ns" } else { Write-Output 'WHS (hold, slow corner): not found' }
 
-    # 10) archive logs to reports/ (timestamped) + stable bitstream copy.
-    #     "full" keeps the historical instrec-latest.* names; the other sets
-    #     write <TopModule>-latest.* so the three lines coexist in build/.
     if ($BuildSet -eq 'full') { $latestBase = 'instrec-latest' } else { $latestBase = $topModule + '-latest' }
     $reportsDir = [System.IO.Path]::Combine($project, 'reports')
     [void](New-Item -ItemType Directory -Path $reportsDir -Force)
@@ -418,7 +331,6 @@ try {
         Copy-Item -LiteralPath $bitstream -Destination ([System.IO.Path]::Combine($project, 'build', ($latestBase + '.sbit'))) -Force
     }
 
-    # 11) manifest (build provenance, REQ-BLD-001)
     $manifest = [ordered]@{
         Schema = 1
         BuildSet = $BuildSet

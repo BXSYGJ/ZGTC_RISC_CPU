@@ -1,5 +1,4 @@
-// npu_m1_bridge -- Frozen candidate; PDS and board validation pending.
-// Experimental transaction-level bridge; native command is held until done.
+// npu_m1_bridge.v
 module npu_m1_bridge (
     input wire clk, rst_n,
     input wire wgt_cmd_valid,
@@ -47,10 +46,7 @@ module npu_m1_bridge (
     assign wgt_done = state==WEIGHT && read_complete && !m1_abort;
     assign act_rd_data = m1_rdata;
     assign act_rd_valid = state==ACTIVATION && !cmd_q[36] && m1_rvalid && !m1_abort;
-    // The client data beat is accepted before the native command is issued.
-    // ACT_DATA is the bridge's one-beat staging buffer; waiting for native
-    // m1_wready here deadlocks because the controller cannot assert wready
-    // until it has first seen the activation command.
+
     assign act_wr_ready = state==ACT_DATA && !m1_abort;
     always @(posedge clk or negedge rst_n) begin
         if(!rst_n) begin

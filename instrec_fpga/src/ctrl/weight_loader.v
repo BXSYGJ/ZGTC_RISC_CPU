@@ -1,57 +1,27 @@
-// ---------------------------------------------------------------------------
-// weight_loader.v -- UART weight-image loader (T-M2-01, board side)
-//
-// Wire protocol (PC -> FPGA), every field little-endian:
-//   SOF0=0xAA SOF1=0x55 | seq[2] | len[2] | payload[len] | crc16[2]
-//   seq = 0xFFFF, len = 0 marks end-of-image.
-//   crc16 = CRC-16/CCITT-FALSE over seq, len and payload.
-//
-// Board -> PC:
-//   'K'  chunk accepted (CRC ok and seq == expected)
-//   'N'  chunk rejected (CRC error, seq mismatch or DDR3 write error)
-//   "WOK <8hex>\n" after the end frame; <8hex> is the 32-bit folding
-//   accumulator over every accepted payload word (weak image digest,
-//   design.md 6.4; the PC keeps the authoritative sha256).
-//
-// DDR3 side (master 1 of ddr3_ctrl_axi):
-//   One command per chunk, len = ceil(len/32)-1 (32 B per beat).
-//   cmd_valid is held until done, as the controller/arbiter contract
-//   requires. The payload is buffered per beat, so wdata is stable for
-//   the whole command and advances on every wready_beat pulse.
-//
-// Frame pacing: UART at 115200 gives ~10868 core_clk cycles per byte,
-// so both the CRC step and the DDR3 write fit between received bytes.
-// The loader stalls the PC by withholding 'K'.
-// ---------------------------------------------------------------------------
-
+// weight_loader.v
 module weight_loader #(
     parameter [27:0] BASE_ADDR = 28'd0
 ) (
     input  wire        clk,
     input  wire        rst_n,
 
-    // UART byte channel (from uart_rx)
     input  wire        rx_valid,
     input  wire [7:0]  rx_data,
 
-    // UART byte channel (to uart_tx; top level arbitrates with uart_debug)
     output reg         tx_valid,
     output reg  [7:0]  tx_data,
     input  wire        tx_ready,
 
-    // DDR3 master-1 write port
     output reg         cmd_valid,
     output reg  [36:0] cmd,
     output reg  [255:0] wdata,
     input  wire        wready_beat,
     input  wire        done,
 
-    // DDR3 master-1 read side (read-back verification, design.md 6.4)
     output reg         rd_ready,
     input  wire [255:0] rd_data,
     input  wire        rd_valid,
 
-    // status
     output reg         busy,
     output reg         weight_ok,
     output reg         weight_err,
@@ -97,14 +67,9 @@ module weight_loader #(
     reg [7:0]   tx_line [0:12];
     reg [3:0]   tx_pos;
 
-    // UART reply handshake to uart_tx (see the S_TX branch comment).
-    // tx_pend    : a one-cycle strobe was issued and its frame is not done yet
-    // tx_saw_low : the peer's ready has been seen low, i.e. the frame really
-    //              started; the byte is complete only once ready rises again
     reg         tx_pend;
     reg         tx_saw_low;
 
-    // CRC-16/CCITT-FALSE single byte step (combinational LUT tree).
     function [15:0] crc16_step;
         input [15:0] crc;
         input [7:0]  b;
@@ -128,15 +93,12 @@ module weight_loader #(
         end
     endfunction
 
-    // Payload beat read: beat index 0..7, 32 B each.
     wire [255:0] wdata_c = beat_buf[beat_idx[2:0]];
 
-    // Chunk geometry: beats = ceil(len/32), command length = beats-1.
     wire [8:0]  beat_num_c = {1'b0, len_rx[15:5]} + (|len_rx[4:0] ? 9'd1 : 9'd0);
     wire [7:0]  cmd_len_c  = beat_num_c[7:0] - 8'd1;
     wire [27:0] cmd_addr_c = BASE_ADDR + {4'd0, seq_rx, 8'd0};
 
-    // Folded digest reported in the WOK line.
     wire [31:0] digest_c = acc0 ^ acc1 ^ acc2 ^ acc3;
     wire [31:0] rdigest_c = racc0 ^ racc1 ^ racc2 ^ racc3;
     wire [15:0] rd_len_c = (rd_seq + 16'd1 == frame_cnt) ? last_len : 16'd256;
@@ -228,7 +190,7 @@ module weight_loader #(
                         crc_calc <= crc16_step(crc_calc, rx_data);
                         pay_idx  <= 16'd0;
                         if (rx_data == 8'd0 && len_rx[7:0] == 8'd0)
-                            state <= S_CRC0;      // end frame
+                            state <= S_CRC0;
                         else
                             state <= S_PAY;
                     end
@@ -264,8 +226,7 @@ module weight_loader #(
                         err_addr   <= cmd_addr_c;
                         state      <= S_NAK;
                     end else if (len_rx == 16'd0) begin
-                        // End frame: read the whole image back and compare
-                        // the folded digest before reporting WOK/WERR.
+
                         rd_seq <= 16'd0;
                         racc0  <= 32'd0;
                         racc1  <= 32'd0;
@@ -301,11 +262,10 @@ module weight_loader #(
                 end
 
                 S_ACK: begin
-                    // Single-byte reply 'K' with the same one-shot strobe and
-                    // full ready low/high handshake as S_TX (see that comment).
+
                     if (!tx_pend) begin
                         if (tx_ready) begin
-                            tx_data    <= 8'h4B;   // 'K'
+                            tx_data    <= 8'h4B;
                             tx_valid   <= 1'b1;
                             tx_pend    <= 1'b1;
                             tx_saw_low <= 1'b0;
@@ -320,10 +280,10 @@ module weight_loader #(
                 end
 
                 S_NAK: begin
-                    // Single-byte reply 'N', same handshake as S_ACK.
+
                     if (!tx_pend) begin
                         if (tx_ready) begin
-                            tx_data    <= 8'h4E;   // 'N'
+                            tx_data    <= 8'h4E;
                             tx_valid   <= 1'b1;
                             tx_pend    <= 1'b1;
                             tx_saw_low <= 1'b0;
@@ -364,14 +324,14 @@ module weight_loader #(
                 end
 
                 S_RD_CHK: begin
-                    tx_line[0] <= 8'h57;  // 'W'
-                    tx_line[1] <= 8'h4F;  // 'O'
-                    tx_line[2] <= 8'h4B;  // 'K'
-                    tx_line[3] <= 8'h20;  // ' '
+                    tx_line[0] <= 8'h57;
+                    tx_line[1] <= 8'h4F;
+                    tx_line[2] <= 8'h4B;
+                    tx_line[3] <= 8'h20;
                     if (rdigest_c != digest_c) begin
-                        tx_line[1] <= 8'h45;  // 'E'
-                        tx_line[2] <= 8'h52;  // 'R'
-                        tx_line[3] <= 8'h52;  // 'R'
+                        tx_line[1] <= 8'h45;
+                        tx_line[2] <= 8'h52;
+                        tx_line[3] <= 8'h52;
                         weight_err <= 1'b1;
                         err_addr   <= BASE_ADDR + {4'd0, rd_seq, 8'd0};
                     end else begin
@@ -385,7 +345,7 @@ module weight_loader #(
                     tx_line[9]  <= hex_ascii(rdigest_c[11:8]);
                     tx_line[10] <= hex_ascii(rdigest_c[7:4]);
                     tx_line[11] <= hex_ascii(rdigest_c[3:0]);
-                    tx_line[12] <= 8'h0A;  // newline
+                    tx_line[12] <= 8'h0A;
                     tx_pos      <= 4'd0;
                     state       <= S_END;
                 end
@@ -397,30 +357,16 @@ module weight_loader #(
                 end
 
                 S_TX: begin
-                    // One-shot strobe plus a full ready low-then-high period.
-                    //
-                    // uart_tx.byte_wready is a REGISTERED ~busy (uart_tx.v:72)
-                    // and a byte is taken only on !busy && wvalid && wready
-                    // (uart_tx.v:74-76), so ready still reads high on the cycle
-                    // AFTER an accept.  The old code held tx_valid high and
-                    // advanced tx_pos on every "tx_valid && tx_ready" cycle,
-                    // which stepped tx_pos on that extra ready cycle although
-                    // uart_tx never saw the byte: every other character was
-                    // dropped ("WOK 42851062" reached the PC as "WK4816",
-                    // which is why the board never saw a WOK reply).
-                    //
-                    // Now a strobe is presented for exactly one cycle, and the
-                    // byte counts as sent only after ready was seen LOW (frame
-                    // in flight) and then HIGH again (frame done).
+
                     if (!tx_pend) begin
                         if (tx_ready) begin
                             tx_data    <= tx_line[tx_pos];
-                            tx_valid   <= 1'b1;     // single-cycle strobe
+                            tx_valid   <= 1'b1;
                             tx_pend    <= 1'b1;
                             tx_saw_low <= 1'b0;
                         end
                     end else if (!tx_ready) begin
-                        tx_saw_low <= 1'b1;         // frame is being shifted out
+                        tx_saw_low <= 1'b1;
                     end else if (tx_saw_low) begin
                         tx_pend    <= 1'b0;
                         tx_saw_low <= 1'b0;

@@ -1,28 +1,11 @@
+// ms7200_ctl.v
 `timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company:Meyesemi 
-// Engineer: Will
-// 
-// Create Date: 2023-01-29 20:31  
-// Design Name:  
-// Module Name: 
-// Project Name: 
-// Target Devices: Pango
-// Tool Versions: 
-// Description: 
-//      
-// Dependencies: 
-// 
-// Revision:
-// Revision 1.0 - File Created
-// Additional Comments:
-// 
-//////////////////////////////////////////////////////////////////////////////////
+
 `define UD #1
 module ms7200_ctl(
     input               clk,
     input               rstn,
-                        
+
     output reg          init_over,
     output        [7:0] device_id,
     output reg          iic_trig ,
@@ -31,7 +14,7 @@ module ms7200_ctl(
     output reg   [ 7:0] data_in  ,
     input               busy     ,
     input        [ 7:0] data_out ,
-    input               byte_over 
+    input               byte_over
 );
     assign device_id = 8'h56;
 function [23:0] cmd_data;
@@ -337,13 +320,13 @@ input [9:0] index;
             9'd296 : cmd_data = {16'h2000, 8'h0F};
             9'd297 : cmd_data = {16'h2001, 8'h00};
             9'd298 : cmd_data = {16'h2002, 8'h00};
-            9'd299 : cmd_data = {16'h2003, 8'h01}; 
-            
+            9'd299 : cmd_data = {16'h2003, 8'h01};
+
             9'd300 : cmd_data = {16'h209C, 8'h00};
             9'd301 : cmd_data = {16'h209D, 8'h00};
             9'd302 : cmd_data = {16'h209E, 8'h00};
             9'd303 : cmd_data = {16'h209F, 8'h00};
-             
+
             9'd304 : cmd_data = {16'h1010, 8'h01};
             9'd305 : cmd_data = {16'h1024, 8'h00};
             9'd306 : cmd_data = {16'h0200, 8'h00};
@@ -351,12 +334,10 @@ input [9:0] index;
             9'd308 : cmd_data = {16'h0200, 8'h07};
             9'd309 : cmd_data = {16'h0215, 8'h01};
             9'd310 : cmd_data = {16'h0215, 8'h00};
-       endcase 
+       endcase
     end
 endfunction
-    //===========================================================================
-    //  MS7210 driver control FSM
-    //===========================================================================
+
     parameter    IDLE   = 7'b000_0001;
     parameter    CONECT = 7'b000_0010;
     parameter    INIT   = 7'b000_0100;
@@ -375,26 +356,22 @@ endfunction
 
     reg          busy_1d;
     wire         busy_falling;
-    
+
     assign busy_falling = ((~busy) & busy_1d);
     always @(posedge clk)
     begin
         busy_1d <= busy;
-        
-//        if(state_n ==STA_RD && dri_cnt == 9'd3 && byte_over)
-//        begin
+
             freq_rec_1d <= freq_rec;
-//        end
-        
+
         if(state_n ==STA_RD && dri_cnt == 9'd2 && busy_falling)
         begin
             freq_rec_2d <= freq_rec_1d;
         end
     end
-    
+
     reg freq_ensure/*synthesis PAP_MARK_DEBUG="true"*/;
-//    assign freq_ensure = (freq_rec_1d[17:16]==2'b00) && (freq_rec[17:16] == 2'b10);
-    
+
     always @(posedge clk)
     begin
     	if(!rstn)
@@ -406,8 +383,7 @@ endfunction
         else
             freq_ensure <= freq_ensure;
     end
-    //===========================================================================
-    //  MS7210 driver control FSM    First Step
+
     always @(posedge clk)
     begin
         if(!rstn)
@@ -415,47 +391,45 @@ endfunction
         else
             state <= state_n;
     end
-    
-    //===========================================================================
-    //  MS7210 driver control FSM    Second Step
+
     always @(*)
     begin
         state_n = state;
         case(state)
-            IDLE     : begin   //000_0001
+            IDLE     : begin
                 state_n = CONECT;
             end
-            CONECT   : begin   //000_0010
-                if(dri_cnt == 5'd1 && busy_falling && data_out == 8'h5A)//)//
+            CONECT   : begin
+                if(dri_cnt == 5'd1 && busy_falling && data_out == 8'h5A)
                     state_n = INIT;
                 else
                     state_n = state;
             end
-            INIT     : begin   //000_0100
+            INIT     : begin
                 if(dri_cnt == 9'd299 && busy_falling)
-                    state_n = STA_RD;//WAIT;
+                    state_n = STA_RD;
                 else
                     state_n = state;
             end
-            WAIT     : begin   //000_1000
-                if(delay_cnt == 24'h989680)//)//
-                    state_n = STA_RD;//RD_BAK;//SETING;//
+            WAIT     : begin
+                if(delay_cnt == 24'h989680)
+                    state_n = STA_RD;
                 else
                     state_n = state;
             end
-            STA_RD   : begin   //001_0000
-                if(dri_cnt == 9'd3 && busy_falling && freq_ensure)//freq_rec[15:0] > 16'h5000)
-                    state_n = SETING;//WAIT;//
+            STA_RD   : begin
+                if(dri_cnt == 9'd3 && busy_falling && freq_ensure)
+                    state_n = SETING;
                 else
                     state_n = state;
             end
-            SETING   : begin   //010_0000
+            SETING   : begin
                 if(dri_cnt == 5'd6 && busy_falling)
                     state_n = STA_RD;
                 else
                     state_n = state;
             end
-            RD_BAK     : begin   //100_0000
+            RD_BAK     : begin
                 if(dri_cnt == 9'd299 && busy_falling)
                     state_n = WAIT;
                 else
@@ -466,9 +440,7 @@ endfunction
             end
         endcase
     end
-    
-    //===========================================================================
-    //  MS7210 driver control FSM    Third Step
+
     always @(posedge clk)
     begin
         if(!rstn)
@@ -537,12 +509,12 @@ endfunction
             endcase
         end
     end
-    
+
     always @(posedge clk)
     begin
         if(state == WAIT)
         begin
-            if(delay_cnt == 24'h989680)//)//
+            if(delay_cnt == 24'h989680)
                 delay_cnt <= 22'd0;
             else
                 delay_cnt <= delay_cnt + 22'd1;
@@ -550,7 +522,7 @@ endfunction
         else
             delay_cnt <= 22'd0;
     end
-    
+
     always @(posedge clk)
     begin
         if(!rstn)
@@ -559,7 +531,7 @@ endfunction
         begin
             case(state)
                 IDLE     : iic_trig <= 1'b1;
-                WAIT     : iic_trig <= (delay_cnt == 24'h989680);//);//
+                WAIT     : iic_trig <= (delay_cnt == 24'h989680);
                 CONECT   ,
                 INIT     ,
                 SETING   ,
@@ -569,7 +541,7 @@ endfunction
             endcase
         end
     end
-    
+
     always @(posedge clk)
     begin
         if(!rstn)
@@ -593,7 +565,7 @@ endfunction
                         w_r <= w_r;
                 end
                 STA_RD   : begin
-                    if(dri_cnt == 9'd3 && busy_falling && freq_ensure)//freq_rec[15:0] > 16'h5000)
+                    if(dri_cnt == 9'd3 && busy_falling && freq_ensure)
                         w_r <= 1'b1;
                     else
                         w_r <= w_r;
@@ -610,7 +582,7 @@ endfunction
             endcase
         end
     end
-    
+
     always @(posedge clk)
     begin
         if(!rstn)
@@ -623,9 +595,7 @@ endfunction
                 INIT     : begin
                     if(byte_over)
                     begin
-//                    	if(dri_cnt == 9'd299)
-//                    	    cmd_index <= cmd_index - 4'd6;
-//                    	else
+
                             cmd_index <= cmd_index + 1'b1;
                     end
                     else
@@ -633,28 +603,19 @@ endfunction
                 end
                 WAIT     : cmd_index <= cmd_index;
                 RD_BAK   :begin
-//                    if(byte_over)
-//                        cmd_index <= cmd_index + 1'b1;
-//                    else
+
                         cmd_index <= cmd_index;
                 end
                 SETING   ,
                 STA_RD   : begin
-//                	if(byte_over)
-//                	begin
-//                		if(dri_cnt == 9'd3 && freq_rec[15:0] == 0)
-//                		    cmd_index <= cmd_index - 3'd3;
-//                		else
-//                            cmd_index <= cmd_index + 1'b1;
-//                    end
-//                    else
+
                         cmd_index <= cmd_index;
                 end
                 default  : cmd_index <= 6'd0;
             endcase
         end
     end
-    
+
     always @(posedge clk)
     begin
         if(!rstn)
@@ -686,7 +647,7 @@ endfunction
             endcase
         end
     end
-    
+
     reg [23:0] cmd_iic;
     always@(posedge clk)
 	begin
@@ -694,10 +655,10 @@ endfunction
 			cmd_iic <= 0;
 		else if(state == IDLE)
 			cmd_iic <= 24'd0;
-        else //if(state == WAIT || state == SETING)
+        else
             cmd_iic <= cmd_data(cmd_index);
 	end
-    
+
     always @(posedge clk)
     begin
         if(!rstn)

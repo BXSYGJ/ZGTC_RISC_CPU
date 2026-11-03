@@ -1,39 +1,9 @@
-// ---------------------------------------------------------------------------
-// pool_engine.v -- 2x2 stride-2 max pooling with floor semantics (T-M2-05)
-//
-// Bit truth: golden_pipeline.maxpool2x2_floor().
-//   out_w = w_in >> 1, out_h = h_in >> 1; an odd last column/row is never
-//   consumed (design.md 4.4, R-10). Max is channel-local.
-//
-// Geometry is a runtime input (cin / w_in / h_in), so one instance can serve
-// every pooling stage of the InstRec stack: the layer sequencer runs exactly
-// one layer at a time, so the four stages never overlap. The caller owns the
-// capacity contract below.
-//
-// Input stream (from conv_engine egress):
-//   one beat per cycle, order (row, grp, col, lane 0..15); one pixel carries
-//   16 consecutive lanes. lane/col/grp/row are derived by counting.
-//
-// Output stream (to the next conv_engine ingress):
-//   same (row, grp, col, lane) shape at half resolution. p_valid is high for
-//   the 16 lanes of one pooled pixel, in lane order, one beat after the
-//   second window column arrives.
-//
-// Storage: four synchronous line banks (row ping-pong x column parity),
-// each cin*out_w bytes. Splitting even/odd columns lets the window read
-// (c-1, c) of the previous row and (c-1) of the current row in the same
-// cycle with one read port per bank, which is what a DRM primitive offers.
-// The odd last column of an odd-width layer is never written or read.
-// ---------------------------------------------------------------------------
-
+// pool_engine.v
 module pool_engine (
     input  wire        clk,
     input  wire        rst_n,
     input  wire        layer_start,
 
-    // Runtime layer geometry. The arrays below are sized for the deepest
-    // stack layer (conv1, cin*out_w = 48*129 = 6192), so the caller must
-    // keep cin*out_w <= 2*SEG (8192) and cin a multiple of 16.
     input  wire [15:0] cin,
     input  wire [15:0] w_in,
     input  wire [15:0] h_in,
@@ -79,10 +49,7 @@ module pool_engine (
             endcase
         end
     end
-    // Block RAM is limited to 4096 words at 8-bit width, while a bank is
-    // cin*out_w (up to 6192 bytes). Split each bank into low/high halves and
-    // select by address bit 12; otherwise PDS falls back to distributed RAM
-    // (ram64x1d) and placement fails.
+
     localparam SEG = 4096;
     (* syn_ramstyle = "block_ram" *) reg [7:0] ev0_lo [0:SEG-1];
     (* syn_ramstyle = "block_ram" *) reg [7:0] ev0_hi [0:SEG-1];
@@ -98,26 +65,20 @@ module pool_engine (
     reg [7:0]  grp_cnt;
     reg [15:0] row_cnt;
 
-    // Runtime geometry (floor pooling drops an odd last column or row).
-    wire [15:0] out_w    = w_in >> 1;                  // pooled columns
-    wire [15:0] out_h    = h_in >> 1;                  // pooled rows
-    wire [15:0] col_last = (out_w << 1) - 16'd1;       // last consumed column
-    wire [15:0] row_last = (out_h << 1) - 16'd1;       // last consumed row
-    wire [15:0] col_all  = w_in - 16'd1;               // last column of a row
-    wire [15:0] grp_last = (cin >> 4) - 16'd1;         // last 16-channel group
+    wire [15:0] out_w    = w_in >> 1;
+    wire [15:0] out_h    = h_in >> 1;
+    wire [15:0] col_last = (out_w << 1) - 16'd1;
+    wire [15:0] row_last = (out_h << 1) - 16'd1;
+    wire [15:0] col_all  = w_in - 16'd1;
+    wire [15:0] grp_last = (cin >> 4) - 16'd1;
 
-    // Bank index = ch * out_w + col_half, with ch = grp*16 + lane. It is
-    // accumulated (+out_w per lane step) instead of multiplying at runtime;
-    // grp_base holds grp*16*out_w so that a column wrap can resume the scan
-    // without a multiplier.
     reg [15:0] idx;
     reg [15:0] grp_base;
-    wire [15:0] grp_step = out_w << 4;                 // 16 channels * out_w
+    wire [15:0] grp_step = out_w << 4;
 
     wire row_hi = row_cnt[0];
     wire col_hi = col_cnt[0];
 
-    // write the incoming pixel (only the columns kept by floor pooling)
     wire        wr_hi  = idx[12];
     wire [11:0] wr_off = idx[11:0];
 
@@ -147,9 +108,6 @@ module pool_engine (
         if (accept_y && !col_hi && (col_cnt <= col_last)) cur_prev[lane_cnt] <= y_u8;
     end
 
-    // Synchronous window read (DRM has a 1-cycle read latency):
-    // stage 1 registers the address, stage 2 captures the data, and the
-    // y/valid/last flags are delayed two beats to stay aligned.
     reg [15:0] rd_idx_q;
     reg        rd_row_hi_q;
     reg [7:0]  y_d1, y_d2;
@@ -158,9 +116,7 @@ module pool_engine (
     reg [3:0]  lane_d1, lane_d2;
 
     reg [7:0]  prev_even_q, prev_odd_q;
-    // Current row's (c-1) value per lane, latched on the even column. This
-    // removes the second read port on ev0/ev1, which otherwise makes PDS
-    // replicate the bank into distributed RAM.
+
     reg [7:0]  cur_prev [0:15];
 
     wire fire_c = accept_y && row_hi && col_hi && (col_cnt <= col_last);

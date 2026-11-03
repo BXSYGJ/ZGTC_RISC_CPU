@@ -1,6 +1,4 @@
-// dashboard_renderer: labeled instrument recognition dashboard.
-// Fixed 1080p dashboard. Graphics and text share a four-clock video latency.
-// External waveform/feature memories have a one-clock read latency.
+// dashboard_renderer.v
 module dashboard_renderer #(parameter SIMULATION = 0) (
     input wire pix_clk, rst_pix_n,
     input wire [10:0] pix_x, pix_y,
@@ -50,7 +48,7 @@ module dashboard_renderer #(parameter SIMULATION = 0) (
     reg [15:0] neg_magnitude;
     reg [23:0] heat;
     always @* begin
-        // Features are standardized unsigned bytes, not calibrated dB.
+
         if (spec_ram_data < 64) heat = {8'h16, (8'h24 + (spec_ram_data >> 1)), (8'h40 + spec_ram_data)};
         else if (spec_ram_data < 128) heat = {8'h18, (8'h44 + spec_ram_data), 8'h90};
         else if (spec_ram_data < 192) heat = {(spec_ram_data - 8'd96), 8'hd6, (8'hff - spec_ram_data)};

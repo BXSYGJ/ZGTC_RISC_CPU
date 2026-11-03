@@ -1,5 +1,5 @@
 build/
-reports/*.log
-scripts/outputs/*.npy
+reports/
 __pycache__/
 *.pyc
+!ipcore/

@@ -1,6 +1,4 @@
-// dashboard_text: labeled instrument recognition dashboard.
-// Tile and font ROMs use synchronous reads without payload resets.
-// Latency: tile lookup, glyph lookup, ink/color output (three clocks).
+// dashboard_text.v
 module dashboard_text #(parameter SIMULATION = 0) (
     input wire pix_clk, rst_pix_n,
     input wire [10:0] pix_x, pix_y,
@@ -30,8 +28,7 @@ module dashboard_text #(parameter SIMULATION = 0) (
     reg de_s1, de_s2, enabled;
     reg wave_s1, feature_s1, result_s1;
     reg [3:0] class_s1;
-    // Format all lanes before tile selection to shorten the tile-to-font path.
-    // This register replaces percentages_s1; video latency stays unchanged.
+
     reg [31:0] formatted_pct [0:7];
     integer pct_lane;
     function [31:0] format_percent;

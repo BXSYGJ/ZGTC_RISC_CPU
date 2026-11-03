@@ -1,5 +1,4 @@
-// activation_store_mux -- Frozen candidate; PDS and board validation pending.
-// Experimental two-client, one-outstanding abstract DDR mux.
+// activation_store_mux.v
 module activation_store_mux (
  input wire clk,rst_n,
  input wire s0_cmd_valid,s0_cmd_write,input wire[31:0]s0_cmd_addr,

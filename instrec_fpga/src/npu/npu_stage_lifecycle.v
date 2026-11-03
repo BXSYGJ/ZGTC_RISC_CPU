@@ -1,5 +1,4 @@
-// npu_stage_lifecycle -- Frozen candidate; PDS and board validation pending.
-// Experimental lifecycle helper. Clear at producer start; capture accepted last.
+// npu_stage_lifecycle.v
 module npu_stage_lifecycle (
     input wire clk, rst_n, inference_start,
     input wire [3:0] conv_start,

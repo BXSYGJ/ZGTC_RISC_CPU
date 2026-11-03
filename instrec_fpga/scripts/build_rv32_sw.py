@@ -1,21 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""build_rv32_sw.py - build the InstRec control-core firmware.
-
-The RV32 core in src/cpu/rv32_cpu_subsys.sv boots from an 8 KiB ROM that PDS
-initialises with $readmemh("src/cpu/prog.hex", ...).  This script produces that
-file from sw/rv32/{start.S,main.c}:
-
-    gcc (xPack riscv-none-elf, native Windows) -> prog.elf -> prog.bin -> prog.hex
-
-Toolchain lookup order (same convention as cpu/scripts/build_app.ps1):
-    $RV32_TOOLCHAIN  ->  H:/ST/RV32I  ->  D:/ST/RV32I
-A wrong-architecture compiler is a hard error; there is no silent fallback.
-
-Usage:
-    python scripts/build_rv32_sw.py             # RV32IM (ENABLE_M=1)
-    python scripts/build_rv32_sw.py --no-m      # RV32I  (ENABLE_M=0)
-"""
 from __future__ import annotations
 
 import argparse
@@ -25,12 +7,11 @@ import subprocess
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]          # instrec_fpga/
+ROOT = Path(__file__).resolve().parents[1]
 SW = ROOT / "sw" / "rv32"
 OUT = ROOT / "build" / "rv32_sw"
 HEX = ROOT / "src" / "cpu" / "prog.hex"
 ROM_BYTES = 8 * 1024
-
 
 def find_prefix() -> Path:
     candidates = []
@@ -44,7 +25,6 @@ def find_prefix() -> Path:
             return cand / "bin" / "riscv-none-elf-"
     raise SystemExit("no riscv-none-elf toolchain found (set RV32_TOOLCHAIN)")
 
-
 def run(cmd: list[str]) -> None:
     print("$ " + " ".join(str(c) for c in cmd))
     res = subprocess.run([str(c) for c in cmd], capture_output=True, text=True,
@@ -54,7 +34,6 @@ def run(cmd: list[str]) -> None:
     if res.returncode != 0:
         sys.stderr.write(res.stderr)
         raise SystemExit("command failed (exit %d)" % res.returncode)
-
 
 def main() -> int:
     ap = argparse.ArgumentParser()
@@ -97,7 +76,6 @@ def main() -> int:
 
     print("firmware: %d bytes, %d words -> %s" % (len(data), len(words), HEX))
     return 0
-
 
 if __name__ == "__main__":
     raise SystemExit(main())

@@ -1,15 +1,4 @@
-// ---------------------------------------------------------------------------
-// feat_copy_engine.v -- copy one Mel window into the display page (M3)
-//
-// Reads 16512 bytes (258 x 64) from mel_engine's feature port and writes
-// them into feat_page_buf. mel returns data one cycle after the address, so
-// the copy keeps a 1-beat pipeline: present addr N, write the data of N-1.
-// At the end the destination page flips.
-//
-// The mel feature port is shared with the NPU; the caller gates this engine
-// with npu_feat_rd_en (NPU priority). start only when the NPU is idle.
-// ---------------------------------------------------------------------------
-
+// feat_copy_engine.v
 module feat_copy_engine #(
     parameter integer SOURCE_FRAME_MAJOR = 0
 ) (
@@ -36,15 +25,12 @@ module feat_copy_engine #(
     reg [14:0] idx;
     reg [14:0] idx_q;
     reg        run;
-    reg        fin;       // last byte written; flip page on the next beat
+    reg        fin;
     reg        rd_pending;
     wire [14:0] display_addr = {idx_q[5:0], 8'd0} +
                               {8'd0, idx_q[5:0], 1'd0} +
                               {6'd0, idx_q[14:6]};
 
-    // The address is sampled by the shared synchronous RAM on this edge.
-    // Its response belongs to us on the following edge even if the NPU
-    // takes the port then. A stalled request is never marked as pending.
     always @* begin
         src_addr = (idx < DEPTH) ? idx : 15'd0;
         src_en = run && !busy_in && (idx < DEPTH);

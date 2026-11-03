@@ -1,61 +1,42 @@
+// iic_dri.v
 `timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company:Meyesemi 
-// Engineer: Will
-// 
-// Create Date: 2023-01-29 20:31  
-// Design Name:  
-// Module Name: 
-// Project Name: 
-// Target Devices: Pango
-// Tool Versions: 
-// Description: 
-//      
-// Dependencies: 
-// 
-// Revision:
-// Revision 1.0 - File Created
-// Additional Comments: 修改IIC状态机，第二段为组合逻辑，赋值应使用“=”，将“=”替换“<= `UD”
-//                       修改busy区间，由于iic_dri不能缓冲命令，应在接收一次触发后就进入busy状态，
-//                                修改语句：if(start_en)       busy <= `UD 1'b1;   
-//////////////////////////////////////////////////////////////////////////////////
+
 `define UD #1
 module iic_dri #(
-    parameter            CLK_FRE = 27'd50_000_000,  //system clock frequency
-    parameter            IIC_FREQ = 20'd400_000,    //I2c clock frequency
-    parameter            T_WR = 10'd5,              //I2c transmit delay ms
-    parameter            ADDR_BYTE = 2'd1,          //I2C addr byte number
-    parameter            LEN_WIDTH = 8'd3,          //I2C transmit byte width
-    parameter            DATA_BYTE = 2'd1           //I2C data byte number
-)(                       
+    parameter            CLK_FRE = 27'd50_000_000,
+    parameter            IIC_FREQ = 20'd400_000,
+    parameter            T_WR = 10'd5,
+    parameter            ADDR_BYTE = 2'd1,
+    parameter            LEN_WIDTH = 8'd3,
+    parameter            DATA_BYTE = 2'd1
+)(
     input                clk,
     input                rstn,
-    input                pluse,                     //I2C transmit trigger
-    input  [7:0]         device_id,                 //I2C divice id
-    input                w_r,                       //I2C transmit direction 1:send  0:receive
-    input  [LEN_WIDTH:0] byte_len,                  //I2C transmit data byte length of once trigger
-                    
-    input  [ADDR_BYTE*8 - 1:0]         addr,                      //I2C transmit addr
-    input  [7:0]         data_in,                   //I2C send data
-                         
-    output reg           busy=0,                    //I2C bus status
-    output reg           byte_over=0,               //I2C byte transmit over flag
-                         
-    output reg[7:0]      data_out,                  //I2C receive data
-                         
+    input                pluse,
+    input  [7:0]         device_id,
+    input                w_r,
+    input  [LEN_WIDTH:0] byte_len,
+
+    input  [ADDR_BYTE*8 - 1:0]         addr,
+    input  [7:0]         data_in,
+
+    output reg           busy=0,
+    output reg           byte_over=0,
+
+    output reg[7:0]      data_out,
+
     output               scl,
     input                sda_in,
     output   reg         sda_out=1'b1,
     output               sda_out_en
 );
 
-    localparam CLK_DIV = CLK_FRE/IIC_FREQ;  //计数器计数最大值，产生时钟用
-    localparam ID_ADDR_BYTE = ADDR_BYTE + 1'b1;//地址加deviceID字节数
-    localparam DATA_SET = CLK_DIV>>2;//输出data变化位置
+    localparam CLK_DIV = CLK_FRE/IIC_FREQ;
+    localparam ID_ADDR_BYTE = ADDR_BYTE + 1'b1;
+    localparam DATA_SET = CLK_DIV>>2;
     localparam T_WR_DELAY = T_WR*CLK_FRE/1000_000;
 
-    //  iic clock time counter
-    reg [20:0] fre_cnt;//=21'd0;
+    reg [20:0] fre_cnt;
     always @(posedge clk)
     begin
         if(!rstn)
@@ -65,19 +46,17 @@ module iic_dri #(
         else
             fre_cnt <= `UD fre_cnt + 1'b1;
     end
-    
+
     wire  full_cycle;
     wire  half_cycle;
-    assign full_cycle = (fre_cnt == CLK_DIV - 1'b1) ? 1'b1 : 1'b0;  //SCL上升沿：1个SCL周期位置
-    assign half_cycle = (fre_cnt == (CLK_DIV>>1'b1) - 1'b1) ? 1'b1 : 1'b0;//SCL下降沿：1/2个SCL周期位置
-    
+    assign full_cycle = (fre_cnt == CLK_DIV - 1'b1) ? 1'b1 : 1'b0;
+    assign half_cycle = (fre_cnt == (CLK_DIV>>1'b1) - 1'b1) ? 1'b1 : 1'b0;
+
     wire start_h;
     wire dsu;
-    assign start_h = (fre_cnt == DATA_SET - 1'b1) ? 1'b1 : 1'b0; //开始停止标志SDA翻转位置 ：1/4个SCL周期位置
-    assign dsu = (fre_cnt == (CLK_DIV>>1'b1) + DATA_SET - 1'b1) ? 1'b1 : 1'b0; //数据传输过程SDA变化位置：3/4个SCL周期位置
-    
-    //============================================================================
-    //pluse trige the iic bus transmit start
+    assign start_h = (fre_cnt == DATA_SET - 1'b1) ? 1'b1 : 1'b0;
+    assign dsu = (fre_cnt == (CLK_DIV>>1'b1) + DATA_SET - 1'b1) ? 1'b1 : 1'b0;
+
     wire   start;
     reg    start_en;
     reg    pluse_1d,pluse_2d,pluse_3d;
@@ -92,23 +71,23 @@ module iic_dri #(
         else
         begin
             pluse_1d <= `UD pluse   ;
-            pluse_2d <= `UD pluse_1d;//同步
-            pluse_3d <= `UD pluse_2d;//取边沿用
+            pluse_2d <= `UD pluse_1d;
+            pluse_3d <= `UD pluse_2d;
         end
     end
-    
+
     always @ (posedge clk)
     begin
-        if(start || (!rstn))//开始后开始使能信号拉低
+        if(start || (!rstn))
             start_en <= `UD 1'b0;
-        else if(~pluse_3d & pluse_2d)//上升沿
+        else if(~pluse_3d & pluse_2d)
             start_en <= `UD 1'b1;
         else
             start_en <= `UD start_en;
     end
-    
+
     assign start = (start_en & full_cycle) ? 1'b1 : 1'b0;
-    
+
     reg w_r_1d=1'b0,w_r_2d=1'b0;
     always @(posedge clk)
     begin
@@ -124,9 +103,6 @@ module iic_dri #(
         end
     end
 
-    //==========================================================================
-    //     IIC FSM STATE
-    //==========================================================================
     localparam IDLE   = 3'd0;
     localparam S_START= 3'd1;
     localparam SEND   = 3'd2;
@@ -137,7 +113,7 @@ module iic_dri #(
     reg [2:0] state;
     reg [2:0] state_n;
     reg [2:0] trans_bit = 3'd0;
-    
+
     reg [LEN_WIDTH :0] trans_byte = 5'd0;
     reg [LEN_WIDTH :0] trans_byte_max = 5'd0;
     reg       restart = 1'b0;
@@ -146,72 +122,54 @@ module iic_dri #(
     reg       trans_en=0;
     reg       trans_over=0;
     reg       scl_out= 1'b1/*synthesis PAP_MARK_DEBUG="true"*/;
-    
-//    assign sda = sda_out_en ? sda_out : 1'bz;
-//    assign sda_in = sda;
+
     assign scl = scl_out;
-    
-    //============================================================================
-    //transmit status
+
     always @ (posedge clk)
     begin
-        if(start)//传输操作开始标志
+        if(start)
             trans_en <= `UD 1'b1;
-        else if(state == STOP && start_h)//传输STOP标志输出完成
+        else if(state == STOP && start_h)
             trans_en <= `UD 1'b0;
         else
             trans_en <= `UD trans_en;
     end
-    
-//    always @(posedge clk)//冗余
-//    begin
-//        if(start)
-//            trans_over <= `UD 1'b0;
-//        else if(state == STOP && start_h)
-//            trans_over <= `UD 1'b1;
-//        else 
-//            trans_over <= `UD trans_over;
-//    end
-    
-    //===========================================================================
-    // IIC Bus status
+
     reg           twr_en=0;
     reg  [26:0]   twr_cnt=0;
     always @(posedge clk)
     begin
-        if(state == STOP && dsu)//STOP状态后开始延时
+        if(state == STOP && dsu)
             twr_en <= `UD 1'b1;
-        else if(twr_cnt == T_WR_DELAY)//延时满5ms
+        else if(twr_cnt == T_WR_DELAY)
             twr_en <= `UD 1'b0;
         else
-            twr_en <= `UD twr_en;    
+            twr_en <= `UD twr_en;
     end
-    
+
     always @(posedge clk)
     begin
         if(twr_en)
         begin
-            if(twr_cnt == T_WR_DELAY)//延时满5ms
+            if(twr_cnt == T_WR_DELAY)
                 twr_cnt <= `UD 1'b0;
             else
-                twr_cnt <= `UD twr_cnt + 1'b1; 
+                twr_cnt <= `UD twr_cnt + 1'b1;
         end
         else
             twr_cnt <= `UD twr_cnt;
     end
-    
+
     always @(posedge clk)
     begin
-        if(start_en)  //接收开始指令进入busy
+        if(start_en)
             busy <= `UD 1'b1;
-        else if(twr_cnt == T_WR_DELAY)//busy延时完成
+        else if(twr_cnt == T_WR_DELAY)
             busy <= `UD 1'b0;
         else
             busy <= `UD busy;
     end
-    
-    //============================================================================
-    //iic bus controller
+
     always @(posedge clk)
     begin
         if(trans_en)
@@ -224,19 +182,18 @@ module iic_dri #(
         else
             scl_out <= 1'b1;
     end
-    
+
     assign sda_out_en = ((state == S_ACK) || (state == RECEIV)) ? 1'b0 : 1'b1;
-    
-    //tx data control
+
     always @(posedge clk)
     begin
-        if(start)//开始传输时提前准备第一个设备ID+写标志
-            send_data <= `UD {device_id[7:1],1'b0};//{设备ID，读写标志}   传输高位在前
-        else if(state == S_ACK && full_cycle) //在SACK状态中取一个点提前准备数据
+        if(start)
+            send_data <= `UD {device_id[7:1],1'b0};
+        else if(state == S_ACK && full_cycle)
         begin
         	if(ADDR_BYTE == 2'd1)
         	begin
-                case(trans_byte)//传输内容变化
+                case(trans_byte)
                     5'd0 : send_data <= `UD {device_id[7:1],1'b0};
                     5'd1 : send_data <= `UD addr[7:0];
                     5'd2 : send_data <= `UD (w_r_2d) ? data_in : {device_id[7:1],1'b1};
@@ -245,7 +202,7 @@ module iic_dri #(
             end
             else
             begin
-            	case(trans_byte)//传输内容变化
+            	case(trans_byte)
                     5'd0 : send_data <= `UD {device_id[7:1],1'b0};
                     5'd1 : send_data <= `UD addr[ 7:0];
                     5'd2 : send_data <= `UD addr[15:8];
@@ -257,8 +214,7 @@ module iic_dri #(
         else
             send_data <= `UD send_data;
     end
-    
-    //transmit byte number,contain device ID，ADDR，DATA
+
     always @(posedge clk)
     begin
         if(start)
@@ -271,50 +227,49 @@ module iic_dri #(
         else
             trans_byte_max <= `UD trans_byte_max;
     end
-    
-    //sda out control
+
     always @(posedge clk)
     begin
         case(state)
-            IDLE  ://空闲状态
+            IDLE  :
             begin
                 sda_out <= `UD 1'b1;
             end
-            S_START ://开始状态
+            S_START :
             begin
-                if(start_h)//开始标志产生
+                if(start_h)
                     sda_out <= `UD 1'b0;
-                else if(dsu)//数据在SCL上升沿前发出
-                    sda_out <= `UD send_data[7-trans_bit];//高位先发
+                else if(dsu)
+                    sda_out <= `UD send_data[7-trans_bit];
                 else
                     sda_out <= `UD sda_out;
             end
             SEND  :
             begin
-                sda_out <= `UD send_data[7-trans_bit];//变化数据，高位先发
+                sda_out <= `UD send_data[7-trans_bit];
             end
             S_ACK :
             begin
-                if(trans_byte == ID_ADDR_BYTE && dsu && !w_r_2d)//读状态下地址传输完成，准备进入第二次S_START
+                if(trans_byte == ID_ADDR_BYTE && dsu && !w_r_2d)
                     sda_out <= `UD 1'b1;
                 else
                     sda_out <= `UD 1'h0;
             end
             R_ACK :
             begin
-                if(trans_byte < trans_byte_max)//继续读取回复ACK
+                if(trans_byte < trans_byte_max)
                     sda_out <= `UD 1'b0;
                 else
                 begin
-                    if(dsu)//反馈ACK结束，进入STOP状态，提前将SDA拉低
+                    if(dsu)
                         sda_out <= `UD 1'b0;
-                    else//反馈不再继续读，提示切换传输方向；
+                    else
                         sda_out <= `UD 1'b1;
                 end
             end
             STOP  :
             begin
-                if(start_h)//停止标志，
+                if(start_h)
                     sda_out <= `UD 1'b1;
                 else
                     sda_out <= `UD sda_out;
@@ -322,13 +277,12 @@ module iic_dri #(
             default: sda_out <= `UD 1'b1;
         endcase
     end
-    
-    // iic read data
+
     always @(posedge clk)
     begin
         if(state == RECEIV)
         begin
-            if(full_cycle)//上升沿位置接收输入数据
+            if(full_cycle)
                 receiv_data <= `UD {receiv_data[6:0],sda_in};
             else
                 receiv_data <= `UD receiv_data;
@@ -336,34 +290,33 @@ module iic_dri #(
         else
             receiv_data <= `UD 8'd0;
     end
-    
+
     always @(posedge clk)
     begin
-        if(state == RECEIV && trans_bit == 3'd7 && half_cycle)//接收1byte数据后，将数据传出
+        if(state == RECEIV && trans_bit == 3'd7 && half_cycle)
             data_out <= `UD receiv_data;
         else
             data_out <= `UD data_out;
     end
-    
-    //one byte data transmit over flag
+
     always @(posedge clk)
     begin
         if(w_r_2d)
         begin
-            if(trans_byte > ID_ADDR_BYTE - 1'b1 && dsu && trans_bit == 3'd7)//写地址完成后再传输字节进行标识
+            if(trans_byte > ID_ADDR_BYTE - 1'b1 && dsu && trans_bit == 3'd7)
                 byte_over <= `UD 1'b1;
             else
                 byte_over <= `UD 1'b0;
         end
         else
         begin
-            if(trans_byte > ID_ADDR_BYTE && dsu && trans_bit == 3'd7)//写完第二次ID后，再传输字节进行标识
+            if(trans_byte > ID_ADDR_BYTE && dsu && trans_bit == 3'd7)
                 byte_over <= `UD 1'b1;
             else
                 byte_over <= `UD 1'b0;
         end
     end
-    
+
     always @(posedge clk)
     begin
         if(state == SEND || state == RECEIV)
@@ -376,25 +329,22 @@ module iic_dri #(
         else
             trans_bit <= `UD 3'd0;
     end
-    
+
     always @(posedge clk)
     begin
-        if(start)//每次开始传输时清零byte计数
+        if(start)
             trans_byte <= `UD 5'd0;
-        else if(state == SEND || state == RECEIV)//读写状态需要计数
+        else if(state == SEND || state == RECEIV)
         begin
-            if(dsu && trans_bit == 3'd7)//传输满1byte时计数加1
+            if(dsu && trans_bit == 3'd7)
                 trans_byte <= `UD trans_byte + 1'b1;
-            else//其他时候保持状态
+            else
                 trans_byte <= `UD trans_byte;
         end
-        else//其他时候保持状态
+        else
             trans_byte <= `UD trans_byte;
     end
-    
-    //==========================================================================
-    //     IIC FSM STATE CHANGE
-    //==========================================================================
+
     always @(posedge clk)
     begin
         if(!rstn)
@@ -402,8 +352,7 @@ module iic_dri #(
         else
             state <= `UD state_n;
     end
-    
-    // next state set
+
     always @(*)
     begin
         state_n = state;
@@ -417,11 +366,8 @@ module iic_dri #(
             end
             S_START :
             begin
-//                if(full_cycle && trans_byte == 3'd0) //读写操作第一次
-//                    state_n = SEND;
-//                else if(!w_r_2d && trans_byte == ID_ADDR_BYTE && dsu)//读操作第二次
-//                    state_n = SEND;
-                if(dsu) 
+
+                if(dsu)
                     state_n = SEND;
                 else
                     state_n = state;
@@ -435,24 +381,24 @@ module iic_dri #(
             end
             S_ACK :
             begin
-                if(dsu)// & sda_in)
+                if(dsu)
                 begin
                     if(w_r_2d)
                     begin
-                        if(trans_byte < ID_ADDR_BYTE)//写入ID+ADDR
+                        if(trans_byte < ID_ADDR_BYTE)
                             state_n = SEND;
-                        else if(trans_byte < trans_byte_max)//写入数据
+                        else if(trans_byte < trans_byte_max)
                             state_n = SEND;
-                        else//写入数据完成
+                        else
                             state_n = STOP;
                     end
                     else
                     begin
-                        if(trans_byte < ID_ADDR_BYTE)//写入ID+ADDR
+                        if(trans_byte < ID_ADDR_BYTE)
                             state_n = SEND;
-                        else if(trans_byte == ID_ADDR_BYTE)//重新开始，写入ID和读标志位
+                        else if(trans_byte == ID_ADDR_BYTE)
                             state_n = S_START;
-                        else//进入读状态
+                        else
                             state_n = RECEIV;
                     end
                 end
@@ -488,8 +434,5 @@ module iic_dri #(
             default: state_n = IDLE;
         endcase
     end
-    
-    //===========================================================================
 
 endmodule
- 

@@ -1,5 +1,4 @@
-// npu_m1_owner -- Frozen candidate; PDS and board validation pending.
-// Candidate native transaction owner. Hold through done and FIFO delivery.
+// npu_m1_owner.v
 module npu_m1_owner(
  input wire clk,rst_n,loader_allowed,
  input wire l_valid,input wire[36:0]l_cmd,input wire[255:0]l_wdata,input wire l_rd_ready,
@@ -26,8 +25,7 @@ module npu_m1_owner(
  assign m_rd_ready=active && !fault && (owner?l_rd_ready:n_rd_ready);
  assign l_wready=active && !fault && owner && m_wready;
  assign l_rvalid=active && !fault && owner && m_rvalid && !m_abort;
- // Native timeout raises done before its sticky abort is observable.
- // Require registered done_seen so a failed write cannot acknowledge 'K'.
+
  assign l_done=active && !fault && owner && done_seen && complete && !loader_done_seen && !m_abort;
  assign n_wready=active && !fault && !owner && m_wready;
  assign n_rvalid=active && !fault && !owner && m_rvalid && !m_abort;

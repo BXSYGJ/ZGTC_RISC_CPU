@@ -1,4 +1,0 @@
-# Preserve generated PDS evidence byte for byte, including terminal whitespace.
-*.snr -text -whitespace
-*.dmr -text -whitespace
-apm_drm_lutram_utilization.txt -text -whitespace
