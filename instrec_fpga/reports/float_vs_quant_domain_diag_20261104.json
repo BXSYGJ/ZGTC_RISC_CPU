@@ -1,0 +1,2079 @@
+{
+  "report": "float_vs_quant_domain_diag_20261104",
+  "purpose": "2x2 {train-domain, golden-domain feature} x {float, quantized model} root-cause localization for the IRMAS constant-top1 collapse",
+  "determinism": {
+    "seed": 20261104,
+    "torch_threads": 1,
+    "mode": "eval + no_grad everywhere; dropout inactive; no random augmentation"
+  },
+  "environment": {
+    "python": "3.12.7",
+    "numpy": "2.1.2",
+    "torch": "2.14.1+cpu",
+    "librosa": "1.0.0"
+  },
+  "class_space": {
+    "deployed_model_space": "Medley-solos-DB 8-class",
+    "names": [
+      "clarinet",
+      "distorted electric guitar",
+      "female singer",
+      "flute",
+      "piano",
+      "tenor saxophone",
+      "trumpet",
+      "violin"
+    ],
+    "source": "layer_contract.json classes (asserted against InstRec/src/dataset.py INSTRUMENT_NAMES) and InstRec/deploy/class_names.json",
+    "npu_probe_misread_note": "reports/npu_probe_irmas_20261104.json labels top1=0 as 'piano' under an IRMAS-order table; in the deployed model space index 0 is 'clarinet' (class-table misread, does not change the constant-top1 symptom)",
+    "ground_truth_mapping": {
+      "clarinet": {
+        "idx": 0,
+        "match": "exact"
+      },
+      "flute": {
+        "idx": 3,
+        "match": "exact"
+      },
+      "guitar_acoustic": {
+        "idx": null,
+        "match": "no_class"
+      },
+      "guitar_electric": {
+        "idx": 1,
+        "match": "nearest"
+      },
+      "piano": {
+        "idx": 4,
+        "match": "exact"
+      },
+      "saxophone": {
+        "idx": 5,
+        "match": "family"
+      },
+      "trumpet": {
+        "idx": 6,
+        "match": "exact"
+      },
+      "violin": {
+        "idx": 7,
+        "match": "exact"
+      }
+    }
+  },
+  "feature_domains": {
+    "train": "InstRec/src/features.py extract_mel(wav): librosa.load(sr=44100, mono=True) full file -> melspectrogram n_fft=2048 hop=512 center=True reflect -> power_to_db(ref=max, top_db=80) -> keep-tail 258 -> per-sample z-norm",
+    "F0": "experiments/audio_frontend/frontend_variants.py F0: librosa.load(sr=48000) upsample 44.1k->48k -> soxr_hq resample back to 44.1k -> same spectrogram semantics",
+    "golden_z": "scripts/golden_pipeline.py load_pcm_s16 (integer downmix (L+R+1)>>1, truncate 132096 hardware window) + run_mel_pipeline fixed-point chain, z Q4.12 / 4096 float view",
+    "golden_u8": "same chain, QuantStub uint8 output (s_in=0.06266622, zp_in=49)"
+  },
+  "quant_input_contract": {
+    "description": "Mel -> int8 quantization contract (REQ-FTR-006): x_q = sat_u8(round_even(z * inv_s_in >> frac_bits) + zp_in)",
+    "s_in": 0.06266622245311737,
+    "zp_in": 49,
+    "dtype": "torch.quint8",
+    "inv_s_in": 267723430,
+    "inv_s_in_format": "Q8.24",
+    "inv_s_in_bits": 32
+  },
+  "golden_feat_reproduction_vs_npu_probe": {
+    "clarinet": {
+      "golden_feat_sha256": "11cbc39c4ef06857345391bf98a36609adf29fcf56c15e5459b478addf9f083c",
+      "npu_probe_sha256": "11cbc39c4ef06857345391bf98a36609adf29fcf56c15e5459b478addf9f083c",
+      "reproduces_npu_probe": true
+    },
+    "flute": {
+      "golden_feat_sha256": "51ed915da334bf8cfd01408f8b55dfe52c52c30c1b641d1e00eadf23053943cc",
+      "npu_probe_sha256": "51ed915da334bf8cfd01408f8b55dfe52c52c30c1b641d1e00eadf23053943cc",
+      "reproduces_npu_probe": true
+    },
+    "guitar_acoustic": {
+      "golden_feat_sha256": "ae4ce79fa10ddf61dc58540e0de17172585f7d2188d26b7b44324604a57d0428",
+      "npu_probe_sha256": "ae4ce79fa10ddf61dc58540e0de17172585f7d2188d26b7b44324604a57d0428",
+      "reproduces_npu_probe": true
+    },
+    "guitar_electric": {
+      "golden_feat_sha256": "407646782cf6a1666bc726239627eba4f4dc24d948c42306519970c3377ff7aa",
+      "npu_probe_sha256": "407646782cf6a1666bc726239627eba4f4dc24d948c42306519970c3377ff7aa",
+      "reproduces_npu_probe": true
+    },
+    "piano": {
+      "golden_feat_sha256": "c83d2202959da32b37b9f213187e89c6ef611f5fac11279533b898726e85fc4f",
+      "npu_probe_sha256": "c83d2202959da32b37b9f213187e89c6ef611f5fac11279533b898726e85fc4f",
+      "reproduces_npu_probe": true
+    },
+    "saxophone": {
+      "golden_feat_sha256": "0d5b2181549194e7c2344b102c19e73a6fcb707a019d49cd27141dc8eadac95d",
+      "npu_probe_sha256": "0d5b2181549194e7c2344b102c19e73a6fcb707a019d49cd27141dc8eadac95d",
+      "reproduces_npu_probe": true
+    },
+    "trumpet": {
+      "golden_feat_sha256": "e7839ecf0be6f61ce33e7cbd4bbdb441d20c3f7b89cf9c037cc234be3a392bbb",
+      "npu_probe_sha256": "e7839ecf0be6f61ce33e7cbd4bbdb441d20c3f7b89cf9c037cc234be3a392bbb",
+      "reproduces_npu_probe": true
+    },
+    "violin": {
+      "golden_feat_sha256": "44e62256df483f7bb98b257d54ffe5a6b5bcb2c8610ed9d6e1f5d3fd2e713351",
+      "npu_probe_sha256": "44e62256df483f7bb98b257d54ffe5a6b5bcb2c8610ed9d6e1f5d3fd2e713351",
+      "reproduces_npu_probe": true
+    }
+  },
+  "cells": {
+    "G1_train_float": {
+      "clarinet": {
+        "true_medley_idx": 0,
+        "true_medley_name": "clarinet",
+        "match_kind": "exact",
+        "top1": 4,
+        "top1_class": "piano",
+        "logits": [
+          -2.2165989875793457,
+          1.1976380348205566,
+          -2.4508063793182373,
+          1.8917230367660522,
+          3.8891360759735107,
+          -3.6400997638702393,
+          -5.125688552856445,
+          0.4912419617176056
+        ],
+        "top2_margin": 1.9974130392074585,
+        "top1_matches_true": false
+      },
+      "flute": {
+        "true_medley_idx": 3,
+        "true_medley_name": "flute",
+        "match_kind": "exact",
+        "top1": 4,
+        "top1_class": "piano",
+        "logits": [
+          -4.637805938720703,
+          -1.309641718864441,
+          1.5395420789718628,
+          -0.6629425287246704,
+          3.4944701194763184,
+          2.8931517601013184,
+          -9.024497985839844,
+          1.4326139688491821
+        ],
+        "top2_margin": 0.601318359375,
+        "top1_matches_true": false
+      },
+      "guitar_acoustic": {
+        "true_medley_idx": null,
+        "true_medley_name": null,
+        "match_kind": "no_class",
+        "top1": 1,
+        "top1_class": "distorted electric guitar",
+        "logits": [
+          -9.900005340576172,
+          7.454229354858398,
+          -0.8506953716278076,
+          -1.5930136442184448,
+          4.140148639678955,
+          -0.16121646761894226,
+          -6.304537773132324,
+          -0.5793607234954834
+        ],
+        "top2_margin": 3.3140807151794434,
+        "top1_matches_true": null
+      },
+      "guitar_electric": {
+        "true_medley_idx": 1,
+        "true_medley_name": "distorted electric guitar",
+        "match_kind": "nearest",
+        "top1": 1,
+        "top1_class": "distorted electric guitar",
+        "logits": [
+          -13.455011367797852,
+          10.31242561340332,
+          4.730568885803223,
+          -1.995330572128296,
+          0.5532492399215698,
+          -0.9804936647415161,
+          -6.942572593688965,
+          -0.9933713674545288
+        ],
+        "top2_margin": 5.581856727600098,
+        "top1_matches_true": true
+      },
+      "piano": {
+        "true_medley_idx": 4,
+        "true_medley_name": "piano",
+        "match_kind": "exact",
+        "top1": 4,
+        "top1_class": "piano",
+        "logits": [
+          -3.0898966789245605,
+          1.2407315969467163,
+          -2.698885202407837,
+          -3.1999504566192627,
+          8.110146522521973,
+          -0.9151867628097534,
+          -7.742355823516846,
+          0.3953571319580078
+        ],
+        "top2_margin": 6.869414806365967,
+        "top1_matches_true": true
+      },
+      "saxophone": {
+        "true_medley_idx": 5,
+        "true_medley_name": "tenor saxophone",
+        "match_kind": "family",
+        "top1": 1,
+        "top1_class": "distorted electric guitar",
+        "logits": [
+          -4.926253318786621,
+          3.3614935874938965,
+          0.40044835209846497,
+          0.26296019554138184,
+          1.7318543195724487,
+          -2.9122602939605713,
+          -5.340890884399414,
+          1.9714099168777466
+        ],
+        "top2_margin": 1.39008367061615,
+        "top1_matches_true": false
+      },
+      "trumpet": {
+        "true_medley_idx": 6,
+        "true_medley_name": "trumpet",
+        "match_kind": "exact",
+        "top1": 2,
+        "top1_class": "female singer",
+        "logits": [
+          -5.297596454620361,
+          0.029095441102981567,
+          6.483251571655273,
+          -0.7667281627655029,
+          0.9999260902404785,
+          1.6224981546401978,
+          -9.64702320098877,
+          0.2667177617549896
+        ],
+        "top2_margin": 4.860753536224365,
+        "top1_matches_true": false
+      },
+      "violin": {
+        "true_medley_idx": 7,
+        "true_medley_name": "violin",
+        "match_kind": "exact",
+        "top1": 1,
+        "top1_class": "distorted electric guitar",
+        "logits": [
+          -9.995368957519531,
+          7.072793006896973,
+          -2.9406747817993164,
+          -2.912477970123291,
+          4.9507646560668945,
+          0.6613262891769409,
+          -5.387320518493652,
+          0.08723857998847961
+        ],
+        "top2_margin": 2.122028350830078,
+        "top1_matches_true": false
+      }
+    },
+    "G2a_f0_float": {
+      "clarinet": {
+        "true_medley_idx": 0,
+        "true_medley_name": "clarinet",
+        "match_kind": "exact",
+        "top1": 4,
+        "top1_class": "piano",
+        "logits": [
+          -2.21891188621521,
+          1.194459080696106,
+          -2.447693109512329,
+          1.899826169013977,
+          3.8839221000671387,
+          -3.638523578643799,
+          -5.129375457763672,
+          0.49646395444869995
+        ],
+        "top2_margin": 1.9840959310531616,
+        "top1_matches_true": false
+      },
+      "flute": {
+        "true_medley_idx": 3,
+        "true_medley_name": "flute",
+        "match_kind": "exact",
+        "top1": 4,
+        "top1_class": "piano",
+        "logits": [
+          -4.6352434158325195,
+          -1.3136155605316162,
+          1.5356720685958862,
+          -0.6637669801712036,
+          3.4967494010925293,
+          2.895272731781006,
+          -9.02532958984375,
+          1.4342527389526367
+        ],
+        "top2_margin": 0.6014766693115234,
+        "top1_matches_true": false
+      },
+      "guitar_acoustic": {
+        "true_medley_idx": null,
+        "true_medley_name": null,
+        "match_kind": "no_class",
+        "top1": 1,
+        "top1_class": "distorted electric guitar",
+        "logits": [
+          -9.900388717651367,
+          7.455727577209473,
+          -0.8514225482940674,
+          -1.591780185699463,
+          4.140974998474121,
+          -0.1616171896457672,
+          -6.304844379425049,
+          -0.5803869962692261
+        ],
+        "top2_margin": 3.3147525787353516,
+        "top1_matches_true": null
+      },
+      "guitar_electric": {
+        "true_medley_idx": 1,
+        "true_medley_name": "distorted electric guitar",
+        "match_kind": "nearest",
+        "top1": 1,
+        "top1_class": "distorted electric guitar",
+        "logits": [
+          -13.47096061706543,
+          10.324310302734375,
+          4.734780788421631,
+          -2.0042080879211426,
+          0.5545230507850647,
+          -0.9774999618530273,
+          -6.945685386657715,
+          -0.9931867122650146
+        ],
+        "top2_margin": 5.589529514312744,
+        "top1_matches_true": true
+      },
+      "piano": {
+        "true_medley_idx": 4,
+        "true_medley_name": "piano",
+        "match_kind": "exact",
+        "top1": 4,
+        "top1_class": "piano",
+        "logits": [
+          -3.1001598834991455,
+          1.2497550249099731,
+          -2.692619562149048,
+          -3.1946518421173096,
+          8.104055404663086,
+          -0.9150588512420654,
+          -7.741733074188232,
+          0.39517393708229065
+        ],
+        "top2_margin": 6.854300498962402,
+        "top1_matches_true": true
+      },
+      "saxophone": {
+        "true_medley_idx": 5,
+        "true_medley_name": "tenor saxophone",
+        "match_kind": "family",
+        "top1": 1,
+        "top1_class": "distorted electric guitar",
+        "logits": [
+          -4.930919647216797,
+          3.3634936809539795,
+          0.4027303159236908,
+          0.2629450261592865,
+          1.7271966934204102,
+          -2.911926746368408,
+          -5.341259479522705,
+          1.9764339923858643
+        ],
+        "top2_margin": 1.3870596885681152,
+        "top1_matches_true": false
+      },
+      "trumpet": {
+        "true_medley_idx": 6,
+        "true_medley_name": "trumpet",
+        "match_kind": "exact",
+        "top1": 2,
+        "top1_class": "female singer",
+        "logits": [
+          -5.282877445220947,
+          0.0134676992893219,
+          6.481362342834473,
+          -0.7663484215736389,
+          1.0041813850402832,
+          1.623569369316101,
+          -9.652017593383789,
+          0.2693713903427124
+        ],
+        "top2_margin": 4.857792854309082,
+        "top1_matches_true": false
+      },
+      "violin": {
+        "true_medley_idx": 7,
+        "true_medley_name": "violin",
+        "match_kind": "exact",
+        "top1": 1,
+        "top1_class": "distorted electric guitar",
+        "logits": [
+          -9.996129989624023,
+          7.076922416687012,
+          -2.9470362663269043,
+          -2.909733295440674,
+          4.950813293457031,
+          0.6564192771911621,
+          -5.38184118270874,
+          0.08646833896636963
+        ],
+        "top2_margin": 2.1261091232299805,
+        "top1_matches_true": false
+      }
+    },
+    "G2b_goldenz_float": {
+      "clarinet": {
+        "true_medley_idx": 0,
+        "true_medley_name": "clarinet",
+        "match_kind": "exact",
+        "top1": 4,
+        "top1_class": "piano",
+        "logits": [
+          -2.141071319580078,
+          1.0811465978622437,
+          -2.4451725482940674,
+          1.9411678314208984,
+          3.8857250213623047,
+          -3.6422688961029053,
+          -5.175498008728027,
+          0.5366985201835632
+        ],
+        "top2_margin": 1.9445571899414062,
+        "top1_matches_true": false
+      },
+      "flute": {
+        "true_medley_idx": 3,
+        "true_medley_name": "flute",
+        "match_kind": "exact",
+        "top1": 4,
+        "top1_class": "piano",
+        "logits": [
+          -4.59349250793457,
+          -1.3425410985946655,
+          1.452829122543335,
+          -0.6470620632171631,
+          3.533024787902832,
+          2.873288631439209,
+          -9.003873825073242,
+          1.45260488986969
+        ],
+        "top2_margin": 0.659736156463623,
+        "top1_matches_true": false
+      },
+      "guitar_acoustic": {
+        "true_medley_idx": null,
+        "true_medley_name": null,
+        "match_kind": "no_class",
+        "top1": 1,
+        "top1_class": "distorted electric guitar",
+        "logits": [
+          -9.832913398742676,
+          7.409420490264893,
+          -0.9161708950996399,
+          -1.5625855922698975,
+          4.18225622177124,
+          -0.2012510597705841,
+          -6.289825916290283,
+          -0.5721131563186646
+        ],
+        "top2_margin": 3.2271642684936523,
+        "top1_matches_true": null
+      },
+      "guitar_electric": {
+        "true_medley_idx": 1,
+        "true_medley_name": "distorted electric guitar",
+        "match_kind": "nearest",
+        "top1": 1,
+        "top1_class": "distorted electric guitar",
+        "logits": [
+          -13.430609703063965,
+          10.318154335021973,
+          4.649741172790527,
+          -1.9597420692443848,
+          0.5757319927215576,
+          -1.010072112083435,
+          -6.90983247756958,
+          -0.981112003326416
+        ],
+        "top2_margin": 5.668413162231445,
+        "top1_matches_true": true
+      },
+      "piano": {
+        "true_medley_idx": 4,
+        "true_medley_name": "piano",
+        "match_kind": "exact",
+        "top1": 4,
+        "top1_class": "piano",
+        "logits": [
+          -3.0544936656951904,
+          1.2070127725601196,
+          -2.696233034133911,
+          -3.1754560470581055,
+          8.10754108428955,
+          -0.923637330532074,
+          -7.751307010650635,
+          0.3969156742095947
+        ],
+        "top2_margin": 6.900528430938721,
+        "top1_matches_true": true
+      },
+      "saxophone": {
+        "true_medley_idx": 5,
+        "true_medley_name": "tenor saxophone",
+        "match_kind": "family",
+        "top1": 1,
+        "top1_class": "distorted electric guitar",
+        "logits": [
+          -4.8642072677612305,
+          3.3284993171691895,
+          0.3206562399864197,
+          0.26514992117881775,
+          1.7633891105651855,
+          -2.946610927581787,
+          -5.309767246246338,
+          1.9817031621932983
+        ],
+        "top2_margin": 1.3467961549758911,
+        "top1_matches_true": false
+      },
+      "trumpet": {
+        "true_medley_idx": 6,
+        "true_medley_name": "trumpet",
+        "match_kind": "exact",
+        "top1": 2,
+        "top1_class": "female singer",
+        "logits": [
+          -5.232942581176758,
+          -0.003472059965133667,
+          6.397921085357666,
+          -0.7500479221343994,
+          1.0410467386245728,
+          1.6006706953048706,
+          -9.620368957519531,
+          0.28733736276626587
+        ],
+        "top2_margin": 4.797250270843506,
+        "top1_matches_true": false
+      },
+      "violin": {
+        "true_medley_idx": 7,
+        "true_medley_name": "violin",
+        "match_kind": "exact",
+        "top1": 1,
+        "top1_class": "distorted electric guitar",
+        "logits": [
+          -9.90114974975586,
+          7.006665229797363,
+          -3.061866521835327,
+          -2.8681106567382812,
+          5.02345609664917,
+          0.6017482876777649,
+          -5.376861095428467,
+          0.11072754859924316
+        ],
+        "top2_margin": 1.9832091331481934,
+        "top1_matches_true": false
+      }
+    },
+    "G2c_goldenu8deq_float": {
+      "clarinet": {
+        "true_medley_idx": 0,
+        "true_medley_name": "clarinet",
+        "match_kind": "exact",
+        "top1": 0,
+        "top1_class": "clarinet",
+        "logits": [
+          105.8985824584961,
+          -131.2538604736328,
+          -25.197980880737305,
+          21.99927520751953,
+          18.49205207824707,
+          -73.77448272705078,
+          -81.71379089355469,
+          59.768009185791016
+        ],
+        "top2_margin": 46.13057327270508,
+        "top1_matches_true": true
+      },
+      "flute": {
+        "true_medley_idx": 3,
+        "true_medley_name": "flute",
+        "match_kind": "exact",
+        "top1": 0,
+        "top1_class": "clarinet",
+        "logits": [
+          98.49288177490234,
+          -145.73133850097656,
+          -32.99359130859375,
+          19.91754722595215,
+          24.247934341430664,
+          -49.62069320678711,
+          -94.73358154296875,
+          71.78382873535156
+        ],
+        "top2_margin": 26.70905303955078,
+        "top1_matches_true": false
+      },
+      "guitar_acoustic": {
+        "true_medley_idx": null,
+        "true_medley_name": null,
+        "match_kind": "no_class",
+        "top1": 0,
+        "top1_class": "clarinet",
+        "logits": [
+          132.94793701171875,
+          -167.0113983154297,
+          -42.70927429199219,
+          10.087294578552246,
+          21.3664608001709,
+          -90.37300872802734,
+          -97.68915557861328,
+          91.20072174072266
+        ],
+        "top2_margin": 41.747215270996094,
+        "top1_matches_true": null
+      },
+      "guitar_electric": {
+        "true_medley_idx": 1,
+        "true_medley_name": "distorted electric guitar",
+        "match_kind": "nearest",
+        "top1": 0,
+        "top1_class": "clarinet",
+        "logits": [
+          120.39126586914062,
+          -155.994873046875,
+          -33.17088317871094,
+          15.690472602844238,
+          18.543405532836914,
+          -91.5842056274414,
+          -101.97759246826172,
+          91.77011108398438
+        ],
+        "top2_margin": 28.62115478515625,
+        "top1_matches_true": false
+      },
+      "piano": {
+        "true_medley_idx": 4,
+        "true_medley_name": "piano",
+        "match_kind": "exact",
+        "top1": 0,
+        "top1_class": "clarinet",
+        "logits": [
+          78.66962432861328,
+          -102.54801940917969,
+          -16.880109786987305,
+          21.511503219604492,
+          23.395944595336914,
+          -57.95384979248047,
+          -79.3010482788086,
+          47.89959716796875
+        ],
+        "top2_margin": 30.77002716064453,
+        "top1_matches_true": false
+      },
+      "saxophone": {
+        "true_medley_idx": 5,
+        "true_medley_name": "tenor saxophone",
+        "match_kind": "family",
+        "top1": 0,
+        "top1_class": "clarinet",
+        "logits": [
+          87.40515899658203,
+          -112.19818115234375,
+          -21.589967727661133,
+          21.884126663208008,
+          23.76003074645996,
+          -60.02739334106445,
+          -79.54695892333984,
+          50.04945373535156
+        ],
+        "top2_margin": 37.35570526123047,
+        "top1_matches_true": false
+      },
+      "trumpet": {
+        "true_medley_idx": 6,
+        "true_medley_name": "trumpet",
+        "match_kind": "exact",
+        "top1": 0,
+        "top1_class": "clarinet",
+        "logits": [
+          132.20269775390625,
+          -170.77127075195312,
+          -38.0416259765625,
+          12.978522300720215,
+          20.07626724243164,
+          -103.12237548828125,
+          -111.4250259399414,
+          104.4018325805664
+        ],
+        "top2_margin": 27.800865173339844,
+        "top1_matches_true": false
+      },
+      "violin": {
+        "true_medley_idx": 7,
+        "true_medley_name": "violin",
+        "match_kind": "exact",
+        "top1": 0,
+        "top1_class": "clarinet",
+        "logits": [
+          128.79290771484375,
+          -158.12344360351562,
+          -28.796234130859375,
+          22.50412368774414,
+          15.467427253723145,
+          -89.1574935913086,
+          -92.5561752319336,
+          74.27723693847656
+        ],
+        "top2_margin": 54.51567077636719,
+        "top1_matches_true": false
+      }
+    },
+    "G2d_goldenu8fixeddeq_float": {
+      "clarinet": {
+        "true_medley_idx": 0,
+        "true_medley_name": "clarinet",
+        "match_kind": "exact",
+        "top1": 4,
+        "top1_class": "piano",
+        "logits": [
+          -2.342738151550293,
+          1.1460896730422974,
+          -2.2512624263763428,
+          2.072896957397461,
+          3.7639241218566895,
+          -3.7129244804382324,
+          -5.367820739746094,
+          0.7259653806686401
+        ],
+        "top2_margin": 1.6910271644592285,
+        "top1_matches_true": false
+      },
+      "flute": {
+        "true_medley_idx": 3,
+        "true_medley_name": "flute",
+        "match_kind": "exact",
+        "top1": 4,
+        "top1_class": "piano",
+        "logits": [
+          -4.815098285675049,
+          -1.2050390243530273,
+          1.718504548072815,
+          -0.5588828325271606,
+          3.3656880855560303,
+          2.765613317489624,
+          -9.150243759155273,
+          1.5592846870422363
+        ],
+        "top2_margin": 0.6000747680664062,
+        "top1_matches_true": false
+      },
+      "guitar_acoustic": {
+        "true_medley_idx": null,
+        "true_medley_name": null,
+        "match_kind": "no_class",
+        "top1": 1,
+        "top1_class": "distorted electric guitar",
+        "logits": [
+          -10.038923263549805,
+          7.601995468139648,
+          -0.7913562655448914,
+          -1.4609700441360474,
+          4.074667930603027,
+          -0.42826563119888306,
+          -6.353701114654541,
+          -0.4679114520549774
+        ],
+        "top2_margin": 3.527327537536621,
+        "top1_matches_true": null
+      },
+      "guitar_electric": {
+        "true_medley_idx": 1,
+        "true_medley_name": "distorted electric guitar",
+        "match_kind": "nearest",
+        "top1": 1,
+        "top1_class": "distorted electric guitar",
+        "logits": [
+          -13.572154998779297,
+          10.449654579162598,
+          4.639713764190674,
+          -1.8582768440246582,
+          0.5603075623512268,
+          -1.1789135932922363,
+          -6.969157695770264,
+          -0.8939181566238403
+        ],
+        "top2_margin": 5.809940814971924,
+        "top1_matches_true": true
+      },
+      "piano": {
+        "true_medley_idx": 4,
+        "true_medley_name": "piano",
+        "match_kind": "exact",
+        "top1": 4,
+        "top1_class": "piano",
+        "logits": [
+          -3.2237091064453125,
+          1.3560669422149658,
+          -2.497112989425659,
+          -3.072110414505005,
+          7.987850666046143,
+          -1.0385466814041138,
+          -7.825811862945557,
+          0.47288039326667786
+        ],
+        "top2_margin": 6.631783485412598,
+        "top1_matches_true": true
+      },
+      "saxophone": {
+        "true_medley_idx": 5,
+        "true_medley_name": "tenor saxophone",
+        "match_kind": "family",
+        "top1": 1,
+        "top1_class": "distorted electric guitar",
+        "logits": [
+          -4.975722312927246,
+          3.335355281829834,
+          0.45398128032684326,
+          0.3517278730869293,
+          1.6860291957855225,
+          -3.036372423171997,
+          -5.4464311599731445,
+          2.108935832977295
+        ],
+        "top2_margin": 1.226419448852539,
+        "top1_matches_true": false
+      },
+      "trumpet": {
+        "true_medley_idx": 6,
+        "true_medley_name": "trumpet",
+        "match_kind": "exact",
+        "top1": 2,
+        "top1_class": "female singer",
+        "logits": [
+          -5.381424903869629,
+          0.10663774609565735,
+          6.415909767150879,
+          -0.6405320167541504,
+          1.0099198818206787,
+          1.4664134979248047,
+          -9.73369026184082,
+          0.47885069251060486
+        ],
+        "top2_margin": 4.949496269226074,
+        "top1_matches_true": false
+      },
+      "violin": {
+        "true_medley_idx": 7,
+        "true_medley_name": "violin",
+        "match_kind": "exact",
+        "top1": 1,
+        "top1_class": "distorted electric guitar",
+        "logits": [
+          -10.165019989013672,
+          7.182351112365723,
+          -2.8186848163604736,
+          -2.7880988121032715,
+          4.846086502075195,
+          0.5280492305755615,
+          -5.495543003082275,
+          0.18868213891983032
+        ],
+        "top2_margin": 2.3362646102905273,
+        "top1_matches_true": false
+      }
+    },
+    "G3_train_quant": {
+      "clarinet": {
+        "true_medley_idx": 0,
+        "true_medley_name": "clarinet",
+        "match_kind": "exact",
+        "top1": 4,
+        "top1_class": "piano",
+        "logits": [
+          -2.52616548538208,
+          1.4034253358840942,
+          -2.245480537414551,
+          1.964795470237732,
+          3.929590940475464,
+          -3.6489057540893555,
+          -5.333016395568848,
+          0.5613701343536377
+        ],
+        "top2_margin": 1.964795470237732,
+        "top1_matches_true": false,
+        "crosscheck_chained_top1": 4,
+        "crosscheck_abs_max": 0.0
+      },
+      "flute": {
+        "true_medley_idx": 3,
+        "true_medley_name": "flute",
+        "match_kind": "exact",
+        "top1": 4,
+        "top1_class": "piano",
+        "logits": [
+          -4.771646022796631,
+          -1.1227402687072754,
+          1.684110403060913,
+          -0.5613701343536377,
+          3.368220806121826,
+          2.8068506717681885,
+          -9.26260757446289,
+          1.4034253358840942
+        ],
+        "top2_margin": 0.5613701343536377,
+        "top1_matches_true": false,
+        "crosscheck_chained_top1": 4,
+        "crosscheck_abs_max": 0.0
+      },
+      "guitar_acoustic": {
+        "true_medley_idx": null,
+        "true_medley_name": null,
+        "match_kind": "no_class",
+        "top1": 1,
+        "top1_class": "distorted electric guitar",
+        "logits": [
+          -10.10466194152832,
+          7.859181880950928,
+          -0.5613701343536377,
+          -1.684110403060913,
+          3.929590940475464,
+          -0.28068506717681885,
+          -6.455756664276123,
+          -0.5613701343536377
+        ],
+        "top2_margin": 3.929590940475464,
+        "top1_matches_true": null,
+        "crosscheck_chained_top1": 1,
+        "crosscheck_abs_max": 0.0
+      },
+      "guitar_electric": {
+        "true_medley_idx": 1,
+        "true_medley_name": "distorted electric guitar",
+        "match_kind": "nearest",
+        "top1": 1,
+        "top1_class": "distorted electric guitar",
+        "logits": [
+          -13.753568649291992,
+          10.385347366333008,
+          4.771646022796631,
+          -1.964795470237732,
+          0.5613701343536377,
+          -1.1227402687072754,
+          -7.017126560211182,
+          -0.8420552015304565
+        ],
+        "top2_margin": 5.613701343536377,
+        "top1_matches_true": true,
+        "crosscheck_chained_top1": 1,
+        "crosscheck_abs_max": 0.0
+      },
+      "piano": {
+        "true_medley_idx": 4,
+        "true_medley_name": "piano",
+        "match_kind": "exact",
+        "top1": 4,
+        "top1_class": "piano",
+        "logits": [
+          -3.368220806121826,
+          1.4034253358840942,
+          -2.52616548538208,
+          -3.087535858154297,
+          8.139866828918457,
+          -0.8420552015304565,
+          -7.859181880950928,
+          0.28068506717681885
+        ],
+        "top2_margin": 6.736441612243652,
+        "top1_matches_true": true,
+        "crosscheck_chained_top1": 4,
+        "crosscheck_abs_max": 0.0
+      },
+      "saxophone": {
+        "true_medley_idx": 5,
+        "true_medley_name": "tenor saxophone",
+        "match_kind": "family",
+        "top1": 1,
+        "top1_class": "distorted electric guitar",
+        "logits": [
+          -5.05233097076416,
+          3.368220806121826,
+          0.5613701343536377,
+          0.28068506717681885,
+          1.684110403060913,
+          -3.087535858154297,
+          -5.333016395568848,
+          1.964795470237732
+        ],
+        "top2_margin": 1.4034253358840942,
+        "top1_matches_true": false,
+        "crosscheck_chained_top1": 1,
+        "crosscheck_abs_max": 0.0
+      },
+      "trumpet": {
+        "true_medley_idx": 6,
+        "true_medley_name": "trumpet",
+        "match_kind": "exact",
+        "top1": 2,
+        "top1_class": "female singer",
+        "logits": [
+          -5.613701343536377,
+          0.28068506717681885,
+          6.736441612243652,
+          -0.8420552015304565,
+          0.8420552015304565,
+          1.4034253358840942,
+          -9.82397747039795,
+          0.5613701343536377
+        ],
+        "top2_margin": 5.333016395568848,
+        "top1_matches_true": false,
+        "crosscheck_chained_top1": 2,
+        "crosscheck_abs_max": 0.0
+      },
+      "violin": {
+        "true_medley_idx": 7,
+        "true_medley_name": "violin",
+        "match_kind": "exact",
+        "top1": 1,
+        "top1_class": "distorted electric guitar",
+        "logits": [
+          -10.385347366333008,
+          7.297811508178711,
+          -2.8068506717681885,
+          -3.087535858154297,
+          4.771646022796631,
+          0.5613701343536377,
+          -5.613701343536377,
+          0.0
+        ],
+        "top2_margin": 2.52616548538208,
+        "top1_matches_true": false,
+        "crosscheck_chained_top1": 1,
+        "crosscheck_abs_max": 0.0
+      }
+    },
+    "G4_golden_quant_torch": {
+      "clarinet": {
+        "true_medley_idx": 0,
+        "true_medley_name": "clarinet",
+        "match_kind": "exact",
+        "top1": 0,
+        "top1_class": "clarinet",
+        "logits": [
+          47.15509033203125,
+          -15.999049186706543,
+          -7.017126560211182,
+          3.087535858154297,
+          4.210276126861572,
+          -15.999049186706543,
+          -15.999049186706543,
+          19.36726951599121
+        ],
+        "top2_margin": 27.78782081604004,
+        "top1_matches_true": true,
+        "npu_probe_top1_golden": 0,
+        "npu_probe_top1_rtl": 0,
+        "torch_top1_agrees_npu_probe": true
+      },
+      "flute": {
+        "true_medley_idx": 3,
+        "true_medley_name": "flute",
+        "match_kind": "exact",
+        "top1": 0,
+        "top1_class": "clarinet",
+        "logits": [
+          36.769744873046875,
+          -15.999049186706543,
+          -9.543292045593262,
+          -0.28068506717681885,
+          2.52616548538208,
+          -13.192197799682617,
+          -15.999049186706543,
+          25.542341232299805
+        ],
+        "top2_margin": 11.22740364074707,
+        "top1_matches_true": false,
+        "npu_probe_top1_golden": 0,
+        "npu_probe_top1_rtl": 0,
+        "torch_top1_agrees_npu_probe": true
+      },
+      "guitar_acoustic": {
+        "true_medley_idx": null,
+        "true_medley_name": null,
+        "match_kind": "no_class",
+        "top1": 0,
+        "top1_class": "clarinet",
+        "logits": [
+          46.593719482421875,
+          -15.999049186706543,
+          -9.543292045593262,
+          -1.4034253358840942,
+          1.1227402687072754,
+          -15.999049186706543,
+          -15.999049186706543,
+          23.296859741210938
+        ],
+        "top2_margin": 23.296859741210938,
+        "top1_matches_true": null,
+        "npu_probe_top1_golden": 0,
+        "npu_probe_top1_rtl": 0,
+        "torch_top1_agrees_npu_probe": true
+      },
+      "guitar_electric": {
+        "true_medley_idx": 1,
+        "true_medley_name": "distorted electric guitar",
+        "match_kind": "nearest",
+        "top1": 0,
+        "top1_class": "clarinet",
+        "logits": [
+          42.94481658935547,
+          -15.999049186706543,
+          -8.420552253723145,
+          -0.5613701343536377,
+          1.1227402687072754,
+          -15.999049186706543,
+          -15.999049186706543,
+          26.384395599365234
+        ],
+        "top2_margin": 16.560420989990234,
+        "top1_matches_true": false,
+        "npu_probe_top1_golden": 0,
+        "npu_probe_top1_rtl": 0,
+        "torch_top1_agrees_npu_probe": true
+      },
+      "piano": {
+        "true_medley_idx": 4,
+        "true_medley_name": "piano",
+        "match_kind": "exact",
+        "top1": 0,
+        "top1_class": "clarinet",
+        "logits": [
+          38.73453903198242,
+          -15.999049186706543,
+          -8.420552253723145,
+          4.771646022796631,
+          10.946717262268066,
+          -15.999049186706543,
+          -15.999049186706543,
+          17.40247344970703
+        ],
+        "top2_margin": 21.33206558227539,
+        "top1_matches_true": false,
+        "npu_probe_top1_golden": 0,
+        "npu_probe_top1_rtl": 0,
+        "torch_top1_agrees_npu_probe": true
+      },
+      "saxophone": {
+        "true_medley_idx": 5,
+        "true_medley_name": "tenor saxophone",
+        "match_kind": "family",
+        "top1": 0,
+        "top1_class": "clarinet",
+        "logits": [
+          40.980018615722656,
+          -15.999049186706543,
+          -9.26260757446289,
+          5.05233097076416,
+          8.981922149658203,
+          -15.999049186706543,
+          -15.999049186706543,
+          17.40247344970703
+        ],
+        "top2_margin": 23.577545166015625,
+        "top1_matches_true": false,
+        "npu_probe_top1_golden": 0,
+        "npu_probe_top1_rtl": 0,
+        "torch_top1_agrees_npu_probe": true
+      },
+      "trumpet": {
+        "true_medley_idx": 6,
+        "true_medley_name": "trumpet",
+        "match_kind": "exact",
+        "top1": 0,
+        "top1_class": "clarinet",
+        "logits": [
+          43.50618362426758,
+          -15.999049186706543,
+          -6.175071716308594,
+          -1.964795470237732,
+          1.4034253358840942,
+          -15.999049186706543,
+          -15.999049186706543,
+          27.78782081604004
+        ],
+        "top2_margin": 15.718362808227539,
+        "top1_matches_true": false,
+        "npu_probe_top1_golden": 0,
+        "npu_probe_top1_rtl": 0,
+        "torch_top1_agrees_npu_probe": true
+      },
+      "violin": {
+        "true_medley_idx": 7,
+        "true_medley_name": "violin",
+        "match_kind": "exact",
+        "top1": 0,
+        "top1_class": "clarinet",
+        "logits": [
+          48.27783203125,
+          -15.999049186706543,
+          -6.455756664276123,
+          1.964795470237732,
+          0.5613701343536377,
+          -15.999049186706543,
+          -15.999049186706543,
+          21.051380157470703
+        ],
+        "top2_margin": 27.226451873779297,
+        "top1_matches_true": false,
+        "npu_probe_top1_golden": 0,
+        "npu_probe_top1_rtl": 0,
+        "torch_top1_agrees_npu_probe": true
+      }
+    },
+    "G4b_golden_quant_fixed": {
+      "clarinet": {
+        "true_medley_idx": 0,
+        "true_medley_name": "clarinet",
+        "match_kind": "exact",
+        "top1": 4,
+        "top1_class": "piano",
+        "logits": [
+          -2.52616548538208,
+          1.4034253358840942,
+          -2.245480537414551,
+          1.964795470237732,
+          3.929590940475464,
+          -3.6489057540893555,
+          -5.333016395568848,
+          0.8420552015304565
+        ],
+        "top2_margin": 1.964795470237732,
+        "top1_matches_true": false
+      },
+      "flute": {
+        "true_medley_idx": 3,
+        "true_medley_name": "flute",
+        "match_kind": "exact",
+        "top1": 4,
+        "top1_class": "piano",
+        "logits": [
+          -4.771646022796631,
+          -1.1227402687072754,
+          1.684110403060913,
+          -0.5613701343536377,
+          3.368220806121826,
+          2.8068506717681885,
+          -9.26260757446289,
+          1.684110403060913
+        ],
+        "top2_margin": 0.5613701343536377,
+        "top1_matches_true": false
+      },
+      "guitar_acoustic": {
+        "true_medley_idx": null,
+        "true_medley_name": null,
+        "match_kind": "no_class",
+        "top1": 1,
+        "top1_class": "distorted electric guitar",
+        "logits": [
+          -10.10466194152832,
+          7.578496932983398,
+          -0.8420552015304565,
+          -1.684110403060913,
+          3.929590940475464,
+          -0.28068506717681885,
+          -6.455756664276123,
+          -0.28068506717681885
+        ],
+        "top2_margin": 3.6489059925079346,
+        "top1_matches_true": null
+      },
+      "guitar_electric": {
+        "true_medley_idx": 1,
+        "true_medley_name": "distorted electric guitar",
+        "match_kind": "nearest",
+        "top1": 1,
+        "top1_class": "distorted electric guitar",
+        "logits": [
+          -13.472883224487305,
+          10.385347366333008,
+          4.771646022796631,
+          -1.964795470237732,
+          0.5613701343536377,
+          -1.1227402687072754,
+          -7.017126560211182,
+          -0.8420552015304565
+        ],
+        "top2_margin": 5.613701343536377,
+        "top1_matches_true": true
+      },
+      "piano": {
+        "true_medley_idx": 4,
+        "true_medley_name": "piano",
+        "match_kind": "exact",
+        "top1": 4,
+        "top1_class": "piano",
+        "logits": [
+          -3.368220806121826,
+          1.4034253358840942,
+          -2.52616548538208,
+          -3.087535858154297,
+          8.139866828918457,
+          -1.1227402687072754,
+          -7.578496932983398,
+          0.28068506717681885
+        ],
+        "top2_margin": 6.736441612243652,
+        "top1_matches_true": true
+      },
+      "saxophone": {
+        "true_medley_idx": 5,
+        "true_medley_name": "tenor saxophone",
+        "match_kind": "family",
+        "top1": 1,
+        "top1_class": "distorted electric guitar",
+        "logits": [
+          -5.05233097076416,
+          3.368220806121826,
+          0.28068506717681885,
+          0.28068506717681885,
+          1.684110403060913,
+          -3.087535858154297,
+          -5.333016395568848,
+          1.964795470237732
+        ],
+        "top2_margin": 1.4034253358840942,
+        "top1_matches_true": false
+      },
+      "trumpet": {
+        "true_medley_idx": 6,
+        "true_medley_name": "trumpet",
+        "match_kind": "exact",
+        "top1": 2,
+        "top1_class": "female singer",
+        "logits": [
+          -5.333016395568848,
+          0.28068506717681885,
+          6.455756664276123,
+          -0.5613701343536377,
+          1.1227402687072754,
+          1.4034253358840942,
+          -9.82397747039795,
+          0.5613701343536377
+        ],
+        "top2_margin": 5.052331447601318,
+        "top1_matches_true": false
+      },
+      "violin": {
+        "true_medley_idx": 7,
+        "true_medley_name": "violin",
+        "match_kind": "exact",
+        "top1": 1,
+        "top1_class": "distorted electric guitar",
+        "logits": [
+          -10.385347366333008,
+          7.297811508178711,
+          -2.8068506717681885,
+          -3.087535858154297,
+          4.771646022796631,
+          0.5613701343536377,
+          -5.613701343536377,
+          0.0
+        ],
+        "top2_margin": 2.52616548538208,
+        "top1_matches_true": false
+      }
+    }
+  },
+  "feature_diffs": {
+    "clarinet": {
+      "train_vs_f0": {
+        "abs_mean": 0.0037388073540744545,
+        "abs_max": 1.0419055670499802,
+        "l2": 4.607014422605853
+      },
+      "train_vs_golden_z": {
+        "abs_mean": 0.006127874950267554,
+        "abs_max": 0.9941718578338623,
+        "l2": 2.044757375878523
+      },
+      "golden_z_vs_u8deq": {
+        "abs_mean": 7.284942972221116,
+        "abs_max": 12.905823707580566,
+        "l2": 1133.2437205833055
+      },
+      "train_vs_u8deq": {
+        "abs_mean": 7.286078356120583,
+        "abs_max": 13.022962711751461,
+        "l2": 1133.3560165481304
+      },
+      "golden_z_vs_u8fixeddeq": {
+        "abs_mean": 0.013559537932507752,
+        "abs_max": 0.03132791817188263,
+        "l2": 2.0944245627605524
+      },
+      "input_quant_saturation": {
+        "n_elements": 16512,
+        "buggy_u8_eq0_pct": 48.2437015503876,
+        "buggy_u8_eq255_pct": 51.64123062015504,
+        "buggy_u8_extreme_pct": 99.88493217054264,
+        "fixed_u8_eq0_pct": 0.0,
+        "fixed_u8_eq255_pct": 0.0,
+        "fixed_matches_frontend_quant": true
+      },
+      "z_train_stats": {
+        "min": -1.2540714740753174,
+        "max": 2.4695351123809814,
+        "mean": 7.947286206899662e-08,
+        "std": 0.9999998807907104
+      },
+      "f0_frames_raw": 259,
+      "f0_frame_action": "keep_tail_258_of_259",
+      "pcm_samples": 132096
+    },
+    "flute": {
+      "train_vs_f0": {
+        "abs_mean": 0.0007492563008694293,
+        "abs_max": 0.7930527925491333,
+        "l2": 1.4973965867466847
+      },
+      "train_vs_golden_z": {
+        "abs_mean": 0.00377964205313368,
+        "abs_max": 0.762750506401062,
+        "l2": 1.7155425735210592
+      },
+      "golden_z_vs_u8deq": {
+        "abs_mean": 6.811541950445651,
+        "abs_max": 12.906067848205566,
+        "l2": 1076.7549764243722
+      },
+      "train_vs_u8deq": {
+        "abs_mean": 6.811198388406555,
+        "abs_max": 13.138012498617172,
+        "l2": 1076.7250371713596
+      },
+      "golden_z_vs_u8fixeddeq": {
+        "abs_mean": 0.016707454642006594,
+        "abs_max": 0.03132271766662598,
+        "l2": 2.4566042947112265
+      },
+      "input_quant_saturation": {
+        "n_elements": 16512,
+        "buggy_u8_eq0_pct": 53.16133720930233,
+        "buggy_u8_eq255_pct": 46.72359496124031,
+        "buggy_u8_extreme_pct": 99.88493217054264,
+        "fixed_u8_eq0_pct": 0.0,
+        "fixed_u8_eq255_pct": 0.0,
+        "fixed_matches_frontend_quant": true
+      },
+      "z_train_stats": {
+        "min": -1.6185264587402344,
+        "max": 2.2435996532440186,
+        "mean": -1.4785648261295137e-07,
+        "std": 0.9999998807907104
+      },
+      "f0_frames_raw": 259,
+      "f0_frame_action": "keep_tail_258_of_259",
+      "pcm_samples": 132096
+    },
+    "guitar_acoustic": {
+      "train_vs_f0": {
+        "abs_mean": 0.0023096963824789387,
+        "abs_max": 1.2247313261032104,
+        "l2": 3.8546632014562605
+      },
+      "train_vs_golden_z": {
+        "abs_mean": 0.003853293664607936,
+        "abs_max": 0.46413445472717285,
+        "l2": 1.5318580076052328
+      },
+      "golden_z_vs_u8deq": {
+        "abs_mean": 8.063935464536844,
+        "abs_max": 12.905579566955566,
+        "l2": 1220.508379846157
+      },
+      "train_vs_u8deq": {
+        "abs_mean": 8.063070788979234,
+        "abs_max": 12.90311022894457,
+        "l2": 1220.437920475522
+      },
+      "golden_z_vs_u8fixeddeq": {
+        "abs_mean": 0.015575026279286475,
+        "abs_max": 0.03132791817188263,
+        "l2": 2.2905537522371837
+      },
+      "input_quant_saturation": {
+        "n_elements": 16512,
+        "buggy_u8_eq0_pct": 41.103439922480625,
+        "buggy_u8_eq255_pct": 58.73304263565892,
+        "buggy_u8_extreme_pct": 99.83648255813954,
+        "fixed_u8_eq0_pct": 0.0,
+        "fixed_u8_eq255_pct": 0.0,
+        "fixed_matches_frontend_quant": true
+      },
+      "z_train_stats": {
+        "min": -2.0399646759033203,
+        "max": 2.372421979904175,
+        "mean": 7.762465514815631e-08,
+        "std": 0.9999999403953552
+      },
+      "f0_frames_raw": 259,
+      "f0_frame_action": "keep_tail_258_of_259",
+      "pcm_samples": 132096
+    },
+    "guitar_electric": {
+      "train_vs_f0": {
+        "abs_mean": 0.002121320933779717,
+        "abs_max": 1.1537833213806152,
+        "l2": 3.5634400934844503
+      },
+      "train_vs_golden_z": {
+        "abs_mean": 0.0038145743789376038,
+        "abs_max": 1.0880918502807617,
+        "l2": 2.1634436178518563
+      },
+      "golden_z_vs_u8deq": {
+        "abs_mean": 8.466851716500152,
+        "abs_max": 12.905579566955566,
+        "l2": 1263.3182887980397
+      },
+      "train_vs_u8deq": {
+        "abs_mean": 8.46734731402374,
+        "abs_max": 13.150242760777473,
+        "l2": 1263.385252030193
+      },
+      "golden_z_vs_u8fixeddeq": {
+        "abs_mean": 0.01610651825890378,
+        "abs_max": 0.0313071608543396,
+        "l2": 2.3601458627144254
+      },
+      "input_quant_saturation": {
+        "n_elements": 16512,
+        "buggy_u8_eq0_pct": 37.60901162790697,
+        "buggy_u8_eq255_pct": 62.215358527131784,
+        "buggy_u8_extreme_pct": 99.82437015503875,
+        "fixed_u8_eq0_pct": 0.0,
+        "fixed_u8_eq255_pct": 0.0,
+        "fixed_matches_frontend_quant": true
+      },
+      "z_train_stats": {
+        "min": -2.7310757637023926,
+        "max": 2.0440263748168945,
+        "mean": -1.0165133090822565e-07,
+        "std": 1.0
+      },
+      "f0_frames_raw": 259,
+      "f0_frame_action": "keep_tail_258_of_259",
+      "pcm_samples": 132096
+    },
+    "piano": {
+      "train_vs_f0": {
+        "abs_mean": 0.002637358451043814,
+        "abs_max": 0.9210564494132996,
+        "l2": 3.5266314384610102
+      },
+      "train_vs_golden_z": {
+        "abs_mean": 0.005174782652744515,
+        "abs_max": 0.3989207148551941,
+        "l2": 1.2872855205017881
+      },
+      "golden_z_vs_u8deq": {
+        "abs_mean": 7.173212314082324,
+        "abs_max": 12.905823707580566,
+        "l2": 1120.12985644918
+      },
+      "train_vs_u8deq": {
+        "abs_mean": 7.172887072883937,
+        "abs_max": 12.982347048819065,
+        "l2": 1120.0969941861363
+      },
+      "golden_z_vs_u8fixeddeq": {
+        "abs_mean": 0.01539017833938981,
+        "abs_max": 0.031333088874816895,
+        "l2": 2.2397804805967825
+      },
+      "input_quant_saturation": {
+        "n_elements": 16512,
+        "buggy_u8_eq0_pct": 49.26114341085272,
+        "buggy_u8_eq255_pct": 50.62984496124031,
+        "buggy_u8_extreme_pct": 99.89098837209302,
+        "fixed_u8_eq0_pct": 0.0,
+        "fixed_u8_eq255_pct": 0.0,
+        "fixed_matches_frontend_quant": true
+      },
+      "z_train_stats": {
+        "min": -1.2781964540481567,
+        "max": 2.221710681915283,
+        "mean": 7.300413784605553e-08,
+        "std": 0.9999999403953552
+      },
+      "f0_frames_raw": 259,
+      "f0_frame_action": "keep_tail_258_of_259",
+      "pcm_samples": 132096
+    },
+    "saxophone": {
+      "train_vs_f0": {
+        "abs_mean": 0.0015941165688144433,
+        "abs_max": 0.7281540632247925,
+        "l2": 2.268014723478468
+      },
+      "train_vs_golden_z": {
+        "abs_mean": 0.004677790986595782,
+        "abs_max": 0.6654895544052124,
+        "l2": 1.8805679838654579
+      },
+      "golden_z_vs_u8deq": {
+        "abs_mean": 7.275760341839966,
+        "abs_max": 12.906067848205566,
+        "l2": 1132.0651743438152
+      },
+      "train_vs_u8deq": {
+        "abs_mean": 7.273801280797922,
+        "abs_max": 12.98212019354105,
+        "l2": 1131.867936776849
+      },
+      "golden_z_vs_u8fixeddeq": {
+        "abs_mean": 0.015596104161308487,
+        "abs_max": 0.03132791817188263,
+        "l2": 2.2889497590882457
+      },
+      "input_quant_saturation": {
+        "n_elements": 16512,
+        "buggy_u8_eq0_pct": 48.26792635658915,
+        "buggy_u8_eq255_pct": 51.63517441860465,
+        "buggy_u8_extreme_pct": 99.90310077519379,
+        "fixed_u8_eq0_pct": 0.0,
+        "fixed_u8_eq255_pct": 0.0,
+        "fixed_matches_frontend_quant": true
+      },
+      "z_train_stats": {
+        "min": -1.40984046459198,
+        "max": 2.260331392288208,
+        "mean": 8.409337226567004e-08,
+        "std": 0.9999999403953552
+      },
+      "f0_frames_raw": 259,
+      "f0_frame_action": "keep_tail_258_of_259",
+      "pcm_samples": 132096
+    },
+    "trumpet": {
+      "train_vs_f0": {
+        "abs_mean": 0.0013111279877677348,
+        "abs_max": 0.922134518623352,
+        "l2": 2.318744410299168
+      },
+      "train_vs_golden_z": {
+        "abs_mean": 0.003927034110930425,
+        "abs_max": 0.5032464563846588,
+        "l2": 1.6597659859614573
+      },
+      "golden_z_vs_u8deq": {
+        "abs_mean": 7.2342639436382195,
+        "abs_max": 12.906067848205566,
+        "l2": 1127.0714443727534
+      },
+      "train_vs_u8deq": {
+        "abs_mean": 7.234297485617071,
+        "abs_max": 12.90616295998916,
+        "l2": 1127.093829919866
+      },
+      "golden_z_vs_u8fixeddeq": {
+        "abs_mean": 0.01639532890033641,
+        "abs_max": 0.03132271766662598,
+        "l2": 2.406152681946548
+      },
+      "input_quant_saturation": {
+        "n_elements": 16512,
+        "buggy_u8_eq0_pct": 50.01211240310077,
+        "buggy_u8_eq255_pct": 49.81831395348838,
+        "buggy_u8_extreme_pct": 99.83042635658916,
+        "fixed_u8_eq0_pct": 0.0,
+        "fixed_u8_eq255_pct": 0.0,
+        "fixed_matches_frontend_quant": true
+      },
+      "z_train_stats": {
+        "min": -2.4235987663269043,
+        "max": 2.102221965789795,
+        "mean": 6.099079996602086e-08,
+        "std": 0.9999998807907104
+      },
+      "f0_frames_raw": 259,
+      "f0_frame_action": "keep_tail_258_of_259",
+      "pcm_samples": 132096
+    },
+    "violin": {
+      "train_vs_f0": {
+        "abs_mean": 0.0024218207957935234,
+        "abs_max": 1.295239269733429,
+        "l2": 3.6652352067656397
+      },
+      "train_vs_golden_z": {
+        "abs_mean": 0.004065035469921757,
+        "abs_max": 0.6302320957183838,
+        "l2": 1.4868177593096614
+      },
+      "golden_z_vs_u8deq": {
+        "abs_mean": 7.703198057563268,
+        "abs_max": 12.906067848205566,
+        "l2": 1180.8894393991548
+      },
+      "train_vs_u8deq": {
+        "abs_mean": 7.704366394845982,
+        "abs_max": 13.122330844402313,
+        "l2": 1181.0002481419926
+      },
+      "golden_z_vs_u8fixeddeq": {
+        "abs_mean": 0.016162655983199617,
+        "abs_max": 0.03132271766662598,
+        "l2": 2.3714361197781915
+      },
+      "input_quant_saturation": {
+        "n_elements": 16512,
+        "buggy_u8_eq0_pct": 44.36773255813954,
+        "buggy_u8_eq255_pct": 55.45663759689923,
+        "buggy_u8_extreme_pct": 99.82437015503875,
+        "fixed_u8_eq0_pct": 0.0,
+        "fixed_u8_eq255_pct": 0.0,
+        "fixed_matches_frontend_quant": true
+      },
+      "z_train_stats": {
+        "min": -1.8110591173171997,
+        "max": 2.6322576999664307,
+        "mean": 7.762465514815631e-08,
+        "std": 0.9999999403953552
+      },
+      "f0_frames_raw": 259,
+      "f0_frame_action": "keep_tail_258_of_259",
+      "pcm_samples": 132096
+    }
+  },
+  "matrix_summary": {
+    "G1_train_float": {
+      "top1_per_sample": {
+        "clarinet": 4,
+        "flute": 4,
+        "guitar_acoustic": 1,
+        "guitar_electric": 1,
+        "piano": 4,
+        "saxophone": 1,
+        "trumpet": 2,
+        "violin": 1
+      },
+      "n_distinct_top1": 3,
+      "exact_subset_correct": "1/5",
+      "exact_correct_list": [
+        "piano"
+      ],
+      "any_match_correct": "2/8",
+      "any_match_list": [
+        "guitar_electric",
+        "piano"
+      ]
+    },
+    "G2a_f0_float": {
+      "top1_per_sample": {
+        "clarinet": 4,
+        "flute": 4,
+        "guitar_acoustic": 1,
+        "guitar_electric": 1,
+        "piano": 4,
+        "saxophone": 1,
+        "trumpet": 2,
+        "violin": 1
+      },
+      "n_distinct_top1": 3,
+      "exact_subset_correct": "1/5",
+      "exact_correct_list": [
+        "piano"
+      ],
+      "any_match_correct": "2/8",
+      "any_match_list": [
+        "guitar_electric",
+        "piano"
+      ]
+    },
+    "G2b_goldenz_float": {
+      "top1_per_sample": {
+        "clarinet": 4,
+        "flute": 4,
+        "guitar_acoustic": 1,
+        "guitar_electric": 1,
+        "piano": 4,
+        "saxophone": 1,
+        "trumpet": 2,
+        "violin": 1
+      },
+      "n_distinct_top1": 3,
+      "exact_subset_correct": "1/5",
+      "exact_correct_list": [
+        "piano"
+      ],
+      "any_match_correct": "2/8",
+      "any_match_list": [
+        "guitar_electric",
+        "piano"
+      ]
+    },
+    "G2c_goldenu8deq_float": {
+      "top1_per_sample": {
+        "clarinet": 0,
+        "flute": 0,
+        "guitar_acoustic": 0,
+        "guitar_electric": 0,
+        "piano": 0,
+        "saxophone": 0,
+        "trumpet": 0,
+        "violin": 0
+      },
+      "n_distinct_top1": 1,
+      "exact_subset_correct": "1/5",
+      "exact_correct_list": [
+        "clarinet"
+      ],
+      "any_match_correct": "1/8",
+      "any_match_list": [
+        "clarinet"
+      ]
+    },
+    "G2d_goldenu8fixeddeq_float": {
+      "top1_per_sample": {
+        "clarinet": 4,
+        "flute": 4,
+        "guitar_acoustic": 1,
+        "guitar_electric": 1,
+        "piano": 4,
+        "saxophone": 1,
+        "trumpet": 2,
+        "violin": 1
+      },
+      "n_distinct_top1": 3,
+      "exact_subset_correct": "1/5",
+      "exact_correct_list": [
+        "piano"
+      ],
+      "any_match_correct": "2/8",
+      "any_match_list": [
+        "guitar_electric",
+        "piano"
+      ]
+    },
+    "G3_train_quant": {
+      "top1_per_sample": {
+        "clarinet": 4,
+        "flute": 4,
+        "guitar_acoustic": 1,
+        "guitar_electric": 1,
+        "piano": 4,
+        "saxophone": 1,
+        "trumpet": 2,
+        "violin": 1
+      },
+      "n_distinct_top1": 3,
+      "exact_subset_correct": "1/5",
+      "exact_correct_list": [
+        "piano"
+      ],
+      "any_match_correct": "2/8",
+      "any_match_list": [
+        "guitar_electric",
+        "piano"
+      ]
+    },
+    "G4_golden_quant_torch": {
+      "top1_per_sample": {
+        "clarinet": 0,
+        "flute": 0,
+        "guitar_acoustic": 0,
+        "guitar_electric": 0,
+        "piano": 0,
+        "saxophone": 0,
+        "trumpet": 0,
+        "violin": 0
+      },
+      "n_distinct_top1": 1,
+      "exact_subset_correct": "1/5",
+      "exact_correct_list": [
+        "clarinet"
+      ],
+      "any_match_correct": "1/8",
+      "any_match_list": [
+        "clarinet"
+      ]
+    },
+    "G4b_golden_quant_fixed": {
+      "top1_per_sample": {
+        "clarinet": 4,
+        "flute": 4,
+        "guitar_acoustic": 1,
+        "guitar_electric": 1,
+        "piano": 4,
+        "saxophone": 1,
+        "trumpet": 2,
+        "violin": 1
+      },
+      "n_distinct_top1": 3,
+      "exact_subset_correct": "1/5",
+      "exact_correct_list": [
+        "piano"
+      ],
+      "any_match_correct": "2/8",
+      "any_match_list": [
+        "guitar_electric",
+        "piano"
+      ]
+    },
+    "G4_golden_quant_npu_probe_cited": {
+      "source": "reports/npu_probe_irmas_20261104.json (bit-level golden and RTL, same uint8 feature; torch chained forward reproduced above as cross-check)",
+      "top1_per_sample": {
+        "clarinet": 0,
+        "flute": 0,
+        "guitar_acoustic": 0,
+        "guitar_electric": 0,
+        "piano": 0,
+        "saxophone": 0,
+        "trumpet": 0,
+        "violin": 0
+      },
+      "n_distinct_top1": 1,
+      "constant_top1_value": 0
+    }
+  },
+  "reading_table": {
+    "a_feature_domain_mismatch": "G1 discriminates, G2 collapses",
+    "b_quantization_defect": "G1 and G2 both discriminate",
+    "c_model_or_sample_domain": "G1 also collapses / random",
+    "applied": "G2a/G2b (golden/F0 feature + float model) match G1 sample-by-sample -> (a) rejected. G3 (quantized model + train feature) matches G1 sample-by-sample -> weight quantization/calibration intact. G2c/G4 (uint8 feature) collapse to top1=0 on BOTH float and quantized models -> the collapse enters exactly at the input uint8 quantization step. G2d/G4b (same z, corrected shift 36) match G1 sample-by-sample -> the collapse is fully and only explained by the 24-vs-36 shift bug.",
+    "verdict": "(b) quantization defect, sub-type: implementation bug in the golden/RTL QuantStub input quantization (4096x scale error), NOT an fbgemm calibration defect; secondary (c) fact: the float model itself discriminates weakly on these IRMAS samples (exact 1/5, piano all-correct) -> after the bug fix the board will show varied-but-mostly-wrong predictions on IRMAS-domain audio until a training-domain check or IRMAS retraining happens."
+  },
+  "root_cause": {
+    "primary": "Input uint8 quantization scale bug: scripts/golden_pipeline.py quantize_int8 (line 554, round_half_even_shift(prod, QUANT_IN_FRAC_BITS=24)) and src/mel/standardize.v Beat Q (line 252-258, qprod_s48 = z_reg * INV_S_IN_S then q_shift = q_abs[47:24]) shift the product of z_q412 (Q4.12, 12 frac bits) and inv_s_in (Q8.24, 24 frac bits) by only 24 bits instead of 12 + 24 = 36 bits. The result is 4096x too large, so essentially every non-zero z bin saturates: measured 37.6..53.2 percent of bins == 0 and 46.7..62.2 percent of bins == 255 (~100 percent the feature is binarized) while the correctly shifted quantization saturates 0.0 %% on the same z.",
+    "effect": "The binarized feature destroys the spectrogram structure: BOTH the float checkpoint (G2c) and the deployed quantized model (G4, matching the bit-level golden and RTL of npu_probe_irmas_20261104.json) collapse to a constant top1=0 on all 8 IRMAS samples. RTL and golden stay bit-consistent with each other because they share the SAME buggy shift, so all previous golden-vs-RTL parity evidence remains valid as parity evidence, while both consume a broken input feature.",
+    "class_table_note": "reports/npu_probe_irmas_20261104.json reads top1=0 as 'piano' under an IRMAS-order table; the deployed model's label space is the Medley-solos-DB table (layer_contract.json classes), where index 0 is 'clarinet'. The constant-top1 symptom is unchanged.",
+    "secondary": "Domain shift: the float model (Medley-solos-DB training domain) only classifies piano (3/3 clips) and guitar_electric (nearest-class hit) correctly among these IRMAS clips; clarinet->piano, flute->piano, saxophone->distorted electric guitar, trumpet->female singer, violin->distorted electric guitar. Varied but mostly wrong -> IRMAS-vs-Medley domain mismatch is real but NOT the cause of the constant top1."
+  },
+  "fix_path": [
+    "RTL src/mel/standardize.v Beat Q: shift the s48 product by 36 bits instead of 24 (q_shift = q_abs[47:36], round-half-even threshold 2^35, rem width 36 bits; re-derive the wire widths accordingly). INV_S_IN / ZP_IN / the layer_contract quant_stub_input_contract and weights_image.bin are all unaffected - only the shift amount changes.",
+    "scripts/golden_pipeline.py quantize_int8: use frac = 12 + 24 = 36 (Z_Q412_FRAC_BITS + QUANT_IN_FRAC_BITS), keeping the round_half_even_shift call otherwise identical.",
+    "Regression guard: assert golden feat == frontend_variants.quantize_uint8(z_gold_float, s_in, zp_in) (already asserted per-sample in this run: fixed_matches_frontend_quant=true for 8/8 samples) and re-run the npu_probe IRMAS injection expecting the G4b column (top1 4/4/1/1/4/1/2/1) instead of the constant 0.",
+    "After the fix, re-check board behaviour on training-domain audio (Medley-solos-DB style clips): expect the G1/G3 predictions. For IRMAS-domain audio the fixed pipeline will still mis-classify most instruments (domain shift); full IRMAS accuracy needs training-domain re-validation or an IRMAS-domain retrain (note: no Medley class exists for acoustic guitar)."
+  ],
+  "evidence_files": [
+    "experiments/diag_float_domain/run_diag.py (this experiment; writes only this report)",
+    "reports/npu_probe_irmas_20261104.json (authoritative G4: bit-level golden + RTL constant top1=0, feat sha256 reproduced 8/8 by this run)",
+    "scripts/golden_pipeline.py:546-555 (quantize_int8, buggy shift 24 at line 554)",
+    "src/mel/standardize.v:249-265 (Beat Q, buggy q_abs[47:24] at line 255)",
+    "scripts/outputs/layer_contract.json (quant_stub_input_contract s_in=0.06266622245311737 zp_in=49; Medley class table)",
+    "D:/0000/111/001/Pango/InstRec/src/features.py (training-domain feature definition, lines 39-65 constants, 124-168 extract_mel_waveform)",
+    "D:/0000/111/001/Pango/InstRec/deploy/inference_reference.py (deploy input contract: float (1,1,64,258) into QuantStub forward, lines 110-124)",
+    "D:/0000/111/001/Pango/InstRec/deploy/quantization_config.json (static fbgemm PTQ, 500 Medley calibration samples)",
+    "D:/0000/111/001/Pango/InstRec/runs/best_model.pt (float 8f)",
+    "D:/0000/111/001/Pango/InstRec/deploy/quantized_model.pt (quantized 8q)"
+  ],
+  "feature_domain_comparison": {
+    "verdict": "(a) rejected: train-domain, F0 and golden-domain features give sample-identical top1 on the float model (G1 == G2a == G2b); the acoustic parameters are identical (sr 44100 / n_fft 2048 / hop 512 / 64 slaney mels / fmax 22050 / power 2.0 / power_to_db ref=max top_db=80 / keep-tail 258 / per-sample z-norm). The only differences are numerical: integer (L+R+1)>>1 downmix vs librosa float mean, 132096-sample hardware window vs full 132299-sample file, fixed-point Q15/Q4.12 chain vs float chain - LSB-scale effects only (see feature_diffs), no top1 change.",
+    "quantization_input_convention": "The deployed quantized model consumes the SAME float feature as the float model (deploy/inference_reference.py predict(): float (1,1,64,258) into the QuantStub forward); the uint8 domain (s_in=0.06266622245311737, zp_in=49) exists only inside the QuantStub / the NPU input image. fv.quantize_uint8 reproduces the fbgemm QuantStub semantics bit-exactly (run_compare S3); the golden/RTL shift bug is a re-implementation error of exactly this step."
+  },
+  "conclusion": {
+    "matrix": {
+      "G1_train_float": {
+        "clarinet": 4,
+        "flute": 4,
+        "guitar_acoustic": 1,
+        "guitar_electric": 1,
+        "piano": 4,
+        "saxophone": 1,
+        "trumpet": 2,
+        "violin": 1
+      },
+      "G2a_f0_float": {
+        "clarinet": 4,
+        "flute": 4,
+        "guitar_acoustic": 1,
+        "guitar_electric": 1,
+        "piano": 4,
+        "saxophone": 1,
+        "trumpet": 2,
+        "violin": 1
+      },
+      "G2b_goldenz_float": {
+        "clarinet": 4,
+        "flute": 4,
+        "guitar_acoustic": 1,
+        "guitar_electric": 1,
+        "piano": 4,
+        "saxophone": 1,
+        "trumpet": 2,
+        "violin": 1
+      },
+      "G2c_goldenu8deq_float": {
+        "clarinet": 0,
+        "flute": 0,
+        "guitar_acoustic": 0,
+        "guitar_electric": 0,
+        "piano": 0,
+        "saxophone": 0,
+        "trumpet": 0,
+        "violin": 0
+      },
+      "G2d_goldenu8fixeddeq_float": {
+        "clarinet": 4,
+        "flute": 4,
+        "guitar_acoustic": 1,
+        "guitar_electric": 1,
+        "piano": 4,
+        "saxophone": 1,
+        "trumpet": 2,
+        "violin": 1
+      },
+      "G3_train_quant": {
+        "clarinet": 4,
+        "flute": 4,
+        "guitar_acoustic": 1,
+        "guitar_electric": 1,
+        "piano": 4,
+        "saxophone": 1,
+        "trumpet": 2,
+        "violin": 1
+      },
+      "G4_golden_quant_torch": {
+        "clarinet": 0,
+        "flute": 0,
+        "guitar_acoustic": 0,
+        "guitar_electric": 0,
+        "piano": 0,
+        "saxophone": 0,
+        "trumpet": 0,
+        "violin": 0
+      },
+      "G4_golden_quant_npu_probe_cited": {
+        "clarinet": 0,
+        "flute": 0,
+        "guitar_acoustic": 0,
+        "guitar_electric": 0,
+        "piano": 0,
+        "saxophone": 0,
+        "trumpet": 0,
+        "violin": 0
+      },
+      "G4b_golden_quant_fixed": {
+        "clarinet": 4,
+        "flute": 4,
+        "guitar_acoustic": 1,
+        "guitar_electric": 1,
+        "piano": 4,
+        "saxophone": 1,
+        "trumpet": 2,
+        "violin": 1
+      }
+    },
+    "final": "(b) quantization defect with a precisely localized implementation bug: the golden/RTL input uint8 quantization shifts z_q412 * inv_s_in by 24 instead of 36 bits (4096x scale error), binarizing the feature and collapsing every input to top1=0 (clarinet in the deployed Medley label space, misread as 'piano' in npu_probe under an IRMAS-order table). Feature-domain mismatch (a) is rejected; fbgemm weight quantization is intact (G3 == G1). Secondary (c): the float model is weak on IRMAS-domain clips (exact 1/5, piano 3/3) - fix the shift first, then re-evaluate on training-domain audio; full IRMAS accuracy needs domain re-validation or retraining.",
+    "confidence": "high - four-way closure: {float, quantized} model x {buggy, corrected} input quantization; the buggy uint8 collapses BOTH models, the corrected uint8 matches the float-feature result sample-by-sample, and the golden feature hash reproduces npu_probe 8/8 so the cited evidence and this run share the identical (broken) feature."
+  }
+}

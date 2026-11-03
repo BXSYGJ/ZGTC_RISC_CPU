@@ -54,7 +54,7 @@
       "source": "D:\\0000\\111\\001\\Pango\\InstRec\\data\\demo\\irmas_test\\clarinet_sample.wav via golden_pipeline.load_pcm_s16 (stereo integer downmix (L+R+1)>>1, established convention) + run_mel_pipeline, truncated to the 132096-sample hardware window",
       "feat": {
         "file": "build/sim/npu_probe/irmas_clarinet_sample/feat_u8.bin",
-        "sha256": "11cbc39c4ef06857345391bf98a36609adf29fcf56c15e5459b478addf9f083c",
+        "sha256": "bbc5d3f49f8dc9f6868849a0d7a0de9d559e776bff0216d69c2d28a21f86d174",
         "shape": [
           64,
           258
@@ -62,219 +62,219 @@
         "dtype": "uint8",
         "zp_in": 49,
         "elements": 16512,
-        "first": 255,
-        "last": 0,
-        "min": 0,
-        "max": 255,
-        "sum_int64": 2176657
+        "first": 61,
+        "last": 29,
+        "min": 29,
+        "max": 89,
+        "sum_int64": 808675
       },
       "cycles": 31115245,
-      "sim_seconds": 52.2,
-      "top1_rtl": 0,
-      "top1_golden": 0,
+      "sim_seconds": 39.7,
+      "top1_rtl": 4,
+      "top1_golden": 4,
       "top1_matches_class": false,
       "logits_int32_rtl": [
-        169,
-        -57,
-        -41,
-        12,
-        13,
-        -57,
-        -57,
-        68
+        -9,
+        5,
+        -8,
+        7,
+        14,
+        -13,
+        -19,
+        3
       ],
       "logits_int32_golden": [
-        169,
-        -57,
-        -41,
-        12,
-        13,
-        -57,
-        -57,
-        68
+        -9,
+        5,
+        -8,
+        7,
+        14,
+        -13,
+        -19,
+        3
       ],
       "logits_dequant_rtl": [
-        47.435776352882385,
-        -15.999048829078674,
-        -11.508087754249573,
-        3.368220806121826,
-        3.648905873298645,
-        -15.999048829078674,
-        -15.999048829078674,
-        19.08658456802368
+        -2.5261656045913696,
+        1.4034253358840942,
+        -2.245480537414551,
+        1.964795470237732,
+        3.929590940475464,
+        -3.648905873298645,
+        -5.333016276359558,
+        0.8420552015304565
       ],
       "probs_q16_rtl": [
-        65535,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0
+        82,
+        4212,
+        109,
+        7392,
+        51310,
+        27,
+        5,
+        2400
       ],
       "probs_q16_golden": [
-        65535,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0
+        82,
+        4212,
+        109,
+        7392,
+        51310,
+        27,
+        5,
+        2400
       ],
       "probs_float_rtl": [
-        0.9999847412109375,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0
+        0.001251220703125,
+        0.06427001953125,
+        0.0016632080078125,
+        0.11279296875,
+        0.782928466796875,
+        0.0004119873046875,
+        7.62939453125e-05,
+        0.03662109375
       ],
       "percent_rtl": [
-        100,
+        0,
+        6,
+        0,
+        11,
+        78,
         0,
         0,
-        0,
-        0,
-        0,
-        0,
-        0
+        4
       ],
       "layers": {
         "conv1": {
           "file": "build/sim/npu_probe/irmas_clarinet_sample/conv1_u8.bin",
-          "sha256": "1082020e03a6b20b3b2bdf34800d973b1cda7f107deec95f5d45fe31137e2eaf",
+          "sha256": "43a6fe6ce8dbeffc5d22c80df87c31156e97ff99b9e03d8578d15846f5168ae2",
           "container": "u8",
           "elements": 792576,
-          "first": 34,
+          "first": 0,
           "last": 0,
           "min": 0,
-          "max": 255,
-          "sum_int64": 14339107
+          "max": 56,
+          "sum_int64": 1746043
         },
         "conv2": {
           "file": "build/sim/npu_probe/irmas_clarinet_sample/conv2_u8.bin",
-          "sha256": "ef9e68aff35280123821d0287cbeeb2e9c6b31b077c41c1fe4c0d2a36fe57448",
+          "sha256": "39052a73a583c674aa98cc8bced3949db7a4dd4edb54d6135b0bfc3d67f15eea",
           "container": "u8",
           "elements": 396288,
-          "first": 0,
-          "last": 17,
+          "first": 4,
+          "last": 13,
           "min": 0,
-          "max": 255,
-          "sum_int64": 10067379
+          "max": 54,
+          "sum_int64": 1444557
         },
         "conv3": {
           "file": "build/sim/npu_probe/irmas_clarinet_sample/conv3_u8.bin",
-          "sha256": "24579e615981d632079edf7e69635d1c17f880ffea5ced6af0dbe68aaf1c1ddb",
+          "sha256": "e91d01691196774e7510f14b6d3d7aeb1388b8e89ccded88c5f1e7286f893b09",
           "container": "u8",
           "elements": 196608,
-          "first": 0,
+          "first": 27,
           "last": 0,
           "min": 0,
-          "max": 255,
-          "sum_int64": 4380774
+          "max": 60,
+          "sum_int64": 1017525
         },
         "conv4": {
           "file": "build/sim/npu_probe/irmas_clarinet_sample/conv4_u8.bin",
-          "sha256": "4f8798dd40297ba2d9a92f39ef9a01f746099b191c0625cf9d902156bc767798",
+          "sha256": "594e02ae40f449ae86f3f2752f72c016ff01061abddbe37703d7b08c60dc9575",
           "container": "u8",
           "elements": 65536,
           "first": 0,
-          "last": 5,
+          "last": 0,
           "min": 0,
-          "max": 255,
-          "sum_int64": 2819755
+          "max": 59,
+          "sum_int64": 246767
         },
         "pool1": {
           "file": "build/sim/npu_probe/irmas_clarinet_sample/pool1_u8.bin",
-          "sha256": "172361244e9aecc333974f12c432c398e307a35f4140b0c9eed9fb65f3154a98",
+          "sha256": "64f828d75023a6236df1227350fd72951cd12518b86c9e045171ea15b6fc56d8",
           "container": "u8",
           "elements": 198144,
-          "first": 34,
-          "last": 5,
+          "first": 1,
+          "last": 2,
           "min": 0,
-          "max": 255,
-          "sum_int64": 5087718
+          "max": 56,
+          "sum_int64": 590247
         },
         "pool2": {
           "file": "build/sim/npu_probe/irmas_clarinet_sample/pool2_u8.bin",
-          "sha256": "8682c2ec0a38959c2e5bfbe7865747966792bfe712ab3d68a2a0f75c03fe96c4",
+          "sha256": "96f73ef45634bc625172e9ffc80b74e968fcfa480270075069a9663ffb0887e7",
           "container": "u8",
           "elements": 98304,
-          "first": 0,
-          "last": 0,
+          "first": 4,
+          "last": 3,
           "min": 0,
-          "max": 255,
-          "sum_int64": 3561834
+          "max": 54,
+          "sum_int64": 545673
         },
         "pool3": {
           "file": "build/sim/npu_probe/irmas_clarinet_sample/pool3_u8.bin",
-          "sha256": "45434a8da6166def792709b45980b8cd5578a866528fd77300c63471a4b5f04a",
+          "sha256": "d2f95454717981d3f3d60c5aacb5400cec2de1e13d1196b968874d98979bdcdc",
           "container": "u8",
           "elements": 49152,
-          "first": 0,
+          "first": 27,
           "last": 0,
           "min": 0,
-          "max": 255,
-          "sum_int64": 1623188
+          "max": 60,
+          "sum_int64": 407797
         },
         "pool4": {
           "file": "build/sim/npu_probe/irmas_clarinet_sample/pool4_u8.bin",
-          "sha256": "d7d65845890337f16d88b8285e9eb80fa3a64dfbd57905b7ad48542b5062dfad",
+          "sha256": "aa49ef598f184c1402af5114c36158ba6e5e8ac9cb69bf28ed00faba40f2a9b8",
           "container": "u8",
           "elements": 16384,
-          "first": 0,
-          "last": 17,
+          "first": 16,
+          "last": 0,
           "min": 0,
-          "max": 255,
-          "sum_int64": 1058785
+          "max": 59,
+          "sum_int64": 115824
         },
         "gap": {
           "file": "build/sim/npu_probe/irmas_clarinet_sample/gap_s32.bin",
-          "sha256": "3cd9ebf0f30ed8c5c98e983ffbe94b3b680fee8415b8f27fb1c4a9a903434b4d",
+          "sha256": "d7fa01851f2c2b5c469d22dc6a1a71676d828b3248d18f8f6f61e39450ad4cf8",
           "container": "s32",
           "elements": 256,
-          "first": 1,
-          "last": 25,
-          "min": 0,
-          "max": 203,
-          "sum_int64": 16541
+          "first": 7,
+          "last": 2,
+          "min": 1,
+          "max": 16,
+          "sum_int64": 1812
         },
         "fc1": {
           "file": "build/sim/npu_probe/irmas_clarinet_sample/fc1_u8.bin",
-          "sha256": "3d6f3712aee29ba23b6ecc29f9e63da284b33eeb8a38937a9792f66064b9637d",
+          "sha256": "c9efdf181c101890ad7b17cc65f5d1bb5069f772d26422ccca742fabe5fbb53c",
           "container": "u8",
           "elements": 128,
           "first": 0,
-          "last": 168,
+          "last": 18,
           "min": 0,
-          "max": 255,
-          "sum_int64": 13591
+          "max": 46,
+          "sum_int64": 1715
         },
         "fc2": {
           "file": "build/sim/npu_probe/irmas_clarinet_sample/fc2_u8.bin",
-          "sha256": "cf42510bde854a757f21fe03cad00777edcabf95f69a3795c36a18a5d814bdc6",
+          "sha256": "38f155fd9efd65b671412700492ddf1baa2b7f4875881de45424eea405d94c2e",
           "container": "u8",
           "elements": 8,
-          "first": 226,
-          "last": 125,
-          "min": 0,
-          "max": 226,
-          "sum_int64": 506
+          "first": 48,
+          "last": 60,
+          "min": 38,
+          "max": 71,
+          "sum_int64": 436
         },
         "probs_q16": {
           "file": "build/sim/npu_probe/irmas_clarinet_sample/probs_q16_u16.bin",
-          "sha256": "c9473276fe8062bdfabc6a610f8bfdfceedddeafb5fbc5ab445281c5586e7969",
+          "sha256": "c8ae82bdbedc73dd48c2c59fcd9f621f51db69dd840fec8ecbda9086a3032a43",
           "container": "u16",
           "elements": 8,
-          "first": 65535,
-          "last": 0,
-          "min": 0,
-          "max": 65535,
-          "sum_int64": 65535
+          "first": 82,
+          "last": 2400,
+          "min": 5,
+          "max": 51310,
+          "sum_int64": 65537
         }
       },
       "golden_match": {
@@ -357,7 +357,7 @@
       "source": "D:\\0000\\111\\001\\Pango\\InstRec\\data\\demo\\irmas_test\\flute_sample.wav via golden_pipeline.load_pcm_s16 (stereo integer downmix (L+R+1)>>1, established convention) + run_mel_pipeline, truncated to the 132096-sample hardware window",
       "feat": {
         "file": "build/sim/npu_probe/irmas_flute_sample/feat_u8.bin",
-        "sha256": "51ed915da334bf8cfd01408f8b55dfe52c52c30c1b641d1e00eadf23053943cc",
+        "sha256": "4e533af0405b14a8c28de51c895b7edbb0c7454307796c3f6d884360be4d50ce",
         "shape": [
           64,
           258
@@ -365,219 +365,219 @@
         "dtype": "uint8",
         "zp_in": 49,
         "elements": 16512,
-        "first": 255,
-        "last": 0,
-        "min": 0,
-        "max": 255,
-        "sum_int64": 1968352
+        "first": 58,
+        "last": 23,
+        "min": 23,
+        "max": 85,
+        "sum_int64": 808517
       },
       "cycles": 31115245,
-      "sim_seconds": 70.4,
-      "top1_rtl": 0,
-      "top1_golden": 0,
+      "sim_seconds": 40.1,
+      "top1_rtl": 4,
+      "top1_golden": 4,
       "top1_matches_class": false,
       "logits_int32_rtl": [
-        134,
-        -57,
-        -47,
-        1,
-        8,
-        -50,
-        -57,
-        89
+        -17,
+        -4,
+        6,
+        -2,
+        12,
+        10,
+        -33,
+        6
       ],
       "logits_int32_golden": [
-        134,
-        -57,
-        -47,
-        1,
-        8,
-        -50,
-        -57,
-        89
+        -17,
+        -4,
+        6,
+        -2,
+        12,
+        10,
+        -33,
+        6
       ],
       "logits_dequant_rtl": [
-        37.611799001693726,
-        -15.999048829078674,
-        -13.192198157310486,
-        0.28068506717681885,
-        2.245480537414551,
-        -14.034253358840942,
-        -15.999048829078674,
-        24.980970978736877
+        -4.77164614200592,
+        -1.1227402687072754,
+        1.684110403060913,
+        -0.5613701343536377,
+        3.368220806121826,
+        2.8068506717681885,
+        -9.262607216835022,
+        1.684110403060913
       ],
       "probs_q16_rtl": [
-        65535,
+        10,
+        379,
+        6307,
+        665,
+        33043,
+        18827,
         0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0
+        6307
       ],
       "probs_q16_golden": [
-        65535,
+        10,
+        379,
+        6307,
+        665,
+        33043,
+        18827,
         0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0
+        6307
       ],
       "probs_float_rtl": [
-        0.9999847412109375,
+        0.000152587890625,
+        0.0057830810546875,
+        0.0962371826171875,
+        0.0101470947265625,
+        0.5041961669921875,
+        0.2872772216796875,
         0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0
+        0.0962371826171875
       ],
       "percent_rtl": [
-        100,
         0,
+        1,
+        10,
+        1,
+        50,
+        29,
         0,
-        0,
-        0,
-        0,
-        0,
-        0
+        10
       ],
       "layers": {
         "conv1": {
           "file": "build/sim/npu_probe/irmas_flute_sample/conv1_u8.bin",
-          "sha256": "dd9cbe23fb77aa39aa560ca732852717797313952ec920045fc3c78f78fd4114",
+          "sha256": "a60e4574bee55bf0315caa147617d7d6acb95bc6c1d867cb0e71b803023c0f91",
           "container": "u8",
           "elements": 792576,
-          "first": 33,
+          "first": 1,
           "last": 0,
           "min": 0,
-          "max": 255,
-          "sum_int64": 14266259
+          "max": 37,
+          "sum_int64": 1754537
         },
         "conv2": {
           "file": "build/sim/npu_probe/irmas_flute_sample/conv2_u8.bin",
-          "sha256": "12e1b19d005a4ea265fdde9fabcdb0ae56010d560d72d82314ba728340c5cfb1",
+          "sha256": "2d7d9939ea7764c3f86cd360bb9271d52285b0d09465a4103f935b30ac8f180c",
           "container": "u8",
           "elements": 396288,
-          "first": 58,
-          "last": 17,
+          "first": 13,
+          "last": 14,
           "min": 0,
-          "max": 255,
-          "sum_int64": 10181234
+          "max": 49,
+          "sum_int64": 1347024
         },
         "conv3": {
           "file": "build/sim/npu_probe/irmas_flute_sample/conv3_u8.bin",
-          "sha256": "e04f71a66f95aba9b163495e8c333a24529a2a1802a913658c544b8f68d9c47d",
+          "sha256": "4cc5fb829b7c75143d590056bfdc72e320ba64d6aef915ea4b9fb706fb300920",
           "container": "u8",
           "elements": 196608,
-          "first": 0,
+          "first": 33,
           "last": 0,
           "min": 0,
-          "max": 255,
-          "sum_int64": 4556283
+          "max": 60,
+          "sum_int64": 1005415
         },
         "conv4": {
           "file": "build/sim/npu_probe/irmas_flute_sample/conv4_u8.bin",
-          "sha256": "4ee916337a2961c34e58cd0647dcb19af1489d214284f36457b030d5ea68dbbe",
+          "sha256": "deff051790b5ec0b6cdca06211681a86372b55a49960b57aabca73bbcebfe3c5",
           "container": "u8",
           "elements": 65536,
           "first": 0,
-          "last": 5,
+          "last": 0,
           "min": 0,
-          "max": 255,
-          "sum_int64": 3075947
+          "max": 61,
+          "sum_int64": 285007
         },
         "pool1": {
           "file": "build/sim/npu_probe/irmas_flute_sample/pool1_u8.bin",
-          "sha256": "651c132f94253f1d8618576520b912fed2ab7270a28bc0116aa6a7fb75af22a0",
+          "sha256": "9cca3e2b0df538f247a4347c6f2b06e93f7fe8f737160d895bcfbbe8a507ad33",
           "container": "u8",
           "elements": 198144,
-          "first": 81,
-          "last": 5,
+          "first": 4,
+          "last": 2,
           "min": 0,
-          "max": 255,
-          "sum_int64": 5293579
+          "max": 37,
+          "sum_int64": 627590
         },
         "pool2": {
           "file": "build/sim/npu_probe/irmas_flute_sample/pool2_u8.bin",
-          "sha256": "380a20cedab5bb4a54ea39ce677f8d3074b83627f015559a00db68eae286698e",
+          "sha256": "1210fc5c6bab8cec6f0de120104dda9ebe69e81ec6df0b22394f794e5806a5ef",
           "container": "u8",
           "elements": 98304,
-          "first": 65,
-          "last": 0,
+          "first": 13,
+          "last": 1,
           "min": 0,
-          "max": 255,
-          "sum_int64": 3724044
+          "max": 49,
+          "sum_int64": 544727
         },
         "pool3": {
           "file": "build/sim/npu_probe/irmas_flute_sample/pool3_u8.bin",
-          "sha256": "eec8367b5cc171e99f529dcff6e4c6bf522b8cefceacd475a45d25508aadfc98",
+          "sha256": "b40de658addcb35e9fb007345ee9dcffe40eea2df0a7a85ddd0b19ff0f05a5fe",
           "container": "u8",
           "elements": 49152,
-          "first": 0,
-          "last": 0,
+          "first": 33,
+          "last": 3,
           "min": 0,
-          "max": 255,
-          "sum_int64": 1735048
+          "max": 60,
+          "sum_int64": 419134
         },
         "pool4": {
           "file": "build/sim/npu_probe/irmas_flute_sample/pool4_u8.bin",
-          "sha256": "a6c236afb3e000b438ab7548b983c03c733ccab1bb4f538fa803f927e7da031d",
+          "sha256": "05a55d8ca66009e5ff65dd4d02f1a3120228363fe551dd77d7d8e2811aba2f90",
           "container": "u8",
           "elements": 16384,
           "first": 0,
-          "last": 5,
+          "last": 0,
           "min": 0,
-          "max": 255,
-          "sum_int64": 1137643
+          "max": 61,
+          "sum_int64": 133031
         },
         "gap": {
           "file": "build/sim/npu_probe/irmas_flute_sample/gap_s32.bin",
-          "sha256": "2f0a00822e6c0c73532118a75b657966ada05e643c6c32682ae3fb1b06788953",
+          "sha256": "ccf53815e389ec7b2f7a30506b163c24d81d9248ad25856c093a9cc720ec7a44",
           "container": "s32",
           "elements": 256,
-          "first": 1,
-          "last": 41,
+          "first": 10,
+          "last": 5,
           "min": 0,
-          "max": 205,
-          "sum_int64": 17771
+          "max": 22,
+          "sum_int64": 2084
         },
         "fc1": {
           "file": "build/sim/npu_probe/irmas_flute_sample/fc1_u8.bin",
-          "sha256": "c61d64e03f991a14a178859eb91f74739afdc92af72e7e371ae82efc985f9510",
+          "sha256": "0ba04a6aa340527fddbeb38064ff643aa51e15c4ebbb9fbcb3789f9328c0f11b",
           "container": "u8",
           "elements": 128,
           "first": 0,
-          "last": 130,
+          "last": 10,
           "min": 0,
-          "max": 255,
-          "sum_int64": 14407
+          "max": 67,
+          "sum_int64": 2123
         },
         "fc2": {
           "file": "build/sim/npu_probe/irmas_flute_sample/fc2_u8.bin",
-          "sha256": "7f036e6d83bdc867be94b12e76eac849a442c23d0f192cc274aed8d340bee37e",
+          "sha256": "b9030616f92a7a1b61377ff4e80ea1ae65599e78b2f188642ffa9a7453c20641",
           "container": "u8",
           "elements": 8,
-          "first": 191,
-          "last": 146,
-          "min": 0,
-          "max": 191,
-          "sum_int64": 477
+          "first": 40,
+          "last": 63,
+          "min": 24,
+          "max": 69,
+          "sum_int64": 434
         },
         "probs_q16": {
           "file": "build/sim/npu_probe/irmas_flute_sample/probs_q16_u16.bin",
-          "sha256": "c9473276fe8062bdfabc6a610f8bfdfceedddeafb5fbc5ab445281c5586e7969",
+          "sha256": "aa47297001ad75202ecc496ee0af0a6a6440ea76d798c0855935a07bbb36cc2b",
           "container": "u16",
           "elements": 8,
-          "first": 65535,
-          "last": 0,
+          "first": 10,
+          "last": 6307,
           "min": 0,
-          "max": 65535,
-          "sum_int64": 65535
+          "max": 33043,
+          "sum_int64": 65538
         }
       },
       "golden_match": {
@@ -660,7 +660,7 @@
       "source": "D:\\0000\\111\\001\\Pango\\InstRec\\data\\demo\\irmas_test\\guitar_acoustic_sample.wav via golden_pipeline.load_pcm_s16 (stereo integer downmix (L+R+1)>>1, established convention) + run_mel_pipeline, truncated to the 132096-sample hardware window",
       "feat": {
         "file": "build/sim/npu_probe/irmas_guitar_acoustic_sample/feat_u8.bin",
-        "sha256": "ae4ce79fa10ddf61dc58540e0de17172585f7d2188d26b7b44324604a57d0428",
+        "sha256": "5b4b3369ba27bebc66877f2f2b99f53741c5df3394c6700bc381d32cc32259fa",
         "shape": [
           64,
           258
@@ -668,83 +668,83 @@
         "dtype": "uint8",
         "zp_in": 49,
         "elements": 16512,
-        "first": 255,
-        "last": 0,
-        "min": 0,
-        "max": 255,
-        "sum_int64": 2476153
+        "first": 61,
+        "last": 17,
+        "min": 17,
+        "max": 87,
+        "sum_int64": 809384
       },
       "cycles": 31115245,
-      "sim_seconds": 51.2,
-      "top1_rtl": 0,
-      "top1_golden": 0,
+      "sim_seconds": 39.5,
+      "top1_rtl": 1,
+      "top1_golden": 1,
       "top1_matches_class": false,
       "logits_int32_rtl": [
-        167,
-        -57,
-        -50,
-        -5,
-        2,
-        -57,
-        -57,
-        83
+        -36,
+        27,
+        -3,
+        -6,
+        14,
+        -1,
+        -23,
+        -2
       ],
       "logits_int32_golden": [
-        167,
-        -57,
-        -50,
-        -5,
-        2,
-        -57,
-        -57,
-        83
+        -36,
+        27,
+        -3,
+        -6,
+        14,
+        -1,
+        -23,
+        -2
       ],
       "logits_dequant_rtl": [
-        46.87440621852875,
-        -15.999048829078674,
-        -14.034253358840942,
-        -1.4034253358840942,
-        0.5613701343536377,
-        -15.999048829078674,
-        -15.999048829078674,
-        23.296860575675964
+        -10.104662418365479,
+        7.578496813774109,
+        -0.8420552015304565,
+        -1.684110403060913,
+        3.929590940475464,
+        -0.28068506717681885,
+        -6.4557565450668335,
+        -0.5613701343536377
       ],
       "probs_q16_rtl": [
-        65535,
         0,
+        63773,
+        15,
+        6,
+        1699,
+        25,
         0,
-        0,
-        0,
-        0,
-        0,
-        0
+        18
       ],
       "probs_q16_golden": [
-        65535,
         0,
+        63773,
+        15,
+        6,
+        1699,
+        25,
         0,
-        0,
-        0,
-        0,
-        0,
-        0
+        18
       ],
       "probs_float_rtl": [
-        0.9999847412109375,
         0.0,
+        0.9730987548828125,
+        0.0002288818359375,
+        9.1552734375e-05,
+        0.0259246826171875,
+        0.0003814697265625,
         0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0
+        0.000274658203125
       ],
       "percent_rtl": [
-        100,
+        0,
+        97,
         0,
         0,
-        0,
-        0,
+        3,
         0,
         0,
         0
@@ -752,135 +752,135 @@
       "layers": {
         "conv1": {
           "file": "build/sim/npu_probe/irmas_guitar_acoustic_sample/conv1_u8.bin",
-          "sha256": "cf3ad0b6273dcf9329152b60fd9cf5ed948151df71e6e11713a407d601de165f",
+          "sha256": "7bfca6d995add0cda61f5cda7d183a1eacc44f8cb54d579f56bb909bd30a21f5",
           "container": "u8",
           "elements": 792576,
-          "first": 34,
+          "first": 2,
           "last": 0,
           "min": 0,
-          "max": 255,
-          "sum_int64": 15893903
+          "max": 45,
+          "sum_int64": 1635247
         },
         "conv2": {
           "file": "build/sim/npu_probe/irmas_guitar_acoustic_sample/conv2_u8.bin",
-          "sha256": "9a688a615a92461480fa371e2b435a3ab15fe9b5fb97c499b68e0e7b7e920578",
+          "sha256": "8c910bf6bb133e540920668bbfa0561a1532d9b6ea6c88e0f7a7eaea41bf0fa2",
           "container": "u8",
           "elements": 396288,
-          "first": 32,
-          "last": 17,
+          "first": 13,
+          "last": 14,
           "min": 0,
-          "max": 255,
-          "sum_int64": 11705243
+          "max": 47,
+          "sum_int64": 1476858
         },
         "conv3": {
           "file": "build/sim/npu_probe/irmas_guitar_acoustic_sample/conv3_u8.bin",
-          "sha256": "461c4c2e88b9de353f66b914e6ef86e02e9740b03b08e4c3d9d0015fb6c683d8",
+          "sha256": "95557e74db66dda08ab8588a0191eeea63f0f82e26be378cd7edf47b7265a98c",
           "container": "u8",
           "elements": 196608,
-          "first": 0,
+          "first": 24,
           "last": 0,
           "min": 0,
-          "max": 255,
-          "sum_int64": 5254483
+          "max": 70,
+          "sum_int64": 1053286
         },
         "conv4": {
           "file": "build/sim/npu_probe/irmas_guitar_acoustic_sample/conv4_u8.bin",
-          "sha256": "5b7677dcf6ac35759d68005d6521e28ad61a08b9be19970c6c8d3cb8b158e324",
+          "sha256": "f3736d3ad735ccebdca49baddc8ccbb617d1a50c9211ebb1e9f1105c27479a6d",
           "container": "u8",
           "elements": 65536,
           "first": 0,
           "last": 0,
           "min": 0,
-          "max": 255,
-          "sum_int64": 3584747
+          "max": 73,
+          "sum_int64": 313039
         },
         "pool1": {
           "file": "build/sim/npu_probe/irmas_guitar_acoustic_sample/pool1_u8.bin",
-          "sha256": "712d3cb693403df58e7e83e7cf75450f6c47fac9499e126fb70e91e674ee1c39",
+          "sha256": "fa09681f92b11fa72aeeaf5ccd66799263cf84cbede39fbf1a679d699661cdeb",
           "container": "u8",
           "elements": 198144,
-          "first": 78,
-          "last": 5,
+          "first": 6,
+          "last": 3,
           "min": 0,
-          "max": 255,
-          "sum_int64": 6035154
+          "max": 45,
+          "sum_int64": 591699
         },
         "pool2": {
           "file": "build/sim/npu_probe/irmas_guitar_acoustic_sample/pool2_u8.bin",
-          "sha256": "05d90d71a37f1cc977fd89e20fe6cea736c66852330010d11bf58babbcbecf96",
+          "sha256": "b3a63df2514d5923b6300bff33e5e15015aad3394b011b0ff6c55af5cb455598",
           "container": "u8",
           "elements": 98304,
-          "first": 32,
+          "first": 13,
           "last": 0,
           "min": 0,
-          "max": 255,
-          "sum_int64": 4431876
+          "max": 43,
+          "sum_int64": 587706
         },
         "pool3": {
           "file": "build/sim/npu_probe/irmas_guitar_acoustic_sample/pool3_u8.bin",
-          "sha256": "d0a37f16cf7e4f4b58921b7091703651152f2285bf0c385c720ff9d18ab50090",
+          "sha256": "f00bf897ff361773feaf9c041e9f583b13f94b23deefe5c675b2649f9c90b791",
           "container": "u8",
           "elements": 49152,
-          "first": 0,
-          "last": 46,
+          "first": 24,
+          "last": 4,
           "min": 0,
-          "max": 255,
-          "sum_int64": 1982973
+          "max": 70,
+          "sum_int64": 440120
         },
         "pool4": {
           "file": "build/sim/npu_probe/irmas_guitar_acoustic_sample/pool4_u8.bin",
-          "sha256": "88349da95e89184df1e5ff3250eccf4aae16c1afc513ec6d24eed009606ac4d3",
+          "sha256": "7ecf1075a5b337d86593a09ccaa874a3873bcfafd9e6c3c7e03042b212d80e60",
           "container": "u8",
           "elements": 16384,
           "first": 0,
-          "last": 0,
+          "last": 3,
           "min": 0,
-          "max": 255,
-          "sum_int64": 1223707
+          "max": 73,
+          "sum_int64": 142128
         },
         "gap": {
           "file": "build/sim/npu_probe/irmas_guitar_acoustic_sample/gap_s32.bin",
-          "sha256": "90f05f19ea46135d1c67a69d3075373781645d7583c3528e6b33506b6ea9c295",
+          "sha256": "db308256c06b7fe0502654fdf80a2555d929ce9a9a19c054b22477c6f5f7ce35",
           "container": "s32",
           "elements": 256,
-          "first": 0,
-          "last": 32,
+          "first": 8,
+          "last": 6,
           "min": 0,
-          "max": 232,
-          "sum_int64": 19116
+          "max": 25,
+          "sum_int64": 2218
         },
         "fc1": {
           "file": "build/sim/npu_probe/irmas_guitar_acoustic_sample/fc1_u8.bin",
-          "sha256": "82964d50499bfb01b4c4d2ddd289b9d37d04642d0486e1988e6862b4e8ee73cb",
+          "sha256": "020d0cbe6f0adf6407e83a0cfe4d6d9357cfcdadd59e5a504ad18d669ed416ea",
           "container": "u8",
           "elements": 128,
           "first": 0,
-          "last": 190,
+          "last": 25,
           "min": 0,
-          "max": 255,
-          "sum_int64": 14534
+          "max": 80,
+          "sum_int64": 2186
         },
         "fc2": {
           "file": "build/sim/npu_probe/irmas_guitar_acoustic_sample/fc2_u8.bin",
-          "sha256": "cadc970d1b42d463e4ec8b5779d64ee423c237427c2a82f206d99dfe2344cd6d",
+          "sha256": "816ca68c071739e9cc11c84163eb2f245e19159d0a02f41f51ad44da61119910",
           "container": "u8",
           "elements": 8,
-          "first": 224,
-          "last": 140,
-          "min": 0,
-          "max": 224,
-          "sum_int64": 482
+          "first": 21,
+          "last": 55,
+          "min": 21,
+          "max": 84,
+          "sum_int64": 426
         },
         "probs_q16": {
           "file": "build/sim/npu_probe/irmas_guitar_acoustic_sample/probs_q16_u16.bin",
-          "sha256": "c9473276fe8062bdfabc6a610f8bfdfceedddeafb5fbc5ab445281c5586e7969",
+          "sha256": "eba428b476d0f2737c17f785e25a61e24ef22b96c9bd5af7b0876c01ec35091e",
           "container": "u16",
           "elements": 8,
-          "first": 65535,
-          "last": 0,
+          "first": 0,
+          "last": 18,
           "min": 0,
-          "max": 65535,
-          "sum_int64": 65535
+          "max": 63773,
+          "sum_int64": 65536
         }
       },
       "golden_match": {
@@ -963,7 +963,7 @@
       "source": "D:\\0000\\111\\001\\Pango\\InstRec\\data\\demo\\irmas_test\\guitar_electric_sample.wav via golden_pipeline.load_pcm_s16 (stereo integer downmix (L+R+1)>>1, established convention) + run_mel_pipeline, truncated to the 132096-sample hardware window",
       "feat": {
         "file": "build/sim/npu_probe/irmas_guitar_electric_sample/feat_u8.bin",
-        "sha256": "407646782cf6a1666bc726239627eba4f4dc24d948c42306519970c3377ff7aa",
+        "sha256": "12520e3a9c2d7a14c3bc5fcf24b2d76a074402ca7d4894a03ae48292acd47fe2",
         "shape": [
           64,
           258
@@ -971,80 +971,80 @@
         "dtype": "uint8",
         "zp_in": 49,
         "elements": 16512,
-        "first": 255,
-        "last": 0,
-        "min": 0,
-        "max": 255,
-        "sum_int64": 2623130
+        "first": 68,
+        "last": 17,
+        "min": 6,
+        "max": 82,
+        "sum_int64": 809428
       },
       "cycles": 31115245,
-      "sim_seconds": 51.2,
-      "top1_rtl": 0,
-      "top1_golden": 0,
+      "sim_seconds": 39.9,
+      "top1_rtl": 1,
+      "top1_golden": 1,
       "top1_matches_class": false,
       "logits_int32_rtl": [
-        155,
-        -57,
-        -45,
-        -1,
-        1,
-        -57,
-        -57,
-        93
+        -48,
+        37,
+        17,
+        -7,
+        2,
+        -4,
+        -25,
+        -3
       ],
       "logits_int32_golden": [
-        155,
-        -57,
-        -45,
-        -1,
-        1,
-        -57,
-        -57,
-        93
+        -48,
+        37,
+        17,
+        -7,
+        2,
+        -4,
+        -25,
+        -3
       ],
       "logits_dequant_rtl": [
-        43.50618541240692,
-        -15.999048829078674,
-        -12.630828022956848,
-        -0.28068506717681885,
-        0.28068506717681885,
-        -15.999048829078674,
-        -15.999048829078674,
-        26.103711247444153
+        -13.472883224487305,
+        10.385347485542297,
+        4.77164614200592,
+        -1.964795470237732,
+        0.5613701343536377,
+        -1.1227402687072754,
+        -7.017126679420471,
+        -0.8420552015304565
       ],
       "probs_q16_rtl": [
-        65535,
         0,
+        65287,
+        243,
         0,
+        4,
+        1,
         0,
-        0,
-        0,
-        0,
-        0
+        1
       ],
       "probs_q16_golden": [
-        65535,
         0,
+        65287,
+        243,
         0,
+        4,
+        1,
         0,
-        0,
-        0,
-        0,
-        0
+        1
       ],
       "probs_float_rtl": [
-        0.9999847412109375,
         0.0,
+        0.9962005615234375,
+        0.0037078857421875,
         0.0,
+        6.103515625e-05,
+        1.52587890625e-05,
         0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0
+        1.52587890625e-05
       ],
       "percent_rtl": [
-        100,
         0,
+        100,
         0,
         0,
         0,
@@ -1055,135 +1055,135 @@
       "layers": {
         "conv1": {
           "file": "build/sim/npu_probe/irmas_guitar_electric_sample/conv1_u8.bin",
-          "sha256": "61c7ca04f1dcc961601eaafc3b4d7bf56114b771908eb025ded09b380ff7704a",
+          "sha256": "6cc9c3c6c0ce0004438d8f1869626d8a781c2efd1f4c2a5fb6a58a40f65ea60a",
           "container": "u8",
           "elements": 792576,
-          "first": 34,
+          "first": 4,
           "last": 0,
           "min": 0,
-          "max": 255,
-          "sum_int64": 15758338
+          "max": 63,
+          "sum_int64": 1496122
         },
         "conv2": {
           "file": "build/sim/npu_probe/irmas_guitar_electric_sample/conv2_u8.bin",
-          "sha256": "a91e4f81619d9ed01af6593a618f7542c5fdb16117217786b63516ed518ebea7",
+          "sha256": "4a33ca4411d87d0b0f8a7684bf6e4906edeed5eb240467cec7276107297c1bf6",
           "container": "u8",
           "elements": 396288,
-          "first": 32,
-          "last": 17,
+          "first": 10,
+          "last": 16,
           "min": 0,
-          "max": 255,
-          "sum_int64": 11773166
+          "max": 62,
+          "sum_int64": 1596339
         },
         "conv3": {
           "file": "build/sim/npu_probe/irmas_guitar_electric_sample/conv3_u8.bin",
-          "sha256": "2abad02f9a245b0fe3a99e59297cd86a09ca9ac1ab538dfe23de29c96aafd8c4",
+          "sha256": "b6b5c8566adec8e061038959ee164b7e1f9130ee829ebeb8fd990409176de683",
           "container": "u8",
           "elements": 196608,
-          "first": 0,
+          "first": 24,
           "last": 0,
           "min": 0,
-          "max": 255,
-          "sum_int64": 5133654
+          "max": 81,
+          "sum_int64": 1090019
         },
         "conv4": {
           "file": "build/sim/npu_probe/irmas_guitar_electric_sample/conv4_u8.bin",
-          "sha256": "0f79e91aa84a1be5b958c05768aa931acd5a60d0fa74f6cb0333b6d99d710ca2",
+          "sha256": "3f9bc3c3ea465135a81ca7962cb60a0898eee86c764da7ad6231daafed8c2f09",
           "container": "u8",
           "elements": 65536,
           "first": 0,
           "last": 0,
           "min": 0,
-          "max": 255,
-          "sum_int64": 3329862
+          "max": 88,
+          "sum_int64": 384587
         },
         "pool1": {
           "file": "build/sim/npu_probe/irmas_guitar_electric_sample/pool1_u8.bin",
-          "sha256": "699425226204ef092d52dd66232845deae471d679567c51b6dd7b8f35744d1ac",
+          "sha256": "3131816acb5facd4f184e1ba2835a7aff26f461558d150be65580ba1ddd0c0fe",
           "container": "u8",
           "elements": 198144,
-          "first": 78,
-          "last": 5,
+          "first": 8,
+          "last": 2,
           "min": 0,
-          "max": 255,
-          "sum_int64": 5908079
+          "max": 63,
+          "sum_int64": 558065
         },
         "pool2": {
           "file": "build/sim/npu_probe/irmas_guitar_electric_sample/pool2_u8.bin",
-          "sha256": "c65b258151cdf3fa2b56dc21c4351f7e4b05f0a49ccd54cd36bf209a843e7fab",
+          "sha256": "f0aa732769d7be5e9cd502e83d813713f2d94f975717370d4077764a6ac15d05",
           "container": "u8",
           "elements": 98304,
-          "first": 32,
+          "first": 10,
           "last": 0,
           "min": 0,
-          "max": 255,
-          "sum_int64": 4267040
+          "max": 62,
+          "sum_int64": 627764
         },
         "pool3": {
           "file": "build/sim/npu_probe/irmas_guitar_electric_sample/pool3_u8.bin",
-          "sha256": "10b75eaecdcf52de1903b7c22a80f98bf3b7f429097ed69de021a9a754496491",
+          "sha256": "b98c7039f32c9e09d47196c629e83a72f9cbee0f0a7018b3879f8005dae4668a",
           "container": "u8",
           "elements": 49152,
-          "first": 0,
-          "last": 0,
+          "first": 24,
+          "last": 7,
           "min": 0,
-          "max": 255,
-          "sum_int64": 1909114
+          "max": 81,
+          "sum_int64": 458380
         },
         "pool4": {
           "file": "build/sim/npu_probe/irmas_guitar_electric_sample/pool4_u8.bin",
-          "sha256": "b8dc3237cbc3f8ec6c6c3edd1a09460aeefcabddc49cd1ff54993ba649674a76",
+          "sha256": "2c0e5e5356760f699f1b1b0f231b697cc2fdf5c449b2ea18e0136c257e2fd829",
           "container": "u8",
           "elements": 16384,
           "first": 0,
-          "last": 0,
+          "last": 10,
           "min": 0,
-          "max": 255,
-          "sum_int64": 1142115
+          "max": 88,
+          "sum_int64": 176704
         },
         "gap": {
           "file": "build/sim/npu_probe/irmas_guitar_electric_sample/gap_s32.bin",
-          "sha256": "ecf3ce586d8be3c7d59ffd1965fb395cfc8f62e465b08dad518b8e180a977cfd",
+          "sha256": "16d2fd92ac655e68bb623966c1789b9c769692b6d349eee58144e94539c8e5f2",
           "container": "s32",
           "elements": 256,
-          "first": 1,
-          "last": 33,
+          "first": 17,
+          "last": 9,
           "min": 0,
-          "max": 232,
-          "sum_int64": 17842
+          "max": 30,
+          "sum_int64": 2752
         },
         "fc1": {
           "file": "build/sim/npu_probe/irmas_guitar_electric_sample/fc1_u8.bin",
-          "sha256": "3dd53ff6d5dec8ad2208eee951a8444f4a452d167538513daf681cfdc5092d29",
+          "sha256": "18c0d90ce359319c5a1db8609f7a89ef8aa837a59504b3fb6c2c42ea0c24afea",
           "container": "u8",
           "elements": 128,
           "first": 0,
-          "last": 171,
+          "last": 44,
           "min": 0,
-          "max": 255,
-          "sum_int64": 14316
+          "max": 92,
+          "sum_int64": 2741
         },
         "fc2": {
           "file": "build/sim/npu_probe/irmas_guitar_electric_sample/fc2_u8.bin",
-          "sha256": "1d7cfd723a83d1c122ceface7583bf6a99cb0d5c825f4e0bc84702abf0c8b122",
+          "sha256": "b1a2e0a1c8f1e6b7ef21adb7b9dd68ad7fde6350eb22caa415044ac691dae0b1",
           "container": "u8",
           "elements": 8,
-          "first": 212,
-          "last": 150,
-          "min": 0,
-          "max": 212,
-          "sum_int64": 488
+          "first": 9,
+          "last": 54,
+          "min": 9,
+          "max": 94,
+          "sum_int64": 425
         },
         "probs_q16": {
           "file": "build/sim/npu_probe/irmas_guitar_electric_sample/probs_q16_u16.bin",
-          "sha256": "c9473276fe8062bdfabc6a610f8bfdfceedddeafb5fbc5ab445281c5586e7969",
+          "sha256": "ab5cd208828526e4514ca80af6886a8a54b8118f836f839b7dad83d16f03dccd",
           "container": "u16",
           "elements": 8,
-          "first": 65535,
-          "last": 0,
+          "first": 0,
+          "last": 1,
           "min": 0,
-          "max": 65535,
-          "sum_int64": 65535
+          "max": 65287,
+          "sum_int64": 65536
         }
       },
       "golden_match": {
@@ -1266,7 +1266,7 @@
       "source": "D:\\0000\\111\\001\\Pango\\InstRec\\data\\demo\\irmas_test\\piano_sample.wav via golden_pipeline.load_pcm_s16 (stereo integer downmix (L+R+1)>>1, established convention) + run_mel_pipeline, truncated to the 132096-sample hardware window",
       "feat": {
         "file": "build/sim/npu_probe/irmas_piano_sample/feat_u8.bin",
-        "sha256": "c83d2202959da32b37b9f213187e89c6ef611f5fac11279533b898726e85fc4f",
+        "sha256": "a239276ae18e1a3b21b18235260d0536481a098d1eceade4ea5ee361c81231c0",
         "shape": [
           64,
           258
@@ -1274,83 +1274,83 @@
         "dtype": "uint8",
         "zp_in": 49,
         "elements": 16512,
-        "first": 255,
-        "last": 0,
-        "min": 0,
-        "max": 255,
-        "sum_int64": 2133849
+        "first": 68,
+        "last": 29,
+        "min": 29,
+        "max": 85,
+        "sum_int64": 809856
       },
       "cycles": 31115245,
-      "sim_seconds": 50.8,
-      "top1_rtl": 0,
-      "top1_golden": 0,
-      "top1_matches_class": true,
+      "sim_seconds": 40.6,
+      "top1_rtl": 4,
+      "top1_golden": 4,
+      "top1_matches_class": false,
       "logits_int32_rtl": [
-        140,
-        -57,
-        -42,
-        18,
-        38,
-        -57,
-        -57,
-        62
+        -12,
+        5,
+        -9,
+        -11,
+        29,
+        -4,
+        -28,
+        1
       ],
       "logits_int32_golden": [
-        140,
-        -57,
-        -42,
-        18,
-        38,
-        -57,
-        -57,
-        62
+        -12,
+        5,
+        -9,
+        -11,
+        29,
+        -4,
+        -28,
+        1
       ],
       "logits_dequant_rtl": [
-        39.29590940475464,
-        -15.999048829078674,
-        -11.788772821426392,
-        5.052331209182739,
-        10.666032552719116,
-        -15.999048829078674,
-        -15.999048829078674,
-        17.40247416496277
+        -3.368220806121826,
+        1.4034253358840942,
+        -2.5261656045913696,
+        -3.0875357389450073,
+        8.139866948127747,
+        -1.1227402687072754,
+        -7.859181880950928,
+        0.28068506717681885
       ],
       "probs_q16_rtl": [
-        65535,
+        1,
+        79,
+        2,
+        1,
+        65421,
+        6,
         0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0
+        26
       ],
       "probs_q16_golden": [
-        65535,
+        1,
+        79,
+        2,
+        1,
+        65421,
+        6,
         0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0
+        26
       ],
       "probs_float_rtl": [
-        0.9999847412109375,
+        1.52587890625e-05,
+        0.0012054443359375,
+        3.0517578125e-05,
+        1.52587890625e-05,
+        0.9982452392578125,
+        9.1552734375e-05,
         0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0
+        0.000396728515625
       ],
       "percent_rtl": [
+        0,
+        0,
+        0,
+        0,
         100,
-        0,
-        0,
-        0,
-        0,
         0,
         0,
         0
@@ -1358,135 +1358,135 @@
       "layers": {
         "conv1": {
           "file": "build/sim/npu_probe/irmas_piano_sample/conv1_u8.bin",
-          "sha256": "f6cfe6a3aa238e6cffc1e8f80b64b53b19d4943229a4d55c14a4d4259add3c0d",
+          "sha256": "8eef871356c17ea35cd0485904cc74e99c570ac0a568bd0049e5b5fddbaea80f",
           "container": "u8",
           "elements": 792576,
-          "first": 34,
+          "first": 3,
           "last": 0,
           "min": 0,
-          "max": 255,
-          "sum_int64": 13457023
+          "max": 31,
+          "sum_int64": 1647216
         },
         "conv2": {
           "file": "build/sim/npu_probe/irmas_piano_sample/conv2_u8.bin",
-          "sha256": "55b895ce60804cb522eeb372595a978e22205e73d7330e9da2d4271be9142c7f",
+          "sha256": "0aa44e720dbe540e45604eed566af1c1c373322cadcad7c8ff102601f4344552",
           "container": "u8",
           "elements": 396288,
-          "first": 32,
-          "last": 17,
+          "first": 8,
+          "last": 13,
           "min": 0,
-          "max": 255,
-          "sum_int64": 9447569
+          "max": 41,
+          "sum_int64": 1463205
         },
         "conv3": {
           "file": "build/sim/npu_probe/irmas_piano_sample/conv3_u8.bin",
-          "sha256": "1b86e108d4087ee33e803210c7bcef4cfb47450d753af3845e30d1287f444f8b",
+          "sha256": "2a4b57cf617c5334aa36e04da6b27f01044d319fd3dd53a5d3a1b1c1a485d513",
           "container": "u8",
           "elements": 196608,
-          "first": 0,
+          "first": 29,
           "last": 0,
           "min": 0,
-          "max": 255,
-          "sum_int64": 3955931
+          "max": 60,
+          "sum_int64": 1036964
         },
         "conv4": {
           "file": "build/sim/npu_probe/irmas_piano_sample/conv4_u8.bin",
-          "sha256": "de136eba349ee70a06c0842de82ae38aad1717921e05969d584a0dd8739eb0fc",
+          "sha256": "c40e72f22d320ade17554b7fbfa6baf1a3269812ac74f021ff1bb22ba5100c71",
           "container": "u8",
           "elements": 65536,
           "first": 0,
-          "last": 5,
+          "last": 0,
           "min": 0,
-          "max": 255,
-          "sum_int64": 2449592
+          "max": 65,
+          "sum_int64": 236256
         },
         "pool1": {
           "file": "build/sim/npu_probe/irmas_piano_sample/pool1_u8.bin",
-          "sha256": "6d882697612124b5eecdb5e314f01b1bfc4fb61a598585a96b05d7cad0135862",
+          "sha256": "641ce4464a9499865757b03a1cd1c394b83cbc03e581060d3263d7f0fc3a63da",
           "container": "u8",
           "elements": 198144,
-          "first": 78,
-          "last": 5,
+          "first": 6,
+          "last": 2,
           "min": 0,
-          "max": 255,
-          "sum_int64": 4494711
+          "max": 31,
+          "sum_int64": 531221
         },
         "pool2": {
           "file": "build/sim/npu_probe/irmas_piano_sample/pool2_u8.bin",
-          "sha256": "fbd0699cf2fab49b21ded962db5832af601dc6ccb3563e3534a58516044c4508",
+          "sha256": "5ea85cea909215ce4a0e3649d6ed8c90cbece909afe5ba66e452652ddb79b3a9",
           "container": "u8",
           "elements": 98304,
-          "first": 32,
-          "last": 0,
+          "first": 8,
+          "last": 3,
           "min": 0,
-          "max": 255,
-          "sum_int64": 3129255
+          "max": 41,
+          "sum_int64": 510186
         },
         "pool3": {
           "file": "build/sim/npu_probe/irmas_piano_sample/pool3_u8.bin",
-          "sha256": "49afb8dab1133c05f7a282bc218dd121cb73803650f83503fb4d3f8c64f2677c",
+          "sha256": "bf7e856f13094c8c9d43fd231714538916d250ab1b4f69ccc630a823695e68e4",
           "container": "u8",
           "elements": 49152,
-          "first": 0,
+          "first": 29,
           "last": 0,
           "min": 0,
-          "max": 255,
-          "sum_int64": 1477031
+          "max": 60,
+          "sum_int64": 390203
         },
         "pool4": {
           "file": "build/sim/npu_probe/irmas_piano_sample/pool4_u8.bin",
-          "sha256": "de675c6cf4f052928b6fda12fef125daa7e98df7943410aa5c5fdb9d5fab39bd",
+          "sha256": "a470691681f906c6a24e0ddebd3f1a335fd085ac9103264c07d59226ab123c4e",
           "container": "u8",
           "elements": 16384,
-          "first": 0,
-          "last": 5,
+          "first": 8,
+          "last": 0,
           "min": 0,
-          "max": 255,
-          "sum_int64": 941869
+          "max": 65,
+          "sum_int64": 103859
         },
         "gap": {
           "file": "build/sim/npu_probe/irmas_piano_sample/gap_s32.bin",
-          "sha256": "9aa85f229cfb1571496a7174444672d9d9e2a47aecdedb64afe2f653b5808b95",
+          "sha256": "3aaaeb9a187f19114258ca04e68ccf332fd9e74491e954eb073c2bef9bd2528a",
           "container": "s32",
           "elements": 256,
-          "first": 2,
-          "last": 33,
+          "first": 5,
+          "last": 0,
           "min": 0,
-          "max": 169,
-          "sum_int64": 14711
+          "max": 24,
+          "sum_int64": 1613
         },
         "fc1": {
           "file": "build/sim/npu_probe/irmas_piano_sample/fc1_u8.bin",
-          "sha256": "8f07e41cd1584cf48a6e9d6bb4428a5ad06a7bbfecefc6e9754408b1036100a7",
+          "sha256": "76d7c11f680d316bb629e40b9c0d4db60463ee3fd0e9d89413a9cd420a7417f7",
           "container": "u8",
           "elements": 128,
           "first": 0,
-          "last": 138,
+          "last": 16,
           "min": 0,
-          "max": 255,
-          "sum_int64": 12933
+          "max": 73,
+          "sum_int64": 1772
         },
         "fc2": {
           "file": "build/sim/npu_probe/irmas_piano_sample/fc2_u8.bin",
-          "sha256": "08db76670290b312e8cd9f4040eb4b0853882c8d53fcac1ed9da03ff00a72236",
+          "sha256": "be9bfe2e4bbd76954c302838466b3bab344da7cb1c41b93134628bc2209460e3",
           "container": "u8",
           "elements": 8,
-          "first": 197,
-          "last": 119,
-          "min": 0,
-          "max": 197,
-          "sum_int64": 501
+          "first": 45,
+          "last": 58,
+          "min": 29,
+          "max": 86,
+          "sum_int64": 427
         },
         "probs_q16": {
           "file": "build/sim/npu_probe/irmas_piano_sample/probs_q16_u16.bin",
-          "sha256": "c9473276fe8062bdfabc6a610f8bfdfceedddeafb5fbc5ab445281c5586e7969",
+          "sha256": "2ae1f7f49154280035cd721047b983561fb35bc8c06103cd11611bb341f21068",
           "container": "u16",
           "elements": 8,
-          "first": 65535,
-          "last": 0,
+          "first": 1,
+          "last": 26,
           "min": 0,
-          "max": 65535,
-          "sum_int64": 65535
+          "max": 65421,
+          "sum_int64": 65536
         }
       },
       "golden_match": {
@@ -1569,7 +1569,7 @@
       "source": "D:\\0000\\111\\001\\Pango\\InstRec\\data\\demo\\irmas_test\\saxophone_sample.wav via golden_pipeline.load_pcm_s16 (stereo integer downmix (L+R+1)>>1, established convention) + run_mel_pipeline, truncated to the 132096-sample hardware window",
       "feat": {
         "file": "build/sim/npu_probe/irmas_saxophone_sample/feat_u8.bin",
-        "sha256": "0d5b2181549194e7c2344b102c19e73a6fcb707a019d49cd27141dc8eadac95d",
+        "sha256": "a92b6d5b61283ece59a1255aab2b0265dff2a3345c9badf68edab3f0e94b8c64",
         "shape": [
           64,
           258
@@ -1577,218 +1577,218 @@
         "dtype": "uint8",
         "zp_in": 49,
         "elements": 16512,
-        "first": 255,
-        "last": 0,
-        "min": 0,
-        "max": 255,
-        "sum_int64": 2176146
+        "first": 64,
+        "last": 27,
+        "min": 27,
+        "max": 85,
+        "sum_int64": 809414
       },
       "cycles": 31115245,
-      "sim_seconds": 51.3,
-      "top1_rtl": 0,
-      "top1_golden": 0,
+      "sim_seconds": 39.8,
+      "top1_rtl": 1,
+      "top1_golden": 1,
       "top1_matches_class": false,
       "logits_int32_rtl": [
-        148,
-        -57,
-        -45,
-        20,
-        30,
-        -57,
-        -57,
-        61
+        -18,
+        12,
+        1,
+        1,
+        6,
+        -11,
+        -19,
+        7
       ],
       "logits_int32_golden": [
-        148,
-        -57,
-        -45,
-        20,
-        30,
-        -57,
-        -57,
-        61
+        -18,
+        12,
+        1,
+        1,
+        6,
+        -11,
+        -19,
+        7
       ],
       "logits_dequant_rtl": [
-        41.54138994216919,
-        -15.999048829078674,
-        -12.630828022956848,
-        5.613701343536377,
-        8.420552015304565,
-        -15.999048829078674,
-        -15.999048829078674,
-        17.12178909778595
+        -5.052331209182739,
+        3.368220806121826,
+        0.28068506717681885,
+        0.28068506717681885,
+        1.684110403060913,
+        -3.0875357389450073,
+        -5.333016276359558,
+        1.964795470237732
       ],
       "probs_q16_rtl": [
-        65535,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0
+        10,
+        42577,
+        1991,
+        1991,
+        8126,
+        68,
+        7,
+        10765
       ],
       "probs_q16_golden": [
-        65535,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0
+        10,
+        42577,
+        1991,
+        1991,
+        8126,
+        68,
+        7,
+        10765
       ],
       "probs_float_rtl": [
-        0.9999847412109375,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0
+        0.000152587890625,
+        0.6496734619140625,
+        0.0303802490234375,
+        0.0303802490234375,
+        0.123992919921875,
+        0.00103759765625,
+        0.0001068115234375,
+        0.1642608642578125
       ],
       "percent_rtl": [
-        100,
+        0,
+        65,
+        3,
+        3,
+        12,
         0,
         0,
-        0,
-        0,
-        0,
-        0,
-        0
+        16
       ],
       "layers": {
         "conv1": {
           "file": "build/sim/npu_probe/irmas_saxophone_sample/conv1_u8.bin",
-          "sha256": "bc6b5351f4fae622b702310bbe1ecfd7f89cd513be58464236cd3b7da2b3fd29",
+          "sha256": "4d9faa57a2c7e15d92249583e7146c882b6d29c85e85a519866613551f908911",
           "container": "u8",
           "elements": 792576,
-          "first": 34,
+          "first": 2,
           "last": 0,
           "min": 0,
-          "max": 255,
-          "sum_int64": 13647442
+          "max": 37,
+          "sum_int64": 1736816
         },
         "conv2": {
           "file": "build/sim/npu_probe/irmas_saxophone_sample/conv2_u8.bin",
-          "sha256": "ddb225ab14191cc959a8304ecc250aa3fa6f119f34fd7ded932df9677b38732e",
+          "sha256": "45048c78f37b926cc33010c2a584531946a8f2fd032857bbf2703eaf89c7d8a5",
           "container": "u8",
           "elements": 396288,
-          "first": 32,
-          "last": 17,
+          "first": 7,
+          "last": 14,
           "min": 0,
-          "max": 255,
-          "sum_int64": 9485311
+          "max": 40,
+          "sum_int64": 1398257
         },
         "conv3": {
           "file": "build/sim/npu_probe/irmas_saxophone_sample/conv3_u8.bin",
-          "sha256": "61efe8ca0fdcbbc5dffd36827440b59d094c73971928853dd843c691ed5992e3",
+          "sha256": "71cc4df822f52bb61d9201cd3921e0aa0c6a0f8cb255cdfbbba38dfcf959a50c",
           "container": "u8",
           "elements": 196608,
-          "first": 0,
+          "first": 31,
           "last": 0,
           "min": 0,
-          "max": 255,
-          "sum_int64": 4054154
+          "max": 51,
+          "sum_int64": 987649
         },
         "conv4": {
           "file": "build/sim/npu_probe/irmas_saxophone_sample/conv4_u8.bin",
-          "sha256": "3f3ab026838e1a90c1484b80523bfcf5fbe8925ca8bfd58b4954e476f93d04d0",
+          "sha256": "0363ba1c946df69afd407160243ad8eaf18dd4245beb2c761e7848698bc80d0b",
           "container": "u8",
           "elements": 65536,
           "first": 0,
-          "last": 5,
+          "last": 0,
           "min": 0,
-          "max": 255,
-          "sum_int64": 2599587
+          "max": 54,
+          "sum_int64": 240287
         },
         "pool1": {
           "file": "build/sim/npu_probe/irmas_saxophone_sample/pool1_u8.bin",
-          "sha256": "e6fcf94eb2f019559c6a9312ccca5013eb405fe0fa68e986eb01bdcb06d09096",
+          "sha256": "1f84abb03c6094cf4ce0c748a33d34220c9967eef2efa22711fcaa1a3b46d73e",
           "container": "u8",
           "elements": 198144,
-          "first": 78,
-          "last": 5,
+          "first": 5,
+          "last": 2,
           "min": 0,
-          "max": 255,
-          "sum_int64": 4558985
+          "max": 37,
+          "sum_int64": 594700
         },
         "pool2": {
           "file": "build/sim/npu_probe/irmas_saxophone_sample/pool2_u8.bin",
-          "sha256": "b30a2c359895f6e9460b06c49aa19f4ddb34fdc6d9f03808d2ee1c665dcefb2c",
+          "sha256": "c4d7522457d766116c62e6c6c886721243e6e32ff7ad51f2d56a6dcb1ad5222a",
           "container": "u8",
           "elements": 98304,
-          "first": 32,
-          "last": 0,
+          "first": 7,
+          "last": 2,
           "min": 0,
-          "max": 255,
-          "sum_int64": 3201844
+          "max": 40,
+          "sum_int64": 540998
         },
         "pool3": {
           "file": "build/sim/npu_probe/irmas_saxophone_sample/pool3_u8.bin",
-          "sha256": "a777d9e26f7a4e80eacc1dd61e708ddfe9496b9b4dc2954b83125bf7483b3e37",
+          "sha256": "2de96598196dceb89b852230456f05d2bb93b6d637fc11b9a98e1f675629bdc6",
           "container": "u8",
           "elements": 49152,
-          "first": 0,
-          "last": 0,
+          "first": 31,
+          "last": 2,
           "min": 0,
-          "max": 255,
-          "sum_int64": 1536998
+          "max": 51,
+          "sum_int64": 396849
         },
         "pool4": {
           "file": "build/sim/npu_probe/irmas_saxophone_sample/pool4_u8.bin",
-          "sha256": "add420632ef64d6f3b6db4f00720e0b9afbe93d6327028147e55e0d54c04cc95",
+          "sha256": "26aea38b076deb320ac906bb17ca9a0dec733b199d8cc33c87e6eccf9be25f87",
           "container": "u8",
           "elements": 16384,
-          "first": 0,
-          "last": 5,
+          "first": 10,
+          "last": 0,
           "min": 0,
-          "max": 255,
-          "sum_int64": 985736
+          "max": 54,
+          "sum_int64": 110991
         },
         "gap": {
           "file": "build/sim/npu_probe/irmas_saxophone_sample/gap_s32.bin",
-          "sha256": "feb8fcb5c6572fe1e8af58898faae0489de193c595b02f4cd2d98181f679ee17",
+          "sha256": "409a7194fc1ca26ac3de06001f5b9ac9649423e25f20eab5ea37d46a10b94d10",
           "container": "s32",
           "elements": 256,
-          "first": 1,
-          "last": 31,
+          "first": 12,
+          "last": 3,
           "min": 0,
-          "max": 187,
-          "sum_int64": 15413
+          "max": 16,
+          "sum_int64": 1734
         },
         "fc1": {
           "file": "build/sim/npu_probe/irmas_saxophone_sample/fc1_u8.bin",
-          "sha256": "b5d464915094431cc83e9a2ba4fa25ebbca65e7f0795ad7225fe6047504a5d3c",
+          "sha256": "916667d304fc43fabdeb42cb187911d0cedfdb3101554a0f7d873e5585456642",
           "container": "u8",
           "elements": 128,
           "first": 0,
-          "last": 135,
+          "last": 23,
           "min": 0,
-          "max": 255,
-          "sum_int64": 13218
+          "max": 47,
+          "sum_int64": 1634
         },
         "fc2": {
           "file": "build/sim/npu_probe/irmas_saxophone_sample/fc2_u8.bin",
-          "sha256": "a3240d524bf04e279380064bcb92d1ffb31c4e5f8c27e0b3f214d6288af7d3ec",
+          "sha256": "546c94852750f5ec72ecee27bbb92c440b02b8412babc5106b54a2da85768748",
           "container": "u8",
           "elements": 8,
-          "first": 205,
-          "last": 118,
-          "min": 0,
-          "max": 205,
-          "sum_int64": 499
+          "first": 39,
+          "last": 64,
+          "min": 38,
+          "max": 69,
+          "sum_int64": 435
         },
         "probs_q16": {
           "file": "build/sim/npu_probe/irmas_saxophone_sample/probs_q16_u16.bin",
-          "sha256": "c9473276fe8062bdfabc6a610f8bfdfceedddeafb5fbc5ab445281c5586e7969",
+          "sha256": "e2cbd3489fa1358fe9d6f0e6929a03a8f6d988543c671100acbf570f0f6a7fc1",
           "container": "u16",
           "elements": 8,
-          "first": 65535,
-          "last": 0,
-          "min": 0,
-          "max": 65535,
+          "first": 10,
+          "last": 10765,
+          "min": 7,
+          "max": 42577,
           "sum_int64": 65535
         }
       },
@@ -1872,7 +1872,7 @@
       "source": "D:\\0000\\111\\001\\Pango\\InstRec\\data\\demo\\irmas_test\\trumpet_sample.wav via golden_pipeline.load_pcm_s16 (stereo integer downmix (L+R+1)>>1, established convention) + run_mel_pipeline, truncated to the 132096-sample hardware window",
       "feat": {
         "file": "build/sim/npu_probe/irmas_trumpet_sample/feat_u8.bin",
-        "sha256": "e7839ecf0be6f61ce33e7cbd4bbdb441d20c3f7b89cf9c037cc234be3a392bbb",
+        "sha256": "9d971ffc5f22c0f4e56952ba4dd21bf12e67e35bdc2a78583ea9bebfb347abeb",
         "shape": [
           64,
           258
@@ -1880,219 +1880,219 @@
         "dtype": "uint8",
         "zp_in": 49,
         "elements": 16512,
-        "first": 255,
-        "last": 0,
-        "min": 0,
-        "max": 255,
-        "sum_int64": 2101642
+        "first": 69,
+        "last": 11,
+        "min": 11,
+        "max": 83,
+        "sum_int64": 809553
       },
       "cycles": 31115245,
-      "sim_seconds": 52.2,
-      "top1_rtl": 0,
-      "top1_golden": 0,
+      "sim_seconds": 39.9,
+      "top1_rtl": 2,
+      "top1_golden": 2,
       "top1_matches_class": false,
       "logits_int32_rtl": [
-        156,
-        -57,
-        -38,
-        -6,
-        2,
-        -57,
-        -57,
-        99
+        -20,
+        1,
+        23,
+        -2,
+        4,
+        5,
+        -35,
+        2
       ],
       "logits_int32_golden": [
-        156,
-        -57,
-        -38,
-        -6,
-        2,
-        -57,
-        -57,
-        99
+        -20,
+        1,
+        23,
+        -2,
+        4,
+        5,
+        -35,
+        2
       ],
       "logits_dequant_rtl": [
-        43.78687047958374,
-        -15.999048829078674,
-        -10.666032552719116,
-        -1.684110403060913,
-        0.5613701343536377,
-        -15.999048829078674,
-        -15.999048829078674,
-        27.787821650505066
+        -5.613701343536377,
+        0.28068506717681885,
+        6.4557565450668335,
+        -0.5613701343536377,
+        1.1227402687072754,
+        1.4034253358840942,
+        -9.82397735118866,
+        0.5613701343536377
       ],
       "probs_q16_rtl": [
-        65535,
         0,
+        137,
+        64421,
+        59,
+        318,
+        421,
         0,
-        0,
-        0,
-        0,
-        0,
-        0
+        181
       ],
       "probs_q16_golden": [
-        65535,
         0,
+        137,
+        64421,
+        59,
+        318,
+        421,
         0,
-        0,
-        0,
-        0,
-        0,
-        0
+        181
       ],
       "probs_float_rtl": [
-        0.9999847412109375,
         0.0,
+        0.0020904541015625,
+        0.9829864501953125,
+        0.0009002685546875,
+        0.004852294921875,
+        0.0064239501953125,
         0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0
+        0.0027618408203125
       ],
       "percent_rtl": [
-        100,
         0,
         0,
+        98,
         0,
         0,
-        0,
+        1,
         0,
         0
       ],
       "layers": {
         "conv1": {
           "file": "build/sim/npu_probe/irmas_trumpet_sample/conv1_u8.bin",
-          "sha256": "990247bdd91b7f25b4a3f77962a87523eb97648e52bce56cd4da8d9ad37c7f05",
+          "sha256": "adb5cedcbfd97ec238b28e7fd4e881a9baf7a069f39b01fa6ddd71cc63362c4d",
           "container": "u8",
           "elements": 792576,
-          "first": 34,
+          "first": 3,
           "last": 0,
           "min": 0,
-          "max": 255,
-          "sum_int64": 15332005
+          "max": 58,
+          "sum_int64": 1585262
         },
         "conv2": {
           "file": "build/sim/npu_probe/irmas_trumpet_sample/conv2_u8.bin",
-          "sha256": "7c5b88f3925d04b07ba2083c51fb8c84beb7fc33dd994172760328b849a74fec",
+          "sha256": "4bfe1b960c0c9680f1530fd1e2fdcc1686b1ba146a16dc0a6692298da74a4675",
           "container": "u8",
           "elements": 396288,
-          "first": 32,
-          "last": 17,
+          "first": 10,
+          "last": 15,
           "min": 0,
-          "max": 255,
-          "sum_int64": 11588728
+          "max": 68,
+          "sum_int64": 1526759
         },
         "conv3": {
           "file": "build/sim/npu_probe/irmas_trumpet_sample/conv3_u8.bin",
-          "sha256": "4e74795ae38663fb981cd06a73265bd8b604ee4bfcb89c62e60e929af9b4e3f6",
+          "sha256": "3b27d76a346e7f0be6652902f1fc403289f90d1e752591e4c4ba3ef603fc690e",
           "container": "u8",
           "elements": 196608,
-          "first": 0,
+          "first": 30,
           "last": 0,
           "min": 0,
-          "max": 255,
-          "sum_int64": 5156342
+          "max": 86,
+          "sum_int64": 1046719
         },
         "conv4": {
           "file": "build/sim/npu_probe/irmas_trumpet_sample/conv4_u8.bin",
-          "sha256": "3b1753dd4f7766087fbcba1b79fdd17371edba4d5997f088a15b9b682e27f97f",
+          "sha256": "b18711e1018038950b333adf0f2462e4b77a4a8664bb4a5715ab2c6c3eac271c",
           "container": "u8",
           "elements": 65536,
           "first": 0,
-          "last": 2,
+          "last": 0,
           "min": 0,
-          "max": 255,
-          "sum_int64": 3339347
+          "max": 101,
+          "sum_int64": 351484
         },
         "pool1": {
           "file": "build/sim/npu_probe/irmas_trumpet_sample/pool1_u8.bin",
-          "sha256": "8f4247fa004d0920a596edc7fd8a03d311f5f9a11de53f686d7ea234e254b255",
+          "sha256": "eaa486c138f52857083f92e667d8ecbf3358d7bf4aa184e4f5a8e291f0d64449",
           "container": "u8",
           "elements": 198144,
-          "first": 78,
-          "last": 5,
+          "first": 8,
+          "last": 4,
           "min": 0,
-          "max": 255,
-          "sum_int64": 6358182
+          "max": 58,
+          "sum_int64": 598701
         },
         "pool2": {
           "file": "build/sim/npu_probe/irmas_trumpet_sample/pool2_u8.bin",
-          "sha256": "8f04effb7c5b35177858d97bdf859cc8949d61ce63e550ec2200c1888ab6885b",
+          "sha256": "b671575016ede8158bc8e5e43ad6a8451e6515bd494edc8ef81e08fac5d57b41",
           "container": "u8",
           "elements": 98304,
-          "first": 32,
+          "first": 10,
           "last": 0,
           "min": 0,
-          "max": 255,
-          "sum_int64": 4465933
+          "max": 68,
+          "sum_int64": 628877
         },
         "pool3": {
           "file": "build/sim/npu_probe/irmas_trumpet_sample/pool3_u8.bin",
-          "sha256": "1f279acd6cddfab9e6ca9e300ea7cc0f5e6977060dcb8ed3449afd388891642c",
+          "sha256": "88c2f9dd51550d947bf403b289983eaeedcfee6f7da34b63cd05126f3e6bb79e",
           "container": "u8",
           "elements": 49152,
-          "first": 0,
-          "last": 0,
+          "first": 30,
+          "last": 6,
           "min": 0,
-          "max": 255,
-          "sum_int64": 1899415
+          "max": 86,
+          "sum_int64": 464608
         },
         "pool4": {
           "file": "build/sim/npu_probe/irmas_trumpet_sample/pool4_u8.bin",
-          "sha256": "66f2a7c9c5805e95e74caf5124b8ab200d2014ee7bee53f826a9edd9ab1bd016",
+          "sha256": "3b903f90b456f134ec581dcb834fc602aacac9fa459b4db3e6ebdaa767451e9d",
           "container": "u8",
           "elements": 16384,
           "first": 0,
-          "last": 2,
+          "last": 9,
           "min": 0,
-          "max": 255,
-          "sum_int64": 1150341
+          "max": 101,
+          "sum_int64": 174095
         },
         "gap": {
           "file": "build/sim/npu_probe/irmas_trumpet_sample/gap_s32.bin",
-          "sha256": "7313dcc8d59e547ce7a518849eb4e37d21d59d2293581881f30338d5c5fd7dd1",
+          "sha256": "6b229d107d007755d46519f374abcca87dd3e69bf3bc3fc36b9e99c503c657f0",
           "container": "s32",
           "elements": 256,
-          "first": 1,
-          "last": 18,
+          "first": 15,
+          "last": 6,
           "min": 0,
-          "max": 236,
-          "sum_int64": 17979
+          "max": 27,
+          "sum_int64": 2725
         },
         "fc1": {
           "file": "build/sim/npu_probe/irmas_trumpet_sample/fc1_u8.bin",
-          "sha256": "df0b3f0eef716b62a93705b86708362102f0754982638684f8bb517c6dc650a5",
+          "sha256": "5d9ac3bf644033606d202600e4484ad2a267dd6e5b25019844aeaafce7cfd537",
           "container": "u8",
           "elements": 128,
           "first": 0,
-          "last": 189,
+          "last": 29,
           "min": 0,
-          "max": 255,
-          "sum_int64": 14333
+          "max": 76,
+          "sum_int64": 2589
         },
         "fc2": {
           "file": "build/sim/npu_probe/irmas_trumpet_sample/fc2_u8.bin",
-          "sha256": "0a86e31829c992ed8db059993d2945e13f6761b34cd185618dd6a811f7cfe979",
+          "sha256": "4dacbb30d3b0952537d788c769c5f28e5dc5ed123691c65cd563f98dd00cacd8",
           "container": "u8",
           "elements": 8,
-          "first": 213,
-          "last": 156,
-          "min": 0,
-          "max": 213,
-          "sum_int64": 498
+          "first": 37,
+          "last": 59,
+          "min": 22,
+          "max": 80,
+          "sum_int64": 434
         },
         "probs_q16": {
           "file": "build/sim/npu_probe/irmas_trumpet_sample/probs_q16_u16.bin",
-          "sha256": "c9473276fe8062bdfabc6a610f8bfdfceedddeafb5fbc5ab445281c5586e7969",
+          "sha256": "d29c46d37e6844c368bc1a8c6e3357672076c02950f0a428d24009b4df7706d1",
           "container": "u16",
           "elements": 8,
-          "first": 65535,
-          "last": 0,
+          "first": 0,
+          "last": 181,
           "min": 0,
-          "max": 65535,
-          "sum_int64": 65535
+          "max": 64421,
+          "sum_int64": 65537
         }
       },
       "golden_match": {
@@ -2175,7 +2175,7 @@
       "source": "D:\\0000\\111\\001\\Pango\\InstRec\\data\\demo\\irmas_test\\violin_sample.wav via golden_pipeline.load_pcm_s16 (stereo integer downmix (L+R+1)>>1, established convention) + run_mel_pipeline, truncated to the 132096-sample hardware window",
       "feat": {
         "file": "build/sim/npu_probe/irmas_violin_sample/feat_u8.bin",
-        "sha256": "44e62256df483f7bb98b257d54ffe5a6b5bcb2c8610ed9d6e1f5d3fd2e713351",
+        "sha256": "d8a8be5949dda31668b8a7ee3c13831ce4573bceb046b4f802ea3354f006ff8f",
         "shape": [
           64,
           258
@@ -2183,83 +2183,83 @@
         "dtype": "uint8",
         "zp_in": 49,
         "elements": 16512,
-        "first": 255,
-        "last": 0,
-        "min": 0,
-        "max": 255,
-        "sum_int64": 2338488
+        "first": 72,
+        "last": 20,
+        "min": 20,
+        "max": 91,
+        "sum_int64": 808678
       },
       "cycles": 31115245,
-      "sim_seconds": 52.3,
-      "top1_rtl": 0,
-      "top1_golden": 0,
-      "top1_matches_class": false,
+      "sim_seconds": 39.1,
+      "top1_rtl": 1,
+      "top1_golden": 1,
+      "top1_matches_class": true,
       "logits_int32_rtl": [
-        174,
-        -57,
-        -38,
-        7,
-        0,
-        -57,
-        -57,
-        75
+        -37,
+        26,
+        -10,
+        -11,
+        17,
+        2,
+        -20,
+        1
       ],
       "logits_int32_golden": [
-        174,
-        -57,
-        -38,
-        7,
-        0,
-        -57,
-        -57,
-        75
+        -37,
+        26,
+        -10,
+        -11,
+        17,
+        2,
+        -20,
+        1
       ],
       "logits_dequant_rtl": [
-        48.83920168876648,
-        -15.999048829078674,
-        -10.666032552719116,
-        1.964795470237732,
-        0.0,
-        -15.999048829078674,
-        -15.999048829078674,
-        21.051380038261414
+        -10.385347485542297,
+        7.29781174659729,
+        -2.8068506717681885,
+        -3.0875357389450073,
+        4.77164614200592,
+        0.5613701343536377,
+        -5.613701343536377,
+        0.28068506717681885
       ],
       "probs_q16_rtl": [
-        65535,
         0,
+        60441,
+        3,
+        2,
+        4962,
+        73,
         0,
-        0,
-        0,
-        0,
-        0,
-        0
+        55
       ],
       "probs_q16_golden": [
-        65535,
         0,
+        60441,
+        3,
+        2,
+        4962,
+        73,
         0,
-        0,
-        0,
-        0,
-        0,
-        0
+        55
       ],
       "probs_float_rtl": [
-        0.9999847412109375,
         0.0,
+        0.9222564697265625,
+        4.57763671875e-05,
+        3.0517578125e-05,
+        0.075714111328125,
+        0.0011138916015625,
         0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0
+        0.0008392333984375
       ],
       "percent_rtl": [
-        100,
+        0,
+        92,
         0,
         0,
-        0,
-        0,
+        8,
         0,
         0,
         0
@@ -2267,135 +2267,135 @@
       "layers": {
         "conv1": {
           "file": "build/sim/npu_probe/irmas_violin_sample/conv1_u8.bin",
-          "sha256": "84cde690f3678236929a0d297d9bcc54ed708c2b59697cfe26f2731b21aa9c4a",
+          "sha256": "503eca7624dd9540ebf850bb229f2659cc93e3cc53b4f1066466c22708ae0913",
           "container": "u8",
           "elements": 792576,
-          "first": 34,
+          "first": 4,
           "last": 0,
           "min": 0,
-          "max": 255,
-          "sum_int64": 14984030
+          "max": 40,
+          "sum_int64": 1690654
         },
         "conv2": {
           "file": "build/sim/npu_probe/irmas_violin_sample/conv2_u8.bin",
-          "sha256": "95d9498f02bef6d9456d23af433e79d7dce7096d3ff8edab40dab744d0a211e8",
+          "sha256": "901f673556d95eb85a2e4aeabbed8f144c233182140f01c82d4ef8c9c35ef4d9",
           "container": "u8",
           "elements": 396288,
-          "first": 32,
-          "last": 17,
+          "first": 7,
+          "last": 14,
           "min": 0,
-          "max": 255,
-          "sum_int64": 10863406
+          "max": 46,
+          "sum_int64": 1439251
         },
         "conv3": {
           "file": "build/sim/npu_probe/irmas_violin_sample/conv3_u8.bin",
-          "sha256": "7042fbc2949519fc4629fec971db9ce7e208f66748f8c0f6dfaafdc47aa8e47a",
+          "sha256": "365c80089b7e2461b465f46f492c87d533959f9eb51b360d1f516520aeff19a2",
           "container": "u8",
           "elements": 196608,
-          "first": 0,
+          "first": 26,
           "last": 0,
           "min": 0,
-          "max": 255,
-          "sum_int64": 4819996
+          "max": 83,
+          "sum_int64": 983883
         },
         "conv4": {
           "file": "build/sim/npu_probe/irmas_violin_sample/conv4_u8.bin",
-          "sha256": "3656af95b18d56e44e375bd17ac13f0f934536366e9e32818e78d499d62c1151",
+          "sha256": "143b09a0969f35f1c66c8d4fcc8b1a6e870f856d9f8cb52cb8b3968d31d4c1dd",
           "container": "u8",
           "elements": 65536,
           "first": 0,
-          "last": 1,
+          "last": 0,
           "min": 0,
-          "max": 255,
-          "sum_int64": 3202810
+          "max": 85,
+          "sum_int64": 295478
         },
         "pool1": {
           "file": "build/sim/npu_probe/irmas_violin_sample/pool1_u8.bin",
-          "sha256": "6a71b53fcee1c50b7ba028296ab323f180ddb3476f9558b7b0fdb4ce8d549fb8",
+          "sha256": "a7ec7b271d46ff873f2f0f4ef09a97ff5c2a9631a698e983752f2f1b350a2f8e",
           "container": "u8",
           "elements": 198144,
-          "first": 78,
-          "last": 5,
+          "first": 8,
+          "last": 3,
           "min": 0,
-          "max": 255,
-          "sum_int64": 5548074
+          "max": 40,
+          "sum_int64": 600479
         },
         "pool2": {
           "file": "build/sim/npu_probe/irmas_violin_sample/pool2_u8.bin",
-          "sha256": "df7832862f99c144baa6017bd60429572cdce5e3835d1fa0fda6172462d28130",
+          "sha256": "5cd4a4964797a30bbb90c00181c5e759c5f09b0f28e90d3e4156fc70400ebe23",
           "container": "u8",
           "elements": 98304,
-          "first": 32,
+          "first": 7,
           "last": 0,
           "min": 0,
-          "max": 255,
-          "sum_int64": 3986836
+          "max": 46,
+          "sum_int64": 570574
         },
         "pool3": {
           "file": "build/sim/npu_probe/irmas_violin_sample/pool3_u8.bin",
-          "sha256": "335f8b6b8414d6c0cec00c86edc598d129d7102eb9c1d598169152061209710c",
+          "sha256": "862e571531db775de284ea31098f8743d08a83363b150deda37838c3feb5db0e",
           "container": "u8",
           "elements": 49152,
-          "first": 0,
-          "last": 0,
+          "first": 26,
+          "last": 2,
           "min": 0,
-          "max": 255,
-          "sum_int64": 1775411
+          "max": 83,
+          "sum_int64": 406233
         },
         "pool4": {
           "file": "build/sim/npu_probe/irmas_violin_sample/pool4_u8.bin",
-          "sha256": "f73c991258f263baa7a1242a26e5f01a9c033dbc547b13c8a85df0a3460172f1",
+          "sha256": "8d974d5036e23acb31512d69f4cbc64b9338d7c97ade9c6ff217cec783bff4cb",
           "container": "u8",
           "elements": 16384,
-          "first": 0,
-          "last": 1,
+          "first": 2,
+          "last": 0,
           "min": 0,
-          "max": 255,
-          "sum_int64": 1131625
+          "max": 85,
+          "sum_int64": 131866
         },
         "gap": {
           "file": "build/sim/npu_probe/irmas_violin_sample/gap_s32.bin",
-          "sha256": "ab4bbc314ae1d7e90c012323a7adc3f465045850109ef89466f4b08e6b639e6a",
+          "sha256": "4a4b1fc96daa5af307b9c7c7c841778476f9cbf97a1d9d50d2cb77327be139c5",
           "container": "s32",
           "elements": 256,
-          "first": 3,
-          "last": 27,
+          "first": 5,
+          "last": 7,
           "min": 0,
-          "max": 226,
-          "sum_int64": 17682
+          "max": 28,
+          "sum_int64": 2064
         },
         "fc1": {
           "file": "build/sim/npu_probe/irmas_violin_sample/fc1_u8.bin",
-          "sha256": "66cc47fefa50686235e5d922f33f10eb9fe3571f6c2134d38aba60398cc1bf44",
+          "sha256": "d53c0df5dc53fd6ee6312f9d9e64202c889aa5819f804592bf88fdd58ba13e16",
           "container": "u8",
           "elements": 128,
-          "first": 0,
-          "last": 181,
+          "first": 5,
+          "last": 21,
           "min": 0,
-          "max": 255,
-          "sum_int64": 14009
+          "max": 81,
+          "sum_int64": 2127
         },
         "fc2": {
           "file": "build/sim/npu_probe/irmas_violin_sample/fc2_u8.bin",
-          "sha256": "9507968c6cd22c809145098fec790249749efcfb257dd245a687d47df73fb6b1",
+          "sha256": "2d294eb987a91e491b95c0f772ae4d18220b73297f5ff1c1d5dd8756a435fb5f",
           "container": "u8",
           "elements": 8,
-          "first": 231,
-          "last": 132,
-          "min": 0,
-          "max": 231,
-          "sum_int64": 503
+          "first": 20,
+          "last": 58,
+          "min": 20,
+          "max": 83,
+          "sum_int64": 424
         },
         "probs_q16": {
           "file": "build/sim/npu_probe/irmas_violin_sample/probs_q16_u16.bin",
-          "sha256": "c9473276fe8062bdfabc6a610f8bfdfceedddeafb5fbc5ab445281c5586e7969",
+          "sha256": "a74bc94fa9750abff129a02395f00cfa83812259bb9483090f45e011ac1f437d",
           "container": "u16",
           "elements": 8,
-          "first": 65535,
-          "last": 0,
+          "first": 0,
+          "last": 55,
           "min": 0,
-          "max": 65535,
-          "sum_int64": 65535
+          "max": 60441,
+          "sum_int64": 65536
         }
       },
       "golden_match": {
@@ -2474,51 +2474,53 @@
       {
         "name": "irmas_clarinet_sample",
         "class": "clarinet",
-        "top1_rtl": 0
+        "top1_rtl": 4
       },
       {
         "name": "irmas_flute_sample",
         "class": "flute",
-        "top1_rtl": 0
+        "top1_rtl": 4
       },
       {
         "name": "irmas_guitar_acoustic_sample",
         "class": "guitar_acoustic",
-        "top1_rtl": 0
+        "top1_rtl": 1
       },
       {
         "name": "irmas_guitar_electric_sample",
         "class": "guitar_electric",
-        "top1_rtl": 0
+        "top1_rtl": 1
       },
       {
         "name": "irmas_piano_sample",
         "class": "piano",
-        "top1_rtl": 0
+        "top1_rtl": 4
       },
       {
         "name": "irmas_saxophone_sample",
         "class": "saxophone",
-        "top1_rtl": 0
+        "top1_rtl": 1
       },
       {
         "name": "irmas_trumpet_sample",
         "class": "trumpet",
-        "top1_rtl": 0
+        "top1_rtl": 2
       },
       {
         "name": "irmas_violin_sample",
         "class": "violin",
-        "top1_rtl": 0
+        "top1_rtl": 1
       }
     ],
     "top1_distribution_rtl": {
-      "0 (piano)": 8
+      "4 (saxophone)": 3,
+      "1 (violin)": 4,
+      "2 (clarinet)": 1
     },
     "all_top1_match_class": false,
     "all_top1_distinct": false,
     "rtl_matches_golden_all_layers_all_samples": true,
-    "conclusion": "RTL matches the bit-level golden on every layer for all samples, but top1 does NOT track the sample class -- it collapses to a single class (0 (piano)=8). The quantized model has no class-discriminative power in the golden mel feature domain, so the constant-top1 symptom is rooted model/feature-side, not in RTL numeric correctness nor in board data transport. The board collapse point (top1=6, guitar_acoustic) differs from the RTL/golden collapse point (top1=0, piano), which indicates the board input domain additionally shifts the collapse point, but a board-side fix alone cannot restore correct classification while the model side stays non-discriminative.",
+    "conclusion": "RTL matches the bit-level golden on every layer for all samples, but top1 does NOT track the sample class -- it collapses to a single class (1 (violin)=4, 2 (clarinet)=1, 4 (saxophone)=3). The quantized model has no class-discriminative power in the golden mel feature domain, so the constant-top1 symptom is rooted model/feature-side, not in RTL numeric correctness nor in board data transport. The board collapse point (top1=6, guitar_acoustic) differs from the RTL/golden collapse point (top1=0, piano), which indicates the board input domain additionally shifts the collapse point, but a board-side fix alone cannot restore correct classification while the model side stays non-discriminative.",
     "suggested_next_steps": [
       "run the same 8 wavs through the InstRec floating-point model with its training-time librosa feature extractor to check whether the collapse is a quantized-model defect or a golden-mel-domain vs training-domain mismatch (dB normalization / top_db / downmix semantics)",
       "compare golden_pipeline.run_mel_pipeline output against InstRec extract_mel on one IRMAS sample element-wise",
@@ -2533,7 +2535,7 @@
   "summary": {
     "samples_run": 8,
     "total_cycles": 248921960,
-    "total_sim_seconds": 431.6,
-    "total_wall_seconds": 447.0
+    "total_sim_seconds": 318.6,
+    "total_wall_seconds": 329.0
   }
 }

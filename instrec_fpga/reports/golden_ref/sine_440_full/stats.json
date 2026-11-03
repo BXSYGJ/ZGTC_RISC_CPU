@@ -7,9 +7,9 @@
         64,
         258
       ],
-      "min": 0,
-      "max": 255,
-      "n_unique": 2
+      "min": 43,
+      "max": 121,
+      "n_unique": 66
     },
     "conv1": {
       "dtype": "uint8",
@@ -19,8 +19,8 @@
         258
       ],
       "min": 0,
-      "max": 255,
-      "n_unique": 195
+      "max": 81,
+      "n_unique": 72
     },
     "conv2": {
       "dtype": "uint8",
@@ -30,8 +30,8 @@
         129
       ],
       "min": 0,
-      "max": 255,
-      "n_unique": 247
+      "max": 98,
+      "n_unique": 80
     },
     "conv3": {
       "dtype": "uint8",
@@ -41,8 +41,8 @@
         64
       ],
       "min": 0,
-      "max": 255,
-      "n_unique": 245
+      "max": 100,
+      "n_unique": 92
     },
     "conv4": {
       "dtype": "uint8",
@@ -52,8 +52,8 @@
         32
       ],
       "min": 0,
-      "max": 255,
-      "n_unique": 243
+      "max": 124,
+      "n_unique": 105
     },
     "pool1": {
       "dtype": "uint8",
@@ -63,8 +63,8 @@
         129
       ],
       "min": 0,
-      "max": 255,
-      "n_unique": 186
+      "max": 81,
+      "n_unique": 67
     },
     "pool2": {
       "dtype": "uint8",
@@ -74,8 +74,8 @@
         64
       ],
       "min": 0,
-      "max": 255,
-      "n_unique": 222
+      "max": 98,
+      "n_unique": 76
     },
     "pool3": {
       "dtype": "uint8",
@@ -85,8 +85,8 @@
         32
       ],
       "min": 0,
-      "max": 255,
-      "n_unique": 228
+      "max": 100,
+      "n_unique": 91
     },
     "pool4": {
       "dtype": "uint8",
@@ -96,8 +96,8 @@
         16
       ],
       "min": 0,
-      "max": 255,
-      "n_unique": 242
+      "max": 124,
+      "n_unique": 104
     },
     "gap": {
       "dtype": "int32",
@@ -105,8 +105,8 @@
         256
       ],
       "min": 0,
-      "max": 119,
-      "n_unique": 91
+      "max": 46,
+      "n_unique": 44
     },
     "fc1": {
       "dtype": "uint8",
@@ -114,8 +114,8 @@
         128
       ],
       "min": 0,
-      "max": 255,
-      "n_unique": 60
+      "max": 128,
+      "n_unique": 50
     },
     "fc2_logits": {
       "dtype": "int32",
@@ -123,8 +123,8 @@
         8
       ],
       "min": -57,
-      "max": 145,
-      "n_unique": 6
+      "max": 64,
+      "n_unique": 8
     },
     "probs": {
       "dtype": "uint16",

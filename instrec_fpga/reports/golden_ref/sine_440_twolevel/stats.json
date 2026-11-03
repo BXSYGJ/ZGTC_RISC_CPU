@@ -7,9 +7,9 @@
         64,
         258
       ],
-      "min": 0,
-      "max": 255,
-      "n_unique": 7
+      "min": 44,
+      "max": 126,
+      "n_unique": 74
     },
     "conv1": {
       "dtype": "uint8",
@@ -19,8 +19,8 @@
         258
       ],
       "min": 0,
-      "max": 255,
-      "n_unique": 229
+      "max": 78,
+      "n_unique": 69
     },
     "conv2": {
       "dtype": "uint8",
@@ -30,8 +30,8 @@
         129
       ],
       "min": 0,
-      "max": 255,
-      "n_unique": 256
+      "max": 91,
+      "n_unique": 85
     },
     "conv3": {
       "dtype": "uint8",
@@ -41,8 +41,8 @@
         64
       ],
       "min": 0,
-      "max": 255,
-      "n_unique": 256
+      "max": 107,
+      "n_unique": 101
     },
     "conv4": {
       "dtype": "uint8",
@@ -52,8 +52,8 @@
         32
       ],
       "min": 0,
-      "max": 255,
-      "n_unique": 256
+      "max": 126,
+      "n_unique": 115
     },
     "pool1": {
       "dtype": "uint8",
@@ -63,8 +63,8 @@
         129
       ],
       "min": 0,
-      "max": 255,
-      "n_unique": 226
+      "max": 78,
+      "n_unique": 66
     },
     "pool2": {
       "dtype": "uint8",
@@ -74,8 +74,8 @@
         64
       ],
       "min": 0,
-      "max": 255,
-      "n_unique": 255
+      "max": 91,
+      "n_unique": 82
     },
     "pool3": {
       "dtype": "uint8",
@@ -85,8 +85,8 @@
         32
       ],
       "min": 0,
-      "max": 255,
-      "n_unique": 255
+      "max": 107,
+      "n_unique": 100
     },
     "pool4": {
       "dtype": "uint8",
@@ -96,8 +96,8 @@
         16
       ],
       "min": 0,
-      "max": 255,
-      "n_unique": 256
+      "max": 126,
+      "n_unique": 113
     },
     "gap": {
       "dtype": "int32",
@@ -105,8 +105,8 @@
         256
       ],
       "min": 0,
-      "max": 134,
-      "n_unique": 108
+      "max": 45,
+      "n_unique": 44
     },
     "fc1": {
       "dtype": "uint8",
@@ -114,7 +114,7 @@
         128
       ],
       "min": 0,
-      "max": 255,
+      "max": 136,
       "n_unique": 48
     },
     "fc2_logits": {
@@ -123,8 +123,8 @@
         8
       ],
       "min": -57,
-      "max": 169,
-      "n_unique": 6
+      "max": 67,
+      "n_unique": 7
     },
     "probs": {
       "dtype": "uint16",

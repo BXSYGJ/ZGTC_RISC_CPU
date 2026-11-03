@@ -308,18 +308,31 @@ def test_archived_board_value_domain():
 
 
 def test_board_columns_are_invariant_and_so_is_the_golden(golden):
-    """Column invariance is a property of the Mel data, not of the datapath."""
+    """Archived board columns were invariant because of the saturation bug.
+
+    The archived capture (values {0,1,2,8,255}) predates the 2026-11-04
+    shift-36 quantizer fix: its column invariance was a saturation
+    artifact of the 2^12 gain bug, not a Mel property.  The fixed golden
+    conv1 must NOT show that invariance any more - its disappearance is
+    the positive evidence that the bug is gone.
+    """
     win0 = np.array(ARCHIVED_WIN0, dtype=np.int64)
     win4 = np.array(ARCHIVED_WIN4, dtype=np.int64)
     assert all(len(set(win0[4:, ch].tolist())) == 1 for ch in range(16))
     assert all(len(set(win4[2:, ch].tolist())) == 1 for ch in range(16))
     _, conv1 = golden
-    assert all(int(conv1[ch, 0, 4:32].std()) == 0 for ch in range(16))
-    assert all(int(conv1[ch, 63, 2:32].std()) == 0 for ch in range(16))
+    assert any(int(conv1[ch, 0, 4:32].std()) > 0 for ch in range(16))
 
 
 def test_observed_is_not_a_permutation_of_the_golden(golden):
-    """Rules out the 16-lane TDM lane -> channel mapping hypothesis."""
+    """Rules out the 16-lane TDM lane -> channel mapping hypothesis.
+
+    After the 2026-11-04 shift-36 fix the golden left the archived
+    bug-domain board values entirely.  At most one accidental multiset
+    collision remains (column 24: both sides are near-zero clusters of
+    0s and 1s), which still rules out any systematic lane -> channel
+    permutation of this golden against that capture.
+    """
     _, conv1 = golden
     win0 = np.array(ARCHIVED_WIN0, dtype=np.int64)
     equal = 0
@@ -327,7 +340,7 @@ def test_observed_is_not_a_permutation_of_the_golden(golden):
         expected = sorted(int(conv1[ch, 0, col]) for ch in range(16))
         observed = sorted(int(v) for v in win0[col])
         equal += expected == observed
-    assert equal == 0
+    assert equal <= 1
 
 
 # --------------------------------------------------------------------------- #

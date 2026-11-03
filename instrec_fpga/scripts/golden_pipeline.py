@@ -126,7 +126,12 @@ LOG2_ZERO_Q88 = LOG2_BIAS << 8   # log2(0) defined as -14336
 # an unsigned MAC with the per-channel -zp_in * sum(w) correction, see
 # layer_contract.json zp_in_correction / golden_pipeline.npu_forward).
 DEFAULT_CONTRACT_PATH = SCRIPTS_DIR / "outputs" / "layer_contract.json"
-QUANT_IN_FRAC_BITS = 24            # Q8.24 inv_s_in (design.md 3.7)
+# z is Q4.12 and inv_s_in is Q8.24, so the product carries 12 + 24 = 36
+# fractional bits.  The historical value 24 (design.md 3.7) shifted only
+# the inv_s_in scale, leaving an extra 2^12 gain that saturated the uint8
+# feature (~50% of bytes at 255); found 2026-11-04, see
+# reports/float_vs_quant_domain_diag_20261104.json.
+QUANT_IN_FRAC_BITS = 36            # Q4.12 z * Q8.24 inv_s_in (12 + 24)
 
 GOLDEN_NAME = "golden_pipeline.py"
 SPEC_REFS = "tasks.md T-GP-04/T-GP-05; design.md 3.1-3.7, 4.3-4.5; spec.md REQ-FTR-001..005, REQ-ACC-002/003"
@@ -540,8 +545,10 @@ def quantize_int8(
 
     Bit-level QuantStub parity (fbgemm round-half-to-even):
       x_u8 = sat_u8( round_half_even(z * inv_s_in >> frac) + zp_in )
-    with inv_s_in = round(2^24 / s_in) in Q8.24 (frac = 24) taken from
-    the layer contract.  The result is UNSIGNED uint8 in [0, 255]; it
+    with inv_s_in = round(2^24 / s_in) in Q8.24 taken from the layer
+    contract and frac = 36 because z is Q4.12 (the historical frac = 24
+    dropped the z scale and saturated the feature, see QUANT_IN_FRAC_BITS
+    above).  The result is UNSIGNED uint8 in [0, 255]; it
     carries the +49 zero-point offset, i.e. the quantized-domain zero
     is 49, NOT 0 (all-silent windows produce an all-49 feature).
     """

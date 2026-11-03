@@ -246,21 +246,26 @@ module standardize #(
                                      z_rhu_s39[15:0];
 
     // ------------------------------------------------------------------
-    // Beat Q: x_u8 = sat_u8(rhe_shift(z * inv_s_in, 24) + zp_in) with
+    // Beat Q: x_u8 = sat_u8(rhe_shift(z * inv_s_in, 36) + zp_in) with
     // bitwise round-half-to-even (golden round_half_even_shift).
+    // z is Q4.12 and inv_s_in is Q8.24, so the product carries 36
+    // fractional bits (12 + 24).  The historical >>24 dropped the z
+    // scale and left a 2^12 gain that saturated the uint8 feature;
+    // found 2026-11-04, see
+    // reports/float_vs_quant_domain_diag_20261104.json.
     // ------------------------------------------------------------------
     wire signed [47:0] qprod_s48 = z_reg * INV_S_IN_S;
     wire               q_neg = qprod_reg[47];
     wire [47:0]        q_abs = q_neg ? (~qprod_reg + 48'd1) : qprod_reg;
-    wire [23:0]        q_shift = q_abs[47:24];
-    wire [23:0]        q_rem = q_abs[23:0];
-    // tie threshold 2^23: rem > half, or rem == half and q odd -> +1
-    wire               rhe_inc = (q_rem > 24'h800000) ||
-                                 ((q_rem == 24'h800000) && q_shift[0]);
-    wire [24:0]        q_rnd = {1'b0, q_shift} + (rhe_inc ? 25'd1 : 25'd0);
-    wire signed [25:0] q_res_s26 = q_neg ? -$signed({1'b0, q_rnd})
+    wire [11:0]        q_shift = q_abs[47:36];
+    wire [35:0]        q_rem = q_abs[35:0];
+    // tie threshold 2^35: rem > half, or rem == half and q odd -> +1
+    wire               rhe_inc = (q_rem > 36'h800000000) ||
+                                 ((q_rem == 36'h800000000) && q_shift[0]);
+    wire [12:0]        q_rnd = {1'b0, q_shift} + (rhe_inc ? 13'd1 : 13'd0);
+    wire signed [13:0] q_res_s14 = q_neg ? -$signed({1'b0, q_rnd})
                                           : $signed({1'b0, q_rnd});
-    wire signed [26:0] x_q_s27 = q_res_s26 + ZP_IN_S;
+    wire signed [26:0] x_q_s27 = {{13{q_res_s14[13]}}, q_res_s14} + ZP_IN_S;
     wire [7:0]         feat_byte = (x_q_s27 < 27'sd0)   ? 8'd0   :
                                    (x_q_s27 > 27'sd255) ? 8'd255 :
                                                           x_q_s27[7:0];

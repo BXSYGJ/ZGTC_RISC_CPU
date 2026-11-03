@@ -306,10 +306,16 @@ def test_dod4_fullscale_saturation_no_wrap(samples):
     smp = samples["sine_440_full"]
     feat, g = smp["feat"], smp["golden"]
 
-    # The full-scale sample actually exercises the uint8 rails.
-    assert int(feat.min()) == 0 or int(feat.max()) == 255, (
-        "full-scale sample does not exercise the saturation path"
-    )
+    # The uint8 rails are exercised at the quantizer: the negative Q4.12
+    # extreme clamps to 0, while the positive extreme reaches the Q4.12
+    # domain ceiling (z=8 -> 8*inv_s_in+zp ~ 177) without ever hitting
+    # 255 - the historical full-rail coverage was itself the 2^12 gain
+    # saturation bug (fixed 2026-11-04, shift 36).
+    z_rails = np.array([-32768, -30000, 0, 30000, 32767], dtype=np.int16)
+    x_rails = gp.quantize_int8(z_rails)
+    assert int(x_rails[0]) == 0
+    assert int(x_rails[-1]) == int(x_rails.max())
+    assert 150 < int(x_rails[-1]) <= 177
 
     # No wrap-around anywhere: every container value inside its domain.
     for stage in ("conv1", "pool1", "conv2", "pool2", "conv3", "pool3",

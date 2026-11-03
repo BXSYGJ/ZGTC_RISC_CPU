@@ -33,7 +33,7 @@
       "contract_layer": "quant_stub_input",
       "contract_layer_id": null,
       "source": "golden_pipeline.run_mel_pipeline()['feat']",
-      "sha256": "c5a789ed1239489914b6129ad66ff908ebd12655e60bb57b7091be8c0770ee70",
+      "sha256": "13a3287d9da22fab597b8dd1027ea763540ac1ed809789e2c67228e3a2a34c85",
       "note": "Mel feature, uint8 quint8 container, zp_in = 49"
     },
     "conv1": {
@@ -48,7 +48,7 @@
       "contract_layer": "conv1",
       "contract_layer_id": 0,
       "source": "golden_pipeline.npu_forward()['conv1'] (conv2d_int8)",
-      "sha256": "38f8b073ae3ce5d5a290c4339b80fd7c990bd02133eea953208bf15347b3b248"
+      "sha256": "e25ca73ef97719caf252266481ef98f71f1d3490523192a7ba7c0352d73cf181"
     },
     "conv2": {
       "file": "conv2.npy",
@@ -62,7 +62,7 @@
       "contract_layer": "conv2",
       "contract_layer_id": 1,
       "source": "golden_pipeline.npu_forward()['conv2'] (conv2d_int8)",
-      "sha256": "fc7477bf4da796766e7741946c622f047b4d4a19ffa204f9d017dda8c7d8ebb4"
+      "sha256": "2b651c24607b57fd57af20d3d2d360764914487d73b8d58eb8e30710455d0ce4"
     },
     "conv3": {
       "file": "conv3.npy",
@@ -76,7 +76,7 @@
       "contract_layer": "conv3",
       "contract_layer_id": 2,
       "source": "golden_pipeline.npu_forward()['conv3'] (conv2d_int8)",
-      "sha256": "7726e4215b3e5277703ee9aa2a17b8c1042e2609c65703d284788b34c02e47ab"
+      "sha256": "572340bf00354af558b078fd14bea847a28928e1441a517539743ab0dc11b342"
     },
     "conv4": {
       "file": "conv4.npy",
@@ -90,7 +90,7 @@
       "contract_layer": "conv4",
       "contract_layer_id": 3,
       "source": "golden_pipeline.npu_forward()['conv4'] (conv2d_int8)",
-      "sha256": "b54700180c3b4dc01d4bf1e672a23879837acdc52ab2c26c18c2956ed5fc8c05"
+      "sha256": "142456d6bb89a53ad2c8d97c27cb5d9f84b1e296e72389fc9c77c631932b1243"
     },
     "pool1": {
       "file": "pool1.npy",
@@ -104,7 +104,7 @@
       "contract_layer": null,
       "contract_layer_id": null,
       "source": "golden_pipeline.npu_forward()['pool1'] (maxpool2x2_floor)",
-      "sha256": "56d83caec90f5e2c46e2e53a0dad288ee7127d2acc61eaf771764b0472d29556"
+      "sha256": "53045dee2979b18e84e9a908c72c8b28816ab2d4e79ee372365a41d627cb9b55"
     },
     "pool2": {
       "file": "pool2.npy",
@@ -118,7 +118,7 @@
       "contract_layer": null,
       "contract_layer_id": null,
       "source": "golden_pipeline.npu_forward()['pool2'] (maxpool2x2_floor)",
-      "sha256": "173fd35985f039b487fce05a80ec6dc54a28b56c2983da463f41d40a7fe308fb"
+      "sha256": "aebe3691979c0e86361bad6d13265b1d6b8ca479bbbdeab998febd119980c7da"
     },
     "pool3": {
       "file": "pool3.npy",
@@ -132,7 +132,7 @@
       "contract_layer": null,
       "contract_layer_id": null,
       "source": "golden_pipeline.npu_forward()['pool3'] (maxpool2x2_floor)",
-      "sha256": "5c1bd34a0c544c8c84759b7ea03433844792a6cd997b55bae702604c53f15a91"
+      "sha256": "85790b456785d6f20d0ff3c16153b35ff6973a113fd920c32db375f468963efc"
     },
     "pool4": {
       "file": "pool4.npy",
@@ -146,7 +146,7 @@
       "contract_layer": null,
       "contract_layer_id": null,
       "source": "golden_pipeline.npu_forward()['pool4'] (maxpool2x2_floor)",
-      "sha256": "4ed06a949e972bab4e32d6390082d208b6d7063a95db92fc7acbc9f85fbdeb5f"
+      "sha256": "acf2785cd125b30b2bd2e669ea376e1f6328a1110923acebc64f0de304e89472"
     },
     "gap": {
       "file": "gap.npy",
@@ -158,7 +158,7 @@
       "contract_layer": null,
       "contract_layer_id": null,
       "source": "golden_pipeline.npu_forward()['gap'] (gap_s32, int64 -> int32)",
-      "sha256": "c05b301e97ad457b4553539270fb78cb6aa79b8cf8138bfdc3bfcb0b078c0642",
+      "sha256": "541159f8ae850ece840c75aef2fb63deaeb962bd1ed2a113d8cc51947f9c79f7",
       "note": "fc1 input requant (conv4 output scale/zp), 4x16=64 taps >> 6"
     },
     "fc1": {
@@ -171,7 +171,7 @@
       "contract_layer": "fc1",
       "contract_layer_id": 4,
       "source": "golden_pipeline.npu_forward()['fc1'] (fc_int8, ReLU rail)",
-      "sha256": "770fb480d9b755b1676ddb9a9345c2aa9e6558f23f3b95e2be1b00e95f5249e0"
+      "sha256": "7a4bc72e45c79be23b2ca5a7da5c8e29df6d2d75e1b606e1252feace1e11f3f2"
     },
     "fc2_logits": {
       "file": "fc2_logits.npy",
@@ -183,7 +183,7 @@
       "contract_layer": "fc2",
       "contract_layer_id": 5,
       "source": "golden_pipeline.npu_forward()['logits'] (fc2_u8 - zp_out=57, int32)",
-      "sha256": "8eadc3bbc3a026b7bf117cc5e26982b62e3af31623b5d71be2b7d6a03470f375",
+      "sha256": "34404dbe8d6c5287f364a259eaeccf12c71adaf9f91fddf7463f5cea1c570f3f",
       "note": "signed container value, NOT the u8 logits array"
     },
     "probs": {
