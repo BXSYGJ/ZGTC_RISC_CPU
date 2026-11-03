@@ -274,6 +274,16 @@ register(Case(
 ))
 
 register(Case(
+    name="pcm1808",
+    prepare="pcm1808",
+    tb="tb_pcm1808.sv",
+    rtl=["src/audio/i2s_slave_rx.v", "src/audio/pcm1808_resampler.v",
+         "src/audio/pcm1808_coeff_rom.v", "src/audio/audio_cdc_fifo.v"],
+    timeout=180,
+    description="PCM1808 serial pins, stereo FIR golden, stop/reconnect",
+))
+
+register(Case(
     name="i2s_capture",
     tb="tb_i2s_capture.sv",
     rtl=["src/audio/i2s_clk_gen.v", "src/audio/i2s_rx.v"],
@@ -655,7 +665,13 @@ def prepare_full_top_ctrl(work: Path) -> None:
     prepare_rv_top_ctrl(work, "src/ctrl/instrec_top.v")
 
 
+def prepare_pcm1808(work):
+    subprocess.run([sys.executable, str(ROOT / "scripts/check_pcm1808.py")],
+                   cwd=str(ROOT), check=True, capture_output=True)
+
+
 PREPARERS = {
+    "pcm1808": prepare_pcm1808,
     "conv1": prepare_conv1,
     "mel": prepare_mel,
     "npu_chain": prepare_npu_chain,

@@ -1,5 +1,20 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-03 12:38：PCM1808 首轮布线超时无位流；精简源联合 RTL 通过，重新资源门控
+
+- 首轮 run20261103-112431-bd9f445f 的 PNR 于 12:32:58 按 50 分钟截止安全结束。放置估计 WNS -2.008ns（不是最终 STA），详细布线第 16 轮仍有 40256 未布通网络；没有最终 PNR 库、十表时序或新位流，未烧录。监控/失败 hash 已保存至 build/pcm1808-pnr-20261103-114253/result.json 并纳入 reports/pcm1808_validation_20261103.json；放置 ADF SHA256 a421a6951559319294a509970068c3563ace888af0021551a6a024fdae643d60。
+- 精简 FIR 保持原 14112 项系数逐值不变，以 7104 项基表＋73 相中心抽头微校正重建；历史改为两路 128x16 同步 block_ram 模板，使用有效历史计数补零，不清 RAM。实际串行→FIR→CDC 两轮无 reset 的 4096 对输入/3762 对 golden 输出再次 PASS，含断钟/LRCK 卡死恢复；pytest 3 passed，lint 64/0。系数数值 hash 仍 f8ee7f0f05b9a726fb0345922ddf3dd4247fa2b33146f2151913e127461c8033。
+- 12:37:46 启动唯一新源资源门控 run20261103-123749-eb5117d4，止于 dev_map，20 分钟截止、15 秒 CPU/日志监控。不能拿首轮映射资源充作本次优化结果；读到新完整资源后再决定受控 PNR。
+- 用户已重插下载器；只读确认 FTDI 恢复，既有 JS9040/cfg46156/65420 未改动。板上仍旧输出方向位流，**BCK/LRCK 继续断开，等待新输入方向位流确认烧录成功**。没有真实音频验收，不重复要求重插。
+
+## 2026-11-03 11:43：PCM1808 联合仿真及整机资源门控通过，唯一新源限时 PNR 中
+
+- 用户实际音源为自带晶振的 PCM1808，固定 I2S master / 48kHz / BCK64FS / 24bit。已将完整系统 U20/BCK 与 T20/LRCK 从输出改为输入，新增两级同步从接收、147/160 的 96tap/147phase 双声道定点 FIR，输出保持既有模型 44.1kHz 契约；不接 MCK。MES-FMC-LPC-IO 紫卡接线见 docs/PCM1808_AUDIO_INPUT.md。**旧板上位流仍输出 BCK/LRCK，新版确认烧入前保持这两根线断开，已告知用户。**
+- 实际串行引脚→接收→FIR→异步 FIFO 两轮无 reset 联合 RTL PASS：4096 对输入、3762 对输出逐项整数 golden 一致，含 24bit 低位丢弃、正负满量程、随机立体声、LRCK 卡死及断钟恢复。修复 watchdog 超时后持续清除对齐状态导致无法恢复的问题。原 I2S/CDC 回归 PASS；新增 pytest 3 passed，已有全量 433 passed/4 skipped，lint 64/0。频响通带最大误差 0.00315dB，22.05–24kHz 最差 -69.20dB；独立报告 reports/pcm1808_filter_20261103.json、pcm1808_validation_20261103.json。
+- 唯一新源 PDS run20261103-112431-bd9f445f：compile/synthesize/dev_map 全 PASS，SourcesUnchanged=true，正常退出；39749 LUT、39576 FF、154.5/155 DRM、92 APM，容量通过但 DRM 仅剩 0.5。常量 case 系数 ROM 实际推断 6 DRM，不能宣称零 DRM；历史为寄存器。映射 ADF SHA256 c22b303376f93ccdf699c98d65e5a633adaf16caaac301f0d600302c0481cba7，门控监控与 hash 存 build/pcm1808-gate-20261103-112430。
+- 确认全部源 hash 未变、没有其他 PDS 后，11:42:54 从本轮新映射库启动唯一 PNR→十表时序→位流流程；硬截止 12:32:54，15 秒 CPU/RSS/阶段日志监控及结果存 build/pcm1808-pnr-20261103-114253。RTL/约束冻结，不复用旧源数据库；当前尚无新位流/时序结论。
+- 当前没有新位流、没有新烧录或外部音频准确率结论；保留 2673246E 完整显示基线及 602AB321 fallback。未触碰 cdt_js/cdt_cfg、CPU 用户 diff、PCB 或 obj_dir。五类迁移和 Flash 工作保留，当前优先完成实际 PCM1808 音频接口。
+
 ## 2026-11-03 00:10：Flash 固化工具流程打通，第一版烧写镜像已产出（文件层）
 
 - 完成 PDS 位流→SPI Flash 固化的全工具链研究并**实际离线转换**出第一版可烧写镜像 `build/flash_boot/instrec_top_w25q128q.sfc`（3,791,112 B，SHA256 `2673246E…`）。手册 `docs/FLASH_PROGRAM_FLOW_20261103.md`、结构化记录 `reports/flash_program_flow_20261103.json`。

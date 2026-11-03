@@ -60,20 +60,16 @@ define_attribute {p:uart_tx} {PAP_IO_DRIVE} {8}
 define_attribute {p:uart_tx} {PAP_IO_SLEW} {SLOW}
 define_attribute {p:uart_tx} {PAP_IO_NONE} {TRUE}
 
-define_attribute {p:i2s_bck} {PAP_IO_DIRECTION} {OUTPUT}
+define_attribute {p:i2s_bck} {PAP_IO_DIRECTION} {INPUT}
 define_attribute {p:i2s_bck} {PAP_IO_LOC} {U20}
 define_attribute {p:i2s_bck} {PAP_IO_VCCIO} {3.3}
 define_attribute {p:i2s_bck} {PAP_IO_STANDARD} {LVCMOS33}
-define_attribute {p:i2s_bck} {PAP_IO_DRIVE} {8}
-define_attribute {p:i2s_bck} {PAP_IO_SLEW} {SLOW}
 define_attribute {p:i2s_bck} {PAP_IO_NONE} {TRUE}
 
-define_attribute {p:i2s_lrck} {PAP_IO_DIRECTION} {OUTPUT}
+define_attribute {p:i2s_lrck} {PAP_IO_DIRECTION} {INPUT}
 define_attribute {p:i2s_lrck} {PAP_IO_LOC} {T20}
 define_attribute {p:i2s_lrck} {PAP_IO_VCCIO} {3.3}
 define_attribute {p:i2s_lrck} {PAP_IO_STANDARD} {LVCMOS33}
-define_attribute {p:i2s_lrck} {PAP_IO_DRIVE} {8}
-define_attribute {p:i2s_lrck} {PAP_IO_SLEW} {SLOW}
 define_attribute {p:i2s_lrck} {PAP_IO_NONE} {TRUE}
 
 define_attribute {p:i2s_sd} {PAP_IO_DIRECTION} {INPUT}

@@ -1,0 +1,214 @@
+{
+  "status": "OPTIMIZED_RTL_PASS_NEW_RESOURCE_GATE_RUNNING",
+  "contract": {
+    "source": "PCM1808 onboard oscillator, I2S master",
+    "input_hz": 48000,
+    "output_hz": 44100,
+    "bck_hz": 3072000,
+    "significant_bits": 24,
+    "captured_bits": 16,
+    "slot_bits": 32,
+    "bck_lrck_direction": "INPUT",
+    "ratio": "147/160"
+  },
+  "tests": {
+    "pcm1808_serial_fir_cdc": "PASS: two no-reset epochs, 4096 serial stereo pairs, 3762 exact FIR/CDC outputs, stuck LRCK and clock loss/recovery",
+    "pcm1808_pytest": "3 passed",
+    "legacy_i2s_capture": "PASS",
+    "audio_fifo": "PASS",
+    "existing_pytest_before_new_tests": "433 passed, 4 skipped",
+    "lint": "64 files, 0 violations"
+  },
+  "filter": {
+    "input_rate": 48000,
+    "output_rate": 44100,
+    "phases": 147,
+    "taps": 96,
+    "passband_0_to_18500_max_error_db": 0.0031469168215471233,
+    "stopband_22050_to_24000_max_db": -69.20274152012226,
+    "coefficient_sha256": "f8ee7f0f05b9a726fb0345922ddf3dd4247fa2b33146f2151913e127461c8033",
+    "serial_test_input_frames": 2048,
+    "golden_output_frames": 1881,
+    "rounding": "half-even; signed saturation; 24-bit source high 16 bits"
+  },
+  "pds": {
+    "run": "build/pds/20261103-112431-bd9f445f",
+    "resource_gate": "PASS",
+    "sources_unchanged": true,
+    "resources": {
+      "lut": 39749,
+      "ff": 39576,
+      "drm": 154.5,
+      "drm_capacity": 155,
+      "apm": 92
+    },
+    "gate_evidence": {
+      "reason": "normal",
+      "exit_code": 0,
+      "run": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\pds\\20261103-112431-bd9f445f",
+      "duration_seconds": 992.9,
+      "archive": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\pcm1808-gate-20261103-112430",
+      "files": [
+        {
+          "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\pds\\20261103-112431-bd9f445f\\compile\\instrec_top_comp.adf",
+          "sha256": "8bbc3a8ba54180ded57d4b816a1e8bcb23df675342cb60fd8f81006620ac6729",
+          "size": 5706569
+        },
+        {
+          "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\pds\\20261103-112431-bd9f445f\\compile\\run.log",
+          "sha256": "ea70d3958859e3cf16e1669e928c6e98ad5c4497b41b31f4862981cbd5b7ccad",
+          "size": 1262532
+        },
+        {
+          "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\pds\\20261103-112431-bd9f445f\\synthesize\\add_sub_carrychain.log",
+          "sha256": "12032940f7f872c0a72120c7583e5d2c1a6a787b3fb011f1fc5d26d28b5aeedc",
+          "size": 234585
+        },
+        {
+          "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\pds\\20261103-112431-bd9f445f\\synthesize\\apm_drm_lutram_utilization.log",
+          "sha256": "bef4b3a3a62d8e2eca955f01fb0d27d7e30a11c27267102bb09f1a216243801c",
+          "size": 170095
+        },
+        {
+          "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\pds\\20261103-112431-bd9f445f\\synthesize\\instrec_top_syn.adf",
+          "sha256": "50a829c5763e6cd4090dd4b3c420a4595cd2657d9062f39b7456b81b2b4bfeaf",
+          "size": 10143275
+        },
+        {
+          "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\pds\\20261103-112431-bd9f445f\\synthesize\\run.log",
+          "sha256": "248f52417898423be5046c31883686de6dfa4ba5755c075f73c7bed1ec8561db",
+          "size": 1022348
+        },
+        {
+          "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\pds\\20261103-112431-bd9f445f\\device_map\\instrec_top_map.adf",
+          "sha256": "c22b303376f93ccdf699c98d65e5a633adaf16caaac301f0d600302c0481cba7",
+          "size": 8814049
+        },
+        {
+          "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\pds\\20261103-112431-bd9f445f\\device_map\\run.log",
+          "sha256": "7ae715ff2161def1154cf92fcda33f16fdd754cf01551894ab919aaf3751ea2c",
+          "size": 123723
+        },
+        {
+          "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\pds\\20261103-112431-bd9f445f\\pds.stdout.log",
+          "sha256": "c9258720ba9088c29e1da8392f1e03f3cabf9b1ff50eccb3ac3c4cd0b4900f9a",
+          "size": 2475873
+        },
+        {
+          "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\pds\\20261103-112431-bd9f445f\\pds.stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        {
+          "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\pds\\20261103-112431-bd9f445f\\manifest.json",
+          "sha256": "d91eb68973a70bbc8f0ed31e37645abcd8f34dbe7be33d471bd72e5ddb16138e",
+          "size": 2466
+        },
+        {
+          "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\pds\\20261103-112431-bd9f445f\\source-manifest.json",
+          "sha256": "f026e7f65016f4a915ea51b8203b3818463df2e66d06fcb752b15d7ecb3ccea2",
+          "size": 34260
+        }
+      ]
+    },
+    "pnr_status": "DEADLINE_EXCEEDED_NO_BITSTREAM",
+    "pnr_archive": "build/pcm1808-pnr-20261103-114253",
+    "pnr_started_local": "2026-11-03 11:42:54 +08:00",
+    "deadline_local": "2026-11-03 12:32:54 +08:00",
+    "no_bitstream": true,
+    "pnr_evidence": {
+      "reason": "50 minute deadline",
+      "exit_code": 1,
+      "run": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\pds\\20261103-112431-bd9f445f",
+      "duration_seconds": 3003.6,
+      "archive": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\pcm1808-pnr-20261103-114253",
+      "files": [
+        {
+          "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\pds\\20261103-112431-bd9f445f\\place_route\\instrec_top_plc.adf",
+          "sha256": "a421a6951559319294a509970068c3563ace888af0021551a6a024fdae643d60",
+          "size": 10166508
+        },
+        {
+          "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\pds\\20261103-112431-bd9f445f\\place_route\\run.log",
+          "sha256": "c2ff4b1042eecc0ce03fe9e7a6a2f05724da39fa8a4a4f5acc6f506235b4c6f7",
+          "size": 68627
+        },
+        {
+          "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\pds\\20261103-112431-bd9f445f\\source-manifest.json",
+          "sha256": "f026e7f65016f4a915ea51b8203b3818463df2e66d06fcb752b15d7ecb3ccea2",
+          "size": 34260
+        },
+        {
+          "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\pds\\20261103-112431-bd9f445f\\stage-20261103-114255-124a03b7.log",
+          "sha256": "5f0430d051cf007926b7604181d1f2ba3670fe486cf903cab986df271258151e",
+          "size": 69585
+        },
+        {
+          "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\pds\\20261103-112431-bd9f445f\\stage-20261103-114255-124a03b7.stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        {
+          "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\pds\\20261103-112431-bd9f445f\\stage-20261103-114255-124a03b7.tcl",
+          "sha256": "8fc756bf248e416f5fff7c8d553eae6a747e6aadce7675523555b3cfab3e5809",
+          "size": 324
+        }
+      ]
+    },
+    "placement_estimate_only": {
+      "wns_ns": -2.008,
+      "tns_ns": -3786.786,
+      "not_final_sta": true
+    },
+    "last_route_iteration": 16,
+    "last_unrouted_nets": 40256
+  },
+  "board": {
+    "new_bitstream_programmed": false,
+    "bck_lrck_must_remain_disconnected_until_new_input_bitstream_programmed": true,
+    "external_audio_recognition_acceptance": "NOT_TESTED",
+    "usb_reinserted": "FTDI present; existing JS9040 and cfg46156 untouched, port65420 open"
+  },
+  "initial_revision_sha256": {
+    "src/audio/i2s_slave_rx.v": "453923d5c5d1629946436e7fb0886ba3a6699c512906c580e8342f2ff573588f",
+    "src/audio/pcm1808_resampler.v": "0714a805433beb189a6da60c9d844eadfbcb5e04d85ec298f599862f458dfb09",
+    "src/audio/pcm1808_coeff_rom.v": "3ba6f9cd86fdd96209515aff9d8ad8b5203e6d3140c2cbc005e8445270619451",
+    "src/ctrl/instrec_top.v": "c98855064409b7cab583b948daf5f4d818d6d76a33d5da440983d4d6e531d5b7",
+    "constraints/instrec_top.fdc": "23ab557376248b8d28aea808c06847682596acf86b3c38e21f77a38171c0901d",
+    "scripts/gen_pcm1808_filter.py": "8e9fe5bdf202cda00b64b10228e9308d659b89d92342fdc0f745f6f32d46a766",
+    "scripts/check_pcm1808.py": "a96263be57dd957a2f3065caf75aac26339efae8580cde226d89e57796355a72",
+    "sim/tb_pcm1808.sv": "a4e897a53c9bfd7284c64608096e8ca4e19141d07432bfc6c823665d5918de6f",
+    "sim/run_sim.py": "ea5965be64a5b8ae9f839fd90b0ebf1378dc1720c490eb3c1435556368964246",
+    "tests/test_pcm1808.py": "9b9a2697151b127f0cd8fe1161dc7bb55aa691d464e61f4e2ac3f4e0d0a9d8ff",
+    "build/sim/pcm1808/run.log": "a49ff68ad74eebed27f95fa2dda67bfad08aa7b99a12f7ba30075a5e0562892a",
+    "build/sim/pcm1808/input.hex": "d806a84e4e8040c4cfaa7e0d32d6d36dcaf711b5be48414493640e3620e2df54",
+    "build/sim/pcm1808/expected.hex": "9dcab4ffcc4771d0b5e49a2c34efe48911e48e175ce297e6b11894fd6a63a195"
+  },
+  "optimized_revision": {
+    "base_coefficient_words": 7104,
+    "full_coefficient_words": 14112,
+    "exact_reflection_corrections": 73,
+    "history": "two synchronous 128x16 block_ram arrays, valid-count zero padding",
+    "rtl_test": "PASS two no-reset epochs, 4096 serial pairs / 3762 exact FIR+CDC outputs",
+    "pytest": "3 passed",
+    "lint": "64 files / 0 violations",
+    "pds_run": "build/pds/20261103-123749-eb5117d4",
+    "resource_gate": "RUNNING",
+    "no_bitstream": true
+  },
+  "sha256": {
+    "src/audio/i2s_slave_rx.v": "453923d5c5d1629946436e7fb0886ba3a6699c512906c580e8342f2ff573588f",
+    "src/audio/pcm1808_resampler.v": "116a33c5a5f5852c2d2818a3a0063a6e90001a5952fc51a59cce7de85caeefeb",
+    "src/audio/pcm1808_coeff_rom.v": "2202fb99d5883e95fb96794274225658908ce29aacbfc8df89d44ceee6a0cc10",
+    "src/ctrl/instrec_top.v": "c98855064409b7cab583b948daf5f4d818d6d76a33d5da440983d4d6e531d5b7",
+    "constraints/instrec_top.fdc": "23ab557376248b8d28aea808c06847682596acf86b3c38e21f77a38171c0901d",
+    "scripts/gen_pcm1808_filter.py": "0daacd85c0aab2be73eabe24b6db1fa65da6e95916ffebf0043627eb973bb5bc",
+    "scripts/check_pcm1808.py": "a96263be57dd957a2f3065caf75aac26339efae8580cde226d89e57796355a72",
+    "sim/tb_pcm1808.sv": "a4e897a53c9bfd7284c64608096e8ca4e19141d07432bfc6c823665d5918de6f",
+    "sim/run_sim.py": "ea5965be64a5b8ae9f839fd90b0ebf1378dc1720c490eb3c1435556368964246",
+    "tests/test_pcm1808.py": "bd04eae438de83f8ec541959fc1e17b528e28ff5646425f9e24918276dd38d94",
+    "build/sim/pcm1808/run.log": "5a51d35e17cee9d19d6ecf1ee1280e1e758842161640ceb5f9766199315f83d6",
+    "build/sim/pcm1808/input.hex": "d806a84e4e8040c4cfaa7e0d32d6d36dcaf711b5be48414493640e3620e2df54",
+    "build/sim/pcm1808/expected.hex": "9dcab4ffcc4771d0b5e49a2c34efe48911e48e175ce297e6b11894fd6a63a195"
+  }
+}

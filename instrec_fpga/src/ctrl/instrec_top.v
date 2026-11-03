@@ -53,8 +53,8 @@ module instrec_top #(
     input  wire        uart_rx,      // CP2102 RX (B24)
     output wire        uart_tx,      // CP2102 TX (C24)
     // ---- I2S audio pins ----
-    output wire        i2s_bck,      // bit clock 1.4112 MHz (U20)
-    output wire        i2s_lrck,     // frame clock 44.1 kHz (T20)
+    input  wire        i2s_bck,      // PCM1808 bit clock 3.072 MHz (U20)
+    input  wire        i2s_lrck,     // PCM1808 frame clock 48 kHz (T20)
     input  wire        i2s_sd,       // serial data (V16)
     output wire        hdmi_rst_n,   // board MS7210 reset (G25)
     // ---- HDMI transmitter pins (demo fdc pinout) ----
@@ -116,8 +116,6 @@ module instrec_top #(
     // ==================================================================
     // Audio chain (clk_nco / core_clk domains)
     // ==================================================================
-    wire [4:0]  bck_phase;
-    wire        bck_tick;
     wire [15:0] pcm_l;
     wire [15:0] pcm_r;
     wire        pcm_valid;
@@ -265,28 +263,21 @@ module instrec_top #(
         .rst_sync_nco(rst_sync_nco)
     );
 
-    // ---- I2S clock generator (clk_nco domain) ----
-    i2s_clk_gen u_i2s_clk_gen (
-        .clk_nco   (clk_nco),
-        .rst_n     (rst_sync_nco),
-        .bck_phase (bck_phase),
-        .bck_tick  (bck_tick),
-        .i2s_bck   (i2s_bck),
-        .i2s_lrck  (i2s_lrck)
+    // PCM1808 owns both clocks. Convert coherent stereo pairs to 44.1 kHz.
+    wire [15:0] capture_l, capture_r;
+    wire capture_valid, capture_idle, resample_overrun;
+    assign sd_idle = capture_idle | resample_overrun;
+    i2s_slave_rx u_i2s_slave_rx (
+        .clk_nco(clk_nco), .rst_n(rst_sync_nco),
+        .i2s_bck(i2s_bck), .i2s_lrck(i2s_lrck), .i2s_sd(i2s_sd),
+        .pcm_l(capture_l), .pcm_r(capture_r),
+        .pcm_valid(capture_valid), .sd_idle(capture_idle)
     );
-
-    // ---- I2S receiver (clk_nco domain, SD 2FF synchronized inside) ----
-    i2s_rx u_i2s_rx (
-        .clk_nco   (clk_nco),
-        .rst_n     (rst_sync_nco),
-        .i2s_sd    (i2s_sd),
-        .bck_tick  (bck_tick),
-        .bck_phase (bck_phase),
-        .i2s_lrck  (i2s_lrck),
-        .pcm_l     (pcm_l),
-        .pcm_r     (pcm_r),
-        .pcm_valid (pcm_valid),
-        .sd_idle   (sd_idle)
+    pcm1808_resampler u_pcm1808_resampler (
+        .clk(clk_nco), .rst_n(rst_sync_nco), .stream_idle(capture_idle),
+        .in_valid(capture_valid), .in_l(capture_l), .in_r(capture_r),
+        .out_valid(pcm_valid), .out_l(pcm_l), .out_r(pcm_r),
+        .overrun(resample_overrun)
     );
 
     // ---- 216 MHz -> 125 MHz stereo sample CDC FIFO ----
@@ -296,7 +287,7 @@ module instrec_top #(
         .pcm_valid   (pcm_valid),
         .pcm_l       (pcm_l),
         .pcm_r       (pcm_r),
-        .i2s_lrck    (i2s_lrck),
+        .i2s_lrck    (1'b0), // Pair-valid is already once per stereo frame.
         .clk_core    (core_clk),
         .rd_rst_n    (core_clk_rst_n),
         .rd_en       (fifo_rd_en),
