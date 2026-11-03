@@ -1,5 +1,5 @@
 {
-  "status": "27MHZ_FULL_MAP_RECOVERED_PNR_RUNNING_NO_NEW_FULL_BITSTREAM",
+  "status": "27MHZ_MACRO_PLACEMENT_FAILED_MEL_SPLIT_NEW_GATE_RUNNING_NO_NEW_FULL_BITSTREAM",
   "contract": {
     "source": "PCM1808 onboard oscillator, I2S master",
     "input_hz": 48000,
@@ -353,8 +353,56 @@
     "sources_unchanged": true,
     "pnr_started_local": "2026-11-03 15:12:34",
     "pnr_deadline_local": "2026-11-03 17:12:34",
-    "pnr_archive": "build/pcm1808-27m-pnr-20261103-151234",
-    "pnr_result": "PENDING",
+    "pnr_archive": "build/pcm1808-27m-pnr-20261103-151232",
+    "pnr_result": {
+      "reason": "normal",
+      "exit_code": 1,
+      "run": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\pds\\20261103-144754-6578ad23",
+      "duration_seconds": 376.0,
+      "archive": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\pcm1808-27m-pnr-20261103-151232",
+      "files": [
+        {
+          "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\pds\\20261103-144754-6578ad23\\place_route\\run.log",
+          "sha256": "6160a5e5af8add924247f5e5c860c6baf315b6f866c836f3724040eb73321aa0",
+          "size": 56073
+        },
+        {
+          "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\pds\\20261103-144754-6578ad23\\source-manifest.json",
+          "sha256": "efbbc5b2d8f4cc244343c895b9f11ce8da8f823d37a451fb45bca66316383801",
+          "size": 34260
+        },
+        {
+          "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\pds\\20261103-144754-6578ad23\\stage-20261103-150849-92938bf7.log",
+          "sha256": "e0f822bf8408e0f2631bade2cf9b568e44e8e2c7ee3da2964d6cdfc17af7ae4e",
+          "size": 123756
+        },
+        {
+          "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\pds\\20261103-144754-6578ad23\\stage-20261103-150849-92938bf7.stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        {
+          "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\pds\\20261103-144754-6578ad23\\stage-20261103-150849-92938bf7.tcl",
+          "sha256": "b13a2fa414c8f3bf0f13b2dfc4131fea80ea1c883b0dda393d630b36cd8e28fc",
+          "size": 303
+        },
+        {
+          "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\pds\\20261103-144754-6578ad23\\stage-20261103-151235-62f6359f.log",
+          "sha256": "d8baf9bf66bd255b477032239c54dc6e2d7f5e3eb5defd87d35900a25749fa94",
+          "size": 57067
+        },
+        {
+          "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\pds\\20261103-144754-6578ad23\\stage-20261103-151235-62f6359f.stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        {
+          "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\pds\\20261103-144754-6578ad23\\stage-20261103-151235-62f6359f.tcl",
+          "sha256": "ac44625e0f6f58eedd9c6c56a2ff18f58cf5fa218952ef9181859945830ff83e",
+          "size": 324
+        }
+      ]
+    },
     "new_full_bitstream": false,
     "tests": {
       "serial_fir_cdc_27mhz": "PASS",
@@ -364,6 +412,23 @@
       "lint": "65 files, zero violations",
       "full_pytest_first": "435 passed, 4 skipped, 1 failed (build-set guard omitted pcm1808_diag)",
       "corrected_guard_suite": "9 passed"
-    }
+    },
+    "pnr_failure": "Place-0006 u_mel_engine/spec_bank_0/gopdrm_36k cannot be placed; no route, final STA or bitstream"
+  },
+  "mel_bank_split": {
+    "run": "build/pds/20261103-152639-fb2ffc99",
+    "status": "NEW_SOURCE_COMPILE_SYNTH_MAP_RUNNING",
+    "gate_deadline_minutes": 30,
+    "old_bank": "16576x16 inferred 16 DRM36, allocation padded to 32768",
+    "new_bank": "16384x16 plus 192x16, synchronous read latency preserved",
+    "resource_saving": "PENDING full mapping, not inferred from estimate",
+    "tests": {
+      "miter": "212480 comparisons, two epochs without reset PASS",
+      "mel": "16512 feature bytes, zero mismatches PASS",
+      "handoff": "16512 bytes PASS",
+      "pytest": "436 passed, 4 skipped, 127.70s",
+      "lint": "65 files, 0 violations"
+    },
+    "rtl_sha256": "913c84630a1cce3a36f5c76e6cc51dcc3d0b0ad7467c31fb96b1ada259a37508"
   }
 }

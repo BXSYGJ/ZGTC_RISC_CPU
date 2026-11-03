@@ -1,0 +1,7 @@
+{
+  "result": "PASS",
+  "scope": "Actual extracted production bank vs frozen single-array bank; all16576 addresses, three writer roles/priority, same-address read/write, boundary, random and no-reset second epoch",
+  "source_sha256": "913c84630a1cce3a36f5c76e6cc51dcc3d0b0ad7467c31fb96b1ada259a37508",
+  "log": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\sim\\mel_bank_split\\run.log",
+  "log_sha256": "2265ccdd47d269675fda94151bae201886141204516338285f35bc7cf25f5ce8"
+}

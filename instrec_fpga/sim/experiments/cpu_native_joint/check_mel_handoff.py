@@ -40,8 +40,13 @@ integer m,t,count=0,mismatches=0,above127=0;
 reg[7:0]expected;
 initial begin
  for(t=0;t<258;t=t+1)for(m=0;m<64;m=m+1)begin
-  old_bank.spec_bank[64+t*64+m]=(m*13+t*7)%256;
-  new_bank.spec_bank[64+t*64+m]=(m*13+t*7)%256;
+  if(64+t*64+m<16384)begin
+   old_bank.spec_bank_lo[64+t*64+m]=(m*13+t*7)%256;
+   new_bank.spec_bank_lo[64+t*64+m]=(m*13+t*7)%256;
+  end else begin
+   old_bank.spec_bank_hi[64+t*64+m-16384]=(m*13+t*7)%256;
+   new_bank.spec_bank_hi[64+t*64+m-16384]=(m*13+t*7)%256;
+  end
  end
  repeat(3)@(negedge clk);rst_n=1;conv1_start=1;
  @(negedge clk);conv1_start=0;
@@ -74,5 +79,5 @@ report={'result':'PASS' if result.ok else 'FAIL','scope':'Actual extracted NPU r
  'addresses':16512,'bijection':True,'minimal_counterexample':{'npu_linear_index':1,'expected_mel':0,'expected_time':1,'legacy_logical_address':1,'correct_logical_address':64,'legacy_byte':13,'correct_byte':7},
  'sources':[{'path':str(p),'sha256':hashlib.sha256(p.read_bytes()).hexdigest()}for p in [ROOT/'src/npu/npu_top.v',ROOT/'src/mel/mel_engine.v',replay_path,bank_path,tb]],
  'log':str(result.log_path),'log_sha256':hashlib.sha256(Path(result.log_path).read_bytes()).hexdigest()}
-(ROOT/'reports/mel_feature_handoff_validation_20261101.json').write_text(json.dumps(report,indent=2)+'\n',encoding='ascii')
+(ROOT/'reports/mel_feature_handoff_validation_20261103.json').write_text(json.dumps(report,indent=2)+'\n',encoding='ascii')
 raise SystemExit(0 if result.ok else 1)

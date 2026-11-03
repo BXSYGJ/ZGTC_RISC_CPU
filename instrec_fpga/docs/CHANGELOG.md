@@ -1,5 +1,9 @@
 # InstRec-FPGA 变更日志
 
+## 2026-11-03：Mel scratch bank 按16K边界拆分以释放宏放置空间
+
+- 保存完整27MHz整机Place-0006失败证据，无新位流。bank拆分保持逐拍语义，212480次miter、整窗Mel及16512字节NPU交接均PASS；启动新源单路30分钟资源门控，实际资源与PNR待验。旧特征交接历史报告保留，新报告独立。本次全量436passed/4skipped、lint65/0。
+
 ## 2026-11-03：XSY 完整系统接入 27MHz PCM1808 处理域
 
 - 按用户要求将五个 PCM1808/Flash 提交快进合到 XSY 并推送，停用 XSY2 后续开发。

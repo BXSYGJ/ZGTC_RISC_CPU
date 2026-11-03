@@ -439,8 +439,16 @@ module mel_engine #(
     // the low byte (ST_STD) -> NPU export reads (ST_IDLE/DONE). See the
     // header SPECTRUM BANK section for the in-place overwrite proofs.
     // -----------------------------------------------------------------
-    reg [15:0] spec_bank [0:16575];
-    reg [15:0] bank_q;        // port A synchronous read data (1 cycle)
+    // Split at the power-of-two boundary to avoid a 32768 x 16 mapping.
+    reg [15:0] spec_bank_lo [0:16383];
+    reg [15:0] spec_bank_hi [0:191];
+    reg [15:0] bank_q_lo, bank_q_hi;
+    reg bank_hi_q;
+    wire [15:0] bank_q = bank_hi_q ? bank_q_hi : bank_q_lo;
+    reg bank_we;
+    reg [14:0] bank_wa;
+    reg [15:0] bank_wd;
+    // Port A synchronous read data stays one cycle.
     reg [14:0] bank_ra;       // port A address (state-muxed)
 
     always @* begin
@@ -456,20 +464,37 @@ module mel_engine #(
     end
 
     always @(posedge clk) begin
-        bank_q <= spec_bank[bank_ra];
+        bank_q_lo <= spec_bank_lo[bank_ra[13:0]];
+        bank_q_hi <= spec_bank_hi[bank_ra[7:0]];
+        bank_hi_q <= bank_ra[14];
     end
 
     // Port B write mux: the three writers are state-exclusive (first
     // pass mel_filter / db_norm overwrite / standardize feat writeback
     // with the +64 physical offset, {8'h00, feat} low byte).
+    always @* begin
+        bank_we = 1'b0;
+        bank_wa = 15'd0;
+        bank_wd = 16'd0;
+        if (run_active && mel_valid) begin
+            bank_we = 1'b1;
+            bank_wa = {frm_out, mel_ch};
+            bank_wd = mel_q88;
+        end else if (db_active && db_wr_en) begin
+            bank_we = 1'b1;
+            bank_wa = db_wr_addr;
+            bank_wd = db_wr_data;
+        end else if (std_active && std_feat_wr_en) begin
+            bank_we = 1'b1;
+            bank_wa = {1'b0, std_feat_wr_addr} + 15'd64;
+            bank_wd = {8'h00, std_feat_wr_data};
+        end
+    end
     always @(posedge clk) begin
-        if (run_active && mel_valid)
-            spec_bank[{frm_out, mel_ch}] <= mel_q88;
-        else if (db_active && db_wr_en)
-            spec_bank[db_wr_addr] <= db_wr_data;
-        else if (std_active && std_feat_wr_en)
-            spec_bank[{1'b0, std_feat_wr_addr} + 15'd64]
-                <= {8'h00, std_feat_wr_data};
+        if (bank_we && !bank_wa[14])
+            spec_bank_lo[bank_wa[13:0]] <= bank_wd;
+        if (bank_we && bank_wa[14])
+            spec_bank_hi[bank_wa[7:0]] <= bank_wd;
     end
 
     assign feat_rd_data = bank_q[7:0];

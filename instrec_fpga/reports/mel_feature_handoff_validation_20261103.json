@@ -1,0 +1,40 @@
+{
+  "result": "PASS",
+  "scope": "Actual extracted NPU replay and Mel bank mux/synchronous read RTL; other Mel phases tied idle",
+  "mapping": "time*64+mel = {feat_col,feat_row[5:0]}; Mel applies +64 internally",
+  "addresses": 16512,
+  "bijection": true,
+  "minimal_counterexample": {
+    "npu_linear_index": 1,
+    "expected_mel": 0,
+    "expected_time": 1,
+    "legacy_logical_address": 1,
+    "correct_logical_address": 64,
+    "legacy_byte": 13,
+    "correct_byte": 7
+  },
+  "sources": [
+    {
+      "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\npu\\npu_top.v",
+      "sha256": "47089a8390312f0654a1cbba3244fe7e271eea98972c6cbe89c8bf83538b409d"
+    },
+    {
+      "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\mel\\mel_engine.v",
+      "sha256": "913c84630a1cce3a36f5c76e6cc51dcc3d0b0ad7467c31fb96b1ada259a37508"
+    },
+    {
+      "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\sim\\mel_feature_handoff\\feature_replay_slice.sv",
+      "sha256": "bff50470046d6aa1196e075e0cfa4e0cc79617b303b072d576074510464de24c"
+    },
+    {
+      "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\sim\\mel_feature_handoff\\mel_bank_slice.sv",
+      "sha256": "7ab56c4fbbbdb58dacedee3ddc983f564c9f1067b5826a0026691b62baf9b8f2"
+    },
+    {
+      "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\sim\\mel_feature_handoff\\tb_mel_handoff.sv",
+      "sha256": "3f35fff5e7f5ca4e380f5411018749262600a97dcd485eba817b45bf3ba7d396"
+    }
+  ],
+  "log": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\sim\\mel_feature_handoff\\run.log",
+  "log_sha256": "5b9f9776f4571eb1798835b49474462fa5d3a1400575f4a609c8cb16f51385d6"
+}
