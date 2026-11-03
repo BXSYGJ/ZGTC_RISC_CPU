@@ -4,7 +4,7 @@
 
 - BCK/LRCK 改为输入，新增 216MHz 同步 Philips I2S 从接收，捕获 24bit 的高 16bit；完整立体声帧 watchdog 支持断钟/LRCK 卡死后无 reset 恢复。
 - 新增 147/160、147phase/96tap 双声道 Q15 FIR，将 48kHz 转为原模型的 44.1kHz；明确 MES-FMC-LPC-IO 紫卡 J2 接线，旧输出位流更换前不连接 BCK/LRCK。
-- 系数以 7104 项基表和 73 相整数校正无损重建原 14112 项；采样历史改同步 block RAM＋有效计数补零。优化源联合 RTL 再次通过。首轮 50 分钟 PNR 截止时仍未布通，已保存失败证据，无位流/无烧录；优化源新资源门控中。
+- 系数以 7104 项基表和 73 相整数校正无损重建原 14112 项；采样历史改同步 block RAM＋有效计数补零。优化源联合 RTL 再次通过。首轮 50 分钟 PNR 截止时仍未布通，已保存失败证据，无位流/无烧录；优化完整映射 PASS：35931 LUT/35508 FF/155 DRM/92 APM（DRM 已满），新映射限时 PNR 中。全量回归 436 passed/4 skipped。
 - 实际串行→FIR→CDC 两轮 4096 对输入/3762 对输出逐项 golden PASS；新增 pytest 3 passed、既有 433 passed/4 skipped，lint 64/0。完整新源映射 39749 LUT/39576 FF/154.5 DRM/92 APM，容量通过；PNR/时序及板级结果以 STATUS 与 pcm1808_validation_20261103.json 为准，不以仿真或映射代替上板验收。
 
 ## 2026-11-03：Flash 固化工具流程与第一版烧写镜像
