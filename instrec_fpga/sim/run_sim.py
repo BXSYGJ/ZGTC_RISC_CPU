@@ -284,6 +284,18 @@ register(Case(
 ))
 
 register(Case(
+    name="pcm1808_27mhz",
+    prepare="pcm1808",
+    tb="tb_pcm1808.sv",
+    rtl=["src/audio/i2s_slave_rx.v", "src/audio/pcm1808_resampler.v",
+         "src/audio/pcm1808_coeff_rom.v", "src/audio/audio_cdc_fifo.v"],
+    extra_flags=["-GCLK_HALF_NS=18.5185", "-GRX_TIMEOUT=27000",
+                 "-GSTUCK_SLOTS=110", "-GLOSS_WAIT_NS=1200000", "-GDRAIN_NS=20000"],
+    timeout=180,
+    description="PCM1808 diagnostic 27 MHz serial/FIR/CDC and recovery",
+))
+
+register(Case(
     name="i2s_capture",
     tb="tb_i2s_capture.sv",
     rtl=["src/audio/i2s_clk_gen.v", "src/audio/i2s_rx.v"],

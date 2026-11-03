@@ -1,7 +1,13 @@
 `timescale 1ns/1ps
-module tb_pcm1808;
+module tb_pcm1808 #(
+    parameter real CLK_HALF_NS = 2.315,
+    parameter integer RX_TIMEOUT = 16000,
+    parameter integer STUCK_SLOTS = 8,
+    parameter integer LOSS_WAIT_NS = 100000,
+    parameter integer DRAIN_NS = 3000
+);
     reg clk=0;
-    always #2.315 clk=~clk;
+    always #(CLK_HALF_NS) clk=~clk;
     reg rst_n=0, bck=0, lrck=0, sd=0;
     wire [15:0] captured_l, captured_r, out_l, out_r;
     wire captured_valid, idle, out_valid, overrun;
@@ -27,7 +33,7 @@ module tb_pcm1808;
         end
         if (overflow != 0) $fatal(1,"CDC overflow");
     end
-    i2s_slave_rx #(.TIMEOUT_CYCLES(16000)) u_rx (
+    i2s_slave_rx #(.TIMEOUT_CYCLES(RX_TIMEOUT)) u_rx (
         .clk_nco(clk), .rst_n(rst_n), .i2s_bck(bck), .i2s_lrck(lrck),
         .i2s_sd(sd), .pcm_l(captured_l), .pcm_r(captured_r),
         .pcm_valid(captured_valid), .sd_idle(idle));
@@ -73,16 +79,16 @@ module tb_pcm1808;
                 slot(0,{source[n][31:16],8'hd3});
                 slot(1,{source[n][15:0],8'h6b});
             end
-            bck=0; #3000;
+            bck=0; #(DRAIN_NS);
             if (captures!=2048 || outputs!=1881 || fifo_outputs!=1881)
                 $fatal(1,"count mismatch %0d/%0d",captures,outputs);
-            repeat (8) slot(1,24'h555555);
+            repeat (STUCK_SLOTS) slot(1,24'h555555);
             if (!idle) $fatal(1,"stuck LRCK not detected");
-            #100000;
+            #(LOSS_WAIT_NS);
             if (!idle || captures!=2048 || outputs!=1881 || fifo_outputs!=1881)
                 $fatal(1,"unexpected samples after clock loss");
         end
-        rst_n=0; #100; rst_n=1; #100000;
+        rst_n=0; #100; rst_n=1; #(LOSS_WAIT_NS);
         if (!idle || captured_valid || out_valid) $fatal(1,"reset/clock loss failure");
         $display("RESULT: PASS pcm1808: two no-reset epochs, 4096 serial stereo pairs, 3762 FIR/CDC golden outputs, clock loss/recovery");
         $finish;

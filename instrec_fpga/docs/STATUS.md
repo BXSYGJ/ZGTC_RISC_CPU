@@ -1,10 +1,18 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-03 13:50：PCM1808 独立真实采集诊断已烧入，等外部音频接线
+
+- 优化完整系统 PNR 已于 13:42 按 50 分钟截止结束：第 132 轮仍有 4737 条未布通网络，无最终 STA/新完整位流；证据及 hash 保留 build/pcm1808-pnr-20261103-125201/result.json，reports/pcm1808_validation_20261103.json 已更新。不要把下述小型诊断当整机完成。
+- 为先打通实际音源，新增 pcm1808_diag 构建集/top_pcm1808_probe：直接 27MHz、生产 I2S 从接收＋完整 147/160 FIR＋UART/LED，不含 DDR/NPU/HDMI。F 字段观察实际滤波样本，避免未使用导致 FIR 被综合裁掉。唯一标准全流程 run20261103-134537-c263d9e2 全六阶段 PASS、SourcesUnchanged=true；最终 701 LUT/742 FF/2 APM，十表全部 PASS（setup +29.430ns、hold +0.158ns）。异步输入/输出 IO 存在未约束告警，不代表外部接口认证。
+- 位流 SHA256 2856BB4D19390773462EF6830504A772750693D20355411EF0A2C2AB950F1CBE，13:49 复用 JS9040/65420 成功烧入，done=1/CRC=0；原有 cfg46156 未操作，JS 实例保持单一。串口连续收到 A=50434D38；B/C/D=0、G=01，符合未接外部时钟状态，尚无真实音频验收。已通知用户可以接 J2 BCK11/LRCK12/DATA20/GND，MCK/VDD33 不接；诊断期间 HDMI 无输出，不能反复当显示故障回退。
+- 27MHz 与原 216MHz 两套实际串行/FIR/CDC 回归均 PASS：两轮无 reset、4096 对输入/3762 对整数 golden 输出，含断钟/LRCK 卡死恢复。构建集及烧录安全 pytest 41 passed，lint 65/0；本轮未重跑全量 pytest，先前完整 436 passed/4 skipped 的范围见旧记录。
+- 报告 pcm1808_probe_validation_20261103.json / pcm1808_probe_timing_20261103.json / pcm1808_probe_board_20261103.json；两个早期诊断试验失败保留、不用于烧录。PDS/monitor 已正常退出。下一步用户接线播放后只读串口核实约 48000→44100 对/秒、非零率、正负范围和滤波样本，再集成完整系统；不以采样计数宣称识别准确。当前板上为输入方向诊断，禁止在 PCM1808 时钟接着时恢复旧输出方向位流。五类与 Flash 保留待续。
+
 ## 2026-11-03 12:52：PCM1808 精简完整资源门控通过，唯一新映射限时 PNR 中
 
 - run20261103-123749-eb5117d4 的 compile/synthesize/dev_map 全 PASS、SourcesUnchanged=true，正常退出。完整资源 35931 LUT、35508 FF、155/155 DRM、92 APM；较首轮少 3818 LUT/4068 FF，但自动 RAM 分配后 DRM 全满，不能宣称剩余容量增加。历史成功合并至一块 DRM18K，系数 ROM 三块 DRM36K。映射 ADF SHA256 dbee9ac6d2f55228bbb48b02528d410c5df7bd77c2a932bfe1fdcb3ed4c053c6，门控证据 build/pcm1808-gate-20261103-123746/result.json。
 - 新源实际串行/FIR/CDC 联合 RTL PASS；全量 pytest 436 passed/4 skipped，烧录安全 16 passed、lint 64/0。改动已提交 9313dba8 并推送当前已有工作分支 XSY2；CPU 用户 diff、PCB、obj_dir 和另一路 group5 未跟踪资产未提交。
-- 核验源 hash 未变、无 PDS 残留后，12:52:02 从本次新映射库启动唯一 PNR→十表→位流流程；13:42:02 硬截止，15 秒监控 CPU/日志，存 build/pcm1808-pnr-20261103-125202。不是复用首轮旧映射。当前没有新位流/新烧录；旧板上 BCK/LRCK 仍须断开，既有 JS9040/cfg46156 不动。
+- 核验源 hash 未变、无 PDS 残留后，12:52:02 从本次新映射库启动唯一 PNR→十表→位流流程；13:42:02 硬截止，15 秒监控 CPU/日志，存 build/pcm1808-pnr-20261103-125201。不是复用首轮旧映射。当前没有新位流/新烧录；旧板上 BCK/LRCK 仍须断开，既有 JS9040/cfg46156 不动。
 
 ## 2026-11-03 12:38：PCM1808 首轮布线超时无位流；精简源联合 RTL 通过，重新资源门控
 

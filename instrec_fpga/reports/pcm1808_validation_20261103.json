@@ -1,5 +1,5 @@
 {
-  "status": "OPTIMIZED_RTL_AND_RESOURCE_GATE_PASS_PNR_RUNNING",
+  "status": "OPTIMIZED_GATE_PASS_PNR_DEADLINE_NO_BITSTREAM",
   "contract": {
     "source": "PCM1808 onboard oscillator, I2S master",
     "input_hz": 48000,
@@ -274,10 +274,51 @@
         }
       ]
     },
-    "pnr_status": "RUNNING",
-    "pnr_archive": "build/pcm1808-pnr-20261103-125202",
+    "pnr_status": "50_MINUTE_DEADLINE_NO_BITSTREAM",
+    "pnr_archive": "build/pcm1808-pnr-20261103-125201",
     "pnr_started_local": "2026-11-03 12:52:02 +08:00",
-    "deadline_local": "2026-11-03 13:42:02 +08:00"
+    "deadline_local": "2026-11-03 13:42:02 +08:00",
+    "pnr_result": {
+      "reason": "50 minute deadline",
+      "exit_code": 1,
+      "run": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\pds\\20261103-123749-eb5117d4",
+      "duration_seconds": 3004.5,
+      "archive": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\pcm1808-pnr-20261103-125201",
+      "files": [
+        {
+          "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\pds\\20261103-123749-eb5117d4\\place_route\\instrec_top_plc.adf",
+          "sha256": "08ba7fd51ad88d2bc2936b92605ac887e84270c01c0ac7cbf35bab3a67d9a99f",
+          "size": 9130182
+        },
+        {
+          "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\pds\\20261103-123749-eb5117d4\\place_route\\run.log",
+          "sha256": "2c05c3d39dc4c735e8fe40a34a178558efeeda085e9b47c09a33f6be895e69ad",
+          "size": 110526
+        },
+        {
+          "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\pds\\20261103-123749-eb5117d4\\source-manifest.json",
+          "sha256": "e9c3c548b40863618fe71dc777ce94025d87f43eb2e166841f6c1007d72cd3d2",
+          "size": 34260
+        },
+        {
+          "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\pds\\20261103-123749-eb5117d4\\stage-20261103-125203-e1f6bed8.log",
+          "sha256": "b741223679bf89c6a17e83c35d09d9e771bead12e07a8303da08701a3d265848",
+          "size": 111484
+        },
+        {
+          "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\pds\\20261103-123749-eb5117d4\\stage-20261103-125203-e1f6bed8.stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        {
+          "path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\pds\\20261103-123749-eb5117d4\\stage-20261103-125203-e1f6bed8.tcl",
+          "sha256": "eb061b87fd9f46f25f3f50243f13ad0750fc42f056576a771112239b3ef21701",
+          "size": 324
+        }
+      ]
+    },
+    "final_unrouted_nets": 4737,
+    "final_route_iteration": 132
   },
   "sha256": {
     "src/audio/i2s_slave_rx.v": "453923d5c5d1629946436e7fb0886ba3a6699c512906c580e8342f2ff573588f",

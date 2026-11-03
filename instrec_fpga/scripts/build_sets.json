@@ -170,6 +170,22 @@
         "src/mel",
         "src/cpu"
       ]
+    },
+    "pcm1808_diag": {
+      "top_module": "top_pcm1808_probe",
+      "sources": [
+        "src/audio/i2s_slave_rx.v",
+        "src/audio/pcm1808_resampler.v",
+        "src/audio/pcm1808_coeff_rom.v",
+        "src/diag/diag_uart_report.v",
+        "src/ctrl/uart_tx.v",
+        "src/diag/top_pcm1808_probe.v"
+      ],
+      "ip_cores": [],
+      "constraints": [
+        "constraints/top_pcm1808_probe.fdc"
+      ],
+      "hex_dirs": []
     }
   }
 }

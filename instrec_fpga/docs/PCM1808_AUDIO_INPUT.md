@@ -36,3 +36,11 @@
 - `python -m pytest -q tests/test_pcm1808.py`：一秒输入严格得到 44100 对输出、双通道 DC、实际重采样后 1kHz 信号保真及 22.5kHz 混叠抑制、生成 ROM 一致性。
 
 仿真不等于板级验收。新版必须通过完整系统资源门控，再限时 PNR 和完整 setup/hold/recovery/removal 检查；烧入后观察真实音频采样和 HDMI 波形/Mel，不能以静默补零或推理计数宣称识别准确。位流 SHA、构建结果和板测状态以 STATUS 最新条目为准。
+
+## 2026-11-03 13:50 独立诊断版已上板
+
+完整系统两轮限时布线均未完成；当前板上是 `pcm1808_diag` / `top_pcm1808_probe`（2856BB4D…），不是完整识别系统。它使用实际 I2S 接收及生产 FIR，直接 27MHz，每秒输出 UART 115200 诊断，不输出 HDMI。烧录 done=1/CRC=0 后已允许连接上表 BCK/LRCK；恢复任何旧输出方向位流前必须断开这两根线。
+
+UART 格式为 `DIAG UIDEMO A=50434D38 ...`，字段均十六进制：B=每秒输入 stereo pair 数，C=每秒滤波输出数，D=非零输入对数，E=左声道有符号 16bit 最小/最大值，F=最近一对实际滤波后的左右样本，G bit0=idle、bit1=overrun，H=1B（27MHz）。稳定 48kHz 音源应约 B=48000、C=44100（这里为十进制描述），G=0；拔线 G=1/计数归零。数字静音可有正常计数但 D=0，不应据此认定识别准确。
+
+复现：`powershell -NoProfile -ExecutionPolicy Bypass -File scripts/run_pds_full.ps1 -BuildSet pcm1808_diag`（先确认无其他 PDS）；`python sim/run_sim.py pcm1808_27mhz` 和 `python sim/run_sim.py pcm1808` 分别验证诊断/生产频率。构建、十表与初始上板证据见 `reports/pcm1808_probe_validation_20261103.json`。当前还未验收外部音源。

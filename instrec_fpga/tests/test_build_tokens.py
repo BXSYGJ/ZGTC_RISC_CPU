@@ -46,9 +46,10 @@ TOKENS = (
     '__CONSTRAINT_FILES__',
     '__HEX_COPY_BLOCK__',
 )
-SET_NAMES = ('full', 'ddr3_diag', 'ui_demo', 'conv1_test', 'mel_test', 'core_only', 'rv_core')
+SET_NAMES = ('full', 'ddr3_diag', 'ui_demo', 'conv1_test', 'mel_test', 'core_only', 'rv_core', 'pcm1808_diag')
 SET_KEYS = ('top_module', 'sources', 'ip_cores', 'constraints', 'hex_dirs')
 TOP_MODULES = {
+    'pcm1808_diag': 'top_pcm1808_probe',
     'full': 'instrec_top',
     'ddr3_diag': 'top_ddr3_diag',
     'ui_demo': 'top_ui_demo',
