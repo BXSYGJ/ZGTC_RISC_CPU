@@ -1,5 +1,23 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-04（第三批·重大修复）：恒 top1 根因修复——standardize 量化移位 24→36，特征恢复分化
+
+- **根因修复已落地并全链验证**：`src/mel/standardize.v` Beat Q 与 `scripts/golden_pipeline.py`（QUANT_IN_FRAC_BITS）的 z(Q4.12)×inv_s_in(Q8.24) 移位从 24 改为 36（12+24）。旧值等效 2^12 增益，uint8 特征 ~50% 饱和（0/255 两值化），这是板上恒 top1 的直接根因；**RTL 与 golden 共享此 bug，故历来位级对拍一致但同吃坏特征**——「golden 位级真值」的可信边界仅覆盖「RTL 实现 golden 数学」，不覆盖「golden 数学实现训练语义」，本次由浮点模型×特征域 2×2 对照补上后半环（`reports/float_vs_quant_domain_diag_20261104.json`）。
+- 修复后全链验证：mel/mel_credit PASS（RTL=新 golden 0 失配）、conv1 PASS（hex_conv1 重生成）、全 TB **34/34 PASS**（含本轮新增 ui_scene/uart_app_boot/logits_snap）、pytest **443 passed / 4 skipped**；golden_ref 三 stem 参考按 gen_golden_refs.py 重生成（旧域版本在 git HEAD 可恢复）。
+- **IRMAS 八样本 NPU 探针（修复后）**：top1 从全坍缩 0 恢复分化 {4:3, 1:4, 2:1}、RTL=golden 逐位一致、每样本 31,115,245 cycles 不变（`reports/npu_probe_irmas_20261104.json` 已更新）。1/8 准确率属 IRMAS↔Medley 域差异（E4 格 1 float 模型亦 2/8），不构成模型缺陷判据；真实精度须 Medley 验证集（数据缺口仍开）。
+- **新知识：修复后特征域上限 177**（Q4.12 极值 z=8 → 8×15.94+49），255 在合法输入域内不可达；旧域「满幅触轨」断言（DoD4 等 3 个共生测试）已改为修复后语义（quantize_int8 极值轨 0/177、列不变性症状消失断言、非排列弱断言）。
+- 类别表澄清：E4 判定部署空间 idx 0=clarinet（此前「小号/钢琴」读法均误）；板上恒 top1=6 的类名以部署类别表为准待板上复核。
+- 板级含义：板上 1497FAF4 位流含此 bug（其恒 top1 与 RTL 坍缩点不同还叠加板侧输入域偏移）；**修复版需新构建新位流后才有板级意义，本轮零 PDS/零烧录**。五组 INT8 契约（group5_contract）的 inv_s_in 语义与八类同型，其 golden 管线同查点已在评审记录，重生成属 M3 任务。
+- 下一步：①修复版唯一资源门控+限时 PNR+板级三层注入对拍（判据=npu_probe 新基线）②Medley 验证集获取（精度评估数据缺口）③logits_snap/uart_app_boot/ui_scene 集成实验顶层 ④五组 golden 同点复查。
+
+## 2026-11-04（第二批）：恒 top1 根因二分完成——模型/特征域（强结论）；logits 快照 RTL；五组 INT8 契约评审转正
+
+- **E2 诊断实验（本轮最重要发现）**：8 个 IRMAS 真实八类样本过 RTL NPU 全链，RTL 与位级 golden **逐层逐位全同**（8×13 层 all_identical），但 top1 全部坍缩到 0（piano），probs 恒 [65535,0,…,0]，仅 piano 样本本身 match。⇒ **恒 top1 根因方向=模型/特征域，非 RTL 数值、非板级搬运**；板上坍缩点 6（guitar_acoustic，此前「小号」为类表误读：trumpet=idx5）≠ RTL 坍缩点 0，说明板侧输入域另有偏移，但**仅修板侧无法恢复正确分类**。证据 `reports/npu_probe_irmas_20261104.json`（8 样本×12 层快照，431.6s 仿真，`sim/experiments/npu_probe/run_irmas.py`）。待区分：量化模型缺陷 vs golden mel 域与训练域失配（下一步浮点模型对照）。
+- **E1 logits 快照 RTL**：`src/ctrl/logits_snap.v`（契约 §3 的 RTL 化：16 槽影子寄存器单拍原子锁存、LOGIT_IDX/VAL/META/CTRL 接口、epoch 递增清 valid 不清数据）+ TB 五场景 30 检查 PASS；独立模块未接线生产，集成留下轮。run_sim 新增 logits_snap case（12.0s）。
+- **E3 五组 INT8 契约评审：转正提交**。遗留五候选资产（golden_pipeline_group5.py / eval_group5_int8.py / group5_contract.json / group5_weights_image.bin / 校准报告）评审全过：requant RHE/compute_m_shift/zp=98/BN 折叠与八类逐行同型；macro-F1 0.87307→0.86559（Δ-0.0075，门槛 ≤2pt 内）、双跑 byte-identical、来源链 hash 锁定。跟进项：R1 zp 打包 'b'→'B' 解析端同步、R2 无 pytest 冻结测试、R3 agreement 余量 +0.0006。报告 `reports/group5_int8_contract_review_20261104.md`。
+- 验证基线：check_rtl 74 .v / 0 violation（+logits_snap）；pytest 443 passed / 4 skipped；零 PDS/JTAG/烧录。
+- 下一步（E2 结论后重排）：①**浮点模型对照诊断**（区分量化缺陷 vs 特征域失配，决定重训范围——最高优先）②logits_snap/uart_app_boot/ui_scene 集成实验顶层 ③五组 INT8 R1/R2 跟进（zp 打包统一+pytest 冻结）④存储共享/16/8lane。
+
 ## 2026-11-04：按总规划启动并行开发，四工作包首批最小交付完成（M0 数值真源 + M1 双半程）
 
 - 用户指令「按 DUAL_MODE 规划完成开发、注意版本管理、调用子智能体并行」；按 HANDOFF_DEVELOPMENT_MASTER_PLAN_20261104 第 6 节分工并行分派 A/B/C/D 四个子智能体，主线任集成负责人。先修复基线缺口（emergency_demo 漏第 4 处登记致 1 failed），回到 443 passed / 4 skipped。

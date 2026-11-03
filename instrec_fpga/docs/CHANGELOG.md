@@ -1,5 +1,17 @@
 # InstRec-FPGA 变更日志
 
+## 2026-11-04：恒 top1 根因修复——量化移位 24→36，特征域恢复分化（全链验证）
+
+- standardize.v/golden_pipeline.py 的 z×inv_s_in 移位修正（Q4.12+Q8.24=36 位小数）；旧 >>24 等效 2^12 增益致 uint8 特征 ~50% 饱和，RTL 与 golden 共享故位级对拍从未暴露；浮点×特征域 2×2 对照定位（float_vs_quant_domain_diag）。
+- 修复后：mel/mel_credit/conv1 PASS、全 TB 34/34、pytest 443/4；golden_ref 三 stem 重生成（旧域在 git HEAD）；IRMAS 八样本 top1 由全坍缩恢复三类别分化且 RTL=golden 逐位一致；特征域上限 177（255 不可达）记入共生测试新语义。
+- 待办：修复版新构建/新位流/板级三层注入（判据=npu_probe 新基线）；Medley 验证集数据缺口仍开；板上旧位流含此 bug。
+
+## 2026-11-04：第二批交付——恒 top1 根因二分（模型/特征域）、logits 快照、五组契约转正
+
+- E2 诊断：8 个 IRMAS 真实样本 RTL=golden 逐位全同但 top1 全坍缩 piano ⇒ 恒 top1 根因在模型/特征域；类表纠正（idx6=guitar_acoustic 非 trumpet）；板上坍缩点 6≠RTL 坍缩点 0，板侧另有偏移但仅修板侧不可恢复分类。
+- E1：src/ctrl/logits_snap.v 16 槽原子快照锁存（契约 §3 RTL 化）+ TB 五场景 PASS。
+- E3：五组 INT8 契约评审结论「转正提交」（macro-F1 Δ-0.0075、确定性双跑一致、hash 链锁定）；R1 zp 打包/R2 pytest 冻结为跟进项。
+
 ## 2026-11-04：按总规划启动并行开发，四工作包首批最小交付落地
 
 - 修复基线缺口：emergency_demo 构建集补第 4 处登记（test_plan_contract_guards SET_NAMES），全量回到 443 passed / 4 skipped。
