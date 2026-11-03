@@ -149,6 +149,12 @@ def register(case: Case) -> None:
 
 
 register(Case(
+    name="demo_player", tb="tb_demo_player.sv",
+    rtl=["src/ui/demo_confidence_player.v"], timeout=120,
+    description="scripted demo: idle, debounce, complete bundles, hold and replay",
+))
+
+register(Case(
     name="self_test",
     tb="tb_self_test.sv",
     rtl=["src/ctrl/self_test.v"],

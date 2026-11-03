@@ -1081,3 +1081,9 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 ## 2026-11-03 16:26：完整系统布线检查点
 
 - 新Mel拆分源已通过宏放置，放置估计+0.500ns/TNS0；详细布线第71轮5302未布通，最终时序/位流待验。修正监控目录154653，保存只读JTAG done0/CRC0与UART无输出证据；无新烧录。
+
+
+## 2026-11-03：紧急八类置信度回放演示框架
+
+- 独立emergency_demo保留真实PCM1808/Mel/HDMI，移除NPU推理，KEY1触发10Hz预设曲线/末帧保持/重播，不再启动DDR自检；正式full保持。
+- 增加曲线编译、顶层生成、RTL消抖/快照回归与使用说明，修复StopAfter compile带参数阶段匹配。RTL PASS、pytest47passed、lint67/0、PDS compile PASS。首轮重复驱动失败保留并修复；尚待曲线，无演示位流/烧录。

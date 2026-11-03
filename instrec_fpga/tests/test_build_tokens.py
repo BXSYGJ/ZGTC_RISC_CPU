@@ -46,9 +46,10 @@ TOKENS = (
     '__CONSTRAINT_FILES__',
     '__HEX_COPY_BLOCK__',
 )
-SET_NAMES = ('full', 'ddr3_diag', 'ui_demo', 'conv1_test', 'mel_test', 'core_only', 'rv_core', 'pcm1808_diag')
+SET_NAMES = ('full', 'ddr3_diag', 'ui_demo', 'conv1_test', 'mel_test', 'core_only', 'rv_core', 'pcm1808_diag', 'emergency_demo')
 SET_KEYS = ('top_module', 'sources', 'ip_cores', 'constraints', 'hex_dirs')
 TOP_MODULES = {
+    'emergency_demo': 'top_emergency_demo',
     'pcm1808_diag': 'top_pcm1808_probe',
     'full': 'instrec_top',
     'ddr3_diag': 'top_ddr3_diag',
@@ -345,7 +346,7 @@ def test_all_generated_paths_are_absolute_under_the_project(dry_runs):
     repo_prefix = ROOT.parent.as_posix().lower() + '/'
     for name, run in dry_runs.items():
         for path in tcl_lines(run['tcl'], ADD_DESIGN_RE) + tcl_lines(run['tcl'], ADD_CONSTRAINT_RE):
-            allowed = path.lower().startswith(prefix) or (name in ('rv_core', 'full') and path.lower().startswith(repo_prefix + 'cpu/rtl/'))
+            allowed = path.lower().startswith(prefix) or (name in ('rv_core', 'full', 'emergency_demo') and path.lower().startswith(repo_prefix + 'cpu/rtl/'))
             assert allowed, \
                 '{0}: {1} is not under the project root'.format(name, path)
             assert '\\' not in path, 'build.tcl must use forward slashes'

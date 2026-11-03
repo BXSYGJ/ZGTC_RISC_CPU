@@ -40,7 +40,7 @@
 #   - No PS7-only operators (ternary / null-coalescing / chain operators).
 [CmdletBinding()]
 param(
-    [ValidateSet('full', 'ddr3_diag', 'ui_demo', 'conv1_test', 'mel_test', 'core_only', 'rv_core', 'pcm1808_diag')]
+    [ValidateSet('full', 'ddr3_diag', 'ui_demo', 'conv1_test', 'mel_test', 'core_only', 'rv_core', 'pcm1808_diag', 'emergency_demo')]
     [string]$BuildSet = 'full',
 
     [string]$TopModule = '',
@@ -206,7 +206,7 @@ try {
         $lines = $tcl -split "`r?`n"
         $idx = -1
         for ($li = 0; $li -lt $lines.Count; $li++) {
-            if ($lines[$li].Trim() -eq $nextStage) { $idx = $li; break }
+            if ($lines[$li].Trim() -match ('^' + [regex]::Escape($nextStage) + '(\s|$)')) { $idx = $li; break }
         }
         if ($idx -lt 0) { throw "StopAfter: stage '$nextStage' not found in build.tcl" }
         $head = @()

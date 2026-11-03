@@ -1,5 +1,13 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+
+## 2026-11-03 17:44：按用户紧急要求建立无推理演示版，待置信度曲线
+
+- 用户中止恒小号诊断，优先独立演示：八类现界面、真实PCM1808/波形/Mel频谱/HDMI保持，KEY1播放预设置信度，不再推理。XSY新增emergency_demo/top_emergency_demo，正式full顶层不改；移除演示顶层NPU实例、禁止启动，sys_ctrl不等权重，KEY1与DDR自检解除。KEY0仍复位。板上仍1497FAF4，本轮没有烧录。
+- 回放10Hz、KEY1消抖/从头播放、完整八项快照后帧边界提交、播完保持/再按重播；最长409.5秒。曲线导入脚本支持八类关键帧插值，详见docs/EMERGENCY_DEMO.md。用户尚未提供变化图，目前ROM全零占位，不能将其当最终演示结果或准确率。
+- demo_player实际RTL仿真PASS（零值等待、消抖、三帧/类别、保持、重播），相关pytest47passed，lint67/0。唯一编译run20261103-174125-b3a995ac正常PASS/exit0/110秒，源hash未变；本轮只请求compile，其他stage的FAIL占位是未执行，无综合/映射/PNR/时序/演示位流。首轮173816编译发现生成stub重复驱动，已修复；原失败日志/hash保留。StopAfter compile原脚本不能识别带参数synthesize命令，已修复阶段匹配。证据reports/emergency_demo_framework_20261103.json。
+- 当前无PDS/monitor；未触碰cdt_js/cdt_cfg、CPU用户diff、PCB、obj_dir或group5未跟踪资产。下一步收到用户曲线→填入并冻结→唯一新源资源门控→容量允许后限时PNR/完整时序→安全复用既有JS烧录、真实音频频谱及KEY1回放验收。曲线变化后不得复用旧ROM映射。正式恒小号根因尚未定位；演示不作为修复或准确率证明。
+
 ## 2026-11-03：新完整系统中文显示用户验收正常，手动复位后重载权重恢复
 
 - 用户确认1497FAF4中文仪表盘、波形/频谱动态都正常，无错位/撕裂/花块反馈，覆盖前条待答显示验收；随后用户按复位。KEY0会清除weight_loader.weight_ok，单纯DDR数据可能残留不能视为权重仍有效，当前尚未Flash自动恢复。
