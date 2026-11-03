@@ -69,7 +69,7 @@
     "crc_err": 0,
     "boot": "PASS",
     "ddr_selftest": "PASS",
-    "display_playback_acceptance": "pending user",
+    "display_playback_acceptance": "PASS: user confirmed display and playback normal",
     "weights_uploaded": false,
     "uart_sha256": "fa1fb3a037911da8377a24bc0678acb45e97fd7ba5d6b93374e17c16e003be74",
     "uart_note": "Capture includes pre-program old NPU lines. After RV32 BOOT, NPU GO/top1 reports are retained CPU firmware reading demo stub/UI registers, cycles=0; no NPU instance or inference."

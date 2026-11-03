@@ -1,11 +1,11 @@
 # InstRec-FPGA 当前状态（STATUS）
 
-## 2026-11-03 18:19：用户曲线演示 CE2E2205 已烧录，等待屏幕/KEY1 回放验收
+## 2026-11-03 18:19：用户曲线演示 CE2E2205 已烧录，用户确认显示与回放正常
 
 - 唯一run20261103-175125-bc930d4f完成PNR/十表/位流，监控正常退出0、871.6秒，冻结源逐文件hash未变；PDS与monitor均已退出。位流3791112B，SHA256 CE2E2205F4F17C28A5AF2E9E16D8B2ED0DF73F48F8DBE3BD783CF698E2667A88，证据build/emergency-demo-pnr-20261103-180146/result.json与reports/emergency_demo_timeline_20261103.json。
 - 完整十表Some Constraints Violated：pix慢角setup -0.005ns/1端点，core慢角setup -0.399ns/34端点，其余setup/hold/recovery/removal/min-pulse通过。仅作为紧急演示候选，不宣称时序收敛或长期稳定；reports/emergency_demo_timing_20261103.json归档全部表/hash。
 - 安全复用JS9040/65420烧录成功done1/CRC0、RV32 BOOT/MMIO/ISA与DDROK通过，既有cfg46156保持。无权重上传；当前板上已是无NPU的独立演示CE2E2205，不是正式1497FAF4。串口保留的NPU GO/top1/cycles0是原CPU固件读演示stub/UI寄存器，不代表真实推理；采集开头还含烧录前旧系统记录。烧录/串口hash见reports/emergency_demo_board_20261103.json与timeline报告。
-- 已询问新屏幕验收：真实PCM1808波形/Mel动态、同步播放配套WAV并按KEY1后八类曲线变化、58秒保持/再按重播，待用户回复；不重复旧fallback问题。无需权重/重插/改线。正式位流与资产保留，未触碰CPU用户diff、PCB、obj_dir及group5资产。下一步按实际反馈修复演示，静态时序与原恒小号诊断仍未解决。
+- 用户明确回复“显示与回放正常”，本次真实音频动态显示与KEY1曲线演示实屏验收通过；不重复询问。无需权重/重插/改线。正式位流与资产保留，未触碰CPU用户diff、PCB、obj_dir及group5资产。下一步按实际反馈修复演示，静态时序与原恒小号诊断仍未解决。
 
 
 
