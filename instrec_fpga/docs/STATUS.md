@@ -1,5 +1,13 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-03 14:48：按用户要求回到 XSY，完整系统改用已实测 27MHz 音频域
+
+- 用户明确要求继续完整系统并放在 XSY，XSY2 暂不用。已切换 XSY，将 XSY2 的 9d2940f9..8f902aec 五个仅 instrec_fpga 提交 fast-forward 合入，并推送 origin/XSY；上游改为 origin/XSY。未修改/暂存 CPU 两项用户 diff、PCB、obj_dir 或另一组未跟踪 group5 资产；不再向 XSY2 续交。
+- 完整 instrec_top 的外部主机 I2S 接收/FIR/CDC 写域由 216MHz 改为板载 27MHz，使用同一已实测算法；288 拍计算小于每输入帧 562.5 拍预算。移除该顶层不再需要的 audio PLL 实例，保留可复用历史模块/IP；本域复位异步置位、两级同步释放，sys_ctrl readiness 接同步释放完成，1ms watchdog 对应 27000 拍。原模型 44.1kHz、147/160、系数数值与 NPU 结构不改。FDC 去除不存在 PLL 的 generated clock，异步组改用实际 clk，仍在 DDR clocks 创建后加载。
+- 新源唯一资源门控 build/pds/20261103-144754-6578ad23 于 14:47:54 启动，止于 dev_map，20 分钟截止；当前 compile 中、有 CPU 推进。现有 wrapper 的“最新目录”采样被 pytest -DryRun 目录干扰，实际 run 以本条和 wrapper.log 为准，不以 144823-2f39978d 当真实构建。源 hash 及最终门控结果须补录，尚无本轮映射/时序/完整位流。
+- 27MHz 实际串行/FIR/CDC golden 回归 PASS（33s），audio_fifo、rv_top_ctrl PASS；lint 65/0。全量首次 435 passed/4 skipped/1 failed，唯一失败是旧 plan-contract 的构建集清单漏 pcm1808_diag，已补清单、相关 9 tests PASS；不是 RTL 功能失败。不宣称初次全量全绿。
+- 板上仍 2856BB4D 真实音频诊断，J2 实际音源已经通过，保留接线、不重刷旧输出方向位流。门控通过后在新库执行受控 PNR→完整十表→安全复用 JS 烧录→权重 WOK→真实音频联合回读/HDMI 验收；不得拿旧库充作新源结果。
+
 ## 2026-11-03 14:43：真实 PCM1808 音频采集与 FIR 重采样板测通过
 
 - 用户补供电后仍无完整帧，随后发现误接紫卡 J3，改接 J2 后无需复位/重烧即恢复。当前板上仍为 2856BB4D 输入方向诊断位流。

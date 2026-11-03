@@ -10,9 +10,8 @@
 
 create_clock -name {clk} [get_ports {clk}] -period {37.037} -waveform {0.000 18.519}
 
-# ---- derived clocks from the two GPLLs (audio 216 MHz, video 148.5 MHz,
+# ---- derived clocks from the video GPLL (148.5 MHz pixel,
 # ---- HDMI I2C config 10.395 MHz) ----
-create_generated_clock -name {clk_nco} -source [get_ports {clk}] [get_pins {u_audio_pll/u_pll_audio/u_gpll/CLKOUT0}] -multiply_by {8} -divide_by {1}
 create_generated_clock -name {pix_clk} -source [get_ports {clk}] [get_pins {u_hdmi_tx_if/u_pll/u_gpll/CLKOUT0}] -multiply_by {11} -divide_by {2}
 # cfg_clk: explicit name for the demo GPLL clkout1 (10.395 MHz = 27 x 77/200).
 # The explicit declaration supersedes the hierarchical "Inferred" clock so
@@ -20,12 +19,12 @@ create_generated_clock -name {pix_clk} -source [get_ports {clk}] [get_pins {u_hd
 create_generated_clock -name {cfg_clk} -source [get_ports {clk}] [get_pins {u_hdmi_tx_if/u_pll/u_gpll/CLKOUT1}] -multiply_by {77} -divide_by {200}
 
 # ---- clock domain asynchronicity (design doc section 1.4 CDC table) ----
-# Board clk / audio NCO / pixel clock are independent roots. The groups
+# Board audio processing and pixel clock cross through CDC logic. The groups
 # that reference the DDR3 family clocks (created later by ddr3_100h.fdc)
 # live in constraints/clock_groups_async.fdc, which is loaded AFTER
 # ddr3_100h.fdc so every get_clocks reference resolves (SDC-2027 lesson:
 # a group naming a not-yet-created clock makes PDS ignore the command).
-set_clock_groups -asynchronous -group [get_clocks {clk}] -group [get_clocks {clk_nco}] -group [get_clocks {pix_clk}]
+set_clock_groups -asynchronous -group [get_clocks {clk}] -group [get_clocks {pix_clk}]
 
 
 define_attribute {p:clk} {PAP_IO_DIRECTION} {INPUT}

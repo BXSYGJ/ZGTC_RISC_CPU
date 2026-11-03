@@ -455,7 +455,7 @@ def test_diag_frame_is_91_bytes_and_matches_frame_re():
 # Guard 5: build_sets.json paths exist and the three sets stay isolated
 # --------------------------------------------------------------------------- #
 
-SET_NAMES = ('full', 'ddr3_diag', 'ui_demo', 'conv1_test', 'mel_test', 'core_only', 'rv_core')
+SET_NAMES = ('full', 'ddr3_diag', 'ui_demo', 'conv1_test', 'mel_test', 'core_only', 'rv_core', 'pcm1808_diag')
 SET_LIST_KEYS = ('sources', 'ip_cores', 'constraints', 'hex_dirs')
 
 #: Substrings the diagnostic set must never carry (kept out of the build).

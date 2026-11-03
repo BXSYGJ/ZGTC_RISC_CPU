@@ -1,5 +1,11 @@
 # InstRec-FPGA 变更日志
 
+## 2026-11-03：XSY 完整系统接入 27MHz PCM1808 处理域
+
+- 按用户要求将五个 PCM1808/Flash 提交快进合到 XSY 并推送，停用 XSY2 后续开发。
+- instrec_top 复用实测通过的 27MHz 主机接收/FIR，1ms watchdog、两级复位释放和异步时钟组同步更新，移除顶层不再需要的音频 PLL；不改变模型采样契约。串行 golden/audio FIFO/CPU 控制回归通过。新源资源门控中，尚无新完整位流。
+- 修正 plan-contract 测试清单漏列 pcm1808_diag；相关 9 tests PASS，首次全量的单项失败记录保留。
+
 ## 2026-11-03：PCM1808 实际线路音频板测通过
 
 - 用户纠正 J3→J2 并供电后，连续 10 秒输入约 48k stereo pairs/s、滤波输出约 44.1k，非零正负音频持续变化，无 idle/overrun。保存串口原文/hash/解析；当前仍为 2856BB4D 独立诊断，完整识别集成待完成。未烧录新增边沿候选，候选构建已退出并归档。

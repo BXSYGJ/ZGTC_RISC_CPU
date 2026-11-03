@@ -7,14 +7,14 @@
 //           (design doc sections 1.1 / 2.2.1, REQ-VER-001 M0 scope).
 //
 // Clock domains (design doc section 1.2):
-//   clk       27 MHz board crystal (D18), reference of both GPLLs
-//   clk_nco   216 MHz audio NCO time base (audio_pll / pll_audio IP)
+//   clk       27 MHz board crystal (D18), reference of video GPLL
+//   clk_nco   27 MHz audio processing clock (alias of board clk)
 //   pix_clk   148.5 MHz pixel clock (hdmi_tx_if / demo GPLL_B IP)
 //   core_clk  125 MHz DDR3 controller user clock (ddr3_wrapper IP output)
 //
 // Reset tree (design doc section 1.3):
 //   rst_n     asynchronous board reset (KEY0, C22)
-//   rst_sync_nco   clk_nco domain, lock-gated sync release (audio_pll)
+//   rst_sync_nco   clk_nco domain, two-FF synchronous reset release
 //   rst_pix_n      pix_clk domain, sync release (hdmi_tx_if)
 //   rst_sync_core  = rst_n directly; feeds ONLY ddr3_wrapper.resetn.
 //                  Must not depend on core_clk (the IP GPLL produces it,
@@ -88,9 +88,9 @@ module instrec_top #(
     // ==================================================================
     // Clock and reset nets
     // ==================================================================
-    wire clk_nco;            // 216 MHz NCO time base
-    wire pll_audio_locked;   // audio GPLL lock
-    wire rst_sync_nco;       // clk_nco domain reset (lock gated)
+    wire clk_nco;            // 27 MHz board-clock alias
+    wire pll_audio_locked;   // audio reset-release readiness
+    wire rst_sync_nco;       // 27 MHz synchronized reset release
     wire pix_clk;            // 148.5 MHz pixel clock
     wire rst_pix_n;          // pix_clk domain reset
     wire core_clk;           // 125 MHz DDR3 user clock
@@ -254,20 +254,22 @@ module instrec_top #(
     // Module instances
     // ==================================================================
 
-    // ---- 216 MHz audio time base (clk_nco domain reset included) ----
-    audio_pll u_audio_pll (
-        .clk_27m     (clk),
-        .rst_n       (rst_n),
-        .clk_nco     (clk_nco),
-        .pll_locked  (pll_audio_locked),
-        .rst_sync_nco(rst_sync_nco)
-    );
+    // PCM1808 supplies its own clocks; the board clock has ample FIR budget.
+    // 288 processing cycles fit within 562.5 cycles per 48 kHz stereo pair.
+    reg [1:0] audio_reset_sync;
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) audio_reset_sync <= 2'b00;
+        else audio_reset_sync <= {audio_reset_sync[0],1'b1};
+    end
+    assign clk_nco = clk;
+    assign rst_sync_nco = audio_reset_sync[1];
+    assign pll_audio_locked = audio_reset_sync[1];
 
     // PCM1808 owns both clocks. Convert coherent stereo pairs to 44.1 kHz.
     wire [15:0] capture_l, capture_r;
     wire capture_valid, capture_idle, resample_overrun;
     assign sd_idle = capture_idle | resample_overrun;
-    i2s_slave_rx u_i2s_slave_rx (
+    i2s_slave_rx #(.TIMEOUT_CYCLES(27000)) u_i2s_slave_rx (
         .clk_nco(clk_nco), .rst_n(rst_sync_nco),
         .i2s_bck(i2s_bck), .i2s_lrck(i2s_lrck), .i2s_sd(i2s_sd),
         .pcm_l(capture_l), .pcm_r(capture_r),
@@ -280,7 +282,7 @@ module instrec_top #(
         .overrun(resample_overrun)
     );
 
-    // ---- 216 MHz -> 125 MHz stereo sample CDC FIFO ----
+    // ---- 27 MHz -> 125 MHz stereo sample CDC FIFO ----
     audio_cdc_fifo u_audio_cdc_fifo (
         .clk_nco     (clk_nco),
         .wr_rst_n    (rst_sync_nco),
