@@ -1,5 +1,12 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-03 18:49：KEY1 提示整行删除，新版 0EBF9448 已烧录且十表时序通过
+
+- 按用户明确要求只删除演示右下角整行“KEY1 重播 / 预设曲线”；置信度ROM数值与此前CE2E2205完全相同，KEY1重播/58秒末帧保持、真实PCM1808/波形/Mel、其余标签保持。lint69/0、五状态全1080p实际RTL回归PASS；显示差异仅y960/x>=1280的20个提示tile，动态类名/数字/百分比glyph一致。
+- 新源唯一run20261103-182311-e9fcb396门控正常526.7秒，20880LUT/18148FF/74.5DRM/31APM；同冻结源PNR/十表/位流正常902.4秒，逐文件hash未变。完整十表All Constraints Met，无负项（包括慢角pix setup +0.180ns）；这是演示顶层的新结果，不代表正式推理系统时序通过。位流3791112B，SHA256 0EBF9448533FD958676B376295F1A23D571DD64E881B9C7813C0E036FA12A584。
+- 安全复用JS9040/TCP65420烧录PASS，done1/CRC0、RV32 BOOT与DDROK通过，既有cfg46156保持；无权重上传、无NPU推理。串口NPU GO/top1/cycles0是原CPU读演示stub/UI，采集含烧录前旧记录，不作为推理证据。当前板上是去提示0EBF9448，已询问新实屏效果待答，不重复烧录/旧验收。
+- 证据reports/emergency_demo_nohint_20261103.json、对应timing/board报告；旧CE2E2205及正式1497FAF4证据均保留。PDS/monitor均正常退出，未操作JS/cfg，未碰CPU用户diff/PCB/obj_dir/group5资产。下一步仅按新实屏反馈处理；正式恒小号、五类与Flash后续任务不以演示替代。
+
 ## 2026-11-03 18:19：用户曲线演示 CE2E2205 已烧录，用户确认显示与回放正常
 
 - 唯一run20261103-175125-bc930d4f完成PNR/十表/位流，监控正常退出0、871.6秒，冻结源逐文件hash未变；PDS与monitor均已退出。位流3791112B，SHA256 CE2E2205F4F17C28A5AF2E9E16D8B2ED0DF73F48F8DBE3BD783CF698E2667A88，证据build/emergency-demo-pnr-20261103-180146/result.json与reports/emergency_demo_timeline_20261103.json。

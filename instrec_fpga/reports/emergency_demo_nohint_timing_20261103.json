@@ -1,0 +1,632 @@
+{
+  "report": "build\\pds\\20261103-182311-e9fcb396\\report_timing\\top_emergency_demo.rtr",
+  "sha256": "13039f9b8185a83116f629c6618ccc26d861c5e6ae5fb6441a783311acccd5b4",
+  "tool_verdict": "All Constraints Met.",
+  "complete": true,
+  "meets_constraints": true,
+  "violations": [],
+  "tables": [
+    {
+      "check": "Setup",
+      "corner": "Slow",
+      "rows": [
+        {
+          "clocks": [
+            "clk",
+            "clk"
+          ],
+          "slack_ns": 28.928,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 991
+        },
+        {
+          "clocks": [
+            "pix_clk",
+            "pix_clk"
+          ],
+          "slack_ns": 0.18,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 1254
+        },
+        {
+          "clocks": [
+            "cfg_clk",
+            "cfg_clk"
+          ],
+          "slack_ns": 89.9,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 651
+        },
+        {
+          "clocks": [
+            "rst_clk",
+            "rst_clk"
+          ],
+          "slack_ns": 5.438,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 419
+        },
+        {
+          "clocks": [
+            "ddrphy_sysclk",
+            "ddrphy_sysclk"
+          ],
+          "slack_ns": 0.046,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 52592
+        }
+      ]
+    },
+    {
+      "check": "Hold",
+      "corner": "Slow",
+      "rows": [
+        {
+          "clocks": [
+            "clk",
+            "clk"
+          ],
+          "slack_ns": 0.187,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 991
+        },
+        {
+          "clocks": [
+            "pix_clk",
+            "pix_clk"
+          ],
+          "slack_ns": 0.349,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 1254
+        },
+        {
+          "clocks": [
+            "cfg_clk",
+            "cfg_clk"
+          ],
+          "slack_ns": 0.247,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 651
+        },
+        {
+          "clocks": [
+            "rst_clk",
+            "rst_clk"
+          ],
+          "slack_ns": 0.201,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 419
+        },
+        {
+          "clocks": [
+            "ddrphy_sysclk",
+            "ddrphy_sysclk"
+          ],
+          "slack_ns": 0.137,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 52592
+        }
+      ]
+    },
+    {
+      "check": "Recovery",
+      "corner": "Slow",
+      "rows": [
+        {
+          "clocks": [
+            "clk",
+            "clk"
+          ],
+          "slack_ns": 33.409,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 170
+        },
+        {
+          "clocks": [
+            "pix_clk",
+            "pix_clk"
+          ],
+          "slack_ns": 1.246,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 158
+        },
+        {
+          "clocks": [
+            "cfg_clk",
+            "cfg_clk"
+          ],
+          "slack_ns": 92.799,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 19
+        },
+        {
+          "clocks": [
+            "rst_clk",
+            "rst_clk"
+          ],
+          "slack_ns": 5.85,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 96
+        },
+        {
+          "clocks": [
+            "ddrphy_sysclk",
+            "ddrphy_sysclk"
+          ],
+          "slack_ns": 1.529,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 8408
+        }
+      ]
+    },
+    {
+      "check": "Removal",
+      "corner": "Slow",
+      "rows": [
+        {
+          "clocks": [
+            "clk",
+            "clk"
+          ],
+          "slack_ns": 0.587,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 170
+        },
+        {
+          "clocks": [
+            "pix_clk",
+            "pix_clk"
+          ],
+          "slack_ns": 0.908,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 158
+        },
+        {
+          "clocks": [
+            "cfg_clk",
+            "cfg_clk"
+          ],
+          "slack_ns": 0.966,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 19
+        },
+        {
+          "clocks": [
+            "rst_clk",
+            "rst_clk"
+          ],
+          "slack_ns": 0.396,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 96
+        },
+        {
+          "clocks": [
+            "ddrphy_sysclk",
+            "ddrphy_sysclk"
+          ],
+          "slack_ns": 0.351,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 8408
+        }
+      ]
+    },
+    {
+      "check": "Minimum Pulse Width",
+      "corner": "Slow",
+      "rows": [
+        {
+          "clocks": [
+            "clk"
+          ],
+          "slack_ns": 17.558,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 180
+        },
+        {
+          "clocks": [
+            "pix_clk"
+          ],
+          "slack_ns": 2.407,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 398
+        },
+        {
+          "clocks": [
+            "cfg_clk"
+          ],
+          "slack_ns": 47.139,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 121
+        },
+        {
+          "clocks": [
+            "rst_clk"
+          ],
+          "slack_ns": 3.8,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 97
+        },
+        {
+          "clocks": [
+            "ddrphy_sysclk"
+          ],
+          "slack_ns": 2.655,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 13209
+        },
+        {
+          "clocks": [
+            "phy_dq_clk_0"
+          ],
+          "slack_ns": 0.035,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 35
+        },
+        {
+          "clocks": [
+            "phy_dq_sysclk_0"
+          ],
+          "slack_ns": 1.85,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 35
+        },
+        {
+          "clocks": [
+            "phy_dq_clk_1"
+          ],
+          "slack_ns": 0.035,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 84
+        },
+        {
+          "clocks": [
+            "phy_dq_sysclk_1"
+          ],
+          "slack_ns": 2.4,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 84
+        }
+      ]
+    },
+    {
+      "check": "Setup",
+      "corner": "Fast",
+      "rows": [
+        {
+          "clocks": [
+            "clk",
+            "clk"
+          ],
+          "slack_ns": 31.76,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 991
+        },
+        {
+          "clocks": [
+            "pix_clk",
+            "pix_clk"
+          ],
+          "slack_ns": 1.818,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 1254
+        },
+        {
+          "clocks": [
+            "cfg_clk",
+            "cfg_clk"
+          ],
+          "slack_ns": 92.296,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 651
+        },
+        {
+          "clocks": [
+            "rst_clk",
+            "rst_clk"
+          ],
+          "slack_ns": 6.431,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 419
+        },
+        {
+          "clocks": [
+            "ddrphy_sysclk",
+            "ddrphy_sysclk"
+          ],
+          "slack_ns": 3.04,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 52592
+        }
+      ]
+    },
+    {
+      "check": "Hold",
+      "corner": "Fast",
+      "rows": [
+        {
+          "clocks": [
+            "clk",
+            "clk"
+          ],
+          "slack_ns": 0.122,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 991
+        },
+        {
+          "clocks": [
+            "pix_clk",
+            "pix_clk"
+          ],
+          "slack_ns": 0.254,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 1254
+        },
+        {
+          "clocks": [
+            "cfg_clk",
+            "cfg_clk"
+          ],
+          "slack_ns": 0.175,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 651
+        },
+        {
+          "clocks": [
+            "rst_clk",
+            "rst_clk"
+          ],
+          "slack_ns": 0.149,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 419
+        },
+        {
+          "clocks": [
+            "ddrphy_sysclk",
+            "ddrphy_sysclk"
+          ],
+          "slack_ns": 0.1,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 52592
+        }
+      ]
+    },
+    {
+      "check": "Recovery",
+      "corner": "Fast",
+      "rows": [
+        {
+          "clocks": [
+            "clk",
+            "clk"
+          ],
+          "slack_ns": 34.622,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 170
+        },
+        {
+          "clocks": [
+            "pix_clk",
+            "pix_clk"
+          ],
+          "slack_ns": 1.963,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 158
+        },
+        {
+          "clocks": [
+            "cfg_clk",
+            "cfg_clk"
+          ],
+          "slack_ns": 94.047,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 19
+        },
+        {
+          "clocks": [
+            "rst_clk",
+            "rst_clk"
+          ],
+          "slack_ns": 6.647,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 96
+        },
+        {
+          "clocks": [
+            "ddrphy_sysclk",
+            "ddrphy_sysclk"
+          ],
+          "slack_ns": 3.585,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 8408
+        }
+      ]
+    },
+    {
+      "check": "Removal",
+      "corner": "Fast",
+      "rows": [
+        {
+          "clocks": [
+            "clk",
+            "clk"
+          ],
+          "slack_ns": 0.342,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 170
+        },
+        {
+          "clocks": [
+            "pix_clk",
+            "pix_clk"
+          ],
+          "slack_ns": 0.642,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 158
+        },
+        {
+          "clocks": [
+            "cfg_clk",
+            "cfg_clk"
+          ],
+          "slack_ns": 0.682,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 19
+        },
+        {
+          "clocks": [
+            "rst_clk",
+            "rst_clk"
+          ],
+          "slack_ns": 0.278,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 96
+        },
+        {
+          "clocks": [
+            "ddrphy_sysclk",
+            "ddrphy_sysclk"
+          ],
+          "slack_ns": 0.249,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 8408
+        }
+      ]
+    },
+    {
+      "check": "Minimum Pulse Width",
+      "corner": "Fast",
+      "rows": [
+        {
+          "clocks": [
+            "clk"
+          ],
+          "slack_ns": 17.863,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 180
+        },
+        {
+          "clocks": [
+            "pix_clk"
+          ],
+          "slack_ns": 2.797,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 398
+        },
+        {
+          "clocks": [
+            "cfg_clk"
+          ],
+          "slack_ns": 47.529,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 121
+        },
+        {
+          "clocks": [
+            "rst_clk"
+          ],
+          "slack_ns": 3.8,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 97
+        },
+        {
+          "clocks": [
+            "ddrphy_sysclk"
+          ],
+          "slack_ns": 3.202,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 13209
+        },
+        {
+          "clocks": [
+            "phy_dq_clk_0"
+          ],
+          "slack_ns": 0.035,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 35
+        },
+        {
+          "clocks": [
+            "phy_dq_sysclk_0"
+          ],
+          "slack_ns": 1.85,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 35
+        },
+        {
+          "clocks": [
+            "phy_dq_clk_1"
+          ],
+          "slack_ns": 0.035,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 84
+        },
+        {
+          "clocks": [
+            "phy_dq_sysclk_1"
+          ],
+          "slack_ns": 2.4,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 84
+        }
+      ]
+    }
+  ]
+}
