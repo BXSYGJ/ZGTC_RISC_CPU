@@ -4,7 +4,7 @@
 
 - 上轮 PNR 于 15:18 正常报 Place-0006：u_mel_engine/spec_bank_0/gopdrm_36k cannot be placed，无路由/最终十表/位流/烧录。失败日志与 hash 保留 build/pcm1808-27m-pnr-20261103-151232/result.json；更正旧条目的 archive 尾号151234为151232。板上仍2856BB4D输入诊断，PCM1808接线保持。
 - 定位原16576x16 Mel bank被向上分配为32768深度、16块DRM36。生产bank拆为16384x16与192x16，同步读保持一拍，保留三writer优先级及读写同址行为；是否节省DRM以新完整映射为准。新源逐拍miter212480比较/两轮无reset PASS，真实Mel整窗16512bytes/0mismatch PASS，NPU交接16512bytes PASS；历史20261101报告保持，新增20261103报告独立记录。
-- 新冻结源唯一门控run20261103-152639-fb2ffc99于15:26:39启动，compile/synthesize/dev_map，30分钟硬截止、15秒CPU/日志监控。不复用旧map；新资源结果后再决定限时PNR，成功后核验十表、安全复用JS烧录与WOK/真实音频联合验收。本次split后全量pytest436passed/4skipped（127.70s）、lint65/0。
+- 新冻结源唯一门控run20261103-152639-fb2ffc99于15:26:39启动，compile/synthesize/dev_map，30分钟硬截止、15秒CPU/日志监控。不复用旧map；新资源结果后再决定限时PNR，成功后核验十表、安全复用JS烧录与WOK/真实音频联合验收。本次split后全量pytest436passed/4skipped（127.70s）、lint65/0；生产ROM/真实native A/B两轮无reset全部层golden及CPU回读ACK PASS（reports/cpu_native_pcm27_melsplit_20261103.json）。
 - 仅XSY/instrec_fpga改动，CPU用户diff、PCB、obj_dir和group5未跟踪资产保留，cdt_js/cdt_cfg未操作。
 
 ## 2026-11-03 15:13：27MHz 完整映射库恢复成功，唯一新源 PNR 已启动

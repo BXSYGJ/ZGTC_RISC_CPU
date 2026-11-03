@@ -1055,3 +1055,7 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 
 - 保存初次20分钟门控截止时的未完整映射库证据；仅从完整综合库恢复 dev_map，工具正常完成，完整库 SHA256 762c19fc…；资源35743 LUT/35504 FF/155 DRM/92 APM。
 - 冻结源逐文件 hash 一致，新完整库15:12:34启动唯一PNR，最长120分钟，继续十表与板级验收；尚无新完整位流。仅更新状态和证据，不修改冻结RTL/约束。
+
+## 2026-11-03：新源CPU/native连续A/B联合回归
+
+- 生产ROM、frame-major真实native控制器两种不同输入无reset回归PASS，所有层golden精确、CPU请求/报告/ACK通过；物理DDR/CDC/板测和时序不在此回归范围。

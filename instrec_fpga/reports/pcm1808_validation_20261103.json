@@ -427,7 +427,8 @@
       "mel": "16512 feature bytes, zero mismatches PASS",
       "handoff": "16512 bytes PASS",
       "pytest": "436 passed, 4 skipped, 127.70s",
-      "lint": "65 files, 0 violations"
+      "lint": "65 files, 0 violations",
+      "cpu_native_ab": "PASS production ROM, frame-major, two different inputs without reset, full layers golden exact, CPU ACK/report; reports/cpu_native_pcm27_melsplit_20261103.json"
     },
     "rtl_sha256": "913c84630a1cce3a36f5c76e6cc51dcc3d0b0ad7467c31fb96b1ada259a37508"
   }
