@@ -489,6 +489,19 @@ register(Case(
 ))
 
 
+# MMIO logits snapshot (INTERFACE_CONTRACTS_V0_20261104 sec. 3): the TB
+# samples u_dut.snap_slots[*] hierarchically for the same-cycle atomicity
+# check, hence --public.
+register(Case(
+    name="logits_snap",
+    tb="tb_logits_snap.sv",
+    rtl=["src/ctrl/logits_snap.v"],
+    timeout=120,
+    extra_flags=["--public"],
+    description="MMIO logits snapshot: atomic 16-slot latch, epoch clear, readback",
+))
+
+
 # ---------------------------------------------------------------------------
 # Small helpers
 # ---------------------------------------------------------------------------
