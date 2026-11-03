@@ -510,8 +510,29 @@
         }
       ]
     },
-    "pnr_archive": "build/pcm1808-mel-split-pnr-20261103-154655",
+    "pnr_archive": "build/pcm1808-mel-split-pnr-20261103-154653",
     "pnr_started_local": "2026-11-03 15:46:55",
-    "pnr_deadline_local": "2026-11-03 17:46:55"
+    "pnr_deadline_local": "2026-11-03 17:46:55",
+    "board_precheck": {
+      "local_time": "2026-11-03 15:56",
+      "status": "0x00180c80",
+      "done": false,
+      "crc_error": false,
+      "uart_bytes": 0,
+      "jtagserver_pid": 9040,
+      "existing_cfg_pid": 46156,
+      "evidence": "build/pcm1808_probe/status_before_full_split.json",
+      "programmed": false
+    },
+    "pnr_checkpoint": {
+      "local_time": "2026-11-03 16:26",
+      "macro_placement": "PASS",
+      "placement_estimated_slack_ns": 0.5,
+      "placement_tns": 0,
+      "routing_iteration": 71,
+      "unrouted_nets": 5302,
+      "final_sta_available": false,
+      "new_bitstream_available": false
+    }
   }
 }
