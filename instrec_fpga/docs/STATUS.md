@@ -1,5 +1,10 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-03 19:45：再次请求烧录，FTDI 缺席，未执行 program
+
+- 用户再次要求重烧同一去提示0EBF9448，位流hash已核对。烧录前PnP无FTDI，自动安全退出，未执行program；JS9040/65420与既有cfg46156保持，未重启或终止服务。独立证据reports/emergency_demo_nohint_repeat_board_20261103.json。
+- 已仅请用户重插下载器电脑端USB，保持电源/JTAG/HDMI/音频不动；等待恢复后继续同hash烧录。此次不是烧录成功，不覆盖上次配置成功但UART0B的结果。CPU用户diff/PCB/obj_dir/group5资产保持。
+
 ## 2026-11-03 19:31：按用户要求重烧同一去提示版，配置成功但 UART 无数据
 
 - 用户已确认此前0EBF9448提示消失、回放和频谱正常；随后明确要求重新烧录。同一hash位流安全复用JS9040/65420重烧成功，program=true、done1/CRC0，既有cfg46156保持；无新构建/权重上传/服务重启。
