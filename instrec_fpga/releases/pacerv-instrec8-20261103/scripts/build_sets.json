@@ -1,0 +1,80 @@
+{
+  "schema": 1,
+  "sets": {
+    "full": {
+      "top_module": "instrec_top",
+      "sources": [
+        "src/audio/audio_cdc_fifo.v",
+        "src/audio/audio_sink.v",
+        "src/audio/i2s_slave_rx.v",
+        "src/audio/pcm1808_coeff_rom.v",
+        "src/audio/pcm1808_resampler.v",
+        "src/cpu/core/rv32_alu.sv",
+        "src/cpu/core/rv32_btb.sv",
+        "src/cpu/core/rv32_core.sv",
+        "src/cpu/core/rv32_decode.sv",
+        "src/cpu/core/rv32_machine.sv",
+        "src/cpu/core/rv32_muldiv.sv",
+        "src/cpu/rv32_cpu_subsys.sv",
+        "src/ctrl/instrec_top.v",
+        "src/ctrl/self_test.v",
+        "src/ctrl/sys_ctrl.v",
+        "src/ctrl/uart_debug.v",
+        "src/ctrl/uart_rx.v",
+        "src/ctrl/uart_tx.v",
+        "src/ctrl/weight_loader.v",
+        "src/ddr3/ddr3_arbiter.v",
+        "src/ddr3/ddr3_ctrl_axi.v",
+        "src/ddr3/ddr3_wrapper.v",
+        "src/hdmi/hdmi_tx_if.v",
+        "src/hdmi/iic_dri.v",
+        "src/hdmi/ms7200_ctl.v",
+        "src/hdmi/ms7210_ctl.v",
+        "src/hdmi/ms72xx_ctl.v",
+        "src/hdmi/sync_vg.v",
+        "src/mel/db_norm.v",
+        "src/mel/fft2048_sdf.v",
+        "src/mel/hann_rom.v",
+        "src/mel/mel_engine.v",
+        "src/mel/mel_filter.v",
+        "src/mel/standardize.v",
+        "src/mel/stft_framer.v",
+        "src/mel/tw_rom_s.v",
+        "src/npu/activation_row_store_dynamic.v",
+        "src/npu/activation_store_mux.v",
+        "src/npu/conv_engine.v",
+        "src/npu/fc_engine.v",
+        "src/npu/gap_unit.v",
+        "src/npu/npu_m1_bridge.v",
+        "src/npu/npu_m1_owner.v",
+        "src/npu/npu_stage_lifecycle.v",
+        "src/npu/npu_top.v",
+        "src/npu/pool_engine.v",
+        "src/npu/requant_unit.v",
+        "src/npu/softmax_top.v",
+        "src/npu/wbuf.v",
+        "src/npu/wdma.v",
+        "src/npu/weight_read_aligner_hardened.v",
+        "src/ui/bars_data.v",
+        "src/ui/dashboard_renderer.v",
+        "src/ui/dashboard_text.v",
+        "src/ui/feat_copy_engine.v",
+        "src/ui/feat_page_buf.v"
+      ],
+      "ip_cores": [
+        "ipcore/pll/pll.idf",
+        "ipcore/ddr3_test/ddr3_test.idf"
+      ],
+      "constraints": [
+        "constraints/instrec_top.fdc",
+        "constraints/ddr3_100h.fdc",
+        "constraints/clock_groups_async.fdc"
+      ],
+      "hex_dirs": [
+        "src/mel",
+        "src/ui",
+        "src/cpu"
+      ]
+    }
+  }
+}

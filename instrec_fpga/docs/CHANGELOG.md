@@ -1114,3 +1114,8 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 
 - 独立emergency_demo保留真实PCM1808/Mel/HDMI，移除NPU推理，KEY1触发10Hz预设曲线/末帧保持/重播，不再启动DDR自检；正式full保持。
 - 增加曲线编译、顶层生成、RTL消抖/快照回归与使用说明，修复StopAfter compile带参数阶段匹配。RTL PASS、pytest47passed、lint67/0、PDS compile PASS。首轮重复驱动失败保留并修复；尚待曲线，无演示位流/烧录。
+
+## 2026-11-03：CPU/NPU八类下午版源码定版
+
+- 新增releases/pacerv-instrec8-20261103独立源码包，冻结0c138d4f/1497FAF4真实推理系统，筛除未引用资产与开发注释，CPU本地化，保留175文件hash及原始验证身份。后续应用报告切换此源码依据。
+- 56份RTL token一致、固件ROM重建一致、独立PDS compile PASS/lint43零违规、安全与权重检查通过；未新综合/PNR/烧录，原时序与准确率结论保持，不混入五类或无NPU演示。导出脚本保存于scripts/freeze_instrec8_release.py。

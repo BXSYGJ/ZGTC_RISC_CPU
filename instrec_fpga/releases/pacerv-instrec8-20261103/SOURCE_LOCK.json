@@ -1,0 +1,1404 @@
+{
+  "name": "PaceRV CPU + NPU eight-class recognizer",
+  "version": "2026-11-03-afternoon",
+  "source_commit": "0c138d4f8590be1a0dde63e21d680e8d250e32a0",
+  "source_commit_local_time": "2026-11-03 17:23:50 +08:00",
+  "original_build": "20261103-152639-fb2ffc99",
+  "top_module": "instrec_top",
+  "device": "PG2L100H-6IFBG676",
+  "scope": "Frozen implemented eight-class CPU/NPU application; excludes scripted demo, group5 and Flash expansion",
+  "cpu": {
+    "isa": "RV32I",
+    "ENABLE_M": 0,
+    "ENABLE_PREDICTOR": 0,
+    "rom_bytes": 8192,
+    "ram_bytes": 8192
+  },
+  "input": "PCM1808 master: 48kHz stereo, 24 significant bits in 32-bit slots; FPGA slave, 147/160 FIR to 44.1kHz",
+  "classes_zh": [
+    "单簧管",
+    "失真电吉他",
+    "女声",
+    "长笛",
+    "钢琴",
+    "次中音萨克斯",
+    "小号",
+    "小提琴"
+  ],
+  "bitstream_sha256": "1497faf47b83b64a62027c38b6bf94d12112002c250fc5278c3c28ad2fa46abe",
+  "weights_sha256": "19a74dbec29d3a0f16ab06dc30f70312849977de0c6b345710b046b1908f5d7a",
+  "resources": {
+    "lut": 33967,
+    "ff": 35466,
+    "drm": 150.5,
+    "apm": 92
+  },
+  "original_verification": {
+    "program": "PASS",
+    "boot_mmio_isa_ddr": "PASS",
+    "weights": "WOK FA0D5236",
+    "continuous_inferences_30s": 10,
+    "hdmi_user_feedback": "normal waveform/spectrum/dashboard",
+    "manual_reset_weight_reload": "PASS",
+    "recognition_accuracy": "not measured; repeated top1=6 observed",
+    "timing_meets_constraints": false,
+    "timing_violations": [
+      {
+        "check": "Setup",
+        "corner": "Slow",
+        "clocks": [
+          "ddrphy_sysclk",
+          "ddrphy_sysclk"
+        ],
+        "slack_ns": -1.071,
+        "total_negative_slack_ns": -88.874,
+        "failing_endpoints": 338,
+        "endpoints": 108875
+      }
+    ]
+  },
+  "cleanup": "Unreferenced modules and tables omitted; executable tokens preserved; synthesis directives, vendor IP and license retained; paths localized in explicit build set",
+  "source_files": [
+    {
+      "path": "LICENSE",
+      "origin": "LICENSE",
+      "git_source_sha256": "3bccad30b3d53934fd0771fc78119a509f0fb47ecee31735a5c967697f6ed8b9",
+      "original_build_sha256": null,
+      "sha256": "3bccad30b3d53934fd0771fc78119a509f0fb47ecee31735a5c967697f6ed8b9",
+      "comment_cleanup": false
+    },
+    {
+      "path": "src/cpu/core/rv32_alu.sv",
+      "origin": "cpu/rtl/rv32_alu.sv",
+      "git_source_sha256": "f462cb16e30e6bc2143dea6319cb768a33875fd40b1588c5fd74f8284ccd1e66",
+      "original_build_sha256": "f462cb16e30e6bc2143dea6319cb768a33875fd40b1588c5fd74f8284ccd1e66",
+      "sha256": "f584154a6b754933511dbfbf996facc086a8f37e4360555a5cbb188d56259d01",
+      "comment_cleanup": true
+    },
+    {
+      "path": "src/cpu/core/rv32_btb.sv",
+      "origin": "cpu/rtl/rv32_btb.sv",
+      "git_source_sha256": "188e78886bdaa8b16b1b298b511efa04985aec946214639a9e60d783d034ac77",
+      "original_build_sha256": "188e78886bdaa8b16b1b298b511efa04985aec946214639a9e60d783d034ac77",
+      "sha256": "bef14f19058894afad88f477f26c982109ed64cabf29d0c05c6beedd679af25a",
+      "comment_cleanup": true
+    },
+    {
+      "path": "src/cpu/core/rv32_core.sv",
+      "origin": "cpu/rtl/rv32_core.sv",
+      "git_source_sha256": "55b04c7971c2cfc039b8b7c2266be720e3d553166cd5197279c858a6c22c066e",
+      "original_build_sha256": "55b04c7971c2cfc039b8b7c2266be720e3d553166cd5197279c858a6c22c066e",
+      "sha256": "04f64f6e4cf1111e9254201c6e428736465bd9030210469c2ed19a0ebd97d389",
+      "comment_cleanup": true
+    },
+    {
+      "path": "src/cpu/core/rv32_decode.sv",
+      "origin": "cpu/rtl/rv32_decode.sv",
+      "git_source_sha256": "8b28bb62fdec586ece047627cb9e0593cdf541fcf0793e166e73824d8a6fc1cc",
+      "original_build_sha256": "8b28bb62fdec586ece047627cb9e0593cdf541fcf0793e166e73824d8a6fc1cc",
+      "sha256": "ef0966618011288b00de76fa34792130455bb4b62ab4d7c7d51c77d45b7e2719",
+      "comment_cleanup": true
+    },
+    {
+      "path": "src/cpu/core/rv32_machine.sv",
+      "origin": "cpu/rtl/rv32_machine.sv",
+      "git_source_sha256": "3af396762b415330f55dbd0ec747c4b55482f6ae729efb59ebf052be0c2a1900",
+      "original_build_sha256": "3af396762b415330f55dbd0ec747c4b55482f6ae729efb59ebf052be0c2a1900",
+      "sha256": "1417ba2ad475fe04079d3cfc376032bbfb81ff9bd7b448d840a7e09ecd2d4fec",
+      "comment_cleanup": true
+    },
+    {
+      "path": "src/cpu/core/rv32_muldiv.sv",
+      "origin": "cpu/rtl/rv32_muldiv.sv",
+      "git_source_sha256": "4f13da11d528bff2edcd561401d17b46b65bc92ccda09907294ef9317a35dea6",
+      "original_build_sha256": "4f13da11d528bff2edcd561401d17b46b65bc92ccda09907294ef9317a35dea6",
+      "sha256": "8d876f86d67fd9b833136c7bc364186aeb367559e471864258d3fa2e44194c43",
+      "comment_cleanup": true
+    },
+    {
+      "path": "constraints/clock_groups_async.fdc",
+      "origin": "instrec_fpga/constraints/clock_groups_async.fdc",
+      "git_source_sha256": "76cb4ae92035a14385bf78d1e5d27a601ee02f159379e21f3ac614044ea2c10e",
+      "original_build_sha256": "76cb4ae92035a14385bf78d1e5d27a601ee02f159379e21f3ac614044ea2c10e",
+      "sha256": "2375e63e266210605f3c4e0b1bcee140adc1ad85de868f17126840240c35ec4e",
+      "comment_cleanup": true
+    },
+    {
+      "path": "constraints/ddr3_100h.fdc",
+      "origin": "instrec_fpga/constraints/ddr3_100h.fdc",
+      "git_source_sha256": "00d9761dbb4f8f3e37fb1f784aa5b6a5534dc1988c12977766262a2a6e8af495",
+      "original_build_sha256": "00d9761dbb4f8f3e37fb1f784aa5b6a5534dc1988c12977766262a2a6e8af495",
+      "sha256": "6025b817b145c9bd4aeaeb83a488f8f0bb4eadf88e65e4f89647e6252a67aecf",
+      "comment_cleanup": true
+    },
+    {
+      "path": "constraints/instrec_top.fdc",
+      "origin": "instrec_fpga/constraints/instrec_top.fdc",
+      "git_source_sha256": "9748bd2da05a307614f34186b6ef422167ef669df7b7016749af2977adc95f41",
+      "original_build_sha256": "9748bd2da05a307614f34186b6ef422167ef669df7b7016749af2977adc95f41",
+      "sha256": "b9c4e3b67fc1df75e8baa8a263634436376ded6a85bec566261d6837124a4dea",
+      "comment_cleanup": true
+    },
+    {
+      "path": "ipcore/ddr3_test/ddr3_test.idf",
+      "origin": "instrec_fpga/ipcore/ddr3_test/ddr3_test.idf",
+      "git_source_sha256": "b600d6102995be4e76b060dd45786b5e1497bd2e7499bbc04b870de9355f2747",
+      "original_build_sha256": "b600d6102995be4e76b060dd45786b5e1497bd2e7499bbc04b870de9355f2747",
+      "sha256": "b600d6102995be4e76b060dd45786b5e1497bd2e7499bbc04b870de9355f2747",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/ddr3_test.v",
+      "origin": "instrec_fpga/ipcore/ddr3_test/ddr3_test.v",
+      "git_source_sha256": "3c5441b4bff33dff73811c3a025ede3b6348cb5779e21778653659b6cbfb84e0",
+      "original_build_sha256": null,
+      "sha256": "3c5441b4bff33dff73811c3a025ede3b6348cb5779e21778653659b6cbfb84e0",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/ddr3_test_ddrphy_top.v",
+      "origin": "instrec_fpga/ipcore/ddr3_test/ddr3_test_ddrphy_top.v",
+      "git_source_sha256": "a95c28f225d2984401a798f673efff209154ae5beb8a7356d303136b71ea49d5",
+      "original_build_sha256": null,
+      "sha256": "a95c28f225d2984401a798f673efff209154ae5beb8a7356d303136b71ea49d5",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ddr3_test_slice_top_v1_10.v",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/ddrphy/ddr3_test_slice_top_v1_10.v",
+      "git_source_sha256": "69d4135c367efbb73f83c82ecd9871519e19b0d5c48bce2df0eac6b3dff50b87",
+      "original_build_sha256": null,
+      "sha256": "69d4135c367efbb73f83c82ecd9871519e19b0d5c48bce2df0eac6b3dff50b87",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_calib_mux_v1_0.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_calib_mux_v1_0.vp",
+      "git_source_sha256": "676e36319e7ce80b93e3543e255d53708d9fc71606587a6e692eab1ec82ecaed",
+      "original_build_sha256": null,
+      "sha256": "676e36319e7ce80b93e3543e255d53708d9fc71606587a6e692eab1ec82ecaed",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_calib_top_v1_10.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_calib_top_v1_10.vp",
+      "git_source_sha256": "04faf434cef120b5d712911dfc97c8f498901b0679fba720b806f596d688bded",
+      "original_build_sha256": null,
+      "sha256": "04faf434cef120b5d712911dfc97c8f498901b0679fba720b806f596d688bded",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_control_path_adj_v1_10.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_control_path_adj_v1_10.vp",
+      "git_source_sha256": "8cdd7b9ec01c143882217b038cbf840d77e52ee3037e629e75e10b03fc223a38",
+      "original_build_sha256": null,
+      "sha256": "8cdd7b9ec01c143882217b038cbf840d77e52ee3037e629e75e10b03fc223a38",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_cpd_ctrl_v1_3.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_cpd_ctrl_v1_3.vp",
+      "git_source_sha256": "56f52683adbe720c7d43da1a9f199f4ab3add3f3b5960e3f687f87f60267c161",
+      "original_build_sha256": null,
+      "sha256": "56f52683adbe720c7d43da1a9f199f4ab3add3f3b5960e3f687f87f60267c161",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_cpd_lock_v1_0.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_cpd_lock_v1_0.vp",
+      "git_source_sha256": "a6696f8e79e2d132a6e76ad4997d5366d6c9cf8f05c60f77feff1b47b50d0090",
+      "original_build_sha256": null,
+      "sha256": "a6696f8e79e2d132a6e76ad4997d5366d6c9cf8f05c60f77feff1b47b50d0090",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_data_slice_dqs_gate_cal_v1_10.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_data_slice_dqs_gate_cal_v1_10.vp",
+      "git_source_sha256": "8764275d4eeb8d1765b3a09aba527d6d3bf3e46f5e1d17eefc685d7e0dbe1520",
+      "original_build_sha256": null,
+      "sha256": "8764275d4eeb8d1765b3a09aba527d6d3bf3e46f5e1d17eefc685d7e0dbe1520",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_data_slice_v1_10.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_data_slice_v1_10.vp",
+      "git_source_sha256": "e13e33d97ecbfea1838c4dd28e7f9f1c57dcb974606179523be46bba75344d50",
+      "original_build_sha256": null,
+      "sha256": "e13e33d97ecbfea1838c4dd28e7f9f1c57dcb974606179523be46bba75344d50",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_data_slice_wrcal_v1_10.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_data_slice_wrcal_v1_10.vp",
+      "git_source_sha256": "b7a9757c252f74c4b57eb0fb74738c57e4eed3e669ddd7ffeeca1acedd330b2e",
+      "original_build_sha256": null,
+      "sha256": "b7a9757c252f74c4b57eb0fb74738c57e4eed3e669ddd7ffeeca1acedd330b2e",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_data_slice_wrlvl_v1_10.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_data_slice_wrlvl_v1_10.vp",
+      "git_source_sha256": "871874f4af0f068571416916898f83eb07052e6e015c5800ffdf65d67620cf7e",
+      "original_build_sha256": null,
+      "sha256": "871874f4af0f068571416916898f83eb07052e6e015c5800ffdf65d67620cf7e",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_dfi_v1_3.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_dfi_v1_3.vp",
+      "git_source_sha256": "9828a1ef43a864d287a7a317910fe330bfc904f44e8f60c8773aafa1d8c1534e",
+      "original_build_sha256": null,
+      "sha256": "9828a1ef43a864d287a7a317910fe330bfc904f44e8f60c8773aafa1d8c1534e",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_dll_update_ctrl_v1_3.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_dll_update_ctrl_v1_3.vp",
+      "git_source_sha256": "bc4e8f402d2fb98920e050a3c1514d44ec959877217d7865a30b22b7da73cac6",
+      "original_build_sha256": null,
+      "sha256": "bc4e8f402d2fb98920e050a3c1514d44ec959877217d7865a30b22b7da73cac6",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_dqs_gate_coarse_cal_v1_0.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_dqs_gate_coarse_cal_v1_0.vp",
+      "git_source_sha256": "950a0010929854894c2c92d9f3f8e9dce0fee6985fee70d4160540a058853ede",
+      "original_build_sha256": null,
+      "sha256": "950a0010929854894c2c92d9f3f8e9dce0fee6985fee70d4160540a058853ede",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_dqs_rddata_align_v1_10.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_dqs_rddata_align_v1_10.vp",
+      "git_source_sha256": "c0cab4287a7a7b6b720977c1c5f9259c5f48f8da18e9a3ca1173a073b1ccf025",
+      "original_build_sha256": null,
+      "sha256": "c0cab4287a7a7b6b720977c1c5f9259c5f48f8da18e9a3ca1173a073b1ccf025",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_dqsi_rdel_cal_v1_3.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_dqsi_rdel_cal_v1_3.vp",
+      "git_source_sha256": "ef7e57755ab7558b1b518aa73999384368f349efe7077cf9283e0911e711ac1a",
+      "original_build_sha256": null,
+      "sha256": "ef7e57755ab7558b1b518aa73999384368f349efe7077cf9283e0911e711ac1a",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_drift_ctrl_v1_0.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_drift_ctrl_v1_0.vp",
+      "git_source_sha256": "8ea99ac6decf6fe14c0585b4f121d7a1acc17290d7a1c68725d984e704e277bc",
+      "original_build_sha256": null,
+      "sha256": "8ea99ac6decf6fe14c0585b4f121d7a1acc17290d7a1c68725d984e704e277bc",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_eyecal_v1_5.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_eyecal_v1_5.vp",
+      "git_source_sha256": "31977dd34339d163ecbd8b9949ac4b65f0eaa6fbcd9a75d787400ae73f7f51d2",
+      "original_build_sha256": null,
+      "sha256": "31977dd34339d163ecbd8b9949ac4b65f0eaa6fbcd9a75d787400ae73f7f51d2",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_gate_update_ctrl_v1_3.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_gate_update_ctrl_v1_3.vp",
+      "git_source_sha256": "ce20eb3b9cbe3b392d8be0aa1d6787247bc7b2d91af36a1f734f35c9eb03d642",
+      "original_build_sha256": null,
+      "sha256": "ce20eb3b9cbe3b392d8be0aa1d6787247bc7b2d91af36a1f734f35c9eb03d642",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_gatecal_v1_10.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_gatecal_v1_10.vp",
+      "git_source_sha256": "b6859250ca098e81ff05bcab08dfe8ffee77648218e90c040a1dd3838a0671f2",
+      "original_build_sha256": null,
+      "sha256": "b6859250ca098e81ff05bcab08dfe8ffee77648218e90c040a1dd3838a0671f2",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_gpll_phase_v1_0.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_gpll_phase_v1_0.vp",
+      "git_source_sha256": "ef8ebe3742d23848bd2a1492d4901f886ce49aa98dbc295873b67e4116ba8524",
+      "original_build_sha256": null,
+      "sha256": "ef8ebe3742d23848bd2a1492d4901f886ce49aa98dbc295873b67e4116ba8524",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_info_v1_0.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_info_v1_0.vp",
+      "git_source_sha256": "0794201be97885e7695a16b6c35848655b08c4bf191405d26417126512ce4aa8",
+      "original_build_sha256": null,
+      "sha256": "0794201be97885e7695a16b6c35848655b08c4bf191405d26417126512ce4aa8",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_init_v1_0.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_init_v1_0.vp",
+      "git_source_sha256": "817f9f32b2260a4c35af446e89ff4c2d4b065381b25cb2020c538d22b4a45088",
+      "original_build_sha256": null,
+      "sha256": "817f9f32b2260a4c35af446e89ff4c2d4b065381b25cb2020c538d22b4a45088",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_main_ctrl_v1_10.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_main_ctrl_v1_10.vp",
+      "git_source_sha256": "39d5024d7364b441340b131d265d0648d8b7c1f92cc417424d7c584413c5f4a6",
+      "original_build_sha256": null,
+      "sha256": "39d5024d7364b441340b131d265d0648d8b7c1f92cc417424d7c584413c5f4a6",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_rdcal_v1_10.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_rdcal_v1_10.vp",
+      "git_source_sha256": "6b4c7f3c24a4750ac69b4e7882617105c6e31f02da712aaa87932b8561ccea2b",
+      "original_build_sha256": null,
+      "sha256": "6b4c7f3c24a4750ac69b4e7882617105c6e31f02da712aaa87932b8561ccea2b",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_reset_ctrl_v1_3.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_reset_ctrl_v1_3.vp",
+      "git_source_sha256": "17189b59ed5307c4a27ec35485b33af5c98a89e6ee7f9c5d85aaed9c03a77163",
+      "original_build_sha256": null,
+      "sha256": "17189b59ed5307c4a27ec35485b33af5c98a89e6ee7f9c5d85aaed9c03a77163",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_rst_clk_phase_adj_v1_0.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_rst_clk_phase_adj_v1_0.vp",
+      "git_source_sha256": "dd1dbae71726d968df475fe7fbb2b7321411fa67786092c0dc2e065edcf39382",
+      "original_build_sha256": null,
+      "sha256": "dd1dbae71726d968df475fe7fbb2b7321411fa67786092c0dc2e065edcf39382",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_rst_debounce_v1_0.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_rst_debounce_v1_0.vp",
+      "git_source_sha256": "bff7ed95c8d305dfb88e6002c6de8453a21c72c03a5a0521a76ddd105598dc4d",
+      "original_build_sha256": null,
+      "sha256": "bff7ed95c8d305dfb88e6002c6de8453a21c72c03a5a0521a76ddd105598dc4d",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_slice_rddata_align_v1_0.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_slice_rddata_align_v1_0.vp",
+      "git_source_sha256": "befb44f07d851524109a6dc8e17c5b8062694aa274ed8dbc4f7326b8fe1c443e",
+      "original_build_sha256": null,
+      "sha256": "befb44f07d851524109a6dc8e17c5b8062694aa274ed8dbc4f7326b8fe1c443e",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_training_ctrl_v1_0.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_training_ctrl_v1_0.vp",
+      "git_source_sha256": "777e8ee9d8d819fdcf04b39b5a5d6086c52369a7f19f04dbd0d06f7a7d3d6110",
+      "original_build_sha256": null,
+      "sha256": "777e8ee9d8d819fdcf04b39b5a5d6086c52369a7f19f04dbd0d06f7a7d3d6110",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_upcal_v1_0.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_upcal_v1_0.vp",
+      "git_source_sha256": "afbca3503da609f7951ad7fbef386bd007f403c89f52377211ba521967c94455",
+      "original_build_sha256": null,
+      "sha256": "afbca3503da609f7951ad7fbef386bd007f403c89f52377211ba521967c94455",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_wdata_path_adj_v1_10.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_wdata_path_adj_v1_10.vp",
+      "git_source_sha256": "85f625ed4a09964442e8616074eea9e4757e43b4217589bb9e2f289c9748b272",
+      "original_build_sha256": null,
+      "sha256": "85f625ed4a09964442e8616074eea9e4757e43b4217589bb9e2f289c9748b272",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_wrcal_v1_7.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_wrcal_v1_7.vp",
+      "git_source_sha256": "0a8cb0bb70bd40809260c50bcb85d092c16fea5d9ab2e4fbbe647ccbd1bfb1b0",
+      "original_build_sha256": null,
+      "sha256": "0a8cb0bb70bd40809260c50bcb85d092c16fea5d9ab2e4fbbe647ccbd1bfb1b0",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_wrlvl_v1_0.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_wrlvl_v1_0.vp",
+      "git_source_sha256": "00c086bd729be3ab8287f6eb786cfb3549c97aa92f8465c608b8fc2477df3edc",
+      "original_build_sha256": null,
+      "sha256": "00c086bd729be3ab8287f6eb786cfb3549c97aa92f8465c608b8fc2477df3edc",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ips2l_rst_sync_v1_3.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/ips2l_rst_sync_v1_3.vp",
+      "git_source_sha256": "64b8d83f15f2ff373e6b1040405c42051d8761bd1857dec719c884c2eb59361a",
+      "original_build_sha256": null,
+      "sha256": "64b8d83f15f2ff373e6b1040405c42051d8761bd1857dec719c884c2eb59361a",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/distributed_fifo/ips2l_distributed_fifo_v1_0.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/mcdq_ctrl/distributed_fifo/ips2l_distributed_fifo_v1_0.vp",
+      "git_source_sha256": "d6c0b0d8560b0f22128b4883933944fc686fd7597cfea0d6c545cc6af56c0b7a",
+      "original_build_sha256": null,
+      "sha256": "d6c0b0d8560b0f22128b4883933944fc686fd7597cfea0d6c545cc6af56c0b7a",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/distributed_fifo/rtl/ips2l_distributed_fifo_ctr_v1_0.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/mcdq_ctrl/distributed_fifo/rtl/ips2l_distributed_fifo_ctr_v1_0.vp",
+      "git_source_sha256": "fe31c8f44bea653ab20bb1830ad4f8ed41566e9cfef354bd5e2d48c7682f353d",
+      "original_build_sha256": null,
+      "sha256": "fe31c8f44bea653ab20bb1830ad4f8ed41566e9cfef354bd5e2d48c7682f353d",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/distributed_fifo/rtl/ips2l_distributed_fifo_v1_0_distributed_fifo_v1_0.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/mcdq_ctrl/distributed_fifo/rtl/ips2l_distributed_fifo_v1_0_distributed_fifo_v1_0.vp",
+      "git_source_sha256": "867ac91a1485dfe613a81f372d788e784bba8cd4b0497e56986135e92685ba73",
+      "original_build_sha256": null,
+      "sha256": "867ac91a1485dfe613a81f372d788e784bba8cd4b0497e56986135e92685ba73",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/distributed_fifo/rtl/ips2l_distributed_sdpram_v1_0_distributed_fifo_v1_0.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/mcdq_ctrl/distributed_fifo/rtl/ips2l_distributed_sdpram_v1_0_distributed_fifo_v1_0.vp",
+      "git_source_sha256": "3561bbbbd4e4432a538c3d20818d262b4f1e5517c48296f6b1b4cc8afdd19aef",
+      "original_build_sha256": null,
+      "sha256": "3561bbbbd4e4432a538c3d20818d262b4f1e5517c48296f6b1b4cc8afdd19aef",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_apb_cross_v1_2.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_apb_cross_v1_2.vp",
+      "git_source_sha256": "62f7d55354a8afe4d02bc6f6d6dc30fc8e9960d3b21709988b887acc99d09cf5",
+      "original_build_sha256": null,
+      "sha256": "62f7d55354a8afe4d02bc6f6d6dc30fc8e9960d3b21709988b887acc99d09cf5",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_calib_delay_v1_2.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_calib_delay_v1_2.vp",
+      "git_source_sha256": "a52e992b9766b6cb22ed23aa01d1cc5ac9b6a429a8e49de7a13ac51dd70e9784",
+      "original_build_sha256": null,
+      "sha256": "a52e992b9766b6cb22ed23aa01d1cc5ac9b6a429a8e49de7a13ac51dd70e9784",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_cfg_apb_v1_2.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_cfg_apb_v1_2.vp",
+      "git_source_sha256": "482cb280a614f70209f1d07892fdd773a259d2ca0f23e8f38b85a9faf00513b9",
+      "original_build_sha256": null,
+      "sha256": "482cb280a614f70209f1d07892fdd773a259d2ca0f23e8f38b85a9faf00513b9",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_dcd_bm_v1_2.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_dcd_bm_v1_2.vp",
+      "git_source_sha256": "bfbd472dd8b427fe6b003dd510f73db89f915ac92d31fe8a779c40f9d4e56bee",
+      "original_build_sha256": null,
+      "sha256": "bfbd472dd8b427fe6b003dd510f73db89f915ac92d31fe8a779c40f9d4e56bee",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_dcd_rowaddr_v1_2.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_dcd_rowaddr_v1_2.vp",
+      "git_source_sha256": "4ac4721747b13020e1895be6265e55df90968f05beb8056279589039394bb9be",
+      "original_build_sha256": null,
+      "sha256": "4ac4721747b13020e1895be6265e55df90968f05beb8056279589039394bb9be",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_dcd_sm_v1_2.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_dcd_sm_v1_2.vp",
+      "git_source_sha256": "d7e710e3ed4d1807fb0bdd4d84c264817247a4da41123c72439c555573821f49",
+      "original_build_sha256": null,
+      "sha256": "d7e710e3ed4d1807fb0bdd4d84c264817247a4da41123c72439c555573821f49",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_dcd_top_v1_2.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_dcd_top_v1_2.vp",
+      "git_source_sha256": "26ab4e142f555602c023f62b19df52056c6d51da5052401254066cae0655ddaa",
+      "original_build_sha256": null,
+      "sha256": "26ab4e142f555602c023f62b19df52056c6d51da5052401254066cae0655ddaa",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_dcp_back_ctrl_v1_2.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_dcp_back_ctrl_v1_2.vp",
+      "git_source_sha256": "fe7b340b41d80ec7428cc38329a41864bcf5c209a6310610d09c7bc8579e541f",
+      "original_build_sha256": null,
+      "sha256": "fe7b340b41d80ec7428cc38329a41864bcf5c209a6310610d09c7bc8579e541f",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_dcp_buf_v1_2.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_dcp_buf_v1_2.vp",
+      "git_source_sha256": "dab35fa172243ecbb5426a8ebccc2c168368ea0a6ea0558c909b815d781b17d6",
+      "original_build_sha256": null,
+      "sha256": "dab35fa172243ecbb5426a8ebccc2c168368ea0a6ea0558c909b815d781b17d6",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_dcp_out_v1_2.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_dcp_out_v1_2.vp",
+      "git_source_sha256": "9471082e23170b144dc619f7f7e08c94b8a03378f72da388f744d6acb728928b",
+      "original_build_sha256": null,
+      "sha256": "9471082e23170b144dc619f7f7e08c94b8a03378f72da388f744d6acb728928b",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_dcp_top_v1_2.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_dcp_top_v1_2.vp",
+      "git_source_sha256": "21b1f0e3b4660e1078b47000bfe50022346414f5d5e713ac9e522a4f39f76548",
+      "original_build_sha256": null,
+      "sha256": "21b1f0e3b4660e1078b47000bfe50022346414f5d5e713ac9e522a4f39f76548",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_dfi_v1_2.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_dfi_v1_2.vp",
+      "git_source_sha256": "abf138d692e634fabe5f569b98d897dfece8a8ae66cee1dba830a56d7e255df1",
+      "original_build_sha256": null,
+      "sha256": "abf138d692e634fabe5f569b98d897dfece8a8ae66cee1dba830a56d7e255df1",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_lp_v1_2.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_lp_v1_2.vp",
+      "git_source_sha256": "7a80ccb1e053e5c9d8f389169359570f256d709ff2e4ad2c51fda7a7a6a4239d",
+      "original_build_sha256": null,
+      "sha256": "7a80ccb1e053e5c9d8f389169359570f256d709ff2e4ad2c51fda7a7a6a4239d",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_mrs_v1_2.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_mrs_v1_2.vp",
+      "git_source_sha256": "f78133bc021a57cf469773daaf102817fc37069447e8accc80afa1f4b20b0ad6",
+      "original_build_sha256": null,
+      "sha256": "f78133bc021a57cf469773daaf102817fc37069447e8accc80afa1f4b20b0ad6",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_prefetch_fifo_v1_2.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_prefetch_fifo_v1_2.vp",
+      "git_source_sha256": "ee3aa91e980fb3dd08231cf1806a28edf759f4ea8248adfd44407d607519b9e4",
+      "original_build_sha256": null,
+      "sha256": "ee3aa91e980fb3dd08231cf1806a28edf759f4ea8248adfd44407d607519b9e4",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_rdatapath_v1_2.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_rdatapath_v1_2.vp",
+      "git_source_sha256": "72dd8ece021f4ee74fd576c1628c4f7d3606ef632f0e68b9569a288a092a6b0f",
+      "original_build_sha256": null,
+      "sha256": "72dd8ece021f4ee74fd576c1628c4f7d3606ef632f0e68b9569a288a092a6b0f",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_reg_fifo2_v1_2.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_reg_fifo2_v1_2.vp",
+      "git_source_sha256": "bc9cff65e4002a51af0c20c2f0a9b9f17dacde5157b58691bbfb1c44348ee08a",
+      "original_build_sha256": null,
+      "sha256": "bc9cff65e4002a51af0c20c2f0a9b9f17dacde5157b58691bbfb1c44348ee08a",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_ui_axi_v1_2a.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_ui_axi_v1_2a.vp",
+      "git_source_sha256": "145b69395412be2553835f9278cdf1cb1703d3beeb914abf7d985e3c69f817fb",
+      "original_build_sha256": null,
+      "sha256": "145b69395412be2553835f9278cdf1cb1703d3beeb914abf7d985e3c69f817fb",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_wdatapath_v1_2.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_wdatapath_v1_2.vp",
+      "git_source_sha256": "db648e90ff607ca2f9e2b5cca048de417439888d0b906288e0cec7cf038d9dee",
+      "original_build_sha256": null,
+      "sha256": "db648e90ff607ca2f9e2b5cca048de417439888d0b906288e0cec7cf038d9dee",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_wdp_align_v1_2.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_wdp_align_v1_2.vp",
+      "git_source_sha256": "1645e9eb7fac3c9c13cd3e0d7367f132293f9cec16835ce188c6345993d2b730",
+      "original_build_sha256": null,
+      "sha256": "1645e9eb7fac3c9c13cd3e0d7367f132293f9cec16835ce188c6345993d2b730",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_wdp_dcp_v1_2.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_wdp_dcp_v1_2.vp",
+      "git_source_sha256": "3f30be0f49f78f09915743995c950fa6ff8de5f14598ebc8802e73b5c6d140ee",
+      "original_build_sha256": null,
+      "sha256": "3f30be0f49f78f09915743995c950fa6ff8de5f14598ebc8802e73b5c6d140ee",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_wrapper_v1_2b.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_wrapper_v1_2b.vp",
+      "git_source_sha256": "d35010f49be551fb15ab2655cbeffcaaaa74fdf3ccb0754b033fc979d615e805",
+      "original_build_sha256": null,
+      "sha256": "d35010f49be551fb15ab2655cbeffcaaaa74fdf3ccb0754b033fc979d615e805",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_com_timing_v1_2.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_com_timing_v1_2.vp",
+      "git_source_sha256": "e3f19c4be6352ab64f07426973387f2876c540ee992f6eac9d3f2d470b3d49c2",
+      "original_build_sha256": null,
+      "sha256": "e3f19c4be6352ab64f07426973387f2876c540ee992f6eac9d3f2d470b3d49c2",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_tfaw_timing_v1_2.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_tfaw_timing_v1_2.vp",
+      "git_source_sha256": "c632619f042bebb4f059df7f20eee90eb2b51b81210430cb37d01958ad3cd30f",
+      "original_build_sha256": null,
+      "sha256": "c632619f042bebb4f059df7f20eee90eb2b51b81210430cb37d01958ad3cd30f",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_tfaw_v1_2.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_tfaw_v1_2.vp",
+      "git_source_sha256": "ab87b7718bffc4fb2a2b27765576187f09b5266bbca7fc393c43c6dec96ff379",
+      "original_build_sha256": null,
+      "sha256": "ab87b7718bffc4fb2a2b27765576187f09b5266bbca7fc393c43c6dec96ff379",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_timing_act2wr_pass_v1_2.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_timing_act2wr_pass_v1_2.vp",
+      "git_source_sha256": "1b3874b059923481f292ba382ad156f7dcdd9ad39da6c86dddd480290ccce498",
+      "original_build_sha256": null,
+      "sha256": "1b3874b059923481f292ba382ad156f7dcdd9ad39da6c86dddd480290ccce498",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_timing_act_pass_v1_2.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_timing_act_pass_v1_2.vp",
+      "git_source_sha256": "9f32b6936e039c15f7b07b74480179d39d1b3787965e1b90bd067a7ede7fdd4c",
+      "original_build_sha256": null,
+      "sha256": "9f32b6936e039c15f7b07b74480179d39d1b3787965e1b90bd067a7ede7fdd4c",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_timing_pre_pass_v1_2.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_timing_pre_pass_v1_2.vp",
+      "git_source_sha256": "e40a64caec9725c231cd88dde69973eab3aca38c9d2e66a2c5c0bbddf3103ae0",
+      "original_build_sha256": null,
+      "sha256": "e40a64caec9725c231cd88dde69973eab3aca38c9d2e66a2c5c0bbddf3103ae0",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_timing_rd_pass_v1_2.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_timing_rd_pass_v1_2.vp",
+      "git_source_sha256": "78b1de719a43ee0fc80e1a5464f7284439d91f1d4b3f83ef2ae5611920293988",
+      "original_build_sha256": null,
+      "sha256": "78b1de719a43ee0fc80e1a5464f7284439d91f1d4b3f83ef2ae5611920293988",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_timing_ref_pass_v1_2.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_timing_ref_pass_v1_2.vp",
+      "git_source_sha256": "c79dde6f9a682c55aff7bb89c4863f76a069b874fb154dff7d3e4d4a7a88f9d1",
+      "original_build_sha256": null,
+      "sha256": "c79dde6f9a682c55aff7bb89c4863f76a069b874fb154dff7d3e4d4a7a88f9d1",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_timing_wr_pass_v1_2.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_timing_wr_pass_v1_2.vp",
+      "git_source_sha256": "ea3470ca984554d4908ec950314f9242042417c6c4c6b3fd05ac5d6daab98c90",
+      "original_build_sha256": null,
+      "sha256": "ea3470ca984554d4908ec950314f9242042417c6c4c6b3fd05ac5d6daab98c90",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_trc_timing_v1_2.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_trc_timing_v1_2.vp",
+      "git_source_sha256": "7234241e5968f91ec6e396794f0bb80f6c7d1bca2038aa004d5078d3937953da",
+      "original_build_sha256": null,
+      "sha256": "7234241e5968f91ec6e396794f0bb80f6c7d1bca2038aa004d5078d3937953da",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/pll/ips2l_ddrphy_gpll_v1_3.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/pll/ips2l_ddrphy_gpll_v1_3.vp",
+      "git_source_sha256": "3fecc367573a4b5bd158e1a8ff106c5c401c5f180143e8e5abe6bb068e5078d2",
+      "original_build_sha256": null,
+      "sha256": "3fecc367573a4b5bd158e1a8ff106c5c401c5f180143e8e5abe6bb068e5078d2",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/pll/ips2l_ddrphy_ppll_v1_0.vp",
+      "origin": "instrec_fpga/ipcore/ddr3_test/rtl/pll/ips2l_ddrphy_ppll_v1_0.vp",
+      "git_source_sha256": "34bb46106b84eab147f130bd7526f1486d35caeb40b0258cd59656e50d19dddd",
+      "original_build_sha256": null,
+      "sha256": "34bb46106b84eab147f130bd7526f1486d35caeb40b0258cd59656e50d19dddd",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/pll/pll.idf",
+      "origin": "instrec_fpga/ipcore/pll/pll.idf",
+      "git_source_sha256": "6a0ffb23b6a838d5e8c1f38d595d4934df37bc305f0e521449fb25727652ff84",
+      "original_build_sha256": "6a0ffb23b6a838d5e8c1f38d595d4934df37bc305f0e521449fb25727652ff84",
+      "sha256": "6a0ffb23b6a838d5e8c1f38d595d4934df37bc305f0e521449fb25727652ff84",
+      "comment_cleanup": false
+    },
+    {
+      "path": "ipcore/pll/pll.v",
+      "origin": "instrec_fpga/ipcore/pll/pll.v",
+      "git_source_sha256": "e70c5d8615ad252fbf85fba6fc77d1433ebb424d0480595b26f0fe38c3ac6add",
+      "original_build_sha256": null,
+      "sha256": "e70c5d8615ad252fbf85fba6fc77d1433ebb424d0480595b26f0fe38c3ac6add",
+      "comment_cleanup": false
+    },
+    {
+      "path": "scripts/board_check.py",
+      "origin": "instrec_fpga/scripts/board_check.py",
+      "git_source_sha256": "c54a2572f575689d71aef90249eac9751c209569111d0c4a2e18938c6917f2e7",
+      "original_build_sha256": null,
+      "sha256": "e55f3c90fefc1a166a8500643c50a9ef75bdbb97cc1b9bf2b73aec0c9f1300d0",
+      "comment_cleanup": true
+    },
+    {
+      "path": "scripts/build_full.tcl",
+      "origin": "instrec_fpga/scripts/build_full.tcl",
+      "git_source_sha256": "f5bc1ac77892f7216fdb67691b9e366dbe15f04337d38ce5f2e60590976ba9cb",
+      "original_build_sha256": "f7096568192504db602f98e9f13e903a28bf8dd52043a83edaab7b30e7f9ca85",
+      "sha256": "61be03ef0e346607aa303d18386d9dc1eb0a9a9fdb19710115e8ad545b901af5",
+      "comment_cleanup": true
+    },
+    {
+      "path": "scripts/build_rv32_sw.py",
+      "origin": "instrec_fpga/scripts/build_rv32_sw.py",
+      "git_source_sha256": "6b48a8cc7e1ab114e4632a3c8602a2ed06e4ef01817bc60dcfdaaa26d6e5b4e9",
+      "original_build_sha256": null,
+      "sha256": "4ecf15c6d1f6066875fc3c85b8679037482a5fc153de75b96b76bdfb495b2dcc",
+      "comment_cleanup": true
+    },
+    {
+      "path": "scripts/check_rtl.py",
+      "origin": "instrec_fpga/scripts/check_rtl.py",
+      "git_source_sha256": "c1414d17838f43b00f08cf3a624d3d598538524fab2a0b1214f5ecd1dfe4b8e8",
+      "original_build_sha256": null,
+      "sha256": "4607e7093f2bb5b5c3535ea0b683761f34263708e391179be0948a1b57ad0751",
+      "comment_cleanup": true
+    },
+    {
+      "path": "scripts/outputs/layer_contract.json",
+      "origin": "instrec_fpga/scripts/outputs/layer_contract.json",
+      "git_source_sha256": "2344dc068dee174c1490d80f3e927cdcb72df86e7e86d38a837d85d68980f7d9",
+      "original_build_sha256": null,
+      "sha256": "2344dc068dee174c1490d80f3e927cdcb72df86e7e86d38a837d85d68980f7d9",
+      "comment_cleanup": false
+    },
+    {
+      "path": "scripts/outputs/weights_image.bin",
+      "origin": "instrec_fpga/scripts/outputs/weights_image.bin",
+      "git_source_sha256": "19a74dbec29d3a0f16ab06dc30f70312849977de0c6b345710b046b1908f5d7a",
+      "original_build_sha256": null,
+      "sha256": "19a74dbec29d3a0f16ab06dc30f70312849977de0c6b345710b046b1908f5d7a",
+      "comment_cleanup": false
+    },
+    {
+      "path": "scripts/run_pds_full.ps1",
+      "origin": "instrec_fpga/scripts/run_pds_full.ps1",
+      "git_source_sha256": "46e6174cb9a2dba37ffca1224827480f6df1212465d60e2baa58700835ce3fae",
+      "original_build_sha256": "46e6174cb9a2dba37ffca1224827480f6df1212465d60e2baa58700835ce3fae",
+      "sha256": "c53f2f50e58902d7e90aa6a43b7241e815cc9935368c9e98e0ea460659e39876",
+      "comment_cleanup": false
+    },
+    {
+      "path": "scripts/weight_upload.py",
+      "origin": "instrec_fpga/scripts/weight_upload.py",
+      "git_source_sha256": "e70c3959988e7d34d68b4ea6e4cd9e09cebedb935c61de6f9ab14dd77d0b01f5",
+      "original_build_sha256": null,
+      "sha256": "75560afb90fe7c4b8e23fee49c36da99aaaceac768a5c85aded6676513059b89",
+      "comment_cleanup": true
+    },
+    {
+      "path": "src/audio/audio_cdc_fifo.v",
+      "origin": "instrec_fpga/src/audio/audio_cdc_fifo.v",
+      "git_source_sha256": "eade0b2cac8eb723745f6fc71a3c75bf51ae41fb6777f3415ff2066b3af56689",
+      "original_build_sha256": "eade0b2cac8eb723745f6fc71a3c75bf51ae41fb6777f3415ff2066b3af56689",
+      "sha256": "994d30e8cdf5b090ff4baec8ad601c81a44f723b7e6fa3eae1fbd416e4889867",
+      "comment_cleanup": true
+    },
+    {
+      "path": "src/audio/audio_sink.v",
+      "origin": "instrec_fpga/src/audio/audio_sink.v",
+      "git_source_sha256": "3c2554d19bb808cac3fdfb1ca26630a9ac8bc44d40566f20ba0325f46a1c8689",
+      "original_build_sha256": "4323a5da8382796fa17127ab5d5329187c9c5ba11ed7e5f80dbd38ec8943ad2b",
+      "sha256": "fec7cb8e19c67a359fba688e0347dc4fe79a305eddec0a24cec70234dc540238",
+      "comment_cleanup": true
+    },
+    {
+      "path": "src/audio/i2s_slave_rx.v",
+      "origin": "instrec_fpga/src/audio/i2s_slave_rx.v",
+      "git_source_sha256": "453923d5c5d1629946436e7fb0886ba3a6699c512906c580e8342f2ff573588f",
+      "original_build_sha256": "453923d5c5d1629946436e7fb0886ba3a6699c512906c580e8342f2ff573588f",
+      "sha256": "76bb24dfc3633d2059132c400b24f9d117a6d359606ab90215e91c7c8209b741",
+      "comment_cleanup": true
+    },
+    {
+      "path": "src/audio/pcm1808_coeff_rom.v",
+      "origin": "instrec_fpga/src/audio/pcm1808_coeff_rom.v",
+      "git_source_sha256": "2202fb99d5883e95fb96794274225658908ce29aacbfc8df89d44ceee6a0cc10",
+      "original_build_sha256": "2202fb99d5883e95fb96794274225658908ce29aacbfc8df89d44ceee6a0cc10",
+      "sha256": "c81366968f4bcb742ba9ece4c7e71a5ec654227f435e3b0d1324928f6a888dbe",
+      "comment_cleanup": true
+    },
+    {
+      "path": "src/audio/pcm1808_resampler.v",
+      "origin": "instrec_fpga/src/audio/pcm1808_resampler.v",
+      "git_source_sha256": "116a33c5a5f5852c2d2818a3a0063a6e90001a5952fc51a59cce7de85caeefeb",
+      "original_build_sha256": "116a33c5a5f5852c2d2818a3a0063a6e90001a5952fc51a59cce7de85caeefeb",
+      "sha256": "6213d1dd5338d3efd21f67c79edf27772aef4264bc26dd3c286059e2e1ad59b6",
+      "comment_cleanup": true
+    },
+    {
+      "path": "src/cpu/prog.hex",
+      "origin": "instrec_fpga/src/cpu/prog.hex",
+      "git_source_sha256": "8757babe8ece9173b4c34fe38025c4cdc1e0b033cbd05e4358b1a222ac408f30",
+      "original_build_sha256": "8757babe8ece9173b4c34fe38025c4cdc1e0b033cbd05e4358b1a222ac408f30",
+      "sha256": "8757babe8ece9173b4c34fe38025c4cdc1e0b033cbd05e4358b1a222ac408f30",
+      "comment_cleanup": false
+    },
+    {
+      "path": "src/cpu/rv32_cpu_subsys.sv",
+      "origin": "instrec_fpga/src/cpu/rv32_cpu_subsys.sv",
+      "git_source_sha256": "37676259e7a857d6393f83f84796a86a3ab414b54c66e3e1666e421277f936fd",
+      "original_build_sha256": "be33b7c296bc52778a7428200a2faf3e6cff69c7d3ffb2c521ece135320a40ec",
+      "sha256": "0e2850a8ca44d577fb1ef8a94006e8987d93c9f368514637d447cb549e6357cd",
+      "comment_cleanup": true
+    },
+    {
+      "path": "src/ctrl/instrec_top.v",
+      "origin": "instrec_fpga/src/ctrl/instrec_top.v",
+      "git_source_sha256": "b7e3dae415d3cc50130f6c4422c1ff4cd05cd12c9c52f579180d3a6988c18f4e",
+      "original_build_sha256": "b7e3dae415d3cc50130f6c4422c1ff4cd05cd12c9c52f579180d3a6988c18f4e",
+      "sha256": "39c1f83613bdb9164691e4ff2abff4df704b730242103f669d47ec57f3bbf760",
+      "comment_cleanup": true
+    },
+    {
+      "path": "src/ctrl/self_test.v",
+      "origin": "instrec_fpga/src/ctrl/self_test.v",
+      "git_source_sha256": "2f97ebaeedc75cf3418fdc2ed08af95e6932e833d39c09c62eb2c90cc1c903f9",
+      "original_build_sha256": "2f97ebaeedc75cf3418fdc2ed08af95e6932e833d39c09c62eb2c90cc1c903f9",
+      "sha256": "af93cdf360b19e5c51c36373e34941b75d8bceedf2b62db00c3c2f4edaeba494",
+      "comment_cleanup": true
+    },
+    {
+      "path": "src/ctrl/sys_ctrl.v",
+      "origin": "instrec_fpga/src/ctrl/sys_ctrl.v",
+      "git_source_sha256": "313bce9abac002205373bb51145597c89bbdbc3fddab47f99814a154c0be2917",
+      "original_build_sha256": "5039dc97e077134a970a31e9ae088f58935b1d299fc8fd3e48cb482cade9f050",
+      "sha256": "f526bef60d865d99c5ed091b40228d44bcb62fc6066803fa0ea0ea3b2948345b",
+      "comment_cleanup": true
+    },
+    {
+      "path": "src/ctrl/uart_debug.v",
+      "origin": "instrec_fpga/src/ctrl/uart_debug.v",
+      "git_source_sha256": "66e9892dd88e41fecdf0c5413378229b61b60851984b016d39d6380003667ec4",
+      "original_build_sha256": "66e9892dd88e41fecdf0c5413378229b61b60851984b016d39d6380003667ec4",
+      "sha256": "2be776045005393d1262f6a27a76ba0a18cd3af6346785bedb4a4332f3b5bd6a",
+      "comment_cleanup": true
+    },
+    {
+      "path": "src/ctrl/uart_rx.v",
+      "origin": "instrec_fpga/src/ctrl/uart_rx.v",
+      "git_source_sha256": "bd1700de878f472963b81ba55df7d958b98ed932ba096997cdd6a6e7bbf58dcb",
+      "original_build_sha256": "bd1700de878f472963b81ba55df7d958b98ed932ba096997cdd6a6e7bbf58dcb",
+      "sha256": "3435f73f680a189d421ba56eba5bbe62400859be0a00d5968bc15be277487998",
+      "comment_cleanup": true
+    },
+    {
+      "path": "src/ctrl/uart_tx.v",
+      "origin": "instrec_fpga/src/ctrl/uart_tx.v",
+      "git_source_sha256": "9ce20db2aa09f678ab0537ab97d131077400336a657c731860832350bf3cc762",
+      "original_build_sha256": "9ce20db2aa09f678ab0537ab97d131077400336a657c731860832350bf3cc762",
+      "sha256": "8cf986197330bfcc84586d9b480d2b665a46224264e0c3ffea46159c6c4a8361",
+      "comment_cleanup": true
+    },
+    {
+      "path": "src/ctrl/weight_loader.v",
+      "origin": "instrec_fpga/src/ctrl/weight_loader.v",
+      "git_source_sha256": "edfc91589316bf60134cf8b93839ec95998fbe64808a439a966d8e99e0109cf6",
+      "original_build_sha256": "2252c6f7bb9b8ac35d1ddce1db018a93c71de27065b5fa9daa3dab870af0e035",
+      "sha256": "6be788f4ad81024fc74dd88b4116eb6feacd399ee00352b8551bbd8d6243df04",
+      "comment_cleanup": true
+    },
+    {
+      "path": "src/ddr3/ddr3_arbiter.v",
+      "origin": "instrec_fpga/src/ddr3/ddr3_arbiter.v",
+      "git_source_sha256": "059e0e1dbc581dab3a45a9773dd56d72c3e38eb97718e5e8f1208e3801ba7d81",
+      "original_build_sha256": "059e0e1dbc581dab3a45a9773dd56d72c3e38eb97718e5e8f1208e3801ba7d81",
+      "sha256": "a67810ae3fc725582893bb9a669dbe1dc63ab2bf2b7516d5e3fadab37a9694e1",
+      "comment_cleanup": true
+    },
+    {
+      "path": "src/ddr3/ddr3_ctrl_axi.v",
+      "origin": "instrec_fpga/src/ddr3/ddr3_ctrl_axi.v",
+      "git_source_sha256": "3f1f2e9dacd243ad8a61babb2f32044089420c3eaaee4ebbccdccfc171f9a30f",
+      "original_build_sha256": "3f1f2e9dacd243ad8a61babb2f32044089420c3eaaee4ebbccdccfc171f9a30f",
+      "sha256": "f3b164fb2e0b61dd6b68e8a3bcfd9588bb7f166fd8e6191098fbe0c28355c9b8",
+      "comment_cleanup": true
+    },
+    {
+      "path": "src/ddr3/ddr3_wrapper.v",
+      "origin": "instrec_fpga/src/ddr3/ddr3_wrapper.v",
+      "git_source_sha256": "d74b666fcd7a4e029545ef7b810e4511845b5775c148b2fb37d83cb54afe3d3b",
+      "original_build_sha256": "d74b666fcd7a4e029545ef7b810e4511845b5775c148b2fb37d83cb54afe3d3b",
+      "sha256": "d0e477b891c4ebc3ff1036a58b71264341f93c0c551da790eaadbd8543a3609c",
+      "comment_cleanup": true
+    },
+    {
+      "path": "src/hdmi/hdmi_tx_if.v",
+      "origin": "instrec_fpga/src/hdmi/hdmi_tx_if.v",
+      "git_source_sha256": "11b253b0dc0ad695f23ba00231284b90c13791fe849efb2d205e6308be35fb4a",
+      "original_build_sha256": "d616d2236b8f460f3be2cfcd14f66b4aed55a4c60b4e217cab5680b01e40bd3a",
+      "sha256": "5f68e9bd88c74d2ab077b086a19e9cada874835cac6a4a34722785109aee4903",
+      "comment_cleanup": true
+    },
+    {
+      "path": "src/hdmi/iic_dri.v",
+      "origin": "instrec_fpga/src/hdmi/iic_dri.v",
+      "git_source_sha256": "8516560f7ab3e27ef1bd19006b0d89fde9be31bb24a088bbe2d6a93e81c104a8",
+      "original_build_sha256": "5f60bc8bcac110f0125a278c332065d2594874c465ec961c603662f92c16b13e",
+      "sha256": "68d122ae710765d19ab736b482ee417fa0a300151e9fec1b1d3cccdeba29a5e8",
+      "comment_cleanup": true
+    },
+    {
+      "path": "src/hdmi/ms7200_ctl.v",
+      "origin": "instrec_fpga/src/hdmi/ms7200_ctl.v",
+      "git_source_sha256": "67874f14e07601f1a7f50e967d0e4400e03c1fdd4f394d1f9cf0106638a215f7",
+      "original_build_sha256": "501521c4cceecd48de5741d3116eb7062c93a70a606a386682e1d8756a494199",
+      "sha256": "fe42460cdd7085b03b6e69453f722661d097f3ce7759b57af54ba63340192347",
+      "comment_cleanup": true
+    },
+    {
+      "path": "src/hdmi/ms7210_ctl.v",
+      "origin": "instrec_fpga/src/hdmi/ms7210_ctl.v",
+      "git_source_sha256": "ab4e58be6f740e76b1f36f1c904bf5a9c7886d28c789f06fdceeecd7aa9f958b",
+      "original_build_sha256": "c9b101e58f381ddf3c6d663d0003c18065302659424b8345022161413ccf09ae",
+      "sha256": "142ceab573cd8c26ca9246a9f1b2be61093f389466c72c2eaa4b3ab3b3923664",
+      "comment_cleanup": true
+    },
+    {
+      "path": "src/hdmi/ms72xx_ctl.v",
+      "origin": "instrec_fpga/src/hdmi/ms72xx_ctl.v",
+      "git_source_sha256": "66818c4c616435b7145254ac07f578cc8e8d0f99bdad56b84eaa127e8af5ac6d",
+      "original_build_sha256": "d9b3d714739066b32153dd7d406d489e833e7a9b92fa0415db676a480e107302",
+      "sha256": "4cf3e509c048988933344b7613a4f5ead3ae8fecfa7d3cccd7f0a1e5dd8538d0",
+      "comment_cleanup": true
+    },
+    {
+      "path": "src/hdmi/sync_vg.v",
+      "origin": "instrec_fpga/src/hdmi/sync_vg.v",
+      "git_source_sha256": "4433c8a8d6370c81969256877e7060ff0f8eeb2421f85c07b1ecbcf3d053c5d2",
+      "original_build_sha256": "062ea3ec1c4479ce7ddc28314030228e81baab4fef2a96cbfc1827668292c21e",
+      "sha256": "0f4f03de4fdfdd0c8c293d3c61c2350a3c1fa3d42feb8030a8dd02fa5908f4b1",
+      "comment_cleanup": true
+    },
+    {
+      "path": "src/mel/db_norm.v",
+      "origin": "instrec_fpga/src/mel/db_norm.v",
+      "git_source_sha256": "80395100d67e5399a07a54402170a50b513099f415c08c598d86f1bea816e318",
+      "original_build_sha256": "80395100d67e5399a07a54402170a50b513099f415c08c598d86f1bea816e318",
+      "sha256": "b59a103300cc47c3d217a2ae9e3dd46c467264da3ca4b5b2fa4e79db10080b26",
+      "comment_cleanup": true
+    },
+    {
+      "path": "src/mel/exp_lut.hex",
+      "origin": "instrec_fpga/src/mel/exp_lut.hex",
+      "git_source_sha256": "8276485fcc10945f17b4a0c8adb3a8fa6af797dc83434e524c2237834bf4a69b",
+      "original_build_sha256": "2548a1ceaf4efb2da0f14086b5840c108ed86fe3762feb4508e3ceae32d337b3",
+      "sha256": "8276485fcc10945f17b4a0c8adb3a8fa6af797dc83434e524c2237834bf4a69b",
+      "comment_cleanup": false
+    },
+    {
+      "path": "src/mel/fft2048_sdf.v",
+      "origin": "instrec_fpga/src/mel/fft2048_sdf.v",
+      "git_source_sha256": "4c3b11118f06105dee036e1be7ad54d61c2f7835b4d140fbda3308cf00cbe73f",
+      "original_build_sha256": "25c577d554bd2af1940258480ec4211562d159bc107302b105cd9e41be66fde6",
+      "sha256": "fa508bbb0fc319edb14c22d9367f1c1c0c6535141768d652faaae9e7f735f652",
+      "comment_cleanup": true
+    },
+    {
+      "path": "src/mel/hann_q15.hex",
+      "origin": "instrec_fpga/src/mel/hann_q15.hex",
+      "git_source_sha256": "5c3085a5600662ccfce605a11de8a1fb0f77f5337d5e0957e6a958be889978b5",
+      "original_build_sha256": "29ffc36c88991d5784c64f4ad9c5f4c97451a25d63d02358781028f621650730",
+      "sha256": "5c3085a5600662ccfce605a11de8a1fb0f77f5337d5e0957e6a958be889978b5",
+      "comment_cleanup": false
+    },
+    {
+      "path": "src/mel/hann_rom.v",
+      "origin": "instrec_fpga/src/mel/hann_rom.v",
+      "git_source_sha256": "ccdd0e849975c007c407f49e4e124ce286170e426c8f3477e54d0275d6b6d659",
+      "original_build_sha256": "ccdd0e849975c007c407f49e4e124ce286170e426c8f3477e54d0275d6b6d659",
+      "sha256": "de13805383940bec0dcd38dadf42b2023824c03887e1cc0805dcc6255c5498cb",
+      "comment_cleanup": true
+    },
+    {
+      "path": "src/mel/log2_lut.hex",
+      "origin": "instrec_fpga/src/mel/log2_lut.hex",
+      "git_source_sha256": "5bd665f8794ed0b3f07df0be882152c7823595a8fb11092313bfe92ff5ae3848",
+      "original_build_sha256": "d4e13c08aed1f6c660eb17d82b30330e397b76d8ecc340812ba2b57a181192bc",
+      "sha256": "5bd665f8794ed0b3f07df0be882152c7823595a8fb11092313bfe92ff5ae3848",
+      "comment_cleanup": false
+    },
+    {
+      "path": "src/mel/mel_coo.hex",
+      "origin": "instrec_fpga/src/mel/mel_coo.hex",
+      "git_source_sha256": "fb0a22bcd3b0cde777af7f536949329d18e077d8af89e7e294188dd0e11638cc",
+      "original_build_sha256": "1ca294afbcfb8ab54f11bc810483f379ba607adc28efcc4a7168b6f150b2dd61",
+      "sha256": "fb0a22bcd3b0cde777af7f536949329d18e077d8af89e7e294188dd0e11638cc",
+      "comment_cleanup": false
+    },
+    {
+      "path": "src/mel/mel_engine.v",
+      "origin": "instrec_fpga/src/mel/mel_engine.v",
+      "git_source_sha256": "913c84630a1cce3a36f5c76e6cc51dcc3d0b0ad7467c31fb96b1ada259a37508",
+      "original_build_sha256": "913c84630a1cce3a36f5c76e6cc51dcc3d0b0ad7467c31fb96b1ada259a37508",
+      "sha256": "da316fc4897a1d820cf1efd7dab0bad5f68e3df269f74a67ba3e94ef78e54166",
+      "comment_cleanup": true
+    },
+    {
+      "path": "src/mel/mel_filter.v",
+      "origin": "instrec_fpga/src/mel/mel_filter.v",
+      "git_source_sha256": "e45c06b9ddbb6e4ac2987601e9965b3229d576cd8cf7e9c09ac52f2ea7f345c2",
+      "original_build_sha256": "cfd711b2e913ea7103040e329360db555c97175dee0b436a94de158efca2f569",
+      "sha256": "dfdf4954e3eaef4f50923145fddbdb54ffe8769e0cad9f1037a2173db087ee28",
+      "comment_cleanup": true
+    },
+    {
+      "path": "src/mel/standardize.v",
+      "origin": "instrec_fpga/src/mel/standardize.v",
+      "git_source_sha256": "5cd09bd31c05476ea5fbc899612182be6747a888f3274c4b6d0830af94f0b444",
+      "original_build_sha256": "5cd09bd31c05476ea5fbc899612182be6747a888f3274c4b6d0830af94f0b444",
+      "sha256": "0343a10c306fb55ad538b4be71570df4df2ee4959826e3b2d7cf00483dc863fb",
+      "comment_cleanup": true
+    },
+    {
+      "path": "src/mel/stft_framer.v",
+      "origin": "instrec_fpga/src/mel/stft_framer.v",
+      "git_source_sha256": "e7bdf972b51abe3e0937aa141f528716f9160c8f378d903a755317f85c08c764",
+      "original_build_sha256": "ba21718175b1025a57e6d335627f6b8f82b2af9ddb04b4fc071f3fcf097b1cb2",
+      "sha256": "79c919b95a5af6cfc5f845948515d7d375b3495c4de2edec5820d13d46b2f957",
+      "comment_cleanup": true
+    },
+    {
+      "path": "src/mel/tw_rom_s.v",
+      "origin": "instrec_fpga/src/mel/tw_rom_s.v",
+      "git_source_sha256": "be96d008f04cc7d64f092dff0af63bbee2830241e874663aa1cdb35e5958ba39",
+      "original_build_sha256": "be96d008f04cc7d64f092dff0af63bbee2830241e874663aa1cdb35e5958ba39",
+      "sha256": "a81d4aa02d8c4c2812195c0f35bc18756bae3d3fc888975b63701567823961f3",
+      "comment_cleanup": true
+    },
+    {
+      "path": "src/mel/twiddle_s10.hex",
+      "origin": "instrec_fpga/src/mel/twiddle_s10.hex",
+      "git_source_sha256": "0a4ab0df4baf2199044bb4ca4f6fc4351737949aea4b64a1c2cef102dacef7ba",
+      "original_build_sha256": "0a4ab0df4baf2199044bb4ca4f6fc4351737949aea4b64a1c2cef102dacef7ba",
+      "sha256": "0a4ab0df4baf2199044bb4ca4f6fc4351737949aea4b64a1c2cef102dacef7ba",
+      "comment_cleanup": false
+    },
+    {
+      "path": "src/mel/twiddle_s11.hex",
+      "origin": "instrec_fpga/src/mel/twiddle_s11.hex",
+      "git_source_sha256": "5bbe38d69602539c4c0401da0e3e11093fd2e159f839147a7c966af5018e0504",
+      "original_build_sha256": "5bbe38d69602539c4c0401da0e3e11093fd2e159f839147a7c966af5018e0504",
+      "sha256": "5bbe38d69602539c4c0401da0e3e11093fd2e159f839147a7c966af5018e0504",
+      "comment_cleanup": false
+    },
+    {
+      "path": "src/mel/twiddle_s2.hex",
+      "origin": "instrec_fpga/src/mel/twiddle_s2.hex",
+      "git_source_sha256": "43172d25a1c9f97027c31ea20c1e29aaafbbb79e53bc7edfd243638023f6324b",
+      "original_build_sha256": "43172d25a1c9f97027c31ea20c1e29aaafbbb79e53bc7edfd243638023f6324b",
+      "sha256": "43172d25a1c9f97027c31ea20c1e29aaafbbb79e53bc7edfd243638023f6324b",
+      "comment_cleanup": false
+    },
+    {
+      "path": "src/mel/twiddle_s3.hex",
+      "origin": "instrec_fpga/src/mel/twiddle_s3.hex",
+      "git_source_sha256": "76d5a0d2b9e19667a8adc7faf0dded3c60cfd8f164d6eae47348867ab66e364c",
+      "original_build_sha256": "76d5a0d2b9e19667a8adc7faf0dded3c60cfd8f164d6eae47348867ab66e364c",
+      "sha256": "76d5a0d2b9e19667a8adc7faf0dded3c60cfd8f164d6eae47348867ab66e364c",
+      "comment_cleanup": false
+    },
+    {
+      "path": "src/mel/twiddle_s4.hex",
+      "origin": "instrec_fpga/src/mel/twiddle_s4.hex",
+      "git_source_sha256": "ce5f6f877d5b0ceaaacb7d30ab52a2f37353ec532522b4801daa0b1b1aa4a11c",
+      "original_build_sha256": "ce5f6f877d5b0ceaaacb7d30ab52a2f37353ec532522b4801daa0b1b1aa4a11c",
+      "sha256": "ce5f6f877d5b0ceaaacb7d30ab52a2f37353ec532522b4801daa0b1b1aa4a11c",
+      "comment_cleanup": false
+    },
+    {
+      "path": "src/mel/twiddle_s5.hex",
+      "origin": "instrec_fpga/src/mel/twiddle_s5.hex",
+      "git_source_sha256": "d7baec67b3f1fc7c557690e383c9d9219168acc1afc4392874489f980bf38139",
+      "original_build_sha256": "d7baec67b3f1fc7c557690e383c9d9219168acc1afc4392874489f980bf38139",
+      "sha256": "d7baec67b3f1fc7c557690e383c9d9219168acc1afc4392874489f980bf38139",
+      "comment_cleanup": false
+    },
+    {
+      "path": "src/mel/twiddle_s6.hex",
+      "origin": "instrec_fpga/src/mel/twiddle_s6.hex",
+      "git_source_sha256": "8f06b5c6719ac0a3d91cdf7d470b200a0040f0ee9055b819d363fcb804303d73",
+      "original_build_sha256": "8f06b5c6719ac0a3d91cdf7d470b200a0040f0ee9055b819d363fcb804303d73",
+      "sha256": "8f06b5c6719ac0a3d91cdf7d470b200a0040f0ee9055b819d363fcb804303d73",
+      "comment_cleanup": false
+    },
+    {
+      "path": "src/mel/twiddle_s7.hex",
+      "origin": "instrec_fpga/src/mel/twiddle_s7.hex",
+      "git_source_sha256": "560b2a5240350d8c4c489e8118f5a54f51d18177fe1c7d8b650630ace810f812",
+      "original_build_sha256": "560b2a5240350d8c4c489e8118f5a54f51d18177fe1c7d8b650630ace810f812",
+      "sha256": "560b2a5240350d8c4c489e8118f5a54f51d18177fe1c7d8b650630ace810f812",
+      "comment_cleanup": false
+    },
+    {
+      "path": "src/mel/twiddle_s8.hex",
+      "origin": "instrec_fpga/src/mel/twiddle_s8.hex",
+      "git_source_sha256": "a54c575030b6b47313c737e33f9a75be843b3e42250a27f50e17ce4e05111d2e",
+      "original_build_sha256": "a54c575030b6b47313c737e33f9a75be843b3e42250a27f50e17ce4e05111d2e",
+      "sha256": "a54c575030b6b47313c737e33f9a75be843b3e42250a27f50e17ce4e05111d2e",
+      "comment_cleanup": false
+    },
+    {
+      "path": "src/mel/twiddle_s9.hex",
+      "origin": "instrec_fpga/src/mel/twiddle_s9.hex",
+      "git_source_sha256": "286404cd9a64c2649d5ccdfeaa6fadb398089f05dc411be5990385a84180264f",
+      "original_build_sha256": "286404cd9a64c2649d5ccdfeaa6fadb398089f05dc411be5990385a84180264f",
+      "sha256": "286404cd9a64c2649d5ccdfeaa6fadb398089f05dc411be5990385a84180264f",
+      "comment_cleanup": false
+    },
+    {
+      "path": "src/npu/activation_row_store_dynamic.v",
+      "origin": "instrec_fpga/src/npu/activation_row_store_dynamic.v",
+      "git_source_sha256": "05321eb0df369350a9198e50fb7f9bdbf804ce6ee655c184255af5e8530cb290",
+      "original_build_sha256": "05321eb0df369350a9198e50fb7f9bdbf804ce6ee655c184255af5e8530cb290",
+      "sha256": "aaf2b934727f26bd33ecf584feedc34de5747a6fc0c8065d43b72756071c6f8c",
+      "comment_cleanup": true
+    },
+    {
+      "path": "src/npu/activation_store_mux.v",
+      "origin": "instrec_fpga/src/npu/activation_store_mux.v",
+      "git_source_sha256": "c02117dc8345a6aa132e63ade9544d1c00cabd45296dc5686f1ede7b1cdc96f9",
+      "original_build_sha256": "c02117dc8345a6aa132e63ade9544d1c00cabd45296dc5686f1ede7b1cdc96f9",
+      "sha256": "63e2704693292703c7671e720c0a24e72ec3a3c5b53a2798b7e01d73a30613ef",
+      "comment_cleanup": true
+    },
+    {
+      "path": "src/npu/conv_engine.v",
+      "origin": "instrec_fpga/src/npu/conv_engine.v",
+      "git_source_sha256": "da1e4e913ab8eb9ccff9bc057ef1489807e69e47f909670a4b4ad6144f24dea4",
+      "original_build_sha256": "da1e4e913ab8eb9ccff9bc057ef1489807e69e47f909670a4b4ad6144f24dea4",
+      "sha256": "b1c46ed32d098d1ee4b6cfc3f7009764551b99ad8d9bb8dc047885c7b9312a79",
+      "comment_cleanup": true
+    },
+    {
+      "path": "src/npu/fc_engine.v",
+      "origin": "instrec_fpga/src/npu/fc_engine.v",
+      "git_source_sha256": "bf24dca55d48ab81fd4ce61a6c0f9c4bc41f2fa7f28937972b4cf36294f448ae",
+      "original_build_sha256": "bf24dca55d48ab81fd4ce61a6c0f9c4bc41f2fa7f28937972b4cf36294f448ae",
+      "sha256": "7f44857f233c7fb444db430bde815f7860fa2cfc1d015f08557eb2790fd35f92",
+      "comment_cleanup": true
+    },
+    {
+      "path": "src/npu/gap_unit.v",
+      "origin": "instrec_fpga/src/npu/gap_unit.v",
+      "git_source_sha256": "b24697c49780a01a768d015c594ef1512fc5cfe6a9f3798e6e6f227123b0acfc",
+      "original_build_sha256": "51831e5f4ee8ac3f162785f91777d54d2aca3e2fc657762f4adb5c3d071fba90",
+      "sha256": "0dc1cc909514873222fc973dd237a0ff94e26f10d70d34d51477feda3172313a",
+      "comment_cleanup": true
+    },
+    {
+      "path": "src/npu/npu_m1_bridge.v",
+      "origin": "instrec_fpga/src/npu/npu_m1_bridge.v",
+      "git_source_sha256": "7510a232de647efa232a5bb11b2bc7229f9571d5f4b13fa57684bea2e2f3cab6",
+      "original_build_sha256": "7510a232de647efa232a5bb11b2bc7229f9571d5f4b13fa57684bea2e2f3cab6",
+      "sha256": "a39d1626ffaaa768b482a3d8194b37db454f6e49e7204b66756a2177b316bcdc",
+      "comment_cleanup": true
+    },
+    {
+      "path": "src/npu/npu_m1_owner.v",
+      "origin": "instrec_fpga/src/npu/npu_m1_owner.v",
+      "git_source_sha256": "ce99ef8e780b72d9205da8c9ef8762cb891ce1d8bbf4295fd38372755a3157ca",
+      "original_build_sha256": "ce99ef8e780b72d9205da8c9ef8762cb891ce1d8bbf4295fd38372755a3157ca",
+      "sha256": "ff14dafa733beff0fbe1239739fc5390f77d8aa9d813aeb2959e60f9dde8952c",
+      "comment_cleanup": true
+    },
+    {
+      "path": "src/npu/npu_stage_lifecycle.v",
+      "origin": "instrec_fpga/src/npu/npu_stage_lifecycle.v",
+      "git_source_sha256": "8ed6d69866c1bd7d60951a25722c77006941d774420170811e636fe0c1bfca11",
+      "original_build_sha256": "8ed6d69866c1bd7d60951a25722c77006941d774420170811e636fe0c1bfca11",
+      "sha256": "efab6445579ec878eb5b5cae82fb2eba64d02f6c7b072a4fc69bbd3c9a046585",
+      "comment_cleanup": true
+    },
+    {
+      "path": "src/npu/npu_top.v",
+      "origin": "instrec_fpga/src/npu/npu_top.v",
+      "git_source_sha256": "47089a8390312f0654a1cbba3244fe7e271eea98972c6cbe89c8bf83538b409d",
+      "original_build_sha256": "47089a8390312f0654a1cbba3244fe7e271eea98972c6cbe89c8bf83538b409d",
+      "sha256": "779c6c0396bb052fa1367b61fb4d2eda8f8a9c387d0ceae6da94846f63c6f05f",
+      "comment_cleanup": true
+    },
+    {
+      "path": "src/npu/pool_engine.v",
+      "origin": "instrec_fpga/src/npu/pool_engine.v",
+      "git_source_sha256": "fa2b81e0336f58b74d19f6e3ee1ad891a5881aecf056240ab00da7746e7025ea",
+      "original_build_sha256": "fa2b81e0336f58b74d19f6e3ee1ad891a5881aecf056240ab00da7746e7025ea",
+      "sha256": "3ac73508d28139609911770bf832637ebc60961b7005f00a2de5bb83bf6e5d62",
+      "comment_cleanup": true
+    },
+    {
+      "path": "src/npu/requant_unit.v",
+      "origin": "instrec_fpga/src/npu/requant_unit.v",
+      "git_source_sha256": "e8114dd8533642d8f22946c449bf4765c69755200c7443b4ca4719f888761945",
+      "original_build_sha256": "8b3f9134ec93a476eef243f75541a0188d1066393da4ee8a636e3e5fc2d0028d",
+      "sha256": "349f6daf36902aa2457b969dc8c847e2c0d7b4e6d56fee4e181d839c195a08e8",
+      "comment_cleanup": true
+    },
+    {
+      "path": "src/npu/softmax_top.v",
+      "origin": "instrec_fpga/src/npu/softmax_top.v",
+      "git_source_sha256": "9c51eb0ce2b3b96b0936c3f037acde2a9a28fbdb10e518be2f1091c8f396eef9",
+      "original_build_sha256": "9c51eb0ce2b3b96b0936c3f037acde2a9a28fbdb10e518be2f1091c8f396eef9",
+      "sha256": "799f190af5640e1428ee10d5af0f220edfa931befe5ffbca4fc5f6501c2c0c52",
+      "comment_cleanup": true
+    },
+    {
+      "path": "src/npu/wbuf.v",
+      "origin": "instrec_fpga/src/npu/wbuf.v",
+      "git_source_sha256": "f8e51d756535e296009db8e37bbd81ca5a475d128e6c0f3cb9c18684b640f42b",
+      "original_build_sha256": "9ea29ab7629d89e7794742260835462930cabcc584db6e3b86be80b9cc5032bd",
+      "sha256": "289e22c2bf51e2121723e7a2803f5e183d79b16c421abbc0591b26c894cee845",
+      "comment_cleanup": true
+    },
+    {
+      "path": "src/npu/wdma.v",
+      "origin": "instrec_fpga/src/npu/wdma.v",
+      "git_source_sha256": "983c5e6cc76c0b26a8650810fe662efe8382558222caca85f163ba5f52211353",
+      "original_build_sha256": "983c5e6cc76c0b26a8650810fe662efe8382558222caca85f163ba5f52211353",
+      "sha256": "24b2f296dea3276a94f7c5e11b634dd5e0451d54be2300f86c9270db273f9754",
+      "comment_cleanup": true
+    },
+    {
+      "path": "src/npu/weight_read_aligner_hardened.v",
+      "origin": "instrec_fpga/src/npu/weight_read_aligner_hardened.v",
+      "git_source_sha256": "54ae62714044ae28676e00d40e8e78d420eba1e9b366cf6da9e8b6487df385cd",
+      "original_build_sha256": "54ae62714044ae28676e00d40e8e78d420eba1e9b366cf6da9e8b6487df385cd",
+      "sha256": "41e3a8ca977f3199b6325ca7e5316050e43dac64750e9554de580878e7d54e62",
+      "comment_cleanup": true
+    },
+    {
+      "path": "src/ui/bars_data.v",
+      "origin": "instrec_fpga/src/ui/bars_data.v",
+      "git_source_sha256": "c29dc11ede3b716f48c5e52aa097ec5cefa873dc205f3a056ebaac7c6bc745e8",
+      "original_build_sha256": "c29dc11ede3b716f48c5e52aa097ec5cefa873dc205f3a056ebaac7c6bc745e8",
+      "sha256": "b37b10a8dcafddc36543eb4adec78015cd6e0d557d3cee29cfc9a7add22b92bf",
+      "comment_cleanup": true
+    },
+    {
+      "path": "src/ui/dashboard_ascii.hex",
+      "origin": "instrec_fpga/src/ui/dashboard_ascii.hex",
+      "git_source_sha256": "72436230eb6fa3455154e6ed2885810b6e7e1e1f17ad1dbe9a8b3e692ce8a534",
+      "original_build_sha256": "72436230eb6fa3455154e6ed2885810b6e7e1e1f17ad1dbe9a8b3e692ce8a534",
+      "sha256": "72436230eb6fa3455154e6ed2885810b6e7e1e1f17ad1dbe9a8b3e692ce8a534",
+      "comment_cleanup": false
+    },
+    {
+      "path": "src/ui/dashboard_classes.hex",
+      "origin": "instrec_fpga/src/ui/dashboard_classes.hex",
+      "git_source_sha256": "d1b96b8ab0204cdc0450d2495f782df24a250f33842bdbf165b69d416e1f3047",
+      "original_build_sha256": "d1b96b8ab0204cdc0450d2495f782df24a250f33842bdbf165b69d416e1f3047",
+      "sha256": "d1b96b8ab0204cdc0450d2495f782df24a250f33842bdbf165b69d416e1f3047",
+      "comment_cleanup": false
+    },
+    {
+      "path": "src/ui/dashboard_font.hex",
+      "origin": "instrec_fpga/src/ui/dashboard_font.hex",
+      "git_source_sha256": "e6656ebf5d7ee6f5aae3bfeb0a6bf350db617813fc290a7724cd7e403a3f499c",
+      "original_build_sha256": "e6656ebf5d7ee6f5aae3bfeb0a6bf350db617813fc290a7724cd7e403a3f499c",
+      "sha256": "e6656ebf5d7ee6f5aae3bfeb0a6bf350db617813fc290a7724cd7e403a3f499c",
+      "comment_cleanup": false
+    },
+    {
+      "path": "src/ui/dashboard_renderer.v",
+      "origin": "instrec_fpga/src/ui/dashboard_renderer.v",
+      "git_source_sha256": "0154f6b3d6e142d58fd4931e31b5cbcec4ba57a91aae33b51e0d355763dc3861",
+      "original_build_sha256": "0154f6b3d6e142d58fd4931e31b5cbcec4ba57a91aae33b51e0d355763dc3861",
+      "sha256": "0023d450b5da59297b2aa6db1d331f4fba1efbeeb841cef45d1092ff8b4fab60",
+      "comment_cleanup": true
+    },
+    {
+      "path": "src/ui/dashboard_text.v",
+      "origin": "instrec_fpga/src/ui/dashboard_text.v",
+      "git_source_sha256": "8237f05100f7cf5ec1a2b3d6f05ee09440a1c58013cf1404ce58a2cacaf1bc50",
+      "original_build_sha256": "8237f05100f7cf5ec1a2b3d6f05ee09440a1c58013cf1404ce58a2cacaf1bc50",
+      "sha256": "d77ff868466240cd9333a58aa5de8ae1a8489c5b89b64dd6818270cb1d3cd8a2",
+      "comment_cleanup": true
+    },
+    {
+      "path": "src/ui/dashboard_tiles.hex",
+      "origin": "instrec_fpga/src/ui/dashboard_tiles.hex",
+      "git_source_sha256": "a84ed90c2a0c2fda303976680fff81f29ebc1732b97d478f20749bfb920ccd64",
+      "original_build_sha256": "a84ed90c2a0c2fda303976680fff81f29ebc1732b97d478f20749bfb920ccd64",
+      "sha256": "a84ed90c2a0c2fda303976680fff81f29ebc1732b97d478f20749bfb920ccd64",
+      "comment_cleanup": false
+    },
+    {
+      "path": "src/ui/feat_copy_engine.v",
+      "origin": "instrec_fpga/src/ui/feat_copy_engine.v",
+      "git_source_sha256": "f51e3ee5fd4f9eac6aa534f9a66761eb0046c491f6f3093024e88729a5765775",
+      "original_build_sha256": "2beb55255ea4eebdaeaa35d36d61459462fe366020e6006281fe5c46882bdf83",
+      "sha256": "d44561bf23088cbcc0c8e56f8c7072e38aa44a1370aae615e3a4b285d6246d87",
+      "comment_cleanup": true
+    },
+    {
+      "path": "src/ui/feat_page_buf.v",
+      "origin": "instrec_fpga/src/ui/feat_page_buf.v",
+      "git_source_sha256": "bb460faaf124c30add6d21fa079a820bf80fea7ae784fa269f18e1d1c1413d95",
+      "original_build_sha256": "bb460faaf124c30add6d21fa079a820bf80fea7ae784fa269f18e1d1c1413d95",
+      "sha256": "780699c0e47c86ddc7930fd51d1617d88674417fc433b3a651e5a055669d79a2",
+      "comment_cleanup": true
+    },
+    {
+      "path": "sw/rv32/link.ld",
+      "origin": "instrec_fpga/sw/rv32/link.ld",
+      "git_source_sha256": "b6cb35707dd4ac5a164a610f6e120afc483859196d8572e729c643982dd2295e",
+      "original_build_sha256": null,
+      "sha256": "c421f09a67d432fb7334ad23766e7394341772d195134bd3cc203fb6cce5b207",
+      "comment_cleanup": true
+    },
+    {
+      "path": "sw/rv32/main.c",
+      "origin": "instrec_fpga/sw/rv32/main.c",
+      "git_source_sha256": "2fc6e40e48b82f030b7f16d792ef61319ffe203fa6b4df9887a8038d113ff8fd",
+      "original_build_sha256": null,
+      "sha256": "f00514b3aa14ced93a2a1884477a378819951d18867e3765e0cef4f06b4a0a28",
+      "comment_cleanup": true
+    },
+    {
+      "path": "sw/rv32/start.S",
+      "origin": "instrec_fpga/sw/rv32/start.S",
+      "git_source_sha256": "35a48fb5001520e4a17524d795f7a3d8368fce9eff5201b2bb7cb818fa21c137",
+      "original_build_sha256": null,
+      "sha256": "3a566a886a0d65295c07623ca4b57a015c0bdd4454564520fa5d0d1fcfffc124",
+      "comment_cleanup": true
+    }
+  ],
+  "build_packaging_changes": [
+    "Explicit dependency-only full build set; CPU sources moved into src/cpu/core; unused audio PLL omitted",
+    "TCL project-name substitution marker retained",
+    "StopAfter stage matcher accepts commands with arguments, enabling compile-only verification"
+  ]
+}
