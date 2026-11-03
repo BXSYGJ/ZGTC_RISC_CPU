@@ -1,10 +1,16 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-03：新完整系统中文显示用户验收正常，手动复位后重载权重恢复
+
+- 用户确认1497FAF4中文仪表盘、波形/频谱动态都正常，无错位/撕裂/花块反馈，覆盖前条待答显示验收；随后用户按复位。KEY0会清除weight_loader.weight_ok，单纯DDR数据可能残留不能视为权重仍有效，当前尚未Flash自动恢复。
+- 复位后只读8秒UART0，随后无需重烧位流，重新上传691040B/2700帧返回WOK FA0D5236，12秒225B/5轮NPU完成及CPU回读恢复、无TIMEOUT。三份原文/hash记入reports/pcm1808_mel_split_full_board_20261103.json/manual_reset_recovery，旧上板证据保留。当前板上仍1497FAF4且权重已恢复；不需用户改线/重插/再次复位。
+- 核心时序FAIL与准确率未验收边界不变；后续继续长路径收敛，Flash固化/自动权重加载将解决复位后手动上传需求。无PDS/无下载器服务操作，XSY仅instrec报告/文档更新。
+
 ## 2026-11-03 17:17：1497FAF4 完整 PCM1808 系统已烧入，WOK 与连续 CPU/NPU 回读通过
 
 - 用户确认下载器恢复后，FTDI在线，复用JS9040/65420正常program，既有cfg46156保持；done1/CRC0。板上当前为新源完整1497FAF47B83B64A62027C38B6BF94D12112002C250FC5278C3C28AD2FA46ABE，不再是独立诊断。烧录捕获RV32 BOOT/MMIO OK/ISA OK、DDR3 SELFTEST/DDROK；启动时DDR WAIT是自检前瞬时状态，随后DDROK。一次命令相对路径重复前缀导致下载前拒绝，已改正确工作目录后成功；原失败记录保留build/board-pcm1808-mel-split-20261103/invocation_path_error_before_program.json。
 - 691040B八类权重2700数据帧上传PASS，WOK FA0D5236。随后30秒450B串口记录包含10轮NPU完成/真实CPU读取ACK再排队，cycles32358425–32362149，全部top1=6，无TIMEOUT。last_class7/last_p0是末类寄存，不是top1置信度。生产启动受完整Mel窗门控；本整机位流未另测采样率/输入幅值，不能把既有独立诊断采样率或相同分类输出当本次准确率证明。证据reports/pcm1808_mel_split_full_board_20261103.json，串口/上传原文和hash均保留。
-- 已询问用户当前中文HDMI仪表盘、波形/频谱动态与花块/撕裂情况，待回复，不重复旧fallback验收。PCM1808接线保持；未恢复任何旧输出BCK/LRCK位流。没有Flash固化操作。
+- 已询问用户当前中文HDMI仪表盘、波形/频谱动态与花块/撕裂情况，后来已确认都正常（见顶部复位恢复记录），不重复旧fallback验收。PCM1808接线保持；未恢复任何旧输出BCK/LRCK位流。没有Flash固化操作。
 - 当前内部十表仍仅核心慢角setup FAIL -1.071ns/338端点；上板跑通不等于时序收敛或长期稳定。下一步修复npu_m1_bridge完成控制到weight_read_aligner CE及FC1 requant控制长路径，相关无reset/全层golden验证后新源唯一资源门控与限时PNR；不能复用本次map称修复。PDS/monitor均已退出，工作维持XSY，保护CPU用户diff/PCB/obj_dir/group5资产。五类双头和Flash后续任务保留。
 
 ## 2026-11-03 17:04：PCM1808 完整整机位流生成，最终时序仍 FAIL；下载器缺席未烧录

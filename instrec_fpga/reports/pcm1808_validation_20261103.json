@@ -1405,7 +1405,7 @@
         "audio_input_rate_verified_in_this_full_bit": false,
         "note": "Reports reflect complete Mel-window NPU launches and CPU ACK/requeue; last_p is final class7 probability, not top1 confidence. Current source playback/screen awaits user feedback."
       },
-      "hdmi_user_feedback": "pending",
+      "hdmi_user_feedback": "User confirmed dashboard/waveform/spectrum normal, no reported tearing/artifacts before manual reset.",
       "static_timing_passed": false,
       "evidence": [
         {
@@ -1428,7 +1428,41 @@
           "bytes": 441,
           "sha256": "cf4ba0110fdcbced63422b407cc9a4219ec7eef76260a1a1dd1fceed9f3bf85d"
         }
-      ]
+      ],
+      "manual_reset_recovery": {
+        "reset_clears_weight_ok": true,
+        "pre_upload_capture_seconds": 8,
+        "pre_upload_uart_bytes": 0,
+        "upload_reply": "WOK FA0D5236",
+        "upload_passed": true,
+        "post_upload_capture_seconds": 12,
+        "completed_cpu_reports": 5,
+        "top1": [
+          6,
+          6,
+          6,
+          6,
+          6
+        ],
+        "bitstream_reprogrammed": false,
+        "evidence": [
+          {
+            "path": "build\\board-pcm1808-mel-split-20261103\\after_user_reset.txt",
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "path": "build\\board-pcm1808-mel-split-20261103\\weight_upload_after_user_reset.txt",
+            "bytes": 1010,
+            "sha256": "1997d6cb498938115d2d4d67a9ca2c5ed70b34f9cf8b35f37c484f0e44bc7099"
+          },
+          {
+            "path": "build\\board-pcm1808-mel-split-20261103\\inference_after_user_reset.txt",
+            "bytes": 225,
+            "sha256": "aa3082b79802df26d7add4e7ea245901e5292ea8229f608e7041e2ece0eb2ccf"
+          }
+        ]
+      }
     }
   }
 }
