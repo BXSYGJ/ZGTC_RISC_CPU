@@ -1,4 +1,3 @@
-// feat_copy_engine.v
 module feat_copy_engine #(
     parameter integer SOURCE_FRAME_MAJOR = 0
 ) (

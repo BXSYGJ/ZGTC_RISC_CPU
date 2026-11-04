@@ -1,4 +1,3 @@
-// feat_page_buf.v
 module feat_page_buf (
     input  wire        core_clk,
     input  wire        core_rst_n,

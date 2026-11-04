@@ -1,4 +1,3 @@
-// bars_data.v
 module bars_data (
     input wire core_clk, core_rst_n,
     input wire probs_valid,

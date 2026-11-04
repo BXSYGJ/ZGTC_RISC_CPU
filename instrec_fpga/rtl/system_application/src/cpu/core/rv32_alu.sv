@@ -1,4 +1,3 @@
-// rv32_alu.sv
 `timescale 1ns/1ps
 module rv32_alu (
     input wire [31:0] operand_a,

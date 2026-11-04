@@ -37,7 +37,7 @@ module rv32_peripherals #(
     reg [7:0] gpio_meta,gpio_sync,gpio_previous,gpio_enable,gpio_pending;
     reg [1:0] uart_control,uart_errors;
     reg [63:0] timer_compare;
-    // Native64-write/8-read snapshot storage; actual vendor timing model is required in simulation.
+
     reg [31:0] rsp_data_scalar;
     reg [31:0] snapshot_tail;
     reg snapshot_valid,snapshot_response_selected;
@@ -104,8 +104,7 @@ module rv32_peripherals #(
             endcase
         end
     end
-    // Compare the values committed on this edge, including masked MMIO writes.
-    // No timer state, response timing, interrupt latency, or capacity changes.
+
     wire timer_interrupt_next=timer_value_next>=timer_compare_next;
     rv32_fifo tx_fifo(.clk(clk),.rst_n(rst_n),.in_valid(request_fire && uart_write),.in_ready(tx_fifo_ready),.in_data(req_data[7:0]),
         .out_valid(uart_tx_valid),.out_ready(uart_tx_ready),.out_data(uart_tx_data),.count(tx_count));

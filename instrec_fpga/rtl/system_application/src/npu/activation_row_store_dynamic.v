@@ -1,4 +1,3 @@
-// activation_row_store_dynamic.v
 module activation_row_store_dynamic (
     input wire clk, rst_n, start, read_mode, row_credit,
     input wire [1:0] cfg_layer, input wire [31:0] cfg_base,

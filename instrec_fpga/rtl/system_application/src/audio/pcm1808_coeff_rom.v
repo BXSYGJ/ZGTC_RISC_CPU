@@ -1,4 +1,3 @@
-// pcm1808_coeff_rom.v
 module pcm1808_coeff_rom (
     input wire clk, input wire [7:0] phase, input wire [6:0] tap,
     output wire signed [15:0] coeff

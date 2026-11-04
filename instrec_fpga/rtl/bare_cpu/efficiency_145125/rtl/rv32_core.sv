@@ -114,10 +114,7 @@ module rv32_core #(
     wire mem_flush=mem_fire && (mem_fault || mem_mret || mem_fence_i || (!mem_early_redirect && mem_prediction_miss));
     wire [31:0] memory_redirect_pc=mem_fault ? trap_target : mem_next_pc;
     wire [31:0] redirect_pc=mem_flush ? memory_redirect_pc : ex_redirect_candidate ? early_next : id_zero_next;
-    // Compute companion addresses before late pipeline-capacity arbitration.
-    // Every addition is 32-bit, including carry beyond FETCH_ADDRESS_BITS.
-    // Preserve the per-source companion carry before late redirect selection.
-    // Only the addressable bits plus overflow are kept, avoiding unused tails.
+
     localparam integer PAIR_PRECOMPUTE_BITS=FETCH_ADDRESS_BITS<32 ? FETCH_ADDRESS_BITS+1 : 32;
     wire [31:0] memory_redirect_pair_full={memory_redirect_pc[31:2],2'b0}+32'd4;
     (* syn_keep=1 *) wire [PAIR_PRECOMPUTE_BITS-1:0] memory_redirect_pair_kept=memory_redirect_pair_full[PAIR_PRECOMPUTE_BITS-1:0];
@@ -175,9 +172,7 @@ module rv32_core #(
     wire ex_redirect_without_irq=ex_fire_without_irq && !early_local_exception && !early_load_dependency &&
         (ex_decode.is_branch || ex_decode.is_jal) && (early_taken ? relative_prediction_miss : sequential_prediction_miss);
     wire ex_redirect=!interrupt_pending && ex_redirect_without_irq;
-    // Address preselection only: actual redirect and transfer enables stay unchanged.
-    // An ID redirect cannot coincide with this candidate: if EX can transfer,
-    // its redirect suppresses id_fire; otherwise the occupied EX blocks id_fire.
+
     wire ex_redirect_candidate=ex_valid && !interrupt_pending && !early_local_exception &&
         !early_load_dependency && (ex_decode.is_branch || ex_decode.is_jal) &&
         (early_taken ? relative_prediction_miss : sequential_prediction_miss);
@@ -189,15 +184,11 @@ module rv32_core #(
         !mem_flush && !frontend_barrier;
     wire id_fire=interrupt_pending ? id_fire_with_irq : id_fire_without_irq;
     wire [1:0] unused_early_control_observation={ex_ready,early_exception};
-    // ID operands read the live register file with explicit current-WB bypass.
-    // Pending EX/MEM writes exclude early resolution; normal EX execution remains.
+
     wire id_zero_hazard=(ex_valid && ex_decode.writes_rd && ex_rd!=0 &&
         (ex_rd==id_rs1 || ex_rd==id_rs2)) ||
         (mem_valid && mem_writes && mem_rd!=0 && (mem_rd==id_rs1 || mem_rd==id_rs2));
-    // The ID redirect is suppressed when an older load is still forwarding
-    // data into EX.  In the remaining cases the address low bits are already
-    // available in the latched EX operand; use only the low two-bit add here
-    // instead of importing the full D-cache/effective-address cone.
+
     wire [1:0] id_early_address_lsb=ex_operand_a[1:0]+ex_decode.immediate[1:0];
     wire id_early_data_misaligned=(ex_decode.is_load || ex_decode.is_store) &&
         !early_load_dependency &&
@@ -213,7 +204,7 @@ module rv32_core #(
         !id_error && !id_decode.illegal && !id_pc[0] && (ENABLE_C!=0 || !id_pc[1]) &&
         id_instruction[6:0]==7'h63 && id_instruction[14:13]==2'b00 &&
         (id_rs1==0 || id_rs2==0);
-    // Unreset metadata is observable only for written registers; current WB wins.
+
     (* syn_ramstyle="lut_ram" *) reg register_zero[0:31];
     always @(posedge clk) if(trace_write) register_zero[wb_rd]<=wb_data_zero;
     wire id_value_a_zero=(trace_write && wb_rd==id_rs1) ? wb_data_zero :
@@ -222,8 +213,7 @@ module rv32_core #(
         !id_register_b_valid || register_zero[id_rs2];
     wire id_zero_zero=id_rs1==0 ? (id_rs2==0 || id_value_b_zero) : id_value_a_zero;
     wire id_zero_taken=id_zero_zero ^ id_instruction[12];
-    // ID early resolution only accepts legal BEQ/BNE instructions, including
-    // normalized compressed branches. B-immediate wiring bypasses generic decode.
+
     wire [31:0] id_zero_branch_immediate={{19{id_instruction[31]}},id_instruction[31],
         id_instruction[7],id_instruction[30:25],id_instruction[11:8],1'b0};
     wire [31:0] id_zero_target=id_pc+id_zero_branch_immediate;
@@ -233,9 +223,7 @@ module rv32_core #(
         !(id_zero_taken && (id_zero_target[0] || (ENABLE_C==0 && id_zero_target[1])));
     wire id_zero_redirect=id_zero_resolve &&
         (id_zero_taken ? id_prediction!=id_zero_target : id_prediction!=id_zero_fallthrough);
-    // Address-only candidate: remove EX redirect suppression before combining
-    // redirects, because an EX redirect already selects the redirect address.
-    // Architectural fire, redirect and flush enables retain their original logic.
+
     wire id_address_fire=id_valid && (!ex_valid || ex_fire_without_irq) &&
         !mem_flush && !frontend_barrier;
     wire id_zero_address_pair=id_address_fire && !interrupt_pending && !id_zero_hazard &&
@@ -314,8 +302,7 @@ module rv32_core #(
         compare_next_a=ex_ready ? id_operand_a : forwarded_a;
         compare_next_b=ex_ready ? id_operand_b : forwarded_b;
     end
-    // One comparison bank follows the existing forwarding muxes.
-    // Early redirects remain inhibited for outstanding load dependencies.
+
     wire [2:0] early_result=operand_relation(forwarded_a,forwarded_b);
     wire [2:0] early_condition_select={ex_instruction[14:13]==2'b00,ex_instruction[14:13]==2'b11,ex_instruction[14:13]==2'b10};
     wire early_selected_condition=|(early_result & early_condition_select);
@@ -470,7 +457,7 @@ module rv32_core #(
     wire frontend_buffered_valid;
     wire [31:0] frontend_buffered_instruction;
     wire [2:0] frontend_buffered_length;
-    // Direct jumps carry their target in the instruction; reserve BTB entries for dynamic control.
+
     wire frontend_direct_c=frontend_buffered_length==3'd2 && frontend_buffered_instruction[1:0]==2'b01 &&
         (frontend_buffered_instruction[15:13]==3'b001 || frontend_buffered_instruction[15:13]==3'b101);
     wire frontend_direct_jal=frontend_buffered_valid && (frontend_direct_c ||
@@ -554,8 +541,7 @@ module rv32_core #(
         branch_taken=ex_decode.is_jal || ex_decode.is_jalr;
         if(ex_decode.is_branch) begin
             if(LOAD_USE_BUBBLE!=0) begin
-                // Reuse the relation already selected for early resolution.
-                // Equality branches retain their same-cycle load bypass.
+
                 if(equality_branch && early_load_dependency)
                     branch_taken=(branch_operand_a==branch_operand_b)^ex_instruction[12];
                 else

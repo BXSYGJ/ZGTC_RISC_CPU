@@ -1,4 +1,3 @@
-// uart_debug.v
 module uart_debug (
     input  wire        clk,
     input  wire        rst_n,

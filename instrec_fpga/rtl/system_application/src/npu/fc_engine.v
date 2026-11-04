@@ -1,4 +1,3 @@
-// fc_engine.v
 module fc_engine #(
     parameter CIN    = 256,
     parameter COUT   = 128,

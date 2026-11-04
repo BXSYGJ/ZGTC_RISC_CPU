@@ -1,4 +1,3 @@
-// npu_top.v
 module npu_top #(
 
     parameter FEATURE_FRAME_MAJOR = 0

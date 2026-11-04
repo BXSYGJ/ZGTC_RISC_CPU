@@ -1,4 +1,3 @@
-// softmax_top.v
 module softmax_top #(
     parameter signed [31:0] S_Q15 = 32'sd9197
 ) (

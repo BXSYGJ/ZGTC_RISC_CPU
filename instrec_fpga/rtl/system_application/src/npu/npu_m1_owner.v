@@ -1,4 +1,3 @@
-// npu_m1_owner.v
 module npu_m1_owner(
  input wire clk,rst_n,loader_allowed,
  input wire l_valid,input wire[36:0]l_cmd,input wire[255:0]l_wdata,input wire l_rd_ready,

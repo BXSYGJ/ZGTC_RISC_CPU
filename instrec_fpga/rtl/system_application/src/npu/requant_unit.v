@@ -1,4 +1,3 @@
-// requant_unit.v
 module requant_unit (
 
     input  wire               clk,

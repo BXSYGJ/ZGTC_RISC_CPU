@@ -1,4 +1,3 @@
-// fft2048_sdf.v
 `timescale 1ns / 1ps
 
 module fft2048_sdf (

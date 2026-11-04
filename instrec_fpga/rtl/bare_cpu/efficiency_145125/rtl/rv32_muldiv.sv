@@ -40,7 +40,7 @@ module rv32_muldiv #(parameter integer PRECOMPUTE=0) (
     wire negative_a=signed_division && req_operand_a[31];
     wire negative_b=signed_division && req_operand_b[31];
     wire [32:0] trial_remainder={remainder[31:0],quotient[31]};
-    // The extra leading bit exposes borrow while retaining the full trial value.
+
     wire [33:0] trial_difference={1'b0,trial_remainder}-{2'b0,divisor};
     wire unused_trial_difference_high=trial_difference[32];
     wire subtract_divisor=!trial_difference[33];

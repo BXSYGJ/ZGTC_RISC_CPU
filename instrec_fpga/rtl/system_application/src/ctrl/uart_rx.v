@@ -1,4 +1,3 @@
-// uart_rx.v
 module uart_rx #(
 
     parameter integer BAUD_DIV = 1085

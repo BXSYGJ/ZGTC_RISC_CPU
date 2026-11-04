@@ -1,4 +1,3 @@
-// stft_framer.v
 module stft_framer #(
     parameter integer N_FFT          = 2048,
     parameter integer HOP            = 512,

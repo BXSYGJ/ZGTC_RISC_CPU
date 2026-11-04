@@ -1,4 +1,3 @@
-// rv32_muldiv.sv
 `timescale 1ns/1ps
 module rv32_muldiv (
     input wire clk,

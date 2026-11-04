@@ -1,4 +1,3 @@
-// i2s_slave_rx.v
 module i2s_slave_rx #(
     parameter TIMEOUT_CYCLES = 216000
 )(

@@ -1,4 +1,3 @@
-// hdmi_tx_if.v
 `timescale 1ns / 1ps
 
 module hdmi_tx_if #(

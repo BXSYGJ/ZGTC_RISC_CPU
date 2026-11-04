@@ -1,42 +1,32 @@
-
-    
-////////////////////////////////////////////////////////////////
-// Copyright (c) 2019 PANGO MICROSYSTEMS, INC
-// ALL RIGHTS REVERVED.
-////////////////////////////////////////////////////////////////
-//Description:
-//Author:  wxxiao
-//History: v1.0
-////////////////////////////////////////////////////////////////
 `timescale 1ns/1ps
 module  ddr3_test_ddrphy_top  #(
 
   parameter         MEM_TYPE     =  "DDR3"   ,
- 
+
   parameter [7:0]   TMRD         =  4/4   ,
 
   parameter [7:0]   TMOD         =  12/4   ,
-  
+
   parameter [7:0]   TXPR         =  39     ,
-  
+
   parameter [7:0]   TRP          =  2     ,
-  
+
   parameter [7:0]   TRFC         =  38     ,
-    
+
   parameter [7:0]   TRCD         =  2     ,
-  
+
   parameter MEM_ROW_WIDTH        =  15     ,
 
   parameter MEM_BANK_WIDTH       =  3     ,
-  
+
   parameter MEM_DQ_WIDTH         =  32     ,
-  
+
   parameter MEM_DM_WIDTH         =  4     ,
-  
-  parameter MEM_DQS_WIDTH        =  4 
-           
+
+  parameter MEM_DQS_WIDTH        =  4
+
 )(
-//clk
+
   input                              ref_clk              ,
   input                              ddr_rstn             ,
   output                             pll_lock             ,
@@ -45,8 +35,7 @@ module  ddr3_test_ddrphy_top  #(
   output                             rst_gpll_lock        ,
   output                             ddrphy_cpd_lock      ,
   output                             ddrphy_sysclk        ,
- 
-//dfi                                           
+
   input  [4*MEM_ROW_WIDTH-1:0]       dfi_address          ,
   input  [4*MEM_BANK_WIDTH-1:0]      dfi_bank             ,
   input  [3:0]                       dfi_cs_n             ,
@@ -66,7 +55,6 @@ module  ddr3_test_ddrphy_top  #(
   output                             dfi_init_complete    ,
   output                             dfi_error            ,
 
-
   output                             mem_cs_n             ,
 
   output                             mem_rst_n            ,
@@ -75,7 +63,7 @@ module  ddr3_test_ddrphy_top  #(
   output                             mem_cke              ,
   output                             mem_ras_n            ,
   output                             mem_cas_n            ,
-  output                             mem_we_n             , 
+  output                             mem_we_n             ,
   output                             mem_odt              ,
   output [MEM_ROW_WIDTH-1:0]         mem_a                ,
   output [MEM_BANK_WIDTH-1:0]        mem_ba               ,
@@ -84,29 +72,27 @@ module  ddr3_test_ddrphy_top  #(
   inout [MEM_DQ_WIDTH-1:0]           mem_dq               ,
   output [MEM_DM_WIDTH-1:0]          mem_dm               ,
 
-  //debug
   input                              dbg_gate_start      ,
   input                              dbg_cpd_start       ,
   input                              dbg_ddrphy_rst_n    ,
   input                              dbg_gpll_scan_rst   ,
-  //input                              dbg_dll_update_en   ,
-  
-  input                              force_samp_position  ,  
-  input                              samp_position_dyn_adj,  
-  input [8*MEM_DQS_WIDTH-1:0]        init_samp_position_even,
-  input [8*MEM_DQS_WIDTH-1:0]        init_samp_position_odd, 
 
-  input                              wrlvl_en             ,  
-  input [8*MEM_DQS_WIDTH-1:0]        init_wrlvl_step      ,  
+  input                              force_samp_position  ,
+  input                              samp_position_dyn_adj,
+  input [8*MEM_DQS_WIDTH-1:0]        init_samp_position_even,
+  input [8*MEM_DQS_WIDTH-1:0]        init_samp_position_odd,
+
+  input                              wrlvl_en             ,
+  input [8*MEM_DQS_WIDTH-1:0]        init_wrlvl_step      ,
   input                              ck_dly_en            ,
   input [7:0]                        init_ck_dly_step     ,
 
   input                              wrcal_position_dyn_adj,
-  input [8*MEM_DQS_WIDTH-1:0]        init_wrcal_position  , 
+  input [8*MEM_DQS_WIDTH-1:0]        init_wrcal_position  ,
 
-  input                              force_read_clk_ctrl  ,  
-  input [3*MEM_DQS_WIDTH-1:0]        init_read_clk_ctrl   ,  
-  input [4*MEM_DQS_WIDTH-1:0]        init_slip_step       ,  
+  input                              force_read_clk_ctrl  ,
+  input [3*MEM_DQS_WIDTH-1:0]        init_read_clk_ctrl   ,
+  input [4*MEM_DQS_WIDTH-1:0]        init_slip_step       ,
 
   output [33:0]                      debug_calib_ctrl     ,
   output [17*MEM_DQS_WIDTH -1:0]     dbg_slice_status     ,
@@ -114,46 +100,44 @@ module  ddr3_test_ddrphy_top  #(
   output [69*MEM_DQS_WIDTH -1:0]     debug_data           ,
   output [1:0]                       dbg_dll_upd_state    ,
   output [8:0]                       debug_gpll_dps_phase ,
- 
+
   output [2:0]                       dbg_rst_dps_state   ,
   output [5:0]                       dbg_tran_err_rst_cnt,
   output                             dbg_ddrphy_init_fail,
-  
+
   input                              debug_cpd_offset_adj,
   input                              debug_cpd_offset_dir,
   input [9:0]                        debug_cpd_offset    ,
-  output [9:0]                       debug_dps_cnt_dir0  , 
+  output [9:0]                       debug_dps_cnt_dir0  ,
   output [9:0]                       debug_dps_cnt_dir1  ,
 
   output [7:0]                       ck_dly_set_bin      ,
   output                             ck_step_ov_warning  ,
   output [MEM_DQS_WIDTH-1:0]         wl_step_ov_warning  ,
- 
+
   output                             align_error         ,
   output [3:0]                       debug_rst_state     ,
-  output [3:0]                       debug_cpd_state     
+  output [3:0]                       debug_cpd_state
 
 );
 
-localparam real CLKIN_FREQ  =  125.0   ; 
+localparam real CLKIN_FREQ  =  125.0   ;
 
 localparam GPLL_BANDWIDTH = "HIGH";
 
 localparam PPLL_BANDWIDTH = "HIGH";
 
-
 localparam DDR_TYPE = (MEM_TYPE == "DDR3") ? 2'b00 : (MEM_TYPE == "DDR2") ? 2'b01 : (MEM_TYPE == "LPDDR") ? 2'b10 : 2'b00;
 localparam SC_LDO_CTRL  =  2'b00     ;
-localparam SC_DLY_2X    =  1'b1      ;  //1'b0  1x delay chain, 1'b1 2x delay chain 
+localparam SC_DLY_2X    =  1'b1      ;
 localparam REF_CNT   = (DDR_TYPE == 2'b10) ? 8'd2 : 8'd9;
-localparam EYECAL_EN    =  1         ; 
+localparam EYECAL_EN    =  1         ;
 
 localparam PPLL_IDIV    =  1         ;
 
 localparam PPLL_FDIV    =  16         ;
 
 localparam PPLL_ODIVPHY =  2         ;
-
 
 localparam TEST_DATA_PATTERN0  = 64'h55_aa_55_aa_08_f7_08_f7;
 localparam TEST_DATA_PATTERN1  = 64'h7f_9f_7f_9f_80_fe_80_fe;
@@ -172,14 +156,13 @@ localparam      GPLL_IDIV  = PPLL_IDIV;
 localparam real GPLL_FDIV  = PPLL_FDIV/2.0;
 localparam      GPLL_DUTYF = PPLL_FDIV/2;
 localparam real GPLL_ODIV0 = PPLL_ODIVPHY*4.0;
-localparam      GPLL_DUTY0 = PPLL_ODIVPHY*4; 
+localparam      GPLL_DUTY0 = PPLL_ODIVPHY*4;
 localparam      GPLL_ODIV1 = PPLL_ODIVPHY*8;
 localparam      GPLL_INTERNAL_FB = "CLKOUTF" ;
 
-//MR0_DDR3
 localparam [0:0] DDR3_PPD      = 1'b1;
 
-localparam [2:0] DDR3_WR       = 3'd4; 
+localparam [2:0] DDR3_WR       = 3'd4;
 
 localparam [0:0] DDR3_DLL      = 1'b1;
 localparam [0:0] DDR3_TM       = 1'b0;
@@ -189,11 +172,11 @@ localparam [3:0] DDR3_CL       = 4'd6;
 
 localparam [1:0] DDR3_BL       = 2'b00;
 localparam [15:0] MR0_DDR3     = {3'b000, DDR3_PPD, DDR3_WR, DDR3_DLL, DDR3_TM, DDR3_CL[3:1], DDR3_RBT, DDR3_CL[0], DDR3_BL};
-//MR1_DDR3
+
 localparam [0:0] DDR3_QOFF     = 1'b0;
 localparam [0:0] DDR3_TDQS     = 1'b0;
 
-localparam [2:0] DDR3_RTT_NOM  = 3'b001;       
+localparam [2:0] DDR3_RTT_NOM  = 3'b001;
 
 localparam [0:0] DDR3_LEVEL    = 1'b0;
 
@@ -203,7 +186,7 @@ localparam [1:0] DDR3_AL       = 2'd2;
 
 localparam [0:0] DDR3_DLL_EN   = 1'b0;
 localparam [15:0] MR1_DDR3 = {1'b0, DDR3_QOFF, DDR3_TDQS, 1'b0, DDR3_RTT_NOM[2], 1'b0, DDR3_LEVEL, DDR3_RTT_NOM[1], DDR3_DIC[1], DDR3_AL, DDR3_RTT_NOM[0], DDR3_DIC[0], DDR3_DLL_EN};
-//MR2_DDR3
+
 localparam [1:0] DDR3_RTT_WR   = 2'b00;
 localparam [0:0] DDR3_SRT      = 1'b0;
 localparam [0:0] DDR3_ASR      = 1'b0;
@@ -212,34 +195,32 @@ localparam [2:0] DDR3_CWL      = 6 - 5;
 
 localparam [2:0] DDR3_PASR     = 3'b000;
 localparam [15:0] MR2_DDR3     = {5'b00000, DDR3_RTT_WR, 1'b0, DDR3_SRT, DDR3_ASR, DDR3_CWL, DDR3_PASR};
-//MR3_DDR3
+
 localparam [0:0] DDR3_MPR      = 1'b0;
 localparam [1:0] DDR3_MPR_LOC  = 2'b00;
 localparam [15:0] MR3_DDR3     = {13'b0, DDR3_MPR, DDR3_MPR_LOC};
 
-//MR_DDR2
 localparam [2:0] DDR2_BL       = 3'b011;
-localparam [0:0] DDR2_BT       = 1'b0; //Sequential
+localparam [0:0] DDR2_BT       = 1'b0;
 
 localparam [2:0] DDR2_CL       = 3'd4;
 
 localparam [0:0] DDR2_TM       = 1'b0;
 localparam [0:0] DDR2_DLL      = 1'b1;
 
-localparam [2:0] DDR2_WR       = 3'd5; 
+localparam [2:0] DDR2_WR       = 3'd5;
 
 localparam [0:0] DDR2_PD       = 1'b0;
 localparam [15:0]  MR_DDR2     = {3'b000,DDR2_PD,DDR2_WR,DDR2_DLL,DDR2_TM,DDR2_CL,DDR2_BT,DDR2_BL};
 
-//EMR1_DDR2
 localparam [0:0] DDR2_DLL_EN      = 1'b0;
 
 localparam [0:0] DDR2_DIC      = 1'b0;
 
-localparam [1:0] DDR2_RTT_NOM  = 2'b01;     
+localparam [1:0] DDR2_RTT_NOM  = 2'b01;
 
-localparam [2:0] DDR2_AL       = 3'd2; 
-  
+localparam [2:0] DDR2_AL       = 3'd2;
+
 localparam [2:0] DDR2_OCD      = 3'b000;
 localparam [0:0] DDR2_DQS      = 1'b0;
 localparam [0:0] DDR2_RDQS     = 1'b0;
@@ -248,8 +229,7 @@ localparam [15:0] EMR1_DDR2    = {3'b000,DDR2_QOFF,DDR2_RDQS,DDR2_DQS,DDR2_OCD,D
 
 localparam [15:0] EMR2_DDR2    =16'h0000;
 localparam [15:0] EMR3_DDR2    =16'h0000;
- 
-//MR_LPDDR
+
 localparam [2:0] LPDDR_BL      = 3'b011;
 localparam [0:0] LPDDR_BT      = 1'b0;
 
@@ -257,32 +237,28 @@ localparam [2:0] LPDDR_CL      = 3'd2;
 
 localparam [15:0] MR_LPDDR    = {9'd0,LPDDR_CL,LPDDR_BT,LPDDR_BL};
 
-//EMR_LPDDR
-
 localparam [2:0] LPDDR_DS      = 3'b000;
 
 localparam [15:0] EMR_LPDDR    = {8'd0,LPDDR_DS,5'd0};
 
 localparam [9:0]   TZQINIT      =  10'd128 ;
 
-
 localparam DFI_CLK_PERIOD =  8000;
 
-
-`ifdef IPS_DDR_SPEEDUP_SIM                                                  
+`ifdef IPS_DDR_SPEEDUP_SIM
 localparam T200US         = (210*1000*1000 / DFI_CLK_PERIOD) / 100;
-`else                                                              
-localparam T200US         = (210*1000*1000 / DFI_CLK_PERIOD);      
+`else
+localparam T200US         = (210*1000*1000 / DFI_CLK_PERIOD);
 `endif
 
-`ifdef IPS_DDR_SPEEDUP_SIM                                                  
+`ifdef IPS_DDR_SPEEDUP_SIM
 localparam T500US         = (510*1000*1000 / DFI_CLK_PERIOD) / 100;
-`else                                                              
-localparam T500US         = (510*1000*1000 / DFI_CLK_PERIOD);      
+`else
+localparam T500US         = (510*1000*1000 / DFI_CLK_PERIOD);
 `endif
 
 localparam T400NS         = 410*1000 / DFI_CLK_PERIOD;
-                                  
+
 wire [2:0]                      ddrphy_ioclk_gate            ;
 wire                            dll_lock                     ;
 wire                            dll_update_n                 ;
@@ -365,9 +341,9 @@ wire [3:0]                      phy_odt                      ;
 wire [3:0]                      phy_ck                       ;
 wire                            phy_rst                      ;
 
-wire                            phy_sysclk_fb                ;  
+wire                            phy_sysclk_fb                ;
 wire                            phy_ioclk_fb                 ;
-//wire                            phy_pll_lock                 ;
+
 wire                            ddrphy_cpd_rstn              ;
 wire                            ddrphy_cpd_up_dnb            ;
 wire                            ddrphy_cpd_done              ;
@@ -375,9 +351,9 @@ wire                            ddrphy_cpd_start             ;
 wire                            gpll_dps_en                  ;
 wire                            gpll_dps_dir                 ;
 wire                            gpll_dps_done                ;
-//wire                            gpll_lock                    ;
-wire                            dll_freeze                   ; 
-wire                            dll_freeze_syn               ; 
+
+wire                            dll_freeze                   ;
+wire                            dll_freeze_syn               ;
 wire                            dll_tran_update_en           ;
 wire                            ddrphy_update                ;
 wire                            ddrphy_update_done           ;
@@ -409,15 +385,9 @@ wire                            rst_clk_adj_start            ;
 wire                            rst_clk_dps_done             ;
 wire                            rst_clk_adj_done             ;
 wire                            rst_clk_adj_dir              ;
-wire                            rst_clk_adj_en               ;      
+wire                            rst_clk_adj_en               ;
 
 assign pll_lock = phy_pll_lock & gpll_lock;
-
-//GTP_CLKBUFG u_refclk_bufg
-//(
-//    .CLKOUT                     (g_refclk                     ),
-//    .CLKIN                      (ref_clk                      )
-//);
 
 GTP_CLKBUFM u_clkbufm
 (
@@ -438,7 +408,7 @@ u_ips2l_ddrphy_rst_clk_phase_adj
     .cpd_state                  (dbg_rst_dps_state            ),
     .rst_clk_adj_done           (rst_clk_adj_done             ),
     .rst_clk_adj_dir            (rst_clk_adj_dir              ),
-    .rst_clk_adj_en             (rst_clk_adj_en               )        
+    .rst_clk_adj_en             (rst_clk_adj_en               )
 );
 
 ips2l_ddrphy_gpll_v1_3 #(
@@ -449,9 +419,9 @@ ips2l_ddrphy_gpll_v1_3 #(
     .DUTYF                      (RST_GPLL_DUTYF               ),
     .ODIV0                      (RST_GPLL_ODIV0               ),
     .ODIV1                      (RST_GPLL_ODIV1               ),
-    .DUTY0                      (RST_GPLL_DUTY0               ), 
+    .DUTY0                      (RST_GPLL_DUTY0               ),
     .STATIC_PHASE0              (0                            ),
-    .INTERNAL_FB                (RST_GPLL_INTERNAL_FB         )    
+    .INTERNAL_FB                (RST_GPLL_INTERNAL_FB         )
 )rst_clk_gpll(
     .clk_in0                    (ref_clk                      ),
     .pll_rst                    (~ddr_rstn                    ),
@@ -464,7 +434,7 @@ ips2l_ddrphy_gpll_v1_3 #(
     .clkout1                    (                             ),
     .clkout1n                   (                             ),
     .dps_done                   (rst_clk_dps_done             ),
-    .pll_lock                   (rst_gpll_lock                )    
+    .pll_lock                   (rst_gpll_lock                )
 );
 
 GTP_CLKBUFG u_rst_clk_bufg
@@ -491,9 +461,9 @@ ips2l_ddrphy_gpll_v1_3 #(
     .DUTYF                      (GPLL_DUTYF                   ),
     .ODIV0                      (GPLL_ODIV0                   ),
     .ODIV1                      (GPLL_ODIV1                   ),
-    .DUTY0                      (GPLL_DUTY0                   ), 
+    .DUTY0                      (GPLL_DUTY0                   ),
     .STATIC_PHASE0              (0                            ),
-    .INTERNAL_FB                (GPLL_INTERNAL_FB             )   
+    .INTERNAL_FB                (GPLL_INTERNAL_FB             )
 )ddrphy_gpll(
     .clk_in0                    (ref_clk                      ),
     .pll_rst                    (phy_pll_rst                  ),
@@ -506,24 +476,23 @@ ips2l_ddrphy_gpll_v1_3 #(
     .clkout1                    (                             ),
     .clkout1n                   (                             ),
     .dps_done                   (gpll_dps_done                ),
-    .pll_lock                   (gpll_lock                    )    
+    .pll_lock                   (gpll_lock                    )
 );
 
-ips2l_ddrphy_gpll_phase_v1_0 u_ddrphy_gpll_phase 
+ips2l_ddrphy_gpll_phase_v1_0 u_ddrphy_gpll_phase
 (
     .gpll_dps_clk               (rst_clk                      ),
     .ddr_rst_n                  (rst_seq_rstn                 ),
     .gpll_dps_done              (gpll_dps_done                ),
     .gpll_dps_dir               (gpll_dps_dir                 ),
-    .gpll_dps_phase             (debug_gpll_dps_phase         )       
+    .gpll_dps_phase             (debug_gpll_dps_phase         )
 );
-  
+
 GTP_CLKBUFG u_sysclk_bufg
 (
     .CLKOUT                     (ddrphy_sysclk                ),
     .CLKIN                      (gpll_clkout0                 )
 );
-
 
 GTP_CLKPD u_ddrphy_cpd(
     .FLAG_PD                    (ddrphy_cpd_up_dnb            ),
@@ -550,13 +519,13 @@ ips2l_ddrphy_cpd_lock_v1_0 u_ips2l_ddrphy_cpd_lock
     .ddrphy_sysclk              (ddrphy_sysclk                ),
     .ddrphy_rst_n               (ddrphy_cpd_rstn_synced       ),
     .ddrphy_cpd_up_dnb          (ddrphy_cpd_up_dnb            ),
-    .ddrphy_cpd_lock            (ddrphy_cpd_lock              )       
+    .ddrphy_cpd_lock            (ddrphy_cpd_lock              )
   );
 
 ips2l_ddrphy_cpd_ctrl_v1_3 ddrphy_cpd_ctrl
 (
     .dps_clk                    (rst_clk                      ),
-    .ddr_rstn                   (logic_rstn                   ),  
+    .ddr_rstn                   (logic_rstn                   ),
     .ddrphy_cpd_start           (ddrphy_cpd_start             ),
     .ddrphy_cpd_up_dnb          (ddrphy_cpd_up_dnb            ),
     .ddrphy_cpd_lock            (ddrphy_cpd_lock              ),
@@ -569,31 +538,31 @@ ips2l_ddrphy_cpd_ctrl_v1_3 ddrphy_cpd_ctrl
     .debug_cpd_offset_dir       (debug_cpd_offset_dir         ),
     .debug_cpd_offset           (debug_cpd_offset             ),
     .debug_cpd_state            (debug_cpd_state              ),
-    .debug_dps_cnt_dir0         (debug_dps_cnt_dir0           ), 
-    .debug_dps_cnt_dir1         (debug_dps_cnt_dir1           ) 
+    .debug_dps_cnt_dir0         (debug_dps_cnt_dir0           ),
+    .debug_dps_cnt_dir1         (debug_dps_cnt_dir1           )
 );
-                  
+
  ips2l_ddrphy_reset_ctrl_v1_3  ddrphy_reset_ctrl(
-    .ddr_rstn                   (rst_seq_rstn                 ),                    
+    .ddr_rstn                   (rst_seq_rstn                 ),
     .rst_clk                    (rst_clk                      ),
     .ddrphy_sysclk              (ddrphy_sysclk                ),
     .dll_lock                   (dll_lock                     ),
     .pll_lock                   (pll_lock                     ),
-    //debug
+
     .dbg_gpll_scan_rst          (dbg_gpll_scan_rst            ),
     .dbg_gate_start             (dbg_gate_start               ),
     .dbg_cpd_start              (dbg_cpd_start                ),
     .dbg_ddrphy_rst_n           (dbg_ddrphy_rst_n             ),
-    //
+
     .ddrphy_cpd_done            (ddrphy_cpd_done              ),
-    .ddrphy_cpd_start           (ddrphy_cpd_start             ),   
+    .ddrphy_cpd_start           (ddrphy_cpd_start             ),
     .dll_update_req_rst_ctrl    (dll_update_req_rst_ctrl      ),
-    .dll_update_ack_rst_ctrl    (dll_update_ack_rst_ctrl      ), 
+    .dll_update_ack_rst_ctrl    (dll_update_ack_rst_ctrl      ),
     .dll_tran_update_en         (dll_tran_update_en           ),
     .ddrphy_calib_done          (calib_done                   ),
     .training_error             (dfi_error                    ),
     .logic_rstn                 (logic_rstn                   ),
-    .phy_pll_rst                (phy_pll_rst                  ),   
+    .phy_pll_rst                (phy_pll_rst                  ),
     .rst_clk_adj_start          (rst_clk_adj_start            ),
     .rst_clk_adj_done           (rst_clk_adj_done             ),
     .tran_err_rst_cnt           (dbg_tran_err_rst_cnt         ),
@@ -609,7 +578,7 @@ ips2l_ddrphy_cpd_ctrl_v1_3 ddrphy_cpd_ctrl
  ips2l_ddrphy_dll_update_ctrl_v1_3 ddrphy_dll_update_ctrl(
     .rst_clk                    (rst_clk                      ),
     .ddr_rstn                   (logic_rstn                   ),
-    .dbg_dll_update_en          (1'b0                         ), //dbg_dll_update_en            ),
+    .dbg_dll_update_en          (1'b0                         ),
     .dfi_refresh                (dfi_refresh                  ),
     .dll_update_req_rst_ctrl    (dll_update_req_rst_ctrl      ),
     .dll_update_ack_rst_ctrl    (dll_update_ack_rst_ctrl      ),
@@ -678,7 +647,7 @@ ips2l_ddrphy_gate_update_ctrl_v1_3 #(
     .MEM_DQ_WIDTH               (MEM_DQ_WIDTH                 ),
     .MEM_DM_WIDTH               (MEM_DM_WIDTH                 ),
     .MEM_DQS_WIDTH              (MEM_DQS_WIDTH                )
-  )ddrphy_calib_top(            
+  )ddrphy_calib_top(
     .mc_wl                      (mc_wl                        ),
     .mr0                        (mr0                          ),
     .mr1                        (mr1                          ),
@@ -800,7 +769,7 @@ ips2l_rst_sync_v1_3 #(
 );
 
  ddr3_test_slice_top_v1_10 #(
-    .CLKIN_FREQ                 (CLKIN_FREQ                   ), 
+    .CLKIN_FREQ                 (CLKIN_FREQ                   ),
     .PPLL_BANDWIDTH             (PPLL_BANDWIDTH               ),
     .DDR_TYPE                   (DDR_TYPE                     ),
     .TEST_DATA_PATTERN0         (TEST_DATA_PATTERN0           ),
@@ -818,7 +787,7 @@ ips2l_rst_sync_v1_3 #(
     .MEM_DQ_WIDTH               (MEM_DQ_WIDTH                 ),
     .MEM_DQS_WIDTH              (MEM_DQS_WIDTH                ),
     .MEM_DM_WIDTH               (MEM_DM_WIDTH                 )
- )ddrphy_slice_top(                          
+ )ddrphy_slice_top(
     .mc_rl                      (mc_rl                        ),
     .force_read_clk_ctrl        (force_read_clk_ctrl_syn      ),
     .init_read_clk_ctrl         (init_read_clk_ctrl           ),
@@ -830,13 +799,13 @@ ips2l_rst_sync_v1_3 #(
     .init_wrlvl_step            (init_wrlvl_step              ),
     .ck_dly_en                  (ck_dly_en                    ),
     .init_ck_dly_step           (init_ck_dly_step             ),
-                                               
+
     .ddrphy_sysclk              (ddrphy_sysclk                ),
     .ddrphy_rst_n               (ddrphy_rst_n                 ),
     .phy_refclk                 (pll_refclk                   ),
     .phy_pll_rst                (phy_pll_rst                  ),
-    .clkoutphy_gate             (ddrphy_ioclk_gate            ), 
-    .ioclkdiv_rst               (ddrphy_dqs_rst               ), 
+    .clkoutphy_gate             (ddrphy_ioclk_gate            ),
+    .ioclkdiv_rst               (ddrphy_dqs_rst               ),
     .dll_rstn                   (ddrphy_dll_rst_n             ),
     .dll_freeze                 (dll_freeze_syn               ),
     .dll_update_n               (dll_update_n_syn             ),
@@ -846,33 +815,33 @@ ips2l_rst_sync_v1_3 #(
     .phy_sysclk_fb              (phy_sysclk_fb                ),
     .phy_ioclk_fb               (phy_ioclk_fb                 ),
     .ddrphy_iol_rst             (ddrphy_iol_rst               ),
-    
+
     .ddrphy_dqs_rst             (ddrphy_dqs_rst               ),
     .ddrphy_dqs_training_rstn   (ddrphy_dqs_training_rstn     ),
-                          
+
     .wrlvl_dqs_req              (wrlvl_dqs_req                ),
     .wrlvl_dqs_resp             (wrlvl_dqs_resp               ),
     .wrlvl_error                (wrlvl_error                  ),
     .ck_step_ov_warning         (ck_step_ov_warning           ),
     .wl_step_ov_warning         (wl_step_ov_warning           ),
-                           
+
     .gatecal_start              (gatecal_start                ),
     .gate_check_pass            (gate_check_pass              ),
     .gate_adj_done              (gate_adj_done                ),
     .gate_cal_error             (gate_cal_error               ),
     .gate_move_en               (gate_move_en                 ),
-    .read_pattern_error         (read_pattern_error           ), 
+    .read_pattern_error         (read_pattern_error           ),
 
     .rddata_cal                 (rddata_cal                   ),
     .rddata_check_pass          (rddata_check_pass            ),
     .read_cmd                   (read_cmd                     ),
-    
+
     .dqs_drift                  (dqs_drift                    ),
     .comp_val                   (comp_val                     ),
     .comp_dir                   (comp_dir                     ),
     .dqs_gate_comp_en           (dqs_gate_comp_en             ),
     .dqs_gate_comp_done         (dqs_gate_comp_done           ),
-                          
+
     .init_adj_rdel              (init_adj_rdel                ),
     .adj_rdel_done              (adj_rdel_done                ),
     .rdel_calibration           (rdel_calibration             ),
@@ -882,14 +851,14 @@ ips2l_rst_sync_v1_3 #(
     .rdel_move_done             (rdel_move_done               ),
     .bitslip_ctrl               (bitslip_ctrl                 ),
 
-    .wrcal_position_dyn_adj     (wrcal_position_dyn_adj_syn   ),           
+    .wrcal_position_dyn_adj     (wrcal_position_dyn_adj_syn   ),
     .init_wrcal_position        (init_wrcal_position          ),
     .wrcal_check_pass           (wrcal_check_pass             ),
     .write_calibration          (write_calibration            ),
     .wrcal_move_en              (wrcal_move_en                ),
     .wrcal_move_done            (wrcal_move_done              ),
     .wrcal_error                (wrcal_error                  ),
-                                                              
+
     .eye_calibration            (eye_calibration              ),
     .eyecal_check_pass          (eyecal_check_pass            ),
     .eyecal_move_done           (eyecal_move_done             ),
@@ -898,9 +867,9 @@ ips2l_rst_sync_v1_3 #(
     .read_valid                 (read_valid                   ),
     .o_read_data                (o_read_data                  ),
     .align_error                (align_error                  ),
-    
+
     .ck_dly_set_bin             (ck_dly_set_bin               ),
-          
+
     .phy_wrdata_en              (phy_wrdata_en                ),
     .phy_wrdata_mask            (phy_wrdata_mask              ),
     .phy_wrdata                 (phy_wrdata                   ),
@@ -914,7 +883,6 @@ ips2l_rst_sync_v1_3 #(
     .phy_odt                    (phy_odt                      ),
     .phy_ck                     (phy_ck                       ),
     .phy_rst                    (phy_rst                      ),
-
 
     .mem_cs_n                   (mem_cs_n                     ),
 
@@ -935,8 +903,8 @@ ips2l_rst_sync_v1_3 #(
     .dbg_slice_status           (dbg_slice_status             ),
     .dbg_slice_state            (dbg_slice_state              ),
     .debug_data                 (debug_data                   )
-  );                                              
- 
+  );
+
   ips2l_ddrphy_dfi_v1_3 #(
     .DDR_TYPE                   (DDR_TYPE                     ),
     .MEM_ADDR_WIDTH             (MEM_ROW_WIDTH                ),
@@ -962,12 +930,12 @@ ips2l_rst_sync_v1_3 #(
     .calib_wrdata_mask          (calib_wrdata_mask            ),
     .read_valid                 (read_valid                   ),
     .o_read_data                (o_read_data                  ),
-    
+
     .ddrphy_update              (ddrphy_update                ),
     .update_cal_req             (update_cal_req               ),
     .update_done                (update_done                  ),
     .ddrphy_update_done         (ddrphy_update_done           ),
-     
+
     .dfi_address                (dfi_address                  ),
     .dfi_bank                   (dfi_bank                     ),
     .dfi_cs_n                   (dfi_cs_n                     ),
@@ -1036,4 +1004,3 @@ ips2l_rst_sync_v1_3 #(
   );
 
 endmodule
-

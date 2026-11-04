@@ -1,4 +1,3 @@
-// iic_dri.v
 `timescale 1ns / 1ps
 
 `define UD #1
@@ -121,7 +120,7 @@ module iic_dri #(
     reg [7:0] receiv_data=8'd0;
     reg       trans_en=0;
     reg       trans_over=0;
-    reg       scl_out= 1'b1/*synthesis PAP_MARK_DEBUG="true"*/;
+    reg       scl_out= 1'b1                                   ;
 
     assign scl = scl_out;
 

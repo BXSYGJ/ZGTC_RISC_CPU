@@ -1,4 +1,3 @@
-// ms7200_ctl.v
 `timescale 1ns / 1ps
 
 `define UD #1
@@ -345,14 +344,14 @@ endfunction
     parameter    STA_RD = 7'b001_0000;
     parameter    SETING = 7'b010_0000;
     parameter    RD_BAK = 7'b100_0000;
-    reg [ 6:0]   state/*synthesis PAP_MARK_DEBUG="true"*/;
+    reg [ 6:0]   state                                   ;
     reg [ 6:0]   state_n;
     reg [ 8:0]   dri_cnt;
     reg [23:0]   delay_cnt;
-    reg [ 8:0]   cmd_index/*synthesis PAP_MARK_DEBUG="true"*/;
-    reg [31:0]   freq_rec/*synthesis PAP_MARK_DEBUG="true"*/;
-    reg [31:0]   freq_rec_1d/*synthesis PAP_MARK_DEBUG="true"*/;
-    reg [31:0]   freq_rec_2d/*synthesis PAP_MARK_DEBUG="true"*/;
+    reg [ 8:0]   cmd_index                                   ;
+    reg [31:0]   freq_rec                                   ;
+    reg [31:0]   freq_rec_1d                                   ;
+    reg [31:0]   freq_rec_2d                                   ;
 
     reg          busy_1d;
     wire         busy_falling;
@@ -370,7 +369,7 @@ endfunction
         end
     end
 
-    reg freq_ensure/*synthesis PAP_MARK_DEBUG="true"*/;
+    reg freq_ensure                                   ;
 
     always @(posedge clk)
     begin

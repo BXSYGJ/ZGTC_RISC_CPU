@@ -152,8 +152,7 @@ module rv32_cache #(
     end endgenerate
     generate
         if(READ_ONLY!=0) begin : ram_valid
-            // Adjacent sets have opposite parity, so one read from each parity
-            // supplies demand and optional next-line validity without replication.
+
             localparam integer ROWS=SETS/2;
             localparam integer ROWS_PER_BANK=ROWS>128 ? 128 : ROWS;
             localparam integer OFFSET_BITS=$clog2(ROWS_PER_BANK);
@@ -168,10 +167,7 @@ module rv32_cache #(
             reg forward_valid0,forward_valid1;
             wire [SET_BITS-1:0] read_set=req_address[WORD_BITS+SET_BITS+1:WORD_BITS+2];
             wire [SET_BITS-1:0] odd_read_row=read_set>>1;
-            // The even bank is used by an even demand set, or by the next
-            // set of an odd demand only when the request crosses a line.
-            // Other even-bank reads are unused, allowing the frontend's
-            // precomputed next-word address to replace the late row increment.
+
             wire [31:0] validity_companion_address=USE_PRECOMPUTED_PAIR_ADDRESS!=0 ?
                 req_pair_address : req_address+32'd4;
             wire [SET_BITS-1:0] even_read_row=(validity_companion_address>>(WORD_BITS+3)) & (ROWS-1);
@@ -264,16 +260,14 @@ module rv32_cache #(
                 wire [31:0] read_word0=unused_writable_valid_storage[read_group0];
                 wire [31:0] read_word1=unused_writable_valid_storage[read_group1];
                 wire read_value0=group_valid[read_group0] && read_word0[read_bit0];
-                // Query0 uses its own RAM read port. No incoming request address
-                // enters replacement, flush or read-modify-write selection.
+
                 wire [SET_BITS+5:0] unused_query_address0={6'b0,incoming_set};
                 wire [DVALID_GROUP_BITS-1:0] query_group0=unused_query_address0[DVALID_GROUP_BITS+4:5];
                 wire [4:0] query_bit0=unused_query_address0[4:0];
                 wire [31:0] query_word0=unused_writable_valid_storage[query_group0];
                 wire [15:0] query_word0_low=query_word0[15:0],query_word0_high=query_word0[31:16];
                 wire [15:0] query_word1_low=read_word1[15:0],query_word1_high=read_word1[31:16];
-                // The late incoming address selects16bits before the request edge.
-                // The final half selection occurs after that same existing edge.
+
                 wire query_value0_low=group_valid[query_group0] && query_word0_low[query_bit0[3:0]];
                 wire query_value0_high=group_valid[query_group0] && query_word0_high[query_bit0[3:0]];
                 wire query_value1_low=group_valid[read_group1] && query_word1_low[read_offset1];
@@ -287,7 +281,7 @@ module rv32_cache #(
                 for(genvar line=0;line<LINES;line=line+1) begin : view
                     assign valid[line]=group_valid[line/32] && unused_writable_valid_storage[line/32][line%32];
                 end
-                // Dedicated port0 serves only replacement, flush and read-modify-write.
+
                 always @* begin
                     write_valid=0;write_value=0;
                     case(state)
@@ -302,7 +296,7 @@ module rv32_cache #(
                     next_word=group_valid[write_group] ? read_word0 : 32'b0;
                     next_word[write_bit]=write_value;
                 end
-                // Raw writes during reset stay masked; first post-reset write zeros stale word.
+
                 always @(posedge clk) begin
                     if(write_valid) unused_writable_valid_storage[write_group]<=next_word;
                 end
@@ -343,7 +337,7 @@ module rv32_cache #(
                     end
                 end
                 assign lookup_valid0=read_valid0[read_half];
-                // For the32-line geometry, each way occupies one distinct half.
+
                 assign lookup_valid1=read_valid1[SET_BITS==4 ? 1'b1 : read_half];
             end else if(READ_ONLY==0 && SET_BITS>4) begin : banked_valid
                 localparam integer BANK_BITS=SET_BITS-4;
@@ -404,12 +398,10 @@ module rv32_cache #(
         if(READ_ONLY!=0 && FETCH_PAIR!=0) begin : synchronous_pair
             wire [SET_BITS+WORD_BITS-2:0] fill_index={victim[SET_BITS-1:0],beat[WORD_BITS-1:1]};
             wire fill_write=state==FILL_DATA && r_valid && !r_error && !fill_failed;
-            // Each bank reads the consecutive word of its parity. Odd requests
-            // may inspect the following line, but never allocate or refill it.
+
             wire [31:0] live_companion_address=USE_PRECOMPUTED_PAIR_ADDRESS!=0 ?
                 req_pair_address : req_address+32'd4;
-            // request_address is captured with zero upper ADDRESS_BITS bits.
-            // Keep one overflow bit for the range test; 32-bit addresses wrap.
+
             localparam integer COMPANION_BITS=ADDRESS_BITS<32 ? ADDRESS_BITS+1 : 32;
             wire [COMPANION_BITS-1:0] compact_companion_address=
                 {{(COMPANION_BITS-ADDRESS_BITS){1'b0}},request_address[ADDRESS_BITS-1:0]}+
@@ -605,11 +597,7 @@ module rv32_cache #(
                         response_data<=current_word; response_pair_data<=current_pair_word; response_pair_available<=current_pair_available; stored_rsp_error<=0;
                         if(!request_missed) hit_count<=hit_count+1;
                         if(DIRECT_READ_RESPONSE!=0) begin
-                            // A read-only hit can hold its synchronous bank outputs
-                            // in LOOKUP. No refill, write or new accepted request can
-                            // modify those words while the response is stalled.
-                            // Reuse the existing miss/accounted flag so hit_count
-                            // increments once, not on every stalled response cycle.
+
                             request_missed<=1;
                             stored_state<=rsp_ready ? IDLE : LOOKUP;
                         end else stored_state<=fast_hit && rsp_ready ? IDLE : RESPONSE;

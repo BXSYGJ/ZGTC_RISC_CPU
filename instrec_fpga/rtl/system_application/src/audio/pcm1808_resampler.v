@@ -1,4 +1,3 @@
-// pcm1808_resampler.v
 module pcm1808_resampler (
     input wire clk, input wire rst_n, input wire stream_idle,
     input wire in_valid, input wire [15:0] in_l, input wire [15:0] in_r,

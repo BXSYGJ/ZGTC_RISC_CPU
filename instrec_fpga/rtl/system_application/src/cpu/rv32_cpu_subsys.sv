@@ -1,4 +1,3 @@
-// rv32_cpu_subsys.sv
 `timescale 1ns / 1ps
 
 module rv32_cpu_subsys #(

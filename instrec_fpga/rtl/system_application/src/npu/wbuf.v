@@ -1,4 +1,3 @@
-// wbuf.v
 module wbuf #(
     parameter TAP_NUM = 1728,
     parameter LANES   = 16

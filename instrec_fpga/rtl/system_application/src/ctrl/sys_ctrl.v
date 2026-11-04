@@ -1,4 +1,3 @@
-// sys_ctrl.v
 module sys_ctrl #(
 
     parameter integer PLL_TIMEOUT_CYCLES = 125000000 * 5,

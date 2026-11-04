@@ -1,4 +1,3 @@
-// wdma.v
 module wdma (
     input  wire         clk,
     input  wire         rst_n,

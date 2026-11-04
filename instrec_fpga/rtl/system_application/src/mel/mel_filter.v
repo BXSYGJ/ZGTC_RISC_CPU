@@ -1,4 +1,3 @@
-// mel_filter.v
 `timescale 1ns / 1ps
 
 module mel_filter #(

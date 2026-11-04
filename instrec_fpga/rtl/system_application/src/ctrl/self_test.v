@@ -1,4 +1,3 @@
-// self_test.v
 module self_test #(
 
     parameter [31:0] DDR_PATTERN  = 32'h5A5A_00FF,

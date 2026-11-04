@@ -1,4 +1,3 @@
-// npu_stage_lifecycle.v
 module npu_stage_lifecycle (
     input wire clk, rst_n, inference_start,
     input wire [3:0] conv_start,

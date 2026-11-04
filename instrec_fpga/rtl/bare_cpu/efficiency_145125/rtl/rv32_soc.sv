@@ -76,8 +76,7 @@ module rv32_soc #(
         .mmio_rsp_valid(mmio_rsp_valid),.mmio_rsp_ready(mmio_rsp_ready),.mmio_rsp_data(mmio_rsp_data),.mmio_rsp_error(mmio_rsp_error),
         .i_hit_count(i_hits),.i_miss_count(i_misses),.d_hit_count(d_hits),.d_miss_count(d_misses),.d_writeback_count(writebacks)
     );
-    // The memory system registers each accepted MMIO request before peripheral acceptance.
-    // Reading on the accepted core request settles native RAM one edge before scalar capture.
+
     wire snapshot_pre_read=d_req_valid && d_req_ready && !d_req_write;
     wire [2:0] snapshot_pre_word_index=d_req_address[4:2]^3'd4;
     rv32_peripherals #(.CLOCK_HZ(CLOCK_HZ),.BAUD(BAUD),.SNAPSHOT_EARLY_READ(1)) peripherals(

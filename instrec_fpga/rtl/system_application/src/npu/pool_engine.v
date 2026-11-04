@@ -1,4 +1,3 @@
-// pool_engine.v
 module pool_engine (
     input  wire        clk,
     input  wire        rst_n,

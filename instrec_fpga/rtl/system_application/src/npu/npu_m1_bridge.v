@@ -1,4 +1,3 @@
-// npu_m1_bridge.v
 module npu_m1_bridge (
     input wire clk, rst_n,
     input wire wgt_cmd_valid,

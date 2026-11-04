@@ -1,4 +1,3 @@
-// tw_rom_s.v
 `timescale 1ns / 1ps
 
 module tw_rom_s #(

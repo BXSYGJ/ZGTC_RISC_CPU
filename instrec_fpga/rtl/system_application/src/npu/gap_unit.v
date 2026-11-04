@@ -1,4 +1,3 @@
-// gap_unit.v
 module gap_unit #(
     parameter CIN  = 256,
     parameter H_IN = 4,

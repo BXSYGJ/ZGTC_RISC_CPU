@@ -103,7 +103,7 @@ module rv32_btb #(
                 history[update_index]<=next_history;
         end
     end
-    // Low index bits select a one-bit tag comparison, not 28 RAM addresses.
+
     generate if(INDEX_BITS>2) begin: interleaved_tags
         localparam integer ROW_BITS=INDEX_BITS-2;
         (* syn_keep=1 *) wire [3:0] fetch_matches;

@@ -1,4 +1,3 @@
-// standardize.v
 module standardize #(
     parameter integer N_MELS            = 64,
     parameter integer OUT_FRAME_COUNT   = 258,

@@ -1,4 +1,3 @@
-// db_norm.v
 module db_norm #(
     parameter integer N_MELS           = 64,
     parameter integer SPEC_FRAME_COUNT = 259,

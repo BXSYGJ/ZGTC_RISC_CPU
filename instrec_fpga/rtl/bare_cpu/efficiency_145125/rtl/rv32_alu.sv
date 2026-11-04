@@ -5,7 +5,7 @@ module rv32_alu (
     input wire [3:0] operation,
     output reg [31:0] result
 );
-    // One arithmetic cone serves ADD, SUB, SLT and SLTU.
+
     wire subtract=operation==1 || operation==3 || operation==4;
     wire [31:0] arithmetic_b=operand_b ^ {32{subtract}};
     wire [32:0] arithmetic_result={1'b0,operand_a}+{1'b0,arithmetic_b}+{32'b0,subtract};

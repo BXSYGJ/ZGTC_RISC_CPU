@@ -1,4 +1,3 @@
-// ddr3_wrapper.v
 `timescale 1ns / 1ps
 
 module ddr3_wrapper (

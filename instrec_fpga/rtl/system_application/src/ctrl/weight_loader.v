@@ -1,4 +1,3 @@
-// weight_loader.v
 module weight_loader #(
     parameter [27:0] BASE_ADDR = 28'd0
 ) (

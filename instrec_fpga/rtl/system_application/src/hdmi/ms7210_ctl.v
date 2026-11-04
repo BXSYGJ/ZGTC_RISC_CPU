@@ -1,4 +1,3 @@
-// ms7210_ctl.v
 `timescale 1ns / 1ps
 
 `define UD #1

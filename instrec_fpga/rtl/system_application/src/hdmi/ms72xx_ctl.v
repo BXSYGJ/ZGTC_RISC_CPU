@@ -1,4 +1,3 @@
-// ms72xx_ctl.v
 `timescale 1ns / 1ps
 
 `define UD #1
@@ -49,11 +48,11 @@ assign init_over_rx=1'b1;
     wire   [7:0] device_id   ;
     wire         iic_trig    ;
     wire         w_r         ;
-    wire  [15:0] addr        /*synthesis PAP_MARK_DEBUG="true"*/;
+    wire  [15:0] addr                                           ;
     wire  [ 7:0] data_in     ;
     wire         busy        ;
-    wire  [ 7:0] data_out    /*synthesis PAP_MARK_DEBUG="true"*/;
-    wire         byte_over   /*synthesis PAP_MARK_DEBUG="true"*/;
+    wire  [ 7:0] data_out                                       ;
+    wire         byte_over                                      ;
 
     ms7200_ctl U1_ms7200_ctl(
         .clk             (             ),
@@ -98,9 +97,9 @@ assign init_over_rx=1'b1;
     assign data_out_rx = (init_over_rx == 1'b0 || init_over == 1'b1) ? data_out : 0;
     assign byte_over_rx = (init_over_rx == 1'b0 || init_over == 1'b1) ? byte_over : 0;
 
-    wire         sda_in/*synthesis PAP_MARK_DEBUG="true"*/;
-    wire         sda_out/*synthesis PAP_MARK_DEBUG="true"*/;
-    wire         sda_out_en/*synthesis PAP_MARK_DEBUG="true"*/;
+    wire         sda_in                                   ;
+    wire         sda_out                                   ;
+    wire         sda_out_en                                   ;
     iic_dri #(
         .CLK_FRE        (  27'd10_000_000  ),
         .IIC_FREQ       (  20'd400_000     ),

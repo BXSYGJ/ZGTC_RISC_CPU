@@ -1,4 +1,3 @@
-// dashboard_renderer.v
 module dashboard_renderer #(parameter SIMULATION = 0) (
     input wire pix_clk, rst_pix_n,
     input wire [10:0] pix_x, pix_y,

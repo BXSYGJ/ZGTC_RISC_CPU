@@ -1,9 +1,7 @@
-// mel_engine.v
 `timescale 1ns / 1ps
 
 module mel_engine #(
 
-    // synthesis/simulation working directory, see hann_rom).
     parameter         HAN_HEX_FILE = "hann_q15.hex",
     parameter         COO_HEX_FILE = "mel_coo.hex",
     parameter         LUT_HEX_FILE = "log2_lut.hex",

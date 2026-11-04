@@ -1,4 +1,3 @@
-// rv32_decode.sv
 `timescale 1ns/1ps
 module rv32_decode #(
     parameter integer ENABLE_M=0

@@ -1,4 +1,3 @@
-// conv_engine.v
 module conv_engine #(
 
     parameter CIN0  = 1,

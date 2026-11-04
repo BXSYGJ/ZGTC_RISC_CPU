@@ -1,4 +1,3 @@
-// audio_cdc_fifo.v
 `timescale 1ns / 1ps
 
 module audio_cdc_fifo #(

@@ -1,4 +1,3 @@
-// rv32_machine.sv
 `timescale 1ns/1ps
 module rv32_machine #(
     parameter integer ENABLE_M=0

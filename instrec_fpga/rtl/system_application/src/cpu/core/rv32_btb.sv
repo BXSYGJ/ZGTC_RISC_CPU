@@ -1,4 +1,3 @@
-// rv32_btb.sv
 `timescale 1ns/1ps
 module rv32_btb #(
     parameter integer INDEX_BITS=4,

@@ -213,8 +213,7 @@ module rv32_cache #(
             end
             assign lookup_valid0=forward_valid0 || (FETCH_PAIR!=0 ? bank_valid0[read_valid_bank] : read_valid0);
             assign lookup_valid1=forward_valid1 || (FETCH_PAIR!=0 ? bank_valid1[read_valid_bank] : read_valid1);
-            // Preserve the metadata view used by cache diagnostics. In read-only
-            // hardware the dirty bits are zero, so the FSM's wide reads prune out.
+
             for(genvar valid_index=0;valid_index<SETS;valid_index=valid_index+1) begin : view
                 assign valid[valid_index]=valid_way0[valid_index];
                 assign valid[SETS+valid_index]=valid_way1[valid_index];
@@ -241,8 +240,7 @@ module rv32_cache #(
                 wire [31:0] read_word0=unused_writable_valid_storage[read_group0];
                 wire [31:0] read_word1=unused_writable_valid_storage[read_group1];
                 wire read_value0=group_valid[read_group0] && read_word0[read_bit0];
-                // Query0 uses its own RAM read port. No incoming request address
-                // enters replacement, flush or read-modify-write selection.
+
                 wire [SET_BITS+5:0] unused_query_address0={6'b0,incoming_set};
                 wire [DVALID_GROUP_BITS-1:0] query_group0=unused_query_address0[DVALID_GROUP_BITS+4:5];
                 wire [4:0] query_bit0=unused_query_address0[4:0];
@@ -251,8 +249,7 @@ module rv32_cache #(
                 wire [7:0] query_word0_q2=query_word0[23:16],query_word0_q3=query_word0[31:24];
                 wire [7:0] query_word1_q0=read_word1[7:0],query_word1_q1=read_word1[15:8];
                 wire [7:0] query_word1_q2=read_word1[23:16],query_word1_q3=read_word1[31:24];
-                // Select eight-bit chunks before the unchanged request edge.
-                // Select the captured quarter after that edge; no added cycle.
+
                 wire query_value0_q0=group_valid[query_group0] && query_word0_q0[query_bit0[2:0]];
                 wire query_value0_q1=group_valid[query_group0] && query_word0_q1[query_bit0[2:0]];
                 wire query_value0_q2=group_valid[query_group0] && query_word0_q2[query_bit0[2:0]];
@@ -270,7 +267,7 @@ module rv32_cache #(
                 for(genvar line=0;line<LINES;line=line+1) begin : view
                     assign valid[line]=group_valid[line/32] && unused_writable_valid_storage[line/32][line%32];
                 end
-                // Dedicated port0 serves only replacement, flush and read-modify-write.
+
                 always @* begin
                     write_valid=0;write_value=0;
                     case(state)
@@ -285,7 +282,7 @@ module rv32_cache #(
                     next_word=group_valid[write_group] ? read_word0 : 32'b0;
                     next_word[write_bit]=write_value;
                 end
-                // Raw writes during reset stay masked; first post-reset write zeros stale word.
+
                 always @(posedge clk) begin
                     if(write_valid) unused_writable_valid_storage[write_group]<=next_word;
                 end
@@ -326,7 +323,7 @@ module rv32_cache #(
                     end
                 end
                 assign lookup_valid0=read_valid0[read_quarter];
-                // For the32-line geometry, each way occupies two distinct quarters.
+
                 assign lookup_valid1=read_valid1[SET_BITS==4 ? {1'b1,read_quarter[0]} : read_quarter];
             end else if(READ_ONLY==0 && SET_BITS>4) begin : banked_valid
                 localparam integer BANK_BITS=SET_BITS-4;

@@ -1,4 +1,3 @@
-// ddr3_ctrl_axi.v
 `timescale 1ns / 1ps
 
 module ddr3_ctrl_axi #(

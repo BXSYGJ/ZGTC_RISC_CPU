@@ -53,14 +53,13 @@ module rv32_rvc_frontend #(
     wire [31:0] following_address=aligned_pc+32'd4;
     wire current_range_error=(pc >> ADDRESS_BITS)!=0;
     wire following_range_error=(following_address >> ADDRESS_BITS)!=0;
-    // Preserve the address-range carry without a full-width stored-tag adder.
+
     localparam integer PAIR_ADDRESS_BITS=ADDRESS_BITS<32 ? ADDRESS_BITS+1 : 32;
     wire [PAIR_ADDRESS_BITS-1:0] compact_pair_address=
         {{(PAIR_ADDRESS_BITS-ADDRESS_BITS){1'b0}},request_tag}+
         {{(PAIR_ADDRESS_BITS-3){1'b0}},3'd4};
     wire [31:0] pair_address={{(32-PAIR_ADDRESS_BITS){1'b0}},compact_pair_address};
-    // Stored demand/buffer tags have zero upper address bits. Share the
-    // upper-range qualification instead of repeating full-width equality.
+
     wire request_current_match=!current_range_error && request_tag==aligned_pc[ADDRESS_BITS-1:0];
     wire request_following_match=!following_range_error && request_tag==following_address[ADDRESS_BITS-1:0];
     wire word0_current_match=!current_range_error && word0_tag==aligned_pc[ADDRESS_BITS-1:0];
@@ -75,8 +74,7 @@ module rv32_rvc_frontend #(
     wire following_buffer_valid=!following_range_error && (pc[2] ? word0_valid && word0_tag==following_address[ADDRESS_BITS-1:0] : word1_valid && word1_tag==following_address[ADDRESS_BITS-1:0]);
     wire current_valid=current_range_error || current_response || current_buffer_valid;
     wire following_valid=following_range_error || following_response || following_buffer_valid;
-    // A separate registered-word cone for static prediction. No response
-    // data, response error, or response-valid signal enters these outputs.
+
     wire [31:0] buffered_current=pc[2] ? word1_data : word0_data;
     wire [31:0] buffered_following=pc[2] ? word0_data : word1_data;
     wire [1:0] buffered_current_is_c=pc[2] ? word1_is_c : word0_is_c;
@@ -107,8 +105,7 @@ module rv32_rvc_frontend #(
     wire [31:0] predicted_pc=predicted_taken ? predicted_target : next_pc;
     function automatic staged(input [31:0] address);
         begin
-            // A companion can be one word beyond the stored address width.
-            // Keep its full-width comparison outside the demand range guard.
+
             staged=((address>>ADDRESS_BITS)==0 &&
                 ((address[2] ? word1_valid && word1_tag==address[ADDRESS_BITS-1:0] : word0_valid && word0_tag==address[ADDRESS_BITS-1:0]) ||
                  (request_pending && !request_discard && request_tag==address[ADDRESS_BITS-1:0]))) ||
@@ -136,7 +133,7 @@ module rv32_rvc_frontend #(
     wire select_redirect_address=USE_REDIRECT_ADDRESS_SELECT!=0 ? redirect_address_select : redirect_valid;
     wire [ADDRESS_BITS-1:0] selected_request=select_redirect_address ? redirect_address[ADDRESS_BITS-1:0] :
         accept_staged ? accepted_request[ADDRESS_BITS-1:0] : hold_request[ADDRESS_BITS-1:0];
-    // Precompute each candidate's companion before the late request selection.
+
     wire [31:0] hold_pair_request=current_staged ? ahead_address : following_address;
     wire [31:0] ahead_pair_address=aligned_pc+32'd12;
     wire [31:0] sequential_pair_request=pc[1] ?

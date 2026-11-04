@@ -1,4 +1,3 @@
-// rv32_core.sv
 `timescale 1ns/1ps
 module rv32_core #(
     parameter [31:0] RESET_VECTOR=32'h00000000,

@@ -1,4 +1,3 @@
-// instrec_top.v
 `timescale 1ns / 1ps
 
 module instrec_top #(

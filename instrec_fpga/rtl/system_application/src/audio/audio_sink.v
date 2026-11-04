@@ -1,4 +1,3 @@
-// audio_sink.v
 `timescale 1ns / 1ps
 
 module audio_sink #(

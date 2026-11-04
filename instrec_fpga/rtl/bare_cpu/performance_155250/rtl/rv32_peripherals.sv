@@ -68,8 +68,7 @@ module rv32_peripherals #(
             endcase
         end
     end
-    // Compare the values committed on this edge, including masked MMIO writes.
-    // No timer state, response timing, interrupt latency, or capacity changes.
+
     wire timer_interrupt_next=timer_value_next>=timer_compare_next;
     rv32_fifo tx_fifo(.clk(clk),.rst_n(rst_n),.in_valid(request_fire && uart_write),.in_ready(tx_fifo_ready),.in_data(req_data[7:0]),
         .out_valid(uart_tx_valid),.out_ready(uart_tx_ready),.out_data(uart_tx_data),.count(tx_count));

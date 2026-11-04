@@ -1,4 +1,3 @@
-// hann_rom.v
 module hann_rom #(
 
     parameter HAN_HEX_FILE = "hann_q15.hex"

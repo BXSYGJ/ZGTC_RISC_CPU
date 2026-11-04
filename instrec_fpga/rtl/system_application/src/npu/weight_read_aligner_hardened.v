@@ -1,4 +1,3 @@
-// weight_read_aligner_hardened.v
 module weight_read_aligner_hardened (
     input wire clk, rst_n,
     input wire up_valid,
