@@ -145,7 +145,12 @@ module mel_filter #(
     // ROM hex file paths (relative to the simulator/synthesis working
     // directory; the build scripts arrange the search path).
     parameter COO_HEX_FILE = "mel_coo.hex",
-    parameter LUT_HEX_FILE = "log2_lut.hex"
+    parameter LUT_HEX_FILE = "log2_lut.hex",
+    // COO ROM depth in words: 65 offset lines + N entries.  The frozen
+    // 44.1 kHz filterbank carries 1960 entries (2025 words); the 48 kHz
+    // filterbank (fmax 24000, mel_coo_48k.hex) carries 1962 entries
+    // (2027 words).  Sizing follows the table that COO_HEX_FILE loads.
+    parameter integer COO_ROM_WORDS = 2025
 ) (
     // core_clk domain (125 MHz).
     input  wire        clk,
@@ -169,10 +174,12 @@ module mel_filter #(
     // -----------------------------------------------------------------
     // Table storage.
     // -----------------------------------------------------------------
-    // COO ROM: line 0..64 = offsets, line 65..2024 = entries.
+    // COO ROM: line 0..64 = offsets, line 65.. = entries (total depth
+    // COO_ROM_WORDS, see the parameter comment above).
     localparam [10:0] COO_E_OFF = 11'd65;   // entry region base address
+    localparam integer COO_ROM_LAST = COO_ROM_WORDS - 1;
 
-    reg [26:0] coo_rom [0:2024];
+    reg [26:0] coo_rom [0:COO_ROM_LAST];
     reg  [7:0] log2_lut [0:255];
 
     initial begin

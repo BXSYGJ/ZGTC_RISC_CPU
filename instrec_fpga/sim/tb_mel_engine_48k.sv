@@ -80,6 +80,7 @@ module tb_mel_engine_48k;
         .HAN_HEX_FILE ("src/mel/hann_q15.hex"),
         .COO_HEX_FILE ("build/sim/mel_48k/mel_coo_48k.hex"),
         .LUT_HEX_FILE ("src/mel/log2_lut.hex"),
+        .COO_ROM_WORDS (2027),
         .INV_S_IN     (32'd267723430),
         .ZP_IN        (8'd49),
         .WATCHDOG_LIMIT (8_000_000)

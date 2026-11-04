@@ -2,6 +2,7 @@
 
 ## 2026-11-04（第五批）：等模型期间三线并行——48k 前端真值链/mel 48k 仿真/集成实验顶层；发现模型侧已开工
 
+- **补充收尾：mel_filter coo_rom 深度已参数化**（`COO_ROM_WORDS` parameter，mel_engine 透传，默认 2025 与 44.1k 逐位一致）：mel_48k TB 直接传 2027，run_sim 的 build 拷贝 override 已拆除（补丁层归零纪律）；mel/mel_credit/mel_48k 复跑 PASS。**48k PDS 前置项清单清空**，等模型期间的全部准备项完成。
 - 用户指示按 MODEL_TRAINING_SPEC 附录 B 推进不依赖新权重的部分。三子代理并行交付（主线已独立复核 stash 对照与全量回归）：
 - **A 48k 前端真值链**：`gen_mel_tables.py` 参数化（--sr/--f-max/--suffix，默认输出与冻结表逐字节一致）；48k 表集 `scripts/outputs/mel_tables_48k.json` + `mel_coo_48k.hex`（1962 entries，bin1..1022）；hann/log2_lut/exp_lut 表级 hash 与 44.1k **相等**（采样率不变量实证，RTL 只需换 COO 表）；`golden_pipeline.py` SR 参数化（帧率断言对表 sr，默认行为不变：44.1k feat 与冻结 golden_ref 逐位一致）；`experiments/mel48k/run_check.py` 自验证：合成 PCM@48k 饱和 0、librosa(48k,fmax24k) 逐 bin Pearson r≥0.999、hex↔json 一致、双跑 hash 复现；报告 `reports/mel48k_truth_chain_20261104.json`。
 - **B mel RTL 48k 注入**：`mel_engine.v` 新增 `INV_S_IN/ZP_IN` parameter 并透传至 standardize 例化（**新模型 QuantStub 注入通路补全**，默认值逐位同旧——mel/mel_credit 复跑 PASS 证明零破坏）；新 sim case `mel_48k`：mel_engine 注入 48k COO 表（TB override），48k 合成 PCM 对拍 48k golden **16512 mismatch 0**（frames=259/cycles=5144063）。**已知跟进项**：`mel_filter.v` coo_rom 深度 [0:2024] 按 44.1k 硬编码，容不下 48k 表 2027 行——mel_48k 用 run_sim overrides 在 build 拷贝上扩容绕过，**正式 48k PDS 交付前必须把 coo_rom 深度参数化/扩容**（列入新模型交付后清单首位）。

@@ -196,6 +196,10 @@ module mel_engine #(
     parameter         HAN_HEX_FILE = "hann_q15.hex",
     parameter         COO_HEX_FILE = "mel_coo.hex",
     parameter         LUT_HEX_FILE = "log2_lut.hex",
+    // COO ROM depth forwarded to mel_filter: 65 offsets + entries of the
+    // table that COO_HEX_FILE loads (2025 for the 44.1 kHz filterbank,
+    // 2027 for the 48 kHz one). See mel_filter.v for the sizing note.
+    parameter integer COO_ROM_WORDS = 2025,
     // QuantStub input contract forwarded to standardize (layer_contract
     // json quant_stub_input_contract): INV_S_IN is the Q8.24 inverse
     // input scale, ZP_IN the quint8 zero point. Defaults are bit
@@ -370,7 +374,8 @@ module mel_engine #(
 
     mel_filter #(
         .COO_HEX_FILE  (COO_HEX_FILE),
-        .LUT_HEX_FILE  (LUT_HEX_FILE)
+        .LUT_HEX_FILE  (LUT_HEX_FILE),
+        .COO_ROM_WORDS (COO_ROM_WORDS)
     ) u_mel_filter (
         .clk           (clk),
         .rst_n         (rst_n),

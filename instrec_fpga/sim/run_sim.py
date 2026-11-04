@@ -225,15 +225,9 @@ register(Case(
 # experiments/mel48k/gen_sim_tables_48k.py hook and are addressed with
 # project-root-relative paths (the run cwd is instrec_fpga/).
 #
-# KNOWN 48k DOMAIN GAP (sim-only override, source untouched): mel_filter.v
-# sizes its COO ROM at [0:2024] = 65 offsets + 1960 entries, the frozen
-# 44.1 kHz table depth. The 48 kHz filterbank has 1962 entries (2027
-# lines), so $readmemh runs past the array end ("address beyond bounds")
-# on the unmodified source. The e_idx / off_lo / off_hi walkers are
-# 12-bit offset-driven and size-agnostic; widening the ROM to [0:2026]
-# on the build copy is the only change needed. The production 48 kHz
-# delivery must parameterize (or re-size) that ROM in src/mel/mel_filter.v
-# before the PDS build.
+# The COO ROM depth is parameterized (mel_filter.v COO_ROM_WORDS, routed
+# through mel_engine); the TB passes 2027 for the 48 kHz filterbank, so
+# no build-copy override is needed any more.
 register(Case(
     name="mel_48k",
     tb="tb_mel_engine_48k.sv",
@@ -241,11 +235,6 @@ register(Case(
     timeout=600,
     prepare="mel_48k",
     extra_flags=["--public"],
-    overrides=[(
-        "src/mel/mel_filter.v",
-        r"reg \[26:0\] coo_rom \[0:2024\];",
-        "reg [26:0] coo_rom [0:2026];",
-    )],
     description="mel_engine with the 48 kHz COO table vs 48k golden feat (16512 bytes)",
 ))
 
