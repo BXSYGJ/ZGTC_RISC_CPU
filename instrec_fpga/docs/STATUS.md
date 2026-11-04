@@ -1,5 +1,12 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-04（第四批）：产出模型重训规格文档，进入「等新模型」阶段
+
+- 用户裁定执行顺序：**先出训练规格交模型负责人重训 → 新模型交付后适配架构 → 分模块逐个仿真 → 全部通过才上板**；此前「修复后直接构建上板」的提议作废。本轮唯一交付为 `docs/MODEL_TRAINING_SPEC_20261104.md`。
+- 规格要点：①数据全部现成（Medley-solos-DB cache/group5_cache_v3 在 InstRec/data/，**无需重新采集**）；②前端统一 F1 原生 48k（删 147/160 重采样，Mel 表 fmax 24k 重生成，几何 64×258 不动）；③网络骨架固定 InstrumentCNN 四级 conv-pool+GAP+FC（NPU 算子白名单），通道候选 S0 基线/S1 24-48-96-128/S2 16-32-64-96；④八类与五组均需按 48k 重训（共享前端强制统一采样率；五组 44.1k INT8 契约保留为架构回退开关）；⑤量化交付必须含 QuantStub {scale,zp}（新 zp_in 不再是 49，standardize 参数化适配是交付后第一输入）；⑥验收门槛与交付物七项清单；⑦附录 B 固化交付后 FPGA 侧「契约适配→分模块仿真→全链→PDS→三层注入→真实音乐」逐级流程。
+- 事实核实：部署类别表=`InstRec/deploy/class_names.json`（Medley 8 类，idx0=clarinet）；正式八类模型为 Medley 域（runs/best_model.pt）；InstRec 前端参数在 deploy/feature_params.json 与 src/features.py。
+- 本轮零仿真/零构建/零板级（分模块仿真按附录 B 须等新模型交付）；XSY 本地 commit 未 push。
+
 ## 2026-11-04（第三批·重大修复）：恒 top1 根因修复——standardize 量化移位 24→36，特征恢复分化
 
 - **根因修复已落地并全链验证**：`src/mel/standardize.v` Beat Q 与 `scripts/golden_pipeline.py`（QUANT_IN_FRAC_BITS）的 z(Q4.12)×inv_s_in(Q8.24) 移位从 24 改为 36（12+24）。旧值等效 2^12 增益，uint8 特征 ~50% 饱和（0/255 两值化），这是板上恒 top1 的直接根因；**RTL 与 golden 共享此 bug，故历来位级对拍一致但同吃坏特征**——「golden 位级真值」的可信边界仅覆盖「RTL 实现 golden 数学」，不覆盖「golden 数学实现训练语义」，本次由浮点模型×特征域 2×2 对照补上后半环（`reports/float_vs_quant_domain_diag_20261104.json`）。
