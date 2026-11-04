@@ -1,0 +1,140 @@
+{
+  "report": "mel48k_truth_chain_20261104",
+  "date": "2026-11-04",
+  "spec_refs": "MODEL_TRAINING_SPEC_20261104 section 2.1 (F1 native 48 kHz front-end); spec appendix B step 1",
+  "generator_cli": "python scripts/gen_mel_tables.py --sr 48000 --f-max 24000 --suffix _48k",
+  "default_regression": {
+    "mel_tables_json_sha256": "5a2bc66d550a3484ee58aaab975eaf079c22a7c1083ba98cab33fef7737a712f",
+    "mel_tables_coe_sha256": "b790da7ab7583bc0e3cced025c558806d66abc6738053537f3c08259c3d890f1",
+    "generator_default_byte_identical": true,
+    "coo_hex_layout_matches_src_mel_mel_coo_hex": true,
+    "golden_44k_sine_feat_identical_to_frozen_ref": true
+  },
+  "tables_48k": {
+    "mel_tables_48k_json": {
+      "sha256": "aefc08fdddb71774624cff19d6a560688ff1fe0dd76cc0eb2a068855881c0652",
+      "bytes": 115048
+    },
+    "mel_tables_48k_coe": {
+      "sha256": "07b317443e3d235a698b8340038276289570c5bde51bdd342a748cc49519cd2d"
+    },
+    "mel_coo_48k_hex": {
+      "sha256": "8aca0239f739fef4ded6d4d7dea6f019b0937b257b63fdcaca49eec69f833a9f",
+      "bytes": 15513,
+      "lines": 2027,
+      "entries": 1962
+    },
+    "invariants": {
+      "hann_q15_sha256_44k_eq_48k": true,
+      "log2_lut_sha256_44k_eq_48k": true,
+      "exp_lut_sha256_44k_eq_48k": true,
+      "mel_coo_sha256_44k": "1573dafa760bc9d4a07ba04e50722d85ab82370f3c46363c895e933e999dcf8a",
+      "mel_coo_sha256_48k": "8a8d17d6d67ef646a98768b3bb843ef53763416f4858478e6f8f69c7d1d7eb17",
+      "mel_coo_entries_44k": 1960,
+      "mel_coo_entries_48k": 1962,
+      "mel_coo_bin_min_48k": 1,
+      "mel_coo_bin_max_48k": 1022,
+      "src_mel_hann_hex_matches_48k_table": true,
+      "src_mel_log2_hex_matches_48k_table": true
+    },
+    "rtl_injection": {
+      "reuse": [
+        "src/mel/hann_q15.hex",
+        "src/mel/log2_lut.hex",
+        "src/mel/exp_lut.hex"
+      ],
+      "swap": "src/mel/mel_coo.hex <- scripts/outputs/mel_coo_48k.hex (future model delivery; COO_HEX_FILE parameter of mel_engine/mel_filter is the injection point)",
+      "note": "mel_engine.v already exposes HAN_HEX_FILE / COO_HEX_FILE / LUT_HEX_FILE parameters, so the 48k swap is an instantiation-level change; this run leaves src/ untouched per task constraints"
+    }
+  },
+  "sanity": {
+    "sine_440_full": {
+      "feat_shape": [
+        64,
+        258
+      ],
+      "feat_dtype": "uint8",
+      "feat_min": 44,
+      "feat_max": 121,
+      "feat_mean": 49.2569,
+      "feat_std": 15.9087,
+      "sat_0_count": 0,
+      "sat_255_count": 0,
+      "feat_sha256": "2b49c7c315de4a66a644988610f8c909a125f5b1b2caa53da7ad6b5304eae6ee",
+      "librosa": {
+        "global_pearson_r": 0.999972215303316,
+        "per_bin_min_r": 0.9912459526134455,
+        "per_bin_mean_r": 0.9997081702540979,
+        "per_bin_active_count": 55,
+        "degenerate_bins": 9,
+        "max_abs_delta": 0.0342864990234375
+      }
+    },
+    "white_noise": {
+      "feat_shape": [
+        64,
+        258
+      ],
+      "feat_dtype": "uint8",
+      "feat_min": 0,
+      "feat_max": 112,
+      "feat_mean": 49.1086,
+      "feat_std": 15.5997,
+      "sat_0_count": 181,
+      "sat_255_count": 0,
+      "feat_sha256": "5ae805dcfaf406bd6c3b126b164d5632487670942084b247412c292a85bb8913",
+      "librosa": {
+        "global_pearson_r": 0.9999905571359071,
+        "per_bin_min_r": 0.9998769403306307,
+        "per_bin_mean_r": 0.9999776734336212,
+        "per_bin_active_count": 64,
+        "degenerate_bins": 0,
+        "max_abs_delta": 0.025149822235107422
+      }
+    },
+    "multi_tone": {
+      "feat_shape": [
+        64,
+        258
+      ],
+      "feat_dtype": "uint8",
+      "feat_min": 40,
+      "feat_max": 94,
+      "feat_mean": 48.729,
+      "feat_std": 16.1537,
+      "sat_0_count": 0,
+      "sat_255_count": 0,
+      "feat_sha256": "af5db78ca2fd88ac318c0dac7d5ca0ec0a8f204511010b07fc1cc10b5fda2658",
+      "librosa": {
+        "global_pearson_r": 0.9999764392817662,
+        "per_bin_min_r": 0.9989631440459845,
+        "per_bin_mean_r": 0.9999367516132602,
+        "per_bin_active_count": 63,
+        "degenerate_bins": 1,
+        "max_abs_delta": 0.03185048699378967
+      }
+    }
+  },
+  "thresholds": {
+    "pearson_r_floor": 0.99,
+    "max_abs_delta": 0.05,
+    "feat_domain_max": 177,
+    "degenerate_bin_std": 0.001
+  },
+  "hex_json_crosscheck": {
+    "hex_total_lines": 2027,
+    "expected_lines": 2027,
+    "offsets_match": true,
+    "bin_idx_match": true,
+    "weight_q15_match": true
+  },
+  "repeat_run": {
+    "pipeline_feat_sha256_reproduced": true,
+    "table_regen_hashes_reproduced": true,
+    "mel_tables_48k_json_sha256": "aefc08fdddb71774624cff19d6a560688ff1fe0dd76cc0eb2a068855881c0652",
+    "mel_coo_48k_hex_sha256": "8aca0239f739fef4ded6d4d7dea6f019b0937b257b63fdcaca49eec69f833a9f",
+    "mel_tables_48k_coe_sha256": "07b317443e3d235a698b8340038276289570c5bde51bdd342a748cc49519cd2d"
+  },
+  "failures": [],
+  "conclusion": "PASS"
+}

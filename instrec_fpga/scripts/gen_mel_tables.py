@@ -40,13 +40,35 @@ Generated tables (all quantized with round-half-up, deterministic bit-exact):
 
 Outputs (idempotent, no timestamps -> byte-identical on re-run):
   scripts/outputs/mel_tables.coe   RTL-readable $readmemh image (per-table
-                                   sections with comment headers).
+                                    sections with comment headers).
   scripts/outputs/mel_tables.json  Structured snapshot (params + table data +
-                                   per-table sha256 over canonical bytes).
+                                    per-table sha256 over canonical bytes).
+
+With --suffix <tag> (e.g. "_48k") every output name gains the tag
+(mel_tables_48k.coe / mel_tables_48k.json) and an additional per-table
+$readmemh image scripts/outputs/mel_coo_48k.hex is written (the same
+offsets+entries layout as src/mel/mel_coo.hex, the file the mel_filter.v
+ROMs load), so an alternate sampling-rate domain never overwrites the
+44.1 kHz production tables.  The suffix run with no --sr/--f-max override
+still emits the default 44.1 kHz table VALUES under the tagged names.
 
 Usage:
   python scripts/gen_mel_tables.py [--params <feature_params.json>]
-                                   [--outdir <dir>]
+                                    [--outdir <dir>]
+                                    [--sr 44100] [--f-max 22050.0]
+                                    [--suffix ""]
+
+Sampling-rate domain (MODEL_TRAINING_SPEC_20261104 section 2.1: the new
+model trains on the native 48 kHz PCM1808 front-end, fmax 24000):
+  --sr/--f-max default to the REQ-FTR-001 production values (44100/22050)
+  and then the run is bit-identical to the historical behaviour.  Passing
+  non-default values overrides the sr/f_max items of the parameter
+  snapshot (all other REQ-FTR-001 items stay pinned); f_max must satisfy
+  f_max <= sr/2.  Only the mel_coo table actually depends on the
+  sampling-rate domain: hann_q15 (2048-point window) and log2_lut (pure
+  mantissa->log2 map) are rate-invariant and are emitted with identical
+  values, so an alternate-rate table set only needs its own mel_coo image
+  for RTL injection.
 """
 
 from __future__ import annotations
@@ -121,14 +143,28 @@ def load_feature_params(params_path: Path) -> dict:
         return json.load(fh)
 
 
-def assert_params_match_req(params: dict) -> None:
+def assert_params_match_req(
+    params: dict, sr: int | None = None, f_max: float | None = None
+) -> None:
     """Assert every REQ-FTR-001 item against the parameter snapshot.
 
     Covers the ten T-GP-02 items (sr, n_fft, hop_length, n_mels, n_frames,
     f_min, f_max, power, top_db, normalization) plus win_length and window,
     which REQ-FTR-001 also pins (win=2048, Hann window).
+
+    sr/f_max: when the CLI overrides the sampling-rate domain (native 48
+    kHz front-end, MODEL_TRAINING_SPEC_20261104 section 2.1), those two
+    items are asserted against the override values instead of the
+    REQ-FTR-001 44.1 kHz defaults; every other item stays pinned.  With
+    both arguments None the assertion set is exactly EXPECTED_PARAMS
+    (historical default behaviour).
     """
-    for key, expected in EXPECTED_PARAMS.items():
+    checked = dict(EXPECTED_PARAMS)
+    if sr is not None:
+        checked["sr"] = int(sr)
+    if f_max is not None:
+        checked["f_max"] = float(f_max)
+    for key, expected in checked.items():
         actual = params.get(key)
         if actual != expected or type(actual) is not type(expected):
             raise AssertionError(
@@ -336,8 +372,10 @@ def build_tables(params: dict) -> dict:
             "offset_header": f"{COO_OFFSET_HEADER_LEN} entries (channel starts)",
             "drop_threshold": COO_WEIGHT_THRESHOLD,
             "source": (
-                "librosa.filters.mel(sr=44100, n_fft=2048, n_mels=64, "
-                "fmin=0, fmax=22050, htk=False, norm='slaney')"
+                f"librosa.filters.mel(sr={int(params['sr'])}, "
+                f"n_fft={int(params['n_fft'])}, n_mels={int(params['n_mels'])}, "
+                f"fmin={params['f_min']:g}, fmax={params['f_max']:g}, "
+                "htk=False, norm='slaney')"
             ),
             "canonical_bytes": "(bin_idx, weight) int16 LE pairs x n_entries",
             "offsets": [int(v) for v in coo["offsets"]],
@@ -392,19 +430,26 @@ def _hex_word(value: int, bit_width: int) -> str:
     return f"{value & mask:0{bit_width // 4}X}"
 
 
-def write_coe(path: Path, tables: dict, params: dict) -> None:
+def write_coe(
+    path: Path, tables: dict, params: dict,
+    param_source: str = "InstRec/deploy/feature_params.json",
+) -> None:
     """Write the RTL-readable .coe image with per-table sections.
 
     Section order: hann_q15, mel_coo_offsets, mel_coo_entries (padded to the
     4096-entry ROM capacity), log2_lut, exp_lut. All words are hex with fixed
     width so $readmemh can load them into matching ROM declarations.
+
+    param_source documents where the effective parameters came from; the
+    default is the plain feature_params.json snapshot (historical header
+    line), an sr/f_max CLI override appends the override note.
     """
     lines: list[str] = []
     lines.append("// ===================================================================")
     lines.append("// InstRec-FPGA Mel coefficient tables (auto-generated, do not edit)")
     lines.append(f"// generator : {GENERATOR_NAME}")
     lines.append(f"// spec refs : {SPEC_REFS}")
-    lines.append("// source    : InstRec/deploy/feature_params.json")
+    lines.append(f"// source    : {param_source}")
     lines.append(f"//   sr={params['sr']} n_fft={params['n_fft']} hop={params['hop_length']}"
                  f" n_mels={params['n_mels']} n_frames={params['n_frames']}")
     lines.append(f"//   f_min={params['f_min']} f_max={params['f_max']}"
@@ -470,15 +515,46 @@ def write_coe(path: Path, tables: dict, params: dict) -> None:
         fh.write("\n".join(lines))
 
 
-def write_json(path: Path, tables: dict, params: dict) -> None:
-    """Write the structured JSON snapshot (params + tables + sha256)."""
+def write_coo_hex(path: Path, tables: dict) -> None:
+    """Write the standalone COO $readmemh image (no comment header).
+
+    Layout is identical to src/mel/mel_coo.hex (the file mel_filter.v loads
+    through COO_HEX_FILE): 65 channel-start offset words in a 16-bit
+    container followed by one 27-bit word per COO entry
+    ({bin_idx[26:16], weight[15:0] signed Q1.15}), one upper-case
+    fixed-width hex word per line, LF newlines, no padding.  This is the
+    RTL injection carrier for alternate sampling-rate table sets (e.g.
+    mel_coo_48k.hex for the native 48 kHz front-end); hann_q15/log2_lut
+    are rate-invariant and reuse the production files.
+    """
+    coo = tables["mel_coo"]
+    lines = [_hex_word(int(v), 16) for v in coo["offsets"]]
+    for bin_idx, weight in zip(coo["bin_idx"], coo["weight_q15"]):
+        word = (int(bin_idx) << 16) | (int(weight) & 0xFFFF)
+        lines.append(_hex_word(word, 27))
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with open(path, "w", encoding="ascii", newline="\n") as fh:
+        fh.write("\n".join(lines) + "\n")
+
+
+def write_json(
+    path: Path, tables: dict, params: dict, expected: dict | None = None
+) -> None:
+    """Write the structured JSON snapshot (params + tables + sha256).
+
+    expected overrides the recorded param_assertions expectation set (used
+    for sr/f_max CLI overrides so the snapshot stays self-describing); the
+    default None records EXPECTED_PARAMS verbatim.
+    """
+    if expected is None:
+        expected = EXPECTED_PARAMS
     payload = {
         "generator": GENERATOR_NAME,
         "spec_refs": SPEC_REFS,
         "params": params,
         "param_assertions": {
-            "expected": EXPECTED_PARAMS,
-            "checked_items": len(EXPECTED_PARAMS),
+            "expected": expected,
+            "checked_items": len(expected),
             "status": "pass",
         },
         "tables": tables,
@@ -493,7 +569,7 @@ def write_json(path: Path, tables: dict, params: dict) -> None:
 # Entry point.
 # ---------------------------------------------------------------------------
 def main(argv: list[str] | None = None) -> int:
-    """Generate all tables and write the .coe/.json outputs."""
+    """Generate all tables and write the .coe/.json (and tagged .hex) outputs."""
     parser = argparse.ArgumentParser(
         description="Generate InstRec-FPGA Mel coefficient tables."
     )
@@ -509,20 +585,72 @@ def main(argv: list[str] | None = None) -> int:
         default=DEFAULT_OUT_DIR,
         help="output directory (default: scripts/outputs)",
     )
+    parser.add_argument(
+        "--sr",
+        type=int,
+        default=44100,
+        help="sampling rate of the mel filterbank domain "
+             "(default: 44100, REQ-FTR-001 production)",
+    )
+    parser.add_argument(
+        "--f-max",
+        type=float,
+        default=22050.0,
+        dest="f_max",
+        help="mel filterbank upper frequency limit (default: 22050.0)",
+    )
+    parser.add_argument(
+        "--suffix",
+        default="",
+        help="output name tag appended to every file (e.g. '_48k' -> "
+             "mel_tables_48k.json + mel_coo_48k.hex); empty = production "
+             "names mel_tables.coe/.json with no hex sidecar",
+    )
     args = parser.parse_args(argv)
 
+    if args.f_max > args.sr / 2.0:
+        parser.error(
+            f"--f-max {args.f_max:g} exceeds Nyquist sr/2 = {args.sr / 2.0:g}"
+        )
+    if args.suffix and not args.suffix.replace("_", "a").replace("-", "a").isalnum():
+        parser.error(f"--suffix {args.suffix!r} must be alphanumeric/_/-")
+
     params = load_feature_params(args.params)
-    assert_params_match_req(params)
+    if args.sr != int(params["sr"]) or args.f_max != float(params["f_max"]):
+        # Sampling-rate domain override (MODEL_TRAINING_SPEC_20261104 2.1):
+        # the sr/f_max snapshot items are replaced by the CLI values, all
+        # other REQ-FTR-001 items remain pinned.
+        params = dict(params)
+        params["sr"] = int(args.sr)
+        params["f_max"] = float(args.f_max)
+        assert_params_match_req(params, sr=args.sr, f_max=args.f_max)
+        expected = dict(EXPECTED_PARAMS)
+        expected["sr"] = int(args.sr)
+        expected["f_max"] = float(args.f_max)
+        param_source = (
+            f"InstRec/deploy/feature_params.json + CLI override "
+            f"(--sr {args.sr} --f-max {args.f_max:g})"
+        )
+    else:
+        assert_params_match_req(params)
+        expected = EXPECTED_PARAMS
+        param_source = "InstRec/deploy/feature_params.json"
 
     tables = build_tables(params)
 
-    coe_path = args.outdir / "mel_tables.coe"
-    json_path = args.outdir / "mel_tables.json"
-    write_coe(coe_path, tables, params)
-    write_json(json_path, tables, params)
+    coe_path = args.outdir / f"mel_tables{args.suffix}.coe"
+    json_path = args.outdir / f"mel_tables{args.suffix}.json"
+    write_coe(coe_path, tables, params, param_source)
+    write_json(json_path, tables, params, expected)
 
     coo = tables["mel_coo"]
-    print(f"[gen_mel_tables] params OK ({len(EXPECTED_PARAMS)} REQ-FTR-001 items)")
+    hex_path = None
+    if args.suffix:
+        hex_path = args.outdir / f"mel_coo{args.suffix}.hex"
+        write_coo_hex(hex_path, tables)
+
+    print(f"[gen_mel_tables] params OK ({len(expected)} REQ-FTR-001 items, "
+          f"sr={params['sr']}, f_max={params['f_max']:g})")
     print(f"[gen_mel_tables] hann_q15   : {tables['hann_q15']['n']} entries")
     print(
         f"[gen_mel_tables] mel_coo    : {coo['n_entries']} entries "
@@ -535,6 +663,8 @@ def main(argv: list[str] | None = None) -> int:
         print(f"[gen_mel_tables] sha256 {name:<10}: {tables[name]['sha256']}")
     print(f"[gen_mel_tables] wrote {coe_path}")
     print(f"[gen_mel_tables] wrote {json_path}")
+    if hex_path is not None:
+        print(f"[gen_mel_tables] wrote {hex_path}")
     return 0
 
 

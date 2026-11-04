@@ -65,6 +65,15 @@ Special paths:
     design.md 3.6 stand-in for the float 1e-6 epsilon, preventing a
     division by zero for degenerate windows).
 
+Sampling-rate domain: the pipeline consumes whichever table set
+--tables points at and derives the effective sampling rate from its
+params.sr snapshot (default mel_tables.json = 44100; the 48 kHz native
+front-end of MODEL_TRAINING_SPEC_20261104 section 2.1 uses
+scripts/outputs/mel_tables_48k.json, sr 48000 / fmax 24000). Input wavs
+must match the table rate; the 44.1 kHz default path is byte-identical
+to the historical behaviour. The librosa --ref mode is restricted to the
+44.1 kHz tables (the InstRec features.py reference is 44.1k-only).
+
 Usage:
   python scripts/golden_pipeline.py --wav tests/fixtures/sine_440_full.wav \
       --stage feat --ref librosa
@@ -73,6 +82,9 @@ Usage:
   python scripts/golden_pipeline.py --wav <wav> \
       --stage conv1,conv2,conv3,conv4,fc1,fc2,logits,probs \
       --ref torch --outdir scripts/outputs/golden
+  python scripts/golden_pipeline.py --wav <48k wav> \
+      --tables scripts/outputs/mel_tables_48k.json --stage feat \
+      --outdir scripts/outputs/golden
 """
 
 from __future__ import annotations
@@ -95,6 +107,12 @@ DEFAULT_OUT_DIR = SCRIPTS_DIR / "outputs" / "golden"
 DEFAULT_REF_SRC_DIR = Path(__file__).resolve().parents[3] / "InstRec" / "src"
 
 # Acoustic parameters (REQ-FTR-001, asserted against mel_tables.json params).
+# SR is the DEFAULT (44.1 kHz production) sampling rate. The mel pipeline
+# itself is rate-agnostic: the effective rate comes from the loaded table
+# set (tables["params"]["sr"], e.g. scripts/outputs/mel_tables_48k.json for
+# the native 48 kHz front-end of MODEL_TRAINING_SPEC_20261104 section 2.1,
+# loaded via --tables); PCM wavs must simply match that rate. n_fft/hop/
+# n_frames/window geometry is shared by every rate variant.
 SR = 44100
 N_FFT = 2048
 HOP = 512
@@ -153,12 +171,18 @@ def load_mel_tables(tables_path: Path = DEFAULT_TABLES_PATH) -> dict:
 
     Returns a dict with int arrays: hann_q15 (2048 int16), coo_offsets
     (65 int64), coo_channels/bin_idx/weight_q15 (int arrays), log2_lut
-    (256 uint8), plus the parameter snapshot for assertion.
+    (256 uint8), plus the parameter snapshot for assertion. The sampling
+    rate is read from the snapshot (params["sr"], default 44100 production
+    tables; the 48 kHz variant mel_tables_48k.json carries 48000) and the
+    callers compare PCM wav frame rates against it -- see load_pcm_s16.
     """
     with open(tables_path, "r", encoding="ascii") as fh:
         payload = json.load(fh)
     params = payload["params"]
-    assert params["sr"] == SR and params["n_fft"] == N_FFT
+    assert isinstance(params["sr"], int) and params["sr"] > 0, (
+        f"mel_tables params.sr must be a positive int, got {params['sr']!r}"
+    )
+    assert params["n_fft"] == N_FFT
     assert params["hop_length"] == HOP and params["n_mels"] == N_MELS
     assert params["n_frames"] == N_FRAMES
     assert params["window"] == "hann" and params["power"] == 2.0
@@ -248,8 +272,16 @@ def sat8(x: np.ndarray) -> np.ndarray:
 # ---------------------------------------------------------------------------
 # Stage 1: PCM loading and STFT framing (center=True reflect, REQ-FTR-002).
 # ---------------------------------------------------------------------------
-def load_pcm_s16(wav_path: Path, max_samples: int = WINDOW_SAMPLES) -> np.ndarray:
+def load_pcm_s16(
+    wav_path: Path, max_samples: int = WINDOW_SAMPLES, sr: int = SR
+) -> np.ndarray:
     """Read a 16-bit wav and cut it to the hardware window length.
+
+    sr is the expected wav frame rate (default SR = 44100, the production
+    table rate). Callers loading an alternate table set pass the table
+    params.sr instead (48 kHz wavs with mel_tables_48k.json), so the
+    assertion compares the wav against the TABLE rate, not a module
+    constant.
 
     Stereo input is downmixed with an integer round-half-up average,
     (L + R + 1) >> 1, matching the librosa mono=True downmix semantics
@@ -259,7 +291,10 @@ def load_pcm_s16(wav_path: Path, max_samples: int = WINDOW_SAMPLES) -> np.ndarra
     """
     with wave.open(str(wav_path), "rb") as wf:
         assert wf.getsampwidth() == 2
-        assert wf.getframerate() == SR
+        assert wf.getframerate() == sr, (
+            f"{wav_path.name}: wav frame rate {wf.getframerate()} != "
+            f"table sampling rate {sr}"
+        )
         n_ch = wf.getnchannels()
         raw = wf.readframes(wf.getnframes())
     samples = np.frombuffer(raw, dtype="<i2").astype(np.int16)
@@ -1114,7 +1149,14 @@ def main(argv: list[str] | None = None) -> int:
             parser.error(f"unknown stage '{stage}' (choose among {ALL_STAGES})")
 
     tables = load_mel_tables(args.tables)
-    pcm = load_pcm_s16(args.wav)
+    table_sr = int(tables["params"]["sr"])
+    if args.ref == "librosa" and table_sr != SR:
+        parser.error(
+            "--ref librosa requires the 44.1 kHz production table set "
+            "(InstRec/src/features.py reference is 44.1k-only); use "
+            "--tables outputs/mel_tables.json or drop --ref"
+        )
+    pcm = load_pcm_s16(args.wav, sr=table_sr)
     result = run_mel_pipeline(pcm, tables)
 
     # NPU section (T-GP-05): run the INT8 forward whenever any NPU stage
