@@ -46,10 +46,11 @@ TOKENS = (
     '__CONSTRAINT_FILES__',
     '__HEX_COPY_BLOCK__',
 )
-SET_NAMES = ('full', 'ddr3_diag', 'ui_demo', 'conv1_test', 'mel_test', 'core_only', 'rv_core', 'pcm1808_diag', 'emergency_demo')
+SET_NAMES = ('full', 'ddr3_diag', 'ui_demo', 'conv1_test', 'mel_test', 'core_only', 'rv_core', 'pcm1808_diag', 'emergency_demo', 'i2s_capture')
 SET_KEYS = ('top_module', 'sources', 'ip_cores', 'constraints', 'hex_dirs')
 TOP_MODULES = {
     'emergency_demo': 'top_emergency_demo',
+    'i2s_capture': 'top_i2s_capture',
     'pcm1808_diag': 'top_pcm1808_probe',
     'full': 'instrec_top',
     'ddr3_diag': 'top_ddr3_diag',

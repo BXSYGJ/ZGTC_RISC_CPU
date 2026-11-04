@@ -195,6 +195,8 @@ module i2s_capture_ctrl #(
     // Combinational write data (stable during the whole write command,
     // advances on every accepted beat).
     always @* m0_wdata = beat_buf[beat_rptr];
+    // Byte offset of the 32-bit slot inside the selected 256-bit beat.
+    wire [7:0] bslot_of = {5'd0, beat_wptr[2:0]} * 8'd32;
 
     assign smp_rd_en = (state == S_CLR) || (state == S_ACC);
 
@@ -600,8 +602,10 @@ module i2s_capture_ctrl #(
                         rret_state <= S_ACC;
                         state      <= S_RSEQ0;
                     end else if (smp_valid) begin
-                        beat_buf[beat_wptr[5:3]][beat_wptr[2:0] * 6'd32 +: 32]
-                            <= smp_data;
+                        // 8-bit slot offset: 7 * 32 = 224 must not wrap at
+                        // 6 bits (a 6-bit product truncated slots 2..7 onto
+                        // slots 0/1, leaving 192 of the 256 bits unwritten).
+                        beat_buf[beat_wptr[5:3]][bslot_of +: 32] <= smp_data;
                         cap_word_cnt <= cap_word_cnt + 18'd1;
                         if (beat_wptr == 6'd63) begin
                             beat_rptr    <= 3'd0;

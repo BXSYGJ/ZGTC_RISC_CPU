@@ -40,7 +40,7 @@
 #   - No PS7-only operators (ternary / null-coalescing / chain operators).
 [CmdletBinding()]
 param(
-    [ValidateSet('full', 'ddr3_diag', 'ui_demo', 'conv1_test', 'mel_test', 'core_only', 'rv_core', 'pcm1808_diag', 'emergency_demo')]
+    [ValidateSet('full', 'ddr3_diag', 'ui_demo', 'conv1_test', 'mel_test', 'core_only', 'rv_core', 'pcm1808_diag', 'emergency_demo', 'i2s_capture')]
     [string]$BuildSet = 'full',
 
     [string]$TopModule = '',

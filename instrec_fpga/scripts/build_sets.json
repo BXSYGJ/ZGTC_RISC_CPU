@@ -223,6 +223,29 @@
         "src/ui",
         "src/cpu"
       ]
+    },
+    "i2s_capture": {
+      "top_module": "top_i2s_capture",
+      "sources": [
+        "src/audio/i2s_slave_rx.v",
+        "src/ctrl/uart_tx.v",
+        "src/ctrl/uart_rx.v",
+        "src/ddr3/ddr3_ctrl_axi.v",
+        "src/ddr3/ddr3_arbiter.v",
+        "src/ddr3/ddr3_wrapper.v",
+        "src/diag/i2s_capture_ctrl.v",
+        "src/diag/top_i2s_capture.v"
+      ],
+      "ip_cores": [
+        "ipcore/pll/pll.idf",
+        "ipcore/ddr3_test/ddr3_test.idf"
+      ],
+      "constraints": [
+        "constraints/ddr3_100h.fdc",
+        "constraints/clock_groups_async.fdc",
+        "constraints/top_i2s_capture.fdc"
+      ],
+      "hex_dirs": []
     }
   }
 }
