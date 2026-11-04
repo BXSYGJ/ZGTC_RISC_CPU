@@ -1,5 +1,12 @@
 # InstRec-FPGA 变更日志
 
+## 2026-11-04：等模型期间三线并行——48k 真值链、mel 48k 仿真、集成实验顶层
+
+- A：gen_mel_tables 参数化出 48k 表集（仅 mel_coo 变，hann/log2_lut 为采样率不变量）；golden_pipeline SR 参数化（默认零破坏）；48k 自验证饱和 0、librosa r≥0.999。
+- B：mel_engine 透传 INV_S_IN/ZP_IN（QuantStub 注入通路补全）；mel_48k 仿真 16512 mismatch 0；跟进项：mel_filter coo_rom 深度须参数化（48k 表 2027 行超 44.1k 硬编码 2025）。
+- C：top_integration_lab 三模块扁平 MMIO 集成 + 四场景 50 检查 PASS；发现 3 个生产集成接口问题（地址冲突/epoch 同拍/frame_start）。
+- 外部事件：模型侧已按规格改 features.py 至 48k 域；test_golden_mel dod1/dod3 加域 guard（跨域 skip），基线 421 passed + 26 skipped（22 个预期过渡 skip）。
+
 ## 2026-11-04：模型重训规格文档交付，进入等模型阶段
 
 - 新增 docs/MODEL_TRAINING_SPEC_20261104.md：交模型负责人的重训完整规格——Medley/五组数据现成无需采集、F1 原生 48k 前端契约（Mel fmax 24k 重生成、几何 64×258 固定）、算子白名单与通道候选、QuantStub 交付要求、验收门槛与七项交付物、附录 B 固化交付后分模块仿真→全链→PDS→三层注入→真实音乐的逐级上板流程。

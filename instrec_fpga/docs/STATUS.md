@@ -1,5 +1,15 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-04（第五批）：等模型期间三线并行——48k 前端真值链/mel 48k 仿真/集成实验顶层；发现模型侧已开工
+
+- 用户指示按 MODEL_TRAINING_SPEC 附录 B 推进不依赖新权重的部分。三子代理并行交付（主线已独立复核 stash 对照与全量回归）：
+- **A 48k 前端真值链**：`gen_mel_tables.py` 参数化（--sr/--f-max/--suffix，默认输出与冻结表逐字节一致）；48k 表集 `scripts/outputs/mel_tables_48k.json` + `mel_coo_48k.hex`（1962 entries，bin1..1022）；hann/log2_lut/exp_lut 表级 hash 与 44.1k **相等**（采样率不变量实证，RTL 只需换 COO 表）；`golden_pipeline.py` SR 参数化（帧率断言对表 sr，默认行为不变：44.1k feat 与冻结 golden_ref 逐位一致）；`experiments/mel48k/run_check.py` 自验证：合成 PCM@48k 饱和 0、librosa(48k,fmax24k) 逐 bin Pearson r≥0.999、hex↔json 一致、双跑 hash 复现；报告 `reports/mel48k_truth_chain_20261104.json`。
+- **B mel RTL 48k 注入**：`mel_engine.v` 新增 `INV_S_IN/ZP_IN` parameter 并透传至 standardize 例化（**新模型 QuantStub 注入通路补全**，默认值逐位同旧——mel/mel_credit 复跑 PASS 证明零破坏）；新 sim case `mel_48k`：mel_engine 注入 48k COO 表（TB override），48k 合成 PCM 对拍 48k golden **16512 mismatch 0**（frames=259/cycles=5144063）。**已知跟进项**：`mel_filter.v` coo_rom 深度 [0:2024] 按 44.1k 硬编码，容不下 48k 表 2027 行——mel_48k 用 run_sim overrides 在 build 拷贝上扩容绕过，**正式 48k PDS 交付前必须把 coo_rom 深度参数化/扩容**（列入新模型交付后清单首位）。
+- **C 三模块集成实验顶层**：`src/integration/top_integration_lab.v`（扁平 MMIO 写口统一 uart_app_boot/ui_scene/logits_snap 三模块 + 假 NPU LCG 结果发生器 + IRAM 执行监视）；`sim/tb_integration_lab.sv` 四场景 50 检查 PASS（APP 加载/场景原子切换/logits 快照闭环/坏帧防御+互不干扰）；run_sim 新增 integration_lab case。**发现三个真实接口问题**（已记录，生产集成时处理）：①logits_snap 寄存器 0x200/0x204 与 ui_scene glyph 子窗地址冲突，生产 MMIO mux 须给独立基址；②epoch 同拍递增约束须写入契约；③ui_scene_top 建议引出 frame_start。
+- **重要外部事件：模型负责人已按训练规格开工**——`InstRec/src/features.py` 已改 SR=48000/F_MAX=24000（git M 状态，注释引用规格措辞）。副作用：`test_golden_mel.py` dod1/dod3（golden z vs 训练侧动态参考）因 44.1k golden 域 vs 48k 参考域错配出现 20 failed（delta≈1.113）。处置：加域一致性 guard——参考域与 golden 表域不匹配时显式 skip（注明原因），**不冒充跨域一致也不挂红基线**；基线变为 **421 passed + 26 skipped**（22 个域 guard skip 属预期过渡态，新模型交付+FPGA golden 切 48k 表后自动恢复实测）。
+- 验证：check_rtl 75 .v / 0 violation；run_sim mel/mel_credit/mel_48k/ui_scene/uart_app_boot/logits_snap/integration_lab 全 PASS；stash 对照证明 20 failed 与本批改动无关（InstRec 侧外部修改所致）。
+- 下一步：等新模型交付（训练规格 §6 七项交付物）；到位后按附录 B：mel_filter coo_rom 深度参数化→48k golden_ref 重生成→NPU 新权重对拍→集成→PDS→三层注入。
+
 ## 2026-11-04（第四批）：产出模型重训规格文档，进入「等新模型」阶段
 
 - 用户裁定执行顺序：**先出训练规格交模型负责人重训 → 新模型交付后适配架构 → 分模块逐个仿真 → 全部通过才上板**；此前「修复后直接构建上板」的提议作废。本轮唯一交付为 `docs/MODEL_TRAINING_SPEC_20261104.md`。
