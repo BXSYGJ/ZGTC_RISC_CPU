@@ -1,5 +1,11 @@
 # InstRec-FPGA 变更日志
 
+## 2026-11-04：I2S 采集链路开发（数据通路打通，仿真未全通过，上板推迟）
+
+- 新增 top_i2s_capture/i2s_capture_ctrl（FIR 前原始 48k 双声道 → DDR3 → UART 帧导出）、约束、全链 TB、PC 采集/播放/对接脚本 + 17 离线测试；恢复被覆盖的 I2S 接收单测为 i2s_rx_phy。
+- 修复四处真实缺陷：命令捆包地址位宽错位、wrapper 输入悬空（_a 信号零连线）、TB BCK 两倍频、TB 采集起点未对齐。数据从全零推进到真实样本回传（word0/1 正确、帧/CRC 结构正确）。
+- 未通过：payload 自 word2 起为零（读回字重复，rd_ready 与模型推送速率不匹配）、每 2 帧 1 新值（LRCK 边沿漏检）。据此不启动构建/烧录；回归 438+26skip、check_rtl 77/0。
+
 ## 2026-11-04：等模型期间三线并行——48k 真值链、mel 48k 仿真、集成实验顶层
 
 - A：gen_mel_tables 参数化出 48k 表集（仅 mel_coo 变，hann/log2_lut 为采样率不变量）；golden_pipeline SR 参数化（默认零破坏）；48k 自验证饱和 0、librosa r≥0.999。

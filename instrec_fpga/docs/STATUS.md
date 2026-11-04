@@ -1,5 +1,14 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-04（第六批）：I2S 采集链路开发——数据通路打通，仿真未全通过（上板推迟）
+
+- 用户指令：硬件在线，要求在板上实现 I2S 采集存入工作区（Realtek 声卡播放 → PCM1808），为排除 I2S 输入域偏移提供真实数据。采集点设计在 **FIR 之前**（原始 48k I2S 双声道），攻克「I2S 接收」与「FIR 重采样」分层。
+- 已交付：`src/diag/top_i2s_capture.v` + `src/diag/i2s_capture_ctrl.v`（DDR3 写/读 + UART 'C'/'R'/'S' 帧导出，帧格式与 weight_loader 同款 0xAA55+seq+len+CRC16）、`constraints/top_i2s_capture.fdc`、`sim/tb_i2s_capture.sv`（全链行为 DDR3 模型）、PC 侧 `scripts/i2s_capture.py`（采集+播放联动 winsound）/`scripts/i2s_capture_check.py`（健康检查+FIR golden 对接）/17 个离线测试、恢复既有 I2S 接收单测为独立 case `i2s_rx_phy`（A 代理曾覆盖该文件）。
+- **本轮修复的四个真实缺陷**：①37 位命令捆包地址字段只拼 24 位（wr/addr/len 整体错位）②wrapper 输入端口全部连到悬空裸 wire、与 ctrl 的 `_a` 信号零连线（PDS/Verilator 均静默，典型「构建通过≠接线正确」）③TB BCK 半周期写成 #81.38（6.144MHz，两倍频）④TB 期望数组从 0 索引未记录采集起点（cap_base）。
+- **当前仿真状态（如实）**：采集主链路已从「读回全零」推进到「真实样本经 I2S→CDC→DDR3→UART 回传」（word0/1 与发送值一致、CRC 帧结构正确、S0/S3/S1-CAPDONE/S2/S4 场景 PASS）；**未通过的判据**：frame payload 自 word2 起为零（读回字重复）与「每 2 帧 1 新值」的 pcm_valid 节奏。探针证据：`rd_valid` 为「FIFO 非空期间持续有效」而行为模型每 4 拍推一字，ctrl 每拍消费导致同一 256 位字重复入 exp_buf；`i2s_slave_rx` 的 LRCK 边沿检测在 27MHz 异步过采样下漏检一半（生产板 BCK 亦异步，值得复核）。
+- **决定**：不启动构建/上板（带这两处缺陷烧录会浪费唯一板级窗口）；下一步对照已验证的 `mel_engine` m2 读 pacing（FILL_CREDIT/credit 机制）重做导出读节奏，并复核 slave_rx 的 LRCK 边沿余量后，再进「构建→烧录→实采」。
+- 回归：check_rtl 77 .v / 0 violation；`i2s_rx_phy` PASS；pytest **438 passed + 26 skipped**（+17 采集工具测试，基线语义不变）。零 PDS/零烧录。
+
 ## 2026-11-04（第五批）：等模型期间三线并行——48k 前端真值链/mel 48k 仿真/集成实验顶层；发现模型侧已开工
 
 - **补充收尾：mel_filter coo_rom 深度已参数化**（`COO_ROM_WORDS` parameter，mel_engine 透传，默认 2025 与 44.1k 逐位一致）：mel_48k TB 直接传 2027，run_sim 的 build 拷贝 override 已拆除（补丁层归零纪律）；mel/mel_credit/mel_48k 复跑 PASS。**48k PDS 前置项清单清空**，等模型期间的全部准备项完成。
