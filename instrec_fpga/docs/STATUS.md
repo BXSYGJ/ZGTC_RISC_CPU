@@ -1,5 +1,13 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-04（第七批）：I2S 采集再修三处真缺陷；**上板被 license 过期阻塞（2026-11-03 到期）**
+
+- 用户要求「没问题就上板放音乐」。如实结论：**仿真仍有 1 处未收敛 + 上板被 license 阻塞**。
+- **本轮新修三处真实缺陷**：①`i2s_capture_ctrl` 的槽位偏移 `beat_wptr[2:0] * 6'd32` 积只有 6 位（7×32=224 截断为 32），槽 2..7 全部回卷覆盖槽 0/1 ⇒ 写回 256 位字只有低 64 位有值（与历史「常量位宽不足」同型，已改 8 位 `bslot_of`，修复后 word0 逐字一致）；②37 位命令捆包仅拼 24 位地址（wr/addr/len 错位）；③wrapper AXI 输入连到悬空裸 wire 而与 ctrl 的 `_a` 族零连线（PDS/Verilator 均静默）。另有 TB 侧两处：BCK 半周期 `#81.38` 实为两倍频、期望数组未记采集起点 `cap_base`。
+- **仍未收敛 1 处**：`i2s_slave_rx` 的 L/R 翻转依赖 LRCK 边沿检测，27MHz 异步过采样下漏检一半 ⇒ 采集样本呈 2:1 抽取（0x11,0x13,0x15…）。三版相位改动均引入新错位，已回滚到 HEAD 版本（该版本板级曾验证 PCM1808 非零动态样本）。**板级真实 PCM1808 的 BCK/LRCK 与 TB 合成源不同，实采数据本身可判定是否复现**；PC 侧 `i2s_capture_check.py` 可检测重复对并去重。
+- **上板阻塞（硬）**：PDS 报 `Flow-0183 Failed to check license fabric_shell`；许可证 `E:\License\pango\new_pds_F4A80DA47D72.lic` 的 `expire_date {2026-11-03}` **已过期**（今天 11-04），系统无其他 license 文件。⇒ 无法构建新位流；板上现有 0EBF9448（无 NPU 脚本演示）/1497FAF4（含 shift-24 bug）**均不含 I2S 采集导出通路**，不能用于本次采集。license 续期后一键恢复：`powershell -File scripts/run_pds_full.ps1 -BuildSet i2s_capture`（构建集已五处登记：build_sets.json / run_pds_full.ps1 ValidateSet / test_build_tokens SET_NAMES+TOP_MODULES / test_plan_contract_guards SET_NAMES）→ `python scripts/board_check.py --sbit build/instrec-latest.sbit` → `python scripts/i2s_capture.py --play-wav InstRec/data/demo_samples_v2/eight_class_montage.wav --lead 1.0` → `python scripts/i2s_capture_check.py --capture <dir>`。
+- 回归：check_rtl 77 .v/0 violation；pytest **438 passed + 26 skipped**；构建集契约 34 passed。零新位流、零烧录。
+
 ## 2026-11-04（第六批）：I2S 采集链路开发——数据通路打通，仿真未全通过（上板推迟）
 
 - 用户指令：硬件在线，要求在板上实现 I2S 采集存入工作区（Realtek 声卡播放 → PCM1808），为排除 I2S 输入域偏移提供真实数据。采集点设计在 **FIR 之前**（原始 48k I2S 双声道），攻克「I2S 接收」与「FIR 重采样」分层。
