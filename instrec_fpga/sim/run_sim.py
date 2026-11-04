@@ -336,6 +336,26 @@ register(Case(
 register(Case(
     name="i2s_capture",
     tb="tb_i2s_capture.sv",
+    rtl=[
+        "src/diag/top_i2s_capture.v",
+        "src/diag/i2s_capture_ctrl.v",
+        "src/ddr3/ddr3_ctrl_axi.v",
+        "src/ddr3/ddr3_arbiter.v",
+        "src/audio/i2s_slave_rx.v",
+        "src/ctrl/uart_tx.v",
+        "src/ctrl/uart_rx.v",
+    ],
+    timeout=600,
+    extra_flags=["-y", "sim"],
+    description="full-chain I2S capture top: PCM1808 master source, UART C/R/S, DDR3 write+export round trip",
+))
+
+# Historical I2S receiver unit test (registered clocks + Philips source into
+# src/audio/i2s_rx.v).  Kept as its own case after the full-chain capture
+# top took over the tb_i2s_capture name.
+register(Case(
+    name="i2s_rx_phy",
+    tb="tb_i2s_rx_phy.sv",
     rtl=["src/audio/i2s_clk_gen.v", "src/audio/i2s_rx.v"],
     timeout=120,
     description="physical Philips I2S source into generated clocks and receiver",
