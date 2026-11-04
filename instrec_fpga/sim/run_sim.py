@@ -218,6 +218,37 @@ register(Case(
     description="mel_engine with FILL_CREDIT=1280 (must complete, feat vs golden)",
 ))
 
+# Native 48 kHz front-end (MODEL_TRAINING_SPEC_20261104 appendix B step 1):
+# the same engine and window geometry, only the COO filterbank image is
+# swapped to the 48 kHz table (mel_coo_48k.hex, fmax 24000; hann/log2 are
+# rate invariants). Tables land in build/sim/mel_48k/ via the
+# experiments/mel48k/gen_sim_tables_48k.py hook and are addressed with
+# project-root-relative paths (the run cwd is instrec_fpga/).
+#
+# KNOWN 48k DOMAIN GAP (sim-only override, source untouched): mel_filter.v
+# sizes its COO ROM at [0:2024] = 65 offsets + 1960 entries, the frozen
+# 44.1 kHz table depth. The 48 kHz filterbank has 1962 entries (2027
+# lines), so $readmemh runs past the array end ("address beyond bounds")
+# on the unmodified source. The e_idx / off_lo / off_hi walkers are
+# 12-bit offset-driven and size-agnostic; widening the ROM to [0:2026]
+# on the build copy is the only change needed. The production 48 kHz
+# delivery must parameterize (or re-size) that ROM in src/mel/mel_filter.v
+# before the PDS build.
+register(Case(
+    name="mel_48k",
+    tb="tb_mel_engine_48k.sv",
+    rtl=list(MEL_RTL),
+    timeout=600,
+    prepare="mel_48k",
+    extra_flags=["--public"],
+    overrides=[(
+        "src/mel/mel_filter.v",
+        r"reg \[26:0\] coo_rom \[0:2024\];",
+        "reg [26:0] coo_rom [0:2026];",
+    )],
+    description="mel_engine with the 48 kHz COO table vs 48k golden feat (16512 bytes)",
+))
+
 register(Case(
     name="weight_loader",
     tb="tb_weight_loader.sv",
@@ -502,6 +533,30 @@ register(Case(
 ))
 
 
+# Integration lab top (INTERFACE_CONTRACTS_V0_20261104 sec. 1/2/3): the
+# three v0 lab modules (uart_app_boot / ui_scene_top / logits_snap) wired
+# bus-level into one clock and reset domain behind a flat MMIO-style write
+# decoder.  No golden preparation is needed: glyph16x32.hex is loaded by
+# ui_scene_render itself through the project-root-relative $readmemh path
+# (the run cwd is instrec_fpga/), and the TB uses self-constructed scenes
+# with frame-diff / sampled-isolation assertions instead of Python
+# reference frames.
+register(Case(
+    name="integration_lab",
+    tb="tb_integration_lab.sv",
+    rtl=["src/integration/top_integration_lab.v",
+         "src/boot/uart_app_boot.v",
+         "src/ctrl/uart_rx.v",
+         "src/ctrl/uart_tx.v",
+         "src/ui_scene/ui_scene_top.v",
+         "src/ui_scene/ui_scene_table.v",
+         "src/ui_scene/ui_scene_render.v",
+         "src/ctrl/logits_snap.v"],
+    timeout=600,
+    description="lab top: boot loader + scene renderer + logits snap on one flat MMIO bus",
+))
+
+
 # ---------------------------------------------------------------------------
 # Small helpers
 # ---------------------------------------------------------------------------
@@ -584,6 +639,22 @@ def prepare_mel(work: Path) -> None:
     write_hex(out / "pcm.hex", pcm.view(np.uint16), 4)
     feat = np.load(GOLDEN / "feat.npy")            # (mel, frame)
     write_hex(out / "golden_feat.hex", feat.T.reshape(-1), 2)
+
+
+def prepare_mel_48k(work: Path) -> None:
+    """48 kHz sim tables via experiments/mel48k/gen_sim_tables_48k.py.
+
+    Writes build/sim/mel_48k/{pcm.hex, golden_feat.hex} (golden_pipeline
+    on mel_tables_48k.json) and copies mel_coo_48k.hex next to them; the
+    TB and the mel_engine COO_HEX_FILE override point there with
+    project-root-relative paths.
+    """
+    script = ROOT / "experiments" / "mel48k" / "gen_sim_tables_48k.py"
+    res = subprocess.run([sys.executable, str(script)], cwd=str(ROOT),
+                         capture_output=True, text=True, encoding="utf-8",
+                         errors="replace")
+    if res.returncode != 0:
+        raise SystemExit("48k table generation failed:\n%s" % res.stderr[-4000:])
 
 
 def _contract() -> dict:
@@ -740,6 +811,7 @@ PREPARERS = {
     "pcm1808": prepare_pcm1808,
     "conv1": prepare_conv1,
     "mel": prepare_mel,
+    "mel_48k": prepare_mel_48k,
     "npu_chain": prepare_npu_chain,
     "weight_loader": prepare_weight_loader,
     "rv_top_ctrl": prepare_rv_top_ctrl,

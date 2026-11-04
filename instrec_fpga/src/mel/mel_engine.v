@@ -196,6 +196,13 @@ module mel_engine #(
     parameter         HAN_HEX_FILE = "hann_q15.hex",
     parameter         COO_HEX_FILE = "mel_coo.hex",
     parameter         LUT_HEX_FILE = "log2_lut.hex",
+    // QuantStub input contract forwarded to standardize (layer_contract
+    // json quant_stub_input_contract): INV_S_IN is the Q8.24 inverse
+    // input scale, ZP_IN the quint8 zero point. Defaults are bit
+    // identical to the standardize.v module defaults, so passing them
+    // through changes nothing until a new model overrides them.
+    parameter [31:0]  INV_S_IN     = 32'd267723430,
+    parameter [7:0]   ZP_IN        = 8'd49,
     // DDR3 byte address of the dB-spectrum export snapshot (design.md
     // 5.1 "Mel log2 spectrum export region").
     parameter [27:0]  SPEC_EX_BASE = 28'h0020_0000,
@@ -415,7 +422,10 @@ module mel_engine #(
     // debug visibility only (kept off the synthesis prune list).
     wire        std_feat_valid;
 
-    standardize u_standardize (
+    standardize #(
+        .INV_S_IN      (INV_S_IN),
+        .ZP_IN         (ZP_IN)
+    ) u_standardize (
         .clk           (clk),
         .rst_n         (rst_n),
         .start         (std_start_pulse),
