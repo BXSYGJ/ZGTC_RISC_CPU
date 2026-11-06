@@ -174,32 +174,106 @@ def sha256_file(path):
 # ---------------------------------------------------------------------------
 # Playback (winsound with a manual-playback fallback).
 # ---------------------------------------------------------------------------
+PLAY_DEVICE = 4              # waveOut index of the Realtek endpoint (PCM1808 line-in)
 SND_FILENAME = 0x00020000    # winsound flag values (module attrs when
 SND_ASYNC = 0x00000001       # winsound is importable)
 SND_LOOP = 0x00000008
 SND_PURGE = 0x00000040
 
 
-def start_playback(wav_path):
-    """Start looping async playback; return the winsound module or None.
+class WaveOutPlayer:
+    """Play a WAV on a SELECTED render endpoint (waveOut device index).
 
-    None means winsound is unavailable (non-Windows / broken install) and
-    the caller must fall back to asking the user to play the file manually.
+    winsound always follows the Windows default endpoint, which on this host
+    is the USB headset (NICEHCK), not the Realtek line-out that feeds PCM1808.
+    The capture chain therefore requires an explicit device id plus a full
+    endpoint volume; those two together were the silent-capture root cause.
     """
+
+    def __init__(self, path, device_id, loop=True):
+        import ctypes
+        import ctypes.wintypes as wt
+        import wave
+
+        self.ctypes = ctypes
+        self.wt = wt
+        self.winmm = ctypes.WinDLL('winmm')
+        self.loop = loop
+        self.device_id = int(device_id)
+        w = wave.open(str(path), 'rb')
+        self.sr = w.getframerate()
+        self.ch = w.getnchannels()
+        self.sw = w.getsampwidth()
+        self.data = w.readframes(w.getnframes())
+        w.close()
+        self.handle = wt.HANDLE()
+        self.hdr = None
+        self.started = False
+
+        class WAVEFORMATEX(ctypes.Structure):
+            _fields_ = [('wFormatTag', wt.WORD), ('nChannels', wt.WORD),
+                        ('nSamplesPerSec', wt.DWORD), ('nAvgBytesPerSec', wt.DWORD),
+                        ('nBlockAlign', wt.WORD), ('wBitsPerSample', wt.WORD),
+                        ('cbSize', wt.WORD)]
+
+        class WAVEHDR(ctypes.Structure):
+            _fields_ = [('lpData', ctypes.c_char_p), ('dwBufferLength', wt.DWORD),
+                        ('dwBytesRecorded', wt.DWORD), ('dwUser', ctypes.c_void_p),
+                        ('dwFlags', wt.DWORD), ('dwLoops', wt.DWORD),
+                        ('lpNext', ctypes.c_void_p), ('reserved', ctypes.c_void_p)]
+
+        self.WAVEHDR = WAVEHDR
+        self.wfmt = WAVEFORMATEX(1, self.ch, self.sr,
+                                 self.sr * self.ch * self.sw,
+                                 self.ch * self.sw, self.sw * 8, 0)
+        try:
+            self.winmm.waveOutSetVolume(ctypes.c_void_p(self.device_id),
+                                        ctypes.c_uint32(0xFFFFFFFF))
+        except Exception:
+            pass
+
+    def start(self):
+        rc = self.winmm.waveOutOpen(self.ctypes.byref(self.handle), self.device_id,
+                                    self.ctypes.byref(self.wfmt), 0, 0, 0)
+        if rc != 0:
+            raise RuntimeError('waveOutOpen device %d rc=%d' % (self.device_id, rc))
+        self.hdr = self.WAVEHDR(self.data, len(self.data), 0, None,
+                                0, 0xFFFFFFFF if self.loop else 0, None, None)
+        self.winmm.waveOutPrepareHeader(self.handle, self.ctypes.byref(self.hdr),
+                                        self.ctypes.sizeof(self.hdr))
+        self.winmm.waveOutWrite(self.handle, self.ctypes.byref(self.hdr),
+                                self.ctypes.sizeof(self.hdr))
+        self.started = True
+        return self
+
+    def stop(self):
+        if not self.started:
+            return
+        try:
+            self.winmm.waveOutReset(self.handle)
+            self.winmm.waveOutClose(self.handle)
+        finally:
+            self.started = False
+
+
+def start_playback(wav_path, device_id=None):
+    """Start playback and return a player object, or None when unavailable.
+
+    device_id is the waveOut index (4 = Realtek on this host); the module-level
+    PLAY_DEVICE default is used when None.
+    """
+    dev = PLAY_DEVICE if device_id is None else int(device_id)
     try:
-        import winsound
-    except ImportError:
+        return WaveOutPlayer(wav_path, dev).start()
+    except Exception as exc:
+        print('waveOut playback unavailable on device %d: %s' % (dev, exc))
         return None
-    winsound.PlaySound(str(wav_path),
-                       winsound.SND_FILENAME | winsound.SND_ASYNC | winsound.SND_LOOP)
-    return winsound
 
 
-def stop_playback(winsound_module):
-    """Stop the async loop started by start_playback (SND_PURGE)."""
-    if winsound_module is None:
-        return
-    winsound_module.PlaySound(None, winsound_module.SND_PURGE)
+def stop_playback(player):
+    """Stop the playback started by start_playback."""
+    if player is not None:
+        player.stop()
 
 
 # ---------------------------------------------------------------------------
@@ -412,12 +486,12 @@ def run_capture(args):
                 print(f'play wav not found: {wav_path}', file=sys.stderr)
                 return 2, summary
             summary['play_wav'] = wav_path.name
-            winsound_module = start_playback(wav_path)
+            winsound_module = start_playback(wav_path, args.play_device)
             if winsound_module is None:
-                print(f'winsound unavailable: play {wav_path} manually NOW '
+                print(f'waveOut unavailable: play {wav_path} manually NOW '
                       f'(looping), capture starts in {args.lead} s')
             else:
-                print(f'playing {wav_path.name} in a loop (winsound async)')
+                print(f'playing {wav_path.name} in a loop on waveOut device {args.play_device}')
         else:
             summary['play_wav'] = None
 
@@ -542,6 +616,8 @@ def main():
                          'budget = seconds + 10)')
     ap.add_argument('--lead', type=float, default=1.0,
                     help='seconds between playback start and the C command')
+    ap.add_argument('--play-device', type=int, default=PLAY_DEVICE,
+                    help='waveOut render device index (default 4 = Realtek)')
     ap.add_argument('--play-wav', default=None,
                     help='wav to loop during the capture (winsound async); '
                          'falls back to a manual-playback prompt')
