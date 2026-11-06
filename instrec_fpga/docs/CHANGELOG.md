@@ -1,5 +1,11 @@
 # InstRec-FPGA 变更日志
 
+## 2026-11-06：取消 147/160 重采样，48k 原生前端位流上板跑通
+
+- instrec_top 删除 pcm1808_resampler、I2S 直连 CDC、mel 换 48k 表（2027 词）、audio_sink 注入 2604 拍。
+- 仿真 mel/mel_credit/mel_48k/full_top_ctrl PASS、pytest 438+26skip、lint 77/0；门控 DRM 150.5→146；full 构建 1h31m，ddrphy −1.245ns（108MHz）。
+- 板级 done=1/CRC0、BOOT/MMIO/ISA/DDROK、WOK FA0D5236、13 轮 NPU 完成；分类值待新量化参数重建。
+
 ## 2026-11-06：真实 I2S 采集全链路打通（播放设备 + 音量双重根因）
 
 - 根因：Windows 默认播放设备为 NICEHCK（USB），winsound 未到 Realtek；且 Realtek 音量过低。改用 waveOutOpen 指定设备 4 + waveOutSetVolume 置满后恢复。

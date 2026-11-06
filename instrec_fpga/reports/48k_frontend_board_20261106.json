@@ -1,0 +1,53 @@
+{
+  "date": "2026-11-06",
+  "scope": "48 kHz native frontend (resampler removed), full top",
+  "bitstream": {
+    "path": "releases/instrec-48k-20261106/instrec_48k.sbit",
+    "sha256": "9731519efa79cc4f1088bea3090786f7c1035ae3499d661e86303b1a92794b18"
+  },
+  "timing": {
+    "ddrphy_sysclk_wns_ns": -1.245,
+    "ddrphy_sysclk_mhz": 108.17,
+    "pix_clk_wns_ns": -0.014,
+    "rst_clk_wns_ns": 3.805,
+    "clk_wns_ns": 33.033
+  },
+  "resources": {
+    "lut": 33242,
+    "lut_pct": 50,
+    "drm": 146,
+    "drm_cap": 155,
+    "apm": 90
+  },
+  "board": {
+    "program": true,
+    "done": 1,
+    "crc_err": 0,
+    "boot_lines": [
+      "RV32 BOOT",
+      "RV32 MMIO OK",
+      "RV32 ISA OK",
+      "RV32 BENCH cycles=460012 inst=180008",
+      "DDR WAIT STS 0x00000000",
+      "NPU GO",
+      "DDR3 SELFTEST...",
+      "DDROK",
+      "DDR3 STS 00"
+    ],
+    "weight_upload": {
+      "reply": "WOK FA0D5236",
+      "frames": 2700,
+      "result": "UPLOAD OK"
+    },
+    "npu_completions": 13,
+    "npu_cycles_range": [
+      32358376,
+      32362313
+    ],
+    "note": "classification values are NOT valid: old 44.1k quantized weights + old QuantStub params on the 48k frontend; link only"
+  },
+  "known_issues": [
+    "DDR3 STS 00: self_test neither done nor failed at the observed window (DDROK comes from ddr_init_done, unaffected)",
+    "QuantStub INV_S_IN/ZP_IN still the 44.1k values; rebuild required when the new model's quantizer lands"
+  ]
+}

@@ -216,7 +216,7 @@ module audio_sink #(
     localparam [27:0] WIN_BYTES    = 28'h0004_2000;   // 264 KB per window
     // Frames per window (132096) and pages per window (8256 = 132096/16).
     // WIN_FRAMES needs 18 bit: 2^17 = 131072 < 132096, so a 17-bit
-    // declaration truncated it to 1024 and collapsed the 2.995 s window
+    // declaration truncated it to 1024 and collapsed the 2.752 s window
     // into 1023 frames (23.2 ms). Keep the counter and the comparison in
     // the same 18-bit domain.
     localparam [17:0] WIN_FRAMES   = 18'd132_096;
