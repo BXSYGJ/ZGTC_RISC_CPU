@@ -1,5 +1,11 @@
 # InstRec-FPGA 变更日志
 
+## 2026-11-06：真实 I2S 采集全链路打通（播放设备 + 音量双重根因）
+
+- 根因：Windows 默认播放设备为 NICEHCK（USB），winsound 未到 Realtek；且 Realtek 音量过低。改用 waveOutOpen 指定设备 4 + waveOutSetVolume 置满后恢复。
+- 判据：1 kHz 满幅测试音 SNR 115.9 dB；真实音乐采集 std 1123、L/R 相关 1.0、CRC 0 错、无 2:1 重复；golden 特征 mean 49.0 / std 15.93 / 饱和 0%。
+- 数据落 data/i2s_capture/montage_music_20261106/；工具 build/play_to_dev.py；采集脚本支持 --skip-boot/--no-capture。
+
 ## 2026-11-06：license（TAP 虚拟网卡）打通，i2s_capture 位流收敛并上板采集
 
 - 修复 PDS 编译：tx_* 双驱动（Verilog-4086）；时序 −8.534 → All Constraints Met（CRC 串行化、约束加载顺序修正、删除无效 clock_groups）。
