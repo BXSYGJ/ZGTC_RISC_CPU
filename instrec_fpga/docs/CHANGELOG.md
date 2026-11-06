@@ -1,5 +1,11 @@
 # InstRec-FPGA 变更日志
 
+## 2026-11-06：license（TAP 虚拟网卡）打通，i2s_capture 位流收敛并上板采集
+
+- 修复 PDS 编译：tx_* 双驱动（Verilog-4086）；时序 −8.534 → All Constraints Met（CRC 串行化、约束加载顺序修正、删除无效 clock_groups）。
+- 位流 releases/i2s-capture-20261106（SHA256 ef8a187e…），烧录 done=1/CRC0，BOOT+DDR OK。
+- 板级采集 4 秒：DDR/UART/CRC 全通（3000 帧 0 错）；I2S 时钟线通、DATA 线恒高（0xFFFF 99.996%）⇒ 待接 DATA 线后重采。
+
 ## 2026-11-04：PDS license 三文件验证，均不可用（构建阻塞闭环）
 
 - 新 pds license（2029 到期）host_id 属另一台机器、旧 license 已过期、ip.lic 为 FlexLM 格式不被 PDS 识别；证据 reports/pds_license_diagnosis_20261104.json。

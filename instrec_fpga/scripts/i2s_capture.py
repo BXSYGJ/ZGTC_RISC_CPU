@@ -394,7 +394,10 @@ def run_capture(args):
     try:
         print(f'UART {args.port} @ {args.baud} open; waiting for boot tokens '
               f'({" / ".join(BOOT_TOKENS)})')
-        ok, lines = wait_for_tokens(port, BOOT_TOKENS, args.boot_timeout, log)
+        if args.skip_boot:
+            ok, lines, missing = True, [], []
+        else:
+            ok, lines, missing = wait_for_tokens(port, BOOT_TOKENS, args.boot_timeout, log)
         for line in lines:
             print(f'  boot: {line}')
         if not ok:
@@ -418,21 +421,27 @@ def run_capture(args):
         else:
             summary['play_wav'] = None
 
-        time.sleep(args.lead)
-        t_c = datetime.now().isoformat(timespec='milliseconds')
-        port.write(b'C')
-        port.flush()
-        print(f"'C' sent at {t_c}; waiting for CAPDONE "
-              f"(budget {args.seconds + 10.0:.0f} s)")
+        if args.no_capture:
+            frame_cnt = expected_frames(args.seconds)
+            done_line = 'CAPDONE (assumed, --no-capture)'
+            t_d = datetime.now().isoformat(timespec='milliseconds')
+            print(f'export-only: assuming {frame_cnt} frames already in DDR')
+        else:
+            time.sleep(args.lead)
+            t_c = datetime.now().isoformat(timespec='milliseconds')
+            port.write(b'C')
+            port.flush()
+            print(f"'C' sent at {t_c}; waiting for CAPDONE "
+                  f"(budget {args.seconds + 10.0:.0f} s)")
 
-        frame_cnt, done_line = wait_for_capdone(
-            port, args.seconds + 10.0, log)
-        if frame_cnt is None:
-            print('CAPDONE not seen within the capture window')
-            return 5, summary
-        t_d = datetime.now().isoformat(timespec='milliseconds')
-        print(f'CAPDONE: {done_line} at {t_d} -> {frame_cnt} frames '
-              f'({frame_cnt * MAX_PAYLOAD} bytes)')
+            frame_cnt, done_line = wait_for_capdone(
+                port, args.seconds + 10.0, log)
+            if frame_cnt is None:
+                print('CAPDONE not seen within the capture window')
+                return 5, summary
+            t_d = datetime.now().isoformat(timespec='milliseconds')
+            print(f'CAPDONE: {done_line} at {t_d} -> {frame_cnt} frames '
+                  f'({frame_cnt * MAX_PAYLOAD} bytes)')
 
         reader = FrameReader(port, log)
         for seq in range(frame_cnt):
@@ -539,6 +548,10 @@ def main():
     ap.add_argument('--label', default=None,
                     help='output label (default: play-wav file stem)')
     ap.add_argument('--boot-timeout', type=float, default=30.0)
+    ap.add_argument('--no-capture', action='store_true',
+                    help='DDR already holds a finished capture; only export frames')
+    ap.add_argument('--skip-boot', action='store_true',
+                    help='board is already past I2SCAP BOOT/DDR OK; send C directly')
     ap.add_argument('--frame-timeout', type=float, default=2.0)
     args = ap.parse_args()
     if args.label is None:

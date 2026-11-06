@@ -241,9 +241,8 @@
         "ipcore/ddr3_test/ddr3_test.idf"
       ],
       "constraints": [
-        "constraints/ddr3_100h.fdc",
-        "constraints/clock_groups_async.fdc",
-        "constraints/top_i2s_capture.fdc"
+        "constraints/top_i2s_capture.fdc",
+        "constraints/ddr3_100h.fdc"
       ],
       "hex_dirs": []
     }

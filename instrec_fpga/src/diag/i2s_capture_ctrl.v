@@ -119,6 +119,7 @@ module i2s_capture_ctrl #(
     localparam [3:0] S_RCHK    = 4'd5;   // 'R': validate seq, dispatch
     localparam [3:0] S_CLR     = 4'd6;   // drain stale FIFO entries
     localparam [3:0] S_ACC     = 4'd7;   // accumulate 64 words
+    localparam [3:0] S_CRC     = 4'd14;  // serial 256-byte CRC
     localparam [3:0] S_WR      = 4'd8;   // one 256 B write command
     localparam [3:0] S_RDCMD   = 4'd9;   // issue one read command
     localparam [3:0] S_RD      = 4'd10;  // collect 8 read beats
@@ -171,6 +172,7 @@ module i2s_capture_ctrl #(
     reg [11:0]  wr_frame;       // completed write frames
     reg [2:0]   rd_beats;       // beats collected by the read command
     reg [15:0]  crc_val;        // running CRC of the exported frame
+    reg [7:0]   crc_idx;        // 0..255 serial CRC byte index
     reg [31:0]  ack_timer;
     reg [31:0]  ddr_timer;
 
@@ -230,50 +232,12 @@ module i2s_capture_ctrl #(
         crc16_step(crc16_step(crc16_step(16'hFFFF, rd_seq[7:0]),
         rd_seq[15:8]), 8'h00), 8'h01);
 
-    // CRC advance for one 256-bit read beat (32 bytes, low byte first).
-    wire [15:0] c1  = crc16_step(crc_val, m0_rd_data[7:0]);
-    wire [15:0] c2  = crc16_step(c1, m0_rd_data[15:8]);
-    wire [15:0] c3  = crc16_step(c2, m0_rd_data[23:16]);
-    wire [15:0] c4  = crc16_step(c3, m0_rd_data[31:24]);
-    wire [15:0] c5  = crc16_step(c4, m0_rd_data[39:32]);
-    wire [15:0] c6  = crc16_step(c5, m0_rd_data[47:40]);
-    wire [15:0] c7  = crc16_step(c6, m0_rd_data[55:48]);
-    wire [15:0] c8  = crc16_step(c7, m0_rd_data[63:56]);
-    wire [15:0] c9  = crc16_step(c8, m0_rd_data[71:64]);
-    wire [15:0] c10 = crc16_step(c9, m0_rd_data[79:72]);
-    wire [15:0] c11 = crc16_step(c10, m0_rd_data[87:80]);
-    wire [15:0] c12 = crc16_step(c11, m0_rd_data[95:88]);
-    wire [15:0] c13 = crc16_step(c12, m0_rd_data[103:96]);
-    wire [15:0] c14 = crc16_step(c13, m0_rd_data[111:104]);
-    wire [15:0] c15 = crc16_step(c14, m0_rd_data[119:112]);
-    wire [15:0] c16 = crc16_step(c15, m0_rd_data[127:120]);
-    wire [15:0] c17 = crc16_step(c16, m0_rd_data[135:128]);
-    wire [15:0] c18 = crc16_step(c17, m0_rd_data[143:136]);
-    wire [15:0] c19 = crc16_step(c18, m0_rd_data[151:144]);
-    wire [15:0] c20 = crc16_step(c19, m0_rd_data[159:152]);
-    wire [15:0] c21 = crc16_step(c20, m0_rd_data[167:160]);
-    wire [15:0] c22 = crc16_step(c21, m0_rd_data[175:168]);
-    wire [15:0] c23 = crc16_step(c22, m0_rd_data[183:176]);
-    wire [15:0] c24 = crc16_step(c23, m0_rd_data[191:184]);
-    wire [15:0] c25 = crc16_step(c24, m0_rd_data[199:192]);
-    wire [15:0] c26 = crc16_step(c25, m0_rd_data[207:200]);
-    wire [15:0] c27 = crc16_step(c26, m0_rd_data[215:208]);
-    wire [15:0] c28 = crc16_step(c27, m0_rd_data[223:216]);
-    wire [15:0] c29 = crc16_step(c28, m0_rd_data[231:224]);
-    wire [15:0] c30 = crc16_step(c29, m0_rd_data[239:232]);
-    wire [15:0] c31 = crc16_step(c30, m0_rd_data[247:240]);
-    wire [15:0] c32 = crc16_step(c31, m0_rd_data[255:248]);
-
     // ------------------------------------------------------------------
     // TX byte engine
     // ------------------------------------------------------------------
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
-            tx_src     <= TXS_NONE;
             tx_pos     <= 9'd0;
-            tx_len     <= 9'd0;
-            tx_single  <= 8'd0;
-            tx_go      <= 1'b0;
             tx_busy    <= 1'b0;
             tx_fin     <= 1'b0;
             tx_pend    <= 1'b0;
@@ -281,7 +245,6 @@ module i2s_capture_ctrl #(
             tx_valid   <= 1'b0;
             tx_data    <= 8'd0;
         end else begin
-            tx_go    <= 1'b0;
             tx_fin   <= 1'b0;
             tx_valid <= 1'b0;   // single-cycle strobe (weight_loader note)
 
@@ -325,6 +288,10 @@ module i2s_capture_ctrl #(
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
             state        <= S_BOOTF;
+            tx_src       <= TXS_NONE;
+            tx_go        <= 1'b0;
+            tx_len       <= 9'd0;
+            tx_single    <= 8'd0;
             ret_state    <= S_CMD;
             rret_state   <= S_CMD;
             rd_seq       <= 16'd0;
@@ -661,6 +628,22 @@ module i2s_capture_ctrl #(
                     end
                 end
 
+                // ---- serial CRC over the 256 payload bytes ------------
+                S_CRC: begin
+                    crc_val <= crc16_step(crc_val,
+                        exp_buf[crc_idx[7:5]][crc_idx[4:0] * 8'd8 +: 8]);
+                    if (crc_idx == 8'd255) begin
+                        tx_src    <= TXS_FRAME;
+                        tx_len    <= 9'd264;
+                        tx_go     <= 1'b1;
+                        ret_state <= S_ACKW;
+                        ack_timer <= 32'd0;
+                        state     <= S_TXWAIT;
+                    end else begin
+                        crc_idx <= crc_idx + 8'd1;
+                    end
+                end
+
                 // ---- export read command ------------------------------
                 S_RDCMD: begin
                     // 37-bit bundle {wr, addr[27:0], len[7:0]}:
@@ -670,24 +653,19 @@ module i2s_capture_ctrl #(
                     m0_rd_ready  <= 1'b1;
                     rd_beats     <= 3'd0;
                     crc_val      <= crc_pre;
+                    crc_idx      <= 8'd0;
                     state        <= S_RD;
                 end
 
                 S_RD: begin
                     if (m0_rd_valid) begin
                         exp_buf[rd_beats] <= m0_rd_data;
-                        crc_val  <= c32;
                         rd_beats <= rd_beats + 3'd1;
                     end
                     if (m0_done) begin
                         m0_cmd_valid <= 1'b0;
                         m0_rd_ready  <= 1'b0;
-                        tx_src       <= TXS_FRAME;
-                        tx_len       <= 9'd264;
-                        tx_go        <= 1'b1;
-                        ret_state    <= S_ACKW;
-                        ack_timer    <= 32'd0;
-                        state        <= S_TXWAIT;
+                        state        <= S_CRC;
                     end
                 end
 
@@ -703,6 +681,9 @@ module i2s_capture_ctrl #(
 
                 // ---- TX engine wait ------------------------------------
                 S_TXWAIT: begin
+                    // Single-owner pulse: the engine samples tx_go on its
+                    // first busy wait beat, then the request is cleared here.
+                    tx_go <= 1'b0;
                     if (tx_fin) begin
                         state <= ret_state;
                     end
