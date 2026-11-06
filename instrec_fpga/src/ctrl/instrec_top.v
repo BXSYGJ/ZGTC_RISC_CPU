@@ -265,21 +265,24 @@ module instrec_top #(
     assign rst_sync_nco = audio_reset_sync[1];
     assign pll_audio_locked = audio_reset_sync[1];
 
-    // PCM1808 owns both clocks. Convert coherent stereo pairs to 44.1 kHz.
+    // PCM1808 owns both clocks. Native 48 kHz path (MODEL_TRAINING_SPEC
+    // section 2.1 / F1 route): the 147/160 resampler is REMOVED and the
+    // captured stereo pairs feed the CDC FIFO directly.  The Mel frontend
+    // consumes the 48 kHz filterbank image (mel_coo_48k.hex, fmax 24000);
+    // the window geometry (259 frames x 512 hop = 132096 samples) and the
+    // audio_sink page contract are sample-count based and therefore
+    // unchanged by the rate switch.
     wire [15:0] capture_l, capture_r;
-    wire capture_valid, capture_idle, resample_overrun;
-    assign sd_idle = capture_idle | resample_overrun;
+    wire capture_valid, capture_idle;
+    assign sd_idle   = capture_idle;
+    assign pcm_l     = capture_l;
+    assign pcm_r     = capture_r;
+    assign pcm_valid = capture_valid;
     i2s_slave_rx #(.TIMEOUT_CYCLES(27000)) u_i2s_slave_rx (
         .clk_nco(clk_nco), .rst_n(rst_sync_nco),
         .i2s_bck(i2s_bck), .i2s_lrck(i2s_lrck), .i2s_sd(i2s_sd),
         .pcm_l(capture_l), .pcm_r(capture_r),
         .pcm_valid(capture_valid), .sd_idle(capture_idle)
-    );
-    pcm1808_resampler u_pcm1808_resampler (
-        .clk(clk_nco), .rst_n(rst_sync_nco), .stream_idle(capture_idle),
-        .in_valid(capture_valid), .in_l(capture_l), .in_r(capture_r),
-        .out_valid(pcm_valid), .out_l(pcm_l), .out_r(pcm_r),
-        .overrun(resample_overrun)
     );
 
     // ---- 27 MHz -> 125 MHz stereo sample CDC FIFO ----
@@ -348,9 +351,10 @@ module instrec_top #(
     wire        mel_busy;
 
     mel_engine #(
-        .HAN_HEX_FILE ("src/mel/hann_q15.hex"),
-        .COO_HEX_FILE ("src/mel/mel_coo.hex"),
-        .LUT_HEX_FILE ("src/mel/log2_lut.hex")
+        .HAN_HEX_FILE   ("src/mel/hann_q15.hex"),
+        .COO_HEX_FILE   ("src/mel/mel_coo_48k.hex"),
+        .LUT_HEX_FILE   ("src/mel/log2_lut.hex"),
+        .COO_ROM_WORDS  (2027)
     ) u_mel_engine (
         .clk           (core_clk),
         .rst_n         (core_clk_rst_n),

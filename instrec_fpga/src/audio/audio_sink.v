@@ -15,7 +15,7 @@
 //             rd_valid valid ONE core_clk cycle after rd_en was accepted
 //             (1-cycle synchronous read, back-to-back capable); entries
 //             are frame-aligned stereo pairs {pcm_l[31:16], pcm_r[15:0]}
-//             at 44.1 kHz. The FIFO is drained in "catch-up" mode: while
+//             at 48 kHz. The FIFO is drained in "catch-up" mode: while
 //             non-empty one entry is read per cycle, so the long-term
 //             frame pace is exactly the write-side pace (locked to the
 //             NCO/BCK audio timing) - no independent core-domain rate
@@ -67,7 +67,7 @@
 //   (8256 pages needs 14 bit: 2^13 = 8192 < 8256).
 //
 // Window beat (REQ-PRF-001 / REQ-MEM-002): every 132096 LEFT-channel
-//   samples (i.e. 132096 accepted frames, 2.995 s at 44.1 kHz) a
+//   samples (i.e. 132096 accepted frames, 2.752 s at 48 kHz) a
 //   single-cycle win_tick pulse is produced and win_id increments; the
 //   left window alternates and the Mel engine (M1) starts on win_tick.
 //   win_id is 16 bit per design.md 2.2.4 (the task brief's "[7:0]" is
@@ -79,15 +79,15 @@
 //                       GPLL_D unlocked - the "reset window" case, which
 //                       is EXPECTED during bring-up). Frame acceptance is
 //                       then sustained by INJECTED zero frames at a
-//                       2834-cycle (22.7 us, ~44.1 kHz) cadence so the
+//                       2604-cycle (20.8 us, 48 kHz) cadence so the
 //                       write pointer and the win_tick beat keep running
 //                       and the pipeline never stalls. Injected frames
 //                       are dropped while a DDR3 page write is in flight
 //                       (agg freeze, < 100 us): during an upstream stall
 //                       the win beat is virtual anyway, and real frames
 //                       are never lost - the CDC FIFO retains them.
-//                       Note: the 2834-cycle cadence is 0.016% fast vs
-//                       the true 44.1 kHz (125M/44100 = 2834.47); the
+//                       Note: the 2604-cycle cadence is 0.007% fast vs
+//                       the native 48 kHz rate (125M/48000 = 2604.17); the
 //                       error only affects the (temporary) injection
 //                       window and does not accumulate once real data
 //                       resumes (catch-up read re-locks to the source).
@@ -143,8 +143,11 @@ module audio_sink #(
     // 16 frames x 16 bit per channel = 256 bit = 32 B = one beat.
     parameter [4:0] AGG_FRAMES = 5'd16,
     // Injection cadence while the CDC FIFO is empty, in core_clk cycles:
-    // 125e6 / 44100 = 2834.47 -> 2834 (0.016% fast, injection-only).
-    parameter [13:0] INJECT_GAP_CYCLES = 14'd2834,
+    // 125e6 / 48000 = 2604.17 -> 2604 (0.007% fast, injection-only).
+    // Native 48 kHz frontend (MODEL_TRAINING_SPEC 2.1): the resampler is
+    // gone, so the empty-FIFO injection cadence must match the PCM1808
+    // rate; real FIFO frames always take priority over injection.
+    parameter [13:0] INJECT_GAP_CYCLES = 14'd2604,
     // Consecutive zero frames counted as "sustained silence" (92.9 ms).
     parameter [13:0] ZERO_SUSTAIN_FRAMES = 14'd4096,
     // Consecutive empty cycles counted as "sustained upstream stall"
@@ -390,7 +393,7 @@ module audio_sink #(
 
     // Window frame counter: counts accepted frames within the window,
     // 0..132095; the frame that reaches 132096 rolls it over, emits
-    // win_tick and advances win_id (window = 2.995 s at 44.1 kHz).
+    // win_tick and advances win_id (window = 2.752 s at 48 kHz).
     // The page counter rolls in lockstep (132096 = 8256 x 16 exactly),
     // so page_no advances ONCE per completed 16-frame page (page_go),
     // not once per frame.
