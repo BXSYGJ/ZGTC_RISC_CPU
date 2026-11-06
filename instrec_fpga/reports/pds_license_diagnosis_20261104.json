@@ -1,0 +1,31 @@
+{
+  "date": "2026-11-04",
+  "purpose": "PDS license availability after the 2026-11-03 expiry",
+  "files": [
+    {
+      "path": "E:\\License\\pango\\new_pds_F4A80DA47D72.lic",
+      "sha16": "10077ed9a5586353",
+      "format": "pango package/feature",
+      "expire": "2026-11-03",
+      "host_id": "F4A80DA47D72 (this machine)",
+      "verdict": "expired"
+    },
+    {
+      "path": "D:\\0000\\111\\001\\Pango\\Lisence\\pds_windows_c03532573d51_2029-09-04.lic",
+      "sha16": "1e8796e8f8f3b9a7",
+      "format": "pango package/feature",
+      "expire": "2029-09-04",
+      "host_id": "c03532573d51 (foreign machine)",
+      "verdict": "host mismatch"
+    },
+    {
+      "path": "D:\\0000\\111\\001\\Pango\\Lisence\\ip.lic",
+      "sha16": "b285315a32402809",
+      "format": "FlexLM INCREMENT",
+      "verdict": "PDS parser rejects INCREMENT"
+    }
+  ],
+  "pds_error": "Flow-0183 Failed to check license fabric_shell; host mismatch c03532573d51 vs local MAC list; INCREMENT not supported",
+  "local_macs": "04:D4:C4:16:46:34 B4:6B:FC:1D:EE:35 B4:6B:FC:1D:EE:36 B6:6B:FC:1D:EE:35 00:15:5D:A2:13:02",
+  "required": "pango package/feature license signed for host_id F4A80DA47D72 (this machine)"
+}

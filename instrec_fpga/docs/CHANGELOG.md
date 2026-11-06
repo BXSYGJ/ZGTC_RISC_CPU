@@ -1,5 +1,10 @@
 # InstRec-FPGA 变更日志
 
+## 2026-11-04：PDS license 三文件验证，均不可用（构建阻塞闭环）
+
+- 新 pds license（2029 到期）host_id 属另一台机器、旧 license 已过期、ip.lic 为 FlexLM 格式不被 PDS 识别；证据 reports/pds_license_diagnosis_20261104.json。
+- 需要本机 host_id F4A80DA47D72 的 package/feature license；构建集与 RTL/TB 均已就绪，license 到位即可构建。
+
 ## 2026-11-04：I2S 采集链路开发（数据通路打通，仿真未全通过，上板推迟）
 
 - 新增 top_i2s_capture/i2s_capture_ctrl（FIR 前原始 48k 双声道 → DDR3 → UART 帧导出）、约束、全链 TB、PC 采集/播放/对接脚本 + 17 离线测试；恢复被覆盖的 I2S 接收单测为 i2s_rx_phy。
