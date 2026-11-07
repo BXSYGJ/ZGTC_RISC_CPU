@@ -1,5 +1,12 @@
 # InstRec-FPGA 变更日志
 
+## 2026-11-07：48k 量化模型接入板级（契约/镜像/位流/链路）
+
+- 生成 scripts/outputs/medley_48k 契约与 691040 B 镜像（zp_in 47、fc2 zp_out 58）；golden 链支持契约/镜像环境变量成对切换。
+- mel_engine 注入 INV_S_IN 236403274 / ZP_IN 47；mel_48k PASS、pytest 438+26skip、lint 77/0；npu_probe 新镜像 top1 一致但 logits 差 2~5 LSB（待查）。
+- full 构建 58m36s，pix +0.059 / ddrphy −0.915；位流 releases/instrec-48k-model-20261107（sha d3ad62dd）。
+- 板级 done1/CRC0、DDROK、WOK CFE5A709、NPU 15 轮；top1 恒定（窗口内容不更新）⇒ 待加 audio 诊断行定位，不宣称板级准确率。
+
 ## 2026-11-06：取消 147/160 重采样，48k 原生前端位流上板跑通
 
 - instrec_top 删除 pcm1808_resampler、I2S 直连 CDC、mel 换 48k 表（2027 词）、audio_sink 注入 2604 拍。

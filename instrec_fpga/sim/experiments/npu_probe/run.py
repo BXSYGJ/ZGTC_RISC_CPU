@@ -171,9 +171,10 @@ def build_vectors() -> list:
     return vectors
 
 
-def write_assets(vectors: list) -> None:
+def write_assets(vectors: list, weights_image=None) -> None:
     ASSETS.mkdir(parents=True, exist_ok=True)
-    weights = np.fromfile(str(ROOT / 'scripts/outputs/weights_image.bin'), dtype=np.uint8)
+    image_path = Path(weights_image) if weights_image else (ROOT / 'scripts/outputs/weights_image.bin')
+    weights = np.fromfile(str(image_path), dtype=np.uint8)
     write_hex(ASSETS / 'weights.hex', weights, 2)
     for i, vec in enumerate(vectors):
         write_hex(ASSETS / ('feat_v%d.hex' % i), vec['feat'].reshape(-1), 2)
@@ -333,6 +334,12 @@ def golden_ref_crosscheck(res: dict) -> dict:
 
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.split('\n')[0])
+    parser.add_argument('--weights-image', type=Path,
+                        default=ROOT / 'scripts/outputs/weights_image.bin',
+                        help='IRW1 weight image (default: legacy 44.1k)')
+    parser.add_argument('--contract', type=Path,
+                        default=ROOT / 'scripts/outputs/layer_contract.json',
+                        help='layer contract (default: legacy 44.1k)')
     parser.add_argument('--vectors', type=int, default=4,
                         help='number of probe vectors to run (1..4, order fixed)')
     parser.add_argument('--report', type=Path, default=REPORT_PATH,
@@ -344,12 +351,14 @@ def main(argv=None) -> int:
     vectors = build_vectors()
     vectors = vectors[:n_vectors]
 
-    contract = golden.load_layer_contract()
+    import os as _os
+    _os.environ[golden.WEIGHTS_IMAGE_ENV] = str(args.weights_image)
+    contract = golden.load_layer_contract(args.contract)
     tables = golden.load_mel_tables()
     fc2_rec = {rec['name']: rec for rec in contract['layers']}['fc2']
     s_out = float(fc2_rec['s_out'])
 
-    write_assets(vectors)
+    write_assets(vectors, args.weights_image)
 
     goldens = {}
     t0 = time.time()

@@ -144,6 +144,14 @@ LOG2_ZERO_Q88 = LOG2_BIAS << 8   # log2(0) defined as -14336
 # an unsigned MAC with the per-channel -zp_in * sum(w) correction, see
 # layer_contract.json zp_in_correction / golden_pipeline.npu_forward).
 DEFAULT_CONTRACT_PATH = SCRIPTS_DIR / "outputs" / "layer_contract.json"
+# Environment override so the native 48 kHz contract (deploy/medley_48k) can
+# be swapped in without touching the legacy 44.1 kHz baseline:
+#   set INSTREC_CONTRACT=scripts/outputs/medley_48k/layer_contract.json
+CONTRACT_PATH_ENV = "INSTREC_CONTRACT"
+NATIVE_48K_CONTRACT_PATH = SCRIPTS_DIR / "outputs" / "medley_48k" / "layer_contract.json"
+WEIGHTS_IMAGE_ENV = "INSTREC_WEIGHTS_IMAGE"
+DEFAULT_WEIGHTS_IMAGE = SCRIPTS_DIR / "outputs" / "weights_image.bin"
+NATIVE_48K_WEIGHTS_IMAGE = SCRIPTS_DIR / "outputs" / "medley_48k" / "weights_image.bin"
 # z is Q4.12 and inv_s_in is Q8.24, so the product carries 12 + 24 = 36
 # fractional bits.  The historical value 24 (design.md 3.7) shifted only
 # the inv_s_in scale, leaving an extra 2^12 gain that saturated the uint8
@@ -561,12 +569,20 @@ def standardize(db_258: np.ndarray) -> np.ndarray:
 # ---------------------------------------------------------------------------
 # Stage 7: CNN input quantization (design.md 3.7, QuantStub contract).
 # ---------------------------------------------------------------------------
-def load_layer_contract(contract_path: Path = DEFAULT_CONTRACT_PATH) -> dict:
+def load_layer_contract(contract_path: Path = None) -> dict:
     """Load the layer contract produced by gen_weight_image.py (T-GP-03).
 
     The NPU forward and the feat quantization consume the SAME
     quant_stub_input_contract record (single source of truth).
+
+    contract_path=None resolves INSTREC_CONTRACT from the environment, then
+    falls back to the legacy 44.1 kHz contract, so the native 48 kHz contract
+    can be selected without editing this module.
     """
+    if contract_path is None:
+        import os
+        env_path = os.environ.get(CONTRACT_PATH_ENV)
+        contract_path = Path(env_path) if env_path else DEFAULT_CONTRACT_PATH
     with open(contract_path, "r", encoding="utf-8") as fh:
         return json.load(fh)
 
@@ -700,7 +716,7 @@ def _deinterleave_group_major(w_bytes: np.ndarray, cout: int,
 
 def load_weights_from_image(
     contract: dict,
-    image_path: Path = DEFAULT_WEIGHT_IMAGE_PATH,
+    image_path: Path = None,
 ) -> dict:
     """Read the per-layer weight/bias/M/shift blocks out of the image.
 
@@ -709,6 +725,10 @@ def load_weights_from_image(
     the layer contract, contents cross-checked against the recorded
     bias/M/shift arrays).
     """
+    if image_path is None:
+        import os
+        env_path = os.environ.get(WEIGHTS_IMAGE_ENV)
+        image_path = Path(env_path) if env_path else DEFAULT_WEIGHTS_IMAGE
     image = np.fromfile(str(image_path), dtype=np.uint8)
     assert image.size == contract["image_total_bytes"], (
         f"weight image size {image.size} != contract "

@@ -84,7 +84,16 @@ def main() -> int:
         raise SystemExit("table params.sr != 48000: %r" % params["sr"])
 
     pcm = synth_pcm()
-    res = gp.run_mel_pipeline(pcm, tables)
+    # The 48 kHz frontend pairs with the native 48 kHz INT8 model contract
+    # (deploy/medley_48k): zp_in 47 / inv_s_in 236403274.  Fall back to the
+    # module default when that contract is absent (legacy experiments).
+    contract_48k = SCRIPTS_DIR / "outputs" / "medley_48k" / "layer_contract.json"
+    if contract_48k.is_file():
+        import json
+        qs = json.loads(contract_48k.read_text(encoding="utf-8"))["quant_stub_input_contract"]
+        res = gp.run_mel_pipeline(pcm, tables, inv_s_in=qs["inv_s_in"], zp_in=qs["zp_in"])
+    else:
+        res = gp.run_mel_pipeline(pcm, tables)
     feat = res["feat"]                              # (64, 258) uint8
     if feat.shape != (gp.N_MELS, gp.N_FRAMES):
         raise SystemExit("unexpected feat shape %r" % (feat.shape,))

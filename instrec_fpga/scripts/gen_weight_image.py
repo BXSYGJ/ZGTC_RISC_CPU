@@ -1242,11 +1242,12 @@ def build_contract_json(activation: dict, layer_records: list, layout: dict,
 # ---------------------------------------------------------------------------
 # Driver.
 # ---------------------------------------------------------------------------
-def generate(instrec_root: Path, out_dir: Path) -> tuple:
+def generate(instrec_root: Path, out_dir: Path, deploy_subdir: str = "deploy") -> tuple:
     """Run the full conversion: returns (image_bytes, contract_dict)."""
-    weights_dir = instrec_root / "deploy" / "weights"
-    model_path = instrec_root / "deploy" / "quantized_model.pt"
-    class_names_json = instrec_root / "deploy" / "class_names.json"
+    delivery = instrec_root / deploy_subdir
+    weights_dir = delivery / "weights"
+    model_path = delivery / "quantized_model.pt"
+    class_names_json = delivery / "class_names.json"
     dataset_py = instrec_root / "src" / "dataset.py"
 
     for required in (weights_dir, model_path, class_names_json, dataset_py):
@@ -1308,12 +1309,16 @@ def main(argv: list | None = None) -> int:
         help="InstRec project root (default: %(default)s)",
     )
     parser.add_argument(
+        "--deploy-subdir", type=str, default="deploy",
+        help="quantization delivery subdirectory under the InstRec root "
+             "(e.g. deploy/medley_48k for the native 48 kHz model)")
+    parser.add_argument(
         "--outdir", type=Path, default=DEFAULT_OUT_DIR,
         help="output directory (default: %(default)s)",
     )
     args = parser.parse_args(argv)
 
-    image, contract = generate(args.instrec_root, args.outdir)
+    image, contract = generate(args.instrec_root, args.outdir, args.deploy_subdir)
 
     bin_path = args.outdir / "weights_image.bin"
     json_path = args.outdir / "layer_contract.json"

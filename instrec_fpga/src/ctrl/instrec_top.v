@@ -350,11 +350,17 @@ module instrec_top #(
     wire        mel_win_miss;
     wire        mel_busy;
 
+    // QuantStub of the native 48 kHz INT8 model (deploy/medley_48k):
+    // s_in = 0.0709686279296875, zp_in = 47  ->  inv_s_in = round(2^24/s_in)
+    // = 236403274 (Q8.24).  Bitstream-level parameters: a new quantizer
+    // requires a rebuild even though the weight image is runtime-uploaded.
     mel_engine #(
         .HAN_HEX_FILE   ("src/mel/hann_q15.hex"),
         .COO_HEX_FILE   ("src/mel/mel_coo_48k.hex"),
         .LUT_HEX_FILE   ("src/mel/log2_lut.hex"),
-        .COO_ROM_WORDS  (2027)
+        .COO_ROM_WORDS  (2027),
+        .INV_S_IN       (32'd236403274),
+        .ZP_IN          (8'd47)
     ) u_mel_engine (
         .clk           (core_clk),
         .rst_n         (core_clk_rst_n),

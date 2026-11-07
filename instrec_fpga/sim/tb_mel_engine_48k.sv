@@ -81,8 +81,10 @@ module tb_mel_engine_48k;
         .COO_HEX_FILE ("build/sim/mel_48k/mel_coo_48k.hex"),
         .LUT_HEX_FILE ("src/mel/log2_lut.hex"),
         .COO_ROM_WORDS (2027),
-        .INV_S_IN     (32'd267723430),
-        .ZP_IN        (8'd49),
+        // Native 48 kHz INT8 model QuantStub (deploy/medley_48k):
+        // s_in 0.0709686279296875, zp_in 47, inv_s_in 236403274 (Q8.24).
+        .INV_S_IN     (32'd236403274),
+        .ZP_IN        (8'd47),
         .WATCHDOG_LIMIT (8_000_000)
     ) dut (
         .clk          (clk),
