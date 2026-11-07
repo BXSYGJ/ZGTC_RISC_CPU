@@ -96,6 +96,13 @@ module sys_ctrl #(
     input  wire [2:0]  ddr_dbg_to_state, // FSM state at the last AXI timeout
     input  wire        ddr_to_err,       // sticky AXI timeout (any master)
     input  wire [3:0]  ddr_cmd_to_err,   // sticky timeout flag per master
+    // Audio-path observation bits packed into "DDR3 STS <hh>":
+    //   bit2 = sd_idle (PCM1808 clock watchdog), bit1 = fifo_empty,
+    //   bit0 = fifo_full.  They replace the timeout FSM state, which the
+    //   cmd_to_err nibble already attributes to the offending master.
+    input  wire        audio_sd_idle,
+    input  wire        audio_fifo_empty,
+    input  wire        audio_fifo_full,
     // uart_debug predefined line channel
     output reg  [2:0]  dbg_line_id,
     output reg  [31:0] dbg_line_arg,
@@ -221,7 +228,9 @@ module sys_ctrl #(
 
     assign ddr_sts_code = {ddr_cmd_to_err,
                            ddr_to_err,
-                           ddr_dbg_to_state};
+                           audio_sd_idle,
+                           audio_fifo_empty,
+                           audio_fifo_full};
 
     reg [2:0]  state;
     reg [31:0] timeout_cnt;

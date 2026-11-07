@@ -1,5 +1,13 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-07（续）：诊断位流——`DDR3 STS` 打包音频遥测；板级识别仍待定位
+
+- `sys_ctrl` 的 `ddr_sts_code` 低 3 位由超时 FSM state 改为音频遥测（bit2=sd_idle / bit1=fifo_empty / bit0=fifo_full），契约测试同步；全量回归 438 passed + 26 skipped、lint 77/0。
+- 诊断位流（`build/pds/20261107-130050-741c06ed`）板级读回 **`DDR3 STS 02`**：**sd_idle=0（PCM1808 BCK/LRCK 正常）**、fifo_empty=1、fifo_full=0。
+- 判读注意：FIFO 深度 16、读侧 125 MHz 远快于写侧 48 kHz，瞬时 `fifo_empty=1` **不足以**证明无真实帧；而 NPU 每窗（2.75 s）完成一次、35 s 内 15 轮，说明 **win_tick 在推进**。因此 top1 恒定（音乐与 1 kHz 满幅测试音完全一致）的剩余解释是**窗口内容恒定（模拟输入静音）**，而非窗口冻结。
+- 下一轮定位路径（按成本排序）：① 播放时用 `waveOutGetVolume(4)` 复核 Realtek 端点音量（避免音量被系统重置）；② 把 `win_id`/`overflow_cnt` 打包进 STS 高字节并在**播放中**多次打印（当前 STS 行仅启动后一次）；③ 若确认模拟输入静音，检查 PCM1808 VINL/VINR 与 Realtek 线路输出接线。
+- 已完成并入库：48k 契约/镜像、QuantStub 注入、位流、板级 BOOT/DDROK/WOK/推理运行（详见上一节）。
+
 ## 2026-11-07：48k 量化模型接入——契约/镜像/位流/板级链路完成；板级 top1 恒定待定位
 
 - 模型侧交付（只读核对，`InstRec/deploy/medley_48k/`）：fp32 test **77.69%** / INT8 **77.32%**（macro-F1 掉 0.95pt，≤2pt 门槛）、`quant_stub.json` s_in=0.0709686279296875/**zp_in=47**、48k 前端参数（sr 48000/fmax 24000/258 帧）、类表对齐、模型 728.56 KB。

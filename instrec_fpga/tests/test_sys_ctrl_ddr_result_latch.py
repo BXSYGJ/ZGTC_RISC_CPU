@@ -576,7 +576,10 @@ def test_rtl_packs_the_sts_byte_in_documented_order():
     m = re.search(r'assign\s+ddr_sts_code\s*=\s*\{(.*?)\};', text, re.S)
     assert m, 'ddr_sts_code concatenation not found'
     fields = [f.strip() for f in m.group(1).split(',')]
-    assert fields == ['ddr_cmd_to_err', 'ddr_to_err', 'ddr_dbg_to_state'], fields
+    # bit7..4 timeout attribution, bit3 any-timeout, bit2..0 audio telemetry
+    # (sd_idle / fifo_empty / fifo_full) replacing the timeout FSM state.
+    assert fields == ['ddr_cmd_to_err', 'ddr_to_err', 'audio_sd_idle',
+                      'audio_fifo_empty', 'audio_fifo_full'], fields
 
 
 def test_rtl_result_fire_is_gated_by_dbg_busy():

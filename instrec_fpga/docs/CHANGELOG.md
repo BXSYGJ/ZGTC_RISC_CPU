@@ -1,5 +1,10 @@
 # InstRec-FPGA 变更日志
 
+## 2026-11-07（续）：DDR3 STS 音频遥测 + 板级判读
+
+- sys_ctrl STS 低 3 位改为 sd_idle/fifo_empty/fifo_full（契约测试同步），回归 438+26skip、lint 77/0。
+- 诊断位流板级读回 STS 02：I2S 时钟正常、FIFO 瞬时空；结合 NPU 每窗完成一次判定窗口在推进，top1 恒定归因于窗口内容恒定（模拟输入静音），待下一轮播放中多次遥测确认。
+
 ## 2026-11-07：48k 量化模型接入板级（契约/镜像/位流/链路）
 
 - 生成 scripts/outputs/medley_48k 契约与 691040 B 镜像（zp_in 47、fc2 zp_out 58）；golden 链支持契约/镜像环境变量成对切换。
