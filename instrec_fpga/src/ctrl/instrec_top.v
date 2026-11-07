@@ -307,6 +307,27 @@ module instrec_top #(
     // Keep master 0 quiet until DDR self-test and weight loading finish.
     wire fifo_rd_valid_run = fifo_rd_valid & sys_run;
     wire fifo_empty_run = sys_run ? fifo_empty : 1'b0;
+    // ---- Audio telemetry: real frames consumed inside the current window.
+    // fifo_rd_valid_run is the audio_sink-side frame strobe (sys_run gated),
+    // so this counts REAL frames, not the empty-FIFO zero injection.  The
+    // value latched at win_tick tells whether a window was filled with audio
+    // (~132096) or with injected zeros (~0).  Reported via "DDR3 STS".
+    reg [16:0] win_fifo_cnt;
+    reg [15:0] win_fifo_cnt_lat;
+    always @(posedge core_clk or negedge core_clk_rst_n) begin
+        if (!core_clk_rst_n) begin
+            win_fifo_cnt     <= 17'd0;
+            win_fifo_cnt_lat <= 16'd0;
+        end else begin
+            if (fifo_rd_valid_run && (win_fifo_cnt != 17'h1FFFF))
+                win_fifo_cnt <= win_fifo_cnt + 17'd1;
+            if (win_tick) begin
+                win_fifo_cnt_lat <= win_fifo_cnt[15:0];
+                win_fifo_cnt     <= 17'd0;
+            end
+        end
+    end
+
     audio_sink u_audio_sink (
         .clk           (core_clk),
         .rst_n         (core_clk_rst_n),
@@ -728,6 +749,8 @@ module instrec_top #(
         .audio_sd_idle   (sd_idle),
         .audio_fifo_empty(fifo_empty),
         .audio_fifo_full (fifo_full),
+        .audio_win_frames(win_fifo_cnt_lat),
+        .audio_win_id    (win_id[7:0]),
         .dbg_line_id     (dbg_line_id),
         .dbg_line_arg    (dbg_line_arg),
         .dbg_line_fire   (dbg_line_fire),

@@ -103,6 +103,8 @@ module sys_ctrl #(
     input  wire        audio_sd_idle,
     input  wire        audio_fifo_empty,
     input  wire        audio_fifo_full,
+    input  wire [15:0] audio_win_frames, // real frames consumed in this window
+    input  wire [7:0]  audio_win_id,
     // uart_debug predefined line channel
     output reg  [2:0]  dbg_line_id,
     output reg  [31:0] dbg_line_arg,
@@ -231,6 +233,18 @@ module sys_ctrl #(
                            audio_sd_idle,
                            audio_fifo_empty,
                            audio_fifo_full};
+
+    // Periodic audio telemetry: repeat the "DDR3 STS" line about once per
+    // 0.8 s (2^27 / 125 MHz) while running, so the window frame count and
+    // win_id can be observed DURING playback (the boot-time line alone
+    // cannot distinguish "window frozen" from "window content silent").
+    reg [26:0] sts_period_cnt;
+    wire       sts_periodic = (sts_period_cnt == 27'h5FFFFFF);
+
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) sts_period_cnt <= 27'd0;
+        else        sts_period_cnt <= sts_period_cnt + 27'd1;
+    end
 
     reg [2:0]  state;
     reg [31:0] timeout_cnt;
@@ -392,8 +406,18 @@ module sys_ctrl #(
                         if (dbg_busy) begin
                             ddr_sts_armed <= 1'b1;
                         end else if (ddr_sts_armed) begin
-                            dbg_line_id   <= 3'd6;   // "DDR3 STS <hex8>"
-                            dbg_line_arg  <= {24'd0, ddr_sts_code};
+                            dbg_line_id   <= 3'd6;   // "DDR3 STS <8 hex>"
+                            // bit31..28 cmd_to_err, 27 to_err, 26 sd_idle,
+                            // 25 fifo_empty, 24 fifo_full, 23..8 window real
+                            // frame count, 7..0 win_id low byte.
+                            // bit31..24 FIFO overflow frames (low byte),
+                            // bit23..8 window real-frame count, 7..0 win_id.
+                            // The timeout attribution already proved zero on
+                            // this board, so the byte is repurposed to decide
+                            // "writes lost to overflow" vs "writes missing".
+                            dbg_line_arg  <= {overflow_cnt[7:0],
+                                              audio_win_frames,
+                                              audio_win_id};
                             dbg_line_fire <= 1'b1;
                             ddr_sts_sent  <= 1'b1;
                         end
@@ -428,6 +452,14 @@ module sys_ctrl #(
                     if (key1_press) begin
                         sys_run <= 1'b0;
                         state   <= ST_DDR;
+                    end
+                    // Periodic audio telemetry (see the counter above).
+                    if (sts_periodic && !dbg_busy && !dbg_line_fire) begin
+                        dbg_line_id   <= 3'd6;   // "DDR3 STS <8 hex>"
+                        dbg_line_arg  <= {overflow_cnt[7:0],
+                                          audio_win_frames,
+                                          audio_win_id};
+                        dbg_line_fire <= 1'b1;
                     end
                 end
 

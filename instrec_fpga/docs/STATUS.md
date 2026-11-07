@@ -1,5 +1,15 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-07（第十二批）：2~5 LSB 根因修复归零；数据链证明音频仅 19% 进窗；FTDI 掉线待恢复
+
+- **2~5 LSB 差异已查清并修复（逐层归零）**：根因是 `npu_top.v` 的两处旧 44.1k 硬编码——`conv_zp_in` 固定 `8'd49`、`fc2` 的 `ZP_OUT(8'd57)`。已参数化为 `ZP_IN_CONV1=47` / `ZP_OUT_FC2=58`（新契约值）；同时把 `npu_probe` 的 RTL 集从 `npu_full_end/*_candidate.v`（未参数化的早期副本）切到**生产 `src/npu/`**。验证：`sine440` **conv1..conv4/pool/gap/fc1/fc2/probs/logits 全部 0 LSB**（此前 conv1 3、conv4 13、logits 5）；`zeros49` 仅 `probs_q16` 差 274（8 个元素，softmax 定点近似，top1 一致，记为待查）。
+- **数据链首次给出「真实帧进窗」的定量证据**：新 STS 遥测（`DDR3 STS <8 hex>`：bit31..24 溢出字节 / bit23..8 窗口真实帧数 / 7..0 win_id）读出 **`0262C007`→`0262C008`**：窗口真实帧 **25,280 / 132,096 = 19%**、`win_id` 递增、`sd_idle=0`。即**音频确实进入窗口，但 81% 由 `audio_sink` 空闲零注入填充**——这解释了 top1 恒定（静音主导特征）。
+- **播放侧已核实（用户第 1 步）**：`resolve_play_device` 按名称解析（实时命中 Realtek，索引曾从 4→0→4 漂移，硬编码必失效）；端点音量 100%；素材必须立体声（44.1k 单声道在 Realtek 端点静默）。
+- 遥测设计：`sys_ctrl` 在 `ST_RUN` 每 ~0.8 s 重发一次 STS（`sts_period_cnt`），播放中可读；`uart_debug` 的 STS 行已扩为 8 位 hex（此前两次「改了没生效」的根因是替换未命中 + 未核对源）。
+- 位流 `releases/instrec-48k-diag2-20261107/`（SHA256 `de508328…`，LUT 33428/50%、DRM 146/155，Wns −2.523）。
+- **阻塞**：烧录前 FTDI 下载器从 PnP 消失（`FTDI ABSENT`，COM5 正常，`pnputil /scan-devices` 需管理员被拒）。按纪律不请求拔插；板级验证待下载器恢复后用该位流读 `overflow` 字节，即可判定 19% 是「写侧 LRCK 漏检」还是「FIFO 溢出（消费被 m0/m2 竞争拖慢）」。
+- 回归：check_rtl 77/0、pytest 438 passed + 26 skipped、`npu_chain` PASS。
+
 ## 2026-11-07（续）：诊断位流——`DDR3 STS` 打包音频遥测；板级识别仍待定位
 
 - `sys_ctrl` 的 `ddr_sts_code` 低 3 位由超时 FSM state 改为音频遥测（bit2=sd_idle / bit1=fifo_empty / bit0=fifo_full），契约测试同步；全量回归 438 passed + 26 skipped、lint 77/0。

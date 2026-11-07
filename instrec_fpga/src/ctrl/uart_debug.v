@@ -354,9 +354,7 @@ module uart_debug (
                 // id 6 carries its 8-bit diagnostic code right-aligned in
                 // dbg_line_arg; shift it into the top nibble pair so the
                 // shared shifter prints exactly 2 hex digits via ST_HEX.
-                rom_arg     <= (dbg_line_id == LINE_ID_DDRSTS)
-                               ? {dbg_line_arg[7:0], 24'd0}
-                               : dbg_line_arg;
+                rom_arg     <= dbg_line_arg;
             end
 
             // -------- TX engine --------
@@ -400,8 +398,8 @@ module uart_debug (
                             state    <= ST_HEX;
                         end else if (rom_id == LINE_ID_DDRSTS &&
                                      rom_idx == LINE_LEN_DDRSTS - 5'd1) begin
-                            // 2 hex digits, then ST_EOL appends '\n'.
-                            hex_left <= 4'd2;
+                            // 8 hex digits (full telemetry word), then EOL.
+                            hex_left <= 4'd8;
                             state    <= ST_HEX;
                         end else if (rom_idx == rom_len(rom_id) - 5'd1) begin
                             // Plain line ends with its own '\n'.

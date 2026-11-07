@@ -1,5 +1,12 @@
 # InstRec-FPGA 变更日志
 
+## 2026-11-07：zp 参数化使 NPU 逐层归零；遥测证明音频仅 19% 进窗
+
+- npu_top：conv1 zp_in 49→47、fc2 zp_out 57→58 参数化（旧硬编码是 2~5 LSB 根因）；npu_probe 切生产 src/npu 源，sine440 全层 0 LSB。
+- sys_ctrl/uart_debug：STS 扩 8 位 hex 内容（溢出字节+窗口帧计数+win_id）并每 0.8s 重发；实测 25280/132096=19% 真实帧、win_id 递增。
+- i2s_capture 播放设备按名称解析（索引漂移 4→0→4）；位流归档 releases/instrec-48k-diag2-20261107（sha de508328）。
+- FTDI 掉线阻塞烧录，待恢复后读 overflow 字节区分「漏检 vs 溢出」。
+
 ## 2026-11-07（续）：DDR3 STS 音频遥测 + 板级判读
 
 - sys_ctrl STS 低 3 位改为 sd_idle/fifo_empty/fifo_full（契约测试同步），回归 438+26skip、lint 77/0。

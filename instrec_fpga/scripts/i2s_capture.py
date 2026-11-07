@@ -174,7 +174,40 @@ def sha256_file(path):
 # ---------------------------------------------------------------------------
 # Playback (winsound with a manual-playback fallback).
 # ---------------------------------------------------------------------------
-PLAY_DEVICE = 4              # waveOut index of the Realtek endpoint (PCM1808 line-in)
+PLAY_DEVICE_NAME = "Realtek"  # endpoint that feeds PCM1808 (line-in)
+PLAY_DEVICE_FALLBACK = 0      # used only when name resolution fails
+
+
+def resolve_play_device(device_id=None, name_hint=PLAY_DEVICE_NAME):
+    """Return the waveOut index of the endpoint whose name contains name_hint.
+
+    waveOut device indices are DYNAMIC (device enumeration order changes with
+    plug/unplug and driver state): on 2026-11-06 Realtek was index 4, on
+    2026-11-07 it was index 0, and a hard-coded 4 silently played into another
+    endpoint so the PCM1808 saw only silence.  Always resolve by name.
+    """
+    if device_id is not None:
+        return int(device_id)
+    import ctypes
+    import ctypes.wintypes as wt
+
+    winmm = ctypes.WinDLL('winmm')
+
+    class CAPS(ctypes.Structure):
+        _fields_ = [('wMid', wt.WORD), ('wPid', wt.WORD),
+                    ('vDriverVersion', wt.UINT), ('szPname', wt.WCHAR * 32),
+                    ('dwFormats', wt.DWORD), ('wChannels', wt.WORD),
+                    ('wReserved1', wt.WORD), ('dwSupport', wt.DWORD)]
+
+    winmm.waveOutGetNumDevs.restype = wt.UINT
+    count = winmm.waveOutGetNumDevs()
+    for idx in range(count):
+        caps = CAPS()
+        if winmm.waveOutGetDevCapsW(idx, ctypes.byref(caps),
+                                    ctypes.sizeof(caps)) == 0:
+            if name_hint.lower() in caps.szPname.lower():
+                return idx
+    return PLAY_DEVICE_FALLBACK
 SND_FILENAME = 0x00020000    # winsound flag values (module attrs when
 SND_ASYNC = 0x00000001       # winsound is importable)
 SND_LOOP = 0x00000008
@@ -262,7 +295,7 @@ def start_playback(wav_path, device_id=None):
     device_id is the waveOut index (4 = Realtek on this host); the module-level
     PLAY_DEVICE default is used when None.
     """
-    dev = PLAY_DEVICE if device_id is None else int(device_id)
+    dev = PLAY_DEVICE_FALLBACK if device_id is None else int(device_id)
     try:
         return WaveOutPlayer(wav_path, dev).start()
     except Exception as exc:
@@ -486,12 +519,15 @@ def run_capture(args):
                 print(f'play wav not found: {wav_path}', file=sys.stderr)
                 return 2, summary
             summary['play_wav'] = wav_path.name
-            winsound_module = start_playback(wav_path, args.play_device)
+            dev = resolve_play_device(args.play_device, args.play_device_name)
+            summary['play_device'] = dev
+            print(f'playback endpoint resolved to waveOut device {dev}')
+            winsound_module = start_playback(wav_path, dev)
             if winsound_module is None:
                 print(f'waveOut unavailable: play {wav_path} manually NOW '
                       f'(looping), capture starts in {args.lead} s')
             else:
-                print(f'playing {wav_path.name} in a loop on waveOut device {args.play_device}')
+                print(f'playing {wav_path.name} in a loop on waveOut device {dev}')
         else:
             summary['play_wav'] = None
 
@@ -616,8 +652,10 @@ def main():
                          'budget = seconds + 10)')
     ap.add_argument('--lead', type=float, default=1.0,
                     help='seconds between playback start and the C command')
-    ap.add_argument('--play-device', type=int, default=PLAY_DEVICE,
-                    help='waveOut render device index (default 4 = Realtek)')
+    ap.add_argument('--play-device', type=int, default=None,
+                    help='waveOut render device index (default: auto-detect)')
+    ap.add_argument('--play-device-name', default=PLAY_DEVICE_NAME,
+                    help='substring to match in the endpoint name (default Realtek)')
     ap.add_argument('--play-wav', default=None,
                     help='wav to loop during the capture (winsound async); '
                          'falls back to a manual-playback prompt')

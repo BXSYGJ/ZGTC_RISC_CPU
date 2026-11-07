@@ -186,11 +186,14 @@ def write_assets(vectors: list, weights_image=None) -> None:
 
 def rtl_file_list() -> list:
     """Identical RTL set to sim/experiments/npu_full_native/run.py."""
-    rtl = [HERE.parent / 'npu_full_end/conv_engine_candidate.v',
-           HERE.parent / 'npu_full_end/pool_engine_candidate.v',
-           HERE.parent / 'npu_full_end/npu_top_candidate.v',
-           HERE.parent / 'npu_full_end/fc_engine.v',
-           HERE.parent / 'npu_full_end/wbuf.v',
+    # Production NPU sources are the truth source (parameterized zero
+    # points): the npu_full_end/*_candidate.v snapshots predate the
+    # parameterization and still hard-code the legacy zp 49/57.
+    rtl = [ROOT / 'src/npu/conv_engine.v',
+           ROOT / 'src/npu/pool_engine.v',
+           ROOT / 'src/npu/npu_top.v',
+           ROOT / 'src/npu/fc_engine.v',
+           ROOT / 'src/npu/wbuf.v',
            ROOT / 'sim/experiments/wdma_parameter_ram/wdma_wide_fixed.v',
            ROOT / 'sim/experiments/activation_store/activation_row_store_dynamic.v',
            ROOT / 'sim/experiments/activation_store/activation_store_mux.v',
@@ -286,7 +289,7 @@ def collect_snapshots(vec: dict) -> dict:
     return {'layers': layers, 'arrays': arrays}
 
 
-def compare_to_golden(arrays: dict, res: dict) -> dict:
+def compare_to_golden(arrays: dict, res: dict, zp_out_fc2: int = 58) -> dict:
     """RTL snapshots vs golden_pipeline.npu_forward, element-wise."""
     match = {}
     for bin_name, _, _, _ in LAYER_SPECS:
@@ -302,7 +305,7 @@ def compare_to_golden(arrays: dict, res: dict) -> dict:
             'n_diff': int((diff > 0).sum()),
             'identical': bool((diff == 0).all()),
         }
-    logits_rtl = arrays['fc2'] - ZP_OUT_FC2
+    logits_rtl = arrays['fc2'] - int(zp_out_fc2)
     logits_gold = np.asarray(res['logits'], np.int64)
     dl = np.abs(logits_rtl - logits_gold)
     match['logits'] = {

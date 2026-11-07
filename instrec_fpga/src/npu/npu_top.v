@@ -18,7 +18,14 @@
 
 module npu_top #(
     // 0: mel-major fixture RAM; 1: mel_engine frame-major feature bank.
-    parameter FEATURE_FRAME_MAJOR = 0
+    parameter FEATURE_FRAME_MAJOR = 0,
+    // Per-layer zero points from the deployed layer contract
+    // (deploy/medley_48k -> scripts/outputs/medley_48k/layer_contract.json).
+    // Native 48 kHz INT8 model: conv1 zp_in = 47 (legacy 44.1 kHz was 49),
+    // fc2 zp_out = 58 (legacy 57).  Model-contract constants: a new
+    // quantizer requires a rebuild together with INV_S_IN/ZP_IN.
+    parameter [7:0] ZP_IN_CONV1 = 8'd47,
+    parameter [7:0] ZP_OUT_FC2 = 8'd58
 ) (
     input  wire        clk,
     input  wire        rst_n,
@@ -302,7 +309,7 @@ module npu_top #(
     wire       core_y_valid;
     wire [7:0] core_y_u8;
     wire       core_w_ready;
-    wire [7:0] conv_zp_in = (layer == L_CONV1) ? 8'd49 : 8'd0;
+    wire [7:0] conv_zp_in = (layer == L_CONV1) ? ZP_IN_CONV1 : 8'd0;
     wire [1:0] conv_sel = (layer == L_CONV1) ? 2'd0 :
                           (layer == L_CONV2) ? 2'd1 :
                           (layer == L_CONV3) ? 2'd2 : 2'd3;
@@ -577,7 +584,7 @@ module npu_top #(
         .y_valid(fc1_y_valid), .y_u8(fc1_y), .done(fc1_done), .grp_advance(fc_grp_advance[0])
     );
 
-    fc_engine #(.CIN(128), .COUT(8), .ZP_IN(8'd0), .ZP_OUT(8'd57)) u_fc2 (
+    fc_engine #(.CIN(128), .COUT(8), .ZP_IN(8'd0), .ZP_OUT(ZP_OUT_FC2)) u_fc2 (
         .clk(clk), .rst_n(rst_n), .layer_start(fc2_start),
         .x_valid(fc1_y_valid), .x_s16({8'd0, fc1_y}),
         .w_valid(wbuf_rd_valid && layer == L_FC2), .w_data(wbuf_rd_data), .w_ready(fc_wready[1]),

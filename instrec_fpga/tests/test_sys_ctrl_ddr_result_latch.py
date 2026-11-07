@@ -651,12 +651,12 @@ def test_rtl_uart_debug_knows_the_sts_line():
     # 9-byte ASCII prefix followed by 2 hex digits and the newline
     assert re.search(r"""localparam LINE_DDRSTS\s*=\s*"DDR3 STS ";""", text)
     assert re.search(r"localparam \[4:0\] LINE_LEN_DDRSTS\s*=\s*5'd9;", text)
-    # the 2-digit branch exists next to the 8-digit (id 4) branch
+    # The STS line now carries full audio telemetry: 8 hex digits printed
+    # from dbg_line_arg (bit31..28 cmd_to_err, 27 to_err, 26 sd_idle,
+    # 25 fifo_empty, 24 fifo_full, 23..8 window real-frame count, 7..0 win_id).
     assert "LINE_ID_DDRSTS &&" in text
-    assert 'hex_left <= 4\'d2;' in text
-    # only the low 8 bits of dbg_line_arg are used, shifted into the top
-    # nibble pair so the shared MSB-first shifter emits 2 digits
-    assert "{dbg_line_arg[7:0], 24'd0}" in text
+    assert "hex_left <= 4'd8;" in text
+    assert "rom_arg     <= dbg_line_arg;" in text
     # the ROM text is a plain ASCII case table (the project convention)
     assert _rom_case_bytes(text, 6) == b'DDR3 STS '
     # and id 6 is routed to ST_HEX (2 nibbles), not left on the RUN default
