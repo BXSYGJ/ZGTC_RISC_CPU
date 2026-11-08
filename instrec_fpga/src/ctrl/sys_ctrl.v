@@ -105,6 +105,7 @@ module sys_ctrl #(
     input  wire        audio_fifo_full,
     input  wire [15:0] audio_win_frames, // real frames consumed in this window
     input  wire [7:0]  audio_win_id,
+    input  wire [15:0] audio_err_cnt,  // audio_sink write-timeout counter
     // uart_debug predefined line channel
     output reg  [2:0]  dbg_line_id,
     output reg  [31:0] dbg_line_arg,
@@ -415,9 +416,12 @@ module sys_ctrl #(
                             // The timeout attribution already proved zero on
                             // this board, so the byte is repurposed to decide
                             // "writes lost to overflow" vs "writes missing".
-                            dbg_line_arg  <= {overflow_cnt[7:0],
-                                              audio_win_frames,
-                                              audio_win_id};
+                            // bit31..24 audio write-timeout count (stalled
+                            // page writes -> agg_freeze stuck), 23..16 FIFO
+                            // overflow high byte, 15..0 window real frames.
+                            dbg_line_arg  <= {audio_err_cnt[7:0],
+                                              overflow_cnt[15:8],
+                                              audio_win_frames};
                             dbg_line_fire <= 1'b1;
                             ddr_sts_sent  <= 1'b1;
                         end
@@ -456,9 +460,9 @@ module sys_ctrl #(
                     // Periodic audio telemetry (see the counter above).
                     if (sts_periodic && !dbg_busy && !dbg_line_fire) begin
                         dbg_line_id   <= 3'd6;   // "DDR3 STS <8 hex>"
-                        dbg_line_arg  <= {overflow_cnt[7:0],
-                                          audio_win_frames,
-                                          audio_win_id};
+                        dbg_line_arg  <= {audio_err_cnt[7:0],
+                                          overflow_cnt[15:8],
+                                          audio_win_frames};
                         dbg_line_fire <= 1'b1;
                     end
                 end

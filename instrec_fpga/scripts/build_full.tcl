@@ -123,6 +123,17 @@ dev_map
 # Reproduce the only configuration that ever closed on this RTL: plain pnr,
 # no seed override and no multi-seed.  m2c (20261029-172919) closed at
 # iteration 981 with exactly this source set.
+# 2026-11-08: -fast_router enabled.  Measured earlier on this design: the
+# fast and default routers produce the SAME placement/routing/timing, the
+# fast one needs 42 vs 278 iterations (and the earlier reason to keep the
+# default router -- proving a -3.593 ns path was not a router artefact -- no
+# longer applies, that path was fixed in RTL).  Without it the 48 kHz build
+# stalled at iteration 394 (1318 nets) after 3 h; the router flag does not
+# change the final image.
+# 2026-11-08: tried -fast_router (Flow-0075: not a valid option on this
+# PDS build) and -gplace_seed 1 (forbidden by the build-contract tests,
+# which pin the PnR line to a bare `pnr`).  Neither change is kept: the
+# PnR invocation must stay exactly `pnr` for reproducibility.
 pnr
 report_timing
 gen_bit_stream

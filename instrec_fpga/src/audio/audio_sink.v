@@ -530,6 +530,15 @@ module audio_sink #(
             agg_freeze_r <= 1'b1;
         else if ((wr_state == ST_WR) && m0_done)
             agg_freeze_r <= 1'b0;
+        else if ((wr_state == ST_WR) &&
+                 (wr_timeout_cnt == WR_TIMEOUT_CYCLES - 23'd1))
+            // Fail-safe release: if the right-page write never completes, the
+            // write FSM re-issues it, but the aggregator must not stay frozen
+            // (a permanent freeze throttles real audio to ~19% of a window
+            // and the rest is filled by empty-FIFO zero injection).  One page
+            // is 16 frames = 333 us at 48 kHz, so a 33 ms cap costs <1% of
+            // frames while bounding the damage of a stuck command.
+            agg_freeze_r <= 1'b0;
     end
 
     assign agg_freeze = agg_freeze_r;

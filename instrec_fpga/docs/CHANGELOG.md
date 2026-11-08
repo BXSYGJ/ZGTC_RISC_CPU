@@ -1,5 +1,12 @@
 # InstRec-FPGA 变更日志
 
+## 2026-11-08：数据链定位消费侧，audio_sink 双修复与 err_cnt 遥测
+
+- 板级 STS 实测 19% 真实帧；overflow 低字节 0 属 256 次溢出的饱和巧合，不能作为无溢出结论；写侧由 i2s_capture（4 s / 192k 帧）证明 48 kHz 满帧率。
+- 修复①（a00be5e7）左右页命令间 ST_GAP 一拍；修复② agg_freeze 右页写超时 33 ms fail-safe 释放。
+- STS 重排为 {err_cnt, overflow_hi, frames}；回归 438 passed + 26 skipped。
+- PNR 收敛阻塞：默认种子 iteration 394 / 1318 未布；-fast_router 非法、-gplace_seed 被契约禁止，需延长窗口或 RTL 拥塞优化。
+
 ## 2026-11-07：zp 参数化使 NPU 逐层归零；遥测证明音频仅 19% 进窗
 
 - npu_top：conv1 zp_in 49→47、fc2 zp_out 57→58 参数化（旧硬编码是 2~5 LSB 根因）；npu_probe 切生产 src/npu 源，sine440 全层 0 LSB。

@@ -751,6 +751,7 @@ module instrec_top #(
         .audio_fifo_full (fifo_full),
         .audio_win_frames(win_fifo_cnt_lat),
         .audio_win_id    (win_id[7:0]),
+        .audio_err_cnt   (audio_err_cnt),
         .dbg_line_id     (dbg_line_id),
         .dbg_line_arg    (dbg_line_arg),
         .dbg_line_fire   (dbg_line_fire),

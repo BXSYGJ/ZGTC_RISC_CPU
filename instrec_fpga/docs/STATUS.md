@@ -1,5 +1,16 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-08：数据链定位到消费侧——overflow 低字节为 256 饱和巧合；加两处 audio_sink 修复；PNR 收敛阻塞
+
+- **板级新证据**：烧录 `releases/instrec-48k-gapfix-20261108/`（sha `40b93d58…`，无 PLL LOCK ERR），播放中周期 STS 读回 `0062C006→0062C008`：真实帧 **25,280/132,096 = 19%**、`win_id` 递增、overflow 低 8 位 = 0。
+- **判读纠正**：`overflow_cnt` 的**低 8 位为 0 不能证明无溢出**——若写侧 48 kHz、消费侧 ~9.2 kHz，2.75 s 内约 128k 次溢出，低 8 位恰好回到 0。因此「FIFO 未满」的结论不成立。
+- **写侧已排除**：`i2s_capture` 顶层用同一 `i2s_slave_rx`（27 MHz、TIMEOUT 27000）在 4 s 内采到 192,000 帧（48 kHz），证明接收端能产满帧率；`i2s_lrck` 接 `1'b0` 使 `wr_req=pcm_valid`。⇒ 瓶颈在 `audio_sink` 消费侧（`agg_freeze` 长期冻结）。
+- **修复①（已提交 `a00be5e7`）**：左右页命令之间插入 `ST_GAP` 一拍（`cmd_valid` 先撤再发），消除「新地址/数据配到退役突发」的风险。板级帧计数**未改善**（仍 25,280）⇒ 不是主因，但属正确的时序加固。
+- **修复②（本轮，待上板）**：`agg_freeze_r` 增加 **fail-safe 释放**——右页写超时（`WR_TIMEOUT_CYCLES` ≈ 33 ms）强制解除冻结。页周期仅 333 µs，该上限最多损失 <1% 帧，却能把「写命令卡死 ⇒ 整窗冻结」的损害封顶。
+- **遥测（本轮，待上板）**：`DDR3 STS` 重排为 `{audio_err_cnt[7:0], overflow_cnt[15:8], win_frames[15:0]}`——`err_cnt>0` 即写命令卡住（冻结根因确证），溢出高字节判定 FIFO 满丢帧。契约测试已同步，全量 438 passed + 26 skipped。
+- **构建阻塞**：48 kHz 顶层默认种子 PNR 在 iteration 394 停（1318 未布，3 h 未收敛）；`-fast_router` 报 Flow-0075（该 PDS 不支持），`-gplace_seed 1` 被 `test_build_tokens` 契约测试**禁止**（PnR 行必须裸 `pnr`）⇒ 不能靠 PnR 参数换布局。seed1 手工实验曾达 85 未布（iteration 616），说明布局质量差异明显但受契约限制。
+- 当前板上：`instrec_48k_gapfix`（可用）。**板级识别结果仍不可用**，不宣称 48k 准确率；下一步需在裸 `pnr` 前提下延长构建窗口或做 RTL 拥塞优化，出带 err_cnt 遥测的位流后即可闭环「写卡死 vs 溢出」。
+
 ## 2026-11-07（第十二批）：2~5 LSB 根因修复归零；数据链证明音频仅 19% 进窗；FTDI 掉线待恢复
 
 - **2~5 LSB 差异已查清并修复（逐层归零）**：根因是 `npu_top.v` 的两处旧 44.1k 硬编码——`conv_zp_in` 固定 `8'd49`、`fc2` 的 `ZP_OUT(8'd57)`。已参数化为 `ZP_IN_CONV1=47` / `ZP_OUT_FC2=58`（新契约值）；同时把 `npu_probe` 的 RTL 集从 `npu_full_end/*_candidate.v`（未参数化的早期副本）切到**生产 `src/npu/`**。验证：`sine440` **conv1..conv4/pool/gap/fc1/fc2/probs/logits 全部 0 LSB**（此前 conv1 3、conv4 13、logits 5）；`zeros49` 仅 `probs_q16` 差 274（8 个元素，softmax 定点近似，top1 一致，记为待查）。
