@@ -439,6 +439,7 @@ module audio_sink #(
     localparam [1:0] ST_IDLE = 2'b00;   // no command outstanding
     localparam [1:0] ST_WL   = 2'b01;   // left page command outstanding
     localparam [1:0] ST_WR   = 2'b10;   // right mirror command outstanding
+    localparam [1:0] ST_GAP  = 2'b11;   // one-cycle gap between L and R
 
     reg [1:0]  wr_state;
     reg [22:0] wr_timeout_cnt;
@@ -476,9 +477,14 @@ module audio_sink #(
                 end
                 ST_WL: begin
                     if (m0_done) begin
-                        wr_state       <= ST_WR;
-                        m0_cmd         <= {1'b1, addr_right, 8'd0};
-                        m0_wdata       <= agg_r_shift;
+                        // Drop cmd_valid for one cycle before presenting the
+                        // right-page command: the controller must retire the
+                        // left burst before it sees new address/data (without
+                        // this gap the right command's completion was lost and
+                        // the aggregator froze forever: only ~19% of a window
+                        // received real frames).
+                        m0_cmd_valid   <= 1'b0;
+                        wr_state       <= ST_GAP;
                         wr_timeout_cnt <= 23'd0;
                     end else if (wr_timeout_cnt == WR_TIMEOUT_CYCLES - 23'd1) begin
                         // Stalled left write: re-issue, count the fault.
@@ -486,6 +492,13 @@ module audio_sink #(
                         if (err_cnt_r != 16'hFFFF)
                             err_cnt_r <= err_cnt_r + 16'd1;
                     end
+                end
+                ST_GAP: begin
+                    m0_cmd_valid   <= 1'b1;
+                    m0_cmd         <= {1'b1, addr_right, 8'd0};
+                    m0_wdata       <= agg_r_shift;
+                    wr_timeout_cnt <= 23'd0;
+                    wr_state       <= ST_WR;
                 end
                 ST_WR: begin
                     if (m0_done) begin
