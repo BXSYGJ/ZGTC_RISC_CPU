@@ -256,17 +256,22 @@ module audio_sink #(
     wire agg_freeze;
     assign fifo_rd_en = ~fifo_empty & ~agg_freeze;
 
-    // Injection cadence counter: runs only while the FIFO is empty and
-    // the aggregator is not frozen (injected frames are dropped during
-    // freeze - see header mute-semantics note 1).
+    // Injection cadence counter: only while the SOURCE IS IDLE.  The FIFO
+    // is naturally empty between frames (the 125 MHz read side drains a
+    // single entry long before the next 48 kHz write), so gating injection
+    // on `fifo_empty` alone injected a zero frame in almost every frame gap
+    // and filled the window with silence: measured 19% real frames on the
+    // board and 69% in the audio_chain simulation.  Injection is a fallback
+    // for "no I2S at all" (sd_idle_sync, the 1 ms PCM1808 watchdog), not for
+    // "the next real frame has not arrived yet".
     reg [13:0] empty_gap_cnt;
-    wire inject_tick = fifo_empty & ~agg_freeze
+    wire inject_tick = sd_idle_sync & fifo_empty & ~agg_freeze
                      & (empty_gap_cnt == INJECT_GAP_CYCLES - 14'd1);
 
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n)
             empty_gap_cnt <= 14'd0;
-        else if (fifo_empty & ~agg_freeze)
+        else if (sd_idle_sync & fifo_empty & ~agg_freeze)
             empty_gap_cnt <= empty_gap_cnt + 14'd1;
         else
             empty_gap_cnt <= 14'd0;
@@ -530,15 +535,14 @@ module audio_sink #(
             agg_freeze_r <= 1'b1;
         else if ((wr_state == ST_WR) && m0_done)
             agg_freeze_r <= 1'b0;
-        else if ((wr_state == ST_WR) &&
-                 (wr_timeout_cnt == WR_TIMEOUT_CYCLES - 23'd1))
-            // Fail-safe release: if the right-page write never completes, the
-            // write FSM re-issues it, but the aggregator must not stay frozen
-            // (a permanent freeze throttles real audio to ~19% of a window
-            // and the rest is filled by empty-FIFO zero injection).  One page
-            // is 16 frames = 333 us at 48 kHz, so a 33 ms cap costs <1% of
-            // frames while bounding the damage of a stuck command.
-            agg_freeze_r <= 1'b0;
+        // NOTE (2026-11-08): a timeout-based fail-safe release was tried and
+        // REVERTED.  Releasing the aggregator while the write FSM is still in
+        // ST_WL/ST_WR is NOT safe: the FSM keeps cmd_valid high and only the
+        // ST_IDLE branch accepts page_go, so the next page's command is never
+        // issued and its 16 frames are silently dropped while win_frame_cnt
+        // keeps counting them (silent data corruption).  A real fail-safe must
+        // also abort/reset the write FSM and mark the window invalid; that is
+        // not implemented, so the freeze is kept as-is and only observed.
     end
 
     assign agg_freeze = agg_freeze_r;

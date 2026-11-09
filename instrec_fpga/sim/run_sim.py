@@ -98,6 +98,7 @@ class Case:
     timeout: int = 180                # run timeout in seconds
     prepare: str | None = None        # name of the data-preparation hook
     extra_flags: list[str] = field(default_factory=list)
+    sim_plusargs: list[str] = field(default_factory=list)
     defines: list[str] = field(default_factory=list)
     overrides: list[tuple] = field(default_factory=list)   # (relpath, regex, repl)
     optional: bool = False            # TB may be delivered by another task
@@ -359,6 +360,48 @@ register(Case(
     rtl=["src/audio/i2s_clk_gen.v", "src/audio/i2s_rx.v"],
     timeout=120,
     description="physical Philips I2S source into generated clocks and receiver",
+))
+
+# Full audio front-end chain at board topology: physical PCM1808 I2S source ->
+# i2s_slave_rx -> audio_cdc_fifo -> audio_sink -> behavioural DDR responder.
+# Used to reproduce/ bisect the board "19% real frames per window" finding by
+# sweeping the DDR done delay (+DLY=<cycles>).
+# Same chain with a 4096-frame window (256 pages) so a full window costs
+# ~85 ms of simulated time: used to sweep the DDR done delay and find where
+# the real-frame rate collapses toward the board-observed 19%.
+register(Case(
+    name="audio_chain_w4k",
+    tb="tb_audio_chain.sv",
+    rtl=[
+        "src/audio/i2s_slave_rx.v",
+        "src/audio/audio_cdc_fifo.v",
+        "src/audio/audio_sink.v",
+    ],
+    timeout=1200,
+    extra_flags=["--public"],
+    sim_plusargs=["+FULL"],
+    overrides=[
+        ("src/audio/audio_sink.v",
+         r"localparam\s+\[17:0\]\s+WIN_FRAMES\s*=\s*18'd132_096;",
+         "localparam [17:0] WIN_FRAMES   = 18'd4096;"),
+        ("src/audio/audio_sink.v",
+         r"localparam\s+\[13:0\]\s+PAGES_PER_WIN\s*=\s*14'd8256;",
+         "localparam [13:0] PAGES_PER_WIN = 14'd256;"),
+    ],
+    description="audio chain with a 4096-frame window (delay sweep)",
+))
+
+register(Case(
+    name="audio_chain",
+    tb="tb_audio_chain.sv",
+    rtl=[
+        "src/audio/i2s_slave_rx.v",
+        "src/audio/audio_cdc_fifo.v",
+        "src/audio/audio_sink.v",
+    ],
+    timeout=1200,
+    extra_flags=["--public"],
+    description="full audio chain (I2S->CDC->audio_sink) vs behavioural DDR, sweep +DLY",
 ))
 
 register(Case(
@@ -1048,7 +1091,7 @@ def run_case(case: Case, verilator: Path, args) -> CaseResult:
 
     log("$ %s" % exe)
     try:
-        run = subprocess.run([str(exe)], cwd=str(ROOT), env=_build_env(),
+        run = subprocess.run([str(exe)] + list(case.sim_plusargs), cwd=str(ROOT), env=_build_env(),
                              capture_output=True, text=True, encoding="utf-8",
                              errors="replace", timeout=case.timeout)
         output = (run.stdout or "") + (run.stderr or "")

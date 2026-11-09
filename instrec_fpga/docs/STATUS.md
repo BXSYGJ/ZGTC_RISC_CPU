@@ -1,5 +1,14 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-09：19% 真实帧根因锁定并修复——零注入门槛只看 FIFO 空；整机仿真 100%
+
+- **新增整机音频链仿真** `sim/tb_audio_chain.sv`（物理 PCM1808 I2S → `i2s_slave_rx` → `audio_cdc_fifo` → `audio_sink` → 行为 DDR 响应器，`+DLY` 可调 done 延迟），并给小窗口变体 `audio_chain_w4k`（WIN_FRAMES 4096 / 256 页，便于扫参）。`run_sim.Case` 新增 `sim_plusargs` 字段。
+- **定位过程（可复现证据）**：2 ms 诊断 `pcm_valid=95 / fifo_rd_valid=95 / ovf=0 / err=0` ⇒ 写侧与 CDC 完全正常（48 kHz）；小窗口基线 `real=2816/4096=69%`、`freeze=3328`（0.03%）⇒ **不是 agg_freeze 卡死，也不是 FIFO 溢出**。
+- **根因**：`audio_sink` 的零注入门槛只有 `fifo_empty`。读侧 125 MHz 远快于写侧 48 kHz，**帧间 FIFO 天然为空**，于是几乎每个帧间隙都被判「无音频」而补一个零帧；真实帧到达后叠加，窗口被注入填满。板级 19%、仿真 69% 都是该机制的表现（比例随 FIFO 空窗占比变化）。
+- **修复**：注入条件加 `sd_idle_sync` 门槛（仅 PCM1808 watchdog 判定源停止时才注入零帧）。验证：`WIN1 real=4095 inj=1`、`WIN2 real=4096 inj=0` ⇒ **100% 真实帧**。
+- 回归：pytest 438 passed + 26 skipped；`mel_credit` / `audio_fifo` / `audio_chain` / `audio_chain_w4k` 全 PASS；lint 77/0。
+- 待办：① 按用户要求把「每窗冻结累计周期」编入遥测（当前 STS 为 `{err[6:0], overflow_hi[7:0], frames[16:0]}`，拟按 `win_id[0]` 交替输出 freeze 行）；② 有界 PNR（90 min 上限）出位流后上板验收 `real≈132096`、注入≈0、top1 随输入变化；③ 通过后做同窗 golden 对拍与已知类别音乐识别。
+
 ## 2026-11-08：数据链定位到消费侧——overflow 低字节为 256 饱和巧合；加两处 audio_sink 修复；PNR 收敛阻塞
 
 - **板级新证据**：烧录 `releases/instrec-48k-gapfix-20261108/`（sha `40b93d58…`，无 PLL LOCK ERR），播放中周期 STS 读回 `0062C006→0062C008`：真实帧 **25,280/132,096 = 19%**、`win_id` 递增、overflow 低 8 位 = 0。

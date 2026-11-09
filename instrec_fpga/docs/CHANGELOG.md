@@ -1,5 +1,11 @@
 # InstRec-FPGA 变更日志
 
+## 2026-11-09：修复零注入门槛（19% 真实帧根因），整机音频链仿真 100%
+
+- 新增 tb_audio_chain / audio_chain_w4k（可调 DDR done 延迟），run_sim 支持 sim_plusargs。
+- 根因：注入只看 fifo_empty，帧间自然空即补零帧；加 sd_idle_sync 门槛后 real 4095/4096、inj≈0。
+- 回归 438+26skip，音频四用例全 PASS。
+
 ## 2026-11-08：数据链定位消费侧，audio_sink 双修复与 err_cnt 遥测
 
 - 板级 STS 实测 19% 真实帧；overflow 低字节 0 属 256 次溢出的饱和巧合，不能作为无溢出结论；写侧由 i2s_capture（4 s / 192k 帧）证明 48 kHz 满帧率。
