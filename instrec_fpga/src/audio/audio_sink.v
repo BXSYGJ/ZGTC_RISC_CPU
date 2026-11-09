@@ -184,6 +184,7 @@ module audio_sink #(
     output reg  [15:0] win_id,
     output reg         mute_flag,
     output wire [15:0] err_cnt,
+    output reg  [31:0] freeze_cycles,   // agg_freeze cycles in the last window
 
     // -----------------------------------------------------------------
     // pix_clk domain (148.5 MHz, from hdmi_tx_if) - only the column
@@ -522,6 +523,26 @@ module audio_sink #(
                     m0_cmd_valid  <= 1'b0;
                 end
             endcase
+        end
+    end
+
+    // Freeze-cycle accumulator: how long (in core cycles) the aggregator was
+    // frozen during the CURRENT window.  A healthy window freezes for only a
+    // few thousand cycles (0.03% of 344 M); if a page write stalls, this is
+    // the number that exposes it.  Latched at win_tick and cleared for the
+    // next window.
+    reg [31:0] freeze_cyc_cnt;
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            freeze_cyc_cnt <= 32'd0;
+            freeze_cycles  <= 32'd0;
+        end else begin
+            if (agg_freeze)
+                freeze_cyc_cnt <= freeze_cyc_cnt + 32'd1;
+            if (win_tick) begin
+                freeze_cycles  <= freeze_cyc_cnt;
+                freeze_cyc_cnt <= 32'd0;
+            end
         end
     end
 

@@ -103,9 +103,10 @@ module sys_ctrl #(
     input  wire        audio_sd_idle,
     input  wire        audio_fifo_empty,
     input  wire        audio_fifo_full,
-    input  wire [15:0] audio_win_frames, // real frames consumed in this window
+    input  wire [17:0] audio_win_frames, // real frames consumed in this window (0..132096)
     input  wire [7:0]  audio_win_id,
     input  wire [15:0] audio_err_cnt,  // audio_sink write-timeout counter
+    input  wire [31:0] audio_freeze_cycles, // agg_freeze cycles, last window
     // uart_debug predefined line channel
     output reg  [2:0]  dbg_line_id,
     output reg  [31:0] dbg_line_arg,
@@ -228,6 +229,13 @@ module sys_ctrl #(
     // st_done / st_fail remain observable through the DDROK and
     // "DDR3 ERR @<addr>" lines, so dropping them here loses nothing.
     wire [7:0] ddr_sts_code;
+
+    // Telemetry alternates per window (win_id[0]):
+    //   even: {err_cnt[6:0], overflow_hi[7:0], window_real_frames[16:0]}
+    //   odd : {agg_freeze cycles in the last window}  (32 bits)
+    wire [31:0] audio_sts_payload = audio_win_id[0]
+        ? audio_freeze_cycles
+        : {audio_err_cnt[6:0], overflow_cnt[15:8], audio_win_frames};
 
     assign ddr_sts_code = {ddr_cmd_to_err,
                            ddr_to_err,
@@ -419,9 +427,10 @@ module sys_ctrl #(
                             // bit31..24 audio write-timeout count (stalled
                             // page writes -> agg_freeze stuck), 23..16 FIFO
                             // overflow high byte, 15..0 window real frames.
-                            dbg_line_arg  <= {audio_err_cnt[7:0],
-                                              overflow_cnt[15:8],
-                                              audio_win_frames};
+                            // bit31..25 write-timeout count (0..127),
+                            // 24..17 FIFO overflow high byte, 16..0 window
+                            // real-frame count (0..132096, full window fits).
+                            dbg_line_arg  <= audio_sts_payload;
                             dbg_line_fire <= 1'b1;
                             ddr_sts_sent  <= 1'b1;
                         end
@@ -460,9 +469,7 @@ module sys_ctrl #(
                     // Periodic audio telemetry (see the counter above).
                     if (sts_periodic && !dbg_busy && !dbg_line_fire) begin
                         dbg_line_id   <= 3'd6;   // "DDR3 STS <8 hex>"
-                        dbg_line_arg  <= {audio_err_cnt[7:0],
-                                          overflow_cnt[15:8],
-                                          audio_win_frames};
+                        dbg_line_arg  <= audio_sts_payload;
                         dbg_line_fire <= 1'b1;
                     end
                 end

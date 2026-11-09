@@ -135,6 +135,7 @@ module instrec_top #(
     wire [15:0] win_id;         // observation tap
     wire        mute_flag;       // observation tap
     wire [15:0] audio_err_cnt;  // observation tap
+    wire [31:0] audio_freeze_cycles;
 
     // ==================================================================
     // Video chain (pix_clk domain)
@@ -312,18 +313,21 @@ module instrec_top #(
     // so this counts REAL frames, not the empty-FIFO zero injection.  The
     // value latched at win_tick tells whether a window was filled with audio
     // (~132096) or with injected zeros (~0).  Reported via "DDR3 STS".
-    reg [16:0] win_fifo_cnt;
-    reg [15:0] win_fifo_cnt_lat;
+    // 18 bits: a full window is 132096 frames, which overflows 17 bits
+    // (2^17 = 131072).  The old 17-bit counter would saturate at 131071 and
+    // under-report a fully-fed window by 1025 frames.
+    reg [17:0] win_fifo_cnt;
+    reg [17:0] win_fifo_cnt_lat;
     always @(posedge core_clk or negedge core_clk_rst_n) begin
         if (!core_clk_rst_n) begin
-            win_fifo_cnt     <= 17'd0;
-            win_fifo_cnt_lat <= 16'd0;
+            win_fifo_cnt     <= 18'd0;
+            win_fifo_cnt_lat <= 18'd0;
         end else begin
-            if (fifo_rd_valid_run && (win_fifo_cnt != 17'h1FFFF))
-                win_fifo_cnt <= win_fifo_cnt + 17'd1;
+            if (fifo_rd_valid_run && (win_fifo_cnt != 18'h3FFFF))
+                win_fifo_cnt <= win_fifo_cnt + 18'd1;
             if (win_tick) begin
-                win_fifo_cnt_lat <= win_fifo_cnt[15:0];
-                win_fifo_cnt     <= 17'd0;
+                win_fifo_cnt_lat <= win_fifo_cnt;
+                win_fifo_cnt     <= 18'd0;
             end
         end
     end
@@ -344,6 +348,7 @@ module instrec_top #(
         .win_id        (win_id),
         .mute_flag     (mute_flag),
         .err_cnt       (audio_err_cnt),
+        .freeze_cycles (audio_freeze_cycles),
         .pix_clk       (pix_clk),
         .vsync_pulse   (vsync_pulse),
         .wave_rd_addr  (wave_rd_addr),
@@ -752,6 +757,7 @@ module instrec_top #(
         .audio_win_frames(win_fifo_cnt_lat),
         .audio_win_id    (win_id[7:0]),
         .audio_err_cnt   (audio_err_cnt),
+        .audio_freeze_cycles(audio_freeze_cycles),
         .dbg_line_id     (dbg_line_id),
         .dbg_line_arg    (dbg_line_arg),
         .dbg_line_fire   (dbg_line_fire),
