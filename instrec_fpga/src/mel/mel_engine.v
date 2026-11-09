@@ -258,7 +258,12 @@ module mel_engine #(
     localparam integer PCM_SAMPLE_BYTES = 2;
     localparam integer PCM_CMD_SAMPLES = 256;    // 512 B len=15 command
     localparam integer PCM_CMD_COUNT   = 516;    // 132096/256 exact
-    localparam [27:0]  PCM_WIN_STRIDE = 28'h0008_4000; // 264 KB ping-pong
+    // 264 KB per window (132096 x 2 B mono lane) - must equal
+    // audio_sink.WIN_BYTES so the window this engine reads is the one
+    // audio_sink just wrote.  The value was 0x84000 (the RIGHT-lane
+    // base), which made every odd window read the right-lane region
+    // instead of its own left-lane ping-pong half (2026-11-09).
+    localparam [27:0]  PCM_WIN_STRIDE = 28'h0004_2000; // 264 KB ping-pong
     localparam integer FILL_CREDIT    = 1280;    // PH_FILL rounded up to 256
     localparam integer HOP_CREDIT     = 512;     // per completed frame
     localparam integer SPEC_ELEMS     = 16512;   // 64 x 258 dB/feat words
