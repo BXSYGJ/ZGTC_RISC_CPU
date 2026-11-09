@@ -107,6 +107,11 @@ module sys_ctrl #(
     input  wire [7:0]  audio_win_id,
     input  wire [15:0] audio_err_cnt,  // audio_sink write-timeout counter
     input  wire [31:0] audio_freeze_cycles, // agg_freeze cycles, last window
+    input  wire        mel_timeout,
+    input  wire        mel_win_miss,
+    input  wire        mel_busy,
+    input  wire [15:0] mel_done_cnt,
+    input  wire [15:0] feat_sig,
     // uart_debug predefined line channel
     output reg  [2:0]  dbg_line_id,
     output reg  [31:0] dbg_line_arg,
@@ -233,9 +238,18 @@ module sys_ctrl #(
     // Telemetry alternates per window (win_id[0]):
     //   even: {err_cnt[6:0], overflow_hi[7:0], window_real_frames[16:0]}
     //   odd : {agg_freeze cycles in the last window}  (32 bits)
-    wire [31:0] audio_sts_payload = audio_win_id[0]
-        ? audio_freeze_cycles
-        : {audio_err_cnt[6:0], overflow_cnt[15:8], audio_win_frames};
+    // Four-state rotation on win_id[1:0]:
+    //   0: {err_cnt[6:0], overflow_hi[7:0], real_frames[16:0]}
+    //   1: {agg_freeze cycles[31:0]}
+    //   2: {mel_timeout, mel_win_miss, mel_busy, 5'd0, mel_done_cnt[7:0],
+    //       feat_sig[15:0]}
+    //   3: 0 (reserved)
+    wire [31:0] audio_sts_payload =
+        (audio_win_id[1:0] == 2'd1) ? audio_freeze_cycles :
+        (audio_win_id[1:0] == 2'd2) ? {mel_timeout, mel_win_miss, mel_busy,
+                                      5'd0, mel_done_cnt[7:0], feat_sig} :
+        (audio_win_id[1:0] == 2'd3) ? 32'd0 :
+        {audio_err_cnt[6:0], overflow_cnt[15:8], audio_win_frames};
 
     assign ddr_sts_code = {ddr_cmd_to_err,
                            ddr_to_err,
