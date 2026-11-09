@@ -110,8 +110,7 @@ module sys_ctrl #(
     input  wire        mel_timeout,
     input  wire        mel_win_miss,
     input  wire        mel_busy,
-    input  wire [15:0] mel_done_cnt,
-    input  wire [15:0] feat_sig,
+
     // uart_debug predefined line channel
     output reg  [2:0]  dbg_line_id,
     output reg  [31:0] dbg_line_arg,
@@ -241,13 +240,15 @@ module sys_ctrl #(
     // Four-state rotation on win_id[1:0]:
     //   0: {err_cnt[6:0], overflow_hi[7:0], real_frames[16:0]}
     //   1: {agg_freeze cycles[31:0]}
-    //   2: {mel_timeout, mel_win_miss, mel_busy, 5'd0, mel_done_cnt[7:0],
-    //       feat_sig[15:0]}
-    //   3: 0 (reserved)
+    //   2: reserved (0)
+    //   3: reserved (0)
+    // The freeze state keeps its upper 29 bits and carries the three mel
+    // status flags in the low bits, so no extra counter/adder is added
+    // (adding one pushed place-and-route past convergence at 95% DRM).
     wire [31:0] audio_sts_payload =
-        (audio_win_id[1:0] == 2'd1) ? audio_freeze_cycles :
-        (audio_win_id[1:0] == 2'd2) ? {mel_timeout, mel_win_miss, mel_busy,
-                                      5'd0, mel_done_cnt[7:0], feat_sig} :
+        (audio_win_id[1:0] == 2'd1) ? {audio_freeze_cycles[31:3],
+                                      mel_timeout, mel_win_miss, mel_busy} :
+        (audio_win_id[1:0] == 2'd2) ? 32'd0 :
         (audio_win_id[1:0] == 2'd3) ? 32'd0 :
         {audio_err_cnt[6:0], overflow_cnt[15:8], audio_win_frames};
 

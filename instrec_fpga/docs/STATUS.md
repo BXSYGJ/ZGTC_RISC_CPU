@@ -1,5 +1,13 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-10：mel 状态可观测（零计数器方案布通）；疑点锁定 win_miss 粘滞
+
+- 三次有界构建（含 mel 计数器遥测）均停在 4–6 根未布网络（DRM 95% 局部拥塞），遥测小改动足以触发布局临界。改为**零计数器方案**：`STS` 态 1 = `{agg_freeze[31:3], mel_timeout, mel_win_miss, mel_busy}`（只新增 3 根线），**第 4 次构建 1 h 2 m 布通**（Wns −1.230，LUT 33439/50%，DRM 146/155），位流归档 `releases/instrec-48k-melstat-20261110/`（sha `f7552f2a…`）。
+- **代码级定位**：`mel_engine.win_miss` 定义为 **sticky「win_tick during non-IDLE」**（`mel_engine.v:250`）。一旦 mel 卡在 `ST_RUN`（`busy = state != ST_IDLE`，`:294`），此后**每个窗口都记 miss 且 feat 永不更新**，NPU 会一直推理同一份旧特征 —— 与板级「200 Hz 与 6 kHz 的 top1/last_p 逐位相同」完全吻合。mel 正常耗时仅 ~5.09 M 拍（40 ms）远小于 2.752 s 窗口，故卡死不是速度问题，而是 **m2 读路径（DDR3 仲裁/超时）或 win_tick 交接**。
+- 已排除：播放设备/音量、I2S 引脚与 CDC、零帧注入门槛、模拟输入（i2s_capture std 20,481）、窗步长（0x84000→0x42000 后 top1 仍恒定）、`fc_*`/NPU 数值（sine440 全层 0 LSB）。
+- 板级阻塞：构建完成后 FTDI 再次从 PnP 消失（`FTDI ABSENT`，jtagserver 无）。按纪律不请求拔插，位流与判据已就绪：下载器恢复后烧 `instrec_48k_melstat.sbit`，读态 1 低 3 位——`busy=1` 或 `win_miss=1` 即确证 mel 卡死；随后查 m2 主口（与 m0 并发时的读完成/超时）。
+- 回归：pytest 438 passed + 26 skipped、lint 77/0。
+
 ## 2026-11-09（续）：全窗口仿真验收 100%；有界 PNR 58 分钟成功出位流；FTDI 链路错误待恢复
 
 - **全窗口验收仿真**（`audio_chain_full`，WIN_FRAMES 132096 × 2 窗，5.5 s 仿真 / 350 s 墙钟）：`WIN1 real=132095 inj=1`、`WIN2 real=132096 inj=0` ⇒ **100% 真实帧、err=0、ovf=0**；`freeze_cyc=107328`（344 M 拍中的 0.03%，即 41 帧周期的总冻结，分散在 8256 页 ≈ 每页 13 拍）。

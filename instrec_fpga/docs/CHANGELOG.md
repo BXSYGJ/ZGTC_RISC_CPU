@@ -1,5 +1,11 @@
 # InstRec-FPGA 变更日志
 
+## 2026-11-10：mel 状态位遥测（零计数器）布通；win_miss 粘滞定位
+
+- 计数器版遥测三次均差 4–6 根线；改零计数器（3 根线）后第 4 次 1h2m 布通，位流 releases/instrec-48k-melstat-20261110（sha f7552f2a）。
+- 代码级：win_miss = sticky win_tick-during-non-IDLE（mel_engine.v:250），mel 卡 ST_RUN 后 feat 永不更新，吻合双测试音 top1 相同。
+- FTDI 再次掉线，待恢复读态 1 低 3 位确认。
+
 ## 2026-11-09：全窗口 100% 验收；有界 PNR 58 分钟成功
 
 - audio_chain_full：两窗 real=132095/132096、inject≈0、freeze 0.03%、err/ovf=0。

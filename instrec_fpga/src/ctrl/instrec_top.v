@@ -498,22 +498,6 @@ module instrec_top #(
     wire [7:0]  spec_ram_data;
 
     wire spec_page_ready;
-    // ---- mel / feat telemetry (STS state 3) ---------------------------
-    // mel_done counts completed Mel windows; feat_sig accumulates the bytes
-    // the copy engine moves out of the Mel bank, so a changing signature
-    // proves the NPU-side feature actually follows the audio input.
-    reg [15:0] mel_done_cnt;
-    reg [15:0] feat_sig;
-    always @(posedge core_clk or negedge core_clk_rst_n) begin
-        if (!core_clk_rst_n) begin
-            mel_done_cnt <= 16'd0;
-            feat_sig     <= 16'd0;
-        end else begin
-            if (mel_done)   mel_done_cnt <= mel_done_cnt + 16'd1;
-            if (copy_dst_we) feat_sig    <= feat_sig + {8'd0, copy_dst_data};
-        end
-    end
-
     feat_page_buf u_feat_page (
         .core_clk   (core_clk),
         .core_rst_n (core_clk_rst_n),
@@ -777,8 +761,6 @@ module instrec_top #(
         .mel_timeout     (mel_timeout),
         .mel_win_miss    (mel_win_miss),
         .mel_busy        (mel_busy),
-        .mel_done_cnt    (mel_done_cnt),
-        .feat_sig        (feat_sig),
         .dbg_line_id     (dbg_line_id),
         .dbg_line_arg    (dbg_line_arg),
         .dbg_line_fire   (dbg_line_fire),
