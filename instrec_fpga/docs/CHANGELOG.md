@@ -1,5 +1,11 @@
 # InstRec-FPGA 变更日志
 
+## 2026-11-09：全窗口 100% 验收；有界 PNR 58 分钟成功
+
+- audio_chain_full：两窗 real=132095/132096、inject≈0、freeze 0.03%、err/ovf=0。
+- 有界 PNR（提交 2d6fd26f，90 min 上限）58m15s 完成；ddrphy −0.658 ns（115.5 MHz，历次最佳）；位流 releases/instrec-48k-injfix-20261109（sha 2726f0cd）。
+- FTDI USB 链路错误（Unknown / 端口重置失败），烧录待恢复；一键脚本 board_48k_run.py 就绪。
+
 ## 2026-11-09：修复零注入门槛（19% 真实帧根因），整机音频链仿真 100%
 
 - 新增 tb_audio_chain / audio_chain_w4k（可调 DDR done 延迟），run_sim 支持 sim_plusargs。

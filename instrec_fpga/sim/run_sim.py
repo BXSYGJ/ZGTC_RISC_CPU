@@ -369,6 +369,22 @@ register(Case(
 # Same chain with a 4096-frame window (256 pages) so a full window costs
 # ~85 ms of simulated time: used to sweep the DDR done delay and find where
 # the real-frame rate collapses toward the board-observed 19%.
+# Full 132096-frame window (2 windows = ~5.5 s simulated): acceptance run for
+# the injection fix.  Slow (~4-5 min) but it is the exact board window size.
+register(Case(
+    name="audio_chain_full",
+    tb="tb_audio_chain.sv",
+    rtl=[
+        "src/audio/i2s_slave_rx.v",
+        "src/audio/audio_cdc_fifo.v",
+        "src/audio/audio_sink.v",
+    ],
+    timeout=1800,
+    extra_flags=["--public"],
+    sim_plusargs=["+FULL"],
+    description="audio chain, two full 132096-frame windows (injection-fix acceptance)",
+))
+
 register(Case(
     name="audio_chain_w4k",
     tb="tb_audio_chain.sv",

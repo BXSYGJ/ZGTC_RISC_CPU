@@ -1,5 +1,13 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+## 2026-11-09（续）：全窗口仿真验收 100%；有界 PNR 58 分钟成功出位流；FTDI 链路错误待恢复
+
+- **全窗口验收仿真**（`audio_chain_full`，WIN_FRAMES 132096 × 2 窗，5.5 s 仿真 / 350 s 墙钟）：`WIN1 real=132095 inj=1`、`WIN2 real=132096 inj=0` ⇒ **100% 真实帧、err=0、ovf=0**；`freeze_cyc=107328`（344 M 拍中的 0.03%，即 41 帧周期的总冻结，分散在 8256 页 ≈ 每页 13 拍）。
+- **有界 PNR（按用户第 5 条）**：对应提交 `2d6fd26f`（注入修复 + 冻结遥测），上限 90 分钟，**58 分 15 秒完成全部六阶段**；未使用任何 PnR 参数（`-fast_router` 非法 Flow-0075、`-gplace_seed` 被 `test_build_tokens` 禁止，PnR 行保持裸 `pnr`）。逐域时序：`ddrphy_sysclk −0.658 ns（115.5 MHz）`、`pix_clk −0.384`、`rst_clk +2.643`、`clk +32.79` —— **Wns −0.658 为 48k 版本历次最佳**；LUT 33427/50%、DRM 146/155。
+- 位流归档 `releases/instrec-48k-injfix-20261109/`（SHA256 `2726f0cd…`）。
+- **板级阻塞（再次）**：烧录前 FTDI 从 PnP 消失，设备管理器显示 `USB Serial Converter A/B` 为 `Unknown`，USB 控制器有两个 `Error`（「设备描述符请求失败」「端口重置失败」），仅 COM5（CP2102）在线。`pnputil /scan-devices` 需管理员被拒 ⇒ 软件不可恢复；按纪律不请求拔插，位流与一键验收脚本已就绪。
+- 一键上板验收（下载器恢复后）：`python scripts/board_48k_run.py --sbit releases/instrec-48k-injfix-20261109/instrec_48k_injfix.sbit`。判据：①偶数窗 STS 的 `frames` 接近 132096（0x20400）、`err`/`overflow_hi` 为 0；②奇数窗 STS 的 freeze 周期在数千量级；③NPU `top1` 随音乐变化。
+
 ## 2026-11-09：19% 真实帧根因锁定并修复——零注入门槛只看 FIFO 空；整机仿真 100%
 
 - **新增整机音频链仿真** `sim/tb_audio_chain.sv`（物理 PCM1808 I2S → `i2s_slave_rx` → `audio_cdc_fifo` → `audio_sink` → 行为 DDR 响应器，`+DLY` 可调 done 延迟），并给小窗口变体 `audio_chain_w4k`（WIN_FRAMES 4096 / 256 页，便于扫参）。`run_sim.Case` 新增 `sim_plusargs` 字段。
