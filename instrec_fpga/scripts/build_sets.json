@@ -19,7 +19,8 @@
         "../cpu/rtl/rv32_alu.sv",
         "../cpu/rtl/rv32_muldiv.sv",
         "../cpu/rtl/rv32_btb.sv",
-        "../cpu/rtl/rv32_machine.sv"
+        "../cpu/rtl/rv32_machine.sv",
+        "src/diag/diag_readback.v"
       ],
       "ip_cores": [
         "ipcore/pll/pll.idf",

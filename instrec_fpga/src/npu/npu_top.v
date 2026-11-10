@@ -61,7 +61,13 @@ module npu_top #(
     output wire        probs_valid,
     output wire [7:0]  probs_pct,
     output wire [3:0]  probs_idx,
-    output wire [3:0]  top1
+    output wire [3:0]  top1,
+    // Full 8-lane logit vector of the last completed window (int32 each) and
+    // its one-cycle valid pulse, exported for the board readback diagnostics
+    // (DIAG_READBACK_PLAN_20261110).  Read-only observation: no datapath
+    // change.
+    output reg  [255:0] logits_out,
+    output reg          logits_valid
 );
 
     localparam [31:0] TIMEOUT_CYCLES = 32'd50_000_000;
@@ -614,6 +620,21 @@ module npu_top #(
     wire [15:0] sm_q16;
     wire [7:0]  sm_pct;
     wire [3:0]  sm_idx;
+
+    // Export the completed logit vector.  sm_start rises one cycle after
+    // fc2_done, when logits_bus already holds all 8 lanes.
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            logits_out   <= 256'd0;
+            logits_valid <= 1'b0;
+        end else begin
+            logits_valid <= 1'b0;
+            if (sm_start) begin
+                logits_out   <= logits_bus;
+                logits_valid <= 1'b1;
+            end
+        end
+    end
 
     softmax_top u_softmax (
         .clk(clk), .rst_n(rst_n), .start(sm_start),

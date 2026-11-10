@@ -168,6 +168,12 @@ module audio_sink #(
     input  wire        fifo_rd_valid,
     input  wire        fifo_empty,
 
+    // Diagnostic window lock (DIAG_READBACK_PLAN_20261110): while high the
+    // sink stops accepting frames so the completed window's DDR image and the
+    // Mel output stay stable for readback.  Default 0 = no effect on the
+    // normal datapath.
+    input  wire        diag_lock,
+
     // Source-idle flag from i2s_rx (clk_nco domain register output).
     // CDC: 2-flop synchronizer into core_clk inside this module.
     input  wire        sd_idle,
@@ -255,7 +261,7 @@ module audio_sink #(
     // Read request: only while non-empty AND the aggregator is not
     // frozen waiting for a DDR3 page write (data stays in the FIFO).
     wire agg_freeze;
-    assign fifo_rd_en = ~fifo_empty & ~agg_freeze;
+    assign fifo_rd_en = ~fifo_empty & ~agg_freeze & ~diag_lock;
 
     // Injection cadence counter: only while the SOURCE IS IDLE.  The FIFO
     // is naturally empty between frames (the 125 MHz read side drains a
@@ -266,7 +272,7 @@ module audio_sink #(
     // for "no I2S at all" (sd_idle_sync, the 1 ms PCM1808 watchdog), not for
     // "the next real frame has not arrived yet".
     reg [13:0] empty_gap_cnt;
-    wire inject_tick = sd_idle_sync & fifo_empty & ~agg_freeze
+    wire inject_tick = sd_idle_sync & fifo_empty & ~agg_freeze & ~diag_lock
                      & (empty_gap_cnt == INJECT_GAP_CYCLES - 14'd1);
 
     always @(posedge clk or negedge rst_n) begin
@@ -282,7 +288,7 @@ module audio_sink #(
     // after the accepted rd_en) or an injected zero frame. The two are
     // mutually exclusive by construction (rd_en is gated by ~fifo_empty,
     // inject_tick requires fifo_empty).
-    wire frame_event = fifo_rd_valid | inject_tick;
+    wire frame_event = (fifo_rd_valid | inject_tick) & ~diag_lock;
 
     // Frame payload (left sample feeds the ring buffer AND the column
     // downsampler; right sample only feeds the mirror ring buffer).

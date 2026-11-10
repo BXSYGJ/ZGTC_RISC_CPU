@@ -167,6 +167,18 @@ module instrec_top #(
     wire [36:0]  m1_cmd;          // tied off (T-M2-02 wdma alignment point)
     wire [36:0]  m2_cmd;          // mel_engine
     wire [36:0]  m3_cmd;
+    wire [36:0]  st_m3_cmd;
+    wire [255:0] st_m3_wdata;
+    wire         dg_m3_cmd_valid;
+    wire [36:0]  dg_m3_cmd;
+    wire [255:0] dg_m3_wdata;
+    wire         dg_m3_rd_ready;
+    wire         dg_lock;
+    wire         dg_tx_valid;
+    wire [7:0]   dg_tx_data;
+    wire         dg_tx_ready;
+    wire         npu_logits_valid;
+    wire [255:0] npu_logits_out;
     wire [255:0] m1_wdata;        // tied off (T-M2-02)
     wire [255:0] m2_wdata;        // mel_engine
     wire [255:0] m3_wdata;
@@ -184,6 +196,15 @@ module instrec_top #(
     // then starved master 3: self_test aborted its first write after 4096
     // cycles and reported DDR3 ERR @00300000 on board.
     assign m0_done = ddr_done[0];
+
+    // Master 3 time-sharing: self_test owns m3 at boot, the diagnostic
+    // readback engine uses it afterwards (never concurrently in practice).
+    wire st_m3_sel    = st_cmd_valid;
+    wire m3_req_valid = st_cmd_valid | dg_m3_cmd_valid;
+    assign m3_cmd   = st_m3_sel ? st_m3_cmd   : dg_m3_cmd;
+    assign m3_wdata = st_m3_sel ? st_m3_wdata : dg_m3_wdata;
+    assign st_rd_ready = 1'b0;   // self_test never issues reads
+
     // mel_engine master-2 port nets (per-master signals, packed into the
     // shared ctrl_axi buses exactly like audio_sink does for master 0)
     wire         mel_m2_cmd_valid;
@@ -340,6 +361,7 @@ module instrec_top #(
         .fifo_rd_valid (fifo_rd_valid_run),
         .fifo_empty    (fifo_empty_run),
         .sd_idle       (sd_idle),
+        .diag_lock     (dg_lock),
         .m0_cmd_valid  (m0_cmd_valid),
         .m0_cmd        (m0_cmd),
         .m0_wdata      (m0_wdata),
@@ -570,7 +592,7 @@ module instrec_top #(
     assign native_fault=native_owner_error || bridge_error || aligner_error || ddr_addr_err[1] || ddr_cmd_to_err[1];
     assign npu_rd_ready_u=1'b1;
     assign ddr_cmd_valid = ddr_init_done ?
-                           {st_cmd_valid,mel_m2_cmd_valid,native_m1_valid,m0_cmd_valid} :
+                           {m3_req_valid,mel_m2_cmd_valid,native_m1_valid,m0_cmd_valid} :
                            4'b0000;
     assign m1_cmd=native_m1_cmd;
     assign m1_wdata=native_m1_wdata;
@@ -613,7 +635,7 @@ module instrec_top #(
         .m2_wdata       (m2_wdata),
         .m3_wdata       (m3_wdata),
         .wready_beat    (ddr_wready_beat),
-        .rd_ready       ({st_rd_ready, mel_m2_rd_ready, native_m1_rd_ready, 1'b0}),
+        .rd_ready       ({st_m3_sel ? st_rd_ready : dg_m3_rd_ready, mel_m2_rd_ready, native_m1_rd_ready, 1'b0}),
         .rd_data_0      (rd_data_0),
         .rd_data_1      (rd_data_1),
         .rd_data_2      (rd_data_2),
@@ -707,13 +729,42 @@ module instrec_top #(
     // write command aborts with st_fail at SELFTEST_BASE.
     assign st_wready_beat = ddr_wready_beat[3];
 
+    // ------------------------------------------------------------------
+    // UART dispatch: weight_loader keeps the 0xAA55 binary frame protocol;
+    // the diagnostic engine receives non-0xAA bytes only while the loader is
+    // idle (the loader ignores them anyway, this just avoids contention).
+    // ------------------------------------------------------------------
+    wire dg_rx_sel = rx_byte_valid && (!wl_busy) && (rx_byte_data != 8'hAA);
+
+    diag_readback u_diag (
+        .clk            (core_clk),
+        .rst_n          (core_clk_rst_n),
+        .rx_valid       (dg_rx_sel),
+        .rx_data        (rx_byte_data),
+        .tx_valid       (dg_tx_valid),
+        .tx_data        (dg_tx_data),
+        .tx_ready       (dg_tx_ready),
+        .m3_cmd_valid   (dg_m3_cmd_valid),
+        .m3_cmd         (dg_m3_cmd),
+        .m3_rd_data     (rd_data_3),
+        .m3_rd_valid    (ddr_rd_valid[3]),
+        .m3_rd_ready    (dg_m3_rd_ready),
+        .m3_done        (ddr_done[3]),
+        .diag_lock      (dg_lock),
+        .win_id         (win_id),
+        .mel_done       (mel_done),
+        .npu_done       (npu_done_raw),
+        .logits_valid   (npu_logits_valid),
+        .logits_in      (npu_logits_out)
+    );
+
     self_test u_self_test (
         .clk          (core_clk),
         .rst_n        (core_clk_rst_n),
         .st_start     (st_start),
         .cmd_valid    (st_cmd_valid),
-        .cmd          (m3_cmd),
-        .wdata        (m3_wdata),
+        .cmd          (st_m3_cmd),
+        .wdata        (st_m3_wdata),
         .wready_beat  (st_wready_beat),
         .rd_ready     (st_rd_ready),
         .rd_data      (rd_data_3),
@@ -803,8 +854,10 @@ module instrec_top #(
         .clk         (core_clk),
         .rst_n       (core_clk_rst_n),
         .byte_wdata  (wl_tx_valid ? wl_tx_data :
-                      (dbg_tx_valid ? dbg_tx_data : cpu_tx_data)),
-        .byte_wvalid ((wl_tx_valid | dbg_tx_valid | cpu_tx_valid) & ~tx_accept_hold),
+                      (dbg_tx_valid ? dbg_tx_data :
+                       (dg_tx_valid ? dg_tx_data : cpu_tx_data))),
+        .byte_wvalid ((wl_tx_valid | dbg_tx_valid | dg_tx_valid |
+                       cpu_tx_valid) & ~tx_accept_hold),
         .byte_wready (tx_byte_ready),
         .uart_txd    (uart_tx)
     );
@@ -812,6 +865,7 @@ module instrec_top #(
     // The CPU may only pop its FIFO when the multiplexer actually selects it,
     // otherwise a byte would be consumed while wl/dbg data goes out instead.
     assign cpu_tx_ready = tx_accept_ready & ~wl_tx_valid & ~dbg_tx_valid;
+    assign dg_tx_ready  = tx_accept_ready & ~wl_tx_valid & ~dbg_tx_valid;
 
     uart_rx u_uart_rx (
         .clk         (core_clk),
@@ -892,6 +946,8 @@ module instrec_top #(
         .probs_pct    (npu_probs_pct_u),
         .probs_idx    (npu_probs_idx_u),
         .top1         (npu_top1_u)
+        ,.logits_out  (npu_logits_out)
+        ,.logits_valid(npu_logits_valid)
     );
 
     // ---- Debug line formatter (M0: status lines only, no text writer) ----
