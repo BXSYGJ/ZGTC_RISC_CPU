@@ -427,22 +427,11 @@ module ddr3_ctrl_axi #(
 
                 S_R: begin
                     if (axi_rvalid) begin
+                        axi_to_cnt <= 13'd0;
                         if (axi_rlast) begin
                             // burst fully captured; drain continues from
                             // the fifo at the upstream master's pace
-                            axi_to_cnt <= 13'd0;
-                            state      <= S_IDLE;
-                        end else begin
-                            // Do NOT clear the watchdog on a plain rvalid
-                            // beat.  If a burst's RLAST never arrives while
-                            // rvalid stays high, the old code reset the
-                            // counter every cycle and parked the controller
-                            // in S_R forever: every later read (mel m2) then
-                            // never completes, the mel engine stays busy and
-                            // the NPU keeps inferring one stale feature.
-                            // A normal 16-beat burst only accumulates 16 of
-                            // the 4096 allowed cycles, so no false timeout.
-                            axi_to_cnt <= axi_to_cnt + 13'd1;
+                            state <= S_IDLE;
                         end
                     end else if (axi_to_cnt >= AXI_TO_LIMIT[12:0]) begin
                         to_err_r       <= 1'b1;
