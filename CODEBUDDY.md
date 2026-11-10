@@ -1,5 +1,8 @@
 # CODEBUDDY.md
 
+> **已归档（2026-11-10）**：本文件描述的是 200H 时代结构，AGENTS.md 已明确其过时。
+> 当前入口见 `AGENTS.md`；快照总览见 `docs/SNAPSHOT_INDEX.md`。
+
 This file provides guidance to CodeBuddy Code when working with code in this repository.
 
 ## What this repository is

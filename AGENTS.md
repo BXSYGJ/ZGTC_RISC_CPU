@@ -7,6 +7,8 @@
 
 ## 恢复开发：先读这些
 
+0. `docs/SNAPSHOT_INDEX.md` —— 快照/交接文档唯一索引；**当前快照 = `instrec_fpga/docs/DEV_SNAPSHOT_HANDOFF_20261110.md`**，
+   其摘要见 `instrec_fpga/docs/status/CURRENT.md`；权威源地址簿见 `docs/project_map.md`。
 1. `instrec_fpga/docs/STATUS.md` —— **唯一实时状态源**（当前阻塞、证据、下一步）；变更史见 `docs/CHANGELOG.md`。
 2. `instrec_fpga/docs/HANDOFF_SNAPSHOT_20261027.md` —— 资产清单与踩坑记录（其 4.1 节已被 STATUS 更新覆盖）。
 3. `instrec_fpga/docs/sdd/{spec,design,tasks}.md` —— 69 条需求 / 17 模块设计 / 44 任务与 DoD。

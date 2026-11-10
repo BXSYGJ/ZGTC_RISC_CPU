@@ -1,0 +1,121 @@
+{
+  "model_id": {
+    "name": "group5_v3_float_20261102",
+    "checkpoint_epoch": 22,
+    "model_class": "DualHeadInstrumentCNN",
+    "num_classes": 5,
+    "input_shape": [
+      1,
+      1,
+      64,
+      130
+    ],
+    "float_state_sha256": "0fb659348612629a91818cba45280e38b721047f3d8122e0726fa4a6e8ac4826",
+    "reference_vectors_sha256": "584fb765a5270a869db855e8c4b9c6d803d906fcbcd470c8e3795c6097f9acaa",
+    "source_checkpoint_sha256": "5ada8db602427af8b5c7ba01aa581f5852ebf2b884d94932c821fe44cf22b636"
+  },
+  "generator": "golden_pipeline_group5.py",
+  "contract_path": "scripts\\outputs\\group5_contract.json",
+  "contract_sha256": "4c097ba7b48ed28e94c348cb2cc7b78b8e06cca3627059f4260317f2bfc65943",
+  "weights_image": "scripts\\outputs\\group5_weights_image.bin",
+  "weights_image_sha256": "2c59459a71a9070bc88f10e2da2f6021a0583910081136a6f2fa6c954bfb9354",
+  "layers": [
+    {
+      "name": "conv1",
+      "weight_int8": "conv1_weight_int8.npy",
+      "weight_scale": "conv1_weight_scale.npy",
+      "bias_int32": "conv1_bias_int32.npy",
+      "M": "conv1_M.npy",
+      "shift": "conv1_shift.npy",
+      "weight_shape": [
+        48,
+        9
+      ]
+    },
+    {
+      "name": "conv2",
+      "weight_int8": "conv2_weight_int8.npy",
+      "weight_scale": "conv2_weight_scale.npy",
+      "bias_int32": "conv2_bias_int32.npy",
+      "M": "conv2_M.npy",
+      "shift": "conv2_shift.npy",
+      "weight_shape": [
+        96,
+        432
+      ]
+    },
+    {
+      "name": "conv3",
+      "weight_int8": "conv3_weight_int8.npy",
+      "weight_scale": "conv3_weight_scale.npy",
+      "bias_int32": "conv3_bias_int32.npy",
+      "M": "conv3_M.npy",
+      "shift": "conv3_shift.npy",
+      "weight_shape": [
+        192,
+        864
+      ]
+    },
+    {
+      "name": "conv4",
+      "weight_int8": "conv4_weight_int8.npy",
+      "weight_scale": "conv4_weight_scale.npy",
+      "bias_int32": "conv4_bias_int32.npy",
+      "M": "conv4_M.npy",
+      "shift": "conv4_shift.npy",
+      "weight_shape": [
+        256,
+        1728
+      ]
+    },
+    {
+      "name": "fc1",
+      "weight_int8": "fc1_weight_int8.npy",
+      "weight_scale": "fc1_weight_scale.npy",
+      "bias_int32": "fc1_bias_int32.npy",
+      "M": "fc1_M.npy",
+      "shift": "fc1_shift.npy",
+      "weight_shape": [
+        128,
+        256
+      ]
+    },
+    {
+      "name": "fc2",
+      "weight_int8": "fc2_weight_int8.npy",
+      "weight_scale": "fc2_weight_scale.npy",
+      "bias_int32": "fc2_bias_int32.npy",
+      "M": "fc2_M.npy",
+      "shift": "fc2_shift.npy",
+      "weight_shape": [
+        5,
+        128
+      ]
+    },
+    {
+      "name": "dom_fc1",
+      "weight_int8": "dom_fc1_weight_int8.npy",
+      "weight_scale": "dom_fc1_weight_scale.npy",
+      "bias_int32": "dom_fc1_bias_int32.npy",
+      "M": "dom_fc1_M.npy",
+      "shift": "dom_fc1_shift.npy",
+      "weight_shape": [
+        128,
+        256
+      ]
+    },
+    {
+      "name": "dom_fc2",
+      "weight_int8": "dom_fc2_weight_int8.npy",
+      "weight_scale": "dom_fc2_weight_scale.npy",
+      "bias_int32": "dom_fc2_bias_int32.npy",
+      "M": "dom_fc2_M.npy",
+      "shift": "dom_fc2_shift.npy",
+      "weight_shape": [
+        5,
+        128
+      ]
+    }
+  ],
+  "integrity_note": "bias_int32 arrays are stored from the exact int64 reconstruction (round-half-even), never from a float astype cast"
+}
