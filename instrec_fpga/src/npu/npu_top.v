@@ -25,7 +25,8 @@ module npu_top #(
     // fc2 zp_out = 58 (legacy 57).  Model-contract constants: a new
     // quantizer requires a rebuild together with INV_S_IN/ZP_IN.
     parameter [7:0] ZP_IN_CONV1 = 8'd47,
-    parameter [7:0] ZP_OUT_FC2 = 8'd58
+    parameter [7:0] ZP_OUT_FC2 = 8'd58,
+    parameter signed [31:0] FC2_LOGIT_BIAS = -32'sd58
 ) (
     input  wire        clk,
     input  wire        rst_n,
@@ -604,7 +605,7 @@ module npu_top #(
             fc2_lane   <= 4'd0;
         end else if (fc2_y_valid && fc2_lane < 4'd8) begin
             logits_bus[fc2_lane*32 +: 32] <=
-                $signed({24'd0, fc2_y}) - 32'sd57;
+                $signed({24'd0, fc2_y}) + FC2_LOGIT_BIAS;
             fc2_lane <= fc2_lane + 4'd1;
         end
     end
