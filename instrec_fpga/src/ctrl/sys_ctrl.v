@@ -96,10 +96,9 @@ module sys_ctrl #(
     input  wire [2:0]  ddr_dbg_to_state, // FSM state at the last AXI timeout
     input  wire        ddr_to_err,       // sticky AXI timeout (any master)
     input  wire [3:0]  ddr_cmd_to_err,   // sticky timeout flag per master
-    // Audio-path observation bits packed into "DDR3 STS <hh>":
-    //   bit2 = sd_idle (PCM1808 clock watchdog), bit1 = fifo_empty,
-    //   bit0 = fifo_full.  They replace the timeout FSM state, which the
-    //   cmd_to_err nibble already attributes to the offending master.
+    // Audio-path observation bits (kept as inputs but no longer packed into
+    // the boot STS byte; the periodic ST_RUN "DDR3 STS" line carries the
+    // audio telemetry via audio_sts_payload instead).
     input  wire        audio_sd_idle,
     input  wire        audio_fifo_empty,
     input  wire        audio_fifo_full,
@@ -252,11 +251,17 @@ module sys_ctrl #(
         (audio_win_id[1:0] == 2'd3) ? 32'd0 :
         {audio_err_cnt[6:0], overflow_cnt[15:8], audio_win_frames};
 
+    // AXI diagnostic byte for the boot-time "DDR3 STS <hh>" line:
+    //   bit7..4 = cmd_to_err[3:0] (which master hit the watchdog),
+    //   bit3    = to_err          (sticky AXI timeout, any master),
+    //   bit2..0 = dbg_to_state    (FSM state at the last timeout: S_AW/S_W/
+    //                               S_DW_* are write phase, S_AR/S_R are read).
+    // A self_test DATA COMPARE failure sets none of these (all zero), so the
+    // byte cleanly separates "compare fail" from "write timeout" vs "read
+    // timeout" -- the exact question the board "DDR3 ERR @00300200" needs.
     assign ddr_sts_code = {ddr_cmd_to_err,
                            ddr_to_err,
-                           audio_sd_idle,
-                           audio_fifo_empty,
-                           audio_fifo_full};
+                           ddr_dbg_to_state};
 
     // Periodic audio telemetry: repeat the "DDR3 STS" line about once per
     // 0.8 s (2^27 / 125 MHz) while running, so the window frame count and
@@ -431,21 +436,13 @@ module sys_ctrl #(
                             ddr_sts_armed <= 1'b1;
                         end else if (ddr_sts_armed) begin
                             dbg_line_id   <= 3'd6;   // "DDR3 STS <8 hex>"
-                            // bit31..28 cmd_to_err, 27 to_err, 26 sd_idle,
-                            // 25 fifo_empty, 24 fifo_full, 23..8 window real
-                            // frame count, 7..0 win_id low byte.
-                            // bit31..24 FIFO overflow frames (low byte),
-                            // bit23..8 window real-frame count, 7..0 win_id.
-                            // The timeout attribution already proved zero on
-                            // this board, so the byte is repurposed to decide
-                            // "writes lost to overflow" vs "writes missing".
-                            // bit31..24 audio write-timeout count (stalled
-                            // page writes -> agg_freeze stuck), 23..16 FIFO
-                            // overflow high byte, 15..0 window real frames.
-                            // bit31..25 write-timeout count (0..127),
-                            // 24..17 FIFO overflow high byte, 16..0 window
-                            // real-frame count (0..132096, full window fits).
-                            dbg_line_arg  <= audio_sts_payload;
+                            // Boot-time line = AXI diagnostic byte (see
+                            // ddr_sts_code above): bit7..4 cmd_to_err,
+                            // bit3 to_err, bit2..0 dbg_to_state.  A self_test
+                            // DATA COMPARE fail shows all zero here (only the
+                            // preceding "DDR3 ERR @xxxx" is non-zero), while a
+                            // write/read AXI timeout shows a non-zero byte.
+                            dbg_line_arg  <= {24'd0, ddr_sts_code};
                             dbg_line_fire <= 1'b1;
                             ddr_sts_sent  <= 1'b1;
                         end

@@ -208,10 +208,16 @@ module instrec_top #(
     // Priority: self_test (boot) > diagnostic readback (PC is waiting) >
     // feature dump (background, fires once per window after the NPU).
     // The diagnostic engine and the feature dump are hard-gated until the
-    // boot self-test has finished (st_done): while self_test owns m3 its
-    // command handshake must stay completely undisturbed, otherwise the
-    // second write of the self-test burst is corrupted (observed on board as
-    // "DDR3 ERR @00300200").
+    // boot self-test has finished (st_done).  Note the ownership split:
+    //  - st_m3_sel (== st_cmd_valid) drives the CMD/WDATA mux: the command
+    //    strobe correctly drops during the read drain tail, since self_test is
+    //    not issuing a new command yet.
+    //  - rd_ready[3] must stay asserted for the WHOLE self-test (until st_done),
+    //    not just while cmd_valid is high: `done` fires on RLAST while the last
+    //    read beat still sits in the controller fifo one cycle later.  If
+    //    rd_ready fell with cmd_valid, that stale last beat would be handed to
+    //    self_test as the first beat of the next read => data compare fail at
+    //    the second read address 0x0030_0200 (the board "DDR3 ERR @00300200").
     wire st_m3_sel    = st_cmd_valid;
     wire dg_m3_en     = st_done;
     wire dg_m3_sel    = !st_m3_sel && dg_m3_en && dg_m3_cmd_valid;
@@ -681,7 +687,7 @@ module instrec_top #(
         .m2_wdata       (m2_wdata),
         .m3_wdata       (m3_wdata),
         .wready_beat    (ddr_wready_beat),
-        .rd_ready       ({st_m3_sel ? st_rd_ready : dg_m3_rd_ready, mel_m2_rd_ready, native_m1_rd_ready, 1'b0}),
+        .rd_ready       ({(!st_done) ? st_rd_ready : dg_m3_rd_ready, mel_m2_rd_ready, native_m1_rd_ready, 1'b0}),
         .rd_data_0      (rd_data_0),
         .rd_data_1      (rd_data_1),
         .rd_data_2      (rd_data_2),

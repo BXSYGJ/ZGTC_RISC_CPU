@@ -577,6 +577,30 @@ register(Case(
     description="multi-master AW timeout: m0/m2 full load vs m3 self_test (T37)",
 ))
 
+# T: diag bitstream DDR3 ERR @00300200.  Replicates the EXACT m3 shared-interface
+# mux instrec_top uses (self_test + diag_readback + feat_dump all wired to m3)
+# and proves whether the rd_ready gating (st_cmd_valid vs !st_done) corrupts the
+# boot self_test read phase.  No build, no board.
+register(Case(
+    name="ddr3_m3_share",
+    tb="tb_ddr3_m3_share.sv",
+    rtl=[
+        "src/ddr3/ddr3_ctrl_axi.v",
+        "src/ddr3/ddr3_arbiter.v",
+        "src/ctrl/self_test.v",
+        "src/diag/diag_readback.v",
+        "src/diag/feat_dump.v",
+    ],
+    timeout=600,
+    extra_flags=["-y", "sim"],
+    overrides=[(
+        "src/ctrl/self_test.v",
+        r"\n    wire \[255:0\] wdata;\n",
+        "\n",
+    )],
+    description="m3 shared-interface self_test vs diag/feat_dump mux (0x300200 root cause)",
+))
+
 
 register(Case(
     name="ui_scene",

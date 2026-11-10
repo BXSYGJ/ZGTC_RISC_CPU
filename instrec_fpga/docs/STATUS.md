@@ -2,8 +2,20 @@
 
 > **交接中（2026-11-10）：先读 `docs/DEV_SNAPSHOT_HANDOFF_20261110.md`** ——
 > 一句话：数值侧全部 0 LSB；板级 top1 对 200 Hz/6 kHz 仍恒定，第一个偏差环节未定位；
-> 诊断读回基础设施已完成并离线验证，但诊断位流因 DDR3 启动自检 `@0x00300200` 失败暂不可用；
-> `FEAT_DUMP_ON_M3` 默认 0（二分态），可直接构建验证。
+> 诊断读回基础设施已完成并离线验证；诊断位流的 DDR3 启动自检 `@0x00300200` 已**离线复现并锁定根因**
+> （m3 `rd_ready` 门控错误导致读阶段陈旧末拍被误比较，纯数据比较失败，非超时），修复已合入，待构建验证。
+
+## 2026-11-10（续）：DDR3 自检 `@0x00300200` 根因锁定并修复（离线仿真证据闭环）
+
+- **结论先行**：`0x00300200` 是**数据比较失败**（第 2 条读命令的首拍对不上），**不是写超时、也不是读超时**。证据：`to_err=0`、`cmd_to_err=0`、`dbg_to_state=0`（无任何 AXI 超时），`st_fail=1`、`st_fail_addr=0x300200`。
+- **根因（instrec_top.v 的 m3 共享接口）**：`rd_ready[3]` 被 `st_m3_sel(=st_cmd_valid)` 门控。自检读阶段 `done` 在 RLAST 触发，但控制器 fifo 的最后一拍要**晚一拍**才可弹出；此刻 `st_cmd_valid` 已撤，`rd_ready[3]` 跌到 `dg_m3_rd_ready(=0)`，fifo 末拍卡住，随后被当作**下一条读命令的首拍**喂给自检 ⇒ 第 2 条读（0x300200）首拍失配。`cmd_valid` 在 drain-tail 撤是正确的（此时本就不该发新命令），错的是把 `rd_ready` 也一并撤了。
+- **修复（1 行）**：`instrec_top.v` 的 `rd_ready` 门控由 `st_m3_sel` 改为 `!st_done`（自检在完成前始终占有 m3 读口）：
+  `.rd_ready ({(!st_done) ? st_rd_ready : dg_m3_rd_ready, ...})`。
+- **可观测性修复（sys_ctrl.v）**：`ddr_sts_code` 恢复为 AXI 诊断字节 `{cmd_to_err[3:0], to_err, dbg_to_state[2:0]}`（bit2..0 是超时 FSM state：S_AW/S_W/S_DW_*=写相，S_AR/S_R=读相），且 boot 期 `DDR3 STS` 行改打它（此前打的是 `audio_sts_payload`，boot 时全 0，才误判成「板上超时归零」）。数据比较失败时该字节全 0，与「超时」非 0 明确区分。
+- **新仿真证据**：`sim/tb_ddr3_m3_share.sv`（复刻 instrec_top 精确 m3 mux：self_test + diag_readback + feat_dump 同挂 m3）跑两档：S0（旧 `st_cmd_valid` 门控）**精确复现** `fail_addr=0x300200, to_err=0`；S1（`!st_done` 门控）**自检全过**。注册为 `run_sim.py` 的 `ddr3_m3_share` 用例。
+- **回归**：check_rtl 0 violation；`ctrl_smoke` PASS；`ddr3_m3_share` PASS；pytest 444 passed（唯一失败是锁死旧 STS 字节顺序的契约测试，已同步更新为 `{cmd_to_err,to_err,dbg_to_state}`）。
+- **下一步**：FTDI 恢复后构建诊断位流（`FEAT_DUMP_ON_M3=0` + 本修复），一次烧录后走 diag `L/U/S/R` 多组读回同窗 PCM / 特征 / 完整 logits，逐段与 golden 对拍，再决定是否修推理。**注意**：本修复只消除自检失败，不改变 top1 恒定问题（那仍是 mel/m2 读路径待定位）。
+
 
 ## 2026-11-10：mel 状态可观测（零计数器方案布通）；疑点锁定 win_miss 粘滞
 

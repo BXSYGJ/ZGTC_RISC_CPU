@@ -576,10 +576,12 @@ def test_rtl_packs_the_sts_byte_in_documented_order():
     m = re.search(r'assign\s+ddr_sts_code\s*=\s*\{(.*?)\};', text, re.S)
     assert m, 'ddr_sts_code concatenation not found'
     fields = [f.strip() for f in m.group(1).split(',')]
-    # bit7..4 timeout attribution, bit3 any-timeout, bit2..0 audio telemetry
-    # (sd_idle / fifo_empty / fifo_full) replacing the timeout FSM state.
-    assert fields == ['ddr_cmd_to_err', 'ddr_to_err', 'audio_sd_idle',
-                      'audio_fifo_empty', 'audio_fifo_full'], fields
+    # bit7..4 cmd_to_err[3:0] (per-master timeout), bit3 to_err (any master),
+    # bit2..0 dbg_to_state (FSM state at the last timeout: S_AW/S_W/S_DW_* are
+    # write phase, S_AR/S_R are read).  A self_test DATA COMPARE fail sets none
+    # of these (all zero), so the byte separates compare-fail from write/read
+    # timeout -- the exact question the board "DDR3 ERR @00300200" needs.
+    assert fields == ['ddr_cmd_to_err', 'ddr_to_err', 'ddr_dbg_to_state'], fields
 
 
 def test_rtl_result_fire_is_gated_by_dbg_busy():

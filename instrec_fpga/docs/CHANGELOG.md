@@ -1,5 +1,12 @@
 # InstRec-FPGA 变更日志
 
+## 2026-11-10（续）：DDR3 自检 @0x00300200 根因修复 + AXI 诊断字节恢复
+
+- 离线仿真（新 `sim/tb_ddr3_m3_share.sv`）复刻 instrec_top 精确 m3 mux，精确复现 `@0x00300200` 并定性为**数据比较失败**（非写/读超时：to_err=0、dbg_to_state=0）。
+- 根因：`rd_ready[3]` 被 `st_cmd_valid` 门控，读阶段 drain-tail 使 fifo 末拍卡住、被当作下条读首拍误比较。修复（1 行）改为 `(!st_done)` 门控。
+- 可观测性：`ddr_sts_code` 恢复为 `{cmd_to_err[3:0], to_err, dbg_to_state[2:0]}`，boot `DDR3 STS` 行改打该字节（原打 audio 遥测，boot 全 0 掩盖超时）。
+- 回归：check_rtl 0；ctrl_smoke / ddr3_m3_share PASS；pytest 444 passed（同步更新 STS 字节契约测试）。
+
 ## 2026-11-10：mel 状态位遥测（零计数器）布通；win_miss 粘滞定位
 
 - 计数器版遥测三次均差 4–6 根线；改零计数器（3 根线）后第 4 次 1h2m 布通，位流 releases/instrec-48k-melstat-20261110（sha f7552f2a）。
