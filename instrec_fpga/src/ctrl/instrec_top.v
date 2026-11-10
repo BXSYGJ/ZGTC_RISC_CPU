@@ -199,11 +199,15 @@ module instrec_top #(
 
     // Master 3 time-sharing: self_test owns m3 at boot, the diagnostic
     // readback engine uses it afterwards (never concurrently in practice).
-    wire st_m3_sel    = st_cmd_valid;
-    wire m3_req_valid = st_cmd_valid | dg_m3_cmd_valid;
-    assign m3_cmd   = st_m3_sel ? st_m3_cmd   : dg_m3_cmd;
-    assign m3_wdata = st_m3_sel ? st_m3_wdata : dg_m3_wdata;
-    assign st_rd_ready = 1'b0;   // self_test never issues reads
+    // Priority: self_test (boot) > diagnostic readback (PC is waiting) >
+    // feature dump (background, fires once per window after the NPU).
+    wire st_m3_sel  = st_cmd_valid;
+    wire dg_m3_sel  = !st_m3_sel && dg_m3_cmd_valid;
+    wire m3_req_valid = st_cmd_valid | dg_m3_cmd_valid | fd_m3_cmd_valid;
+    assign m3_cmd   = st_m3_sel ? st_m3_cmd   :
+                      dg_m3_sel ? dg_m3_cmd   : fd_m3_cmd;
+    assign m3_wdata = st_m3_sel ? st_m3_wdata :
+                      dg_m3_sel ? dg_m3_wdata : fd_m3_wdata;
 
     // mel_engine master-2 port nets (per-master signals, packed into the
     // shared ctrl_axi buses exactly like audio_sink does for master 0)
@@ -500,7 +504,7 @@ module instrec_top #(
     feat_copy_engine #(.SOURCE_FRAME_MAJOR(1)) u_feat_copy (
         .core_clk   (core_clk),
         .core_rst_n (core_clk_rst_n),
-        .start      (mel_npu_start),
+        .start      (npu_done_raw),
         .busy_in    (npu_feat_rd_en_u),
         .src_addr   (copy_src_addr),
         .src_en     (copy_src_en),
@@ -516,10 +520,34 @@ module instrec_top #(
     // only while the NPU is idle.
     assign mel_feat_rd_addr = npu_feat_rd_en_u ? npu_feat_rd_addr : copy_src_addr;
 
-    wire [14:0] spec_ram_addr;
-    wire [7:0]  spec_ram_data;
+    // ---- Feat dump to DDR (replaces the UI spectrum cache) -------------
+    // feat_page_buf (14.7 DRM18K) is disabled: DRM is at 95% and the
+    // place-and-route keeps failing by a handful of nets.  The copy stream
+    // now lands in DDR 0x200000 so the complete feature can be read back
+    // through the diagnostic engine, and the UI spectrum region simply shows
+    // the flat background.
+    wire        fd_m3_cmd_valid;
+    wire [36:0] fd_m3_cmd;
+    wire [255:0] fd_m3_wdata;
+    wire        fd_busy;
+    wire        fd_done;
 
-    wire spec_page_ready;
+    feat_dump #(.DDR_BASE(28'h0020_0000), .BEATS(516)) u_feat_dump (
+        .clk         (core_clk),
+        .rst_n       (core_clk_rst_n),
+        .src_we      (copy_dst_we),
+        .src_addr    (copy_dst_addr),
+        .src_data    (copy_dst_data),
+        .copy_done   (copy_done_u),
+        .m3_cmd_valid(fd_m3_cmd_valid),
+        .m3_cmd      (fd_m3_cmd),
+        .m3_wdata    (fd_m3_wdata),
+        .m3_done     (ddr_done[3]),
+        .busy        (fd_busy),
+        .dump_done   (fd_done)
+    );
+
+    /* feat_page_buf disabled (see above): the UI spectrum region is blank.
     feat_page_buf u_feat_page (
         .core_clk   (core_clk),
         .core_rst_n (core_clk_rst_n),
@@ -535,6 +563,9 @@ module instrec_top #(
         .rd_addr    (spec_ram_addr),
         .rd_data    (spec_ram_data)
     );
+    */
+
+    wire [14:0] spec_ram_addr;   // driven by dashboard_renderer (output)
 
     dashboard_renderer u_ui_renderer (
         .pix_clk(pix_clk), .rst_pix_n(rst_pix_n),
@@ -542,8 +573,8 @@ module instrec_top #(
         .pix_hs(pix_hs), .pix_vs(pix_vs),
         .wave_rd_addr(wave_rd_addr), .wave_min(wave_min), .wave_max(wave_max),
         .wave_valid(wave_valid), .mute_flag_sync(mute_flag_sync),
-        .spec_ram_addr(spec_ram_addr), .spec_ram_data(spec_ram_data),
-        .feature_ready(spec_page_ready), .result_ready(result_frame_ready),
+        .spec_ram_addr(spec_ram_addr), .spec_ram_data(8'd0),
+        .feature_ready(1'b1), .result_ready(result_frame_ready),
         .class_idx(frame_class),
         .pct0(b0), .pct1(b1), .pct2(b2), .pct3(b3),
         .pct4(b4), .pct5(b5), .pct6(b6), .pct7(b7),
