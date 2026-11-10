@@ -43,7 +43,13 @@
 module instrec_top #(
     // 0 = CPU-controlled launch; 1 = automatic Mel -> NPU launch. Weights load
     // before sys_ctrl reaches RUN; CPU requests launch at a Mel boundary.
-    parameter NPU_ENABLE = 0
+    parameter NPU_ENABLE = 0,
+    // 0 = feat_dump is withheld from m3 (bisect state: the DDR3 boot self-test
+    //     fails at its second burst while the dump engine shares m3);
+    // 1 = feat_dump writes the Mel feature to DDR 0x0020_0000 (needed for the
+    //     complete-feature readback described in DIAG_READBACK_PLAN_20261110).
+    // Flip this to 1 once the self-test interaction is understood.
+    parameter FEAT_DUMP_ON_M3 = 0
 ) (
     // ---- board pins ----
     input  wire        clk,          // 27 MHz crystal (D18)
@@ -201,13 +207,22 @@ module instrec_top #(
     // readback engine uses it afterwards (never concurrently in practice).
     // Priority: self_test (boot) > diagnostic readback (PC is waiting) >
     // feature dump (background, fires once per window after the NPU).
-    wire st_m3_sel  = st_cmd_valid;
-    wire dg_m3_sel  = !st_m3_sel && dg_m3_cmd_valid;
-    wire m3_req_valid = st_cmd_valid | dg_m3_cmd_valid | fd_m3_cmd_valid;
+    // The diagnostic engine and the feature dump are hard-gated until the
+    // boot self-test has finished (st_done): while self_test owns m3 its
+    // command handshake must stay completely undisturbed, otherwise the
+    // second write of the self-test burst is corrupted (observed on board as
+    // "DDR3 ERR @00300200").
+    wire st_m3_sel    = st_cmd_valid;
+    wire dg_m3_en     = st_done;
+    wire dg_m3_sel    = !st_m3_sel && dg_m3_en && dg_m3_cmd_valid;
+    wire fd_m3_sel    = !st_m3_sel && !dg_m3_sel && dg_m3_en && fd_m3_cmd_valid;
+    wire fd_on        = (FEAT_DUMP_ON_M3 != 0);
+    wire m3_req_valid = st_cmd_valid | dg_m3_sel | (fd_on && fd_m3_sel);
     assign m3_cmd   = st_m3_sel ? st_m3_cmd   :
                       dg_m3_sel ? dg_m3_cmd   : fd_m3_cmd;
     assign m3_wdata = st_m3_sel ? st_m3_wdata :
-                      dg_m3_sel ? dg_m3_wdata : fd_m3_wdata;
+                      dg_m3_sel ? dg_m3_wdata :
+                      fd_on     ? fd_m3_wdata : 256'd0;
 
     // mel_engine master-2 port nets (per-master signals, packed into the
     // shared ctrl_axi buses exactly like audio_sink does for master 0)
