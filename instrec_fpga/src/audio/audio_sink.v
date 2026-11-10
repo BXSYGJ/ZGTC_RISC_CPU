@@ -191,6 +191,16 @@ module audio_sink #(
     output reg         mute_flag,
     output wire [15:0] err_cnt,
     output reg  [31:0] freeze_cycles,   // agg_freeze cycles in the last window
+    // Page-write accounting for the current window (latched at win_tick).
+    // A full window must show page_cnt = 8256 (one page_go per 16 frames)
+    // and done_cnt = 16512 (one m0_done per left and per right command).
+    //   page_cnt < 8256  => the aggregator never requested those pages
+    //                       (front-end / frame-loss problem)
+    //   page_cnt = 8256 but fewer pages carry data in DDR => the write
+    //                       command was accepted (done returned) yet the
+    //                       data did not land (controller/IP problem)
+    output reg  [17:0] page_cnt_lat,
+    output reg  [17:0] done_cnt_lat,
 
     // -----------------------------------------------------------------
     // pix_clk domain (148.5 MHz, from hdmi_tx_if) - only the column
@@ -573,6 +583,34 @@ module audio_sink #(
     end
 
     assign agg_freeze = agg_freeze_r;
+
+    // -----------------------------------------------------------------
+    // Page-write accounting (see the port comment).  Two 18-bit counters
+    // plus their window latches: 8256 page requests and 16512 done pulses
+    // in a healthy window.
+    // -----------------------------------------------------------------
+    reg [17:0] page_cnt_r;
+    reg [17:0] done_cnt_r;
+
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            page_cnt_r   <= 18'd0;
+            done_cnt_r   <= 18'd0;
+            page_cnt_lat <= 18'd0;
+            done_cnt_lat <= 18'd0;
+        end else begin
+            if (page_go && (page_cnt_r != 18'h3FFFF))
+                page_cnt_r <= page_cnt_r + 18'd1;
+            if (m0_done && (done_cnt_r != 18'h3FFFF))
+                done_cnt_r <= done_cnt_r + 18'd1;
+            if (win_tick) begin
+                page_cnt_lat <= page_cnt_r;
+                done_cnt_lat <= done_cnt_r;
+                page_cnt_r   <= 18'd0;
+                done_cnt_r   <= 18'd0;
+            end
+        end
+    end
 
     // -----------------------------------------------------------------
     // UI waveform column downsampler (design.md 7.4), core_clk side.

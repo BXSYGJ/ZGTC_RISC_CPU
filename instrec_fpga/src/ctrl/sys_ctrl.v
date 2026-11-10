@@ -106,6 +106,8 @@ module sys_ctrl #(
     input  wire [7:0]  audio_win_id,
     input  wire [15:0] audio_err_cnt,  // audio_sink write-timeout counter
     input  wire [31:0] audio_freeze_cycles, // agg_freeze cycles, last window
+    input  wire [17:0] audio_page_cnt,   // page_go pulses, last window (8256 = full)
+    input  wire [17:0] audio_done_cnt,   // m0_done pulses, last window (2/page)
     input  wire        mel_timeout,
     input  wire        mel_win_miss,
     input  wire        mel_busy,
@@ -233,23 +235,19 @@ module sys_ctrl #(
     // "DDR3 ERR @<addr>" lines, so dropping them here loses nothing.
     wire [7:0] ddr_sts_code;
 
-    // Telemetry alternates per window (win_id[0]):
-    //   even: {err_cnt[6:0], overflow_hi[7:0], window_real_frames[16:0]}
-    //   odd : {agg_freeze cycles in the last window}  (32 bits)
-    // Four-state rotation on win_id[1:0]:
+    // Four-state rotation on audio_win_id[1:0]:
     //   0: {err_cnt[6:0], overflow_hi[7:0], real_frames[16:0]}
-    //   1: {agg_freeze cycles[31:0]}
-    //   2: reserved (0)
-    //   3: reserved (0)
-    // The freeze state keeps its upper 29 bits and carries the three mel
-    // status flags in the low bits, so no extra counter/adder is added
-    // (adding one pushed place-and-route past convergence at 95% DRM).
+    //   1: {agg_freeze cycles[31:3], mel_timeout, mel_win_miss, mel_busy}
+    //   2: page_go pulses in the last window (8256 = full window)
+    //   3: m0_done pulses in the last window (16512 = both pages landed)
+    // Phase 2 vs 3 splits "the aggregator never asked for those pages"
+    // from "the command completed but the data did not land".
     wire [31:0] audio_sts_payload =
         (audio_win_id[1:0] == 2'd1) ? {audio_freeze_cycles[31:3],
                                       mel_timeout, mel_win_miss, mel_busy} :
-        (audio_win_id[1:0] == 2'd2) ? 32'd0 :
-        (audio_win_id[1:0] == 2'd3) ? 32'd0 :
-        {audio_err_cnt[6:0], overflow_cnt[15:8], audio_win_frames};
+        (audio_win_id[1:0] == 2'd2) ? {14'd0, audio_page_cnt} :
+        (audio_win_id[1:0] == 2'd3) ? {14'd0, audio_done_cnt} :
+        {audio_err_cnt[6:0], overflow_cnt[15:8], audio_win_frames[16:0]};
 
     // AXI diagnostic byte for the boot-time "DDR3 STS <hh>" line:
     //   bit7..4 = cmd_to_err[3:0] (which master hit the watchdog),

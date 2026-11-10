@@ -142,6 +142,8 @@ module instrec_top #(
     wire        mute_flag;       // observation tap
     wire [15:0] audio_err_cnt;  // observation tap
     wire [31:0] audio_freeze_cycles;
+    wire [17:0] audio_page_cnt;      // page_go pulses in the last window
+    wire [17:0] audio_done_cnt;      // m0_done pulses in the last window
 
     // ==================================================================
     // Video chain (pix_clk domain)
@@ -396,6 +398,8 @@ module instrec_top #(
         .mute_flag     (mute_flag),
         .err_cnt       (audio_err_cnt),
         .freeze_cycles (audio_freeze_cycles),
+        .page_cnt_lat  (audio_page_cnt),
+        .done_cnt_lat  (audio_done_cnt),
         .pix_clk       (pix_clk),
         .vsync_pulse   (vsync_pulse),
         .wave_rd_addr  (wave_rd_addr),
@@ -861,6 +865,8 @@ module instrec_top #(
         .audio_win_id    (win_id[7:0]),
         .audio_err_cnt   (audio_err_cnt),
         .audio_freeze_cycles(audio_freeze_cycles),
+        .audio_page_cnt  (audio_page_cnt),
+        .audio_done_cnt  (audio_done_cnt),
         .mel_timeout     (mel_timeout),
         .mel_win_miss    (mel_win_miss),
         .mel_busy        (mel_busy),
