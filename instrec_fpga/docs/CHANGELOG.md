@@ -10,6 +10,8 @@
 - 时序：已烧位流 `report_timing` 为 `Some Constraints Violated`、WNS −1.402 ns + hold 违规（最差 `u_npu/u_store1 → lane_bank[6].mem`）⇒ 本夜 NPU 数值不作结论依据。
 - 构建守卫：六阶段成功但 `Build inputs changed during PDS` 拒绝发布，已用 manifest 哈希反证差异仅注释（`DE7991CD…`），未绕过守卫，直接烧该 sbit。
 - 清理：`git restore` cpu/ 两个把 AXI 端口方向 / `ddrphy_cpd_lock` 回退成旧 bug 的文件。
+- 追加定量证据：全窗扫描（`build/win_scan.py`，锁窗 327）真实页 3112/8256 = 37.7%，页号 mod 4 直方图 `[2064, 302, 355, 391]`（`≡0` 恰为 8256/4）；gap 区无真实音频 ⇒ 写地址未错位；自检用 `len=15` 通过、音频用 `len=0` 失败 ⇒ 指向**单拍写不被 DDR3 IP 可靠提交**。
+- 新增遥测（`ac953c32`）：`audio_sink` 的 `page_cnt_lat`/`done_cnt_lat` 经 STS phase 2/3 输出（满窗 8256 / 16512），用于在"请求缺失"与"命令完成但数据未落地"之间二选一；位流构建中。
 
 ## 2026-11-10（续）：DDR3 自检 @0x00300200 根因修复 + AXI 诊断字节恢复
 
