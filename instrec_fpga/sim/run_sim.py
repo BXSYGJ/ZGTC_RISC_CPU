@@ -259,6 +259,19 @@ register(Case(
 ))
 
 register(Case(
+    name="diag_readback",
+    tb="tb_diag_readback.sv",
+    rtl=[
+        "src/diag/diag_readback.v",
+        "src/ddr3/ddr3_ctrl_axi.v",
+        "src/ddr3/ddr3_arbiter.v",
+        "sim/ddr3_axi_model.sv",
+    ],
+    timeout=300,
+    description="diag 'L'/'U'/'S'/'R': 256 B UART frames read back through DDR3 m3 (len=7)",
+))
+
+register(Case(
     name="ctrl_smoke",
     tb="tb_ctrl_smoke.sv",
     rtl=["src/ctrl/sys_ctrl.v", "src/ctrl/uart_debug.v"],
