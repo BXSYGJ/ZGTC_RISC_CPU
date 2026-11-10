@@ -70,3 +70,103 @@
 - 不叠加推测性修复：DDR3 `S_R` watchdog 改动已按本方针**回退**（板级 `mel_busy/win_miss=0` 未支持该假设），待离线/读回证据坐实后再修。
 - 一次构建即包含全部诊断接口 + 资源裁剪；不再「加几位 STS 就重建」。
 - 构建前完成第 4 节全部离线验证与资源估算；构建失败时按有界策略（90 min）记录未布数，不无限延长。
+## 7. 实现状态（2026-11-10，`diag_readback` 交付）
+
+状态：**离线验证完成，未上板、未跑 PDS**。只新增了 `src/diag/diag_readback.v`（576 行）与
+`sim/tb_diag_readback.sv`（743 行），`sim/run_sim.py` 追加 `diag_readback` 用例；既有 RTL
+(`weight_loader.v` / `audio_sink.v` / `mel_engine.v` / `ddr3_ctrl_axi.v`) 零改动，顶层也**尚未例化**本模块。
+
+### 7.1 实际端口
+
+| 方向 | 端口 | 说明 |
+|---|---|---|
+| in | `clk` / `rst_n` | core 域 125 MHz，异步复位低有效 |
+| in | `rx_valid` / `rx_data[7:0]` | **字节级** UART 接收通道（同 `weight_loader.v`，由 `uart_rx` 驱动） |
+| out | `tx_valid` / `tx_data[7:0]` | **字节级** UART 发送通道（顶层与 `uart_debug`/`weight_loader` 仲裁后送 `uart_tx`） |
+| in | `tx_ready` | `uart_tx.byte_wready`（寄存器型，接受后多保持一拍） |
+| out | `m3_cmd_valid` / `m3_cmd[36:0]` | DDR3 主口 3，只读；`{wr=0, addr[27:0], len[7:0]}` |
+| in | `m3_rd_data[255:0]` / `m3_rd_valid` / `m3_done` | 控制器读数据/有效/完成 |
+| out | `m3_rd_ready` | 弹性 FIFO 弹出节拍 |
+| out | `diag_lock` | 纯电平，供 `audio_sink` 冻结新帧（本模块不做冻结逻辑） |
+| in | `win_id[15:0]` / `mel_done` / `npu_done` / `logits_valid` | 状态行快照输入 |
+
+参数：`ACK_TIMEOUT`（默认 12500000 = 100 ms @125 MHz，仅仿真/TB 用更小值）。
+
+### 7.2 len 语义核对结论（一帧用 len = 7）
+
+- `ddr3_ctrl_axi.v` 文件头：命令包 `{wr, addr[27:0], len[7:0]}`，**`len = beats-1`，每 beat 32 B**；
+  `ddr3_arbiter` 的合法性检查是 `len <= 15`、32 B 对齐。
+- `mel_engine.v` 生产读：`516` 条 `len=15`，即 16 beat × 32 B = **512 B = 256 个 PCM 采样(2 B)**。
+- 因此「len=15 单命令 = 512 B」成立，256 B 一帧必须用 **`len=7`（8 beat × 32 B = 256 B）**，每条 'R' 帧发一条命令。
+  一个 256 B 帧正好是半条 mel 生产命令，不需要拆分或拼接。
+
+### 7.3 命令与偏差
+
+| 项 | 方案原文 | 实现 |
+|---|---|---|
+| `'L'`/`'U'` | 置/清 `diag_lock`，回 `'K'` | 一致 |
+| `'S'` | `DIAG win=<n> locked=<0/1> ...` | 行**定长 61 字节**，`win` 固定打印 5 位十进制（零填充，如 `04660`），其余字段 1 位；便于 PC 定长解析 |
+| `'R'` | `addr[31:0] LE + len[15:0] LE` | 一致（命令本身无 CRC），逐帧回 256 B 帧 |
+| 读回帧 | 0xAA55 + seq + len + payload + CRC16 | 一致，`len=0x0100`；payload 按 beat 小端展开；CRC-16/CCITT-FALSE 覆盖 seq+len+payload |
+| seq | 从 0 递增 | 每条 'R' 命令从 0 重新计数（= 该命令内帧号） |
+| 错误码 | `'N'` + 1/2/3 | 用 ASCII 数字 `'1'`/`'2'`/`'3'`（非二进制值）；顺序为 len==0 → 3，非 256 倍数 → 1，非法命令 → 2 |
+| 超 1 MB | 回 `'N'+3` | **该分支不可达**：len 字段只有 16 位（≤65535 B），硬件上无法表达 >1 MB 请求；仅保留 len==0 的 `'3'` |
+| 流控 | 每帧等 PC `'K'`，超时 100 ms 继续 | 一致；`'K'` 只在 ACK 状态被消费，该窗口内其他字节丢弃 |
+| 缓冲 | 小 FIFO/分布式 RAM，不新增大 RAM | 8 × 256 bit 寄存器（2 KiB），与 `weight_loader` 帧缓冲同规模；无 BRAM |
+
+其他实现细节 / 偏差：
+
+1. UART 端口是**字节通道**而非裸引脚（方案第 2 节「复用 weight_loader 帧协议」的语义），顶层负责与
+   `uart_debug`/`weight_loader` 复用 `uart_tx`。
+2. 命令只在 `S_IDLE` 接受；读回进行中（含 ACK 窗口）到达的其他字节不解析，PC 需串行下发。
+3. 发现并修正一个控制器交互缺陷：控制器 `rlast` 是第 8 次 push，读完最后一拍时它已回到 `S_IDLE` 且弹性
+   FIFO 已空，若 `cmd_valid` 再多保持一拍就会被**重复授权**（同一 addr 读两遍，多出 8 beat 滞留在 FIFO）。
+   现在在第 8 拍弹出的同一拍撤销 `cmd_valid`，并删掉了原 `S_RD_FIN` 状态；TB 观测 `ar_hs=6`、`rd_beats=48`
+   （6 帧 × 8 beat）、`aw_hs=15`（9 条预填写 + 6 条 dummy write）证明无重复授权。
+4. 若控制器看门狗中途中止（不足 8 拍即 `done`），本模块丢弃该帧回到 `S_IDLE`，不发出半帧数据。
+5. 尚未完成、且不在本任务范围：`instrec_top` 例化 + `audio_sink` 的 `diag_lock` 冻结接线 + m3 主口接入顶层仲裁 +
+   `scripts/diag_dump.py` PC 侧导出。
+
+### 7.4 离线验证证据
+
+- `python scripts/check_rtl.py` → `checked 78 .v file(s) ... 0 violation(s)`。
+- `python sim/run_sim.py diag_readback` → `RESULT: PASS diag_readback`（约 20 s）。TB 走**真实**
+  `ddr3_ctrl_axi` + `ddr3_axi_model`：先用 m0 写路径预填 4 KB @0x000000 与 512 B @0x00200000，
+  再经 UART 读回逐字节比对。
+  - S1 `'R' 0x0 len=1024`：4 帧 × 264 B = 1056 B，逐字节 0 失配，seq 0..3，CRC 正确。
+  - S2 `len=300` → `N1`；`len=0` → `N3`。
+  - S3 非法命令 `0x41` → `N2`。
+  - S4 `'L'`/`'U'` 驱动 `diag_lock`，`'S'` 与 61 字节期望行逐字节一致。
+  - S5 `'R' 0x00200000 len=512`（feat 区）：2 帧，逐字节 0 失配。
+  - 结束时 `addr_err=0`、`to_err=0`。
+- `python -m pytest -q` → `438 passed, 26 skipped`。
+
+
+## 7. 实现状态（2026-11-10）
+
+| 项 | 状态 | 证据 |
+|---|---|---|
+| `src/diag/diag_readback.v`（'L'/'U'/'S'/'R'/'G'，m3 只读或单拍写） | 已实现并集成 | `tb_diag_readback` 五场景 PASS（S1 4 帧逐字节 0 失配、S2 非 256 倍数、S3 非法命令、S4 锁窗与状态行、S5 0x200000 区读回）；`check_rtl` 79/0 |
+| `'G'` 完整 logits | 已实现 | 8×int32 由 `npu_top.logits_out`（`sm_start` 锁存）→ 一帧 256 B 返回，不占 DDR |
+| `audio_sink.diag_lock` | 已实现 | 门控 `rd_en`/注入/`frame_event`，默认 0 零影响 |
+| feat 落 DDR `0x0020_0000` | 已实现 | `src/diag/feat_dump.v`：32 B 打包 + 单拍写（516 条/窗），复用 m3 |
+| 频谱 UI 缓存 | 已关闭 | `feat_page_buf` 停用（省 ~14.7 DRM18K）；**DRM 146 → 130（84%）**，LUT 50%→52% |
+| PC 导出脚本 | 已实现并离线验证 | `scripts/diag_dump.py` + `tests/test_diag_dump.py`（帧解析/CRC/LE 有符号 logits/'K' 流控/分段 5 段各 65,280 B）；pytest 443 passed |
+| 顶层集成 | 已完成 | m3 三方分时（self_test > diag > feat_dump）、UART 按首字节分发（0xAA→loader，其余→diag，仅 loader 空闲时） |
+| 诊断位流 | 已构建 | `releases/instrec-48k-diag3-20261110/`（sha `01fe4336…`），45 m 57 s 一次布通，Wns −1.317、DRM 130/155 |
+| 上板实验 | **阻塞** | FTDI 从 PnP 消失（本轮第 3 次），待恢复 |
+
+## 8. 一次烧录、多组实验（执行手册）
+
+```powershell
+python scripts/board_check.py --sbit releases/instrec-48k-diag3-20261110/instrec_48k_diag3.sbit
+python scripts/weight_upload.py --image scripts/outputs/medley_48k/weights_image.bin
+
+python scripts/diag_dump.py --label silence
+python scripts/diag_dump.py --label tone200 --play build/tone_200.wav
+python scripts/diag_dump.py --label tone6k  --play build/tone_6k.wav
+python scripts/diag_dump.py --label music   --play build/montage_20s_12s.wav
+```
+
+每组输出 `build/diag/<label>/win<NNNN>/{pcm.raw, feat.bin, logits.json, meta.json}`。
+判读：`pcm.raw` → `golden_pipeline`（48k 表 + 新契约）→ `feat_golden`，与板级 `feat.bin` 逐字节比较；再以板级 feat 算 golden logits，与 `logits.json` 比较。**第一个不一致的环节即缺陷位置**（PCM 对/feat 错 → mel；feat 对/logits 错 → NPU；PCM 错 → audio_sink 窗口映射）。
