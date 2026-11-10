@@ -1,5 +1,16 @@
 # InstRec-FPGA 变更日志
 
+## 2026-11-10（续 2）：长读 STABLE 闭环；PCM 静默丢页（60~75% 页从未被写）；烧录位流 WNS −1.402
+
+- 长读：读回协议重写后 3×264192 B、`holes=0`、三次 sha256 全同、`RESULT: STABLE`；停帧根因定性为传输层（遥测插帧 + 主机流水线 + S_ACK 吞字节），非 DDR3 读超时。
+- 自检 `@0x00300200`：本轮位流 `st_fail=0`，m3 `rd_ready` 门控修复（`st_m3_sel`→`!st_done`）板上生效。两项结论证据独立，不合并。
+- 新缺陷：PCM 窗口每 4 页仅 1 页真实，4964/8256 页与从未写过的 stride gap 逐字节相同（上电残留）⇒ 静默丢页；`check_gap.py` 证明自检区 0x300000 读回正确、读路径 OK。
+- 仿真不能复现：`audio_chain_w4k` DLY 4/200/1000/4000/20000 全 100% real、err=0；`audio_chain_full` PASS。候选 ①`page_go` 在 FSM 忙时丢弃 ②控制器 `S_W` 超时发 done 丢写，尚未区分。
+- 音频输入无信号：播放 tone_200.wav 后 std 仍 933.8、logits 与静音窗相同。
+- 时序：已烧位流 `report_timing` 为 `Some Constraints Violated`、WNS −1.402 ns + hold 违规（最差 `u_npu/u_store1 → lane_bank[6].mem`）⇒ 本夜 NPU 数值不作结论依据。
+- 构建守卫：六阶段成功但 `Build inputs changed during PDS` 拒绝发布，已用 manifest 哈希反证差异仅注释（`DE7991CD…`），未绕过守卫，直接烧该 sbit。
+- 清理：`git restore` cpu/ 两个把 AXI 端口方向 / `ddrphy_cpd_lock` 回退成旧 bug 的文件。
+
 ## 2026-11-10（续）：DDR3 自检 @0x00300200 根因修复 + AXI 诊断字节恢复
 
 - 离线仿真（新 `sim/tb_ddr3_m3_share.sv`）复刻 instrec_top 精确 m3 mux，精确复现 `@0x00300200` 并定性为**数据比较失败**（非写/读超时：to_err=0、dbg_to_state=0）。

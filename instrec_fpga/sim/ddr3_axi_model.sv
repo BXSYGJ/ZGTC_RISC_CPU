@@ -61,6 +61,11 @@ module ddr3_axi_model #(
     // fault injection switches
     parameter integer AR_NEVER            = 0,
     parameter integer R_MODE              = 0,
+    // Read-data stall: after the read address handshake, hold rvalid low for
+    // R_STALL_CYCLES cycles before streaming the burst.  Exercises the
+    // controller handshake watchdog (S_R counts while rvalid is low).
+    // 0 = no stall (normal streaming).
+    parameter integer R_STALL_CYCLES      = 0,
     // beat memory size (256-bit beats), covers the low 2 MB of the address map
     parameter integer MEM_BEATS           = 65536,
     // 1 = the IP ignores the byte strobes and always writes all 32 bytes.
@@ -115,6 +120,8 @@ module ddr3_axi_model #(
     localparam [3:0]  AW_DLY_C  = AW_DELAY[3:0];
     localparam [3:0]  W_DLY_C   = W_DELAY[3:0];
     localparam [3:0]  AR_DLY_C  = AR_DELAY[3:0];
+    localparam [19:0] R_STALL_LIMIT = R_STALL_CYCLES[19:0];
+    localparam        R_STALL_ON    = (R_STALL_CYCLES > 0);
 
     localparam [2:0]  LAST_HOLD = 3'd4;   // wusero_last high for 4 cycles
 
@@ -153,6 +160,7 @@ module ddr3_axi_model #(
     reg [4:0]  rd_beat_idx;
     reg [3:0]  r_id_r;
     reg [3:0]  ar_dly;
+    reg [19:0] r_stall_cnt;
 
     // ------------------------------------------------------------------
     // Memory index helpers: 32-byte beats, low 128 KB window
@@ -318,6 +326,7 @@ module ddr3_axi_model #(
             rd_beat_idx   <= 5'd0;
             r_id_r        <= 4'd0;
             ar_dly        <= 4'd0;
+            r_stall_cnt   <= 20'd0;
             obs_ar_hs     <= 32'd0;
             obs_rd_beats  <= 32'd0;
         end else begin
@@ -331,13 +340,21 @@ module ddr3_axi_model #(
             // Accept a read address
             if (ar_hs) begin
                 ar_pending    <= 1'b1;
-                r_push        <= 1'b1;
+                r_push        <= !R_STALL_ON;
                 ar_addr_r     <= s_araddr;
                 rd_beats_left <= {1'b0, s_arlen} + 5'd1;
                 rd_beat_idx   <= 5'd0;
                 r_id_r        <= s_aruser_id;
                 ar_dly        <= 4'd0;
+                r_stall_cnt   <= 20'd0;
                 obs_ar_hs     <= obs_ar_hs + 32'd1;
+            end else if (ar_pending && !r_push && R_STALL_ON) begin
+                // Injected read-data stall: keep rvalid low until the count elapses.
+                if (r_stall_cnt >= R_STALL_LIMIT) begin
+                    r_push <= 1'b1;
+                end else begin
+                    r_stall_cnt <= r_stall_cnt + 20'd1;
+                end
             end
 
             // Stream one beat per cycle (no rready exists)

@@ -12,14 +12,19 @@
 
 | # | 现象 | 已排除 / 进展 |
 |---|---|---|
-| 1 | 诊断位流烧录后 DDR3 自检失败：`DDR3 ERR @00300200`，随后 `weight_upload.py` 无回复 | diag3（sha `01fe4336…`）、diag4（sha `4c46193b…`）均失败；`st_done` 门控已加仍失败；当前源码 `FEAT_DUMP_ON_M3=0` 的位流尚未构建成功（90 min 超时，Unrouted 2580–2649，需重跑） |
-| 2 | `top1` 对 200 Hz 与 6 kHz 满幅测试音完全相同（`top1=3`，`last_p` 相同） | mel 每窗正常完成、NPU 每窗完成；已排除播放链路、模拟输入、I2S/CDC、零帧门槛、窗口步长、mel 读口仲裁、mel_filter COO 表。未定位 mel 实际读到的 PCM / feat 是否随输入变化 |
+| 1 | **PCM 窗口 60~75% 的 32 B 页从未被写**（每 4 页仅 1 页含数据，4964/8256 页与从未写过的 stride gap 逐字节相同 = 上电残留） | 读路径正常（自检区 0x300000 读回正确）；`err_cnt` 仅 0~1 ⇒ **静默丢页**。候选 ①`audio_sink.page_go` 在写 FSM 忙时丢弃 ②`ddr3_ctrl_axi` 写超时发 done 但丢命令；仿真（DLY 4~20000、`audio_chain_full`）无法复现，需计数遥测区分 |
+| 2 | 模拟输入无信号：播放 200 Hz 满幅后 `std` 仍 933.8、logits 与静音窗完全相同 | 与 #1 独立；待查播放设备路由 / 线缆 / PCM1808 VINL,VINR |
+| 3 | 已烧位流 `report_timing` 为 `Some Constraints Violated`，WNS −1.402 ns + 多条 hold 违规（最差 `u_npu/u_store1 → lane_bank[6].mem`） | 与音频写路径无关；但**该位流的 NPU 数值不得作为结论依据** |
+
+- 已恢复（不再算阻塞）：DDR3 启动自检 `@0x00300200` 失败 —— m3 `rd_ready` 由 `st_m3_sel` 改 `!st_done`，本轮位流 `st_fail=0`。
+- 已恢复：diag 长读随机停帧 —— 属传输层（遥测插帧 + 主机流水线 + S_ACK 吞字节）；重写协议后 3×264192 B、`holes=0`、sha 全同、`RESULT: STABLE`。
 
 ## 3. 下一步（按优先级）
 
-1. 按诊断增量做二分：`diag_readback` 例化（m3 端口 + UART 分发）、`npu_top.logits_out` 引出、`audio_sink.diag_lock`、`feat_dump`、`feat_page_buf` 关闭——相对正常基线 `instrec-48k-injfix-20261109`（`2726f0cd…`）/ `instrec-48k-melstat-20261110`（`f7552f2a…`）逐项排除。
-2. 恢复诊断位流后，按“一次烧录、多组实验”（静音 / 200 Hz / 6 kHz / 已知类别音乐）逐组锁窗导出，PC 算 golden 逐段比较。
-3. 诊断完成后再修功能，不叠加推测性修复。
+1. 加计数器遥测（`page_go` 计数 / 写完成页数 / `audio_err_cnt` / `cmd_to_err`）重建位流，**一次烧录**区分丢页候选 ①②。
+2. 排查模拟输入无信号（播放路由 / 线缆 / PCM1808 输入），使 PCM 随播放变化。
+3. 位流交付前必读 `report_timing/*.rtr` 的 WNS；当前 −1.402 + hold 违规的位流不可用于数值结论，须先收敛。
+4. 输入有信号且时序收敛后，再做同窗 PCM/logits 与 48k golden 对拍；feat 对拍需 `FEAT_DUMP_ON_M3=1` 位流。
 
 ## 4. 不要改错的关键契约
 

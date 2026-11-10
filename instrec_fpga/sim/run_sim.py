@@ -272,6 +272,60 @@ register(Case(
 ))
 
 register(Case(
+    name="diag_longread",
+    tb="tb_diag_longread.sv",
+    rtl=[
+        "src/diag/diag_readback.v",
+        "src/ddr3/ddr3_ctrl_axi.v",
+        "src/ddr3/ddr3_arbiter.v",
+        "sim/ddr3_axi_model.sv",
+    ],
+    timeout=600,
+    description="255-frame 'R' long read with no contention (board frame-25 stall repro)",
+))
+
+# Handshake-watchdog boundary: prove the AXI_TO_LIMIT 4096->65536 fix. Each
+# case drives one m3 read with an injected read-data stall (R_STALL_CYCLES).
+register(Case(
+    name="ddr3_watchdog_old",
+    tb="tb_ddr3_watchdog.sv",
+    rtl=[
+        "src/ddr3/ddr3_ctrl_axi.v",
+        "src/ddr3/ddr3_arbiter.v",
+        "sim/ddr3_axi_model.sv",
+    ],
+    timeout=300,
+    extra_flags=["-GAXI_TO_LIMIT=4096", "-GR_STALL_CYCLES=8000"],
+    description="watchdog OLD limit 4096: an 8000-cycle stall must abort (to_err)",
+))
+
+register(Case(
+    name="ddr3_watchdog_new",
+    tb="tb_ddr3_watchdog.sv",
+    rtl=[
+        "src/ddr3/ddr3_ctrl_axi.v",
+        "src/ddr3/ddr3_arbiter.v",
+        "sim/ddr3_axi_model.sv",
+    ],
+    timeout=300,
+    extra_flags=["-GAXI_TO_LIMIT=65536", "-GR_STALL_CYCLES=8000"],
+    description="watchdog NEW limit 65536: an 8000-cycle stall must complete (16 beats)",
+))
+
+register(Case(
+    name="ddr3_watchdog_over",
+    tb="tb_ddr3_watchdog.sv",
+    rtl=[
+        "src/ddr3/ddr3_ctrl_axi.v",
+        "src/ddr3/ddr3_arbiter.v",
+        "sim/ddr3_axi_model.sv",
+    ],
+    timeout=300,
+    extra_flags=["-GAXI_TO_LIMIT=65536", "-GR_STALL_CYCLES=70000"],
+    description="watchdog NEW limit 65536: a 70000-cycle stall must still abort (to_err)",
+))
+
+register(Case(
     name="ctrl_smoke",
     tb="tb_ctrl_smoke.sv",
     rtl=["src/ctrl/sys_ctrl.v", "src/ctrl/uart_debug.v"],

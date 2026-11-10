@@ -30,12 +30,20 @@
 // arbiter: 32-byte alignment plus the five legal windows. Violations latch
 // sticky per-master flags (addr_err) reported through the self-test chain.
 //
-// Timeouts: every AXI handshake phase is guarded by a 4096-cycle watchdog
-// (AXI_TO_LIMIT, same value as the verified pds_cpu_100h bridge). On
-// timeout the command is aborted (done pulse still issued to avoid
-// upstream deadlock), to_err latches sticky, cmd_to_err latches per
-// master, and dbg_to_state records the FSM state where it happened
-// (REQ-REL-002 command-level guard feeding the sys_ctrl watchdog chain).
+// Timeouts: every AXI handshake phase is guarded by a 65536-cycle watchdog
+// (AXI_TO_LIMIT, 524 us at 125 MHz).  The verified pds_cpu_100h bridge used
+// 4096 cycles (32.7 us), but that design did not issue a same-address dummy
+// write before every read.  HYPOTHESIS (not yet measured): the extra
+// write-to-read turnaround plus DDR3 refresh can stall a read past 32.7 us
+// on board, which would abort diag long reads at random frames.  No latency
+// measurement or captured timeout status exists yet, so treat the stall
+// source as unconfirmed; widening the window only removes the abort, it does
+// not explain the delay.  To dispel or confirm it, capture dbg_to_state and
+// a timestamp at the moment a long read is aborted.  On timeout the
+// command is aborted (done pulse still issued to avoid upstream deadlock),
+// to_err latches sticky, cmd_to_err latches per master, and dbg_to_state
+// records the FSM state where it happened (REQ-REL-002 command-level guard
+// feeding the sys_ctrl watchdog chain).
 //
 // Upstream protocol (per master i):
 //   * hold m{i}_cmd_valid + m{i}_cmd until m{i}_done pulses (the wait
@@ -60,8 +68,10 @@ module ddr3_ctrl_axi #(
     // memory data destroyed); 1 = full strobes with zero data (verified
     // pds_cpu_100h bridge form). Board bring-up fallback knob.
     parameter DUMMY_WSTRB_ALL1 = 1'b0,
-    // AXI handshake watchdog limit in core_clk cycles.
-    parameter integer AXI_TO_LIMIT = 4096,
+    // AXI handshake watchdog limit in core_clk cycles (65536 = 524 us at
+    // 125 MHz; the 4096-cycle CPU-bridge value is too tight for the
+    // dummy-write-before-read turnaround on this design).
+    parameter integer AXI_TO_LIMIT = 65536,
     // P3 starvation quota in core_clk cycles (125000 = 1 ms at 125 MHz).
     parameter integer P3_QUOTA_TIMEOUT = 125000
 ) (
@@ -144,7 +154,7 @@ module ddr3_ctrl_axi #(
     reg [3:0]  beat_cnt;        // current burst beat position
     reg [3:0]  wlast_window;    // epilogue cycle counter
     reg        wlast_seen;      // side evidence seen in the window
-    reg [12:0] axi_to_cnt;      // handshake watchdog (4096 needs 13 bits)
+    reg [16:0] axi_to_cnt;      // handshake watchdog (65536 needs 17 bits)
     reg        to_err_r;
     reg [3:0]  cmd_to_err_r;
     reg [2:0]  dbg_to_state_r;
@@ -247,7 +257,7 @@ module ddr3_ctrl_axi #(
     // or watchdog abort. Single-cycle pulse routed to the command owner.
     wire write_cmpl = (state == S_W) && axi_wready && (beat_cnt == cur_len[3:0]);
     wire read_cmpl  = (state == S_R) && axi_rvalid && axi_rlast;
-    wire to_abort   = (axi_to_cnt >= AXI_TO_LIMIT[12:0]) &&
+    wire to_abort   = (axi_to_cnt >= AXI_TO_LIMIT[16:0]) &&
                       (state != S_IDLE) && (state != S_WLAST) &&
                       (state != S_R_DRAIN);
     wire done_pulse = write_cmpl || read_cmpl || to_abort;
@@ -275,7 +285,7 @@ module ddr3_ctrl_axi #(
             beat_cnt        <= 4'd0;
             wlast_window    <= 4'd0;
             wlast_seen      <= 1'b0;
-            axi_to_cnt      <= 13'd0;
+            axi_to_cnt      <= 17'd0;
             to_err_r        <= 1'b0;
             cmd_to_err_r    <= 4'b0000;
             dbg_to_state_r  <= 3'd0;
@@ -319,9 +329,9 @@ module ddr3_ctrl_axi #(
             if ((state == S_AW) || (state == S_W) || (state == S_DW_AW) ||
                 (state == S_DW_W) || (state == S_AR) ||
                 ((state == S_R) && !axi_rvalid)) begin
-                axi_to_cnt <= axi_to_cnt + 13'd1;
+                axi_to_cnt <= axi_to_cnt + 17'd1;
             end else begin
-                axi_to_cnt <= 13'd0;
+                axi_to_cnt <= 17'd0;
             end
 
             // ---- main FSM ----
@@ -347,7 +357,7 @@ module ddr3_ctrl_axi #(
                             if (grant[3]) cur_rd_master <= 2'd3;
                         end
                         beat_cnt   <= 4'd0;
-                        axi_to_cnt <= 13'd0;
+                        axi_to_cnt <= 17'd0;
                         wlast_seen <= 1'b0;
                         wlast_window <= 4'd0;
                         if (grant_wr) begin
@@ -360,9 +370,9 @@ module ddr3_ctrl_axi #(
 
                 S_AW: begin
                     if (axi_awready) begin
-                        axi_to_cnt <= 13'd0;
+                        axi_to_cnt <= 17'd0;
                         state <= S_W;
-                    end else if (axi_to_cnt >= AXI_TO_LIMIT[12:0]) begin
+                    end else if (axi_to_cnt >= AXI_TO_LIMIT[16:0]) begin
                         to_err_r       <= 1'b1;
                         cmd_to_err_r[cur_master] <= 1'b1;
                         dbg_to_state_r <= S_AW;
@@ -372,7 +382,7 @@ module ddr3_ctrl_axi #(
 
                 S_W: begin
                     if (axi_wready) begin
-                        axi_to_cnt <= 13'd0;
+                        axi_to_cnt <= 17'd0;
                         beat_cnt   <= beat_cnt + 4'd1;
                         if (beat_cnt == cur_len[3:0]) begin
                             // last beat accepted: command complete
@@ -380,7 +390,7 @@ module ddr3_ctrl_axi #(
                             wlast_seen   <= 1'b0;
                             state        <= S_WLAST;
                         end
-                    end else if (axi_to_cnt >= AXI_TO_LIMIT[12:0]) begin
+                    end else if (axi_to_cnt >= AXI_TO_LIMIT[16:0]) begin
                         to_err_r       <= 1'b1;
                         cmd_to_err_r[cur_master] <= 1'b1;
                         dbg_to_state_r <= S_W;
@@ -390,9 +400,9 @@ module ddr3_ctrl_axi #(
 
                 S_DW_AW: begin
                     if (axi_awready) begin
-                        axi_to_cnt <= 13'd0;
+                        axi_to_cnt <= 17'd0;
                         state <= S_DW_W;
-                    end else if (axi_to_cnt >= AXI_TO_LIMIT[12:0]) begin
+                    end else if (axi_to_cnt >= AXI_TO_LIMIT[16:0]) begin
                         to_err_r       <= 1'b1;
                         cmd_to_err_r[cur_master] <= 1'b1;
                         dbg_to_state_r <= S_DW_AW;
@@ -403,9 +413,9 @@ module ddr3_ctrl_axi #(
                 S_DW_W: begin
                     if (axi_wready) begin
                         // masked dummy beat accepted, now issue the read
-                        axi_to_cnt <= 13'd0;
+                        axi_to_cnt <= 17'd0;
                         state <= S_AR;
-                    end else if (axi_to_cnt >= AXI_TO_LIMIT[12:0]) begin
+                    end else if (axi_to_cnt >= AXI_TO_LIMIT[16:0]) begin
                         to_err_r       <= 1'b1;
                         cmd_to_err_r[cur_master] <= 1'b1;
                         dbg_to_state_r <= S_DW_W;
@@ -415,9 +425,9 @@ module ddr3_ctrl_axi #(
 
                 S_AR: begin
                     if (axi_arready) begin
-                        axi_to_cnt <= 13'd0;
+                        axi_to_cnt <= 17'd0;
                         state <= S_R;
-                    end else if (axi_to_cnt >= AXI_TO_LIMIT[12:0]) begin
+                    end else if (axi_to_cnt >= AXI_TO_LIMIT[16:0]) begin
                         to_err_r       <= 1'b1;
                         cmd_to_err_r[cur_master] <= 1'b1;
                         dbg_to_state_r <= S_AR;
@@ -427,13 +437,13 @@ module ddr3_ctrl_axi #(
 
                 S_R: begin
                     if (axi_rvalid) begin
-                        axi_to_cnt <= 13'd0;
+                        axi_to_cnt <= 17'd0;
                         if (axi_rlast) begin
                             // burst fully captured; drain continues from
                             // the fifo at the upstream master's pace
                             state <= S_IDLE;
                         end
-                    end else if (axi_to_cnt >= AXI_TO_LIMIT[12:0]) begin
+                    end else if (axi_to_cnt >= AXI_TO_LIMIT[16:0]) begin
                         to_err_r       <= 1'b1;
                         cmd_to_err_r[cur_master] <= 1'b1;
                         dbg_to_state_r <= S_R;

@@ -82,7 +82,7 @@ STATE_NAME = {
     S_R_DRAIN: 'S_R_DRAIN',
 }
 
-AXI_TO_LIMIT = 4096                 # ddr3_ctrl_axi.v:64
+AXI_TO_LIMIT = 65536                # ddr3_ctrl_axi.v:74 (524 us at 125 MHz)
 P3_QUOTA_TIMEOUT = 125000           # ddr3_ctrl_axi.v:66 (1 ms at 125 MHz)
 RD_FIFO_DEPTH = 16                 # ddr3_ctrl_axi.v:153
 BURST_LEN = 15                      # beats - 1 (512 B per command)

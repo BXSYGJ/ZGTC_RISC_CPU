@@ -1,0 +1,63 @@
+{
+  "input": "build\\i2s_capture\\montage_music_20261106_181558\\capture.wav",
+  "label": "capture",
+  "pcm": {
+    "source": "wav",
+    "bytes": 768000,
+    "sample_rate": 48000,
+    "channels": 2,
+    "stereo_frames": 192000,
+    "duration_s": 4.0
+  },
+  "channels": {
+    "left": {
+      "mean": -0.602640625,
+      "std": 1115.1956648042687,
+      "min": -7533,
+      "max": 7952,
+      "nonzero_rate": 0.9958541666666667,
+      "clip_rate": 0.0
+    },
+    "right": {
+      "mean": -0.6028697916666667,
+      "std": 1123.1671752798597,
+      "min": -7587,
+      "max": 8008,
+      "nonzero_rate": 0.9959270833333334,
+      "clip_rate": 0.0
+    },
+    "correlation": 0.9999996505382875,
+    "separable": true
+  },
+  "pattern": {
+    "detected": false,
+    "run_length": 4,
+    "wrap_aware": true,
+    "channel": "left"
+  },
+  "golden": {
+    "mode": "fir_44k",
+    "fir_model": "scripts/check_pcm1808.py:reference (coeff: gen_pcm1808_filter.coefficients)",
+    "fir_input_frames": 192000,
+    "fir_output_frames": 176400,
+    "tables": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\scripts\\outputs\\mel_tables.json",
+    "table_rate": 44100,
+    "feat_shape": [
+      64,
+      258
+    ],
+    "feat_sat_rate": 0.0,
+    "feat_mean": 48.99963662790697,
+    "feat_std": 15.933839254714869,
+    "reference_semantics": "post-fix semantics: feat saturation ~ 0, mean ~ 49 (zp_in), std ~ 16",
+    "usage": "this feature is the origin of the comparison chain: it will be cross-checked against the board-side NPU inference"
+  },
+  "health": {
+    "nonzero_dynamics": true,
+    "channels_separable": true,
+    "clip_free": true,
+    "pattern_detected": false
+  },
+  "verdict": "PASS",
+  "conclusion": "PC-side capture quality check; the golden feature recorded here is the true-chain origin and will be compared against the board-side NPU inference"
+}

@@ -148,19 +148,26 @@ def _state_case(text: str, state: str) -> str:
 
 
 def test_self_test_stub_keeps_s1_s2_same_cycle_done_semantics():
-    """Guard 2: watchdog limit 4096 and "done on the last beat" stay pinned."""
+    """Guard 2: watchdog limit 65536 and "done on the last beat" stay pinned.
+
+    The 4096-cycle CPU-bridge value was raised to 65536 (524 us at 125 MHz)
+    because this design issues a dummy write before every read; see the
+    header comment of ``ddr3_ctrl_axi.v`` (the stall source itself is still
+    unmeasured).  The stub must record the same value, otherwise the model
+    tests would exercise a different watchdog than the RTL.
+    """
     rtl = _read(DDR3_CTRL_V)
     stub = _read(SELF_TEST_MODEL)
 
     limit = re.search(r'\bparameter\s+integer\s+AXI_TO_LIMIT\s*=\s*(\d+)', rtl)
     assert limit is not None, (
-        f'{DDR3_CTRL_V}: expected "parameter integer AXI_TO_LIMIT = 4096", '
+        f'{DDR3_CTRL_V}: expected "parameter integer AXI_TO_LIMIT = 65536", '
         f'actual no such parameter')
-    assert int(limit.group(1)) == 4096, (
-        f'{DDR3_CTRL_V}: AXI_TO_LIMIT expected 4096, actual {limit.group(1)}')
+    assert int(limit.group(1)) == 65536, (
+        f'{DDR3_CTRL_V}: AXI_TO_LIMIT expected 65536, actual {limit.group(1)}')
 
-    assert re.search(r'AXI_TO_LIMIT\s*=\s*4096', stub), (
-        f'{SELF_TEST_MODEL}: expected the stub to record "AXI_TO_LIMIT = 4096" '
+    assert re.search(r'AXI_TO_LIMIT\s*=\s*65536', stub), (
+        f'{SELF_TEST_MODEL}: expected the stub to record "AXI_TO_LIMIT = 65536" '
         f'(S3 semantics shared with {DDR3_CTRL_V}), actual not found')
 
     # S2: wready_beat and the write-completion predicate share one condition,

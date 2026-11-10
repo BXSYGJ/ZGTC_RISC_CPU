@@ -110,7 +110,7 @@ class CtrlStub:
         `wready_pattern` use `wready_tail`, which lets a vector stall the IP
         forever (F2 counter-case) or stream every beat (normal run).
     to_limit:
-        Watchdog limit (the RTL uses AXI_TO_LIMIT = 4096; a small value keeps
+        Watchdog limit (the RTL uses AXI_TO_LIMIT = 65536; a small value keeps
         the vectors short while preserving the S3 semantics).
     r_data_enable:
         When False the S_R phase never raises rvalid, so the read is aborted
