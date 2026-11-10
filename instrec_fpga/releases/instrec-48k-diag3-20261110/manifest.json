@@ -1,0 +1,60 @@
+{
+    "Schema":  1,
+    "BuildSet":  "full",
+    "RunName":  "20261110-125539-54d5cc17",
+    "StopAfter":  "",
+    "SourceManifest":  "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\pds\\20261110-125539-54d5cc17\\source-manifest.json",
+    "SourcesUnchanged":  true,
+    "BuildDirectory":  "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\pds\\20261110-125539-54d5cc17",
+    "Device":  "PG2L100H-6IFBG676",
+    "TopModule":  "instrec_top",
+    "ProjectName":  "instrec_top_pds",
+    "PdsRoot":  "H:\\GG\\pango\\PDS_2022.2-SP6.4",
+    "LicenseFile":  "D:\\0000\\111\\001\\Pango\\Lisence\\pds_windows_c03532573d51_2029-09-04.lic",
+    "StageStatus":  [
+                        {
+                            "Stage":  "compile",
+                            "Status":  "OK"
+                        },
+                        {
+                            "Stage":  "synthesize",
+                            "Status":  "OK"
+                        },
+                        {
+                            "Stage":  "dev_map",
+                            "Status":  "OK"
+                        },
+                        {
+                            "Stage":  "pnr",
+                            "Status":  "OK"
+                        },
+                        {
+                            "Stage":  "report_timing",
+                            "Status":  "OK"
+                        },
+                        {
+                            "Stage":  "gen_bit_stream",
+                            "Status":  "OK"
+                        }
+                    ],
+    "Utilization":  [
+                        "LUT total: 34271/66600 (51%)",
+                        "FF total: 38703/133200 (29%)",
+                        "APM: 90/240 (38%)",
+                        "BKCL: 6/6 (100%)",
+                        "CCS: 1/1 (100%)",
+                        "Distributed RAM: 940/19900 (5%)",
+                        "DRM: 130/155 (84%)",
+                        "GPLL: 3/6 (50%)",
+                        "HCKB: 29/96 (31%)",
+                        "IO: 120/300 (40%)",
+                        "PPLL: 2/6 (34%)",
+                        "SCANCHAIN: 0/1 (0%)",
+                        "USCM: 6/32 (19%)"
+                    ],
+    "Wns":  -1.317,
+    "Whs":  0.088,
+    "Bitstream":  "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\build\\pds\\20261110-125539-54d5cc17\\generate_bitstream\\instrec_top.sbit",
+    "BitstreamSha256":  "01FE43366DDCC9C3FFF707C504F415DFB8338FA896935139C2E434B87F14B8F9",
+    "GeneratedUtc":  "2026-11-10T05:45:36.1439703Z"
+}
