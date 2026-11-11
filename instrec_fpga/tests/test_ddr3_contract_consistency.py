@@ -29,7 +29,8 @@ sys.path.insert(0, str(_HERE.parent / "scripts"))
 
 import ddr3_ctrl_model as dm            # noqa: E402
 import ddr3_mem_model as mm             # noqa: E402
-from ddr3_layout import HW_ADDR_UNIT, BYTE_ADDR_UNIT, PAGE_BYTES  # noqa: E402
+from ddr3_layout import (LEGACY_X4_ADDR_UNIT, PROD_ADDR_UNIT,  # noqa: E402
+                         PAGE_BYTES)
 
 PCM_PAGES = 8256
 FEAT_SLOTS = 64 * 258                   # 16,512 uint8
@@ -59,7 +60,7 @@ def test_audio_write_to_mel_read_matches_only_under_byte_semantics():
     expected = _pcm_samples(pages)
 
     # ADDR_UNIT=4 (measured): sparse page writes vs 16-beat reads disagree.
-    mem4 = mm.Ddr3PhysicalMemory(addr_unit=HW_ADDR_UNIT, fill=0x00)
+    mem4 = mm.Ddr3PhysicalMemory(addr_unit=LEGACY_X4_ADDR_UNIT, fill=0x00)
     mm.write_pages(mem4, 0, pages)
     got4 = mm.mel_read_samples(mem4, 0)
     assert len(got4) == len(expected)
@@ -72,7 +73,7 @@ def test_audio_write_to_mel_read_matches_only_under_byte_semantics():
                        for s in range(16)]
 
     # ADDR_UNIT=1 (documented byte semantics): exact recovery.
-    mem1 = mm.Ddr3PhysicalMemory(addr_unit=BYTE_ADDR_UNIT, fill=0x00)
+    mem1 = mm.Ddr3PhysicalMemory(addr_unit=PROD_ADDR_UNIT, fill=0x00)
     mm.write_pages(mem1, 0, pages)
     assert mm.mel_read_samples(mem1, 0) == expected
 
@@ -80,12 +81,12 @@ def test_audio_write_to_mel_read_matches_only_under_byte_semantics():
 def test_weight_upload_to_wdma_read_matches_only_under_byte_semantics():
     image = bytes((i * 2654435761) & 0xFF for i in range(4096))
 
-    mem4 = mm.Ddr3PhysicalMemory(addr_unit=HW_ADDR_UNIT)
+    mem4 = mm.Ddr3PhysicalMemory(addr_unit=LEGACY_X4_ADDR_UNIT)
     mm.upload_frames(mem4, 0x100000, image)
     got4 = mm.read_contiguous(mem4, 0x100000, len(image))
     assert got4 != image
 
-    mem1 = mm.Ddr3PhysicalMemory(addr_unit=BYTE_ADDR_UNIT)
+    mem1 = mm.Ddr3PhysicalMemory(addr_unit=PROD_ADDR_UNIT)
     mm.upload_frames(mem1, 0x100000, image)
     assert mm.read_contiguous(mem1, 0x100000, len(image)) == image
 
@@ -94,7 +95,7 @@ def test_feat_export_is_recoverable_via_diag_destride_under_both_units():
     elements = [(e * 7919) & 0xFF for e in range(FEAT_SLOTS)]
     slots = mm.feat_slots(elements)
 
-    for unit in (HW_ADDR_UNIT, BYTE_ADDR_UNIT):
+    for unit in (LEGACY_X4_ADDR_UNIT, PROD_ADDR_UNIT):
         mem = mm.Ddr3PhysicalMemory(addr_unit=unit)
         # feat export writes 16 slots (32 B) per single-beat command
         npages = FEAT_SLOTS // 16
@@ -106,7 +107,7 @@ def test_feat_export_is_recoverable_via_diag_destride_under_both_units():
 
 def test_repeated_readback_of_a_locked_window_is_byte_identical():
     pages = _pcm_pages(1024)
-    mem = mm.Ddr3PhysicalMemory(addr_unit=HW_ADDR_UNIT)
+    mem = mm.Ddr3PhysicalMemory(addr_unit=LEGACY_X4_ADDR_UNIT)
     mm.write_pages(mem, 0, pages)
     first = mm.read_pages_via_diag(mem, 0, 1024)
     for _ in range(3):
@@ -118,7 +119,7 @@ def test_cross_page_cross_burst_cross_window_monotonic_ramp():
     # semantics across page (32 B), burst (512 B) and window (8256 pages)
     # boundaries without dropping or reordering a single sample.
     pages = _pcm_pages()
-    mem = mm.Ddr3PhysicalMemory(addr_unit=BYTE_ADDR_UNIT)
+    mem = mm.Ddr3PhysicalMemory(addr_unit=PROD_ADDR_UNIT)
     mm.write_pages(mem, 0, pages)
     got = mm.mel_read_samples(mem, 0)
     assert got == _pcm_samples(pages)

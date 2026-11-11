@@ -215,7 +215,14 @@ module ddr3_ctrl_axi #(
     // IP-side outputs
     // ------------------------------------------------------------------
     assign axi_awvalid   = (state == S_AW) || (state == S_DW_AW);
-    assign axi_awaddr    = cur_addr;
+    // ADDRESS UNIT (2026-11-11, docs/DDR3_CONTRACT_20261111.md): the Pango
+    // DDR3 IP consumes axi_*addr as a 32-bit word index, so the byte
+    // addresses produced by every master (audio page<<5, mel cmd<<9, weight
+    // seq<<8, diag frame<<8) must be shifted right by 2 at the IP boundary.
+    // cur_addr stays a byte address end-to-end inside this controller (the
+    // arbiter region/alignment check and the same-address dummy write both
+    // operate on byte addresses); only the IP-facing AXI address is scaled.
+    assign axi_awaddr    = {2'b00, cur_addr[27:2]};
     assign axi_awuser_ap = AXI_USER_AP;
     assign axi_awuser_id = {2'b00, cur_master};
     assign axi_awlen     = (state == S_DW_AW) ? 4'd0 : cur_len[3:0];
@@ -229,7 +236,7 @@ module ddr3_ctrl_axi #(
                            : 32'hFFFFFFFF;
 
     assign axi_arvalid   = (state == S_AR);
-    assign axi_araddr    = cur_addr;
+    assign axi_araddr    = {2'b00, cur_addr[27:2]};
     assign axi_aruser_ap = AXI_USER_AP;
     assign axi_aruser_id = {2'b00, cur_master};
     assign axi_arlen     = cur_len[3:0];

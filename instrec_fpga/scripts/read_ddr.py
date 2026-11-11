@@ -6,21 +6,26 @@ unit-tested functions here (or in ddr3_layout.py); the serial transport is a
 thin plug-in ``reader(cmd_addr) -> 256-byte frame`` so the geometry is testable
 with no board attached.
 
-Measured contract (bitstream 69041235..., docs/DDR3_CONTRACT_20261111.md):
+Contract (docs/DDR3_CONTRACT_20261111.md section 6):
 
-    physical_byte = ADDR_UNIT * cmd_addr + 32 * beat        ADDR_UNIT = 4
+    physical_byte = ADDR_UNIT * cmd_addr + 32 * beat
 
-A 256-byte ``R`` frame therefore holds ``256/(32*ADDR_UNIT)`` whole 32-byte
-pages; reading a contiguous logical range means issuing one ``R`` per frame at
-the page-strided command address and de-striding the payloads.  Two consecutive
-frames at the old 256-byte command stride alias (they sample the same physical
-gap), which is what the previous raw read-back did wrong.
+Two bitstream generations exist and MUST NOT be confused:
+
+  * NEW bitstream (after the ddr3_ctrl_axi >>2 fix): byte semantics,
+    ADDR_UNIT = 1.  This is the DEFAULT (PROD_ADDR_UNIT): a 256-byte ``R``
+    frame returns 8 whole contiguous pages, no de-striding needed.
+  * OLD bitstream (SHA-256 69041235...): ADDR_UNIT = 4, the IP treats the
+    command address as a word index.  Reading it requires LEGACY_X4_ADDR_UNIT
+    and the destride reconstruction.  Do NOT pass LEGACY_X4_ADDR_UNIT for the
+    new bitstream: it re-introduces the 3/4 aliasing this fix removes.
 """
 
 from __future__ import annotations
 
-from ddr3_layout import (FEAT_SLOT_BYTES, FRAME_BYTES, HW_ADDR_UNIT,
-                         PAGE_BYTES, destride, frame_plan, pages_for)
+from ddr3_layout import (FEAT_SLOT_BYTES, FRAME_BYTES, LEGACY_X4_ADDR_UNIT,
+                         PAGE_BYTES, PROD_ADDR_UNIT, destride, frame_plan,
+                         pages_for)
 
 # --- Production PCM window (audio_sink, mono lane) --------------------------
 PCM_CHANNELS = 1
@@ -44,12 +49,12 @@ def pcm_win_base(win):
     return PCM_LEFT_BASE + (PCM_WIN_STRIDE if (win & 1) else 0)
 
 
-def region_plan(addr, length, addr_unit=HW_ADDR_UNIT):
+def region_plan(addr, length, addr_unit=PROD_ADDR_UNIT):
     """Return the frame plan that reads ``length`` logical bytes at ``addr``."""
     return frame_plan(addr, pages_for(length), addr_unit)
 
 
-def read_region(reader, addr, length, addr_unit=HW_ADDR_UNIT):
+def read_region(reader, addr, length, addr_unit=PROD_ADDR_UNIT):
     """Read ``length`` logical bytes via ``reader(cmd_addr) -> 256 B frame``."""
     plan = frame_plan(addr, pages_for(length), addr_unit)
     frames = []
@@ -62,12 +67,12 @@ def read_region(reader, addr, length, addr_unit=HW_ADDR_UNIT):
     return destride(frames, plan)
 
 
-def read_pcm(reader, win, addr_unit=HW_ADDR_UNIT):
+def read_pcm(reader, win, addr_unit=PROD_ADDR_UNIT):
     """Read the locked PCM window ``win`` as a de-strided int16 byte stream."""
     return read_region(reader, pcm_win_base(win), PCM_BYTES, addr_unit)
 
 
-def read_feat(reader, addr_unit=HW_ADDR_UNIT):
+def read_feat(reader, addr_unit=PROD_ADDR_UNIT):
     """Read the 16,512 feature slots and return the uint8 element stream."""
     raw = read_region(reader, FEAT_BASE, FEAT_BYTES, addr_unit)
     return bytes(raw[0::FEAT_SLOT_BYTES])

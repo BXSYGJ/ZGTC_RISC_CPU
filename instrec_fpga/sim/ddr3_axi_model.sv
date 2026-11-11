@@ -37,11 +37,13 @@
 //                              counts S_R && !rvalid, so it never times out)
 //                          2 = rvalid stuck low (read data never returns)
 //
-// Memory: a flat 256-bit beat array indexed by addr[20:5], i.e. it covers the
-// low 2 MB of the 28-bit address space. That is enough for every image used
-// by the testbench (self-test region 0x0030_0000..0x0030_3FFF, spectral export
-// 0x0020_0000.., PCM windows). It is NOT a general DDR3 model; do not use it
-// to check absolute address decode.
+// Memory: a flat 256-bit beat array.  The Pango IP consumes the AXI address
+// as a 32-bit WORD index (physical_byte = 4 * addr, one beat = 8 words), so a
+// beat's memory index is addr[27:3]; bits [18:3] cover the low 2 MB of the
+// physical space.  That is enough for every image used by the testbench
+// (self-test region 0x0030_0000..0x0030_3FFF, spectral export 0x0020_0000..,
+// PCM windows). It is NOT a general DDR3 model; do not use it to check
+// absolute address decode.
 //
 // This file is simulation-only. It is not part of src/** and is not built by
 // PDS.
@@ -163,14 +165,15 @@ module ddr3_axi_model #(
     reg [19:0] r_stall_cnt;
 
     // ------------------------------------------------------------------
-    // Memory index helpers: 32-byte beats, low 128 KB window
-    // ------------------------------------------------------------------
-    // 16-bit index covers the low 2 MB of the address space; the self-test
-    // region (0x0030_0000) and the PCM windows (0x0000_0020 / 0x0008_4020)
-    // then never alias each other (a 12-bit index did alias them, which
-    // produced a false self-test data mismatch in an earlier revision).
-    wire [15:0] wr_mem_idx = aw_addr_r[20:5] + {11'd0, wr_beat_idx};
-    wire [15:0] rd_mem_idx = ar_addr_r[20:5] + {11'd0, rd_beat_idx};
+    // Memory index helpers: the IP treats the AXI address as a word index
+    // (physical_byte = 4 * addr, 8 words per 32-byte beat), so a beat's index
+    // is addr[27:3].  bits [18:3] are the 16-bit window covering the low 2 MB
+    // of physical space; the self-test region (0x0030_0000) and the PCM
+    // windows (0x0000_0020 / 0x0008_4020) then never alias each other (a
+    // 12-bit index did alias them, which produced a false self-test data
+    // mismatch in an earlier revision).
+    wire [15:0] wr_mem_idx = aw_addr_r[18:3] + {11'd0, wr_beat_idx};
+    wire [15:0] rd_mem_idx = ar_addr_r[18:3] + {11'd0, rd_beat_idx};
 
     // ------------------------------------------------------------------
     // Ready generation (fault-injected)

@@ -656,6 +656,25 @@ register(Case(
 ))
 
 
+# T38: byte-address semantics proof for the >>2 IP-boundary fix.  Drives the
+# three production paths (audio page writes -> mel burst read, weight frame
+# writes -> wdma burst read, feat page writes -> diag burst read) through the
+# REAL ddr3_ctrl_axi against the behavioural word-address model, with a per-byte
+# absolute-address beat pattern so any x4/address-scaling error shifts the data
+# and fails the compare.
+register(Case(
+    name="ddr3_byteaddr",
+    tb="tb_ddr3_byteaddr.sv",
+    rtl=[
+        "src/ddr3/ddr3_ctrl_axi.v",
+        "src/ddr3/ddr3_arbiter.v",
+    ],
+    timeout=600,
+    extra_flags=["-y", "sim"],
+    description=">>2 byte-address fix: sparse write vs contiguous burst read byte-equal (audio/weight/feat)",
+))
+
+
 register(Case(
     name="ui_scene",
     tb="tb_ui_scene.sv",

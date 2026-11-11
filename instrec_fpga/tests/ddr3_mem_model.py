@@ -1,10 +1,10 @@
-"""Behavioural DDR3 memory model with the measured command-address scaling.
+"""Behavioural DDR3 memory model with the command-address scaling.
 
 The Pango DDR3 IP places a burst at ``physical = ADDR_UNIT * cmd_addr`` and
 advances 32 B physically per beat (see scripts/ddr3_layout.py and
-docs/DDR3_CONTRACT_20261111.md).  With ADDR_UNIT = 4, one command of N beats
-covers a contiguous 32*N byte physical window, but consecutive commands issued
-at cmd stride 32*N leave a 96*N byte hole between their windows.
+docs/DDR3_CONTRACT_20261111.md).  After the ddr3_ctrl_axi >>2 fix the
+production default is byte semantics (ADDR_UNIT = 1); the legacy x4 bitstream
+is still reproducible by constructing ``Ddr3PhysicalMemory(addr_unit=4)``.
 
 The producers/consumers below are 1:1 transcriptions of the RTL command
 geometry, so a test can diff two production paths byte for byte:
@@ -18,7 +18,7 @@ geometry, so a test can diff two production paths byte for byte:
 """
 
 from ddr3_layout import (BEAT_BYTES, FEAT_SLOT_BYTES, FRAME_BYTES,
-                         HW_ADDR_UNIT, PAGE_BYTES, destride, frame_plan)
+                         PAGE_BYTES, PROD_ADDR_UNIT, destride, frame_plan)
 
 # Production geometry.
 PCM_PAGES = 8256                 # 264,192 B = 132,096 mono int16 per window
@@ -33,7 +33,7 @@ FEAT_ELEMENTS = 64 * 258         # 16,512 uint8
 class Ddr3PhysicalMemory:
     """Flat physical byte array addressed through the command-address unit."""
 
-    def __init__(self, addr_unit=HW_ADDR_UNIT, size=1 << 24, fill=0xA5):
+    def __init__(self, addr_unit=PROD_ADDR_UNIT, size=1 << 24, fill=0xA5):
         self.addr_unit = addr_unit
         self.fill = fill
         self.mem = bytearray([fill]) * size
