@@ -33,6 +33,8 @@
 - 板上运行的是 `build/pds/20261110-215916-aa6a43cb/generate_bitstream/instrec_top.sbit`（sha `DA3A9098…`）。
 - 该构建六阶段全过但**发布被守卫拒绝**：`Build inputs changed during PDS; refusing publication: ...ddr3_ctrl_axi.v`（退出码 1）。已用 manifest 哈希反证差异**仅为注释**（旧注释版 sha `DE7991CD…` 与 manifest 完全一致），**未绕过守卫**，直接用该 sbit 烧录。
 - `report_timing/instrec_top.rtr`：**`Some Constraints Violated`，WNS −1.402 ns**，另有多条 hold 违规（−0.015 / −0.020 / −0.040）。最差路径 `u_npu/u_store1/state[0] → u_npu/u_store1/lane_bank[6].mem`（DRM，12 级逻辑），**与音频写路径无关**；但因此**本夜 NPU 数值结果不得作为结论依据**。
+- **带计数器的新位流已产出并发布**：`build/pds/20261111-003237-53a02f27`（`SourcesUnchanged=true`，守卫未拒绝），SHA-256 `69041235…`，已复制为 `build/instrec-latest.sbit`。**WNS −0.872 ns（setup）、WHS +0.116 ns（hold 已无违规）**；LUT 34084/66600 (51%)、DRM 130/155 (84%)。最差路径变为 `u_audio_sink/col_min_mem → u_ui_renderer/graph_s3`（clk→pix_clk 跨域，−0.381 ns），属显示路径，**不再是 NPU store**。
+- **烧录阻塞**：`VID_0403` 在 PnP 中计数为 0（连续 30 s 轮询仍为 0），仅 COM5 在线；`cdt_js` 仍在运行但已无设备可握。按纪律不强关、不新起，需物理重插下载器后才能烧 `instrec-latest.sbit`。
 
 **其他已核实事实**
 - `addr[15:8] == 0xAA` 的读命令必失败（另一消费者吃掉 0xAA 字节）；`frame_read_wide`（从 addr−256 发 512 B、取 seq==1 载荷）可绕开。
