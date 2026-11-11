@@ -1,5 +1,15 @@
 # InstRec-FPGA 变更日志
 
+## 2026-11-11：撤销「PCM 静默丢页」；实测 DDR3 地址单位 ×4（主机读回混叠）
+
+- **撤销**：2026-11-10（续 2）的「PCM 窗口每 4 页仅 1 页真实 / 静默丢页 / 单拍写不被 DDR3 IP 可靠提交」作废。板上 PCM 窗口完整含 132,096 帧，无丢页、无丢数。
+- **根因**：`physical_byte = 4 × cmd_addr`，控制器 `cmd.addr` 被 DDR3 IP 当 32 bit 字地址。音频 `page_off = page_no<<5` ⇒ 页 p 落物理 `128p`；8256 页占物理 `0..0x101FA0`（1.06 MB）。各主口用同一 cmd 地址空间，互相一致 ⇒ 片上数据正确，仅空间 4 倍浪费。
+- **决定性证据**（位流 `69041235`，win=62）：`build/probe_addr_unit.py` 重叠实验 `p32[0:128]==p0[128:256]` 与 `p64[0:128]==p32[128:256]` 均 **128/128 全等**，对照仅 6/128 ⇒ 唯一自洽解 `payload[j]=physical[4A+j]`。
+- **全窗重建**：`build/read_pcm_destride.py`（cmd 步长 64，取 `payload[0:32]`/`payload[128:160]`）得 132,096 样本、`holes=0`，页边界平均跳变 3.63 < 页内平均差分 4.47 ⇒ 页序正确。产物 `build/diag/tone200_destride/win0062/pcm.raw`。
+- **旧 gap 证据重新解释**：cmd `0x40800` 在 ×4 下读物理 `0x102000`，已越过最后一页 `0x101FA0`，旧「gap 无音频」验证的是 ×4 而非否证。
+- **未解**：模拟输入仍为噪声底（重建 PCM `std=4.9`）；当前位流 `mel_done=0/npu_done=0/logits_valid=0`，板级「恒 top1」来自 `npu start/feat` 占位桩。
+- 新增（均在 gitignore 的 `build/` 下，仅记录以便复现）：`probe_addr_unit.py`、`read_pcm_destride.py`、`profile_window.py`、`analyze_stride.py`、`probe_weight_region.py`、`decode_sts.py`。
+
 ## 2026-11-10（续 2）：长读 STABLE 闭环；PCM 静默丢页（60~75% 页从未被写）；烧录位流 WNS −1.402
 
 - 长读：读回协议重写后 3×264192 B、`holes=0`、三次 sha256 全同、`RESULT: STABLE`；停帧根因定性为传输层（遥测插帧 + 主机流水线 + S_ACK 吞字节），非 DDR3 读超时。
