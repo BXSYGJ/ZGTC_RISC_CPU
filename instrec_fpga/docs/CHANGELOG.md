@@ -1,5 +1,18 @@
 # InstRec-FPGA 变更日志
 
+## 2026-11-11（夜）：降 DRM 84% 实验证伪；布线瓶颈定位为"route 主导 + 高扇出控制网"
+
+- **证伪**：把 `activation_row_store_dynamic.v` lane_bank `block_ram`→`lut_ram` 一行属性，DRM 130(84%)→98(63%)，但 bare pnr 布线失败（`E: Route-0008`，3h27m）。改已**撤销**，`git diff` 为空。
+- **根因（时序报告 `20261111-003237-53a02f27/report_timing` 逐路径核对）**：三条 setup 违例路径**全是布线主导（Route 74–76%），逻辑级数仅 8–13 级**。瓶颈不是组合逻辑太深，而是：
+  1. 高扇出控制网：NPU store 写使能/写数据选通 `N78` 扇出 170、`_N83` 扇出 124、`_N105` 扇出 73；standardize `qprod_reg[44]` 扇出 44；
+  2. 到 DRM18K/36K 的远距离布线（`mem_wd[6]` 单扇出仍 2.53 ns、`bank_wd[1]` 1.75 ns、DRM `tco` 1.565 ns）。
+- **三瓶颈（WNS）与切分方案**：
+  - **B1 NPU 激活存储写口 −0.872/−0.841**：`beat[1]`→`cmd_addr=row_base+beat*32`（24-bit 进位链）→`act_mux.held_addr`→`act_cmd_ready`→`mem_we`（扇出 32 bank）。手段：**寄存器复制 / 写命令打拍**（`mem_we/mem_wa/mem_wd` 提前一拍寄存，非"切组合逻辑"）。+1 拍延迟、约 +32×8 FF 选通复制，吞吐无影响（3 s 节奏）。
+  - **B2 standardize 量化扫描 −0.859**：`qprod_reg`(DSP 输出)→round-half-even→取负→+zp→钳位→写 `spec_bank`，7 级组合挤一拍（`S_SCAN_Q`）。手段：**拆两拍**（加 `feat_byte_reg`）。+1 拍/元素 = +16512 拍/窗 ≈ +0.13 ms，+8 FF，位级不变。
+  - **B3 UI graph 跨域 −0.381**：`col_min_mem`(DRM36K, pix_clk 侧)→15-bit 比较链→求和→小于比较→`graph_s3`。手段：**输出打拍**（DRM 读→比较结果寄存一拍）。+1 拍、+22 FF。
+- **Option B**：放开构建契约（`tests/test_build_tokens.py` 锁裸 `pnr`）启用 multi-seed，`build_full.tcl` 历史注释已证 seed1 iter15 即 Unrouted 0，但牺牲可复现性。**A/B 待用户拍板，未实施**。
+- **回归**：`python -m pytest -q` 466 passed、26 skipped（>>2 基线干净）。
+
 ## 2026-11-11（续）：DDR3 访问契约收敛 —— ×4 是功能缺陷不是"空间浪费"
 
 - **更正**：同日早前"各主口同 cmd 地址空间 ⇒ 片上数据正确、仅空间 4 倍浪费"**作废**。对"稀疏单拍写 vs 连续突发读"而言，×4 使两者不对齐，是功能缺陷。
