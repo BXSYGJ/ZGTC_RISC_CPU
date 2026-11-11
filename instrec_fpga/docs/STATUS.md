@@ -37,17 +37,30 @@
   **作废**，不要再据此改 RTL。`page_cnt=8255`、`done_cnt=16512` 与「零丢失」一致。
 - 因此「恒 top1」不是 PCM/DDR 地址问题。
 
-**仍然成立的限制**
-- 模拟输入基本无信号：重建 PCM `std=4.9`、`min=-55`、`max=21`，播放 `tone_200.wav` 后仍是噪声底
-  ⇒ 播放器→ADC 物理链路待查（与地址问题无关）。
-- 当前位流 `mel_done=0 / npu_done=0 / logits_valid=0` ⇒ NPU 未产出，`instrec_top` 的
-  `npu start/feat` 仍是占位；板级「恒 top1」来自桩，不是推断结果。
+**适用范围（重要）**
+- ×4 只影响 **diag 读回通路**（`L`/`R`+addr4B+len2B）。音频**输入链**走的是另一条
+  `C` → `R`+seq2B 的**流式抓取**通路（`scripts/i2s_capture.py`），不经 DDR 读回，**不受影响**。
+- 真实 I2S 数据早已归档：`data/i2s_capture/montage_music_20261106/{capture.wav,pcm.raw}`
+  （768000 B = 8 s @48k，git 跟踪）、`data/i2s_capture/test_tone_full.wav`；另有 10 组
+  `build/i2s_capture/*` 留档（`data_line_ok`/`fullcheck`/`realtek_tone`/`realtek_vol`/
+  `route_verify`/`tone_1k`/`tone2`/`tone6k_check`/`montage_lead1`/`montage_music`）。
+  ⇒ **音频输入链是通的**，这是既定事实，不要再用"链路待查"解释安静数据。
+- 本轮测试里重建 PCM 仍是噪声底（`std=4.9`、±55），原因只是那一次播放没有真正送到 ADC
+  （`resolve_play_device()` 返回 dev 4，未确认实际路由），**不是链路问题**；要信号直接用上面归档的 fixture。
+- 推理链已在仿真对拍通过，不是桩：`reports/golden_ref/{silence_3s,sine_440_full,sine_440_twolevel}/`
+  有 conv1..conv4 / pool1..4 / gap / feat / fc1 / fc2_logits / probs 全套 stage 输出，
+  `scripts/outputs/golden/sine_440_full_{ref_librosa,ref_torch_logits,ref_torch_probs}.npy` 是三方交叉参照。
+  `instrec_top` 里 `mel_feat_rd_addr` 由 `npu_feat_rd_addr` 驱动、`mel_npu_start` 触发 NPU、
+  `npu_probs_*`/`npu_top1_u` 直连 `ui_renderer` —— **NPU 是接上的，不是「start/feat 暂置 0」**
+  （AGENTS.md 那句是 2026-10-28 的旧描述，已过时）。
 
 **下一步**
-1. 固化 ×4 契约：读 PCM 一律 cmd 步长 64 + 去交错；或在 `ddr3_ctrl_axi` 输出
-   `axi_awaddr/axi_araddr` 前统一 `>>2`，恢复文档的字节语义（一次改动、需重建验证）。
-2. 修播放器→ADC 链路，让 PCM 有可对拍的信号。
-3. 接 mel feat 读口 + NPU start，才能拿到真实 logits。
+1. 固化 ×4 契约：**所有经 diag 读回的板级数据**（PCM/feat/logits）读之前必须按 `physical = 4×cmd`
+   换算，否则 `diag_compare.py` 过去的板级对拍结果都是混叠数据、不可信。
+2. 用 `data/i2s_capture/montage_music_20261106/pcm.raw` 作为标准输入，跑 `golden_pipeline.py`
+   得参考 feat/logits，再与板上 diag 读回（修正 ×4 后）逐级对拍，定位第一个偏差环节。
+3. 可选根治：`ddr3_ctrl_axi` 输出 `axi_awaddr/axi_araddr` 前统一 `>>2`，恢复文档的字节语义
+   （一次改动、需重建 + 全回归验证）。
 
 ## 2026-11-10（续 2）：长读稳定闭环；PCM 窗口 60~75% 页从未被写；烧录位流时序违规
 

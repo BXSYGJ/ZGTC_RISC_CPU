@@ -7,7 +7,8 @@
 - **决定性证据**（位流 `69041235`，win=62）：`build/probe_addr_unit.py` 重叠实验 `p32[0:128]==p0[128:256]` 与 `p64[0:128]==p32[128:256]` 均 **128/128 全等**，对照仅 6/128 ⇒ 唯一自洽解 `payload[j]=physical[4A+j]`。
 - **全窗重建**：`build/read_pcm_destride.py`（cmd 步长 64，取 `payload[0:32]`/`payload[128:160]`）得 132,096 样本、`holes=0`，页边界平均跳变 3.63 < 页内平均差分 4.47 ⇒ 页序正确。产物 `build/diag/tone200_destride/win0062/pcm.raw`。
 - **旧 gap 证据重新解释**：cmd `0x40800` 在 ×4 下读物理 `0x102000`，已越过最后一页 `0x101FA0`，旧「gap 无音频」验证的是 ×4 而非否证。
-- **未解**：模拟输入仍为噪声底（重建 PCM `std=4.9`）；当前位流 `mel_done=0/npu_done=0/logits_valid=0`，板级「恒 top1」来自 `npu start/feat` 占位桩。
+- **未解**：无。范围更正：×4 只影响 diag 读回通路（`L`/`R`+addr+len）；音频输入链走 `C`→`R`+seq 流式抓取（`scripts/i2s_capture.py`），不经 DDR 读回，**不受影响**。真实 I2S 数据早已归档在 `data/i2s_capture/montage_music_20261106/`（8 s @48k）与 10 组 `build/i2s_capture/*`，输入链是通的。本轮重建 PCM 为噪声底只是那次播放未真正送到 ADC，不是链路问题。推理链亦非桩：`reports/golden_ref/` 有三组输入的 conv/pool/gap/feat/fc/logits/probs 全套 stage 输出并与 librosa/torch 交叉参照；`instrec_top` 中 `mel_feat_rd_addr` 由 NPU 驱动、`mel_npu_start` 触发、`npu_probs_*` 直连 `ui_renderer`。
+- **影响**：任何经 diag 读回的板级–golden 对拍（含 `diag_compare.py` 历史结果）必须先按 `physical=4×cmd` 换算，否则都是混叠数据。
 - 新增（均在 gitignore 的 `build/` 下，仅记录以便复现）：`probe_addr_unit.py`、`read_pcm_destride.py`、`profile_window.py`、`analyze_stride.py`、`probe_weight_region.py`、`decode_sts.py`。
 
 ## 2026-11-10（续 2）：长读 STABLE 闭环；PCM 静默丢页（60~75% 页从未被写）；烧录位流 WNS −1.402
