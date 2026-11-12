@@ -1,5 +1,29 @@
 # InstRec-FPGA 变更日志
 
+## 2026-11-12：共享 beats-1 减法器解决布线拥塞；PnR 收敛并产出位流（方案 B 否决回退）
+
+- **方案 A（保留、已推送 `a797989c`）**：`src/npu/activation_row_store_dynamic.v` 把 generate 循环内
+  32 份 `beats-8'd1` 提为模块级单份 `wire beats_m1=beats-8'd1`，`mem_wa` 与 3 处 `beat==beats-1`
+  复用它。`beats[1]` 扇出 206 → 1。纯组合重构，位级等价，0 FF / 0 周期，`check_rtl` 0 违规、
+  `pytest` 466 passed / 26 skipped。
+- **实测（有效构建 `build/pds/20261112-202047-2c1207d6`）**：六阶段全 OK；布线 `Unrouted 0`
+  （274 轮 / 975 s；上一轮 multi-seed 是 496 轮 / 5396 s 后 `Route-0008` 失败）；
+  位流 `instrec_top.sbit` SHA-256 `23B496EE…`；WNS **−0.667 ns**（Option A 时代 −1.294）、
+  WHS +0.030；`clk` 域 +33.708 ns 已收敛；DRM 130/155 (84%)，DRM18K 92 / DRM36K 84 与改前逐项一致，
+  block RAM 未退化；`Total nets for routing` 77629 → 77620。
+- **方案 B（否决、已回退）**：`requant_unit.v` S2→S3 64 位组合链切一级流水（新增 `q0_q/inc_q/v2b_q/zp_q2b`，
+  +74 FF、延迟 4→5 拍），`fc_engine.v` 注释、`conv_engine.v` `fin_cnt` 22→23 同步。
+  构建 `20261112-215603-990acea9` 布线仍收敛（235 轮 / 1256 s、六阶段全过、位流产
+  `A12A05DD…`），但 **WNS −0.952、WHS +0.001，较方案 A 劣化**。按事前判据回退三文件到已推送 HEAD，
+  SHA-256 逐项一致。失败日志/位流按惯例保留未覆盖。
+- **同时纳入的工作树改动**（来自交接文档）：Option A 的 B1/B2/B3 打拍
+  （`standardize.v`、`activation_row_store_dynamic.v`、`dashboard_renderer.v`）、Option B 的
+  multi-seed PnR 契约（`build_full.tcl`、`test_build_tokens.py`）、`docs/HANDOFF_20261112.md`。
+- **git**：`XSY` 分支推送 `origin/XSY`，`3b265bde..a797989c`，含此前积压 68 个提交；远端与本地
+  HEAD 一致。未动构建契约测试、未并行 `pds_shell`、未做 DRM→distributed 转换。
+- 剩余 −0.667 在 `ddrphy_sysclk`（DDR3 IP 域，281 endpoints / TNS −42.552）与 `pix_clk` −0.095；
+  这些域 STATUS 已标注「用户逻辑改不动、靠布局、能跑就行可暂放」。勿再对 NPU 数值核心做打拍类尝试。
+
 ## 2026-11-11（夜）：降 DRM 84% 实验证伪；布线瓶颈定位为"route 主导 + 高扇出控制网"
 
 - **证伪**：把 `activation_row_store_dynamic.v` lane_bank `block_ram`→`lut_ram` 一行属性，DRM 130(84%)→98(63%)，但 bare pnr 布线失败（`E: Route-0008`，3h27m）。改已**撤销**，`git diff` 为空。
