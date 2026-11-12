@@ -63,18 +63,26 @@
 > 正是 audio 写下的数据"的说法——那句只对"起始地址共享同一约定"成立，对
 > "稀疏写 vs 突发读的对齐"不成立。这正是本次收敛要抓的根因。
 
-## 5. 修复方案（暂不实施，待集中构建）
+## 5. 修复方案（已实施，2026-11-12 更新）
+
+> **状态更新（2026-11-12）**：本节原写"暂不实施，待集中构建"。实际 `>>2` 修复已落地并提交
+> （git `92047409`，`ddr3_ctrl_axi.v:225/239` 为 `{2'b00, cur_addr[27:2]}`），并随
+> 构建 `20261112-202047-2c1207d6` 完成六阶段 / 布线收敛 / 位流产出。
+> 默认读回单位已是 `ddr3_layout.PROD_ADDR_UNIT = 1`（字节语义）；`LEGACY_X4_ADDR_UNIT = 4`
+> 仅用于读旧位流 `69041235…`。**不要再按 §4 的 ×4 结论改 RTL**——那是修复前的实测。
 
 `instrec_fpga/src/ddr3/ddr3_ctrl_axi.v`：
 
 ```verilog
-assign axi_awaddr = cur_addr[27:2];   // 原 = cur_addr;  恢复字节语义
-assign axi_araddr = cur_addr[27:2];   // 原 = cur_addr;
+assign axi_awaddr = {2'b00, cur_addr[27:2]};   // 原 = cur_addr;  恢复字节语义
+assign axi_araddr = {2'b00, cur_addr[27:2]};   // 原 = cur_addr;
 ```
 
 改动后 `physical = cmd_addr`，四主口全部对齐；mel 读 / wdma 读恢复逐字节正确。
-需：重建位流 + `check_rtl.py` + `pytest` + 上板全回归（自检 → 重复长读 →
-同窗 PCM/feat/logits 对拍）。
+`cur_addr` 在控制器内部保持字节语义（arbiter 区域/对齐检查、同址 dummy write 均按字节地址），
+只在 IP 边界缩放；所有 master 命令地址 32 B 对齐，`>>2` 无损。
+回归：`check_rtl` 0 violation、`pytest` 469 passed / 26 skipped、56 个 DDR3 契约/模型测试全绿。
+**仍待板级验收**：上板自检 → 重复长读 → 同窗 PCM/feat/logits 逐级对拍（FTDI 下载器此前反复丢失）。
 
 ## 6. 主机读回契约（×4 下可行，已固化）
 
@@ -95,7 +103,7 @@ assign axi_araddr = cur_addr[27:2];   // 原 = cur_addr;
 |---|---|---|---|---|---|
 | 1 | 启动自检 `@0x00300200` 失败 | `instrec_top.v` m3 `rd_ready` 被 `st_m3_sel` 门控，自检读阶段末拍陈旧被当首拍 | `tb_ddr3_m3_share` 精确复现 `fail_addr=0x300200,to_err=0` | 1 行 `!st_done` 门控，S1 全过 | 板上重验自检 |
 | 2 | UART 长读随机停帧 | 传输层（周期遥测插帧 + 主机流水线 + `S_ACK` 吞字节），**非** DDR 超时 | 连续 3 次读 264192 B `holes=0`、sha256 全同 | 重写读回协议 | 已闭环 |
-| 3 | 地址 ×4 混叠 | IP 字地址解释（`physical=4×cmd_addr`） | probe 重叠 128/128 全等 | 见 §5（`>>2`）| 集中构建后全回归 |
+| 3 | 地址 ×4 混叠 | IP 字地址解释（`physical=4×cmd_addr`） | probe 重叠 128/128 全等 | **已实施** §5（`>>2`，git `92047409`）+ 构建 `202047` 六阶段/布线收敛/位流产 | 离线全绿（469 pytest）；**待板级逐级对拍** |
 
 **已撤销、不得再作为改 RTL 依据**：
 - "PCM 静默丢页 / 每 4 页只有 1 页有音频" —— 实为 ×4 主机读回混叠假象。
@@ -120,5 +128,7 @@ assign axi_araddr = cur_addr[27:2];   // 原 = cur_addr;
 1. 自检（st_fail=0）。
 2. 重复长读同窗 PCM，sha256 全同。
 3. 同窗 PCM / feat / logits 与 `golden_pipeline.py` 参考逐级对拍，定位首个
-   偏差环节后才允许改功能。
-4. 若判定需改 RTL（§5 `>>2`），集中构建一次，不复用旧位流。
+   偏差环节后才允许改功能。**用 `diag_dump.py` 采集时确认 `feat.bin` 是 16512 B
+   uint8 低字节流**（2026-11-12 修复：此前只读 16512 裸 B、混着 `0x00` 高字节，
+   对拍结果不可信）。
+4. §5 的 `>>2` 已实施并随 `202047` 位流构建完成；验收直接烧该位流，不复用旧位流。

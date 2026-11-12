@@ -91,3 +91,40 @@ def test_logits_decode_is_little_endian_signed():
     payload = b''.join(v.to_bytes(4, 'little', signed=True) for v in vals)
     ser = FakeSer(cap.build_frame(0, payload.ljust(256, b'\x00')))
     assert dd.read_logits(ser) == vals
+
+
+def test_feat_region_geometry_is_16bit_slots():
+    # mel_engine exports 16512 x 16-bit DDR slots; only the low byte is the
+    # uint8 feature.  The host must read the full slot stream, not 16512 raw B.
+    import ddr3_layout as layout
+    import read_ddr as formal
+
+    assert dd.FEAT_ELEMENTS == formal.FEAT_ELEMENTS == 16512
+    assert dd.FEAT_SLOT_BYTES == layout.FEAT_SLOT_BYTES == 2
+    assert dd.FEAT_SLOT_STREAM_BYTES == formal.FEAT_BYTES == 33024
+    assert dd.FEAT_BYTES == dd.FEAT_ELEMENTS == 16512
+    assert dd.FEAT_BASE == formal.FEAT_BASE == 0x00200000
+    assert dd.PROD_ADDR_UNIT == layout.PROD_ADDR_UNIT == 1
+
+
+def test_feat_slot_stream_keeps_low_bytes_only():
+    # Build a synthetic 16-bit slot stream {0x00, feat} for 16512 elements,
+    # exactly the RTL export order, then verify feat_slots_to_bytes recovers
+    # the uint8 feature stream (no interleaved 0x00, no truncation).
+    import ddr3_layout as layout
+
+    feats = bytes((i * 7 + 3) & 0xFF for i in range(dd.FEAT_ELEMENTS))
+    raw = bytearray()
+    for value in feats:
+        raw.append(value)       # low byte = uint8 feature
+        raw.append(0x00)        # high byte = 0x00 (see mel_engine bank_wd)
+    assert len(raw) == dd.FEAT_SLOT_STREAM_BYTES
+    assert layout.feat_slots_to_bytes(bytes(raw)) == feats
+
+
+def test_diag_dump_constants_match_diag_compare():
+    # feat.bin must stay the 64x258 uint8 stream diag_compare.py loads.
+    import diag_compare as dc
+
+    assert dd.FEAT_BYTES == dc.FEAT_BYTES
+    assert dd.PCM_WIN_BYTES == dc.PCM_SAMPLES * 2

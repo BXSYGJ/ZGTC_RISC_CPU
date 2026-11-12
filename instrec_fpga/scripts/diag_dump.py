@@ -12,10 +12,22 @@ Implements the host half of DIAG_READBACK_PLAN_20261110:
 Because `len` is 16 bits, long regions are read in 255x256-byte pieces
 (65,280 B) so every request stays a 256-byte multiple.
 
+Address contract: this host reads the bitstream AFTER the ddr3_ctrl_axi >>2
+fix, i.e. byte semantics (ddr3_layout.PROD_ADDR_UNIT == 1).  Pre-fix x4
+bitstreams must use the formal read_ddr.py path instead: a 256-byte 'R'
+frame aliased 3/4 of its payload there.  Do not silently mix the two.
+
+Feature slots: the mel engine exports 16,512 x 16-bit DDR slots at 0x200000
+(low byte = uint8 feature, high byte = 0x00).  We therefore read 33,024 raw
+bytes and keep every other byte, so feat.bin stays the 16,512 B uint8 stream
+diag_compare.py expects.  The old code read only 16,512 raw bytes, producing
+half the elements interleaved with 0x00 -- one source of "untrustworthy" board
+comparisons.
+
 Layout written per capture:
     build/diag/<label>/win<NNNN>/
         pcm.raw       264,192 B   (132,096 x int16, mono lane, little endian)
-        feat.bin      16,512 B    (64 x 258 uint8, mel_engine output)
+        feat.bin      16,512 B    (64 x 258 uint8, mel_engine output, low bytes)
         logits.json   8 x int32 + win/locked/mel_done/npu_done flags
         meta.json     addresses, lengths, sha256 of each file, timestamps
 
@@ -38,13 +50,18 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'scripts'))
 
 import i2s_capture as cap  # noqa: E402  (crc16_ccitt + device resolution + player)
+from ddr3_layout import (FEAT_SLOT_BYTES, PROD_ADDR_UNIT,  # noqa: E402
+                         feat_slots_to_bytes)
 
-# DDR map (must match the RTL/plan)
+# DDR map (must match the RTL/plan); keep the single source of truth in
+# ddr3_layout.py / read_ddr.py for the slot geometry.
 PCM_LASE = 0x000000
 PCM_WIN_STRIDE = 0x042000          # 264 KB per window (WIN_BYTES / PCM_WIN_STRIDE)
 PCM_WIN_BYTES = 264192             # 132,096 frames x 2 B (single lane)
 FEAT_BASE = 0x00200000
-FEAT_BYTES = 16512
+FEAT_ELEMENTS = 16512              # 64 x 258 uint8 features
+FEAT_BYTES = FEAT_ELEMENTS         # feat.bin is the uint8 (low-byte) stream
+FEAT_SLOT_STREAM_BYTES = FEAT_ELEMENTS * FEAT_SLOT_BYTES  # 33,024 raw DDR B
 MAX_CHUNK = 255 * 256              # 65,280 B per 'R'
 
 SOF = b'\xAA\x55'
@@ -192,8 +209,10 @@ def main(argv=None) -> int:
         print('reading pcm @0x%08x (%d B)' % (pcm_base, PCM_WIN_BYTES))
         pcm = read_ddr(ser, pcm_base, PCM_WIN_BYTES)
 
-        print('reading feat @0x%08x (%d B)' % (FEAT_BASE, FEAT_BYTES))
-        feat = read_ddr(ser, FEAT_BASE, FEAT_BYTES)
+        print('reading feat slots @0x%08x (%d raw B -> %d uint8 B)' %
+              (FEAT_BASE, FEAT_SLOT_STREAM_BYTES, FEAT_BYTES))
+        feat_raw = read_ddr(ser, FEAT_BASE, FEAT_SLOT_STREAM_BYTES)
+        feat = feat_slots_to_bytes(feat_raw)
 
         print('reading logits')
         logits = read_logits(ser)
@@ -218,9 +237,12 @@ def main(argv=None) -> int:
     meta = {
         'label': args.label, 'timestamp': datetime.now().isoformat(timespec='seconds'),
         'status': st,
+        'addr_unit': PROD_ADDR_UNIT,   # 1 = byte semantics (post >>2 fix)
+        'feat_slot_bytes': FEAT_SLOT_BYTES,
         'pcm': {'addr': pcm_base, 'bytes': len(pcm), 'sha256': sha256_bytes(pcm),
                 'std': float(a.std()), 'min': int(a.min()), 'max': int(a.max())},
-        'feat': {'addr': FEAT_BASE, 'bytes': len(feat), 'sha256': sha256_bytes(feat),
+        'feat': {'addr': FEAT_BASE, 'raw_bytes': len(feat_raw),
+                 'bytes': len(feat), 'sha256': sha256_bytes(feat),
                  'min': int(np.frombuffer(feat, np.uint8).min()),
                  'max': int(np.frombuffer(feat, np.uint8).max()),
                  'mean': float(np.frombuffer(feat, np.uint8).mean())},

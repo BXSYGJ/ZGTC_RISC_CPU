@@ -1,5 +1,27 @@
 # InstRec-FPGA 变更日志
 
+## 2026-11-12（夜）：修复 DDR3 诊断读回的 feat 槽宽缺陷；纠正契约文档脱节
+
+- **背景**：用户反馈「DDR3 读写比较混乱」。系统核对后确认 RTL 侧 `>>2` 修复早已落地
+  （`ddr3_ctrl_axi.v:225/239`，git `92047409`），`ddr3_layout.py` / `read_ddr.py` 已统一
+  `PROD_ADDR_UNIT=1`（字节语义），56 个 DDR3 契约/模型测试全绿。混乱主要来自**文档脱节 +
+  第二套裸读实现**。
+- **功能修复 `scripts/diag_dump.py`**：feat 区在 DDR 中是 16512 个 **16-bit 槽**
+  （`mel_engine.v:687` `ex_cmd_addr = 0x200000 + elem*2`，低字节 uint8 特征、高字节 `0x00`），
+  即 33024 原始 B。原脚本只读 `FEAT_BYTES=16512` 裸 B 直接当 uint8 存 `feat.bin` ⇒
+  只覆盖前半槽且夹杂 `0x00`，`diag_compare.py` 的逐级对拍因此不可信（STATUS 早有记载）。
+  改为：复用 `ddr3_layout.FEAT_SLOT_BYTES` / `feat_slots_to_bytes()` 单一真源，读
+  `FEAT_SLOT_STREAM_BYTES=33024` B 后取低字节，`feat.bin` 仍是 16512 B uint8（消费方不变）。
+  `meta.json` 新增 `addr_unit` / `feat_slot_bytes` / `raw_bytes` 自描述字段。
+- **等价性验证**：行为模型对拍证明在 `PROD_ADDR_UNIT=1` 下，裸读与 `read_ddr.py` 正式
+  de-stride 路径的 PCM / feat 输出**逐字节一致**（`unit=4` 仍只走 `read_ddr.py`）。
+- **测试**：`tests/test_diag_dump.py` 新增 3 用例（槽几何一致性、低字节提取、
+  与 `diag_compare.py` 常量对齐）；全量 **469 passed / 26 skipped**，`check_rtl` 0 violation。
+- **文档订正**：`docs/DDR3_CONTRACT_20261111.md` §5 标题「暂不实施」→「已实施」并写明
+  提交/构建证据；§7 故障账本 #3 状态更新；§9 验收步骤补 feat.bin 校验点；
+  `STATUS.md` 顶部横幅追加核对结论。**不再按 §4 的 ×4 结论改 RTL**（那是修复前实测）。
+- 仍待板级：FTDI 下载器恢复后烧 `202047` 位流，走自检 → 重复长读 → 同窗逐级对拍。
+
 ## 2026-11-12：共享 beats-1 减法器解决布线拥塞；PnR 收敛并产出位流（方案 B 否决回退）
 
 - **方案 A（保留、已推送 `a797989c`）**：`src/npu/activation_row_store_dynamic.v` 把 generate 循环内
