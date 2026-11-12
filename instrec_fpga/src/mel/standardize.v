@@ -168,6 +168,7 @@ module standardize #(
     localparam [3:0] S_SCAN_D   = 4'd11;
     localparam [3:0] S_SCAN_M   = 4'd12;
     localparam [3:0] S_SCAN_QM  = 4'd13;
+    localparam [3:0] S_SCAN_QW  = 4'd14;   // quantized feature write beat
 
     reg [3:0]         state;
 
@@ -182,6 +183,7 @@ module standardize #(
     reg signed [16:0] d_reg;
     reg signed [38:0] z_prod_reg;
     reg signed [47:0] qprod_reg;
+    reg [7:0]         feat_byte_reg;  // registered quantized feature byte
 
     // scan position (feature-element index 0..16511)
     reg [14:0]        scan_cnt;
@@ -275,10 +277,10 @@ module standardize #(
     // ------------------------------------------------------------------
     assign db_rd_en     = (state == S_SCAN_RD);
     assign db_rd_addr   = scan_cnt + DB_ADDR_OFFSET_C;
-    assign feat_wr_en   = (state == S_SCAN_Q);
+    assign feat_wr_en   = (state == S_SCAN_QW);
     assign feat_valid   = feat_wr_en;
     assign feat_wr_addr = scan_cnt;
-    assign feat_wr_data = feat_byte;
+    assign feat_wr_data = feat_byte_reg;
 
     assign busy = (state != S_IDLE);
 
@@ -298,6 +300,7 @@ module standardize #(
             d_reg        <= 17'sd0;
             z_prod_reg   <= 39'sd0;
             qprod_reg    <= 48'sd0;
+            feat_byte_reg<= 8'd0;
             scan_cnt     <= 15'd0;
             feat_done    <= 1'b0;
             div_n        <= 48'd0;
@@ -431,8 +434,17 @@ module standardize #(
                     qprod_reg <= qprod_s48;
                     state <= S_SCAN_Q;
                 end
-                // ---- scan beat 3: quantize + feature write -----------
+                // ---- scan beat 3: latch the quantized feature byte ----
+                // feat_byte (round-half-even -> negate -> +zp -> clamp) is
+                // a 7-level combinational chain off the DSP qprod_reg.
+                // Latching it here splits that path in half so the feature
+                // write data is a clean register output; value is identical.
                 S_SCAN_Q: begin
+                    feat_byte_reg <= feat_byte;
+                    state         <= S_SCAN_QW;
+                end
+                // ---- scan beat 4: write the registered feature byte ----
+                S_SCAN_QW: begin
                     if (scan_cnt == OUT_ELEM_LAST) begin
                         feat_done <= 1'b1;  // pulse, sampled in S_IDLE
                         state     <= S_IDLE;

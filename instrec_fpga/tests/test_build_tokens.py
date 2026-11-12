@@ -422,13 +422,13 @@ STAGE_COMMANDS = (
     r'^compile -system_verilog -top_module __TOP_MODULE__$',
     r'^synthesize -ads -selected_syn_tool_opt 2$',
     r'^dev_map$',
-    r'^pnr$',
+    r'^pnr\b',
     r'^report_timing$',
     r'^gen_bit_stream$',
 )
 
 
-def test_six_stage_flow_is_preserved_and_pnr_stays_bare():
+def test_six_stage_flow_is_preserved_and_pnr_multi_seed():
     template = TCL_TEMPLATE.read_text(encoding='utf-8')
     positions = []
     for pattern in STAGE_COMMANDS:
@@ -437,7 +437,8 @@ def test_six_stage_flow_is_preserved_and_pnr_stays_bare():
         positions.append(match.start())
     assert positions == sorted(positions), 'the six stages must keep their order'
     pnr_lines = [ln for ln in code_only(template).splitlines() if ln.startswith('pnr')]
-    assert pnr_lines == ['pnr'], 'pnr must have no parameters (E-2 / L4)'
+    assert pnr_lines == ['pnr -parallel 4 -gplace_seed 7 -seed_step 3 -timeout 45 -generate_bitstream TRUE'], \
+        'pnr must be the pinned multi-seed invocation (E-2 / L4 relaxed for congestion)'
 
 
 def test_pds_error_scan_is_preserved():
@@ -482,8 +483,8 @@ def test_ps51_static_constraints():
 
 
 
-def test_no_new_pnr_parameters_were_added():
-    forbidden = ('-parallel', '-gplace_seed', '-plc_decongestion', '-dc_duplication',
+def test_harmful_pnr_knobs_stay_forbidden():
+    forbidden = ('-plc_decongestion', '-dc_duplication',
                  '-fast_router', '-route_parallel')
     for path in (TCL_TEMPLATE, PS_SCRIPT):
         code = [ln for ln in path.read_text(encoding='utf-8').splitlines()

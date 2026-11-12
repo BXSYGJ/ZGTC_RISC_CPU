@@ -49,6 +49,13 @@ module dashboard_renderer #(parameter SIMULATION = 0) (
     reg [6:0] pos_amp, neg_amp;
     reg [15:0] neg_magnitude;
     reg [23:0] heat;
+    // Wave-band pipeline: register the amplitude extraction (which runs a
+    // 16-bit complement carry chain off the wave_min DRM read) one beat,
+    // and shift the wave coordinates to match, so the whole wave graphic is
+    // drawn from registered values and the wave_min->compare path is split.
+    reg [6:0] pos_amp_r, neg_amp_r;
+    reg [10:0] x_s2, y_s2;
+    reg wave_s2, wave_ready_s2, mute_s2;
     always @* begin
         // Features are standardized unsigned bytes, not calibrated dB.
         if (spec_ram_data < 64) heat = {8'h16, (8'h24 + (spec_ram_data >> 1)), (8'h40 + spec_ram_data)};
@@ -69,11 +76,11 @@ module dashboard_renderer #(parameter SIMULATION = 0) (
         neg_magnitude = (~wave_min) + 16'd1;
         neg_amp = wave_min[15] ? neg_magnitude[15:9] : 7'd0;
         if (neg_amp > 64) neg_amp = 64;
-        if (wave_s1) begin
+        if (wave_s2) begin
             graph_color = 24'h0d1726;
-            if (x_s1[7:0] == 128 || y_s1 == 304 || y_s1 == 368 || y_s1 == 432) graph_color = 24'h27364c;
-            if (wave_ready_s1 && y_s1 >= (11'd368 - {4'd0,pos_amp}) && y_s1 <= (11'd368 + {4'd0,neg_amp}))
-                graph_color = mute_s1 ? 24'h9aabc0 : 24'h36d6c5;
+            if (x_s2[7:0] == 128 || y_s2 == 304 || y_s2 == 368 || y_s2 == 432) graph_color = 24'h27364c;
+            if (wave_ready_s2 && y_s2 >= (11'd368 - {4'd0,pos_amp_r}) && y_s2 <= (11'd368 + {4'd0,neg_amp_r}))
+                graph_color = mute_s2 ? 24'h9aabc0 : 24'h36d6c5;
         end
         if (spec_s1) begin
             graph_color = 24'h0d1726;
@@ -104,6 +111,13 @@ module dashboard_renderer #(parameter SIMULATION = 0) (
         result_s1 <= result_ready && class_idx < 8;
         mute_s1 <= mute_flag_sync;
         class_s1 <= class_idx; percentages_s1 <= percentages;
+        pos_amp_r <= pos_amp;
+        neg_amp_r <= neg_amp;
+        x_s2 <= x_s1;
+        y_s2 <= y_s1;
+        wave_s2 <= wave_s1;
+        wave_ready_s2 <= wave_ready_s1;
+        mute_s2 <= mute_s1;
         graph_s2 <= graph_color;
         graph_s3 <= graph_s2;
         rgb <= de_pipe[2] ? (text_on ? text_rgb : graph_s3) : 24'd0;

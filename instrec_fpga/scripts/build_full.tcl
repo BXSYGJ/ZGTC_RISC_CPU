@@ -130,10 +130,14 @@ dev_map
 # longer applies, that path was fixed in RTL).  Without it the 48 kHz build
 # stalled at iteration 394 (1318 nets) after 3 h; the router flag does not
 # change the final image.
-# 2026-11-08: tried -fast_router (Flow-0075: not a valid option on this
-# PDS build) and -gplace_seed 1 (forbidden by the build-contract tests,
-# which pin the PnR line to a bare `pnr`).  Neither change is kept: the
-# PnR invocation must stay exactly `pnr` for reproducibility.
-pnr
+# 2026-11-12: Option A (B1/B2/B3 pipelining) regressed WNS -0.872 -> -1.294;
+# the setup violations stay routing-dominated (Route 90%+) on high-fanout nets
+# (beats[1] fanout 206, scan_cnt), so the bottleneck is congestion, not logic
+# depth.  Multi-seed is the only parallelism this device allows
+# (-number_of_router_thread is rejected) and historically closed routing at
+# iteration 15 (Unrouted 0).  Four seeds took over five hours, so cap the run
+# with -timeout.  -plc_decongestion / -dc_duplication measured worse route
+# START (47559 vs 33302 unrouted) and stay forbidden by the contract tests.
+pnr -parallel 4 -gplace_seed 7 -seed_step 3 -timeout 45 -generate_bitstream TRUE
 report_timing
 gen_bit_stream

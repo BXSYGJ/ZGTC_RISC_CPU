@@ -43,19 +43,36 @@ module activation_row_store_dynamic (
     wire accept_r=rd_valid && ((state==RDATA) || (state==RCMD && cmd_ready));
     wire [12:0] scan_next=(state==EMIT && out_ready) ? count+1 : count;
     wire [7:0] ram_ra=(state==WCMD || state==WDATA) ? beat : scan_next[12:5];
+    // Compute beats-1 once here instead of replicating the subtractor inside
+    // all 32 lane banks.  beats[1] previously drove 206 loads; this leaves
+    // the register driving one subtractor and shortens the high-fanout net.
+    wire [7:0] beats_m1=beats-8'd1;
     genvar g;
     generate for(g=0;g<32;g=g+1) begin: lane_bank
         (* syn_ramstyle = "block_ram" *) reg [7:0] mem [0:BEATS-1];
         reg [7:0] q;
+        // Register the RAM write command one beat ahead: the registered
+        // we/wa/wd drive the 32 block-RAM write ports, cutting the long
+        // beat->cmd_addr->act_cmd_ready->accept_r->mem_we combinational
+        // path and its high-fanout route before the DRM write ports.
+        // Bit-exact: writes shift by one cycle, but every read port
+        // (WDATA replay / EMIT) fires only after all writes for its row
+        // have landed, so the stored row is unchanged.
+        reg [7:0] wd_r;
+        reg [7:0] wa_r;
+        reg       we_r;
         assign row_q[g*8 +:8]=q;
         wire fill_lane=(state==FILL && in_valid && scatter[4:0]==g);
         wire fill_pad=(state==FILL && in_valid && !fill_lane && row_bytes[4:0]==16 && count==row_bytes-1 && g>=16);
         wire mem_we=accept_r || fill_lane || fill_pad;
-        wire [7:0] mem_wa=accept_r ? beat : fill_lane ? scatter[12:5] : beats-8'd1;
+        wire [7:0] mem_wa=accept_r ? beat : fill_lane ? scatter[12:5] : beats_m1;
         wire [7:0] mem_wd=accept_r ? rd_data[g*8 +:8] : fill_lane ? in_data : 8'd0;
         always @(posedge clk) begin
             q<=mem[ram_ra<BEATS ? ram_ra : 8'd0];
-            if(mem_we) mem[mem_wa]<=mem_wd;
+            we_r<=mem_we;
+            wa_r<=mem_wa;
+            wd_r<=mem_wd;
+            if(we_r) mem[wa_r]<=wd_r;
         end
     end endgenerate
     always @(posedge clk or negedge rst_n) begin
@@ -93,7 +110,7 @@ module activation_row_store_dynamic (
                 end
                 WCMD: if(cmd_ready) state<=WDATA;
                 WDATA: if(wr_ready) begin
-                    if(beat==beats-1) begin
+                    if(beat==beats_m1) begin
                         row_done<=1; beat<=0; grp<=0; col<=0; lane<=0;
                         if(row==height-1) begin done<=1; state<=IDLE; end
                         else begin row<=row+1; row_base<=row_base+stride; state<=FILL; end
@@ -103,12 +120,12 @@ module activation_row_store_dynamic (
                 RCMD: if(cmd_ready) begin
                     // Zero-latency R response is accepted as well.
                     if(rd_valid) begin
-                        if(beat==beats-1) begin count<=0; state<=PREFETCH; end
+                        if(beat==beats_m1) begin count<=0; state<=PREFETCH; end
                         else begin beat<=beat+1; state<=RCMD; end
                     end else state<=RDATA;
                 end
                 RDATA: if(rd_valid) begin
-                    if(beat==beats-1) begin count<=0; state<=PREFETCH; end
+                    if(beat==beats_m1) begin count<=0; state<=PREFETCH; end
                     else begin beat<=beat+1; state<=RCMD; end
                 end
                 PREFETCH: state<=EMIT;
