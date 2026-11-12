@@ -1,5 +1,27 @@
 # InstRec-FPGA 变更日志
 
+## 2026-11-12（夜·续）：离线全绿复核 —— DDR3 契约仿真 6/6 PASS，恒 top1 代码层根因均已修复
+
+- **WSL 仿真能力复核**：`Ubuntu-24.04` 内 `iverilog`/`vvp`/`verilator`/`python3` 齐全
+  （旧记录「本机无 WSL 仿真」已过时）。`sim/run_sim.py all --jobs 4` →
+  **46 pass / 1 fail / 0 skip（569 s）**。
+- **唯一失败 `i2s_capture` 为历史未收敛项**（STATUS 325-335 已载：`i2s_slave_rx` L/R 翻转
+  在 27 MHz 异步过采样下漏检一半 ⇒ 2:1 抽取、frame payload 自 word2 起为零；三版相位改动
+  均引入新错位已回滚，且板级真实 PCM1808 与 TB 合成源不同）。**非本轮回归**：本轮零 RTL 改动。
+- **DDR3 契约仿真 6/6 PASS**：`ddr3_byteaddr`（`>>2` 后单拍稀疏写与连续突发读逐字节相等）、
+  `ddr3_m3_share`（自检 `rd_ready` 门控修复）、`ddr3_subsys`、`ddr3_aw_timeout`、
+  `diag_readback`、`diag_longread`；另 `mel` 基线 PASS。⇒ `DDR3_CONTRACT_20261111.md` §9
+  要求的「离线全绿」条件达成，只差板级验收。
+- **「恒 top1」代码层三个根因均已在 RTL 修复**：`standardize.v` 量化移位 = 36、
+  `npu_top.v` `ZP_IN_CONV1=47` / `ZP_OUT_FC2=58` 参数化、`ddr3_ctrl_axi.v` `>>2` 字节地址。
+  离线数值链自检：`reports/golden_ref/sine_440_full` 的 `feat` 43..121（非饱和）、
+  `fc2_logits` 八类分化（−57..64）、`probs` 非坍缩 ⇒ 数值链健康。
+- **结论/纪律**：不基于未板级确证的「mel 卡 ST_RUN」假设改核心 FSM（watchdog 目前仅置观测标志
+  不恢复，但强行拉回 IDLE 会产生假特征，可能更糟；契约 §9 要求先定位第一个偏差环节才允许改功能）。
+  剩余唯一缺口 = **板级验收**（FTDI 下载器此前反复丢失）：烧 `20261112-202047-2c1207d6` 位流
+  → 自检 → 重复长读 → 同窗 PCM/feat/logits 逐级对拍（对拍务必用本轮修复后的 feat.bin）。
+- 本轮仅文档更新，零 RTL / 零脚本 / 零构建改动。
+
 ## 2026-11-12（夜）：修复 DDR3 诊断读回的 feat 槽宽缺陷；纠正契约文档脱节
 
 - **背景**：用户反馈「DDR3 读写比较混乱」。系统核对后确认 RTL 侧 `>>2` 修复早已落地

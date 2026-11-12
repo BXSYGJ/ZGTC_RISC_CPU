@@ -8,6 +8,15 @@
 > 控制器/布局模型/读回脚本均统一字节语义，56 个契约测试全绿；修掉了 `diag_dump.py` 的 feat 槽宽
 > 缺陷（原只读 16512 裸 B、混着 `0x00` 高字节，导致板级逐级对拍不可信）。契约文档 §5/§7 已由
 > 「暂不实施」更正为「已实施」。全量 469 passed / 26 skipped。详见 `## 2026-11-12` 末段。
+> **2026-11-12（夜）离线全绿复核**：WSL Ubuntu-24.04 的 iverilog/vvp/verilator 可用（旧记录「无 WSL 仿真」已过时）。
+> `sim/run_sim.py all --jobs 4` → **46 pass / 1 fail**；唯一失败 `i2s_capture` 是 STATUS 325-335 已记载的
+> 历史未收敛项（L/R 翻转漏检致 2:1 抽取），非本轮回归（本轮零 RTL 改动）。DDR3 契约 6/6 PASS：
+> `ddr3_byteaddr`（>>2 后稀疏写=突发读逐字节相等）、`ddr3_m3_share`、`ddr3_subsys`、
+> `ddr3_aw_timeout`、`diag_readback`、`diag_longread` ⇒ 契约 §9「离线全绿」条件达成。
+> 「恒 top1」三个代码层根因均已在 RTL 修复（standardize shift=36、ZP_IN_CONV1=47/ZP_OUT_FC2=58、
+> ddr3 >>2）；golden_ref sine_440_full 的 feat 43..121 非饱和、fc2_logits 八类分化、probs 非坍缩。
+> **剩余唯一缺口是板级验收**（FTDI 下载器此前反复丢失）：烧 `202047` 位流 → 自检 → 重复长读 →
+> 同窗 PCM/feat/logits 逐级对拍。不基于未确证的「mel 卡 ST_RUN」假设改核心 FSM。
 >
 > **交接中（2026-11-10）：先读 `docs/DEV_SNAPSHOT_HANDOFF_20261110.md`** ——
 > 一句话：数值侧全部 0 LSB；板级 top1 对 200 Hz/6 kHz 仍恒定，第一个偏差环节未定位；
