@@ -948,7 +948,14 @@ module instrec_top #(
     weight_loader #(.BASE_ADDR(28'h100000)) u_weight_loader (
         .clk         (core_clk),
         .rst_n       (core_clk_rst_n),
-        .rx_valid    (rx_byte_valid && !npu_busy_u && !npu_start && !native_fault),
+        // A lone 0xAA sets weight_loader.busy (weight_loader.v:186), which
+        // would then gate the diagnostic engine off through !wl_busy for the
+        // rest of that 'R' command.  While the diag is collecting 'R'
+        // arguments the ambiguous byte therefore belongs to the diag only.
+        // The two protocols cannot legitimately overlap (a weight upload needs
+        // a quiet UART), so dropping it here costs nothing.
+        .rx_valid    (rx_byte_valid && !npu_busy_u && !npu_start && !native_fault &&
+                      !(dg_rx_in_arg && (rx_byte_data == 8'hAA))),
         .rx_data     (rx_byte_data),
         .tx_valid    (wl_tx_valid),
         .tx_data     (wl_tx_data),
