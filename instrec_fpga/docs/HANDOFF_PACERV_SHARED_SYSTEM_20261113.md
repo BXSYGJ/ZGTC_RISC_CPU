@@ -97,3 +97,11 @@ inspect_pds.py已加入Requested Frequency核对：系统与像素时钟须匹�
 当前已提交99a063d，collect_evidence.py新增最终元数据：分支、checkout_commit、系统/像素频率与setup/hold不确定性；从选中快照的pacerv_shared_system.fdc核验0.150ns。测试验证器6项全过、collector AST通过；未改任何运行输入。降频常数检查确认CPU软件只输出原始周期，主top的UART/音频/PLL/DDR等待与quota均已配套；diag ACK仍按12500000周期等待，在109.375MHz延长为约114ms，NPU 50000000周期watchdog约457ms，均作为周期预算保留。其他诊断专用top/未例化demo的默认125MHz常数不属于当前完整实例。
 
 继续等待同一runner。结束后inspect --require-qualified；若未合格按具体setup/hold路径决定修复，不能单凭降低时钟处理hold。025700的93.75MHz快照尚未启动，可在setup仍差且hold可修时采用；采用前必须同步live六份文件、Git checkout、音频测试实际频率、UART及29文件回退。当前全部功能测试路径及最终collector参数沿用上面的109.375MHz条目。VERIFICATION/RESULTS还是上一轮125MHz选中结果，必须在最终物理验收后刷新再交付。
+
+## 最终覆盖：021145六阶段结束与音频影响复核
+
+runner26725已返回：完整六阶段均成功、exit0、3789.377秒，202项冻结输入未变，位流已生成；qualified=false。最终report_timing/instrec_top.rtr十张检查表齐全：系统slow setup -1.633ns/TNS -33.413/155失败端点，slow hold -0.127ns/THS -0.529/8失败，fast hold -0.136ns/THS -1.156/28失败；其余检查正裕量，像素slow setup +0.611ns。最终37,599LUT/46,348FF/1,058DistributedRAM/128.5DRM/94APM。内部posthold摘要-1.548ns不是最终报告值。当前没有运行中的PDS构建，备用025700仍未启动。
+
+最差setup实际来自u_weight_loader/racc0，经rdigest_c XOR、比较进入weight_err、weight_ok及tx_line，5级逻辑但约89%的数据路径耗时来自路由；最差hold来自u_npu/u_gap/lane_cnt[2]直接到acc_b_2_20、acc_b_2_21等RAM64 WADDR[2]。下一轮先读对应RTL，按协议拆解校验数据路径并处理GAP存储映射/写地址保持，禁止通过放宽时序或假路径掩盖真实路径。不要猜测本轮仍是CPU分支或之前两级FIFO；最终报告已给出新的关键路径。新改源须进入基线/差分/回退覆盖并重新做相关功能验证，再选择同频或合法较低频率完整实现。
+
+用户本轮询问相对XSY2的语音影响：原125MHz NPU31,141,255周期约249.130ms，新109.375MHz 31,152,093周期约284.819ms，增加35.689ms；固定整数循环3.680096→1.645861ms，快约2.236倍。采样48kHz、窗口132096帧/2.752s及像素域不变，两档连续I2S稳态完整样本一致，固定特征的完整NPU逐层golden一致。约36ms是NPU增量，完整采音至显示延迟还包括Mel和共享DDR等待。docs/AUDIO_FREQUENCY_IMPACT_20261114.md已同步最终物理状态。此轮只更新四份状态/说明文档，无RTL/约束/实验脚本改动；主VERIFICATION仍待最终合格实现后收集，不能作为109.375MHz合格证明。
