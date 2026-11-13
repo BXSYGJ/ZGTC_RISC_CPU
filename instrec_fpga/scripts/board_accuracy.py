@@ -72,11 +72,18 @@ def loop_to(pcm, seconds, sr=48000):
 
 
 def write_wav(path, pcm, sr=48000):
+    """Write 48 kHz STEREO.
+
+    The Realtek endpoint rejects a 1-channel format (waveOutOpen fails and the
+    clip is silently never played -- measured 2026-11-13: mono gave PCM std~5
+    at the board, i.e. the engine was classifying silence).
+    """
+    stereo = np.repeat(pcm.astype('<i2'), 2)
     with wave.open(str(path), 'wb') as w:
-        w.setnchannels(1)
+        w.setnchannels(2)
         w.setsampwidth(2)
         w.setframerate(sr)
-        w.writeframes(pcm.astype('<i2').tobytes())
+        w.writeframes(stereo.tobytes())
 
 
 def pick_clips(per_class, classes):
@@ -175,13 +182,22 @@ def main(argv=None):
     ok = 0
     agree = 0
     t0 = time.time()
+    window_len = 132096          # hardware window; looping exactly this many
     for idx, (cls, src) in enumerate(clips, 1):
         pcm48 = prep_clip(IR / src, args.peak_dbfs)
-        pcm = loop_to(pcm48, args.clip_seconds)
+        # Phase-locked loop: repeat a slice of exactly one hardware window so
+        # every 2.752 s window the engine sees is identical content.  Without
+        # this the window start lands at a random phase of the excerpt and
+        # board/offline disagree on the same clip.
+        unit = np.tile(pcm48, int(np.ceil(window_len / max(1, pcm48.size))))[:window_len]
+        pcm48 = unit
+        pcm = loop_to(unit, args.clip_seconds)
         wav = tmp / ('acc_%02d_%d.wav' % (idx, cls))
         write_wav(wav, pcm)
 
         player = cap.start_playback(wav, dev)
+        if player is None:
+            raise RuntimeError('waveOut playback failed on device %s' % dev)
         reads = []
         try:
             time.sleep(args.wait)

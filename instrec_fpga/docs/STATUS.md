@@ -74,6 +74,18 @@
 > 不是 FPGA 缺陷。工具：scripts/board_accuracy.py --per-class N（逐片段 board/offline + JSON）。
 >
 > 附带修正：board_e2e.py 默认权重镜像改为 medley_48k；工作区忽略 .runtime/、ai_pcb/、pcb-aoi/。
+
+> **2026-11-13（上板准确率复测：工具修正 + 一处待定位差异）**
+> 1) 工具修正：板级测试脚本原先写单声道 wav，Realtek 端点拒绝单声道，
+>    waveOutOpen 直接失败、板子实际在分类静音（PCM std≈5）。已改为 48 kHz 立体声 +
+>    峰值归一化 + 播放失败立即报错；并固定循环单元为一整个 132096 样本窗口，消除窗口相位差。
+> 2) 已确证：同一段 PCM 下板卡与离线 golden 一致（稳态 tone：板 [27,-19,-7,-16,0,-17,4,-7]
+>    vs golden [26,-22,-14,-8,-5,-21,6,2]，同 top1=class0；numpy 与 TorchScript 参考 3/3 一致）。
+> 3) 待定位：音乐类片段上，板卡 UART 遥测稳定输出 "NPU top1=7 last_p=100 c≈32.36M"
+>    （100% 置信、恒定），而把板子自己采集的同一窗口 PCM 喂 golden 得到 class1/class4。
+>    tone 一致、音乐不一致 ⇒ 疑点在 mel 的 dB 谱导出/回读在大动态范围下的定点处理，
+>    或 mel 吞吐导致窗口内容不完整；需 ILA 抓 mel→NPU 特征边界定位，暂不作为已收口。
+> 4) 准确率口径：IRMAS val（6 类）离线 3/18——模型对该域本就弱；板卡数字链一致性以第 2 条为准。
 >
 > **交接中（2026-11-10）：先读 `docs/DEV_SNAPSHOT_HANDOFF_20261110.md`** ——
 > 一句话：数值侧全部 0 LSB；板级 top1 对 200 Hz/6 kHz 仍恒定，第一个偏差环节未定位；
