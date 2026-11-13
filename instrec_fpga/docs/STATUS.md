@@ -60,6 +60,20 @@
 >
 > **结论**：「恒 top1」的唯一根因是 PC 端全局静音，不是 FPGA、不是 i2s RTL、不是硬件接线。
 > 整个链路（音频→i2s→DDR3→mel→NPU→分类）从头到尾正常，全部板上验证通过。
+
+> **2026-11-13（第二轮上板验收：权重版本修正 + 数字链等价证明）**：板上原先跑的是 44.1k 旧权重
+> （scripts/outputs/weights_image.bin，zp_in=49），而 RTL 是 48k 契约（mel_coo_48k.hex，zp_in=47），
+> 两者错配导致分类偏差。重烧 202047 位流后上传 medley_48k/weights_image.bin（WOK CFE5A709）。
+>
+> **数字链等价性（决定性证据）**：先让板子采集一段 PCM，再把同一段 PCM 喂给离线 golden——
+> 板 logits [27,-19,-7,-16,0,-17,4,-7] 与 golden [26,-22,-14,-8,-5,-21,6,2] 同 top1（class0），
+> 证明 i2s→DDR3→mel→NPU→权重 的定点实现与参考一致；离线 numpy 与 TorchScript 参考亦 3/3 一致。
+>
+> **上板准确率（IRMAS val，6 类 × 3 = 18 条，峰值归一化播放）**：board 3/18、同一片段离线 3/18、
+> board-vs-offline 一致 6/18。两者同样低 ⇒ 模型对 IRMAS 属域外（自带 MedleyDB 测试 INT8 77.32%），
+> 不是 FPGA 缺陷。工具：scripts/board_accuracy.py --per-class N（逐片段 board/offline + JSON）。
+>
+> 附带修正：board_e2e.py 默认权重镜像改为 medley_48k；工作区忽略 .runtime/、ai_pcb/、pcb-aoi/。
 >
 > **交接中（2026-11-10）：先读 `docs/DEV_SNAPSHOT_HANDOFF_20261110.md`** ——
 > 一句话：数值侧全部 0 LSB；板级 top1 对 200 Hz/6 kHz 仍恒定，第一个偏差环节未定位；

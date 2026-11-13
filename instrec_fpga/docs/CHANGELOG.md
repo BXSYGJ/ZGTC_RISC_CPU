@@ -1,5 +1,18 @@
 # InstRec-FPGA 变更日志
 
+## 2026-11-13（第二轮上板验收）：权重版本修正、数字链等价证明、上板准确率工具
+
+- **权重版本错配修正**：板上原先上传的是 44.1k 旧镜像（scripts/outputs/weights_image.bin，zp_in=49），
+  而 RTL 已是 48k 契约（mel_coo_48k.hex，zp_in=47）。重烧 202047 后上传
+  medley_48k/weights_image.bin（WOK CFE5A709）。
+- **数字链等价性（决定性）**：读回板上采集的同一段 PCM 喂离线 golden，板 logits
+  [27,-19,-7,-16,0,-17,4,-7] vs golden [26,-22,-14,-8,-5,-21,6,2]，同 top1=class0；
+  离线 numpy 与 TorchScript 参考 3/3 一致。⇒ i2s→DDR3→mel→NPU→权重 定点实现正确。
+- **上板准确率**：IRMAS val 6 类 × 3 = 18 条（峰值归一化播放）board 3/18、离线同片段 3/18、
+  一致 6/18 —— 两者同样低，说明模型对 IRMAS 域外（自带 MedleyDB 测试 INT8 77.32%），非 FPGA 缺陷。
+- **新工具**：scripts/board_accuracy.py（播放标注片段 → 板上 logits → 准确率/混淆/离线对照 + JSON）。
+- **修正**：board_e2e.py 默认权重镜像改为 medley_48k；.gitignore 忽略 .runtime/、ai_pcb/、pcb-aoi/。
+
 ## 2026-11-13（晚）：最终定论 —— 「恒 top1」唯一根因是 PC 全局静音，分类系统完全恢复
 
 - **根因**：之前所有「恒 top1」现象的唯一根因是 PC 端**全局静音**（非 FPGA、非 i2s RTL、非硬件接线）。

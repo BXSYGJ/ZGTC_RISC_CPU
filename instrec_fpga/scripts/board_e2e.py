@@ -62,7 +62,10 @@ def main(argv=None):
     ap.add_argument('--stem', default='sine_440_full',
                     help='golden run stem for stage 4')
     ap.add_argument('--frames-dir', default='build/board_frames')
-    ap.add_argument('--image', default='scripts/outputs/weights_image.bin')
+    # The RTL front-end is the native 48 kHz contract (zp_in=47,
+    # mel_coo_48k.hex), so the matching image is the medley_48k one.  The
+    # legacy 44.1 kHz image (zp_in=49) silently misclassifies on this build.
+    ap.add_argument('--image', default='scripts/outputs/medley_48k/weights_image.bin')
     ap.add_argument('--skip-boot-upload', action='store_true',
                     help='skip stages 1-2 and only capture/compare')
     args = ap.parse_args(argv)

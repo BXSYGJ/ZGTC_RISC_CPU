@@ -85,3 +85,8 @@ _fpgalab_index.js
 .DS_Store
 Thumbs.db
 Desktop.ini
+
+# Unrelated local projects / runtime scratch sitting in this workspace root
+/.runtime/
+/ai_pcb/
+/pcb-aoi/
