@@ -104,6 +104,23 @@ def pick_clips(per_class, classes):
     return out
 
 
+def board_pcm_std(ser, dd, nbytes=8192):
+    """Peak-hold std of the two PCM ping-pong halves on the board.
+
+    This is the ground truth for "did the clip actually reach the FPGA":
+    endpoint mute, a rejected wave format or a dead cable all show up as a
+    near-zero std here long before they can be mistaken for a model error.
+    """
+    vals = []
+    for base in (dd.PCM_LASE, dd.PCM_LASE + dd.PCM_WIN_STRIDE):
+        try:
+            b = dd.read_ddr(ser, base, nbytes)
+            vals.append(float(np.frombuffer(b, '<i2').std()))
+        except Exception:
+            pass
+    return max(vals) if vals else 0.0
+
+
 def offline_top1(pcm48, tables, contract, weights, window):
     """Golden top1 on exactly the PCM the board is played (48 kHz, normalized)."""
     from golden_pipeline import run_mel_pipeline, npu_forward
@@ -141,13 +158,20 @@ def main(argv=None):
     ap.add_argument('--clip-seconds', type=float, default=13.0)
     ap.add_argument('--peak-dbfs', type=float, default=-1.0,
                     help='playback peak normalisation target (default -1 dBFS)')
+    ap.add_argument('--volume-db', type=float, default=0.0,
+                    help='extra digital gain on top of the peak normalisation')
+    ap.add_argument('--device-hint', default='Realtek')
+    ap.add_argument('--settle', type=float, default=6.0,
+                    help='max seconds to wait for the board to hold this clip')
+    ap.add_argument('--std-min', type=float, default=400.0,
+                    help='board PCM std below this marks the clip INVALID')
     ap.add_argument('--image', default='scripts/outputs/medley_48k/weights_image.bin')
     ap.add_argument('--no-offline', action='store_true')
     ap.add_argument('--json', dest='json_path', default=None)
     args = ap.parse_args(argv)
 
     import serial
-    import i2s_capture as cap
+    import audio_player as apx
     import diag_dump as dd
 
     codes = [c.strip() for c in args.classes.split(',') if c.strip()]
@@ -174,12 +198,13 @@ def main(argv=None):
 
     ser = serial.Serial(args.port, 115200, timeout=0.4)
     time.sleep(0.2)
-    dev = cap.resolve_play_device()
-    print('play device =', dev)
+    dev = apx.resolve_device(args.device_hint)
+    print('play device = %s (%d)' % (args.device_hint, dev))
 
     rows = []
     conf = Counter()
     ok = 0
+    n_valid = 0
     agree = 0
     t0 = time.time()
     window_len = 132096          # hardware window; looping exactly this many
@@ -192,26 +217,46 @@ def main(argv=None):
         unit = np.tile(pcm48, int(np.ceil(window_len / max(1, pcm48.size))))[:window_len]
         pcm48 = unit
         pcm = loop_to(unit, args.clip_seconds)
-        wav = tmp / ('acc_%02d_%d.wav' % (idx, cls))
-        write_wav(wav, pcm)
-
-        player = cap.start_playback(wav, dev)
-        if player is None:
-            raise RuntimeError('waveOut playback failed on device %s' % dev)
         reads = []
-        try:
-            time.sleep(args.wait)
-            for k in range(max(1, args.reads)):
-                reads.append(dd.read_logits(ser))
-                if k + 1 < max(1, args.reads):
-                    time.sleep(3.0)
-        finally:
-            cap.stop_playback(player)
+        pcm_std = 0.0
+        pstats = {}
+        # Up to two attempts: the very first open after a previous stop
+        # occasionally delivers no audio for the whole settle window.
+        for attempt in range(2):
+            player = apx.StreamingPlayer(pcm, sr=48000, channels=2,
+                                         device_hint=args.device_hint,
+                                         gain_db=args.volume_db,
+                                         buf_ms=60, queued=4).start()
+            reads = []
+            pcm_std = 0.0
+            try:
+                time.sleep(0.3)
+                deadline = time.time() + args.settle
+                while time.time() < deadline:
+                    time.sleep(0.4)
+                    pcm_std = board_pcm_std(ser, dd)
+                    if pcm_std >= args.std_min:
+                        break
+                if pcm_std >= args.std_min:
+                    time.sleep(args.wait)
+                    for k in range(max(1, args.reads)):
+                        reads.append(dd.read_logits(ser))
+                        if k + 1 < max(1, args.reads):
+                            time.sleep(2.5)
+            finally:
+                pstats = player.stats()
+                player.stop()
+            if pcm_std >= args.std_min:
+                break
+            time.sleep(0.8)
         votes = [int(np.argmax(r)) for r in reads]
         got = Counter(votes).most_common(1)[0][0] if votes else 0
         logits = reads[-1] if reads else []
-        ok += (got == cls)
-        conf[(cls, got)] += 1
+        valid = pcm_std >= args.std_min
+        if valid:
+            ok += (got == cls)
+            conf[(cls, got)] += 1
+            n_valid += 1
 
         ref = None
         if tables is not None:
@@ -223,20 +268,24 @@ def main(argv=None):
         rows.append({'i': idx, 'true': cls, 'true_name': CLASS_NAMES[cls],
                      'board': got, 'board_name': CLASS_NAMES[got],
                      'offline': ref, 'logits': [int(v) for v in logits],
+                     'pcm_std': pcm_std, 'valid': valid,
+                     'underruns': pstats.get('underruns'),
                      'file': str(src)})
-        print('[%2d/%2d] %-9s expect %d(%s) board %d(%s) %s%s  logits=%s' % (
-            idx, len(clips), src.name[:9] if False else src.parent.name,
+        print('[%2d/%2d] %-9s expect %d(%s) board %d(%s) %s pcm=%5.0f%s%s  logits=%s' % (
+            idx, len(clips), src.parent.name,
             cls, CLASS_NAMES[cls][:8], got, CLASS_NAMES[got][:8],
-            'OK  ' if got == cls else 'MISS',
+            'OK  ' if got == cls else 'MISS', pcm_std,
+            '' if valid else ' INVALID',
             ('  off=%d' % ref) if ref is not None else '',
             [int(v) for v in logits]))
         time.sleep(0.5)
 
     ser.close()
     n = len(rows)
-    acc = 100.0 * ok / n
+    acc = 100.0 * ok / max(1, n_valid)
     print('')
-    print('BOARD accuracy = %d/%d = %.1f%%   (%.0f s)' % (ok, n, acc, time.time() - t0))
+    print('BOARD accuracy = %d/%d valid = %.1f%%   (%d invalid, %.0f s)' % (
+        ok, n_valid, acc, n - n_valid, time.time() - t0))
     if tables is not None:
         print('board vs offline agreement = %d/%d = %.1f%%' % (agree, n, 100.0 * agree / n))
     print('per-class:')
