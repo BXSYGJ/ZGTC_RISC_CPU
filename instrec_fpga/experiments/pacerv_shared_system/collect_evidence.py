@@ -5,7 +5,9 @@ import argparse
 import hashlib
 import json
 from pathlib import Path
+import re
 import shutil
+import subprocess
 
 from inspect_pds import inspect
 
@@ -35,6 +37,20 @@ def main() -> None:
     args = parser.parse_args()
     if bool(args.remote_build) != bool(args.board_run):
         parser.error("Optional remote evidence needs both --remote-build and --board-run")
+    selected_manifest = read(args.full_build / 'INPUTS.json')
+    uncertainty_fdc = args.full_build / 'inputs/constraints/pacerv_shared_system.fdc'
+    uncertainty = re.search(r'^set_clock_uncertainty \{([\d.]+)\} -setup -hold -from ',
+                            uncertainty_fdc.read_text(encoding='utf-8'), re.M)
+    if not uncertainty or float(uncertainty[1]) != 0.150:
+        raise RuntimeError('The selected full build must retain 0.150 ns setup/hold uncertainty')
+    operating_point = {'target': selected_manifest['target'],
+                       'system_clock_hz': selected_manifest['system_clock_hz'],
+                       'pixel_clock_hz': selected_manifest['pixel_clock_hz'],
+                       'system_setup_hold_uncertainty_ns': float(uncertainty[1])}
+    git_context = {key: subprocess.check_output(['git', *git_args], cwd=ROOT, text=True,
+                                                creationflags=subprocess.CREATE_NO_WINDOW).strip()
+                   for key, git_args in (('branch', ['branch', '--show-current']),
+                                         ('checkout_commit', ['rev-parse', 'HEAD']))}
     evidence = HERE / "evidence"
     evidence.mkdir(exist_ok=True)
     copied = []
@@ -200,6 +216,7 @@ def main() -> None:
                  "VERIFICATION": str(HERE / "VERIFICATION.txt"),
                  "ROLLBACK": str(HERE / "ROLLBACK.sh")}
     summary = {"verdict": verdict, "all_selected_gates_passed": all(verdict.values()),
+               'git_context': git_context, 'operating_point': operating_point,
                "artifacts": artifacts,
                "source_hashes": [{"path": str(p.relative_to(ROOT)), "sha256": digest(p)}
                                  for p in source_paths],
@@ -209,10 +226,12 @@ def main() -> None:
                            "local PDS qualification requested; board testing not selected")}
     (HERE / "RESULTS.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
     lines = ["PaceRV core + shared whole-system memory/peripherals", "",
+             'Branch and checkout: ' + json.dumps(git_context),
+             'Selected operating point: ' + json.dumps(operating_point),
              "Changed: RV32IMC H3 execution core, paired local-ROM fetch, uncached CPU DDR data port,",
              "M3_MASK_ENABLE byte masks and locked M3 client ownership; native local data RAM;",
              "four-source UART acceptance, registered MMIO/activation/DDR commands, synchronous FC",
-             "coefficient RAM, seven-clock display alignment, ROM-range fetch qualification,",
+             "coefficient RAM, seven-clock display alignment, FETCH_ADDRESS_BITS=IAW+2 ROM qualification,",
              "register-based short weight FIFOs and matched actual DDR/system clock configuration.",
              "", "Selected gates: " + json.dumps(verdict), "",
              "Baseline and CPU/NPU exact commands, inputs, literal output and exits follow."]

@@ -11,6 +11,8 @@
 > 本轮只验收100Pro+本地完整系统，远程工作已结束；旧正式latest位流不变。说明 `docs/PACERV_SHARED_SYSTEM_20261113.md`；复现 `experiments/pacerv_shared_system/USAGE_zh.md`；恢复 `docs/HANDOFF_PACERV_SHARED_SYSTEM_20261113.md`。
 >
 > 最新物理进展：021145已综合、映射和详细布局，映射37,843LUT/46,345FF/1,058DistributedRAM/128.5DRM/94APM；布局后初步最差裕量+0.999ns、TNS=0，正在详细布线。PDS父29272、布线子75172、runner26725。另存025700的93.75MHz备用快照，厂商812.5Mbps请求实际生成750Mbps；UART814、补零1953及时间常数配套，202份输入hash正确，尚未运行，生产仍109.375MHz。
+>
+> 03:25更新：021145详细布线359轮、778.78秒，全部子网已连通；保持时间修复前三轮分别413.00/216.94/194.45秒，后续修复分析仍运行。最终十张时序表尚未生成，不以布局裕量宣称通过。collector已加入分支、提交、实际频率及0.150ns不确定性核对；六项时序/时钟验证器测试通过。
 
 > **2026-11-13（离线参考量化契约错误修正 —— 板级链路与 golden 逐位一致，先读这节）**
 > **根因**：`golden_pipeline.run_mel_pipeline()` 的 `inv_s_in/zp_in` 默认取

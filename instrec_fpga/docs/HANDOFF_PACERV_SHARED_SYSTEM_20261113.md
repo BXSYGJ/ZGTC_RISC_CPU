@@ -89,3 +89,11 @@ collect_evidence.py已支持--audio-clock-run及--uart-run并核验对应活源h
 备用：prepare_ddr_clock.py --rate-mbps 812.5得到实际750Mbps、93.75MHz（厂商规则允许DDR3 600–1066.666Mbps，不应沿用早期“至少800Mbps”假设）。原生参数和IP生成均通过，目录build/pacerv_shared_system/ddr_clock/20261114-024634-812.5，live未改。prepare_lower_clock.py已支持109.375/93.75MHz，并可从已有参数化top更新五个命名实例；以该DDR目录/seed3生成build/pacerv_shared_system/pds/full-20261114-025700-full。六份变化含3IP、DDR FDC、top、CPU约束时钟注释；UART814、注入1953、写超时3145728、PLL等待468750000、DDR等待9375000、quota93750。202项冻结hash正确，原109.375主线202项hash保持不变。只在109.375最终未合格时考虑此备选。
 
 inspect_pds.py已加入Requested Frequency核对：系统与像素时钟须匹配INPUTS.json，允许报告舍入误差；Estimated Frequency不能代替Requested Frequency。原3项时序测试加3项时钟测试全过，当前6项。若将来启用93.75，run_audio_clock_check.py默认仍125/109.375，需要改为从实际IDF选择当前频率后重跑；UART报告、29文件回退及checkout审计也要与新的活源匹配。不要直接复用当前109.375的audio/top hash作为93.75证据。
+
+## 最新执行进度：2026-11-14 03:25
+
+021145仍是唯一运行的完整PDS，父29272/子75172/runner26725，CPU时间持续增加。359轮详细布线共778.78秒，全部子网已连通；保持修复iter0/1/2分别413.00/216.94/194.45秒，增量分析各约0.7秒，后续修复尚未结束。此时place_route/instrec_top.prr仍为0字节缓冲文件，不能据此判失败；RESULT.json仍是02:27的失败重启记录，活进程与当前stdout才是运行状态依据。绝不因日志暂时不更新而重启流程。最终report_timing/QUALIFICATION尚未生成。
+
+当前已提交99a063d，collect_evidence.py新增最终元数据：分支、checkout_commit、系统/像素频率与setup/hold不确定性；从选中快照的pacerv_shared_system.fdc核验0.150ns。测试验证器6项全过、collector AST通过；未改任何运行输入。降频常数检查确认CPU软件只输出原始周期，主top的UART/音频/PLL/DDR等待与quota均已配套；diag ACK仍按12500000周期等待，在109.375MHz延长为约114ms，NPU 50000000周期watchdog约457ms，均作为周期预算保留。其他诊断专用top/未例化demo的默认125MHz常数不属于当前完整实例。
+
+继续等待同一runner。结束后inspect --require-qualified；若未合格按具体setup/hold路径决定修复，不能单凭降低时钟处理hold。025700的93.75MHz快照尚未启动，可在setup仍差且hold可修时采用；采用前必须同步live六份文件、Git checkout、音频测试实际频率、UART及29文件回退。当前全部功能测试路径及最终collector参数沿用上面的109.375MHz条目。VERIFICATION/RESULTS还是上一轮125MHz选中结果，必须在最终物理验收后刷新再交付。
