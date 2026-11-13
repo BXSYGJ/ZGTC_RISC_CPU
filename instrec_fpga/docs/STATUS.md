@@ -42,6 +42,18 @@
 > 静音/噪声级幅度，**最可能是硬件音频回环（Realtek line-out → PCM1808 line-in）接线断开或悬空**，
 > 而非 i2s RTL 缺陷。判定需在板上量 PCM1808 的 SD 引脚（示波器/ILA）或检查音频接线。
 >
+> **更正（2026-11-13 晚，查历史真实 i2s 数据后）**：`build/i2s_capture/` 留有 10 个之前上板采集的
+> `capture.wav`（11-06~11-09，play_mode=none=外部手动播放）。其中 **5 个是有效信号**：`tone6k_check`
+> std=20409、`realtek_vol` std=9368、`tone2` std=9317、`route_verify` std=1146、`montage_music` std=1119——
+> **证明 PCM1808 + i2s + DDR 存储 + 音频回环当时完全正常，未断线**。其余 5 个是静音/噪声（std<11），
+> 是当时「播放音量/路由」问题的历史复现。
+>
+> 因此「脚本 --play 播放采到噪声（std≈2.2）」的根因在 **PC 端播放链路**，不是硬件断线：
+> waveOutSetVolume 的 API 误用已修（60969209，传 device_id 而非 handle），但实测 `waveOutGetVolume`
+> 返回 0xFFFFFFFF（MME 层音量本已满），故非根因。剩余疑点是 **WASAPI 端点音量（Windows 混合器里
+> Realtek 可能被静音/低音量）或 waveOut device 4「扬声器」输出口 ≠ PCM1808 所接的 line-out**。
+> 验证方法：手动在 Windows 播放（确认输出选 Realtek），脚本只采集——若采到信号即坐实脚本播放问题。
+>
 > **交接中（2026-11-10）：先读 `docs/DEV_SNAPSHOT_HANDOFF_20261110.md`** ——
 > 一句话：数值侧全部 0 LSB；板级 top1 对 200 Hz/6 kHz 仍恒定，第一个偏差环节未定位；
 > 诊断读回基础设施已完成并离线验证；诊断位流的 DDR3 启动自检 `@0x00300200` 已**离线复现并锁定根因**
