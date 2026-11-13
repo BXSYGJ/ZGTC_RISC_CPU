@@ -1,5 +1,16 @@
 # InstRec-FPGA 变更日志
 
+## 2026-11-13（晚）：最终定论 —— 「恒 top1」唯一根因是 PC 全局静音，分类系统完全恢复
+
+- **根因**：之前所有「恒 top1」现象的唯一根因是 PC 端**全局静音**（非 FPGA、非 i2s RTL、非硬件接线）。
+- **验证**：音量开启后重测——PCM std 2.2 → 18969（满幅度有效音频）；
+  三种音频 top1 完全分化：tone_200→class7、tone_6k→class0、montage→class1
+  （静音时三种音频恒 class7）。
+- **结论**：整个链路（音频→i2s→DDR3→mel→NPU→分类）从头到尾正常，全部板上验证通过。
+- 附带修复：`i2s_capture.py` 的 `waveOutSetVolume` API 误用（传 device_id 而非 handle、
+  且在 waveOutOpen 之前调用）已修正（`60969209`）；waveOut 设备枚举顺序会漂移
+  （Realtek 曾为 index 4，本次为 index 0），`resolve_play_device` 按名称解析已覆盖。
+
 ## 2026-11-13：板级验收完成 —— DDR3 读写彻底收口，「恒 top1」根因定位到 i2s 采样链
 
 - **FTDI 恢复**：2026-11-12 夜下载器在 PnP 为 `Unknown`；2026-11-13 用户重插后恢复
