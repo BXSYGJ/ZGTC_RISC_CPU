@@ -81,3 +81,11 @@ collect_evidence.py已支持--audio-clock-run及--uart-run并核验对应活源h
 用户关于XSY2降频影响的结论：125→109.375降低12.5%，同周期计算延时增加14.29%；NPU当前周期折算249.217→284.819ms（+35.602ms）。原XSY2历史NPU31141255周期约249.130ms，增量还包含10838周期流水开销。相同CPU循环460012/125M=3.680ms，新H3 180016/109.375M=1.646ms，约2.236倍。2.752秒音频窗口及48kHz采样不变；具体模型数值、连续采集分别有以上独立证据，不把单循环或原PG200 CoreMark直接代入新整机。
 
 下一步：验收当前全部十张时序表与实际109.375MHz时钟；通过后最终收集、核对/重开四artifact、按STATUS→CHANGELOG→handoff更新及本地git commit，不push。未合格则只按实际关键路径调整，保留每轮报告。
+
+## 最新执行进度：2026-11-14 02:58
+
+上一轮已本地提交2fac956（258份任务文件，包含源码、实验和历史证据，不push）。当前主线运行输入仍为021145的202份，全部与live和Git检出一致。PDS父29272、详细布线子75172、runner26725；025700仅为备用快照，无运行进程。021145器件映射37,843LUT/46,345FF/1058DistributedRAM/128.5DRM/94APM，详细布局后最差slack=999ps、TNS=0，仅为中间结果。02:57路由迭代8剩42372未布线子网，完整目标104621子网，最终时序尚未生成。
+
+备用：prepare_ddr_clock.py --rate-mbps 812.5得到实际750Mbps、93.75MHz（厂商规则允许DDR3 600–1066.666Mbps，不应沿用早期“至少800Mbps”假设）。原生参数和IP生成均通过，目录build/pacerv_shared_system/ddr_clock/20261114-024634-812.5，live未改。prepare_lower_clock.py已支持109.375/93.75MHz，并可从已有参数化top更新五个命名实例；以该DDR目录/seed3生成build/pacerv_shared_system/pds/full-20261114-025700-full。六份变化含3IP、DDR FDC、top、CPU约束时钟注释；UART814、注入1953、写超时3145728、PLL等待468750000、DDR等待9375000、quota93750。202项冻结hash正确，原109.375主线202项hash保持不变。只在109.375最终未合格时考虑此备选。
+
+inspect_pds.py已加入Requested Frequency核对：系统与像素时钟须匹配INPUTS.json，允许报告舍入误差；Estimated Frequency不能代替Requested Frequency。原3项时序测试加3项时钟测试全过，当前6项。若将来启用93.75，run_audio_clock_check.py默认仍125/109.375，需要改为从实际IDF选择当前频率后重跑；UART报告、29文件回退及checkout审计也要与新的活源匹配。不要直接复用当前109.375的audio/top hash作为93.75证据。

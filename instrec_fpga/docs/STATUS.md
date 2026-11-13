@@ -9,6 +9,8 @@
 > 原155.25MHz核心在隔离副本通过三项集成测试，相同循环仍为180,016周期，生产保持H3。厂商说明PG2L100H采用单线程路由；其不接受通用`-number_of_router_thread`选项，当前配方已删除。单独重启PnR未加载已映射状态，现保留两次失败记录并从同一202份冻结输入完整重跑。16GB主机只运行一项重布线，轻量仿真可并行。
 >
 > 本轮只验收100Pro+本地完整系统，远程工作已结束；旧正式latest位流不变。说明 `docs/PACERV_SHARED_SYSTEM_20261113.md`；复现 `experiments/pacerv_shared_system/USAGE_zh.md`；恢复 `docs/HANDOFF_PACERV_SHARED_SYSTEM_20261113.md`。
+>
+> 最新物理进展：021145已综合、映射和详细布局，映射37,843LUT/46,345FF/1,058DistributedRAM/128.5DRM/94APM；布局后初步最差裕量+0.999ns、TNS=0，正在详细布线。PDS父29272、布线子75172、runner26725。另存025700的93.75MHz备用快照，厂商812.5Mbps请求实际生成750Mbps；UART814、补零1953及时间常数配套，202份输入hash正确，尚未运行，生产仍109.375MHz。
 
 > **2026-11-13（离线参考量化契约错误修正 —— 板级链路与 golden 逐位一致，先读这节）**
 > **根因**：`golden_pipeline.run_mel_pipeline()` 的 `inv_s_in/zp_in` 默认取

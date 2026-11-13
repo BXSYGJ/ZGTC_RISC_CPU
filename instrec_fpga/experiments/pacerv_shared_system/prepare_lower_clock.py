@@ -32,8 +32,8 @@ def main() -> None:
     if not clock["commands_passed"] or not clock["live_ip_unchanged"]:
         raise ValueError("DDR generation must have passed")
     hz = int(clock["system_clock_hz"])
-    if hz != 109375000 or args.seed < 1:
-        raise ValueError("This candidate implements the pre-evaluated 109.375 MHz point")
+    if hz not in (109375000, 93750000) or args.seed < 1:
+        raise ValueError("Use an evaluated 109.375 or 93.75 MHz point and a positive seed")
     generated = directory / "ddr3_test"
     live_ip = ROOT / "ipcore/ddr3_test"
     for relative, expected in clock["original_ip_hashes"].items():
@@ -41,6 +41,7 @@ def main() -> None:
             raise ValueError("Live IP no longer matches generated-copy baseline: " + relative)
     output = prepare("full", args.seed, 12, "normal", 1)
     inputs = output / "inputs"
+    original_manifest = json.loads((output / 'INPUTS.json').read_text(encoding='utf-8'))
     changed = []
     for name in ("ddr3_test.idf", "ddr3_test.v", "ddr3_test_ddrphy_top.v"):
         target = inputs / "ipcore/ddr3_test" / name
@@ -68,24 +69,31 @@ def main() -> None:
     text = top.read_text(encoding="utf-8")
     baud = round(hz / 115200)
     inject = round(hz / 48000)
-    replacements = {
-        "uart_tx u_uart_tx (": f"uart_tx #(.BAUD_DIV({baud})) u_uart_tx (",
-        "uart_rx u_uart_rx (": f"uart_rx #(.BAUD_DIV({baud})) u_uart_rx (",
-        "audio_sink u_audio_sink (":
-            f"audio_sink #(.INJECT_GAP_CYCLES(14'd{inject}), "
-            f".WR_TIMEOUT_CYCLES(23'd{round(4194304 * hz / 125000000)})) u_audio_sink (",
-        "sys_ctrl u_sys_ctrl (":
-            f"sys_ctrl #(.PLL_TIMEOUT_CYCLES({hz * 5}), "
-            f".DDR_TIMEOUT_CYCLES({hz // 10})) u_sys_ctrl (",
-        "ddr3_ctrl_axi #(.M3_MASK_ENABLE(1)) u_ddr3_ctrl_axi (":
-            f"ddr3_ctrl_axi #(.M3_MASK_ENABLE(1), .P3_QUOTA_TIMEOUT({hz // 1000})) u_ddr3_ctrl_axi (",
-    }
-    for old, new in replacements.items():
-        text = replace_one(text, old, new)
-    text = text.replace("core_clk  125 MHz DDR3 controller user clock",
-                        "core_clk  109.375 MHz DDR3 controller user clock")
+    replacements = (
+        ('uart_tx', 'u_uart_tx', f'.BAUD_DIV({baud})'),
+        ('uart_rx', 'u_uart_rx', f'.BAUD_DIV({baud})'),
+        ('audio_sink', 'u_audio_sink', f".INJECT_GAP_CYCLES(14'd{inject}), "
+         f".WR_TIMEOUT_CYCLES(23'd{round(4194304 * hz / 125000000)})"),
+        ('sys_ctrl', 'u_sys_ctrl', f'.PLL_TIMEOUT_CYCLES({hz * 5}), .DDR_TIMEOUT_CYCLES({hz // 10})'),
+        ('ddr3_ctrl_axi', 'u_ddr3_ctrl_axi', f'.M3_MASK_ENABLE(1), .P3_QUOTA_TIMEOUT({hz // 1000})'),
+    )
+    for module, instance, parameters in replacements:
+        pattern = r'(?m)^([ \t]*)' + module + r'(?:\s*#\([^\r\n]*\))?[ \t]+' + instance + r'[ \t]*\('
+        text, count = re.subn(pattern, lambda m: m[1] + module + ' #(' + parameters + ') ' + instance + ' (', text)
+        if count != 1:
+            raise ValueError('Expected one clock-dependent instance: ' + instance)
+    text = re.sub(r'core_clk  [\d.]+ MHz DDR3 controller user clock',
+                  f'core_clk  {hz / 1e6:g} MHz DDR3 controller user clock', text)
     top.write_text(text, encoding="utf-8")
     changed.append(top.relative_to(inputs).as_posix())
+    cpu_fdc = inputs / 'constraints/pacerv_shared_system.fdc'
+    comment = cpu_fdc.read_text(encoding='utf-8')
+    comment, count = re.subn(r'share the [\d.]+ MHz user clock',
+                             f'share the {hz / 1e6:g} MHz user clock', comment)
+    if count != 1:
+        raise ValueError('Expected one CPU clock comment')
+    cpu_fdc.write_text(comment, encoding='utf-8')
+    changed.append(cpu_fdc.relative_to(inputs).as_posix())
     manifest_file = output / "INPUTS.json"
     manifest = json.loads(manifest_file.read_text(encoding="utf-8"))
     for entry in manifest["files"]:
@@ -101,9 +109,8 @@ def main() -> None:
         "empty_fifo_injection_cycles": inject,
         "ddr_rate_mbps": clock["actual_rate_mbps"],
         "changed_inputs": changed, "frozen_input_count": len(manifest["files"]),
-        "live_sources_unchanged": all(
-            sha(live_ip / relative) == expected
-            for relative, expected in clock["original_ip_hashes"].items()),
+        "live_sources_unchanged": all(sha(ROOT / item['path']) == item['sha256']
+                                      for item in original_manifest['files']),
         "source_build": str(output), "source_clock_report": str(directory / "RESULT.json"),
     }
     (output / "CLOCK_CANDIDATE.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
