@@ -795,7 +795,16 @@ module mel_engine #(
                 ST_IDLE: begin
                     if (win_tick) begin
                         state    <= ST_RUN;
-                        win_base <= win_id[0] ? PCM_WIN_STRIDE : 28'd0;
+                        // audio_sink increments win_id on the SAME edge that
+                        // raises win_tick, so the value visible here is already
+                        // the NEXT window's id.  The window that just completed
+                        // (n) was written to half n[0] = ~win_id[0]; using
+                        // win_id[0] made the engine read the half that window
+                        // n+1 starts overwriting at this very instant, which
+                        // corrupted the first frames of the window (measured
+                        // 0-75 leading frames off by 2..60 dB, count varying
+                        // per capture).
+                        win_base <= win_id[0] ? 28'd0 : PCM_WIN_STRIDE;
                         frm_out  <= 9'd0;
                         stats_seen <= 1'b0;
                         mel_cycle_cnt <= 32'd0;

@@ -185,6 +185,7 @@ module instrec_top #(
     wire         dg_tx_valid;
     wire [7:0]   dg_tx_data;
     wire         dg_tx_ready;
+    wire         dg_rx_in_arg;   // diag is collecting 'R' arguments (0xAA pass)
     wire         npu_logits_valid;
     wire [255:0] npu_logits_out;
     wire [255:0] m1_wdata;        // tied off (T-M2-02)
@@ -790,7 +791,15 @@ module instrec_top #(
     // the diagnostic engine receives non-0xAA bytes only while the loader is
     // idle (the loader ignores them anyway, this just avoids contention).
     // ------------------------------------------------------------------
-    wire dg_rx_sel = rx_byte_valid && (!wl_busy) && (rx_byte_data != 8'hAA);
+    // A 0xAA byte is normally kept away from the diagnostic engine because the
+    // weight loader owns the 0xAA55 frame header.  Dropping it unconditionally
+    // used to corrupt any 'R' whose address or length contains 0xAA (the diag
+    // FSM lost one argument byte, every following byte shifted, and the
+    // channel ended up spamming NAKs with no way back).  Forward 0xAA while the
+    // diag engine is collecting 'R' arguments -- that is the only place it can
+    // legitimately appear.
+    wire dg_rx_sel = rx_byte_valid && (!wl_busy) &&
+                     ((rx_byte_data != 8'hAA) || dg_rx_in_arg);
 
     diag_readback u_diag (
         .clk            (core_clk),
@@ -807,6 +816,7 @@ module instrec_top #(
         .m3_rd_ready    (dg_m3_rd_ready),
         .m3_done        (ddr_done[3]),
         .diag_lock      (dg_lock),
+        .rx_in_arg      (dg_rx_in_arg),
         .win_id         (win_id),
         .mel_done       (mel_done),
         .npu_done       (npu_done_raw),

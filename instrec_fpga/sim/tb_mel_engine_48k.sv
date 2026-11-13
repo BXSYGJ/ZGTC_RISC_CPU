@@ -268,8 +268,11 @@ module tb_mel_engine_48k;
         rst_n = 1'b1;
         repeat (5) @(posedge clk);
 
-        // one window beat
-        win_id   <= 16'd0;
+        // One window beat.  audio_sink raises win_tick and increments win_id
+        // on the SAME edge, so the engine sees tick with the NEXT id: window 0
+        // has just completed into half 0, and win_id[0] == 1 selects half 0
+        // (mel_engine.v: win_base = win_id[0] ? 0 : PCM_WIN_STRIDE).
+        win_id   <= 16'd1;
         win_tick <= 1'b1;
         @(posedge clk);
         win_tick <= 1'b0;

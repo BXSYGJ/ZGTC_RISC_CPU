@@ -72,6 +72,13 @@ module diag_readback #(
     // window lock request (audio_sink freezes new frames while high)
     output reg          diag_lock,
 
+    // Argument-collection flag: high while the FSM is swallowing the 4-byte
+    // address + 2-byte length of an 'R'.  The top level lets 0xAA through on
+    // this window only, because it otherwise drops every 0xAA byte (the
+    // weight loader owns the 0xAA55 frame header) and an address such as
+    // 0x...AA00 then loses one argument byte and shifts the whole command.
+    output wire         rx_in_arg,
+
     // status snapshot inputs
     input  wire [15:0]  win_id,
     input  wire         mel_done,
@@ -103,6 +110,10 @@ module diag_readback #(
     // State and data registers
     // ------------------------------------------------------------------
     reg [2:0]   state;
+
+    // Argument-collection window (see the port comment): the top level only
+    // lets a 0xAA byte reach this module while this is high.
+    assign rx_in_arg = (state == S_ARG);
 
     reg [31:0]  arg_addr;      // 'R' argument, little endian on the wire
     reg [15:0]  arg_len;
