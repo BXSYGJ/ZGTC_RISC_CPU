@@ -125,7 +125,16 @@ def offline_top1(pcm48, tables, contract, weights, window):
     """Golden top1 on exactly the PCM the board is played (48 kHz, normalized)."""
     from golden_pipeline import run_mel_pipeline, npu_forward
     pcm = np.tile(pcm48, int(np.ceil(window / max(1, pcm48.size))))[:window]
-    feat = run_mel_pipeline(pcm, tables)['feat']
+    # run_mel_pipeline() defaults to the legacy 44.1 kHz contract in
+    # scripts/outputs/layer_contract.json (zp_in=49, inv_s_in=267723430).
+    # The 48 kHz build quantizes with zp_in=47 / inv_s_in=236403274, so the
+    # scale MUST come from the same contract the NPU runs with, otherwise the
+    # offline label is computed from a 13 % over-scaled feature and every
+    # board-vs-offline comparison is meaningless.
+    rec = contract.get('quant_stub_input_contract', contract)
+    feat = run_mel_pipeline(pcm, tables,
+                            inv_s_in=int(rec['inv_s_in']),
+                            zp_in=int(rec['zp_in']))['feat']
     out = npu_forward(feat, contract, tables['exp_lut'], weights=weights)
     return int(out['top1']), [int(v) for v in out['logits']]
 

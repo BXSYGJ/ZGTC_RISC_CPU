@@ -1,5 +1,28 @@
 # InstRec-FPGA 变更日志
 
+## 2026-11-13（第四轮）：离线量化契约错误修正 —— 板级与 golden 逐位一致
+
+- **根因**：`golden_pipeline.run_mel_pipeline()` 默认用 `scripts/outputs/layer_contract.json`
+  （44.1 kHz：zp_in=49、inv_s_in=267723430）做特征量化，而 48 kHz 位流用 zp_in=47、
+  inv_s_in=236403274。所有 48 kHz 的离线 golden 标签因此都基于偏大 13% 的尺度，
+  历次 board-vs-offline 对比全部失真。
+- **修正**：`board_accuracy.offline_top1()` 改为从同一份 48 kHz layer_contract 取
+  `inv_s_in/zp_in` 传给 `run_mel_pipeline`。
+- **修正后等价性**：同一段 PCM 下 board 与 golden 的 logits 只差 ±1 LSB，top1 相同
+  （200 Hz 单音：[-1,9,-24,-16,17,-18,-5,-1] vs [-2,9,-25,-17,18,-18,-6,0]；
+  IRMAS 单簧管片段：[-20,-23,-21,-28,33,23,-47,25] vs [-20,-22,-20,-27,32,22,-47,25]）。
+  ⇒ mel / standardize / 量化 / NPU 全链路板上与参考一致。
+- **剩余差异来自模拟回环**：同一片段用「播放的 wav」算 golden 与用「板子采到的 PCM」算 golden
+  的 logits 完全不同（std 6642→5122、dB 中位 +15.7 dB、z 差 1.02σ、feat 平均差 13 LSB）。
+  Realtek→PCM1808 这一段改掉了信号；判断 FPGA/模型只能用板子实采 PCM 做参考。
+- **澄清**：`0x0020_0000` 是 dB 谱（int16 Q8.8），不是 uint8 特征；此前按 feat 槽读它的低字节
+  得到的「板级特征」是噪声，相关结论作废。
+- **新工具** `scripts/diag_spectrum.py`：锁窗读回整窗 PCM + dB 谱并与 golden 逐元素比对；
+  板级 dB 与 golden 仅差一个全窗常量（≈+36 LSB = 0.14 dB，源自 259/258 帧 max 差异），
+  该常量在 standardize 中抵消。
+- **新发现 RTL 缺陷（待重编）**：`instrec_top.v:793` 把任何 `0xAA` 字节从 diag 命令通道丢弃，
+  地址含 0xAA（如 0x...AA00）时参数错位、通道锁死；主机侧已加绕行，RTL 建议按 diag 状态放行。
+
 ## 2026-11-13（第三轮）：板级准确率工具修正（立体声/相位锁定）与一处待定位差异
 
 - 修正 board_accuracy.py：单声道 wav 会被 Realtek 端点拒绝（waveOutOpen 失败 → 板子分类静音），

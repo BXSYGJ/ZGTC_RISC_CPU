@@ -1,5 +1,54 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+> **2026-11-13（离线参考量化契约错误修正 —— 板级链路与 golden 逐位一致，先读这节）**
+> **根因**：`golden_pipeline.run_mel_pipeline()` 的 `inv_s_in/zp_in` 默认取
+> `scripts/outputs/layer_contract.json`（44.1 kHz：zp_in=49、inv_s_in=267723430），
+> 而 48 kHz 位流的量化器是 zp_in=47、inv_s_in=236403274（`instrec_top.v:433` 显式覆盖）。
+> 因此**所有 48 kHz 的离线 golden 标签都是用偏大 13% 的输入尺度 + zp 49 算出来的**，
+> 每一次 board-vs-offline 对比都被这个错误污染。`board_accuracy.offline_top1()` 已改为
+> 从同一份 48 kHz layer_contract 取量化参数。
+>
+> **修正后的等价性（决定性）**：同一段 PCM 下，板级 logits 与 golden 只差 ±1 LSB：
+> - 200 Hz 单音（锁窗读回 132096 样本）：board `[-1,9,-24,-16,17,-18,-5,-1]`
+>   vs golden `[-2,9,-25,-17,18,-18,-6,0]`，同 top1=4。
+> - IRMAS 单簧管片段（锁窗读回真实窗口）：board `[-20,-23,-21,-28,33,23,-47,25]`
+>   vs golden `[-20,-22,-20,-27,32,22,-47,25]`，同 top1=4。
+> ⇒ mel → standardize → 量化 → NPU 全链路在板上与参考实现一致（±1 LSB 属 requant 截断容差），
+> 「板子算错」不再成立。
+>
+> **剩余差异全部来自模拟回环**：同一片段，用「播放的 wav」算 golden 得
+> `[-20,10,-6,-10,21,-5,-26,6]`，用「板子采到的 PCM」算 golden 得 `[-20,-22,-20,-27,32,22,-47,25]`。
+> 即 Realtek → PCM1808 这一段改掉了信号：PCM std 6642→5122，dB 谱中位 +15.7 dB，
+> z 标准差 1.02σ，feat 平均差 13 LSB。测试台上「板级 ≠ 离线」的观感由这一段造成，与 FPGA 无关。
+> 判断模型/FPGA 只能用**板子实际采到的 PCM** 做参考（`scripts/diag_spectrum.py` 就是这么做的）。
+>
+> **新增工具** `scripts/diag_spectrum.py`：锁窗后一次读回整窗 PCM（264 KB）+ `0x200000` 的 dB 谱
+> （331 个 256 B 块，约 31 s），与 golden 逐元素比对。实测板级 dB 与 golden 只差一个**全窗常量**
+> （约 +36 LSB ≈ 0.14 dB，源自 259 帧 global max 与 258 帧导出的差异），该常量在 standardize
+> 的均值相减里完全抵消，因此不影响特征。
+>
+> **新发现的 RTL 缺陷（待下次重编修）**：`instrec_top.v:793`
+> `dg_rx_sel = rx_byte_valid && !wl_busy && (rx_byte_data != 8'hAA)` 会把**任何值为 0xAA 的字节**
+> 从诊断命令通道里丢掉。地址/长度一旦含 0xAA（例如 `0x...AA00`），diag FSM 就少收一个参数字节、
+> 后续字节全部错位，通道被 NAK 刷屏且无法自恢复。主机侧已加绕行（`diag_spectrum.read_block`
+> 改从更低地址读更宽窗口再切片）；RTL 侧建议把判据改成「仅当 diag 不在 S_IDLE 时才放行 0xAA」。
+>
+> **注意**：`0x0020_0000` 存的是 **dB 谱（int16 Q8.8，全负）**，不是标准化后的 uint8 特征（它在片内，
+>`FEAT_DUMP_ON_M3=0` 时不出 DDR）。此前把它当 feat 槽读低字节得到的"板级特征"是噪声，
+>相关结论一律作废。
+
+>
+> **追查中的残留缺陷（下次重编一并修）**：`diag_spectrum.py` 反复测同一段稳态单音，
+> 窗口**前部 0-75 帧（0～0.65 s）**与 golden 差 2～60 dB，其余 183 帧只差 ≤1.9 dB，且坏帧数量每次不同
+> （一次 3 帧、一次 75 帧）。定位到 `mel_engine.v:798`：`win_tick` 时 `win_base <= win_id[0] ? 0x42000 : 0`，
+> 而 `audio_sink` 在**同一条边沿**就 `win_id <= win_id + 1`，所以 mel 选中的是「下一窗要写入的那一半」
+> （即上上窗 n-1 的数据），而不是刚完成的第 n 窗。mel 用 40 ms 读完这 132096 个样本，同时写侧正在
+> 从同一地址覆盖它，写侧一旦突发（FIFO 积压后回灌），被覆盖的前缀就变长——与「坏帧数量随抓取变化」吻合。
+> 建议改法：`audio_sink` 额外输出一个「已完成窗口号」`win_done_id`（tick 前的 `win_id`），mel 用它取半区；
+> 或最小改动 `win_base <= ~win_id[0] ? PCM_WIN_STRIDE : 0`。修完后用 `diag_spectrum.py` 复核：
+> 判据是「去掉全窗常量后 p99.5 ≤ 8 LSB 且坏帧为 0」。
+
+
 > **2026-11-12（最新，先读这节）**：拥塞根问题已解决。方案 A（共享 `beats-1` 减法器）
 > 让 multi-seed PnR 从「`Route-0008` 布不通、无位流」变成「`Unrouted 0` + 六阶段全过 + 位流产出」，
 > WNS −1.294 → **−0.667 ns**，clk 域已 +33.708 ns 完全收敛。已推送 GitHub（`a797989c`）。
