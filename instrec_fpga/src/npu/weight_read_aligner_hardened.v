@@ -21,7 +21,7 @@ module weight_read_aligner_hardened (
     reg [4:0] offset, wanted, total, received, emitted, chunk, chunk_received;
     reg [27:0] addr;
     reg native_done_seen;
-    reg [255:0] beats [0:16];
+    (* syn_ramstyle = "registers" *) reg [255:0] beats [0:16];
     wire [4:0] request_beats={1'b0,up_cmd[3:0]}+5'd1;
     wire [4:0] physical_beats=request_beats+(up_cmd[12:8]!=5'd0);
     wire [28:0] request_end={1'b0,up_cmd[35:8]}+{19'd0,request_beats,5'd0};

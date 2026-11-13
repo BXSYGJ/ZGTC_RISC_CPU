@@ -1,0 +1,49 @@
+# Frozen inputs and exact byte hashes must survive an independent checkout.
+src/cpu/rv32_cpu_subsys.sv text eol=crlf
+src/ctrl/instrec_top.v text eol=crlf
+src/ddr3/ddr3_arbiter.v text eol=crlf
+src/ddr3/ddr3_ctrl_axi.v text eol=crlf
+scripts/build_sets.json text eol=crlf
+sim/tb_rv_cpu.sv text eol=crlf
+sim/run_sim.py text eol=crlf
+src/npu/activation_store_mux.v text eol=crlf
+src/npu/fc_engine.v text eol=crlf
+src/ui/dashboard_text.v text eol=crlf
+src/ui/dashboard_renderer.v text eol=crlf
+sim/tb_dashboard_ui.sv text eol=crlf
+src/cpu/vendor/pacerv_h3/** -text
+src/cpu/prog_pacerv.hex -text
+src/ddr3/pace_cpu_ddr_bridge.v -text
+src/ddr3/ddr3_m3_share.v -text
+sw/rv32/main_pacerv.c -text
+constraints/pacerv_shared_system.fdc -text
+experiments/pacerv_shared_system/remote/remote_pg200_top.v -text
+experiments/pacerv_shared_system/remote/pg200_clock_probe.v -text
+experiments/pacerv_shared_system/remote/rtl/** -text
+experiments/pacerv_shared_system/remote/constraints/** -text
+sim/experiments/pacerv_shared_ddr/*.original -text
+sim/experiments/pacerv_shared_ddr/MODIFIED_FILE.v -text
+sim/experiments/pacerv_shared_ddr/DIFF_FILE.patch -text
+sim/experiments/pacerv_shared_ddr/*RESULTS.json -text
+sim/experiments/pacerv_shared_ddr/VERIFICATION.txt -text
+sim/experiments/pacerv_shared_ddr/SOURCE_HASHES.json -text
+experiments/pacerv_shared_system/remote/vendor/** -text
+experiments/pacerv_shared_system/remote/firmware/*.hex -text
+experiments/pacerv_shared_system/evidence/** -text
+experiments/pacerv_shared_system/MODIFIED_FILE.sv -text
+experiments/pacerv_shared_system/DIFF_FILE.patch -text
+experiments/pacerv_shared_system/ROLLBACK.* -text
+experiments/pacerv_shared_system/VERIFICATION.txt -text
+sim/experiments/pacerv_integration/*.hex -text
+experiments/pacerv_shared_system/** -text
+sim/experiments/pacerv_integration/** -text
+sim/experiments/pacerv_shared_ddr/** -text
+# Exact bytes of the selected clock candidate and hold-path changes.
+src/cpu/rv32_cpu_subsys.sv -text
+src/ctrl/instrec_top.v -text
+src/npu/wdma.v -text
+src/npu/weight_read_aligner_hardened.v -text
+ipcore/ddr3_test/ddr3_test.idf -text
+ipcore/ddr3_test/ddr3_test.v -text
+ipcore/ddr3_test/ddr3_test_ddrphy_top.v -text
+constraints/ddr3_100h.fdc -text

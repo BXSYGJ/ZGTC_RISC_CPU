@@ -1,0 +1,125 @@
+﻿PaceRV shared DDR bridge verification
+Changed fields: M3_MASK_ENABLE=0 legacy default / m3_wstrb byte mask; CPU APP/OBS range decode; M3 locked ownership, round-robin, drain completion and abort termination.
+APP CPU 0x40000000..0x400fffff maps to DDR 0x00600000..0x006fffff. OBS CPU 0x41000000..0x415fffff reads only existing legal PCM/weight/spectrum/self-test/activation windows. CPU word-bus requests require address[1:0]=0; data/strobes encode subword stores.
+Dummy write remains zero mask. Byte addresses are shifted right by two only at the IP boundary. The new TB indexes the IP word address right by three with no address truncation.
+M3 client done preserves the raw hardware-completion edge, including final write-ready. Ownership/read routing stay locked until registered done plus full read drain. Abort forwards an owner termination with its error. CPU-only timeout freezes payload, drains late traffic and preserves subsequent diagnostic service.
+Legacy TB adapter adds wait(rst_n===1) before the verdict wait loop for Icarus event semantics; original production TB is unchanged.
+MODIFIED_FILE: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\sim\experiments\pacerv_shared_ddr\MODIFIED_FILE.v
+DIFF_FILE: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\sim\experiments\pacerv_shared_ddr\DIFF_FILE.patch
+VERIFICATION: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\sim\experiments\pacerv_shared_ddr\VERIFICATION.txt
+ROLLBACK: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\sim\experiments\pacerv_shared_ddr\ROLLBACK.sh (PowerShell source: execute as a scriptblock with EvidenceDirectory and TargetRtlDirectory; the standard -File entry is ROLLBACK.ps1)
+
+BASELINE exact command: pwsh -NoProfile -File "D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\sim\experiments\pacerv_shared_ddr\run_pacerv_shared_ddr.ps1" -Mode Baseline
+Input: deterministic RTL testbenches; pseudorandom IP handshake LFSR seed 0x12345678; original files for Baseline/Rollback and current four RTL files for Modified.
+Case: legacy
+Compiler: D:\AAAPP\iverilog\bin\iverilog.exe
+Arguments: ["-g2012","-s","tb_ddr3_byteaddr","-o","D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\ddr_bridge\\Baseline_legacy.vvp","D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\experiments\\pacerv_shared_ddr\\tb_pacerv_legacy_byteaddr.sv","D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\experiments\\pacerv_shared_ddr\\ddr3_ctrl_axi.v.original","D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\experiments\\pacerv_shared_ddr\\ddr3_arbiter.v.original","D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\ddr3_axi_model.sv"]
+Compile literal output: 
+Compile exit: 0
+Run command: ["D:\\AAAPP\\iverilog\\bin\\vvp.exe","D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\ddr_bridge\\Baseline_legacy.vvp"]
+Literal output/result:
+
+==============================================================
+ T38 BYTE-ADDRESS SEMANTICS - read/write byte-for-byte proof
+==============================================================
+  phases run        : 3 (3 expected)
+  read beats drained: 40 (40 expected: 16 + 16 + 8)
+  byte mismatches   : 0
+  watchdog cycles   : 352
+==============================================================
+RESULT: PASS
+D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\sim\experiments\pacerv_shared_ddr\tb_pacerv_legacy_byteaddr.sv:372: $finish called at 3755000 (1ps)
+Run exit: 0
+BASELINE PASS cases=1
+Overall exit: 0
+
+MODIFIED exact command: pwsh -NoProfile -File "D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\sim\experiments\pacerv_shared_ddr\run_pacerv_shared_ddr.ps1" -Mode Modified
+Input: deterministic RTL testbenches; pseudorandom IP handshake LFSR seed 0x12345678; original files for Baseline/Rollback and current four RTL files for Modified.
+Case: legacy
+Compiler: D:\AAAPP\iverilog\bin\iverilog.exe
+Arguments: ["-g2012","-s","tb_ddr3_byteaddr","-o","D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\ddr_bridge\\Modified_legacy.vvp","D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\experiments\\pacerv_shared_ddr\\tb_pacerv_legacy_byteaddr.sv","D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\ddr3\\ddr3_ctrl_axi.v","D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\ddr3\\ddr3_arbiter.v","D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\ddr3_axi_model.sv"]
+Compile literal output: 
+Compile exit: 0
+Run command: ["D:\\AAAPP\\iverilog\\bin\\vvp.exe","D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\ddr_bridge\\Modified_legacy.vvp"]
+Literal output/result:
+
+==============================================================
+ T38 BYTE-ADDRESS SEMANTICS - read/write byte-for-byte proof
+==============================================================
+  phases run        : 3 (3 expected)
+  read beats drained: 40 (40 expected: 16 + 16 + 8)
+  byte mismatches   : 0
+  watchdog cycles   : 352
+==============================================================
+RESULT: PASS
+D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\sim\experiments\pacerv_shared_ddr\tb_pacerv_legacy_byteaddr.sv:372: $finish called at 3755000 (1ps)
+Run exit: 0
+Case: shared_ddr
+Compiler: D:\AAAPP\iverilog\bin\iverilog.exe
+Arguments: ["-g2012","-s","tb_pacerv_shared_ddr","-o","D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\ddr_bridge\\Modified_shared_ddr.vvp","D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\experiments\\pacerv_shared_ddr\\tb_pacerv_shared_ddr.sv","D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\ddr3\\pace_cpu_ddr_bridge.v","D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\ddr3\\ddr3_m3_share.v","D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\ddr3\\ddr3_ctrl_axi.v","D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\ddr3\\ddr3_arbiter.v"]
+Compile literal output: 
+Compile exit: 0
+Run command: ["D:\\AAAPP\\iverilog\\bin\\vvp.exe","D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\ddr_bridge\\Modified_shared_ddr.vvp"]
+Literal output/result:
+PACERV_SHARED_DDR PASS checks=996 masked_bytes=256 diagnostic_beats=8 audio_writes=32 activation_reads=8 mel_beats=64 max_cpu_wait=56
+D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\sim\experiments\pacerv_shared_ddr\tb_pacerv_shared_ddr.sv:244: $finish called at 33340000 (1ps)
+Run exit: 0
+Case: m3_share
+Compiler: D:\AAAPP\iverilog\bin\iverilog.exe
+Arguments: ["-g2012","-s","tb_pacerv_m3_share","-o","D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\ddr_bridge\\Modified_m3_share.vvp","D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\experiments\\pacerv_shared_ddr\\tb_pacerv_m3_share.sv","D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\ddr3\\ddr3_m3_share.v"]
+Compile literal output: 
+Compile exit: 0
+Run command: ["D:\\AAAPP\\iverilog\\bin\\vvp.exe","D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\ddr_bridge\\Modified_m3_share.vvp"]
+Literal output/result:
+PACERV_M3_SHARE PASS checks=17 fair_clients=4 original_grants=4
+D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\sim\experiments\pacerv_shared_ddr\tb_pacerv_m3_share.sv:66: $finish called at 760000 (1ps)
+Run exit: 0
+Case: local_timeout
+Compiler: D:\AAAPP\iverilog\bin\iverilog.exe
+Arguments: ["-g2012","-s","tb_pacerv_local_timeout","-o","D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\ddr_bridge\\Modified_local_timeout.vvp","D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\experiments\\pacerv_shared_ddr\\tb_pacerv_local_timeout.sv","D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\ddr3\\pace_cpu_ddr_bridge.v","D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\ddr3\\ddr3_m3_share.v"]
+Compile literal output: 
+Compile exit: 0
+Run command: ["D:\\AAAPP\\iverilog\\bin\\vvp.exe","D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\ddr_bridge\\Modified_local_timeout.vvp"]
+Literal output/result:
+PACERV_LOCAL_TIMEOUT PASS checks=6 late_cpu_drain=1 subsequent_diag=1
+D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\sim\experiments\pacerv_shared_ddr\tb_pacerv_local_timeout.sv:69: $finish called at 1015000 (1ps)
+Run exit: 0
+Case: boot_selftest
+Compiler: D:\AAAPP\iverilog\bin\iverilog.exe
+Arguments: ["-g2012","-s","tb_pacerv_boot_selftest","-o","D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\ddr_bridge\\Modified_boot_selftest.vvp","D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\experiments\\pacerv_shared_ddr\\tb_pacerv_boot_selftest.sv","D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\ctrl\\self_test.v","D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\ddr3\\ddr3_m3_share.v","D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\ddr3\\ddr3_ctrl_axi.v","D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\ddr3\\ddr3_arbiter.v","D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\ddr3_axi_model.sv"]
+Compile literal output: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\src\ctrl\self_test.v:72: warning: extra digits given for sized hex constant.
+Compile exit: 0
+Run command: ["D:\\AAAPP\\iverilog\\bin\\vvp.exe","D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\ddr_bridge\\Modified_boot_selftest.vvp"]
+Literal output/result:
+PACERV_BOOT_SELFTEST PASS boot_bytes=4096 write_beats=128 read_beats=128 diag_beats=8 cpu_beats=1
+D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\sim\experiments\pacerv_shared_ddr\tb_pacerv_boot_selftest.sv:63: $finish called at 4040000 (1ps)
+Run exit: 0
+MODIFIED PASS cases=5
+Overall exit: 0
+
+ROLLBACK exact command: pwsh -NoProfile -File "D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\sim\experiments\pacerv_shared_ddr\run_pacerv_shared_ddr.ps1" -Mode Rollback
+Input: deterministic RTL testbenches; pseudorandom IP handshake LFSR seed 0x12345678; original files for Baseline/Rollback and current four RTL files for Modified.
+ROLLBACK HASH PASS restored=2 removed_new=2
+Case: legacy
+Compiler: D:\AAAPP\iverilog\bin\iverilog.exe
+Arguments: ["-g2012","-s","tb_ddr3_byteaddr","-o","D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\ddr_bridge\\Rollback_legacy.vvp","D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\experiments\\pacerv_shared_ddr\\tb_pacerv_legacy_byteaddr.sv","D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\ddr_bridge\\rollback_copy\\ddr3_ctrl_axi.v","D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\ddr_bridge\\rollback_copy\\ddr3_arbiter.v","D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\ddr3_axi_model.sv"]
+Compile literal output: 
+Compile exit: 0
+Run command: ["D:\\AAAPP\\iverilog\\bin\\vvp.exe","D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\ddr_bridge\\Rollback_legacy.vvp"]
+Literal output/result:
+
+==============================================================
+ T38 BYTE-ADDRESS SEMANTICS - read/write byte-for-byte proof
+==============================================================
+  phases run        : 3 (3 expected)
+  read beats drained: 40 (40 expected: 16 + 16 + 8)
+  byte mismatches   : 0
+  watchdog cycles   : 352
+==============================================================
+RESULT: PASS
+D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\sim\experiments\pacerv_shared_ddr\tb_pacerv_legacy_byteaddr.sv:372: $finish called at 3755000 (1ps)
+Run exit: 0
+ROLLBACK PASS cases=1
+Overall exit: 0
+Restored behavior/status: independent rollback copy matches both original SHA256 hashes, both newly added RTL files are removed from that copy, and original 3-phase/40-read-beat/zero-mismatch behavior passes. Live RTL remains modified.
+Validation scope: RTL simulation and source/hash checks. Full-system synthesis, routing, and board measurements belong to the root integration task.

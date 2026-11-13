@@ -125,16 +125,18 @@ module tb_rv_cpu;
     integer nfail = 0;
     reg cpu_triggered = 1'b0;
     reg cpu_acknowledged = 1'b0;
+    integer cpu_start_count = 0;
 
     always @(posedge clk) begin
         if (rst_n && dut.ctrl_clear) cpu_acknowledged <= 1'b1;
+        if (rst_n && npu_soft_start) cpu_start_count <= cpu_start_count + 1;
     end
 
     // bring-up trace (cheap, only every 250k cycles)
     always @(posedge clk) begin
         if (cycles != 0 && cycles % 250000 == 0) begin
             $display("dbg t=%0d pc=%h ireq=%b/irdy=%b irsp=%b tr=%b nline=%0d imem0=%h",
-                     cycles, dut.u_core.next_pc, dut.i_req_valid, dut.i_req_ready,
+                     cycles, dut.u_core.frontend_pc, dut.i_req_valid, dut.i_req_ready,
                      dut.i_rsp_valid, cpu_trap, nline, dut.imem[0]);
         end
     end
@@ -147,7 +149,7 @@ module tb_rv_cpu;
         // firmware must trigger the NPU itself through CTRL[0] (C6).  Only
         // after that pulse does this testbench answer as the accelerator.
         wait (nline >= 6);      // BOOT / MMIO OK / ISA OK / BENCH / DDR
-        wait (npu_soft_start === 1'b1);
+        wait (cpu_start_count >= 1);
         cpu_triggered = 1'b1;
         @(posedge clk);
 
@@ -172,7 +174,7 @@ module tb_rv_cpu;
 
         wait (nline >= 8);      // + "NPU GO" + the NPU report
         wait (cpu_acknowledged);
-        wait (npu_soft_start === 1'b1);
+        wait (cpu_start_count >= 2);
         $display("CHECK PASS C10 firmware requested next inference after acknowledgement");
         repeat (50) @(posedge clk);
 

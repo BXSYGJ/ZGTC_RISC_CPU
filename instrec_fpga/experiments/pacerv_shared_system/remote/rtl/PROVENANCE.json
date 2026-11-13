@@ -1,0 +1,12 @@
+{
+  "original": "src/ddr3/ddr3_wrapper.v",
+  "original_sha256": "D74B666FCD7A4E029545EF7B810E4511845B5775C148B2FB37D83CB54AFE3D3B",
+  "adapted": "experiments/pacerv_shared_system/remote/rtl/ddr3_wrapper.v",
+  "adapted_sha256": "8b006049163e4d22e4339be972e04642e6cf4f094ef714efbb1fec8a76c13e31",
+  "reference": "cpu/fpga/rv32_ddr3_ip_wrapper.sv (read-only)",
+  "changes": [
+    "PG200-specific source scope",
+    "CK delay disabled",
+    "Official PHY enable independent of the DDR user clock; external POR reset synchronized by the IP"
+  ]
+}

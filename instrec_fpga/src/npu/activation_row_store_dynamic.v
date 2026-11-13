@@ -64,9 +64,13 @@ module activation_row_store_dynamic (
         assign row_q[g*8 +:8]=q;
         wire fill_lane=(state==FILL && in_valid && scatter[4:0]==g);
         wire fill_pad=(state==FILL && in_valid && !fill_lane && row_bytes[4:0]==16 && count==row_bytes-1 && g>=16);
+        // Payload selection uses row position only. The write enable already
+        // qualifies ingress valid; carrying valid through the byte mux adds
+        // a long layer-select path to all 32 banks without changing a write.
+        wire pad_position=(scatter[4:0]!=g && row_bytes[4:0]==16 && count==row_bytes-1 && g>=16);
         wire mem_we=accept_r || fill_lane || fill_pad;
-        wire [7:0] mem_wa=accept_r ? beat : fill_lane ? scatter[12:5] : beats_m1;
-        wire [7:0] mem_wd=accept_r ? rd_data[g*8 +:8] : fill_lane ? in_data : 8'd0;
+        wire [7:0] mem_wa=accept_r ? beat : pad_position ? beats_m1 : scatter[12:5];
+        wire [7:0] mem_wd=accept_r ? rd_data[g*8 +:8] : pad_position ? 8'd0 : in_data;
         always @(posedge clk) begin
             q<=mem[ram_ra<BEATS ? ram_ra : 8'd0];
             we_r<=mem_we;

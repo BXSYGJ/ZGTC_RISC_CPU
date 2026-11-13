@@ -1,0 +1,46 @@
+{
+  "inputs": [
+    {
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\experiments\\pacerv_integration\\tb_shared_uart.sv",
+      "sha256": "bb564e24c7b39c76fb064a14f929d555b0cb8937ace2e297c9dc6b831d711c2d"
+    },
+    {
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\ctrl\\instrec_top.v",
+      "sha256": "685e422f3d603dda19d02a9f39f94ce7879873d126c0a7c88f97ea80400dbfad"
+    },
+    {
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\ctrl\\uart_tx.v",
+      "sha256": "9ce20db2aa09f678ab0537ab97d131077400336a657c731860832350bf3cc762"
+    }
+  ],
+  "scope": "production top UART arbitration and real serializer; other IP unelaborated",
+  "commands": [
+    {
+      "command": [
+        "D:\\AAAPP\\iverilog\\bin\\iverilog.EXE",
+        "-g2012",
+        "-i",
+        "-s",
+        "tb_shared_uart",
+        "-o",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\uart\\before_priority_fix_v2\\test.vvp",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\experiments\\pacerv_integration\\tb_shared_uart.sv",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\ctrl\\instrec_top.v",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\ctrl\\uart_tx.v"
+      ],
+      "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga",
+      "exit_status": 0,
+      "output": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\ctrl\\instrec_top.v:588: warning: extra digits given for sized hex constant.\r\n"
+    },
+    {
+      "command": [
+        "D:\\AAAPP\\iverilog\\bin\\vvp.EXE",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\uart\\before_priority_fix_v2\\test.vvp"
+      ],
+      "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga",
+      "exit_status": 1,
+      "output": "FATAL: D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\experiments\\pacerv_integration\\tb_shared_uart.sv:52: Multiple UART owners consumed the same beat pops=2\r\n       Time: 5452000  Scope: tb_shared_uart\r\n"
+    }
+  ],
+  "passed": false
+}

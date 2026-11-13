@@ -61,8 +61,8 @@ module fc_engine #(
 
     reg signed [15:0] x_buf [0:CIN-1];
     (* syn_ramstyle = "registers" *) reg signed [31:0] b_ram [0:GRP_NUM*16-1];
-    (* syn_ramstyle = "registers" *) reg signed [31:0] m_ram [0:GRP_NUM*16-1];
-    (* syn_ramstyle = "registers" *) reg        [6:0]  s_ram [0:GRP_NUM*16-1];
+    (* syn_ramstyle = "block_ram" *) reg signed [31:0] m_ram [0:GRP_NUM*16-1];
+    (* syn_ramstyle = "block_ram" *) reg        [6:0]  s_ram [0:GRP_NUM*16-1];
 
     reg signed [31:0] acc [0:15];
     reg [7:0]  x_cnt;
@@ -89,6 +89,9 @@ module fc_engine #(
     wire               rq_in;
     wire        [7:0]  rq_y;
     wire               rq_ok;
+    reg signed [31:0] rq_acc_q, rq_m_q;
+    reg [6:0] rq_shift_q;
+    reg rq_in_q;
 
     assign rq_acc   = acc[rq_cnt[3:0]];
     assign rq_m     = m_ram[grp_cnt * 16 + rq_cnt[3:0]];
@@ -97,14 +100,27 @@ module fc_engine #(
     assign w_ready  = (state == S_MAC);
     assign grp_advance = (state == S_NEXT) && (grp_cnt != GRP_LAST);
 
+    // Synchronous coefficient reads isolate the channel selector from the
+    // multiplier inputs. Payload has no reset so M/shift infer native RAM.
+    // All three operands and their valid bit advance together.
+    always @(posedge clk) begin
+        rq_acc_q <= rq_acc;
+        rq_m_q <= rq_m;
+        rq_shift_q <= rq_shift;
+    end
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) rq_in_q <= 1'b0;
+        else rq_in_q <= rq_in;
+    end
+
     requant_unit u_rq (
         .clk       (clk),
         .rst_n     (rst_n),
-        .acc_s32   (rq_acc),
-        .m_s32     (rq_m),
-        .shift     (rq_shift),
+        .acc_s32   (rq_acc_q),
+        .m_s32     (rq_m_q),
+        .shift     (rq_shift_q),
         .zp_out    (ZP_OUT),
-        .in_valid  (rq_in),
+        .in_valid  (rq_in_q),
         .y_u8      (rq_y),
         .out_valid (rq_ok)
     );
@@ -192,7 +208,7 @@ module fc_engine #(
 
                 S_RQ: begin
                     // Present 16 channels (rq_cnt 0..15); the unit has a
-                    // 4-cycle latency and 1/cycle throughput, so collect
+                    // 5-cycle including coefficient read, 1/cycle throughput; collect
                     // 16 out_valid pulses before advancing.
                     if (rq_cnt < 5'd16) rq_cnt <= rq_cnt + 5'd1;
                     if (rq_ok) begin

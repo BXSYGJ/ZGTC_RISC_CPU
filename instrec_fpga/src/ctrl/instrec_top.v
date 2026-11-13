@@ -10,7 +10,7 @@
 //   clk       27 MHz board crystal (D18), reference of video GPLL
 //   clk_nco   27 MHz audio processing clock (alias of board clk)
 //   pix_clk   148.5 MHz pixel clock (hdmi_tx_if / demo GPLL_B IP)
-//   core_clk  125 MHz DDR3 controller user clock (ddr3_wrapper IP output)
+//   core_clk  109.375 MHz DDR3 controller user clock (ddr3_wrapper IP output)
 //
 // Reset tree (design doc section 1.3):
 //   rst_n     asynchronous board reset (KEY0, C22)
@@ -208,30 +208,57 @@ module instrec_top #(
 
     // Master 3 time-sharing: self_test owns m3 at boot, the diagnostic
     // readback engine uses it afterwards (never concurrently in practice).
-    // Priority: self_test (boot) > diagnostic readback (PC is waiting) >
-    // feature dump (background, fires once per window after the NPU).
-    // The diagnostic engine and the feature dump are hard-gated until the
-    // boot self-test has finished (st_done).  Note the ownership split:
-    //  - st_m3_sel (== st_cmd_valid) drives the CMD/WDATA mux: the command
-    //    strobe correctly drops during the read drain tail, since self_test is
-    //    not issuing a new command yet.
-    //  - rd_ready[3] must stay asserted for the WHOLE self-test (until st_done),
-    //    not just while cmd_valid is high: `done` fires on RLAST while the last
-    //    read beat still sits in the controller fifo one cycle later.  If
-    //    rd_ready fell with cmd_valid, that stale last beat would be handed to
-    //    self_test as the first beat of the next read => data compare fail at
-    //    the second read address 0x0030_0200 (the board "DDR3 ERR @00300200").
-    wire st_m3_sel    = st_cmd_valid;
-    wire dg_m3_en     = st_done;
-    wire dg_m3_sel    = !st_m3_sel && dg_m3_en && dg_m3_cmd_valid;
-    wire fd_m3_sel    = !st_m3_sel && !dg_m3_sel && dg_m3_en && fd_m3_cmd_valid;
-    wire fd_on        = (FEAT_DUMP_ON_M3 != 0);
-    wire m3_req_valid = st_cmd_valid | dg_m3_sel | (fd_on && fd_m3_sel);
-    assign m3_cmd   = st_m3_sel ? st_m3_cmd   :
-                      dg_m3_sel ? dg_m3_cmd   : fd_m3_cmd;
-    assign m3_wdata = st_m3_sel ? st_m3_wdata :
-                      dg_m3_sel ? dg_m3_wdata :
-                      fd_on     ? fd_m3_wdata : 256'd0;
+    // M3 keeps its owner until controller completion and read FIFO drain.
+    // Client order is boot, diagnostics, feature export, PaceRV data.
+    wire         m3_req_valid, m3_rd_ready;
+    wire [31:0]  m3_wstrb;
+    wire [3:0]   m3c_wready, m3c_rvalid, m3c_done, m3c_abort;
+    wire [255:0] m3c_rdata;
+    wire         m3_share_fault, m3_share_active;
+    wire [1:0]   m3_share_owner;
+    wire         cpu_dd_req_valid, cpu_dd_req_ready, cpu_dd_req_write;
+    wire [31:0]  cpu_dd_req_address, cpu_dd_req_data;
+    wire [3:0]   cpu_dd_req_strobe;
+    wire         cpu_dd_rsp_valid, cpu_dd_rsp_ready, cpu_dd_rsp_error;
+    wire [31:0]  cpu_dd_rsp_data;
+    wire         cpu_m3_valid, cpu_m3_rd_ready, cpu_dd_fault;
+    wire [36:0]  cpu_m3_cmd;
+    wire [255:0] cpu_m3_wdata;
+    wire [31:0]  cpu_m3_wstrb;
+
+    ddr3_m3_share u_m3_share (
+        .clk(core_clk), .rst_n(core_clk_rst_n),
+        .boot_done(st_done && !st_fail),
+        .c_valid({cpu_m3_valid, (FEAT_DUMP_ON_M3 != 0) && fd_m3_cmd_valid,
+                  dg_m3_cmd_valid, st_cmd_valid}),
+        .c_cmd({cpu_m3_cmd, fd_m3_cmd, dg_m3_cmd, st_m3_cmd}),
+        .c_wdata({cpu_m3_wdata, fd_m3_wdata, dg_m3_wdata, st_m3_wdata}),
+        .c_wstrb({cpu_m3_wstrb, 32'hffffffff, 32'hffffffff, 32'hffffffff}),
+        .c_rd_ready({cpu_m3_rd_ready, 1'b1, dg_m3_rd_ready, st_rd_ready}),
+        .c_wready(m3c_wready), .c_rvalid(m3c_rvalid),
+        .c_done(m3c_done), .c_abort(m3c_abort), .c_rdata(m3c_rdata),
+        .m_valid(m3_req_valid), .m_cmd(m3_cmd), .m_wdata(m3_wdata),
+        .m_wstrb(m3_wstrb), .m_rd_ready(m3_rd_ready),
+        .m_wready(ddr_wready_beat[3]), .m_rvalid(ddr_rd_valid[3]),
+        .m_rdata(rd_data_3), .m_done(ddr_done[3]),
+        .m_abort(ddr_cmd_to_err[3] || ddr_addr_err[3]),
+        .fault(m3_share_fault), .owner(m3_share_owner), .active(m3_share_active)
+    );
+
+    pace_cpu_ddr_bridge u_cpu_ddr_bridge (
+        .clk(core_clk), .rst_n(core_clk_rst_n),
+        .ddr_ok(ddr_init_done && st_done && !st_fail),
+        .req_valid(cpu_dd_req_valid), .req_ready(cpu_dd_req_ready),
+        .req_address(cpu_dd_req_address), .req_write(cpu_dd_req_write),
+        .req_data(cpu_dd_req_data), .req_strobe(cpu_dd_req_strobe),
+        .rsp_valid(cpu_dd_rsp_valid), .rsp_ready(cpu_dd_rsp_ready),
+        .rsp_data(cpu_dd_rsp_data), .rsp_error(cpu_dd_rsp_error),
+        .m_cmd_valid(cpu_m3_valid), .m_cmd(cpu_m3_cmd),
+        .m_wdata(cpu_m3_wdata), .m_wstrb(cpu_m3_wstrb),
+        .m_rd_ready(cpu_m3_rd_ready), .m_wready(m3c_wready[3]),
+        .m_rvalid(m3c_rvalid[3]), .m_rdata(m3c_rdata),
+        .m_done(m3c_done[3]), .m_abort(m3c_abort[3]), .fault(cpu_dd_fault)
+    );
 
     // mel_engine master-2 port nets (per-master signals, packed into the
     // shared ctrl_axi buses exactly like audio_sink does for master 0)
@@ -381,7 +408,7 @@ module instrec_top #(
         end
     end
 
-    audio_sink u_audio_sink (
+    audio_sink #(.INJECT_GAP_CYCLES(14'd2279), .WR_TIMEOUT_CYCLES(23'd3670016)) u_audio_sink (
         .clk           (core_clk),
         .rst_n         (core_clk_rst_n),
         .fifo_rd_en    (fifo_rd_en),
@@ -568,7 +595,7 @@ module instrec_top #(
         .m3_cmd_valid(fd_m3_cmd_valid),
         .m3_cmd      (fd_m3_cmd),
         .m3_wdata    (fd_m3_wdata),
-        .m3_done     (ddr_done[3]),
+        .m3_done     (m3c_done[2]),
         .busy        (fd_busy),
         .dump_done   (fd_done)
     );
@@ -679,7 +706,7 @@ module instrec_top #(
     assign m2_wdata      = mel_m2_wdata;
     assign axi_rvalid_ctrl = ddr_init_done && axi_rvalid;
 
-    ddr3_ctrl_axi u_ddr3_ctrl_axi (
+    ddr3_ctrl_axi #(.M3_MASK_ENABLE(1), .P3_QUOTA_TIMEOUT(109375)) u_ddr3_ctrl_axi (
         .clk            (core_clk),
         .rst_n          (core_clk_rst_n),
         .cmd_valid      (ddr_cmd_valid),
@@ -691,8 +718,9 @@ module instrec_top #(
         .m1_wdata       (m1_wdata),
         .m2_wdata       (m2_wdata),
         .m3_wdata       (m3_wdata),
+        .m3_wstrb       (m3_wstrb),
         .wready_beat    (ddr_wready_beat),
-        .rd_ready       ({(!st_done) ? st_rd_ready : dg_m3_rd_ready, mel_m2_rd_ready, native_m1_rd_ready, 1'b0}),
+        .rd_ready       ({m3_rd_ready, mel_m2_rd_ready, native_m1_rd_ready, 1'b0}),
         .rd_data_0      (rd_data_0),
         .rd_data_1      (rd_data_1),
         .rd_data_2      (rd_data_2),
@@ -784,7 +812,7 @@ module instrec_top #(
     // PDS reports "Verilog-2036: Net st_wready_beat ... has no driver, tie
     // it to 0"; self_test then never sees a beat handshake and the first
     // write command aborts with st_fail at SELFTEST_BASE.
-    assign st_wready_beat = ddr_wready_beat[3];
+    assign st_wready_beat = m3c_wready[0];
 
     // ------------------------------------------------------------------
     // UART dispatch: weight_loader keeps the 0xAA55 binary frame protocol;
@@ -811,10 +839,10 @@ module instrec_top #(
         .tx_ready       (dg_tx_ready),
         .m3_cmd_valid   (dg_m3_cmd_valid),
         .m3_cmd         (dg_m3_cmd),
-        .m3_rd_data     (rd_data_3),
-        .m3_rd_valid    (ddr_rd_valid[3]),
+        .m3_rd_data     (m3c_rdata),
+        .m3_rd_valid    (m3c_rvalid[1]),
         .m3_rd_ready    (dg_m3_rd_ready),
-        .m3_done        (ddr_done[3]),
+        .m3_done        (m3c_done[1]),
         .diag_lock      (dg_lock),
         .rx_in_arg      (dg_rx_in_arg),
         .win_id         (win_id),
@@ -833,9 +861,9 @@ module instrec_top #(
         .wdata        (st_m3_wdata),
         .wready_beat  (st_wready_beat),
         .rd_ready     (st_rd_ready),
-        .rd_data      (rd_data_3),
-        .rd_valid     (ddr_rd_valid[3]),
-        .done         (ddr_done[3]),
+        .rd_data      (m3c_rdata),
+        .rd_valid     (m3c_rvalid[0]),
+        .done         (m3c_done[0]),
         .st_done      (st_done),
         .st_fail      (st_fail),
         .st_fail_addr (st_fail_addr)
@@ -845,7 +873,7 @@ module instrec_top #(
 
     wire weight_start_unused;
 
-    sys_ctrl u_sys_ctrl (
+    sys_ctrl #(.PLL_TIMEOUT_CYCLES(546875000), .DDR_TIMEOUT_CYCLES(10937500)) u_sys_ctrl (
         .weight_ok    (weight_ok),
         .weight_err   (weight_err),
         .weight_start (weight_start_unused),
@@ -902,7 +930,7 @@ module instrec_top #(
     always @(posedge core_clk or negedge core_clk_rst_n) begin
         if (!core_clk_rst_n) tx_accept_hold <= 1'b0;
         else if (!tx_byte_ready) tx_accept_hold <= 1'b0;
-        else if (tx_accept_ready && (wl_tx_valid | dbg_tx_valid | cpu_tx_valid))
+        else if (tx_accept_ready && (wl_tx_valid | dbg_tx_valid | dg_tx_valid | cpu_tx_valid))
             tx_accept_hold <= 1'b1;
     end
     assign wl_tx_ready   = tx_accept_ready;
@@ -918,7 +946,7 @@ module instrec_top #(
     wire        cpu_npu_start;
     wire        cpu_tx_ready;
 
-    uart_tx u_uart_tx (
+    uart_tx #(.BAUD_DIV(949)) u_uart_tx (
         .clk         (core_clk),
         .rst_n       (core_clk_rst_n),
         .byte_wdata  (wl_tx_valid ? wl_tx_data :
@@ -932,10 +960,10 @@ module instrec_top #(
 
     // The CPU may only pop its FIFO when the multiplexer actually selects it,
     // otherwise a byte would be consumed while wl/dbg data goes out instead.
-    assign cpu_tx_ready = tx_accept_ready & ~wl_tx_valid & ~dbg_tx_valid;
+    assign cpu_tx_ready = tx_accept_ready & ~wl_tx_valid & ~dbg_tx_valid & ~dg_tx_valid;
     assign dg_tx_ready  = tx_accept_ready & ~wl_tx_valid & ~dbg_tx_valid;
 
-    uart_rx u_uart_rx (
+    uart_rx #(.BAUD_DIV(949)) u_uart_rx (
         .clk         (core_clk),
         .rst_n       (core_clk_rst_n),
         .uart_rxd    (uart_rx),
@@ -1038,10 +1066,11 @@ module instrec_top #(
     );
 
     rv32_cpu_subsys #(
-        .ENABLE_M         (0),      // RV32I: saves ~600 LUT against the cliff
-        .ENABLE_PREDICTOR (0),
+        .ENABLE_M         (1),
+        .ENABLE_C         (1),
+        .ENABLE_PREDICTOR (1),
         .RESET_VECTOR     (32'h0000_0000),
-        .PROG_HEX         ("src/cpu/prog.hex")
+        .PROG_HEX         ("src/cpu/prog_pacerv.hex")
     ) u_cpu (
         .clk             (core_clk),
         .rst_n           (core_clk_rst_n),
@@ -1053,9 +1082,10 @@ module instrec_top #(
         .npu_probs_idx   (npu_probs_idx_u),
         .npu_top1        (npu_top1_u),
         .npu_cycles      (npu_cycles_u),
-        .ddr_ok          (ddr_init_done & st_done & ~st_fail & ~safe_err),
-        .ddr_err         (safe_err),
-        .ddr_sts         ({8'h00, 8'h00, ddr_cmd_to_err, ddr_to_err,
+        .ddr_ok          (ddr_init_done & st_done & ~st_fail & ~safe_err &
+                          ~cpu_dd_fault & ~m3_share_fault),
+        .ddr_err         (safe_err | cpu_dd_fault | m3_share_fault),
+        .ddr_sts         ({6'h00, cpu_dd_fault, m3_share_fault, 8'h00, ddr_cmd_to_err, ddr_to_err,
                            ddr_dbg_to_state, st_fail, st_done, 6'h00}),
         .uart_valid      (cpu_tx_valid),
         .uart_data       (cpu_tx_data),
@@ -1064,7 +1094,12 @@ module instrec_top #(
         .cpu_alive       (cpu_alive),
         .cpu_trap        (cpu_trap),
         .cpu_trap_cause  (cpu_trap_cause),
-        .npu_soft_start  (cpu_npu_start)
+        .npu_soft_start  (cpu_npu_start),
+        .dd_req_valid    (cpu_dd_req_valid), .dd_req_ready(cpu_dd_req_ready),
+        .dd_req_address  (cpu_dd_req_address), .dd_req_write(cpu_dd_req_write),
+        .dd_req_data     (cpu_dd_req_data), .dd_req_strobe(cpu_dd_req_strobe),
+        .dd_rsp_valid    (cpu_dd_rsp_valid), .dd_rsp_ready(cpu_dd_rsp_ready),
+        .dd_rsp_data     (cpu_dd_rsp_data), .dd_rsp_error(cpu_dd_rsp_error)
     );
 
     // ==================================================================
@@ -1075,6 +1110,7 @@ module instrec_top #(
     //   led[3:1] NPU busy / CPU trap / CPU alive
     //   led[0]   1 Hz heartbeat (active after RUN)
     // ==================================================================
-    assign led = {stage_code, overflow_warn, safe_err, npu_busy_u, cpu_trap, cpu_alive, heartbeat};
+    assign led = {stage_code, overflow_warn, (safe_err | cpu_dd_fault | m3_share_fault),
+                  npu_busy_u, cpu_trap, cpu_alive, heartbeat};
 
 endmodule

@@ -1,0 +1,40 @@
+﻿{
+  "copied_utc": "2026-11-13T10:16:56.7538137Z",
+  "unmodified": true,
+  "source_project": "ZGTC_RISC_CPU",
+  "source": "cpu/H3_Base_145125/source/rtl",
+  "files": [
+    {
+      "file": "rv32_core.sv",
+      "sha256": "15F86BA74E955CE93C3937106C7650D367B0B6249ED8799E3B373F34F31DA404"
+    },
+    {
+      "file": "rv32_alu.sv",
+      "sha256": "125647D90B98F294743127637406D19479EEBDA82DCCFAABA7ACAF59D5AE38B1"
+    },
+    {
+      "file": "rv32_decode.sv",
+      "sha256": "9CB2B57B46ED775D85B6E70A3EEBE92C2D5E49E9A6483993109E2C096D9A3FF3"
+    },
+    {
+      "file": "rv32_machine.sv",
+      "sha256": "56B542E419C58216A08B0A5C83322506E42E2721FA28DB50A6454EBE29607ABD"
+    },
+    {
+      "file": "rv32_muldiv.sv",
+      "sha256": "64DF4940F2D309FA68E8183F5ED1825E8843046703BF5F34EC8B885B03532246"
+    },
+    {
+      "file": "rv32_btb.sv",
+      "sha256": "B1B3481343A2E1275CFD984C4EAB05C5F9D92CB72DAB652010463073EB86EB4F"
+    },
+    {
+      "file": "rv32_rvc_expand.sv",
+      "sha256": "308AC8A65C9E29AEEC27B38417483D0F43FD7C54487C26E89A3FA54B4647951B"
+    },
+    {
+      "file": "rv32_rvc_frontend.sv",
+      "sha256": "210B5BA9280C3840AAFC27E7C3E35616085EFDE310793DC1661CC72F50984128"
+    }
+  ]
+}

@@ -1,5 +1,15 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+> **2026-11-14 PaceRV共享整机：100Pro+ 109.375 MHz时序收敛中**。完整五级RV32IMC核心与整机音频、NPU、显示、UART、DDR已接通。相同固件固定循环460,012→180,016周期，退休指令均180,008，结果f2d8888b；CPU四组、996项DDR、四路UART、标准CPU入口及29文件独立回退通过。
+>
+> 当前冻结run为 `full-20261114-021145-full`，PG2L100H-6IFBG676，系统109.375MHz/像素148.5MHz，202份检出输入一致。官方规则生成的875Mbps DDR IP、FDC、UART分频和音频时间常数已同步启用；程序ROM取指物理地址限制为13位，完整PC和数据地址仍32位；两级短权重FIFO改用寄存器映射以处理保持时间路径。完整NPU golden一致，31,152,093周期、331次CPU DDR请求/返回。七拍显示五帧10,368,000像素与原版一致，2000项检查通过。当前normal/seed2/12轮hold修复完整重跑；旧125MHz的010622轮全部阶段完成但时序未合格，原报告保留。
+>
+> 125MHz及109.375MHz连续I²S仿真各完成两个132,096帧窗口；稳定后的第二窗均全部为真实输入，顺序一致、补零0、FIFO溢出0、写超时0。启动首窗各有1次补零。新频率下NPU周期折算284.819ms，原125MHz折算249.217ms。音频采样48kHz及像素148.5MHz保持独立。
+>
+> 原155.25MHz核心在隔离副本通过三项集成测试，相同循环仍为180,016周期，生产保持H3。厂商说明PG2L100H采用单线程路由；其不接受通用`-number_of_router_thread`选项，当前配方已删除。单独重启PnR未加载已映射状态，现保留两次失败记录并从同一202份冻结输入完整重跑。16GB主机只运行一项重布线，轻量仿真可并行。
+>
+> 本轮只验收100Pro+本地完整系统，远程工作已结束；旧正式latest位流不变。说明 `docs/PACERV_SHARED_SYSTEM_20261113.md`；复现 `experiments/pacerv_shared_system/USAGE_zh.md`；恢复 `docs/HANDOFF_PACERV_SHARED_SYSTEM_20261113.md`。
+
 > **2026-11-13（离线参考量化契约错误修正 —— 板级链路与 golden 逐位一致，先读这节）**
 > **根因**：`golden_pipeline.run_mel_pipeline()` 的 `inv_s_in/zp_in` 默认取
 > `scripts/outputs/layer_contract.json`（44.1 kHz：zp_in=49、inv_s_in=267723430），

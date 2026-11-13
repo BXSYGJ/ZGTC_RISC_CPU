@@ -2,21 +2,19 @@
 // File    : rv32_cpu_subsys.sv
 // Module  : rv32_cpu_subsys
 // Project : InstRec-FPGA (PG2L100H-6IFBG676, PDS 2022.2-SP6.4)
-// Purpose : RV32IM control core inside the InstRec system clock domain.
+// Purpose : PaceRV H3 RV32IMC core with local boot storage and shared DDR data.
 //
-// WHY THIS MODULE EXISTS
-//   instrec_top / top_core_only are pure hardware pipelines: the competition
-//   entry ("RISC-V CPU + AI acceleration") had no soft core at all.  This
-//   module adds the smallest honest integration that still leaves the proven
-//   InstRec datapath untouched:
+// INTEGRATION
+//   The frozen H3 execution core runs in the existing core_clk domain and
+//   supervises the audio/NPU system through the original MMIO register map.
 //
 //     * the CPU fetches from an 8 KiB on-chip ROM that holds the firmware,
 //     * it reads/writes an 8 KiB data RAM (byte strobes supported),
 //     * it observes the accelerator (npu_busy/done/timeout/top1/probs/cycles,
 //       DDR3 self-test status) through a 32-bit MMIO window,
 //     * it drives the shared 115200 UART transmitter through a 16-byte FIFO,
-//     * it may issue an NPU soft start (CTRL[0]) so the control relationship
-//       is real in both directions, not just observation.
+//     * it issues NPU soft starts through CTRL[0],
+//     * it accesses the system DDR through one captured request/response path.
 //
 //   Everything here runs in the core_clk (DDR3 user clock) domain, which is
 //   the same domain as npu_top / mel_engine / uart_tx, so no CDC is added.
@@ -24,13 +22,17 @@
 // MEMORY MAP (CPU byte addresses)
 //   0x0000_0000 .. 0x0000_1FFF  ROM  8 KiB  (firmware, read-only, $readmemh)
 //   0x2000_0000 .. 0x2000_1FFF  RAM  8 KiB  (data/bss/stack, byte strobes)
+//   0x4000_0000 .. 0x400F_FFFF  shared DDR application read/write window
+//   0x4100_0000 .. 0x415F_FFFF  shared DDR observation alias (bridge validates)
 //   0x8000_0000 +                MMIO (see the decoder below)
 //   anything else                       -> bus error (i_rsp_error/d_rsp_error)
 //
 // BUS PROTOCOL
-//   One outstanding request per channel, 1-cycle latency, response held with
-//   rsp_valid until rsp_ready (rv32_core drops a response if rsp_ready is low,
-//   so the hold is mandatory, not a nicety).
+//   One outstanding request per channel. Local storage has one-cycle latency;
+//   shared DDR latency follows the system arbiter. Every response is held until
+//   its valid/ready handshake, including arbitrarily long backpressure.
+//   This integration uses local ROM/RAM and shared DDR data; it does not use
+//   the cache/backing-memory arrangement of the standalone H3 CoreMark result.
 //
 // MMIO MAP
 //   0x8000_0000 R  ID          0x52564331 ("RVC1")
@@ -56,7 +58,11 @@
 
 module rv32_cpu_subsys #(
     parameter integer ENABLE_M         = 1,
-    parameter integer ENABLE_PREDICTOR = 0,
+    parameter integer ENABLE_PREDICTOR = 1,
+    parameter integer ENABLE_C         = 1,
+    parameter integer FETCH_OVERLAP    = 1,
+    parameter integer EARLY_D_REQUEST  = 1,
+    parameter integer BTB_INDEX_BITS   = 8,
     parameter [31:0]  RESET_VECTOR     = 32'h0000_0000,
     parameter integer IMEM_WORDS       = 2048,   // 8 KiB
     parameter integer DMEM_WORDS       = 2048,   // 8 KiB
@@ -88,7 +94,19 @@ module rv32_cpu_subsys #(
     output reg         cpu_alive,
     output wire        cpu_trap,
     output wire [31:0] cpu_trap_cause,
-    output reg         npu_soft_start
+    output reg         npu_soft_start,
+
+    // One outstanding shared-DDR data request. Addresses are CPU byte addresses.
+    output wire        dd_req_valid,
+    input  wire        dd_req_ready,
+    output wire [31:0] dd_req_address,
+    output wire        dd_req_write,
+    output wire [31:0] dd_req_data,
+    output wire [3:0]  dd_req_strobe,
+    input  wire        dd_rsp_valid,
+    output wire        dd_rsp_ready,
+    input  wire [31:0] dd_rsp_data,
+    input  wire        dd_rsp_error
 );
 
     localparam integer IAW = $clog2(IMEM_WORDS);
@@ -102,9 +120,11 @@ module rv32_cpu_subsys #(
     // Core
     // =====================================================================
     wire        i_req_valid, i_req_ready;
-    wire [31:0] i_req_address;
+    wire [31:0] i_req_address, i_req_pair_address;
     wire        i_rsp_valid, i_rsp_ready;
-    wire [31:0] i_rsp_data;
+    wire [31:0] i_rsp_data, i_rsp_pair_data;
+    wire [1:0]  i_rsp_is_c, i_rsp_pair_is_c;
+    wire        i_rsp_pair_valid;
     wire        i_rsp_error;
     wire        d_req_valid, d_req_ready;
     wire [31:0] d_req_address;
@@ -115,6 +135,7 @@ module rv32_cpu_subsys #(
     wire [31:0] d_rsp_data;
     wire        d_rsp_error;
     wire        maintenance_valid;
+    wire        maintenance_ready;
     wire [63:0] cycle_count, retired_count;
 
     // PDS's front end rejects an empty '.port()' connection, so every unused
@@ -128,16 +149,28 @@ module rv32_cpu_subsys #(
     rv32_core #(
         .RESET_VECTOR     (RESET_VECTOR),
         .ENABLE_PREDICTOR (ENABLE_PREDICTOR),
-        .ENABLE_M         (ENABLE_M)
+        .ENABLE_M         (ENABLE_M),
+        .ENABLE_C         (ENABLE_C),
+        .FETCH_ADDRESS_BITS(IAW+2),
+        .FETCH_OVERLAP    (FETCH_OVERLAP),
+        .EARLY_D_REQUEST  (EARLY_D_REQUEST),
+        .BTB_INDEX_BITS   (BTB_INDEX_BITS),
+        .BTB_ADDRESS_BITS (32),
+        .LOAD_USE_BUBBLE  (1)
     ) u_core (
         .clk              (clk),
         .rst_n            (rst_n),
         .i_req_valid      (i_req_valid),
         .i_req_ready      (i_req_ready),
         .i_req_address    (i_req_address),
+        .i_req_pair_address(i_req_pair_address),
         .i_rsp_valid      (i_rsp_valid),
         .i_rsp_ready      (i_rsp_ready),
         .i_rsp_data       (i_rsp_data),
+        .i_rsp_pair_data  (i_rsp_pair_data),
+        .i_rsp_is_c       (i_rsp_is_c),
+        .i_rsp_pair_is_c  (i_rsp_pair_is_c),
+        .i_rsp_pair_valid (i_rsp_pair_valid),
         .i_rsp_error      (i_rsp_error),
         .d_req_valid      (d_req_valid),
         .d_req_ready      (d_req_ready),
@@ -150,7 +183,7 @@ module rv32_cpu_subsys #(
         .d_rsp_data       (d_rsp_data),
         .d_rsp_error      (d_rsp_error),
         .maintenance_valid(maintenance_valid),
-        .maintenance_ready(1'b1),
+        .maintenance_ready(maintenance_ready),
         .timer_value      (64'd0),
         .irq_external     (1'b0),
         .irq_software     (1'b0),
@@ -171,28 +204,40 @@ module rv32_cpu_subsys #(
     );
 
     // =====================================================================
-    // Instruction ROM (8 KiB, one synchronous read port)
+    // Instruction ROM: parity banks supply two adjacent words per request.
     // =====================================================================
     reg [31:0] imem [0:IMEM_WORDS-1];
+    reg [31:0] imem_even [0:(IMEM_WORDS/2)-1];
+    reg [31:0] imem_odd [0:(IMEM_WORDS/2)-1];
     // Second copy of the same image for the DATA port.  A load from a ROM
     // address is a normal RISC-V access (".data load source", string literals),
-    // and giving it its own array keeps both ports single-read: no true-dual-
-    // port inference, no arbitration, no stall.  Costs 2 extra BRAM blocks.
+    // and giving it its own array keeps both ports single-read, without
+    // arbitration. Resource inference is checked in each routed build.
     reg [31:0] rom_d [0:IMEM_WORDS-1];
 
+    integer init_word;
     initial begin
+        for (init_word = 0; init_word < IMEM_WORDS/2; init_word = init_word + 1) begin
+            imem[init_word*2] = 32'd0;
+            imem[init_word*2+1] = 32'd0;
+        end
         $readmemh(PROG_HEX, imem);
-        $readmemh(PROG_HEX, rom_d);
+        for (init_word = 0; init_word < IMEM_WORDS/2; init_word = init_word + 1) begin
+            rom_d[init_word*2] = imem[init_word*2];
+            rom_d[init_word*2+1] = imem[init_word*2+1];
+            imem_even[init_word] = imem[init_word*2];
+            imem_odd[init_word] = imem[init_word*2+1];
+        end
     end
 
     // =====================================================================
     // Data RAM (8 KiB, four byte lanes so the byte strobes map onto BRAM
     // byte-write enables without a 32-bit read-modify-write shim)
     // =====================================================================
-    reg [7:0] dmem0 [0:DMEM_WORDS-1];
-    reg [7:0] dmem1 [0:DMEM_WORDS-1];
-    reg [7:0] dmem2 [0:DMEM_WORDS-1];
-    reg [7:0] dmem3 [0:DMEM_WORDS-1];
+    (* syn_ramstyle = "block_ram" *) reg [7:0] dmem0 [0:DMEM_WORDS-1];
+    (* syn_ramstyle = "block_ram" *) reg [7:0] dmem1 [0:DMEM_WORDS-1];
+    (* syn_ramstyle = "block_ram" *) reg [7:0] dmem2 [0:DMEM_WORDS-1];
+    (* syn_ramstyle = "block_ram" *) reg [7:0] dmem3 [0:DMEM_WORDS-1];
 
     // =====================================================================
     // MMIO registers and sticky status
@@ -306,47 +351,56 @@ module rv32_cpu_subsys #(
     // Instruction channel: ROM only, anything else is a bus error
     // =====================================================================
     reg        i_pend;
-    reg [31:0] i_rsp_q;
+    reg [31:0] i_even_q, i_odd_q;
+    reg        i_primary_odd_q, i_pair_odd_q, i_pair_valid_q;
     reg        i_err_q;
-    reg [9:0]  i_wait;      // orphan-response watchdog (see below)
+    wire i_address_ok = (i_req_address[31:IAW+2] == 0) && (i_req_address[1:0] == 0);
+    // Range qualification makes this narrow word increment equivalent to
+    // byte-address +4, including the ROM-end carry, without a 32-bit adder.
+    wire [IAW:0] i_next_word = {1'b0, i_req_address[IAW+1:2]} + 1'b1;
+    wire i_pair_address_ok = (i_req_pair_address[31:IAW+2] == 0) &&
+                             (i_req_pair_address[1:0] == 0) &&
+                             !i_next_word[IAW] &&
+                             (i_req_pair_address[IAW+1:2] == i_next_word[IAW-1:0]);
+    wire [IAW-2:0] i_even_index = i_req_address[2] ?
+        i_req_pair_address[IAW+1:3] : i_req_address[IAW+1:3];
+    wire [IAW-2:0] i_odd_index = i_req_address[2] ?
+        i_req_address[IAW+1:3] : i_req_pair_address[IAW+1:3];
 
-    assign i_req_ready = !i_pend;
+    assign i_req_ready = !i_pend || i_rsp_ready;
+
+    // A single synchronous read per parity bank; imem is initialization only.
+    always @(posedge clk) begin
+        if (i_req_valid && i_req_ready) begin
+            i_even_q <= imem_even[i_even_index];
+            i_odd_q <= imem_odd[i_odd_index];
+        end
+    end
 
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
             i_pend  <= 1'b0;
-            i_rsp_q <= 32'd0;
+            i_primary_odd_q <= 1'b0;
+            i_pair_odd_q <= 1'b0;
+            i_pair_valid_q <= 1'b0;
             i_err_q <= 1'b0;
-            i_wait  <= 10'd0;
         end else if (i_req_valid && i_req_ready) begin
             i_pend <= 1'b1;
-            i_wait <= 10'd0;
-            if (i_req_address[31:IAW+2] == {(32-IAW-2){1'b0}}) begin
-                i_rsp_q <= imem[i_req_address[IAW+1:2]];
-                i_err_q <= 1'b0;
-            end else begin
-                i_rsp_q <= 32'd0;
-                i_err_q <= 1'b1;
-            end
+            i_primary_odd_q <= i_req_address[2];
+            i_pair_odd_q <= i_req_pair_address[2];
+            i_pair_valid_q <= i_address_ok && i_pair_address_ok;
+            i_err_q <= !i_address_ok;
         end else if (i_rsp_valid && i_rsp_ready) begin
             i_pend <= 1'b0;
-            i_wait <= 10'd0;
-        end else if (i_rsp_valid) begin
-            // A trap flushes the pipeline while a response is still held, and
-            // the core then never asserts rsp_ready again.  Dropping the
-            // orphan after 1024 cycles keeps a taken trap printable instead of
-            // turning it into a silent bus deadlock.
-            if (i_wait == 10'h3ff) begin
-                i_pend <= 1'b0;
-                i_wait <= 10'd0;
-            end else begin
-                i_wait <= i_wait + 10'd1;
-            end
         end
     end
 
     assign i_rsp_valid = i_pend;
-    assign i_rsp_data  = i_rsp_q;
+    assign i_rsp_data  = i_err_q ? 32'd0 : (i_primary_odd_q ? i_odd_q : i_even_q);
+    assign i_rsp_pair_data = i_pair_odd_q ? i_odd_q : i_even_q;
+    assign i_rsp_pair_valid = i_pair_valid_q;
+    assign i_rsp_is_c = {i_rsp_data[17:16] != 2'b11, i_rsp_data[1:0] != 2'b11};
+    assign i_rsp_pair_is_c = {i_rsp_pair_data[17:16] != 2'b11, i_rsp_pair_data[1:0] != 2'b11};
     assign i_rsp_error = i_err_q;
 
     // =====================================================================
@@ -354,11 +408,22 @@ module rv32_cpu_subsys #(
     // =====================================================================
     reg        d_pend;
     reg [31:0] d_rsp_q;
+    reg [31:0] d_rom_q;
+    (* syn_ramstyle = "block_ram" *) reg [7:0] d_ram0_q, d_ram1_q, d_ram2_q, d_ram3_q;
+    wire [31:0] d_ram_q = {d_ram3_q, d_ram2_q, d_ram1_q, d_ram0_q};
+    reg        d_ram_sel_q, d_rom_sel_q;
+    reg        d_ram_write_q;
+    reg [DAW-1:0] d_ram_word_q;
+    reg [31:0] d_ram_data_q;
+    reg [3:0] d_ram_strobe_q;
     reg        d_err_q;
-    reg [9:0]  d_wait;      // orphan-response watchdog (see below)
+    reg        dd_active;
 
     wire d_acc      = d_req_valid && d_req_ready;
     wire d_is_mmio  = d_req_address[31];
+    wire d_is_ddr   = (d_req_address[31:20] == 12'h400) ||
+                     ((d_req_address >= 32'h4100_0000) &&
+                      (d_req_address < 32'h4160_0000));
     wire d_is_ram   = (d_req_address[31:13] == DMEM_BASE_HI) &&
                       (d_req_address[DAW+1:2] <= DMEM_LAST);
     wire d_is_rom   = (d_req_address[31:IAW+2] == {(32-IAW-2){1'b0}});
@@ -367,57 +432,100 @@ module rv32_cpu_subsys #(
 
     // Preserve UART stores under backpressure, even for firmware which does
     // not poll UART_ST before every write.
-    assign d_req_ready = !d_pend &&
+    assign d_req_ready = !d_pend && !dd_active && (!d_is_ddr || dd_req_ready) &&
                          !(d_req_write && d_req_address == 32'h8000_000C && !tx_ready);
+
+    assign dd_req_valid = d_req_valid && d_is_ddr && !d_pend && !dd_active;
+    assign dd_req_address = d_req_address;
+    assign dd_req_write = d_req_write;
+    assign dd_req_data = d_req_data;
+    assign dd_req_strobe = d_req_strobe;
+    assign dd_rsp_ready = dd_active && d_rsp_ready;
+    // Accepted data transactions are exactly the two registered busy states.
+    // FENCE.I reaches MEM after older memory work has completed; younger data
+    // requests are blocked/flushed by the core's maintenance barrier.
+    assign maintenance_ready = !dd_active && !d_pend;
+
+    // Reset-free synchronous memory read registers let PDS infer block RAM.
+    // Read on each idle-channel edge, including the request-accept edge.
+    // Registered busy state holds both results through response backpressure;
+    // address-range decoding stays out of the physical memory enable path.
+    always @(posedge clk) begin
+        if (!d_pend && !dd_active) begin
+            d_ram0_q <= dmem0[d_word];
+            d_ram1_q <= dmem1[d_word];
+            d_ram2_q <= dmem2[d_word];
+            d_ram3_q <= dmem3[d_word];
+            d_rom_q <= rom_d[d_rom_word];
+            // Snapshot MMIO in parallel with local memory. Busy state alone
+            // holds the response; address admission is not on its enable path.
+            d_rsp_q <= mmio_rdata;
+        end
+    end
+
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) dd_active <= 1'b0;
+        else if (d_acc && d_is_ddr) dd_active <= 1'b1;
+        else if (dd_rsp_valid && dd_rsp_ready) dd_active <= 1'b0;
+    end
 
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
             d_pend  <= 1'b0;
-            d_rsp_q <= 32'd0;
             d_err_q <= 1'b0;
-            d_wait  <= 10'd0;
-        end else if (d_acc) begin
+            d_ram_sel_q <= 1'b0;
+            d_rom_sel_q <= 1'b0;
+        end else if (d_acc && !d_is_ddr) begin
             d_pend <= 1'b1;
-            d_wait <= 10'd0;
+            d_ram_sel_q <= d_is_ram && !d_is_mmio;
+            d_rom_sel_q <= d_is_rom && !d_is_mmio && !d_is_ram;
             if (d_is_mmio) begin
-                d_rsp_q <= mmio_rdata;
                 d_err_q <= 1'b0;
             end else if (d_is_ram) begin
-                d_rsp_q <= {dmem3[d_word], dmem2[d_word],
-                            dmem1[d_word], dmem0[d_word]};
                 d_err_q <= 1'b0;
             end else if (d_is_rom) begin
-                d_rsp_q <= rom_d[d_rom_word];
                 d_err_q <= 1'b0;
             end else begin
-                d_rsp_q <= 32'd0;
                 d_err_q <= 1'b1;
             end
         end else if (d_rsp_valid && d_rsp_ready) begin
             d_pend <= 1'b0;
-            d_wait <= 10'd0;
-        end else if (d_rsp_valid) begin
-            if (d_wait == 10'h3ff) begin
-                d_pend <= 1'b0;
-                d_wait <= 10'd0;
-            end else begin
-                d_wait <= d_wait + 10'd1;
+        end
+    end
+
+    assign d_rsp_valid = dd_active ? dd_rsp_valid : d_pend;
+    assign d_rsp_data  = dd_active ? dd_rsp_data :
+                         d_ram_sel_q ? d_ram_q : d_rom_sel_q ? d_rom_q : d_rsp_q;
+    assign d_rsp_error = dd_active ? dd_rsp_error : d_err_q;
+
+    // Capture the RAM write before driving the physical memory enables.
+    // The write commits on the first possible response-consumption edge;
+    // backpressure can delay acknowledgement. The one-outstanding channel
+    // admits the next request only after acknowledgement, preserving latency
+    // and subsequent load values under the original bus contract.
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            d_ram_write_q <= 1'b0;
+            d_ram_word_q <= {DAW{1'b0}};
+            d_ram_data_q <= 32'd0;
+            d_ram_strobe_q <= 4'd0;
+        end else begin
+            d_ram_write_q <= d_acc && d_is_ram && d_req_write;
+            if (d_acc && d_is_ram && d_req_write) begin
+                d_ram_word_q <= d_word;
+                d_ram_data_q <= d_req_data;
+                d_ram_strobe_q <= d_req_strobe;
             end
         end
     end
 
-    assign d_rsp_valid = d_pend;
-    assign d_rsp_data  = d_rsp_q;
-    assign d_rsp_error = d_err_q;
-
-    // Byte-strobed writes: one lane per byte, so each array is a plain
-    // single-port RAM with a byte-wide write enable.
+    // Byte lanes use one reset-free synchronous read and write port each.
     always @(posedge clk) begin
-        if (d_acc && d_is_ram && d_req_write) begin
-            if (d_req_strobe[0]) dmem0[d_word] <= d_req_data[7:0];
-            if (d_req_strobe[1]) dmem1[d_word] <= d_req_data[15:8];
-            if (d_req_strobe[2]) dmem2[d_word] <= d_req_data[23:16];
-            if (d_req_strobe[3]) dmem3[d_word] <= d_req_data[31:24];
+        if (d_ram_write_q) begin
+            if (d_ram_strobe_q[0]) dmem0[d_ram_word_q] <= d_ram_data_q[7:0];
+            if (d_ram_strobe_q[1]) dmem1[d_ram_word_q] <= d_ram_data_q[15:8];
+            if (d_ram_strobe_q[2]) dmem2[d_ram_word_q] <= d_ram_data_q[23:16];
+            if (d_ram_strobe_q[3]) dmem3[d_ram_word_q] <= d_ram_data_q[31:24];
         end
     end
 

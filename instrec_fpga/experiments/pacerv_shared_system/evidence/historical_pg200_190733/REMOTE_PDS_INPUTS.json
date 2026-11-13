@@ -1,0 +1,489 @@
+{
+  "scope": "PG200 CPU/physical DDR/UART with synthetic competing master",
+  "target": "PG2L200H-6FBB676",
+  "project_name": "pacerv_shared_200h",
+  "stage": "full",
+  "files": [
+    {
+      "path": "src/cpu/rv32_cpu_subsys.sv",
+      "bytes": 21253,
+      "sha256": "cb018d10ce1b3245017f4956b75ec1777efca3959e098c251efff6ca0d3e46f4"
+    },
+    {
+      "path": "src/cpu/vendor/pacerv_h3/rv32_alu.sv",
+      "bytes": 1848,
+      "sha256": "125647d90b98f294743127637406d19479eebda82dccfaaba7acaf59d5ae38b1"
+    },
+    {
+      "path": "src/cpu/vendor/pacerv_h3/rv32_btb.sv",
+      "bytes": 9248,
+      "sha256": "b1b3481343a2e1275cfd984c4eab05c5f9d92cb72dab652010463073eb86eb4f"
+    },
+    {
+      "path": "src/cpu/vendor/pacerv_h3/rv32_core.sv",
+      "bytes": 45852,
+      "sha256": "15f86ba74e955ce93c3937106c7650d367b0b6249ed8799e3b373f34f31da404"
+    },
+    {
+      "path": "src/cpu/vendor/pacerv_h3/rv32_decode.sv",
+      "bytes": 4765,
+      "sha256": "9cb2b57b46ed775d85b6e70a3eebe92c2d5e49e9a6483993109e2c096d9a3ff3"
+    },
+    {
+      "path": "src/cpu/vendor/pacerv_h3/rv32_machine.sv",
+      "bytes": 4464,
+      "sha256": "56b542e419c58216a08b0a5c83322506e42e2721fa28db50a6454ebe29607abd"
+    },
+    {
+      "path": "src/cpu/vendor/pacerv_h3/rv32_muldiv.sv",
+      "bytes": 5815,
+      "sha256": "64df4940f2d309fa68e8183f5ed1825e8843046703bf5f34ec8b885b03532246"
+    },
+    {
+      "path": "src/cpu/vendor/pacerv_h3/rv32_rvc_expand.sv",
+      "bytes": 7540,
+      "sha256": "308ac8a65c9e29aeec27b38417483d0f43fd7c54487c26e89a3fa54b4647951b"
+    },
+    {
+      "path": "src/cpu/vendor/pacerv_h3/rv32_rvc_frontend.sv",
+      "bytes": 12738,
+      "sha256": "210b5ba9280c3840aafc27e7c3e35616085efde310793dc1661cc72f50984128"
+    },
+    {
+      "path": "src/ddr3/pace_cpu_ddr_bridge.v",
+      "bytes": 4765,
+      "sha256": "786c6819e18f05e44540b680d3deb5b80f0204b8b5f0807edef02985759b898f"
+    },
+    {
+      "path": "src/ddr3/ddr3_m3_share.v",
+      "bytes": 3821,
+      "sha256": "64610b199c004b118f9bd45627e81ef589925e7389da9795461d77c532be5d6a"
+    },
+    {
+      "path": "src/ddr3/ddr3_ctrl_axi.v",
+      "bytes": 23495,
+      "sha256": "f4850d3cebe8f296407319f4bbb1f570a45864f5dc27d605e7ac58caad4c994f"
+    },
+    {
+      "path": "src/ddr3/ddr3_arbiter.v",
+      "bytes": 10147,
+      "sha256": "63e71d61e1a83202d616ce0b2f5406d833f3824964d11477f032040d716e85dd"
+    },
+    {
+      "path": "src/ddr3/ddr3_wrapper.v",
+      "bytes": 9530,
+      "sha256": "d74b666fcd7a4e029545ef7b810e4511845b5775c148b2fb37d83cb54afe3d3b"
+    },
+    {
+      "path": "src/ctrl/self_test.v",
+      "bytes": 16390,
+      "sha256": "2f97ebaeedc75cf3418fdc2ed08af95e6932e833d39c09c62eb2c90cc1c903f9"
+    },
+    {
+      "path": "src/ctrl/uart_tx.v",
+      "bytes": 4506,
+      "sha256": "9ce20db2aa09f678ab0537ab97d131077400336a657c731860832350bf3cc762"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/remote_pg200_top.v",
+      "bytes": 9225,
+      "sha256": "76dede273a83dd163f451117bce06a86dcd7e1ce884faeda3b1e4f9c099541a4"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/ddr3_test.idf",
+      "bytes": 77657,
+      "sha256": "f8111f0059996708c59f72473fafd62db7a8e738002a740d016e866cdfff57ae"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/firmware/remote_prog.hex",
+      "bytes": 20480,
+      "sha256": "ef024bb1fb737b2b7bcfdefd72e29b1d34c068595f9184794b1fcbe49fd2f176"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/constraints/pg200_ddr3.fdc",
+      "bytes": 30493,
+      "sha256": "b36509bdb09378e4357f3c5ffbe7853ab9502a069499c0a11145e86de7d4ede5"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/constraints/pg200_ip_cdc.fdc",
+      "bytes": 618,
+      "sha256": "cda86a0fd26b3ce5151350f2e89466b3ab6038a75fd9b9fe2863f913182cb751"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/constraints/pg200_remote.fdc",
+      "bytes": 3591,
+      "sha256": "2a0319a1d6077c4145211836df2e406faefe923097dcddb7ee8963a00500974e"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/ddrphy/ddr3_test_slice_top_v1_10.v",
+      "bytes": 55691,
+      "sha256": "213c8c801e069d7b9a98bfe5a4f7981cb1528181d86517c3185a05be541e2289"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/ddrphy/ips2l_ddrphy_calib_mux_v1_0.vp",
+      "bytes": 13948,
+      "sha256": "676e36319e7ce80b93e3543e255d53708d9fc71606587a6e692eab1ec82ecaed"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/ddrphy/ips2l_ddrphy_calib_top_v1_10.vp",
+      "bytes": 29035,
+      "sha256": "04faf434cef120b5d712911dfc97c8f498901b0679fba720b806f596d688bded"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/ddrphy/ips2l_ddrphy_control_path_adj_v1_10.vp",
+      "bytes": 8870,
+      "sha256": "8cdd7b9ec01c143882217b038cbf840d77e52ee3037e629e75e10b03fc223a38"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/ddrphy/ips2l_ddrphy_cpd_ctrl_v1_3.vp",
+      "bytes": 12614,
+      "sha256": "56f52683adbe720c7d43da1a9f199f4ab3add3f3b5960e3f687f87f60267c161"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/ddrphy/ips2l_ddrphy_cpd_lock_v1_0.vp",
+      "bytes": 3988,
+      "sha256": "a6696f8e79e2d132a6e76ad4997d5366d6c9cf8f05c60f77feff1b47b50d0090"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/ddrphy/ips2l_ddrphy_data_slice_dqs_gate_cal_v1_10.vp",
+      "bytes": 7140,
+      "sha256": "8764275d4eeb8d1765b3a09aba527d6d3bf3e46f5e1d17eefc685d7e0dbe1520"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/ddrphy/ips2l_ddrphy_data_slice_v1_10.vp",
+      "bytes": 43859,
+      "sha256": "e13e33d97ecbfea1838c4dd28e7f9f1c57dcb974606179523be46bba75344d50"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/ddrphy/ips2l_ddrphy_data_slice_wrcal_v1_10.vp",
+      "bytes": 20167,
+      "sha256": "b7a9757c252f74c4b57eb0fb74738c57e4eed3e669ddd7ffeeca1acedd330b2e"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/ddrphy/ips2l_ddrphy_data_slice_wrlvl_v1_10.vp",
+      "bytes": 21219,
+      "sha256": "871874f4af0f068571416916898f83eb07052e6e015c5800ffdf65d67620cf7e"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/ddrphy/ips2l_ddrphy_dfi_v1_3.vp",
+      "bytes": 23431,
+      "sha256": "9828a1ef43a864d287a7a317910fe330bfc904f44e8f60c8773aafa1d8c1534e"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/ddrphy/ips2l_ddrphy_dll_update_ctrl_v1_3.vp",
+      "bytes": 8102,
+      "sha256": "bc4e8f402d2fb98920e050a3c1514d44ec959877217d7865a30b22b7da73cac6"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/ddrphy/ips2l_ddrphy_dqs_gate_coarse_cal_v1_0.vp",
+      "bytes": 11936,
+      "sha256": "950a0010929854894c2c92d9f3f8e9dce0fee6985fee70d4160540a058853ede"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/ddrphy/ips2l_ddrphy_dqs_rddata_align_v1_10.vp",
+      "bytes": 39545,
+      "sha256": "c0cab4287a7a7b6b720977c1c5f9259c5f48f8da18e9a3ca1173a073b1ccf025"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/ddrphy/ips2l_ddrphy_dqsi_rdel_cal_v1_3.vp",
+      "bytes": 29297,
+      "sha256": "ef7e57755ab7558b1b518aa73999384368f349efe7077cf9283e0911e711ac1a"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/ddrphy/ips2l_ddrphy_drift_ctrl_v1_0.vp",
+      "bytes": 7226,
+      "sha256": "8ea99ac6decf6fe14c0585b4f121d7a1acc17290d7a1c68725d984e704e277bc"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/ddrphy/ips2l_ddrphy_eyecal_v1_5.vp",
+      "bytes": 16271,
+      "sha256": "31977dd34339d163ecbd8b9949ac4b65f0eaa6fbcd9a75d787400ae73f7f51d2"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/ddrphy/ips2l_ddrphy_gate_update_ctrl_v1_3.vp",
+      "bytes": 6262,
+      "sha256": "ce20eb3b9cbe3b392d8be0aa1d6787247bc7b2d91af36a1f734f35c9eb03d642"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/ddrphy/ips2l_ddrphy_gatecal_v1_10.vp",
+      "bytes": 17323,
+      "sha256": "b6859250ca098e81ff05bcab08dfe8ffee77648218e90c040a1dd3838a0671f2"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/ddrphy/ips2l_ddrphy_gpll_phase_v1_0.vp",
+      "bytes": 3812,
+      "sha256": "ef8ebe3742d23848bd2a1492d4901f886ce49aa98dbc295873b67e4116ba8524"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/ddrphy/ips2l_ddrphy_info_v1_0.vp",
+      "bytes": 12042,
+      "sha256": "0794201be97885e7695a16b6c35848655b08c4bf191405d26417126512ce4aa8"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/ddrphy/ips2l_ddrphy_init_v1_0.vp",
+      "bytes": 43375,
+      "sha256": "817f9f32b2260a4c35af446e89ff4c2d4b065381b25cb2020c538d22b4a45088"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/ddrphy/ips2l_ddrphy_main_ctrl_v1_10.vp",
+      "bytes": 13750,
+      "sha256": "39d5024d7364b441340b131d265d0648d8b7c1f92cc417424d7c584413c5f4a6"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/ddrphy/ips2l_ddrphy_rdcal_v1_10.vp",
+      "bytes": 56971,
+      "sha256": "6b4c7f3c24a4750ac69b4e7882617105c6e31f02da712aaa87932b8561ccea2b"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/ddrphy/ips2l_ddrphy_reset_ctrl_v1_3.vp",
+      "bytes": 19445,
+      "sha256": "17189b59ed5307c4a27ec35485b33af5c98a89e6ee7f9c5d85aaed9c03a77163"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/ddrphy/ips2l_ddrphy_rst_clk_phase_adj_v1_0.vp",
+      "bytes": 7292,
+      "sha256": "dd1dbae71726d968df475fe7fbb2b7321411fa67786092c0dc2e065edcf39382"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/ddrphy/ips2l_ddrphy_rst_debounce_v1_0.vp",
+      "bytes": 4580,
+      "sha256": "bff7ed95c8d305dfb88e6002c6de8453a21c72c03a5a0521a76ddd105598dc4d"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/ddrphy/ips2l_ddrphy_slice_rddata_align_v1_0.vp",
+      "bytes": 6878,
+      "sha256": "befb44f07d851524109a6dc8e17c5b8062694aa274ed8dbc4f7326b8fe1c443e"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/ddrphy/ips2l_ddrphy_training_ctrl_v1_0.vp",
+      "bytes": 4908,
+      "sha256": "777e8ee9d8d819fdcf04b39b5a5d6086c52369a7f19f04dbd0d06f7a7d3d6110"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/ddrphy/ips2l_ddrphy_upcal_v1_0.vp",
+      "bytes": 10182,
+      "sha256": "afbca3503da609f7951ad7fbef386bd007f403c89f52377211ba521967c94455"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/ddrphy/ips2l_ddrphy_wdata_path_adj_v1_10.vp",
+      "bytes": 16469,
+      "sha256": "85f625ed4a09964442e8616074eea9e4757e43b4217589bb9e2f289c9748b272"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/ddrphy/ips2l_ddrphy_wrcal_v1_7.vp",
+      "bytes": 37069,
+      "sha256": "0a8cb0bb70bd40809260c50bcb85d092c16fea5d9ab2e4fbbe647ccbd1bfb1b0"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/ddrphy/ips2l_ddrphy_wrlvl_v1_0.vp",
+      "bytes": 12764,
+      "sha256": "00c086bd729be3ab8287f6eb786cfb3549c97aa92f8465c608b8fc2477df3edc"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/ips2l_rst_sync_v1_3.vp",
+      "bytes": 3024,
+      "sha256": "64b8d83f15f2ff373e6b1040405c42051d8761bd1857dec719c884c2eb59361a"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/mcdq_ctrl/distributed_fifo/ips2l_distributed_fifo_v1_0.vp",
+      "bytes": 7838,
+      "sha256": "d6c0b0d8560b0f22128b4883933944fc686fd7597cfea0d6c545cc6af56c0b7a"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/mcdq_ctrl/distributed_fifo/rtl/ips2l_distributed_fifo_ctr_v1_0.vp",
+      "bytes": 18809,
+      "sha256": "fe31c8f44bea653ab20bb1830ad4f8ed41566e9cfef354bd5e2d48c7682f353d"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/mcdq_ctrl/distributed_fifo/rtl/ips2l_distributed_fifo_v1_0_distributed_fifo_v1_0.vp",
+      "bytes": 7708,
+      "sha256": "867ac91a1485dfe613a81f372d788e784bba8cd4b0497e56986135e92685ba73"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/mcdq_ctrl/distributed_fifo/rtl/ips2l_distributed_sdpram_v1_0_distributed_fifo_v1_0.vp",
+      "bytes": 6854,
+      "sha256": "3561bbbbd4e4432a538c3d20818d262b4f1e5517c48296f6b1b4cc8afdd19aef"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_apb_cross_v1_2.vp",
+      "bytes": 9592,
+      "sha256": "62f7d55354a8afe4d02bc6f6d6dc30fc8e9960d3b21709988b887acc99d09cf5"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_calib_delay_v1_2.vp",
+      "bytes": 6590,
+      "sha256": "a52e992b9766b6cb22ed23aa01d1cc5ac9b6a429a8e49de7a13ac51dd70e9784"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_cfg_apb_v1_2.vp",
+      "bytes": 42389,
+      "sha256": "482cb280a614f70209f1d07892fdd773a259d2ca0f23e8f38b85a9faf00513b9"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_dcd_bm_v1_2.vp",
+      "bytes": 17651,
+      "sha256": "bfbd472dd8b427fe6b003dd510f73db89f915ac92d31fe8a779c40f9d4e56bee"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_dcd_rowaddr_v1_2.vp",
+      "bytes": 4580,
+      "sha256": "4ac4721747b13020e1895be6265e55df90968f05beb8056279589039394bb9be"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_dcd_sm_v1_2.vp",
+      "bytes": 15064,
+      "sha256": "d7e710e3ed4d1807fb0bdd4d84c264817247a4da41123c72439c555573821f49"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_dcd_top_v1_2.vp",
+      "bytes": 12330,
+      "sha256": "26ab4e142f555602c023f62b19df52056c6d51da5052401254066cae0655ddaa"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_dcp_back_ctrl_v1_2.vp",
+      "bytes": 48957,
+      "sha256": "fe7b340b41d80ec7428cc38329a41864bcf5c209a6310610d09c7bc8579e541f"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_dcp_buf_v1_2.vp",
+      "bytes": 22007,
+      "sha256": "dab35fa172243ecbb5426a8ebccc2c168368ea0a6ea0558c909b815d781b17d6"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_dcp_out_v1_2.vp",
+      "bytes": 15064,
+      "sha256": "9471082e23170b144dc619f7f7e08c94b8a03378f72da388f744d6acb728928b"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_dcp_top_v1_2.vp",
+      "bytes": 24371,
+      "sha256": "21b1f0e3b4660e1078b47000bfe50022346414f5d5e713ac9e522a4f39f76548"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_dfi_v1_2.vp",
+      "bytes": 32495,
+      "sha256": "abf138d692e634fabe5f569b98d897dfece8a8ae66cee1dba830a56d7e255df1"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_lp_v1_2.vp",
+      "bytes": 23123,
+      "sha256": "7a80ccb1e053e5c9d8f389169359570f256d709ff2e4ad2c51fda7a7a6a4239d"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_mrs_v1_2.vp",
+      "bytes": 23735,
+      "sha256": "f78133bc021a57cf469773daaf102817fc37069447e8accc80afa1f4b20b0ad6"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_prefetch_fifo_v1_2.vp",
+      "bytes": 6044,
+      "sha256": "ee3aa91e980fb3dd08231cf1806a28edf759f4ea8248adfd44407d607519b9e4"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_rdatapath_v1_2.vp",
+      "bytes": 5212,
+      "sha256": "72dd8ece021f4ee74fd576c1628c4f7d3606ef632f0e68b9569a288a092a6b0f"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_reg_fifo2_v1_2.vp",
+      "bytes": 4818,
+      "sha256": "bc9cff65e4002a51af0c20c2f0a9b9f17dacde5157b58691bbfb1c44348ee08a"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_ui_axi_v1_2a.vp",
+      "bytes": 19885,
+      "sha256": "145b69395412be2553835f9278cdf1cb1703d3beeb914abf7d985e3c69f817fb"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_wdatapath_v1_2.vp",
+      "bytes": 11760,
+      "sha256": "db648e90ff607ca2f9e2b5cca048de417439888d0b906288e0cec7cf038d9dee"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_wdp_align_v1_2.vp",
+      "bytes": 9722,
+      "sha256": "1645e9eb7fac3c9c13cd3e0d7367f132293f9cec16835ce188c6345993d2b730"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_wdp_dcp_v1_2.vp",
+      "bytes": 9132,
+      "sha256": "3f30be0f49f78f09915743995c950fa6ff8de5f14598ebc8802e73b5c6d140ee"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_wrapper_v1_2b.vp",
+      "bytes": 47013,
+      "sha256": "d35010f49be551fb15ab2655cbeffcaaaa74fdf3ccb0754b033fc979d615e805"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_com_timing_v1_2.vp",
+      "bytes": 6636,
+      "sha256": "e3f19c4be6352ab64f07426973387f2876c540ee992f6eac9d3f2d470b3d49c2"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_tfaw_timing_v1_2.vp",
+      "bytes": 8738,
+      "sha256": "c632619f042bebb4f059df7f20eee90eb2b51b81210430cb37d01958ad3cd30f"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_tfaw_v1_2.vp",
+      "bytes": 4074,
+      "sha256": "ab87b7718bffc4fb2a2b27765576187f09b5266bbca7fc393c43c6dec96ff379"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_timing_act2wr_pass_v1_2.vp",
+      "bytes": 7642,
+      "sha256": "1b3874b059923481f292ba382ad156f7dcdd9ad39da6c86dddd480290ccce498"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_timing_act_pass_v1_2.vp",
+      "bytes": 5892,
+      "sha256": "9f32b6936e039c15f7b07b74480179d39d1b3787965e1b90bd067a7ede7fdd4c"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_timing_pre_pass_v1_2.vp",
+      "bytes": 10248,
+      "sha256": "e40a64caec9725c231cd88dde69973eab3aca38c9d2e66a2c5c0bbddf3103ae0"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_timing_rd_pass_v1_2.vp",
+      "bytes": 8652,
+      "sha256": "78b1de719a43ee0fc80e1a5464f7284439d91f1d4b3f83ef2ae5611920293988"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_timing_ref_pass_v1_2.vp",
+      "bytes": 5672,
+      "sha256": "c79dde6f9a682c55aff7bb89c4863f76a069b874fb154dff7d3e4d4a7a88f9d1"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_timing_wr_pass_v1_2.vp",
+      "bytes": 8626,
+      "sha256": "ea3470ca984554d4908ec950314f9242042417c6c4c6b3fd05ac5d6daab98c90"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_trc_timing_v1_2.vp",
+      "bytes": 10424,
+      "sha256": "7234241e5968f91ec6e396794f0bb80f6c7d1bca2038aa004d5078d3937953da"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/pll/ips2l_ddrphy_gpll_v1_3.vp",
+      "bytes": 8324,
+      "sha256": "3fecc367573a4b5bd158e1a8ff106c5c401c5f180143e8e5abe6bb068e5078d2"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/rtl/pll/ips2l_ddrphy_ppll_v1_0.vp",
+      "bytes": 17323,
+      "sha256": "34bb46106b84eab147f130bd7526f1486d35caeb40b0258cd59656e50d19dddd"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/ddr3_test.v",
+      "bytes": 22196,
+      "sha256": "3c5441b4bff33dff73811c3a025ede3b6348cb5779e21778653659b6cbfb84e0"
+    },
+    {
+      "path": "experiments/pacerv_shared_system/remote/vendor/ddr3_test/ddr3_test_ddrphy_top.v",
+      "bytes": 53206,
+      "sha256": "a95c28f225d2984401a798f673efff209154ae5beb8a7356d303136b71ea49d5"
+    }
+  ],
+  "clock_hz": 125000000
+}

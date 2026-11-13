@@ -1,5 +1,5 @@
 // dashboard_renderer: labeled instrument recognition dashboard.
-// Fixed 1080p dashboard. Graphics and text share a four-clock video latency.
+// Fixed 1080p dashboard. Graphics and text share a seven-clock video latency.
 // External waveform/feature memories have a one-clock read latency.
 module dashboard_renderer #(parameter SIMULATION = 0) (
     input wire pix_clk, rst_pix_n,
@@ -40,8 +40,8 @@ module dashboard_renderer #(parameter SIMULATION = 0) (
     reg wave_s1, spec_s1, wave_ready_s1, spec_ready_s1, result_s1, mute_s1;
     reg [3:0] class_s1;
     reg [63:0] percentages_s1;
-    reg [23:0] graph_s2, graph_s3, graph_color;
-    reg [3:0] de_pipe, hs_pipe, vs_pipe;
+    reg [23:0] graph_s2, graph_s3, graph_s4, graph_s5, graph_s6, graph_color;
+    reg [6:0] de_pipe, hs_pipe, vs_pipe;
     reg vs_d;
     reg [3:0] bar_row;
     reg [7:0] bar_pct;
@@ -120,17 +120,20 @@ module dashboard_renderer #(parameter SIMULATION = 0) (
         mute_s2 <= mute_s1;
         graph_s2 <= graph_color;
         graph_s3 <= graph_s2;
-        rgb <= de_pipe[2] ? (text_on ? text_rgb : graph_s3) : 24'd0;
-        de_pipe <= {de_pipe[2:0],pix_de};
-        hs_pipe <= {hs_pipe[2:0],pix_hs};
-        vs_pipe <= {vs_pipe[2:0],pix_vs};
+        graph_s4 <= graph_s3;
+        graph_s5 <= graph_s4;
+        graph_s6 <= graph_s5;
+        rgb <= de_pipe[5] ? (text_on ? text_rgb : graph_s6) : 24'd0;
+        de_pipe <= {de_pipe[5:0],pix_de};
+        hs_pipe <= {hs_pipe[5:0],pix_hs};
+        vs_pipe <= {vs_pipe[5:0],pix_vs};
         vs_d <= pix_vs;
         if (!rst_pix_n) begin
             de_pipe <= 0; hs_pipe <= 0; vs_pipe <= 0; vs_d <= 0; rgb <= 0;
         end
     end
-    assign de_out = de_pipe[3];
-    assign hs_out = hs_pipe[3];
-    assign vs_out = vs_pipe[3];
+    assign de_out = de_pipe[6];
+    assign hs_out = hs_pipe[6];
+    assign vs_out = vs_pipe[6];
     assign vsync_pulse = pix_vs && !vs_d;
 endmodule

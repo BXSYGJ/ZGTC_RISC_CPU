@@ -1,0 +1,30 @@
+{
+  "isa": "RV32IMC",
+  "compiler": "/home/bx/.local/zgtc-riscv32-10.2.0/bin/riscv32-unknown-elf-gcc",
+  "command": [
+    "wsl.exe",
+    "-d",
+    "Ubuntu-22.04",
+    "--cd",
+    "/",
+    "--exec",
+    "/home/bx/.local/zgtc-riscv32-10.2.0/bin/riscv32-unknown-elf-gcc",
+    "-march=rv32imc",
+    "-mabi=ilp32",
+    "-O2",
+    "-msmall-data-limit=0",
+    "-ffreestanding",
+    "-fno-builtin",
+    "-nostdlib",
+    "-nostartfiles",
+    "-Wl,--no-relax",
+    "-Wl,-T,/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/experiments/pacerv_shared_system/remote/link.ld",
+    "-Wl,-Map,/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/experiments/pacerv_shared_system/remote/firmware/remote_prog.map",
+    "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/experiments/pacerv_shared_system/remote/start.S",
+    "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/experiments/pacerv_shared_system/remote/shared_selftest.c",
+    "-o",
+    "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/experiments/pacerv_shared_system/remote/firmware/remote_prog.elf"
+  ],
+  "bytes": 1360,
+  "sha256": "f5de0d8bb34f093a7dbfd17a7c7f0a1bca508674c546c2e93ce4800c5e176dfd"
+}

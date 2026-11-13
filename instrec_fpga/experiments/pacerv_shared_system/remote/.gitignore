@@ -1,0 +1,9 @@
+build/
+sim_build/
+captures/
+__pycache__/
+tests/__pycache__/
+firmware/*.elf
+firmware/*.bin
+firmware/*.map
+firmware/*.dis

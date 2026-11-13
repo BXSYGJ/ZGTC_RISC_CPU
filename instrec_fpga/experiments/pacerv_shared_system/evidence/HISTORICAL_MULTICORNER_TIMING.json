@@ -1,0 +1,11 @@
+{
+  "source_report": "D:\\AAAFPGA\\Current_Paper_and_Sub7000_Core_Releases_20261012\\cores\\Accepted_RV32IM_153000_FullILA\\project\\cpu_paper\\results\\physical-redirect-accepted_valid_ram-uart-loader-packing3_compact0-s3-20260924T153315Z-881a48f1\\implementation\\report_timing\\pds_soc_top.rtr",
+  "source_sha256": "bfc514164ffc3bb357717db15f52c10a809a5b28e498ba50c60fcef0f2064670",
+  "scope": "Archived 153 MHz RV32IM full-ILA implementation; historical timing-analysis example, separate from current PG100 whole-system qualification",
+  "analysis_mode": "multi corner",
+  "clock_period_ns": 6.535,
+  "setup_slow_slack_ns": 0.053,
+  "hold_slow_slack_ns": 0.149,
+  "setup_fast_slack_ns": 2.481,
+  "hold_fast_slack_ns": 0.102
+}

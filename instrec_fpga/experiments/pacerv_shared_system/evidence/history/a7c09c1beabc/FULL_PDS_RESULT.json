@@ -1,0 +1,32 @@
+{
+  "command": [
+    "D:\\PDS_2022.2-SP6.4\\bin\\pds_shell.exe",
+    "-file",
+    "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261113-223256-full\\build.tcl",
+    "-work_dir",
+    "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261113-223256-full",
+    "-project_name",
+    "pacerv_shared_100h"
+  ],
+  "exit_code": 0,
+  "seconds": 2332.056263800012,
+  "frozen_inputs_unchanged": true,
+  "stages": {
+    "compile": true,
+    "synthesize": true,
+    "dev_map": true,
+    "pnr": true,
+    "report_timing": true,
+    "gen_bit_stream": true
+  },
+  "errors": [],
+  "all_constraints_met": false,
+  "qualified": false,
+  "routed_resources": {
+    "lut": 36215,
+    "ff": 39550,
+    "distributed_ram": 1378,
+    "apm": 94,
+    "drm": 126.5
+  }
+}

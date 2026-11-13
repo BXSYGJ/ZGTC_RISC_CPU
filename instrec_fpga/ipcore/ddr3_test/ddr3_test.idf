@@ -108,7 +108,7 @@
         </param>
         <param>
             <name>DFI_CLK_PERIOD</name>
-            <value>8000</value>
+            <value>9142</value>
         </param>
         <param>
             <name>PAD_BA2</name>
@@ -133,7 +133,7 @@
         </param>
         <param>
             <name>DDRC_T_RC</name>
-            <value>25</value>
+            <value>22</value>
         </param>
         <param>
             <name>DDR2_CL</name>
@@ -211,7 +211,7 @@
         </param>
         <param>
             <name>DDRC_T_RP</name>
-            <value>7</value>
+            <value>6</value>
         </param>
         <param>
             <name>PAD_DM5</name>
@@ -275,7 +275,7 @@
         </param>
         <param>
             <name>STATIC_RATIOF</name>
-            <value>16</value>
+            <value>14</value>
         </param>
         <param>
             <name>DESIRED_DDR2_RATE</name>
@@ -284,11 +284,11 @@
         </param>
         <param>
             <name>DDRC_TREFI</name>
-            <value>3900</value>
+            <value>3412</value>
         </param>
         <param>
             <name>DDRC_T_RCD</name>
-            <value>7</value>
+            <value>6</value>
         </param>
         <param>
             <name>PAD_DQ31</name>
@@ -372,7 +372,7 @@
         </param>
         <param>
             <name>DDRC_T_RAS</name>
-            <value>19</value>
+            <value>17</value>
         </param>
         <param>
             <name>A11_DQS_EN</name>
@@ -397,7 +397,7 @@
         </param>
         <param>
             <name>DDRC_TRFC</name>
-            <value>150</value>
+            <value>132</value>
         </param>
         <param>
             <name>GROUP_DQG_8</name>
@@ -486,7 +486,7 @@
         </param>
         <param>
             <name>DDR_CHIP_DQ_WIDTH</name>
-            <value>true</value>
+            <value>1</value>
         </param>
         <param>
             <name>PAD_A7</name>
@@ -767,7 +767,7 @@
         </param>
         <param>
             <name>DDR3_INIT_WR</name>
-            <value>8</value>
+            <value>7</value>
         </param>
         <param>
             <name>A10_DQS_EN</name>
@@ -899,7 +899,7 @@
         </param>
         <param>
             <name>DDRC_T_FAW</name>
-            <value>22</value>
+            <value>19</value>
         </param>
         <param>
             <name>A13_EN</name>
@@ -1026,7 +1026,7 @@
         </param>
         <param>
             <name>PHY_TXPR</name>
-            <value>39</value>
+            <value>34</value>
         </param>
         <param>
             <name>A15_GROUP_NUM</name>
@@ -1124,7 +1124,7 @@
         </param>
         <param>
             <name>ACTUAL_RATE</name>
-            <value>1000.000</value>
+            <value>875.0</value>
             <decimal>3</decimal>
         </param>
         <param>
@@ -1178,7 +1178,7 @@
         </param>
         <param>
             <name>DESIRED_RATE</name>
-            <value>1000.000</value>
+            <value>875.0</value>
             <decimal>3</decimal>
         </param>
         <param>
@@ -1191,7 +1191,7 @@
         </param>
         <param>
             <name>DDR3_WR</name>
-            <value>4</value>
+            <value>3</value>
         </param>
         <param>
             <name>PAD_DQS7</name>
@@ -1213,7 +1213,7 @@
         </param>
         <param>
             <name>DESIRED_DDR3_RATE</name>
-            <value>1000.000</value>
+            <value>875.0</value>
             <decimal>3</decimal>
         </param>
         <param>
@@ -1239,7 +1239,7 @@
         </param>
         <param>
             <name>PHY_TRFC</name>
-            <value>38</value>
+            <value>33</value>
         </param>
         <param>
             <name>DDRC_T_WTR</name>
@@ -1333,7 +1333,7 @@
         </param>
         <param>
             <name>DDRC_T_WR</name>
-            <value>8</value>
+            <value>7</value>
         </param>
         <param>
             <name>PAD_DQ67</name>
@@ -1584,7 +1584,7 @@
         </param>
         <param>
             <name>DEVICE_100H_EN</name>
-            <value>true</value>
+            <value>1</value>
         </param>
         <param>
             <name>DDR2_CL_VALUE</name>
@@ -1938,7 +1938,7 @@
         </param>
         <param>
             <name>tRFC_MIN</name>
-            <value>300000.000</value>
+            <value>300000</value>
             <decimal>3</decimal>
         </param>
         <param>

@@ -142,11 +142,16 @@ module ddr3_arbiter #(
     wire region_act_b = (check_addr >= 28'h0440000) && (check_addr <= 28'h045FFE0);
     wire activation_legal = (sel_onehot == 4'b0010) && (grant_len == 8'd0) &&
                             (region_act_a || region_act_b);
+    wire cpu_observe_activation = (sel_onehot == 4'b1000) && !grant_wr &&
+                                 (grant_len == 8'd0) && (region_act_a || region_act_b);
+    wire cpu_app = (sel_onehot == 4'b1000) && (grant_len == 8'd0) &&
+                  (check_addr >= 28'h0600000) && (check_addr <= 28'h06fffe0);
     wire addr_aligned = (check_addr[4:0] == 5'b00000);  // 32 B alignment
     wire len_legal    = (grant_len <= 8'd15);            // 16-beat max burst
     wire addr_legal   = addr_aligned && len_legal &&
                          (region_pcm_l || region_pcm_r ||
-                          region_wgt || region_spec || region_self || activation_legal);
+                          region_wgt || region_spec || region_self || activation_legal ||
+                          cpu_observe_activation || cpu_app);
 
     // ------------------------------------------------------------------
     // Sequential logic: wait counters, P3 starvation counter, sticky errors

@@ -17,11 +17,11 @@ module  ddr3_test_ddrphy_top  #(
 
   parameter [7:0]   TMOD         =  12/4   ,
   
-  parameter [7:0]   TXPR         =  39     ,
+  parameter [7:0]   TXPR         =  34     ,
   
   parameter [7:0]   TRP          =  2     ,
   
-  parameter [7:0]   TRFC         =  38     ,
+  parameter [7:0]   TRFC         =  33     ,
     
   parameter [7:0]   TRCD         =  2     ,
   
@@ -150,7 +150,7 @@ localparam EYECAL_EN    =  1         ;
 
 localparam PPLL_IDIV    =  1         ;
 
-localparam PPLL_FDIV    =  16         ;
+localparam PPLL_FDIV    =  14         ;
 
 localparam PPLL_ODIVPHY =  2         ;
 
@@ -179,7 +179,7 @@ localparam      GPLL_INTERNAL_FB = "CLKOUTF" ;
 //MR0_DDR3
 localparam [0:0] DDR3_PPD      = 1'b1;
 
-localparam [2:0] DDR3_WR       = 3'd4; 
+localparam [2:0] DDR3_WR       = 3'd3; 
 
 localparam [0:0] DDR3_DLL      = 1'b1;
 localparam [0:0] DDR3_TM       = 1'b0;
@@ -266,7 +266,7 @@ localparam [15:0] EMR_LPDDR    = {8'd0,LPDDR_DS,5'd0};
 localparam [9:0]   TZQINIT      =  10'd128 ;
 
 
-localparam DFI_CLK_PERIOD =  8000;
+localparam DFI_CLK_PERIOD =  9142;
 
 
 `ifdef IPS_DDR_SPEEDUP_SIM                                                  

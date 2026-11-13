@@ -1,0 +1,25 @@
+﻿[
+  {
+    "Case": "legacy",
+    "Compiler": "D:\\AAAPP\\iverilog\\bin\\iverilog.exe",
+    "CompileArguments": [
+      "-g2012",
+      "-s",
+      "tb_ddr3_byteaddr",
+      "-o",
+      "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\ddr_bridge\\Rollback_legacy.vvp",
+      "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\experiments\\pacerv_shared_ddr\\tb_pacerv_legacy_byteaddr.sv",
+      "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\ddr_bridge\\rollback_copy\\ddr3_ctrl_axi.v",
+      "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\ddr_bridge\\rollback_copy\\ddr3_arbiter.v",
+      "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\ddr3_axi_model.sv"
+    ],
+    "CompileOutput": "",
+    "CompileExit": 0,
+    "RunCommand": [
+      "D:\\AAAPP\\iverilog\\bin\\vvp.exe",
+      "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\ddr_bridge\\Rollback_legacy.vvp"
+    ],
+    "Output": "\r\n==============================================================\r\n T38 BYTE-ADDRESS SEMANTICS - read/write byte-for-byte proof\r\n==============================================================\r\n  phases run        : 3 (3 expected)\r\n  read beats drained: 40 (40 expected: 16 + 16 + 8)\r\n  byte mismatches   : 0\r\n  watchdog cycles   : 352\r\n==============================================================\r\nRESULT: PASS\r\nD:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\experiments\\pacerv_shared_ddr\\tb_pacerv_legacy_byteaddr.sv:372: $finish called at 3755000 (1ps)",
+    "RunExit": 0
+  }
+]

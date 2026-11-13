@@ -169,7 +169,7 @@ module wdma (
     reg [27:0] grp_base;     // wb + grp_mod * group_bytes (tracked by add)
 
     // weight stream
-    reg [255:0] fifo [0:15];
+    (* syn_ramstyle = "registers" *) reg [255:0] fifo [0:15];
     reg [4:0]   wr_ptr, rd_ptr, fifo_cnt;
     reg [15:0]  taps_left, beats_left;
     reg [4:0]   cmd_beats, emit_beats;

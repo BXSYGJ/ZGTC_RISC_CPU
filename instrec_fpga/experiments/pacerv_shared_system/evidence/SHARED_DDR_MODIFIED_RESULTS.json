@@ -1,0 +1,117 @@
+﻿[
+  {
+    "Case": "legacy",
+    "Compiler": "D:\\AAAPP\\iverilog\\bin\\iverilog.exe",
+    "CompileArguments": [
+      "-g2012",
+      "-s",
+      "tb_ddr3_byteaddr",
+      "-o",
+      "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\ddr_bridge\\Modified_legacy.vvp",
+      "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\experiments\\pacerv_shared_ddr\\tb_pacerv_legacy_byteaddr.sv",
+      "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\ddr3\\ddr3_ctrl_axi.v",
+      "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\ddr3\\ddr3_arbiter.v",
+      "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\ddr3_axi_model.sv"
+    ],
+    "CompileOutput": "",
+    "CompileExit": 0,
+    "RunCommand": [
+      "D:\\AAAPP\\iverilog\\bin\\vvp.exe",
+      "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\ddr_bridge\\Modified_legacy.vvp"
+    ],
+    "Output": "\r\n==============================================================\r\n T38 BYTE-ADDRESS SEMANTICS - read/write byte-for-byte proof\r\n==============================================================\r\n  phases run        : 3 (3 expected)\r\n  read beats drained: 40 (40 expected: 16 + 16 + 8)\r\n  byte mismatches   : 0\r\n  watchdog cycles   : 352\r\n==============================================================\r\nRESULT: PASS\r\nD:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\experiments\\pacerv_shared_ddr\\tb_pacerv_legacy_byteaddr.sv:372: $finish called at 3755000 (1ps)",
+    "RunExit": 0
+  },
+  {
+    "Case": "shared_ddr",
+    "Compiler": "D:\\AAAPP\\iverilog\\bin\\iverilog.exe",
+    "CompileArguments": [
+      "-g2012",
+      "-s",
+      "tb_pacerv_shared_ddr",
+      "-o",
+      "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\ddr_bridge\\Modified_shared_ddr.vvp",
+      "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\experiments\\pacerv_shared_ddr\\tb_pacerv_shared_ddr.sv",
+      "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\ddr3\\pace_cpu_ddr_bridge.v",
+      "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\ddr3\\ddr3_m3_share.v",
+      "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\ddr3\\ddr3_ctrl_axi.v",
+      "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\ddr3\\ddr3_arbiter.v"
+    ],
+    "CompileOutput": "",
+    "CompileExit": 0,
+    "RunCommand": [
+      "D:\\AAAPP\\iverilog\\bin\\vvp.exe",
+      "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\ddr_bridge\\Modified_shared_ddr.vvp"
+    ],
+    "Output": "PACERV_SHARED_DDR PASS checks=996 masked_bytes=256 diagnostic_beats=8 audio_writes=32 activation_reads=8 mel_beats=64 max_cpu_wait=56\r\nD:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\experiments\\pacerv_shared_ddr\\tb_pacerv_shared_ddr.sv:244: $finish called at 33340000 (1ps)",
+    "RunExit": 0
+  },
+  {
+    "Case": "m3_share",
+    "Compiler": "D:\\AAAPP\\iverilog\\bin\\iverilog.exe",
+    "CompileArguments": [
+      "-g2012",
+      "-s",
+      "tb_pacerv_m3_share",
+      "-o",
+      "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\ddr_bridge\\Modified_m3_share.vvp",
+      "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\experiments\\pacerv_shared_ddr\\tb_pacerv_m3_share.sv",
+      "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\ddr3\\ddr3_m3_share.v"
+    ],
+    "CompileOutput": "",
+    "CompileExit": 0,
+    "RunCommand": [
+      "D:\\AAAPP\\iverilog\\bin\\vvp.exe",
+      "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\ddr_bridge\\Modified_m3_share.vvp"
+    ],
+    "Output": "PACERV_M3_SHARE PASS checks=17 fair_clients=4 original_grants=4\r\nD:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\experiments\\pacerv_shared_ddr\\tb_pacerv_m3_share.sv:66: $finish called at 760000 (1ps)",
+    "RunExit": 0
+  },
+  {
+    "Case": "local_timeout",
+    "Compiler": "D:\\AAAPP\\iverilog\\bin\\iverilog.exe",
+    "CompileArguments": [
+      "-g2012",
+      "-s",
+      "tb_pacerv_local_timeout",
+      "-o",
+      "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\ddr_bridge\\Modified_local_timeout.vvp",
+      "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\experiments\\pacerv_shared_ddr\\tb_pacerv_local_timeout.sv",
+      "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\ddr3\\pace_cpu_ddr_bridge.v",
+      "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\ddr3\\ddr3_m3_share.v"
+    ],
+    "CompileOutput": "",
+    "CompileExit": 0,
+    "RunCommand": [
+      "D:\\AAAPP\\iverilog\\bin\\vvp.exe",
+      "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\ddr_bridge\\Modified_local_timeout.vvp"
+    ],
+    "Output": "PACERV_LOCAL_TIMEOUT PASS checks=6 late_cpu_drain=1 subsequent_diag=1\r\nD:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\experiments\\pacerv_shared_ddr\\tb_pacerv_local_timeout.sv:69: $finish called at 1015000 (1ps)",
+    "RunExit": 0
+  },
+  {
+    "Case": "boot_selftest",
+    "Compiler": "D:\\AAAPP\\iverilog\\bin\\iverilog.exe",
+    "CompileArguments": [
+      "-g2012",
+      "-s",
+      "tb_pacerv_boot_selftest",
+      "-o",
+      "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\ddr_bridge\\Modified_boot_selftest.vvp",
+      "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\experiments\\pacerv_shared_ddr\\tb_pacerv_boot_selftest.sv",
+      "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\ctrl\\self_test.v",
+      "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\ddr3\\ddr3_m3_share.v",
+      "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\ddr3\\ddr3_ctrl_axi.v",
+      "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\ddr3\\ddr3_arbiter.v",
+      "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\ddr3_axi_model.sv"
+    ],
+    "CompileOutput": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\ctrl\\self_test.v:72: warning: extra digits given for sized hex constant.",
+    "CompileExit": 0,
+    "RunCommand": [
+      "D:\\AAAPP\\iverilog\\bin\\vvp.exe",
+      "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\ddr_bridge\\Modified_boot_selftest.vvp"
+    ],
+    "Output": "PACERV_BOOT_SELFTEST PASS boot_bytes=4096 write_beats=128 read_beats=128 diag_beats=8 cpu_beats=1\r\nD:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\experiments\\pacerv_shared_ddr\\tb_pacerv_boot_selftest.sv:63: $finish called at 4040000 (1ps)",
+    "RunExit": 0
+  }
+]

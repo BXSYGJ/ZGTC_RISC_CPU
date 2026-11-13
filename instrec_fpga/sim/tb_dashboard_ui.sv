@@ -42,16 +42,16 @@ module tb_dashboard_ui;
         if (col % 48 > 37) energy = energy/2;
         spec_data <= energy;
     end
-    reg [3:0] de_expected = 0, hs_expected = 0, vs_expected = 0;
-    integer xq [0:3], yq [0:3];
+    reg [6:0] de_expected = 0, hs_expected = 0, vs_expected = 0;
+    integer xq [0:6], yq [0:6];
     integer fd = 0, count = 0, frames = 0, checks = 0;
     integer i;
     reg [23:0] expected;
     always @(posedge clk) begin
-        de_expected = {de_expected[2:0],de && rst};
-        hs_expected = {hs_expected[2:0],hs && rst};
-        vs_expected = {vs_expected[2:0],vs && rst};
-        for (i=3;i>0;i=i-1) begin xq[i]=xq[i-1]; yq[i]=yq[i-1]; end
+        de_expected = {de_expected[5:0],de && rst};
+        hs_expected = {hs_expected[5:0],hs && rst};
+        vs_expected = {vs_expected[5:0],vs && rst};
+        for (i=6;i>0;i=i-1) begin xq[i]=xq[i-1]; yq[i]=yq[i-1]; end
         xq[0]=x; yq[0]=y;
         if (rst) begin
             if (wave_addr > 1919 || spec_addr > 16511) $fatal(1,"RAM address out of bounds");
@@ -59,16 +59,16 @@ module tb_dashboard_ui;
             if (x >= 128 && x < 1152 && y >= 672 && y < 928 && spec_addr !== ((63-(y-672)/4)*258+(x-128)*258/1024)) $fatal(1,"Spectrum orientation or extent");
         end
         #1;
-        if (rst && {out_de,out_hs,out_vs} !== {de_expected[3],hs_expected[3],vs_expected[3]}) $fatal(1,"Four clock control alignment");
+        if (rst && {out_de,out_hs,out_vs} !== {de_expected[6],hs_expected[6],vs_expected[6]}) $fatal(1,"Six clock control alignment");
         if (out_de && fd != 0) begin
             $fwrite(fd,"%c%c%c",rgb[23:16],rgb[15:8],rgb[7:0]);
             count = count + 1;
-            if (xq[3] == 64 && yq[3] == 200 && rgb !== 24'h27364c) $fatal(1,"Card border alignment");
-            if (xq[3] == 1200 && yq[3] == 600 && rgb !== 24'h0b1020) $fatal(1,"Inter-card drawing escaped");
+            if (xq[6] == 64 && yq[6] == 200 && rgb !== 24'h27364c) $fatal(1,"Card border alignment");
+            if (xq[6] == 1200 && yq[6] == 600 && rgb !== 24'h0b1020) $fatal(1,"Inter-card drawing escaped");
             // Bar interiors contain no text; check exact fill/track transition.
-            if (yq[3] == 486 && xq[3] >= 1280 && xq[3] < 1680) begin
-                expected = ready && xq[3]-1280 < (pct[0]>100 ? 400 : pct[0]*4) ? (cls==0 ? 24'h36d6c5 : 24'h547d9d) : 24'h27364c;
-                if (rgb !== expected) $fatal(1,"Bar width/zero/full-scale wrong x=%0d got=%h expected=%h",xq[3],rgb,expected);
+            if (yq[6] == 486 && xq[6] >= 1280 && xq[6] < 1680) begin
+                expected = ready && xq[6]-1280 < (pct[0]>100 ? 400 : pct[0]*4) ? (cls==0 ? 24'h36d6c5 : 24'h547d9d) : 24'h27364c;
+                if (rgb !== expected) $fatal(1,"Bar width/zero/full-scale wrong x=%0d got=%h expected=%h",xq[6],rgb,expected);
                 checks = checks + 1;
             end
         end
@@ -88,7 +88,7 @@ module tb_dashboard_ui;
                     hs=xx>=1924; vs=yy>=1081;
                 end
             @(negedge clk); de=0; hs=0; vs=0;
-            repeat(6) @(negedge clk);
+            repeat(7) @(negedge clk);
             $fclose(fd); fd=0;
             if (count != 2073600) $fatal(1,"Frame pixel count %0d",count);
             frames = frames+1;

@@ -1,0 +1,16 @@
+{
+  "used_bytes": 780,
+  "labels": {
+    "start": 0,
+    "loop": 346,
+    "done": 704,
+    "subroutine": 708,
+    "trap": 712,
+    "fail": 760,
+    "failed": 776
+  },
+  "instruction_set": "RV32IMC_Zicsr_Zifencei",
+  "checks": 25,
+  "success_led": "0xa5",
+  "failure_led": "0xee"
+}

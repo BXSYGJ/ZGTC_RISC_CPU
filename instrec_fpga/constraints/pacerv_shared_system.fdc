@@ -1,0 +1,5 @@
+# PaceRV and system DDR user logic share the 109.375 MHz user clock.
+# Load after ddr3_100h.fdc and clock_groups_async.fdc.
+# Explicit clock-to-clock form gives one 0.150 ns path budget. The clock-only
+# form is applied to both ends by this PDS release (0.300 ns on a self path).
+set_clock_uncertainty {0.150} -setup -hold -from [get_clocks {ddrphy_sysclk}] -to [get_clocks {ddrphy_sysclk}]

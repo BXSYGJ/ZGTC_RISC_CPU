@@ -1,0 +1,37 @@
+{
+  "passed": true,
+  "inputs": [
+    {
+      "path": "sim/experiments/activation_store/tb_activation_store_mux.sv",
+      "sha256": "60e6a81440c2375f99b40e5e475ef588189a03ebd0ce0737ac4e8421bf92fb0f"
+    },
+    {
+      "path": "src/npu/activation_store_mux.v",
+      "sha256": "0c79febbc563553ac9b995bcd7be74ff101e7f0799d8534ef4178ebe48a9792f"
+    }
+  ],
+  "commands": [
+    {
+      "command": [
+        "D:\\AAAPP\\iverilog\\bin\\iverilog.EXE",
+        "-g2012",
+        "-s",
+        "tb_activation_store_mux",
+        "-o",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\activation_mux\\mux.vvp",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\experiments\\activation_store\\tb_activation_store_mux.sv",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\npu\\activation_store_mux.v"
+      ],
+      "exit_status": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        "D:\\AAAPP\\iverilog\\bin\\vvp.EXE",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\activation_mux\\mux.vvp"
+      ],
+      "exit_status": 0,
+      "output": "RESULT: PASS activation store mux: 24 transactions, mixed immediate/delayed R\r\nD:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\experiments\\activation_store\\tb_activation_store_mux.sv:80: $finish called at 2240 (1s)\r\n"
+    }
+  ]
+}

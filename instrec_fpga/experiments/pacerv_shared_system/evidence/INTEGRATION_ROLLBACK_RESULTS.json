@@ -1,0 +1,50 @@
+{
+  "baseline_commit": "852f067db4a4a710f5355e3ab311f035ced5b48d",
+  "commands": [
+    {
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-Command",
+        "& ([scriptblock]::Create([System.IO.File]::ReadAllText('D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\experiments\\pacerv_shared_system\\ROLLBACK.sh'))) -BaselineDirectory 'D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\baseline\\source' -TargetDirectory 'D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\integration_rollback\\restored_copy' -EvidenceDirectory 'D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\experiments\\pacerv_shared_system'"
+      ],
+      "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\integration_rollback\\restored_copy\\instrec_fpga",
+      "exit_status": 0,
+      "output": "INTEGRATION_ROLLBACK_RESTORED files=29 isolated_copy=1\r\n"
+    },
+    {
+      "command": [
+        "D:/AAAPP\\iverilog/bin\\iverilog.EXE",
+        "-g2012",
+        "-s",
+        "tb_rv_cpu",
+        "-o",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\integration_rollback\\original.vvp",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\integration_rollback\\restored_copy\\instrec_fpga\\sim\\tb_rv_cpu.sv",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\integration_rollback\\restored_copy\\instrec_fpga\\src\\cpu\\rv32_cpu_subsys.sv",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\integration_rollback\\restored_copy\\cpu\\rtl\\rv32_core.sv",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\integration_rollback\\restored_copy\\cpu\\rtl\\rv32_alu.sv",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\integration_rollback\\restored_copy\\cpu\\rtl\\rv32_decode.sv",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\integration_rollback\\restored_copy\\cpu\\rtl\\rv32_muldiv.sv",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\integration_rollback\\restored_copy\\cpu\\rtl\\rv32_btb.sv",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\integration_rollback\\restored_copy\\cpu\\rtl\\rv32_machine.sv"
+      ],
+      "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\integration_rollback\\restored_copy\\instrec_fpga",
+      "exit_status": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        "D:/AAAPP\\iverilog/bin\\vvp.EXE",
+        "-i",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\integration_rollback\\original.vvp"
+      ],
+      "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\integration_rollback\\restored_copy\\instrec_fpga",
+      "exit_status": 0,
+      "output": "WARNING: D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\integration_rollback\\restored_copy\\instrec_fpga\\src\\cpu\\rv32_cpu_subsys.sv:184: $readmemh(src/cpu/prog.hex): Not enough words in the file for the requested range [0:2047].\r\nWARNING: D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\integration_rollback\\restored_copy\\instrec_fpga\\src\\cpu\\rv32_cpu_subsys.sv:185: $readmemh(src/cpu/prog.hex): Not enough words in the file for the requested range [0:2047].\r\ndbg t=250000 pc=00000460 ireq=1/irdy=1 irsp=0 tr=0 nline=4 imem0=20002117\r\nCHECK PASS C10 firmware requested next inference after acknowledgement\r\n---- UART log (8 lines) ----\r\n\r\nRV32 BOOT\r\nRV32 MMIO OK\r\nRV32 ISA OK\r\nRV32 BENCH cycles=460012 inst=180008 acc=0xf2d8888b\r\nDDR OK STS 0x00000001\r\nNPU GO\r\nNPU top1=5 last_class=3 last_p=87 c=12345\r\n\r\nCHECK PASS C1 boot banner\r\nCHECK PASS C2 MMIO ID read-back\r\nCHECK PASS C3 ISA self-test\r\nCHECK PASS C4 mcycle/minstret measurement\r\nCHECK PASS C5 NPU event surfaced through MMIO\r\nCHECK PASS C6 CPU-triggered NPU start (CTRL[0])\r\nCHECK PASS C7 DDR status read-back\r\nCHECK PASS C8 firmware acknowledged and cleared NPU event\r\nCHECK PASS C9 result cycle snapshot survives live counter change\r\nRESULT: PASS\r\nD:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\integration_rollback\\restored_copy\\instrec_fpga\\sim\\tb_rv_cpu.sv:210: $finish called at 4740005000 (1ps)\r\n"
+    }
+  ],
+  "passed": true,
+  "all_original_hashes_restored": true,
+  "live_modified_files_unchanged": true
+}

@@ -1,0 +1,8 @@
+# Clock-domain declarations copied from the official PG200 DDR3 demo
+# ipcore/ddr3_test/pnr/ddr_test.fdc (SHA-256 in CLOCK_CONSTRAINT_AUDIT.md).
+# The demo free_clk is absent from this harness, so its command is omitted.
+# User logic remains synchronous in ddrphy_sysclk; its self paths are timed.
+set_clock_groups -name ref_clk -asynchronous -group [get_clocks {ref_clk}]
+set_clock_groups -name rst_clk -asynchronous -group [get_clocks {rst_clk}]
+set_clock_groups -name phy_dq_clk_0 -asynchronous -group [get_clocks {phy_dq_clk_0}]
+set_clock_groups -name phy_dq_clk_1 -asynchronous -group [get_clocks {phy_dq_clk_1}]

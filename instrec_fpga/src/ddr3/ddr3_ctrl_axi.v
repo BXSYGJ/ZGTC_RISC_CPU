@@ -68,6 +68,8 @@ module ddr3_ctrl_axi #(
     // memory data destroyed); 1 = full strobes with zero data (verified
     // pds_cpu_100h bridge form). Board bring-up fallback knob.
     parameter DUMMY_WSTRB_ALL1 = 1'b0,
+    // Legacy masters remain full-width writers unless this is enabled.
+    parameter M3_MASK_ENABLE = 1'b0,
     // AXI handshake watchdog limit in core_clk cycles (65536 = 524 us at
     // 125 MHz; the 4096-cycle CPU-bridge value is too tight for the
     // dummy-write-before-read turnaround on this design).
@@ -87,6 +89,7 @@ module ddr3_ctrl_axi #(
     input  wire [255:0] m1_wdata,
     input  wire [255:0] m2_wdata,
     input  wire [255:0] m3_wdata,
+    input  wire [31:0] m3_wstrb,
     output wire [3:0]  wready_beat,  // per-master write beat pulse
     input  wire [3:0]  rd_ready,     // per-master read pacing
     output wire [255:0] rd_data_0,   // routed read data (active read master)
@@ -233,7 +236,7 @@ module ddr3_ctrl_axi #(
                            (cur_master == 2'd2) ? m2_wdata : m3_wdata;
     assign axi_wstrb     = (state == S_DW_W)
                            ? (DUMMY_WSTRB_ALL1 ? 32'hFFFFFFFF : 32'h00000000)
-                           : 32'hFFFFFFFF;
+                           : ((M3_MASK_ENABLE && cur_master==2'd3) ? m3_wstrb : 32'hFFFFFFFF);
 
     assign axi_arvalid   = (state == S_AR);
     assign axi_araddr    = {2'b00, cur_addr[27:2]};

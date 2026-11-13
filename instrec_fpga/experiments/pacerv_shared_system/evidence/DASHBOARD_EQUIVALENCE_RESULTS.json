@@ -1,0 +1,116 @@
+{
+  "baseline_commit": "852f067db4a4a710f5355e3ab311f035ced5b48d",
+  "commands": [
+    {
+      "label": "baseline",
+      "command": [
+        "D:\\AAAPP\\iverilog\\bin\\iverilog.EXE",
+        "-g2012",
+        "-s",
+        "tb_dashboard_ui",
+        "-o",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\dashboard_equivalence_6clock\\baseline\\dashboard.vvp",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\dashboard_equivalence_6clock\\baseline\\tb_dashboard_ui.sv",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\dashboard_equivalence_6clock\\baseline\\dashboard_renderer.v",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\dashboard_equivalence_6clock\\baseline\\dashboard_text.v"
+      ],
+      "exit_status": 0,
+      "output": ""
+    },
+    {
+      "label": "baseline",
+      "command": [
+        "D:\\AAAPP\\iverilog\\bin\\vvp.EXE",
+        "-i",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\dashboard_equivalence_6clock\\baseline\\dashboard.vvp"
+      ],
+      "exit_status": 0,
+      "output": "RESULT: PASS dashboard_ui frames=5 active_pixels=10368000 bar_checks=2000\r\nD:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\dashboard_equivalence_6clock\\baseline\\tb_dashboard_ui.sv:112: $finish called at 104931600000 (1ps)\r\n"
+    },
+    {
+      "label": "modified",
+      "command": [
+        "D:\\AAAPP\\iverilog\\bin\\iverilog.EXE",
+        "-g2012",
+        "-s",
+        "tb_dashboard_ui",
+        "-o",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\dashboard_equivalence_7clock_timing_selector_register\\modified\\dashboard.vvp",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\dashboard_equivalence_7clock_timing_selector_register\\modified\\tb_dashboard_ui.sv",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\dashboard_equivalence_7clock_timing_selector_register\\modified\\dashboard_renderer.v",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\dashboard_equivalence_7clock_timing_selector_register\\modified\\dashboard_text.v"
+      ],
+      "exit_status": 0,
+      "output": ""
+    },
+    {
+      "label": "modified",
+      "command": [
+        "D:\\AAAPP\\iverilog\\bin\\vvp.EXE",
+        "-i",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\dashboard_equivalence_7clock_timing_selector_register\\modified\\dashboard.vvp"
+      ],
+      "exit_status": 0,
+      "output": "RESULT: PASS dashboard_ui frames=5 active_pixels=10368000 bar_checks=2000\r\nD:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\dashboard_equivalence_7clock_timing_selector_register\\modified\\tb_dashboard_ui.sv:112: $finish called at 104931650000 (1ps)\r\n"
+    }
+  ],
+  "inputs": [
+    {
+      "path": "sim/tb_dashboard_ui.sv",
+      "sha256": "0073c1dd2c69f963843149d1a13ed44bb8e2225036bc82bfdbc7bdbb11275767"
+    },
+    {
+      "path": "src/ui/dashboard_renderer.v",
+      "sha256": "e414e7c6d20c292a5b89f83fd9d0d6b2d7ecfb229661d273a1a503ba0a6884e3"
+    },
+    {
+      "path": "src/ui/dashboard_text.v",
+      "sha256": "cfe4bca5dd5ebd0a3fbbe99523eaba035a94f1c49eb4816b66489d55a03b20b7"
+    },
+    {
+      "path": "src/ui/dashboard_ascii.hex",
+      "sha256": "72436230eb6fa3455154e6ed2885810b6e7e1e1f17ad1dbe9a8b3e692ce8a534"
+    },
+    {
+      "path": "src/ui/dashboard_classes.hex",
+      "sha256": "d1b96b8ab0204cdc0450d2495f782df24a250f33842bdbf165b69d416e1f3047"
+    },
+    {
+      "path": "src/ui/dashboard_font.hex",
+      "sha256": "e6656ebf5d7ee6f5aae3bfeb0a6bf350db617813fc290a7724cd7e403a3f499c"
+    },
+    {
+      "path": "src/ui/dashboard_tiles.hex",
+      "sha256": "a84ed90c2a0c2fda303976680fff81f29ebc1732b97d478f20749bfb920ccd64"
+    }
+  ],
+  "passed": true,
+  "cached_baseline": {
+    "directory": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\dashboard_equivalence_6clock\\baseline",
+    "report_sha256": "b0991916d5116396f091a8926aea928495bc1acd47176cfeb2335cf6b88d7302",
+    "frames": {
+      "waiting": "f4291c3cf60a002cc367fb2830cbc17968de7055c4096e93d85c1567072d8642",
+      "ready": "f9eeb024a460dfab0563ca8efc53b1ce9da9747667ddc14583db45c8ce82430e",
+      "full_scale": "3b10a304a2c841deee22c4350f933eee0f464925abd077d9e96d144cfa065d5f",
+      "zero": "8481b48c5593a6f3e6385a574acee67f355548999a77bf6d8013c409643a4910",
+      "clamped": "3b10a304a2c841deee22c4350f933eee0f464925abd077d9e96d144cfa065d5f"
+    }
+  },
+  "frames": {
+    "baseline": {
+      "waiting": "f4291c3cf60a002cc367fb2830cbc17968de7055c4096e93d85c1567072d8642",
+      "ready": "f9eeb024a460dfab0563ca8efc53b1ce9da9747667ddc14583db45c8ce82430e",
+      "full_scale": "3b10a304a2c841deee22c4350f933eee0f464925abd077d9e96d144cfa065d5f",
+      "zero": "8481b48c5593a6f3e6385a574acee67f355548999a77bf6d8013c409643a4910",
+      "clamped": "3b10a304a2c841deee22c4350f933eee0f464925abd077d9e96d144cfa065d5f"
+    },
+    "modified": {
+      "waiting": "f4291c3cf60a002cc367fb2830cbc17968de7055c4096e93d85c1567072d8642",
+      "ready": "f9eeb024a460dfab0563ca8efc53b1ce9da9747667ddc14583db45c8ce82430e",
+      "full_scale": "3b10a304a2c841deee22c4350f933eee0f464925abd077d9e96d144cfa065d5f",
+      "zero": "8481b48c5593a6f3e6385a574acee67f355548999a77bf6d8013c409643a4910",
+      "clamped": "3b10a304a2c841deee22c4350f933eee0f464925abd077d9e96d144cfa065d5f"
+    }
+  },
+  "all_five_rasters_identical": true
+}

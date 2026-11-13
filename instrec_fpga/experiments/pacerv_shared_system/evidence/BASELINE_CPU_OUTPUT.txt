@@ -1,0 +1,25 @@
+WARNING: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\build\pacerv_shared_system\baseline\source\instrec_fpga\src\cpu\rv32_cpu_subsys.sv:184: $readmemh(src/cpu/prog.hex): Not enough words in the file for the requested range [0:2047].
+WARNING: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\build\pacerv_shared_system\baseline\source\instrec_fpga\src\cpu\rv32_cpu_subsys.sv:185: $readmemh(src/cpu/prog.hex): Not enough words in the file for the requested range [0:2047].
+dbg t=250000 pc=00000460 ireq=1/irdy=1 irsp=0 tr=0 nline=4 imem0=20002117
+CHECK PASS C10 firmware requested next inference after acknowledgement
+---- UART log (8 lines) ----
+
+RV32 BOOT
+RV32 MMIO OK
+RV32 ISA OK
+RV32 BENCH cycles=460012 inst=180008 acc=0xf2d8888b
+DDR OK STS 0x00000001
+NPU GO
+NPU top1=5 last_class=3 last_p=87 c=12345
+
+CHECK PASS C1 boot banner
+CHECK PASS C2 MMIO ID read-back
+CHECK PASS C3 ISA self-test
+CHECK PASS C4 mcycle/minstret measurement
+CHECK PASS C5 NPU event surfaced through MMIO
+CHECK PASS C6 CPU-triggered NPU start (CTRL[0])
+CHECK PASS C7 DDR status read-back
+CHECK PASS C8 firmware acknowledged and cleared NPU event
+CHECK PASS C9 result cycle snapshot survives live counter change
+RESULT: PASS
+D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\build\pacerv_shared_system\baseline\source\instrec_fpga\sim\tb_rv_cpu.sv:210: $finish called at 4740005000 (1ps)

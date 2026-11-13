@@ -1,5 +1,4 @@
-// activation_store_mux -- Frozen candidate; PDS and board validation pending.
-// Experimental two-client, one-outstanding abstract DDR mux.
+// activation_store_mux -- Registered two-client, one-outstanding DDR mux.
 module activation_store_mux (
  input wire clk,rst_n,
  input wire s0_cmd_valid,s0_cmd_write,input wire[31:0]s0_cmd_addr,
@@ -21,13 +20,13 @@ module activation_store_mux (
  wire pending=s0_cmd_valid || s1_cmd_valid;
  wire choose_write=selected ? s1_cmd_write : s0_cmd_write;
  wire command_fire=act_cmd_valid && act_cmd_ready;
- wire route_owner=(state==IDLE) ? selected : owner;
+ wire route_owner=owner;
  wire read_route=(state==READ) || (command_fire && !act_cmd_write);
- assign act_cmd_valid=((state==IDLE) && pending) || state==OFFER;
- assign act_cmd_write=state==OFFER ? held_write : choose_write;
- assign act_cmd_addr=state==OFFER ? held_addr : selected ? s1_cmd_addr : s0_cmd_addr;
- assign s0_cmd_ready=((state==IDLE) || state==OFFER) && !route_owner && act_cmd_ready;
- assign s1_cmd_ready=((state==IDLE) || state==OFFER) && route_owner && act_cmd_ready;
+ assign act_cmd_valid=state==OFFER;
+ assign act_cmd_write=held_write;
+ assign act_cmd_addr=held_addr;
+ assign s0_cmd_ready=state==OFFER && !route_owner && act_cmd_ready;
+ assign s1_cmd_ready=state==OFFER && route_owner && act_cmd_ready;
  assign act_wr_valid=(state==WRITE) && (owner ? s1_wr_valid : s0_wr_valid);
  assign act_wr_data=owner ? s1_wr_data : s0_wr_data;
  assign s0_wr_ready=(state==WRITE) && !owner && act_wr_ready;
@@ -42,11 +41,11 @@ module activation_store_mux (
    if(act_rd_valid && !read_route)protocol_error<=1;
    case(state)
     IDLE:if(pending)begin
-     owner<=selected;held_write<=choose_write;held_addr<=act_cmd_addr;
-     if(!act_cmd_ready)state<=OFFER;
-     else if(choose_write)state<=WRITE;
-     else if(act_rd_valid)begin prefer<=!selected;state<=IDLE;end
-     else state<=READ;
+     // Capture arbitration and address before the downstream ready/range
+     // check. Clients hold their offers until the following handshake.
+     owner<=selected;held_write<=choose_write;
+     held_addr<=selected ? s1_cmd_addr : s0_cmd_addr;
+     state<=OFFER;
     end
     OFFER:if(command_fire)begin
      if(held_write)state<=WRITE;

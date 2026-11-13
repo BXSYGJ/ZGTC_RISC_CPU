@@ -1,0 +1,122 @@
+{
+  "wrapper_sha256": "cb018d10ce1b3245017f4956b75ec1777efca3959e098c251efff6ca0d3e46f4",
+  "vendor_hashes_verified": 8,
+  "results": [
+    {
+      "command": [
+        "D:\\Anaconda\\python.exe",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\experiments\\pacerv_integration\\build_pacerv_directed.py"
+      ],
+      "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga",
+      "exit_status": 0,
+      "output": "BUILT D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\experiments\\pacerv_integration\\pacerv_directed.hex used_bytes=780 checks=25\n",
+      "elapsed_seconds": 0.084
+    },
+    {
+      "command": [
+        "D:\\AAAPP\\iverilog\\bin\\iverilog.EXE",
+        "-g2012",
+        "-s",
+        "tb_pacerv_directed",
+        "-o",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_integration\\tb_pacerv_directed.vvp",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\experiments\\pacerv_integration\\tb_pacerv_directed.sv",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\rv32_cpu_subsys.sv",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_core.sv",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_alu.sv",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_decode.sv",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_machine.sv",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_muldiv.sv",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_btb.sv",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_rvc_expand.sv",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_rvc_frontend.sv"
+      ],
+      "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga",
+      "exit_status": 0,
+      "output": "",
+      "elapsed_seconds": 0.158
+    },
+    {
+      "command": [
+        "D:\\AAAPP\\iverilog\\bin\\vvp.EXE",
+        "-i",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_integration\\tb_pacerv_directed.vvp"
+      ],
+      "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga",
+      "exit_status": 0,
+      "output": "PACERV_DIRECTED_PASS cycles=1704 retired=276 checks=25 DDR=11 traps=1 crossed=117 pairs=1303 request_stalls=1\nD:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\experiments\\pacerv_integration\\tb_pacerv_directed.sv:124: $finish called at 17095000 (1ps)\n",
+      "elapsed_seconds": 0.147
+    },
+    {
+      "command": [
+        "D:\\AAAPP\\iverilog\\bin\\iverilog.EXE",
+        "-g2012",
+        "-s",
+        "tb_pacerv_backpressure",
+        "-o",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_integration\\tb_pacerv_backpressure.vvp",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\experiments\\pacerv_integration\\tb_pacerv_backpressure.sv",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\rv32_cpu_subsys.sv",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_core.sv",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_alu.sv",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_decode.sv",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_machine.sv",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_muldiv.sv",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_btb.sv",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_rvc_expand.sv",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_rvc_frontend.sv"
+      ],
+      "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga",
+      "exit_status": 0,
+      "output": "",
+      "elapsed_seconds": 0.091
+    },
+    {
+      "command": [
+        "D:\\AAAPP\\iverilog\\bin\\vvp.EXE",
+        "-i",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_integration\\tb_pacerv_backpressure.vvp"
+      ],
+      "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga",
+      "exit_status": 0,
+      "output": "PACERV_BACKPRESSURE_PASS local_hold=1500 DDR_hold=1500 ROM_pair_cases=8\nD:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\experiments\\pacerv_integration\\tb_pacerv_backpressure.sv:114: $finish called at 30320000 (1ps)\n",
+      "elapsed_seconds": 0.102
+    },
+    {
+      "command": [
+        "D:\\AAAPP\\iverilog\\bin\\iverilog.EXE",
+        "-g2012",
+        "-s",
+        "tb_pacerv_audio",
+        "-o",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_integration\\tb_pacerv_audio.vvp",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\experiments\\pacerv_integration\\tb_pacerv_audio.sv",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\rv32_cpu_subsys.sv",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_core.sv",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_alu.sv",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_decode.sv",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_machine.sv",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_muldiv.sv",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_btb.sv",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_rvc_expand.sv",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_rvc_frontend.sv"
+      ],
+      "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga",
+      "exit_status": 0,
+      "output": "",
+      "elapsed_seconds": 0.089
+    },
+    {
+      "command": [
+        "D:\\AAAPP\\iverilog\\bin\\vvp.EXE",
+        "-i",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_integration\\tb_pacerv_audio.vvp"
+      ],
+      "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga",
+      "exit_status": 0,
+      "output": "WARNING: D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\rv32_cpu_subsys.sv:224: $readmemh(src/cpu/prog.hex): Not enough words in the file for the requested range [0:2047].\nCHECK PASS C10 firmware requested next inference after acknowledgement\n---- UART log (8 lines) ----\n\nRV32 BOOT\nRV32 MMIO OK\nRV32 ISA OK\nRV32 BENCH cycles=180016 inst=180008 acc=0xf2d8888b\nDDR OK STS 0x00000001\nNPU GO\nNPU top1=5 last_class=3 last_p=87 c=12345\n\nCHECK PASS C1 boot banner\nCHECK PASS C2 MMIO ID read-back\nCHECK PASS C3 ISA self-test\nCHECK PASS C4 mcycle/minstret measurement\nCHECK PASS C5 NPU event surfaced through MMIO\nCHECK PASS C6 CPU-triggered NPU start (CTRL[0])\nCHECK PASS C7 DDR status read-back\nCHECK PASS C8 firmware acknowledged and cleared NPU event\nCHECK PASS C9 result cycle snapshot survives live counter change\nRESULT: PASS\nD:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\experiments\\pacerv_integration\\tb_pacerv_audio.sv:229: $finish called at 1859335000 (1ps)\n",
+      "elapsed_seconds": 38.351
+    }
+  ],
+  "passed": true
+}
