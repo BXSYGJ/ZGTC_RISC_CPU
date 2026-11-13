@@ -49,6 +49,31 @@
 > 判据是「去掉全窗常量后 p99.5 ≤ 8 LSB 且坏帧为 0」。
 
 >
+
+> **2026-11-13（夜，重编后板级验证：mel 修复生效，dB 谱与 golden 逐位相同）**
+> 位流 `20261113-165611-7a005af1`（六阶段 OK、`Unrouted 0`、1h12m58s、SHA-256 `15206FB8…`；
+> `clk` 域 WNS +31.914 ns，`ddrphy_sysclk` −0.933 ns / 165 端点，`pix_clk` −0.648 ns / 7 端点，
+> DRM 130/155 = 84%）。烧录后 RV32 自检 + DDR3 `DDROK` 正常，权重 `WOK CFE5A709`。
+>
+> **验证判据全中**：`diag_spectrum.py --half both` 一次读回两个 ping-pong 半区，
+> mel 实际消费的那一半（`~win_id[0]`）与 golden **exact=100.00%、max|d|=0、corr=1.0000**；
+> 另一半（旧逻辑选中的那半）仍有 221 个坏帧。即 mel → dB 谱这条链在板上与参考实现
+> **逐位相同**，之前「窗口前部 0-75 帧差 2-60 dB」的现象彻底消失，那个 +36 LSB 的全窗常量也归零。
+>
+> **准确率定论（可以收口）**：
+> - 用模型自带的 Medley-solos-DB test 缓存（共 12236 条，随机 400 条）跑 golden NPU：**74.5%**，
+>   与训练侧报告的 77.32% 一致（差值为 float→int8 量化缓存所致）。⇒ NPU / 权重 / 契约正确。
+> - IRMAS val 18 条：board **5/18 (27.8%)**，同一片段离线 **3/18 (16.7%)**，且预测高度集中在
+>   class 4 / 7。⇒ **模型对 IRMAS 属域外**，不是 FPGA 或数字链缺陷。
+> - board 与 offline 仍只有 4/18 一致，是因为 offline 吃「播放的 wav」而板子吃
+>   Realtek→PCM1808 之后的信号（z 差 1.02σ，见上）。判定 FPGA 必须用**板子实采 PCM** 做参考，
+>   `diag_spectrum.py` 已证过（同一窗口 ±1 LSB）；音乐片段的同窗口对照用的是未入库的一次性探针。
+>
+> **仍未修的一处（需再重编一次，不急）**：`dg_rx_in_arg` 只把 0xAA 放行给 diag，但
+> `weight_loader.v:186` 收到单个 0xAA 就 `busy<=1`，后续参数字节仍被 `!wl_busy` 挡掉，
+> 所以含 0xAA 的地址依旧读不到（实测 0xAA00 / 0x2AA00 / 0xAA0000 全 FAIL）。正确改法是在
+> S_ARG 期间把该字节从 `weight_loader` 的 `rx_valid` 里剔掉，而不是只放行给 diag；
+> 主机侧绕行已够日常使用。
 > **构建运维（2026-11-13 两次无输出失败后总结，勿再踩）**：`run_pds_full.ps1` 用
 > `Start-Process -Wait` 起 `pds_shell`，而 compile 阶段约 3m50s 不向脚本 stdout 写任何东西。
 > **后台启动 + 长时间无输出会被回收（两次都在 1.3 / 2.0 分钟被杀，`error_info.txt` 为空、

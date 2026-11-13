@@ -1,5 +1,18 @@
 # InstRec-FPGA 变更日志
 
+## 2026-11-13（第五轮）：重编 + 板级验证 —— mel 修复生效，dB 谱与 golden 逐位相同
+
+- 位流 `20261113-165611-7a005af1`：六阶段 OK、`Unrouted 0`、1h12m58s，SHA-256 `15206FB8…`；
+  `clk` 域 WNS +31.914 ns，`ddrphy_sysclk` −0.933 ns / 165 端点，DRM 130/155。
+- 板上验证：`diag_spectrum --half both` 显示 mel 实际消费的半区与 golden **exact 100%、max|d|=0**；
+  旧逻辑选中的半区仍有 221 个坏帧。窗口前部 0-75 帧畸变与 +36 LSB 全窗常量同时消失。
+- 准确率定论：Medley-solos-DB test 缓存 400 条 golden NPU **74.5%**（训练侧 77.32%，差值来自
+  float→int8 缓存量化）；IRMAS val 18 条 board 5/18、同片段离线 3/18 —— 模型对 IRMAS 域外。
+- board 与 offline 不一致来自 Realtek→PCM1808 模拟回环（z 差 1.02σ），不是 FPGA；
+  判定 FPGA 必须用板子实采 PCM 做参考。
+- 遗留：含 0xAA 的 DDR 地址仍读不到（weight_loader 见 0xAA 即 busy，后续参数被挡），
+  需再重编一次，主机侧已有绕行。
+
 ## 2026-11-13（第四轮）：离线量化契约错误修正 —— 板级与 golden 逐位一致
 
 - **根因**：`golden_pipeline.run_mel_pipeline()` 默认用 `scripts/outputs/layer_contract.json`
