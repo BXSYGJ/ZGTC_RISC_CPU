@@ -98,6 +98,16 @@
 > （如 class4 → class7），说明板内结果对同一输入不稳定。疑点为窗口交接竞争：mel 在 win_tick 立刻开始
 > 读 PCM 窗口，而 audio_sink 的 DDR 写可能尚未排空（page_go 8256 / m0_done 16512 需在 win_tick 时刻核对）。
 > 下一步：核对 win_tick 时刻 page_go/m0_done 计数，或用 ILA 观察 mel 首个读命令与 m0 末次写完成的时间关系。
+
+> **2026-11-13（STS 四相遥测解码，抓到 mel 侧症状）**：稳态输入下连续采集 DDR3 STS，解出
+> page_go=8255（满 8256）、m0_done=16512（满）、real_frames 在 1024..16512 之间跳变，
+> 并出现 **mel_timeout=1、win_miss=1、mel_busy=1** 的采样点。即：
+> (a) 音频写侧基本能写满（m0_done 命中 16512）；
+> (b) mel 会错过 win_tick 并触发 200 ms 看门狗，说明存在「mel 处理未完 / 停滞 → 丢窗 → 结果滞后」。
+> 这与「稳态输入下连续两次读板给出不同类别」一致，是板内不稳定性的直接证据，
+> 而非播放工具或 golden 的问题。
+> 下一步：读 mel_cycles（窗口处理周期数）判断是吞吐不足还是死锁；若吞吐不足，需评估 259 帧 FFT
+> 与 db_norm/standardize 的时间预算；若停滞，用 ILA 抓 mel 状态机与 m2 读握手。
 > 4) 准确率口径：IRMAS val（6 类）离线 3/18——模型对该域本就弱；板卡数字链一致性以第 2 条为准。
 >
 > **交接中（2026-11-10）：先读 `docs/DEV_SNAPSHOT_HANDOFF_20261110.md`** ——
