@@ -24,6 +24,18 @@
 > 无板级真实 PCM1808 源时无法判定是 TB 还是 RTL 错，且前人三版相位改动均回滚 ⇒ **守纪律不改 RTL/TB**，
 > 记为待板级确证项。该链路是诊断采集（非生产推理链），不阻塞交付。
 >
+> **2026-11-13（板级验收完成，最新，先读这节）**：FTDI 重插后恢复，烧 `202047` 位流（方案 A）
+> 全链路验证：位流 done=1 / crc_err=0；RV32 CPU 自检全过（MMIO/ISA/BENCH acc 匹配）；
+> DDR3 自检 `DDROK`；主机诊断读回 4096 B 与自检 pattern 逐位一致（1024 word），6×重复长读 6/6 精确；
+> 权重上传 `WOK`（2700 帧 FA0D5236）。**DDR3 读写「混乱」在板上彻底收口**。
+>
+> **「恒 top1」根因完整定位**：推理链硬件全正常——mel 特征随音频 88% 变化，NPU 分类与 golden
+> 参考一致（板子 feat 喂 golden 也得 class7）。真根因在 **i2s 采样链**：读回 PCM std=5.1、
+> 符号翻转 7 万次（200 Hz 正弦应 ~1100），采到的是噪声非音频；板子 feat 分布 0..255(mean 128)
+> vs 参考 43..121(mean 48.6)。与 i2s 历史悬案（L/R 翻转漏检致 2:1 抽取 / +1 样本偏移）吻合。
+> 即 FPGA 的 DDR3/NPU/权重全部正常，唯一卡住识别的是音频进板的 i2s 采样链（PCM1808 回环/接线
+> 或 L/R 翻转检测）。详见 `## 2026-11-13` 一节。
+>
 > **交接中（2026-11-10）：先读 `docs/DEV_SNAPSHOT_HANDOFF_20261110.md`** ——
 > 一句话：数值侧全部 0 LSB；板级 top1 对 200 Hz/6 kHz 仍恒定，第一个偏差环节未定位；
 > 诊断读回基础设施已完成并离线验证；诊断位流的 DDR3 启动自检 `@0x00300200` 已**离线复现并锁定根因**
@@ -32,6 +44,54 @@
 > 导致主机读回混叠。先读 `## 2026-11-11` 一节。
 > **2026-11-11（夜）更新：降 DRM 84% 实验已证伪** —— 布线瓶颈是逻辑切片拥塞，不是 DRM，
 > `lut_ram` 转换已撤销。先读 `## 2026-11-11（夜）` 一节。
+
+## 2026-11-13：板级验收完成——DDR3 读写彻底收口，「恒 top1」根因定位到 i2s 采样链
+
+**背景**：2026-11-12 夜 FTDI 下载器（USB Cable II）在 PnP 里是 `Unknown`（只有 COM5 在线），
+板级验收被阻塞。2026-11-13 用户重插后 FTDI A/B 恢复 `OK`（VID_0403&PID_6010，FT2232），
+`board_check.py --status-only` 扫描 JTAG 链成功（`cdt_cfg exit 0`，状态寄存器 `0x00180c80`）。
+
+**烧录**：有效位流 `build/pds/20261112-202047-2c1207d6/generate_bitstream/instrec_top.sbit`
+（方案 A，顶层 instrec_top，SHA `23b496ee…`）。注意：`build/instrec-latest.sbit` 指向被否决的
+方案 B（WNS −0.952），**验收必须用 202047 位流，不能烧 latest 指针**。
+烧录结果：`program=True`、状态寄存器 `0x081ffca0`（done=1、crc_err=0）。
+
+**启动 banner（UART 510 B）**：
+```
+I
+RV32 BOOT
+RV32 MMIO OK
+RV32 ISA OK
+RV32 BENCH cycles=460012 inst=180008 acc=0xf2d8888b
+DDR WAIT STS 0x00000000
+NPU GO
+DDR3 SELFTEST...
+DDROK
+```
+即 RV32 CPU 自检（MMIO/ISA/BENCH acc 匹配）+ DDR3 自检 `DDROK`（写 4 KB 地址标签 pattern 到
+0x300000 逐字读回全对）。
+
+**DDR3 读写收口证据（主机诊断读回）**：
+- 读回 0x300000 的 4096 B，1024 个 word 逐位匹配 `0x5A5A00FF ^ w`（little-endian），
+  hex 前 48 B `ff 00 5a 5a fe 00 5a 5a …` 地址标签递减清晰可见。
+- 6×4 KB 重复长读，6/6 pattern 精确匹配（无偶发错位/丢帧）。
+- 权重上传 691040 B / 2700 帧全 `K` 确认，终帧 `WOK FA0D5236`。
+
+**推理链硬件正常（逐级验证）**：
+- mel 特征提取正常：播放 tone_200 vs tone_6k，读回 feat 低字节 88% 不同（前 16 B 完全不同）。
+- NPU 分类正确：把板子读回的 feat 喂 `golden_pipeline.npu_forward`，golden 也得 top1=class7
+  （probs 100%），与板子 logits 的 top1 一致。
+
+**「恒 top1」根因（i2s 采样链）**：
+- 读回 PCM（0x000000，132096×int16）：min=−40 max=13 mean=−1.3 std=5.1，
+  符号翻转 70383 次（200 Hz 正弦 @48k 应 ~1100）——采到的是噪声，不是播放的音频。
+- 板子 feat 分布 0..255（mean 127.8），golden_ref sine_440 参考是 43..121（mean 48.65）——
+  特征被噪声污染、系统性偏向 class7。
+- 与 i2s 历史悬案吻合（STATUS 325-335「L/R 翻转漏检致 2:1 抽取」、WSL 仿真定性「+1 样本偏移」）。
+
+**结论**：FPGA 的 DDR3 / NPU / 权重 / mel 全部正常；唯一卡住识别的是音频进板的 i2s 采样链
+（PCM1808 回环/接线，或 i2s_rx 的 L/R 翻转检测）。修复方向在 i2s 采样 RTL 或音频接线，
+不在 DDR3/NPU（这两条已板上证明正确）。
 
 ## 2026-11-12：拥塞根因解决 —— 共享 beats-1 减法器，PnR 收敛并产出位流
 

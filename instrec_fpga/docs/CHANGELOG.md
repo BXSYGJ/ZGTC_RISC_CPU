@@ -1,5 +1,23 @@
 # InstRec-FPGA 变更日志
 
+## 2026-11-13：板级验收完成 —— DDR3 读写彻底收口，「恒 top1」根因定位到 i2s 采样链
+
+- **FTDI 恢复**：2026-11-12 夜下载器在 PnP 为 `Unknown`；2026-11-13 用户重插后恢复
+  `OK`（VID_0403&PID_6010），JTAG 链扫描成功。
+- **烧录有效位流 `202047`**（方案 A，WNS −0.667，SHA `23b496ee…`）：done=1 / crc_err=0。
+  注意 `build/instrec-latest.sbit` 仍指向被否决方案 B（WNS −0.952），不可用于验收。
+- **启动自检全过**：RV32 MMIO/ISA/BENCH（acc 匹配）+ DDR3 自检 `DDROK`。
+- **DDR3 读写板上收口**：主机诊断读回 0x300000 的 4096 B，1024 word 逐位匹配
+  `0x5A5A00FF ^ w`；6×重复长读 6/6 精确；权重上传 `WOK FA0D5236`。
+- **推理链硬件正常**：mel 特征随音频 88% 变化；板子 feat 喂 `npu_forward` 得 top1=class7，
+  与板子 NPU 分类一致（NPU 无偏差）。
+- **「恒 top1」根因 = i2s 采样链**：读回 PCM std=5.1、符号翻转 7 万次（200 Hz 应 ~1100），
+  采到的是噪声非音频；板子 feat 分布 0..255(mean 128) vs 参考 43..121(mean 48.6)。
+  与历史悬案（L/R 翻转漏检致 2:1 抽取 / +1 样本偏移）吻合。
+- **结论**：FPGA 的 DDR3 / NPU / 权重 / mel 全部正常，唯一卡住识别的是音频进板的
+  i2s 采样链（PCM1808 回环/接线，或 i2s_rx L/R 翻转检测）。修复方向在 i2s 采样 RTL
+  或音频接线，不在 DDR3/NPU。
+
 ## 2026-11-12（夜·续）：离线全绿复核 —— DDR3 契约仿真 6/6 PASS，恒 top1 代码层根因均已修复
 
 - **WSL 仿真能力复核**：`Ubuntu-24.04` 内 `iverilog`/`vvp`/`verilator`/`python3` 齐全
