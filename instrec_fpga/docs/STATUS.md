@@ -48,6 +48,14 @@
 > 或最小改动 `win_base <= ~win_id[0] ? PCM_WIN_STRIDE : 0`。修完后用 `diag_spectrum.py` 复核：
 > 判据是「去掉全窗常量后 p99.5 ≤ 8 LSB 且坏帧为 0」。
 
+>
+> **构建运维（2026-11-13 两次无输出失败后总结，勿再踩）**：`run_pds_full.ps1` 用
+> `Start-Process -Wait` 起 `pds_shell`，而 compile 阶段约 3m50s 不向脚本 stdout 写任何东西。
+> **后台启动 + 长时间无输出会被回收（两次都在 1.3 / 2.0 分钟被杀，`error_info.txt` 为空、
+> `flow.log` 停在 rtl-infer 中途）**；`*>` 重定向到文件同样会让被 Start-Process 继承控制台的
+> 子进程直接退出。可用做法：前台调用（compile 单阶段 3m50s 实测 exit 0），或后台启动时套一层
+> 每 20 s 打一次心跳的包装脚本（`build/heartbeat_build.ps1`），进程就不会被当成停滞。
+
 
 > **2026-11-12（最新，先读这节）**：拥塞根问题已解决。方案 A（共享 `beats-1` 减法器）
 > 让 multi-seed PnR 从「`Route-0008` 布不通、无位流」变成「`Unrouted 0` + 六阶段全过 + 位流产出」，

@@ -166,6 +166,12 @@ def main(argv=None) -> int:
     ap.add_argument("--gain-db", type=float, default=0.0, help="digital playback gain")
     ap.add_argument("--play", default=None, help="48 kHz stereo wav (else synth tone)")
     ap.add_argument("--settle", type=float, default=4.0, help="seconds before locking")
+    ap.add_argument("--half", choices=("prev", "curr", "both"), default="prev",
+                    help="which PCM ping-pong half the Mel engine consumed: "
+                         "'prev' = ~win_id[0] (bitstreams with the mel_engine "
+                         "win_base fix, 2026-11-13 onward), 'curr' = win_id[0] "
+                         "(the 20261112-202047 bitstream), 'both' = read and "
+                         "score both")
     ap.add_argument("--repeat", type=int, default=1, help="independent captures")
     args = ap.parse_args(argv)
 
@@ -196,13 +202,27 @@ def main(argv=None) -> int:
             dd.read_status(ser)
             ser.write(b"L")
             time.sleep(0.05)
-            st = dd.read_status(ser)
-            win = st["win"]
-            pcm_base = dd.PCM_LASE + (dd.PCM_WIN_STRIDE if (win & 1) else 0)
+            st_status = dd.read_status(ser)
+            win = st_status["win"]
+            # The completed window sits in the half the mel engine selected:
+            # before the 2026-11-13 win_base fix it latched win_id[0] (already
+            # the NEXT window id, i.e. the half being overwritten); after the
+            # fix it latches ~win_id[0].  --half picks the right one, --half
+            # both reads and scores both so the two bitstreams are directly
+            # comparable.
+            if args.half == "both":
+                halves = [0, 1]
+            elif args.half == "prev":
+                halves = [0 if (win & 1) else 1]
+            else:
+                halves = [win & 1]
             t0 = time.time()
-            pcm_raw = read_ddr_robust(ser, pcm_base, dd.PCM_WIN_BYTES, progress=True)
+            pcms = {}
+            for h in halves:
+                pcms[h] = read_ddr_robust(ser, dd.PCM_LASE + dd.PCM_WIN_STRIDE * h,
+                                          dd.PCM_WIN_BYTES, progress=True)
             spec_raw = read_ddr_robust(ser, SPEC_BASE, SPEC_BYTES)
-            print("    read %d B in %.1f s" % (len(pcm_raw) + len(spec_raw),
+            print("    read %d B in %.1f s" % (len(spec_raw) + sum(len(v) for v in pcms.values()),
                                                time.time() - t0), flush=True)
             logits = dd.read_logits(ser)
             ser.write(b"U")
@@ -212,65 +232,66 @@ def main(argv=None) -> int:
                 player.stop()
             ser.close()
 
-        pcm = np.frombuffer(pcm_raw, dtype="<i2").astype(np.int16)[:PCM_SAMPLES]
         board_db = np.frombuffer(spec_raw, dtype="<i2").astype(np.int16)
         board_db = board_db.reshape(N_FRAMES, N_MELS).T.copy()   # (64, 258)
 
-        g = gp.run_mel_pipeline(pcm, tables)
-        gold_db = g["dbspec"].astype(np.int16)
-
-        diff = board_db.astype(np.int32) - gold_db.astype(np.int32)
-        exact = float((diff == 0).mean() * 100.0)
-        # The dB spectrum is referenced to a global max taken over 259 frames
-        # while only the kept 258 are exported, so the board sits a small
-        # CONSTANT above golden (measured ~+36 LSB = 0.14 dB).  That offset is
-        # removed by standardize's mean subtraction, so the pass criterion is
-        # the residual after subtracting the median constant.
-        live = (board_db > -20400) & (gold_db > -20400)
-        offset = int(np.median(diff[live])) if live.any() else 0
-        resid = np.abs(diff[live] - offset) if live.any() else np.array([0])
-        stats = {
-            "run": run,
-            "win": win,
-            "status": st,
-            "pcm_std": float(pcm.std()),
-            "pcm_min": int(pcm.min()),
-            "pcm_max": int(pcm.max()),
-            "board_db_min": int(board_db.min()),
-            "board_db_max": int(board_db.max()),
-            "board_db_mean": float(board_db.mean()),
-            "gold_db_min": int(gold_db.min()),
-            "gold_db_max": int(gold_db.max()),
-            "gold_db_mean": float(gold_db.mean()),
-            "diff_max_abs": int(np.abs(diff).max()),
-            "diff_mean_abs": float(np.abs(diff).mean()),
-            "offset_lsb": offset,
-            "resid_max_abs": int(resid.max()),
-            "resid_p995_abs": int(np.percentile(resid, 99.5)),
-            "resid_mean_abs": float(resid.mean()),
-            # Frames whose max residual exceeds 2 dB.  They concentrate at the
-            # start of the window (see mel_engine.v:798 win_base race) and move
-            # between captures, so they are reported, not hidden.
-            "bad_frames": int((np.abs(diff).max(0) > 512).sum()),
-            "exact_pct": exact,
-            "corr": float(np.corrcoef(board_db.ravel(), gold_db.ravel())[0, 1]),
-            "logits_int32": logits,
-        }
-        results.append((stats, board_db, gold_db, pcm, g))
-
-        print("[run %d] win=%d pcm std=%.1f  board dB [%d..%d] mean %.1f | "
-              "golden dB [%d..%d] mean %.1f" % (
-                  run, win, stats["pcm_std"],
-                  stats["board_db_min"], stats["board_db_max"], stats["board_db_mean"],
-                  stats["gold_db_min"], stats["gold_db_max"], stats["gold_db_mean"]))
-        print("        raw: exact=%.2f%%  max|d|=%d  mean|d|=%.2f  corr=%.4f" % (
-            stats["exact_pct"], stats["diff_max_abs"], stats["diff_mean_abs"],
-            stats["corr"]))
-        print("        after removing the %d LSB window constant: mean|d|=%.2f  "
-              "p99.5=%d  max=%d  (>2 dB frames: %d)"
-              % (offset, stats["resid_mean_abs"], stats["resid_p995_abs"],
-                 stats["resid_max_abs"], stats["bad_frames"]))
-        print("        logits=%s" % (logits,))
+        stats = None
+        gold_db = None
+        pcm_best = None
+        g_best = None
+        for h, raw in pcms.items():
+            pcm = np.frombuffer(raw, dtype="<i2").astype(np.int16)[:PCM_SAMPLES]
+            g = gp.run_mel_pipeline(pcm, tables)
+            g_db = g["dbspec"].astype(np.int16)
+            diff = board_db.astype(np.int32) - g_db.astype(np.int32)
+            live = (board_db > -20400) & (g_db > -20400)
+            offset = int(np.median(diff[live])) if live.any() else 0
+            resid = np.abs(diff[live] - offset) if live.any() else np.array([0])
+            st = {
+                "run": run,
+                "half": h,
+                "win": win,
+                "status": st_status,
+                "pcm_std": float(pcm.std()),
+                "pcm_min": int(pcm.min()),
+                "pcm_max": int(pcm.max()),
+                "board_db_min": int(board_db.min()),
+                "board_db_max": int(board_db.max()),
+                "board_db_mean": float(board_db.mean()),
+                "gold_db_min": int(g_db.min()),
+                "gold_db_max": int(g_db.max()),
+                "gold_db_mean": float(g_db.mean()),
+                "diff_max_abs": int(np.abs(diff).max()),
+                "diff_mean_abs": float(np.abs(diff).mean()),
+                "exact_pct": float((diff == 0).mean() * 100.0),
+                "corr": float(np.corrcoef(board_db.ravel(), g_db.ravel())[0, 1]),
+                "offset_lsb": offset,
+                "resid_max_abs": int(resid.max()),
+                "resid_p995_abs": int(np.percentile(resid, 99.5)),
+                "resid_mean_abs": float(resid.mean()),
+                # Frames whose max residual exceeds 2 dB.  They used to
+                # concentrate at the start of the window (the win_base race);
+                # after the fix they should be zero.
+                "bad_frames": int((np.abs(diff).max(0) > 512).sum()),
+                "logits_int32": logits,
+            }
+            print("[run %d half %d] win=%d pcm std=%.1f  board dB [%d..%d] mean %.1f | "
+                  "golden dB [%d..%d] mean %.1f" % (
+                      run, h, win, st["pcm_std"],
+                      st["board_db_min"], st["board_db_max"], st["board_db_mean"],
+                      st["gold_db_min"], st["gold_db_max"], st["gold_db_mean"]))
+            print("        raw: exact=%.2f%%  max|d|=%d  mean|d|=%.2f  corr=%.4f" % (
+                st["exact_pct"], st["diff_max_abs"], st["diff_mean_abs"], st["corr"]))
+            print("        after removing the %d LSB window constant: mean|d|=%.2f  "
+                  "p99.5=%d  max=%d  (>2 dB frames: %d)"
+                  % (offset, st["resid_mean_abs"], st["resid_p995_abs"],
+                     st["resid_max_abs"], st["bad_frames"]))
+            print("        logits=%s" % (logits,))
+            if stats is None or st["bad_frames"] < stats["bad_frames"]:
+                stats, gold_db, pcm_best, g_best = st, g_db, pcm, g
+        if len(pcms) > 1:
+            print("    best half = %d (%d bad frames)" % (stats["half"], stats["bad_frames"]))
+        results.append((stats, board_db, gold_db, pcm_best, g_best))
 
     outdir = ROOT / "build" / "diag" / ("spec_" + args.label)
     outdir.mkdir(parents=True, exist_ok=True)
