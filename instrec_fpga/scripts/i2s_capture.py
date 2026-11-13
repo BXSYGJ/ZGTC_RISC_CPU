@@ -259,17 +259,24 @@ class WaveOutPlayer:
         self.wfmt = WAVEFORMATEX(1, self.ch, self.sr,
                                  self.sr * self.ch * self.sw,
                                  self.ch * self.sw, self.sw * 8, 0)
-        try:
-            self.winmm.waveOutSetVolume(ctypes.c_void_p(self.device_id),
-                                        ctypes.c_uint32(0xFFFFFFFF))
-        except Exception:
-            pass
+        # NOTE: waveOutSetVolume must be called AFTER waveOutOpen with the
+        # returned HWAVEOUT handle, not the device id.  The previous code
+        # passed device_id as a fake handle before the device was opened,
+        # so the volume write was a silent no-op and the Realtek endpoint
+        # kept its (possibly muted) Windows volume -> PCM1808 captured noise.
 
     def start(self):
         rc = self.winmm.waveOutOpen(self.ctypes.byref(self.handle), self.device_id,
                                     self.ctypes.byref(self.wfmt), 0, 0, 0)
         if rc != 0:
             raise RuntimeError('waveOutOpen device %d rc=%d' % (self.device_id, rc))
+        # Full volume on the opened handle (low 16 bits = left, high = right).
+        try:
+            self.winmm.waveOutSetVolume.argtypes = [self.wt.HANDLE, self.wt.DWORD]
+            self.winmm.waveOutSetVolume.restype = self.wt.UINT
+            self.winmm.waveOutSetVolume(self.handle, 0xFFFFFFFF)
+        except Exception:
+            pass
         self.hdr = self.WAVEHDR(self.data, len(self.data), 0, None,
                                 0, 0xFFFFFFFF if self.loop else 0, None, None)
         self.winmm.waveOutPrepareHeader(self.handle, self.ctypes.byref(self.hdr),
