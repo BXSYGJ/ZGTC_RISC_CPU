@@ -97,12 +97,12 @@ python experiments/pacerv_shared_system/inspect_pds.py <本轮远程构建目录
 
 ## 本轮时序收敛改动
 
-当前完整系统使用normal布局布线模式、109.375MHz系统时钟、148.5MHz像素时钟，FDC声明0.150ns时钟不确定性；最终还核对报告中的实际扣减值。DDR采用厂商规则生成的875Mbps配置，FDC和UART/音频时间常数同步匹配。DDR桥请求分级，FC系数使用同步DRM，激活写入payload独立于valid，显示控制七拍；ROM物理取指13位，短权重FIFO采用寄存器映射。权重摘要先寄存再比较；GAP为256×14同步块RAM及一拍读改写流水，末拍增加一次drain，舍入语义保持。最新完整NPU标签timing_gap_sync_bram，控制器31,152,094周期、固件结果窗口31,152,093周期，58份输入hash匹配。显示等价记录在build/pacerv_shared_system/dashboard_equivalence_7clock_timing_selector_register。
+当前完整系统使用normal布局布线模式、83.333333MHz系统时钟、148.5MHz像素时钟，FDC声明0.150ns时钟不确定性；最终还核对报告中的实际扣减值。DDR采用厂商规则生成的666.666667Mbps配置，FDC与UART分频723、音频补样1736拍等时间常数同步匹配。DDR桥请求分级，FC系数使用同步DRM，激活写入payload独立于valid，显示控制七拍；ROM物理取指13位，短权重FIFO采用寄存器映射。权重摘要先寄存再比较；GAP为256×14同步块RAM及一拍读改写流水，末拍增加一次drain，舍入语义保持。DDR读FIFO16×256及CPU UART FIFO16×8使用显式标量寄存器，读出拍数保持。最新完整NPU标签timing_fifo_registers_83m333，控制器31,152,094周期、固件结果窗口31,152,093周期，58份输入hash匹配。显示等价记录在build/pacerv_shared_system/dashboard_equivalence_7clock_timing_selector_register。
 
 新构建命令：
 
 ```powershell
-python experiments/pacerv_shared_system/prepare_pds.py --scope full --stage full --mode normal --seed 4 --hold-iterations 12 --run --minutes 180
+python experiments/pacerv_shared_system/prepare_pds.py --scope full --stage full --mode normal --seed 5 --hold-iterations 12 --run --minutes 180
 python experiments/pacerv_shared_system/inspect_pds.py <构建目录> --require-qualified
 ```
 
@@ -114,7 +114,7 @@ python experiments/pacerv_shared_system/inspect_pds.py <构建目录> --require-
 
 PG2L100H使用厂商单线程路由，不能传通用`-number_of_router_thread`选项。当前电脑24逻辑线程、16GB内存；一个完整布线与轻量仿真可并行。每轮保持独立输入、日志及位流。需要重跑已有冻结工程时，使用`prepare_pds.py --restart <构建目录> --run --minutes 120`；入口先归档原尝试，再重跑完整配方。
 
-连续48kHz音频验证命令为`python sim/experiments/pacerv_integration/run_audio_clock_check.py`。它同时比较125MHz与109.375MHz，各运行两个完整窗口；报告明确记录启动首窗1次补零及稳定第二窗的132,096帧全真实输入。DDR使用512周期行为完成模型。
+连续48kHz音频验证命令为`python sim/experiments/pacerv_integration/run_audio_clock_check.py`。它读取当前DDR IP的实际用户频率，核对生产audio参数，并同时比较125MHz与当前频率，各运行两个完整窗口；当前为83.333333MHz。报告记录启动首窗1次补零及稳定第二窗132,096帧全真实输入。DDR使用512周期行为完成模型。UART执行`python sim/experiments/pacerv_integration/run_shared_uart.py --label <新标签>`，按生产系统时钟/分频逐字节采样四路32字节；旧4分频覆盖已移除。
 
 权重摘要/GAP修改的独立验证采用新label，已有目录保留：
 

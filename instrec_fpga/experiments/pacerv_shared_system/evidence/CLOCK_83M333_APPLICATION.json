@@ -1,0 +1,32 @@
+﻿[
+  {
+    "path": "ipcore/ddr3_test/ddr3_test.idf",
+    "original_sha256": "4e4ff35dcf0dfb4f23919072a014f56c8843e32994ca5aae2a5e5e02b273ec61",
+    "modified_sha256": "e501751be82fa417ce56194ffb6c314c4d8d65ba9cffd0017d24c70345602c34"
+  },
+  {
+    "path": "ipcore/ddr3_test/ddr3_test.v",
+    "original_sha256": "a66d9ea92e427875c0b6d1d0a42e7e0e6a4f498fdd241d0f6850b4350200e552",
+    "modified_sha256": "55b42bb1dbe4acafda4ba1c597eb0983fe5cb5499d8d3bccea23ffb001b66e37"
+  },
+  {
+    "path": "ipcore/ddr3_test/ddr3_test_ddrphy_top.v",
+    "original_sha256": "f8c58e03b1057919e90ed75447efa94ebfabd09f12f2d0bb00f8f9331662c96f",
+    "modified_sha256": "c0d7eec10375f6ce993ddd41fbb3341d733c133ace0cc905a2d50e3ef59492c6"
+  },
+  {
+    "path": "constraints/ddr3_100h.fdc",
+    "original_sha256": "8aca13a4d2280e86d6391d49c0139d023ad405400648e09acf845568fe4634e6",
+    "modified_sha256": "c751da0c0698b862a00701dcff864b7264357cde7fdd17dcc7ccc54469afba7b"
+  },
+  {
+    "path": "src/ctrl/instrec_top.v",
+    "original_sha256": "a5e4848d294baf57afb11c5b117a0b9c5ff61d174ee951db56ae491c2f6d7191",
+    "modified_sha256": "59073a5283f2600e54050e31aecbb58b77cd0f968d2ec3aaa6761b214e95c34d"
+  },
+  {
+    "path": "constraints/pacerv_shared_system.fdc",
+    "original_sha256": "90eeb0f7a7b4a0ac91f9cb2b8e125c86aee6a157b58040723820d64080d1f85d",
+    "modified_sha256": "16a8c5763ea1159980e54c3b4458a80991266aa021a839b98d5cb4e3b692ccd9"
+  }
+]

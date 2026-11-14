@@ -54,7 +54,7 @@ index 0000000..944eefd
 +ipcore/ddr3_test/ddr3_test_ddrphy_top.v -text
 +constraints/ddr3_100h.fdc -text
 diff --git a/instrec_fpga/constraints/ddr3_100h.fdc b/instrec_fpga/constraints/ddr3_100h.fdc
-index 4dbc3ad..3601869 100644
+index 4dbc3ad..689db0b 100644
 --- a/instrec_fpga/constraints/ddr3_100h.fdc
 +++ b/instrec_fpga/constraints/ddr3_100h.fdc
 @@ -1,535 +1,535 @@
@@ -604,12 +604,12 @@ index 4dbc3ad..3601869 100644
 +
 +# ---- Clocks: differential 125 MHz reference -> DDR controller core clocks ----
 +create_clock -name {ref_clk} [get_ports {ref_clk_p}] -period {8.000} -waveform {0.000 4.000}
-+create_generated_clock -name {rst_clk} -source [get_ports {ref_clk_p}] [get_pins {ddr3_wrapper.I_ips_ddr_top.u_ddrphy_top.rst_clk_gpll/clkout0}] -master_clock [get_clocks {ref_clk}] -multiply_by {14} -divide_by {14}
-+create_generated_clock -name {ddrphy_sysclk} -source [get_ports {ref_clk_p}] [get_pins {ddr3_wrapper.I_ips_ddr_top.u_ddrphy_top.ddrphy_gpll/clkout0}] -master_clock [get_clocks {ref_clk}] -multiply_by {14} -divide_by {16}
-+create_generated_clock -name {phy_dq_clk_0} -source [get_ports {ref_clk_p}] [get_pins {ddr3_wrapper.I_ips_ddr_top.u_ddrphy_top.ddrphy_slice_top.i_dqs_bank[0].ddrphy_ppll/clkoutphy}] -master_clock [get_clocks {ref_clk}] -multiply_by {14} -divide_by {2}
++create_generated_clock -name {rst_clk} -source [get_ports {ref_clk_p}] [get_pins {ddr3_wrapper.I_ips_ddr_top.u_ddrphy_top.rst_clk_gpll/clkout0}] -master_clock [get_clocks {ref_clk}] -multiply_by {16} -divide_by {16}
++create_generated_clock -name {ddrphy_sysclk} -source [get_ports {ref_clk_p}] [get_pins {ddr3_wrapper.I_ips_ddr_top.u_ddrphy_top.ddrphy_gpll/clkout0}] -master_clock [get_clocks {ref_clk}] -multiply_by {16} -divide_by {24}
++create_generated_clock -name {phy_dq_clk_0} -source [get_ports {ref_clk_p}] [get_pins {ddr3_wrapper.I_ips_ddr_top.u_ddrphy_top.ddrphy_slice_top.i_dqs_bank[0].ddrphy_ppll/clkoutphy}] -master_clock [get_clocks {ref_clk}] -multiply_by {16} -divide_by {3}
 +create_generated_clock -name {phy_dq_sysclk_0} -source [get_pins {ddr3_wrapper.I_ips_ddr_top.u_ddrphy_top.ddrphy_slice_top.i_dqs_bank[0].ddrphy_ppll/clkoutphy}] [get_pins {ddr3_wrapper.I_ips_ddr_top.u_ddrphy_top.ddrphy_slice_top.i_dqs_bank[0].u_ddrphy_ioclkdiv/CLKDIVOUT}] -master_clock [get_clocks {phy_dq_clk_0}] -edges {5 13 21} -edge_shift {0 0 0}
 +set_multicycle_path 2 -from [get_clocks ddrphy_sysclk] -to [get_clocks phy_dq_sysclk_0]
-+create_generated_clock -name {phy_dq_clk_1} -source [get_ports {ref_clk_p}] [get_pins {ddr3_wrapper.I_ips_ddr_top.u_ddrphy_top.ddrphy_slice_top.i_dqs_bank[1].ddrphy_ppll/clkoutphy}] -master_clock [get_clocks {ref_clk}] -multiply_by {14} -divide_by {2}
++create_generated_clock -name {phy_dq_clk_1} -source [get_ports {ref_clk_p}] [get_pins {ddr3_wrapper.I_ips_ddr_top.u_ddrphy_top.ddrphy_slice_top.i_dqs_bank[1].ddrphy_ppll/clkoutphy}] -master_clock [get_clocks {ref_clk}] -multiply_by {16} -divide_by {3}
 +create_generated_clock -name {phy_dq_sysclk_1} -source [get_pins {ddr3_wrapper.I_ips_ddr_top.u_ddrphy_top.ddrphy_slice_top.i_dqs_bank[1].ddrphy_ppll/clkoutphy}] [get_pins {ddr3_wrapper.I_ips_ddr_top.u_ddrphy_top.ddrphy_slice_top.i_dqs_bank[1].u_ddrphy_ioclkdiv/CLKDIVOUT}] -master_clock [get_clocks {phy_dq_clk_1}] -edges {5 13 21} -edge_shift {0 0 0}
 +set_multicycle_path 2 -from [get_clocks ddrphy_sysclk] -to [get_clocks phy_dq_sysclk_1]
 +set_clock_uncertainty {0.4} -from [get_clocks {ddrphy_sysclk}] -to [get_clocks {phy_dq_sysclk_0}] -setup -hold
@@ -1130,17 +1130,17 @@ index 4dbc3ad..3601869 100644
 +define_attribute {p:mem_we_n} {PAP_IO_SLEW} {SLOW}
 diff --git a/instrec_fpga/constraints/pacerv_shared_system.fdc b/instrec_fpga/constraints/pacerv_shared_system.fdc
 new file mode 100644
-index 0000000..da2541c
+index 0000000..0ade179
 --- /dev/null
 +++ b/instrec_fpga/constraints/pacerv_shared_system.fdc
 @@ -0,0 +1,5 @@
-+# PaceRV and system DDR user logic share the 109.375 MHz user clock.
++# PaceRV and system DDR user logic share the 83.3333 MHz user clock.
 +# Load after ddr3_100h.fdc and clock_groups_async.fdc.
 +# Explicit clock-to-clock form gives one 0.150 ns path budget. The clock-only
 +# form is applied to both ends by this PDS release (0.300 ns on a self path).
 +set_clock_uncertainty {0.150} -setup -hold -from [get_clocks {ddrphy_sysclk}] -to [get_clocks {ddrphy_sysclk}]
 diff --git a/instrec_fpga/ipcore/ddr3_test/ddr3_test.idf b/instrec_fpga/ipcore/ddr3_test/ddr3_test.idf
-index cb21589..642d32d 100644
+index cb21589..2329821 100644
 --- a/instrec_fpga/ipcore/ddr3_test/ddr3_test.idf
 +++ b/instrec_fpga/ipcore/ddr3_test/ddr3_test.idf
 @@ -1,2674 +1,2674 @@
@@ -3928,7 +3928,7 @@ index cb21589..642d32d 100644
 +        </param>
 +        <param>
 +            <name>DFI_CLK_PERIOD</name>
-+            <value>9142</value>
++            <value>12000</value>
 +        </param>
 +        <param>
 +            <name>PAD_BA2</name>
@@ -3953,7 +3953,7 @@ index cb21589..642d32d 100644
 +        </param>
 +        <param>
 +            <name>DDRC_T_RC</name>
-+            <value>22</value>
++            <value>17</value>
 +        </param>
 +        <param>
 +            <name>DDR2_CL</name>
@@ -4007,7 +4007,7 @@ index cb21589..642d32d 100644
 +        </param>
 +        <param>
 +            <name>DDR3_CL_VALUE</name>
-+            <value>6</value>
++            <value>4</value>
 +        </param>
 +        <param>
 +            <name>A1_GROUP_NUM</name>
@@ -4031,7 +4031,7 @@ index cb21589..642d32d 100644
 +        </param>
 +        <param>
 +            <name>DDRC_T_RP</name>
-+            <value>6</value>
++            <value>5</value>
 +        </param>
 +        <param>
 +            <name>PAD_DM5</name>
@@ -4095,7 +4095,7 @@ index cb21589..642d32d 100644
 +        </param>
 +        <param>
 +            <name>STATIC_RATIOF</name>
-+            <value>14</value>
++            <value>16</value>
 +        </param>
 +        <param>
 +            <name>DESIRED_DDR2_RATE</name>
@@ -4104,11 +4104,11 @@ index cb21589..642d32d 100644
 +        </param>
 +        <param>
 +            <name>DDRC_TREFI</name>
-+            <value>3412</value>
++            <value>2600</value>
 +        </param>
 +        <param>
 +            <name>DDRC_T_RCD</name>
-+            <value>6</value>
++            <value>5</value>
 +        </param>
 +        <param>
 +            <name>PAD_DQ31</name>
@@ -4164,7 +4164,7 @@ index cb21589..642d32d 100644
 +        </param>
 +        <param>
 +            <name>DDRC_T_RRD</name>
-+            <value>5</value>
++            <value>4</value>
 +        </param>
 +        <param>
 +            <name>PAD_A6</name>
@@ -4192,7 +4192,7 @@ index cb21589..642d32d 100644
 +        </param>
 +        <param>
 +            <name>DDRC_T_RAS</name>
-+            <value>17</value>
++            <value>13</value>
 +        </param>
 +        <param>
 +            <name>A11_DQS_EN</name>
@@ -4217,7 +4217,7 @@ index cb21589..642d32d 100644
 +        </param>
 +        <param>
 +            <name>DDRC_TRFC</name>
-+            <value>132</value>
++            <value>100</value>
 +        </param>
 +        <param>
 +            <name>GROUP_DQG_8</name>
@@ -4587,7 +4587,7 @@ index cb21589..642d32d 100644
 +        </param>
 +        <param>
 +            <name>DDR3_INIT_WR</name>
-+            <value>7</value>
++            <value>5</value>
 +        </param>
 +        <param>
 +            <name>A10_DQS_EN</name>
@@ -4719,7 +4719,7 @@ index cb21589..642d32d 100644
 +        </param>
 +        <param>
 +            <name>DDRC_T_FAW</name>
-+            <value>19</value>
++            <value>15</value>
 +        </param>
 +        <param>
 +            <name>A13_EN</name>
@@ -4805,7 +4805,7 @@ index cb21589..642d32d 100644
 +        </param>
 +        <param>
 +            <name>DDRC_T_XP</name>
-+            <value>4</value>
++            <value>3</value>
 +        </param>
 +        <param>
 +            <name>PAD_DQ30</name>
@@ -4846,7 +4846,7 @@ index cb21589..642d32d 100644
 +        </param>
 +        <param>
 +            <name>PHY_TXPR</name>
-+            <value>34</value>
++            <value>26</value>
 +        </param>
 +        <param>
 +            <name>A15_GROUP_NUM</name>
@@ -4944,7 +4944,7 @@ index cb21589..642d32d 100644
 +        </param>
 +        <param>
 +            <name>ACTUAL_RATE</name>
-+            <value>875.0</value>
++            <value>666.6666666666666</value>
 +            <decimal>3</decimal>
 +        </param>
 +        <param>
@@ -4998,7 +4998,7 @@ index cb21589..642d32d 100644
 +        </param>
 +        <param>
 +            <name>DESIRED_RATE</name>
-+            <value>875.0</value>
++            <value>687.5</value>
 +            <decimal>3</decimal>
 +        </param>
 +        <param>
@@ -5011,7 +5011,7 @@ index cb21589..642d32d 100644
 +        </param>
 +        <param>
 +            <name>DDR3_WR</name>
-+            <value>3</value>
++            <value>1</value>
 +        </param>
 +        <param>
 +            <name>PAD_DQS7</name>
@@ -5033,7 +5033,7 @@ index cb21589..642d32d 100644
 +        </param>
 +        <param>
 +            <name>DESIRED_DDR3_RATE</name>
-+            <value>875.0</value>
++            <value>687.5</value>
 +            <decimal>3</decimal>
 +        </param>
 +        <param>
@@ -5059,7 +5059,7 @@ index cb21589..642d32d 100644
 +        </param>
 +        <param>
 +            <name>PHY_TRFC</name>
-+            <value>33</value>
++            <value>25</value>
 +        </param>
 +        <param>
 +            <name>DDRC_T_WTR</name>
@@ -5153,7 +5153,7 @@ index cb21589..642d32d 100644
 +        </param>
 +        <param>
 +            <name>DDRC_T_WR</name>
-+            <value>7</value>
++            <value>5</value>
 +        </param>
 +        <param>
 +            <name>PAD_DQ67</name>
@@ -5693,7 +5693,7 @@ index cb21589..642d32d 100644
 +        </param>
 +        <param>
 +            <name>DDR3_CL</name>
-+            <value>7</value>
++            <value>6</value>
 +        </param>
 +        <param>
 +            <name>DDR3_ODT_VALUE</name>
@@ -5701,11 +5701,11 @@ index cb21589..642d32d 100644
 +        </param>
 +        <param>
 +            <name>DDR3_CWL</name>
-+            <value>6</value>
++            <value>5</value>
 +        </param>
 +        <param>
 +            <name>STATIC_RATIO0</name>
-+            <value>2</value>
++            <value>3</value>
 +        </param>
 +        <param>
 +            <name>PAD_DQS8</name>
@@ -6493,7 +6493,7 @@ index cb21589..642d32d 100644
 +    </file_list>
 +</ip_inst>
 diff --git a/instrec_fpga/ipcore/ddr3_test/ddr3_test.v b/instrec_fpga/ipcore/ddr3_test/ddr3_test.v
-index 61efd56..3430dd2 100644
+index 61efd56..210d671 100644
 --- a/instrec_fpga/ipcore/ddr3_test/ddr3_test.v
 +++ b/instrec_fpga/ipcore/ddr3_test/ddr3_test.v
 @@ -1,494 +1,494 @@
@@ -7126,13 +7126,13 @@ index 61efd56..3430dd2 100644
 +//MR0_DDR3
 +localparam [0:0] DDR3_PPD      = 1'b1;
 +
-+localparam [2:0] DDR3_WR       = 3'd3; 
++localparam [2:0] DDR3_WR       = 3'd1; 
 +
 +localparam [0:0] DDR3_DLL      = 1'b1;
 +localparam [0:0] DDR3_TM       = 1'b0;
 +localparam [0:0] DDR3_RBT      = 1'b0;
 +
-+localparam [3:0] DDR3_CL       = 4'd6;
++localparam [3:0] DDR3_CL       = 4'd4;
 +
 +localparam [1:0] DDR3_BL       = 2'b00;
 +localparam [15:0] MR0_DDR3     = {3'b000, DDR3_PPD, DDR3_WR, DDR3_DLL, DDR3_TM, DDR3_CL[3:1], DDR3_RBT, DDR3_CL[0], DDR3_BL};
@@ -7155,7 +7155,7 @@ index 61efd56..3430dd2 100644
 +localparam [0:0] DDR3_SRT      = 1'b0;
 +localparam [0:0] DDR3_ASR      = 1'b0;
 +
-+localparam [2:0] DDR3_CWL      = 6 - 5;
++localparam [2:0] DDR3_CWL      = 5 - 5;
 +
 +localparam [2:0] DDR3_PASR     = 3'b000;
 +localparam [15:0] MR2_DDR3     = {5'b00000, DDR3_RTT_WR, 1'b0, DDR3_SRT, DDR3_ASR, DDR3_CWL, DDR3_PASR};
@@ -7219,37 +7219,37 @@ index 61efd56..3430dd2 100644
 +
 +  localparam [7:0]   PHY_TMOD         =  12/4   ;
 +  
-+  localparam [7:0]   PHY_TXPR         =  34   ;
++  localparam [7:0]   PHY_TXPR         =  26   ;
 +  
 +  localparam [7:0]   PHY_TRP          =  2   ;
 +  
-+  localparam [7:0]   PHY_TRFC         =  33   ;
++  localparam [7:0]   PHY_TRFC         =  25   ;
 +    
 +  localparam [7:0]   PHY_TRCD         =  2   ;
 +            
 +  localparam DDRC_TXSDLL               = 512  ;
 +   
-+  localparam DDRC_TXP                  = 4   ;
++  localparam DDRC_TXP                  = 3   ;
 + 
-+  localparam DDRC_TFAW                 = 19   ;
++  localparam DDRC_TFAW                 = 15   ;
 +
-+  localparam DDRC_TRAS                 = 17   ;
++  localparam DDRC_TRAS                 = 13   ;
 +   
-+  localparam DDRC_TRCD                 = 6   ;
++  localparam DDRC_TRCD                 = 5   ;
 +    
-+  localparam DDRC_TREFI                = 3412   ;
++  localparam DDRC_TREFI                = 2600   ;
 +   
-+  localparam DDRC_TRFC                 = 132   ;
++  localparam DDRC_TRFC                 = 100   ;
 +     
-+  localparam DDRC_TRC                  = 22   ;
++  localparam DDRC_TRC                  = 17   ;
 +
-+  localparam DDRC_TRP                  = 6   ;
++  localparam DDRC_TRP                  = 5   ;
 +
-+  localparam DDRC_TRRD                 = 5   ;  
++  localparam DDRC_TRRD                 = 4   ;  
 +
 +  localparam DDRC_TRTP                 = 4   ;
 +
-+  localparam DDRC_TWR                  = 7   ;
++  localparam DDRC_TWR                  = 5   ;
 +
 +  localparam DDRC_TWTR                 = 4    ;
 + 
@@ -7486,7 +7486,7 @@ index 61efd56..3430dd2 100644
 +endmodule
 +
 diff --git a/instrec_fpga/ipcore/ddr3_test/ddr3_test_ddrphy_top.v b/instrec_fpga/ipcore/ddr3_test/ddr3_test_ddrphy_top.v
-index 3b4c609..e4a0164 100644
+index 3b4c609..796d874 100644
 --- a/instrec_fpga/ipcore/ddr3_test/ddr3_test_ddrphy_top.v
 +++ b/instrec_fpga/ipcore/ddr3_test/ddr3_test_ddrphy_top.v
 @@ -1,1039 +1,1039 @@
@@ -8548,11 +8548,11 @@ index 3b4c609..e4a0164 100644
 +
 +  parameter [7:0]   TMOD         =  12/4   ,
 +  
-+  parameter [7:0]   TXPR         =  34     ,
++  parameter [7:0]   TXPR         =  26     ,
 +  
 +  parameter [7:0]   TRP          =  2     ,
 +  
-+  parameter [7:0]   TRFC         =  33     ,
++  parameter [7:0]   TRFC         =  25     ,
 +    
 +  parameter [7:0]   TRCD         =  2     ,
 +  
@@ -8681,9 +8681,9 @@ index 3b4c609..e4a0164 100644
 +
 +localparam PPLL_IDIV    =  1         ;
 +
-+localparam PPLL_FDIV    =  14         ;
++localparam PPLL_FDIV    =  16         ;
 +
-+localparam PPLL_ODIVPHY =  2         ;
++localparam PPLL_ODIVPHY =  3         ;
 +
 +
 +localparam TEST_DATA_PATTERN0  = 64'h55_aa_55_aa_08_f7_08_f7;
@@ -8710,13 +8710,13 @@ index 3b4c609..e4a0164 100644
 +//MR0_DDR3
 +localparam [0:0] DDR3_PPD      = 1'b1;
 +
-+localparam [2:0] DDR3_WR       = 3'd3; 
++localparam [2:0] DDR3_WR       = 3'd1; 
 +
 +localparam [0:0] DDR3_DLL      = 1'b1;
 +localparam [0:0] DDR3_TM       = 1'b0;
 +localparam [0:0] DDR3_RBT      = 1'b0;
 +
-+localparam [3:0] DDR3_CL       = 4'd6;
++localparam [3:0] DDR3_CL       = 4'd4;
 +
 +localparam [1:0] DDR3_BL       = 2'b00;
 +localparam [15:0] MR0_DDR3     = {3'b000, DDR3_PPD, DDR3_WR, DDR3_DLL, DDR3_TM, DDR3_CL[3:1], DDR3_RBT, DDR3_CL[0], DDR3_BL};
@@ -8739,7 +8739,7 @@ index 3b4c609..e4a0164 100644
 +localparam [0:0] DDR3_SRT      = 1'b0;
 +localparam [0:0] DDR3_ASR      = 1'b0;
 +
-+localparam [2:0] DDR3_CWL      = 6 - 5;
++localparam [2:0] DDR3_CWL      = 5 - 5;
 +
 +localparam [2:0] DDR3_PASR     = 3'b000;
 +localparam [15:0] MR2_DDR3     = {5'b00000, DDR3_RTT_WR, 1'b0, DDR3_SRT, DDR3_ASR, DDR3_CWL, DDR3_PASR};
@@ -8797,7 +8797,7 @@ index 3b4c609..e4a0164 100644
 +localparam [9:0]   TZQINIT      =  10'd128 ;
 +
 +
-+localparam DFI_CLK_PERIOD =  9142;
++localparam DFI_CLK_PERIOD =  12000;
 +
 +
 +`ifdef IPS_DDR_SPEEDUP_SIM                                                  
@@ -10602,10 +10602,10 @@ index 0000000..8674e80
 +204c4941
 +00000000
 diff --git a/instrec_fpga/src/cpu/rv32_cpu_subsys.sv b/instrec_fpga/src/cpu/rv32_cpu_subsys.sv
-index 184c946..1b0d49f 100644
+index 184c946..d99e21f 100644
 --- a/instrec_fpga/src/cpu/rv32_cpu_subsys.sv
 +++ b/instrec_fpga/src/cpu/rv32_cpu_subsys.sv
-@@ -1,424 +1,532 @@
+@@ -1,424 +1,544 @@
 -// ---------------------------------------------------------------------------
 -// File    : rv32_cpu_subsys.sv
 -// Module  : rv32_cpu_subsys
@@ -11330,7 +11330,8 @@ index 184c946..1b0d49f 100644
 +    // =====================================================================
 +    // UART transmit FIFO (16 bytes)
 +    // =====================================================================
-+    reg [7:0]  txq [0:15];
++    // Scalar words retain flop storage and avoid LUT-RAM write-address holds.
++    wire [127:0] txq_words;
 +    reg [4:0]  tx_wr, tx_rd;
 +
 +    wire [4:0] tx_count  = tx_wr - tx_rd;
@@ -11339,7 +11340,19 @@ index 184c946..1b0d49f 100644
 +    wire       tx_ready  = (tx_count != 5'd16);
 +
 +    assign uart_valid = (tx_count != 5'd0);
-+    assign uart_data  = txq[tx_rd[3:0]];
++    assign uart_data  = txq_words[{tx_rd[3:0], 3'd0} +: 8];
++
++    genvar txq_slot;
++    generate
++        for (txq_slot = 0; txq_slot < 16; txq_slot = txq_slot + 1) begin : g_txq
++            reg [7:0] data_word;
++            assign txq_words[txq_slot*8 +: 8] = data_word;
++            always @(posedge clk) begin
++                if (rst_n && tx_push && (tx_wr[3:0] == txq_slot))
++                    data_word <= d_req_data[7:0];
++            end
++        end
++    endgenerate
 +
 +    always @(posedge clk or negedge rst_n) begin
 +        if (!rst_n) begin
@@ -11347,7 +11360,6 @@ index 184c946..1b0d49f 100644
 +            tx_rd <= 5'd0;
 +        end else begin
 +            if (tx_push) begin
-+                txq[tx_wr[3:0]] <= d_req_data[7:0];
 +                tx_wr <= tx_wr + 5'd1;
 +            end
 +            if (uart_valid && uart_ready) begin
@@ -13285,7 +13297,7 @@ index 0000000..20022a3
 +    end
 +endmodule
 diff --git a/instrec_fpga/src/ctrl/instrec_top.v b/instrec_fpga/src/ctrl/instrec_top.v
-index 6bcfefc..26f49d8 100644
+index 6bcfefc..60cc4fd 100644
 --- a/instrec_fpga/src/ctrl/instrec_top.v
 +++ b/instrec_fpga/src/ctrl/instrec_top.v
 @@ -1,1080 +1,1116 @@
@@ -14381,7 +14393,7 @@ index 6bcfefc..26f49d8 100644
 +//   clk       27 MHz board crystal (D18), reference of video GPLL
 +//   clk_nco   27 MHz audio processing clock (alias of board clk)
 +//   pix_clk   148.5 MHz pixel clock (hdmi_tx_if / demo GPLL_B IP)
-+//   core_clk  109.375 MHz DDR3 controller user clock (ddr3_wrapper IP output)
++//   core_clk  83.3333 MHz DDR3 controller user clock (ddr3_wrapper IP output)
 +//
 +// Reset tree (design doc section 1.3):
 +//   rst_n     asynchronous board reset (KEY0, C22)
@@ -14779,7 +14791,7 @@ index 6bcfefc..26f49d8 100644
 +        end
 +    end
 +
-+    audio_sink #(.INJECT_GAP_CYCLES(14'd2279), .WR_TIMEOUT_CYCLES(23'd3670016)) u_audio_sink (
++    audio_sink #(.INJECT_GAP_CYCLES(14'd1736), .WR_TIMEOUT_CYCLES(23'd2796203)) u_audio_sink (
 +        .clk           (core_clk),
 +        .rst_n         (core_clk_rst_n),
 +        .fifo_rd_en    (fifo_rd_en),
@@ -15077,7 +15089,7 @@ index 6bcfefc..26f49d8 100644
 +    assign m2_wdata      = mel_m2_wdata;
 +    assign axi_rvalid_ctrl = ddr_init_done && axi_rvalid;
 +
-+    ddr3_ctrl_axi #(.M3_MASK_ENABLE(1), .P3_QUOTA_TIMEOUT(109375)) u_ddr3_ctrl_axi (
++    ddr3_ctrl_axi #(.M3_MASK_ENABLE(1), .P3_QUOTA_TIMEOUT(83333)) u_ddr3_ctrl_axi (
 +        .clk            (core_clk),
 +        .rst_n          (core_clk_rst_n),
 +        .cmd_valid      (ddr_cmd_valid),
@@ -15244,7 +15256,7 @@ index 6bcfefc..26f49d8 100644
 +
 +    wire weight_start_unused;
 +
-+    sys_ctrl #(.PLL_TIMEOUT_CYCLES(546875000), .DDR_TIMEOUT_CYCLES(10937500)) u_sys_ctrl (
++    sys_ctrl #(.PLL_TIMEOUT_CYCLES(416666665), .DDR_TIMEOUT_CYCLES(8333333)) u_sys_ctrl (
 +        .weight_ok    (weight_ok),
 +        .weight_err   (weight_err),
 +        .weight_start (weight_start_unused),
@@ -15317,7 +15329,7 @@ index 6bcfefc..26f49d8 100644
 +    wire        cpu_npu_start;
 +    wire        cpu_tx_ready;
 +
-+    uart_tx #(.BAUD_DIV(949)) u_uart_tx (
++    uart_tx #(.BAUD_DIV(723)) u_uart_tx (
 +        .clk         (core_clk),
 +        .rst_n       (core_clk_rst_n),
 +        .byte_wdata  (wl_tx_valid ? wl_tx_data :
@@ -15334,7 +15346,7 @@ index 6bcfefc..26f49d8 100644
 +    assign cpu_tx_ready = tx_accept_ready & ~wl_tx_valid & ~dbg_tx_valid & ~dg_tx_valid;
 +    assign dg_tx_ready  = tx_accept_ready & ~wl_tx_valid & ~dbg_tx_valid;
 +
-+    uart_rx #(.BAUD_DIV(949)) u_uart_rx (
++    uart_rx #(.BAUD_DIV(723)) u_uart_rx (
 +        .clk         (core_clk),
 +        .rst_n       (core_clk_rst_n),
 +        .uart_rxd    (uart_rx),
@@ -15578,7 +15590,7 @@ index 7aa9803..342ac1d 100644
 \ No newline at end of file
 +endmodule
 diff --git a/instrec_fpga/src/ddr3/ddr3_ctrl_axi.v b/instrec_fpga/src/ddr3/ddr3_ctrl_axi.v
-index 53320da..db3167e 100644
+index 53320da..21d27d4 100644
 --- a/instrec_fpga/src/ddr3/ddr3_ctrl_axi.v
 +++ b/instrec_fpga/src/ddr3/ddr3_ctrl_axi.v
 @@ -68,6 +68,8 @@ module ddr3_ctrl_axi #(
@@ -15598,7 +15610,35 @@ index 53320da..db3167e 100644
      output wire [3:0]  wready_beat,  // per-master write beat pulse
      input  wire [3:0]  rd_ready,     // per-master read pacing
      output wire [255:0] rd_data_0,   // routed read data (active read master)
-@@ -233,7 +236,7 @@ module ddr3_ctrl_axi #(
+@@ -162,11 +165,26 @@ module ddr3_ctrl_axi #(
+ 
+     // 16 x 256-bit elastic read fifo (depth = max burst length).
+     localparam RD_FIFO_DEPTH = 16;
+-    reg [255:0] rd_fifo_mem [0:RD_FIFO_DEPTH-1];
++    // Scalar words retain flop storage and avoid LUT-RAM write-address holds.
++    wire [RD_FIFO_DEPTH*256-1:0] rd_fifo_words;
+     reg [3:0]   rd_fifo_wr_ptr;
+     reg [3:0]   rd_fifo_rd_ptr;
+     reg [4:0]   rd_fifo_count;
+ 
++    genvar rd_fifo_slot;
++    generate
++        for (rd_fifo_slot = 0; rd_fifo_slot < RD_FIFO_DEPTH;
++             rd_fifo_slot = rd_fifo_slot + 1) begin : g_rd_fifo
++            reg [255:0] data_word;
++            assign rd_fifo_words[rd_fifo_slot*256 +: 256] = data_word;
++            always @(posedge clk) begin
++                if (rst_n && (state == S_R) && axi_rvalid &&
++                    (rd_fifo_wr_ptr == rd_fifo_slot))
++                    data_word <= axi_rdata;
++            end
++        end
++    endgenerate
++
+     // ------------------------------------------------------------------
+     // Arbitration (ddr3_arbiter instance)
+     // ------------------------------------------------------------------
+@@ -233,7 +251,7 @@ module ddr3_ctrl_axi #(
                             (cur_master == 2'd2) ? m2_wdata : m3_wdata;
      assign axi_wstrb     = (state == S_DW_W)
                             ? (DUMMY_WSTRB_ALL1 ? 32'hFFFFFFFF : 32'h00000000)
@@ -15607,6 +15647,23 @@ index 53320da..db3167e 100644
  
      assign axi_arvalid   = (state == S_AR);
      assign axi_araddr    = {2'b00, cur_addr[27:2]};
+@@ -251,7 +269,7 @@ module ddr3_ctrl_axi #(
+ 
+     // Read fifo drain: data routes to the master that owns the fifo.
+     wire rd_fifo_pop = (rd_fifo_count != 5'd0) && rd_ready[cur_rd_master];
+-    wire [255:0] rd_fifo_head = rd_fifo_mem[rd_fifo_rd_ptr];
++    wire [255:0] rd_fifo_head = rd_fifo_words[{rd_fifo_rd_ptr, 8'd0} +: 256];
+ 
+     assign rd_valid = (rd_fifo_count != 5'd0) ? (4'b0001 << cur_rd_master)
+                                               : 4'b0000;
+@@ -305,7 +323,6 @@ module ddr3_ctrl_axi #(
+             // Push happens while S_R streams beats; pop happens whenever
+             // the drain master asserts ready with data available.
+             if ((state == S_R) && axi_rvalid) begin
+-                rd_fifo_mem[rd_fifo_wr_ptr] <= axi_rdata;
+                 rd_fifo_wr_ptr <= rd_fifo_wr_ptr + 4'd1;
+             end
+             if (rd_fifo_pop) begin
 diff --git a/instrec_fpga/src/ddr3/ddr3_m3_share.v b/instrec_fpga/src/ddr3/ddr3_m3_share.v
 new file mode 100644
 index 0000000..909f26f

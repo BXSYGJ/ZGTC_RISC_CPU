@@ -75,15 +75,15 @@ MMIO 数据与本地存储并行采样，由通道忙状态保持，减少地址
 
 ## 100Pro+ 本地物理实现
 
-当前完整系统目标为 PG2L100H-6IFBG676，保留正式音频、NPU、DDR3 和显示模块，系统用户时钟为109.375MHz，像素时钟为148.5MHz。用户已结束远程上板要求，本轮以100Pro+的本地构建与完整时序检查为准。
+当前完整系统目标为 PG2L100H-6IFBG676，保留正式音频、NPU、DDR3 和显示模块，系统用户时钟为83.333333MHz，像素时钟为148.5MHz。用户已结束远程上板要求，本轮以100Pro+的本地构建与完整时序检查为准。
 
-当前冻结构建为`build/pacerv_shared_system/pds/full-20261114-111645-full`，normal模式、seed4、多角优化和最多十二轮保持时间修复，时限180分钟。202份源码、IP、HEX与约束的Git检出重建检查全部一致。当前采用13位ROM物理地址、两个短权重FIFO寄存器映射、875Mbps DDR IP、权重摘要寄存级与同步GAP块RAM。映射37548LUT/46422FF/826DistributedRAM/129DRM/94APM，GAP累加器确认推断为GTP_DRM18K_E1；详细布局后最差裕量+0.801ns、TNS0，正在详细布线，最终资格待验。035340显式寄存器方案在第587轮因7200秒时限中断，无最终报告和位流；021145最终setup -1.633ns、fast hold -0.136ns。历史报告与原正式位流均保留。
+当前冻结构建为`build/pacerv_shared_system/pds/full-20261114-124245-full`，normal模式、seed5、多角优化和最多十二轮保持时间修复，时限180分钟。202份源码、IP、HEX与约束与a5189f2提交检出逐字节一致。当前采用13位ROM物理地址、短权重FIFO寄存器映射、666.666667Mbps DDR IP、权重摘要寄存级与同步GAP块RAM；DDR读FIFO16×256及CPU UART FIFO16×8改用显式标量寄存器，保持原深度和读出时序，当前正在综合，最终资格待验。上一111645完整六阶段完成，最终37271LUT/46426FF/826DistributedRAM/129DRM/94APM，GAP已推断GTP_DRM18K_E1；最终系统slow setup -1.839ns、slow hold -0.160ns、fast hold -0.162ns，像素setup +0.782ns。其setup来自池化写使能及DDR校准，hold来自两个短FIFO的分布式RAM写地址，为本轮修改依据。035340超时及021145未过的历史报告与原正式位流均保留。
 
 ### 原155.25 MHz核心对照及降频预案
 
 归档 `Original_155250` 的八份核心源码与其V0实际布线输入逐份一致。隔离副本只适配原有八字节取指对的地址约定，沿用当前程序ROM、数据RAM、共享DDR和MMIO封装。指令、反压及音频控制固件三项检查通过；固定循环与H3同为180,016周期、180,008条退休指令和结果f2d8888b。该对照支持保留当前H3执行核心，优先缩短NPU和显示的整机关键路径。
 
-109.375MHz配置已通过官方DDR参数规则并启用，UART分频949、音频空FIFO补样节拍2279与相关时间常数同步匹配。当前完整NPU控制器的31,152,094周期在125MHz折算249.217ms，在109.375MHz折算284.819ms。连续48kHz采样由外部PCM1808时钟提供、27MHz域接收；它与系统计算时钟独立。连续I²S仿真两档各完成两个窗口，稳定第二窗均132,096真实帧、补零0、溢出0、写超时0，首窗各有1次启动补零。该实验用512周期行为DDR完成模型；逐层NPU数值另外由完整native测试验证。
+83.333333MHz配置已通过官方DDR参数规则并启用，UART分频723、音频空FIFO补样节拍1736与相关时间常数同步匹配。UART测试按生产时钟和分频实际串行输出四路32字节，逐字节一致。当前完整NPU控制器31,152,094周期在125MHz折算249.217ms，在83.333333MHz折算373.825ms；固定CPU循环在原125MHz下460012周期约3.680ms，在当前频率下180016周期约2.160ms。连续48kHz采样由外部PCM1808时钟提供、27MHz域接收。125MHz及83.333333MHz连续I²S仿真各完成两个窗口，稳定第二窗均132,096真实帧、补零0、溢出0、写超时0，首窗各有1次启动补零。该实验用512周期行为DDR完成模型；逐层NPU数值另外由完整native测试验证。
 
 厂商用户指南标明PG2L100H采用单线程路由，具体器件拒绝通用帮助中的`-number_of_router_thread`。当前配方删除该选项；入口只接受1作为记录值。当前电脑24逻辑线程、16GB内存，完整布线阶段剩余约2GB，重任务顺序执行，轻量核心和音频仿真与PDS并行完成。
 
@@ -98,7 +98,7 @@ python sim/experiments/pacerv_integration/run_activation_mux.py
 python sim/experiments/pacerv_integration/run_dashboard_equivalence.py
 pwsh -NoProfile -File sim/experiments/pacerv_shared_ddr/run_pacerv_shared_ddr.ps1 -Mode Modified
 python sim/experiments/pacerv_integration/run_native_npu.py --firmware imc --backend wsl-verilator --distro Ubuntu-22.04 --verilator /home/bx/.local/src/verilator-5.040/bin/verilator --run-label new_validation
-python experiments/pacerv_shared_system/prepare_pds.py --scope full --stage full --seed 2 --hold-iterations 8 --run --minutes 100
+python experiments/pacerv_shared_system/prepare_pds.py --scope full --stage full --mode normal --seed 5 --hold-iterations 12 --run --minutes 180
 ```
 
 PDS 同时只运行一个流程。既有 PG200 独立实验及其原始记录保存在 `experiments/pacerv_shared_system/remote/`，本轮不继续使用远程平台。

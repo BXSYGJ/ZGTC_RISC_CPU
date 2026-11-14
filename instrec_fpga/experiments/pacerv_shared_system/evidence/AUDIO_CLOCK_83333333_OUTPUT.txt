@@ -1,0 +1,10 @@
+tb_audio_chain: DLY(done delay cycles)=512
+WIN 1: real=132095 inj=1 freeze_cyc=8494395 err=0 ovf=0
+WIN 2: real=132096 inj=0 freeze_cyc=8495424 err=0 ovf=0
+AUDIO_CHAIN RESULT: real=132096 (100.0%) inj=0 freeze_cyc=8495424 err=0 ovf=0
+AUDIO_CLOCK_PASS real=132096 injection=0 overflow=0 errors=0 ordered_samples=1
+TB_AUDIO_CHAIN: DONE
+- /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/pacerv_shared_system/audio_clock/20261114-123646/83333333/tb_audio_chain.sv:208: Verilog $finish
+- S i m u l a t i o n   R e p o r t: Verilator 5.040 2025-08-30
+- Verilator: $finish at 6s; walltime 148.641 s; speed 37.029 ms/s
+- Verilator: cpu 148.641 s on 1 threads; alloced 190 MB

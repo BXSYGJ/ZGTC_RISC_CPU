@@ -1,0 +1,187 @@
+{
+  "requested_rate_mbps": 687.5,
+  "actual_rate_mbps": 666.6666666666666,
+  "system_clock_hz": 83333333.33333333,
+  "parameter_changes": {
+    "DFI_CLK_PERIOD": {
+      "before": "9142",
+      "after": "12000"
+    },
+    "DDRC_T_RC": {
+      "before": "22",
+      "after": "17"
+    },
+    "DDR3_CL_VALUE": {
+      "before": "6",
+      "after": "4"
+    },
+    "DDRC_T_RP": {
+      "before": "6",
+      "after": "5"
+    },
+    "STATIC_RATIOF": {
+      "before": "14",
+      "after": "16"
+    },
+    "DDRC_TREFI": {
+      "before": "3412",
+      "after": "2600"
+    },
+    "DDRC_T_RCD": {
+      "before": "6",
+      "after": "5"
+    },
+    "DDRC_T_RRD": {
+      "before": "5",
+      "after": "4"
+    },
+    "DDRC_T_RAS": {
+      "before": "17",
+      "after": "13"
+    },
+    "DDRC_TRFC": {
+      "before": "132",
+      "after": "100"
+    },
+    "DDR3_INIT_WR": {
+      "before": "7",
+      "after": "5"
+    },
+    "DDRC_T_FAW": {
+      "before": "19",
+      "after": "15"
+    },
+    "DDRC_T_XP": {
+      "before": "4",
+      "after": "3"
+    },
+    "PHY_TXPR": {
+      "before": "34",
+      "after": "26"
+    },
+    "ACTUAL_RATE": {
+      "before": "875.0",
+      "after": "666.6666666666666"
+    },
+    "DESIRED_RATE": {
+      "before": "875.0",
+      "after": "687.5"
+    },
+    "DDR3_WR": {
+      "before": "3",
+      "after": "1"
+    },
+    "DESIRED_DDR3_RATE": {
+      "before": "875.0",
+      "after": "687.5"
+    },
+    "PHY_TRFC": {
+      "before": "33",
+      "after": "25"
+    },
+    "DDRC_T_WR": {
+      "before": "7",
+      "after": "5"
+    },
+    "DDR3_CL": {
+      "before": "7",
+      "after": "6"
+    },
+    "DDR3_CWL": {
+      "before": "6",
+      "after": "5"
+    },
+    "STATIC_RATIO0": {
+      "before": "2",
+      "after": "3"
+    }
+  },
+  "original_ip_hashes": {
+    "ddr3_test.idf": "4e4ff35dcf0dfb4f23919072a014f56c8843e32994ca5aae2a5e5e02b273ec61",
+    "ddr3_test.v": "a66d9ea92e427875c0b6d1d0a42e7e0e6a4f498fdd241d0f6850b4350200e552",
+    "ddr3_test_ddrphy_top.v": "f8c58e03b1057919e90ed75447efa94ebfabd09f12f2d0bb00f8f9331662c96f",
+    "rtl/ips2l_rst_sync_v1_3.vp": "64b8d83f15f2ff373e6b1040405c42051d8761bd1857dec719c884c2eb59361a",
+    "rtl/ddrphy/ddr3_test_slice_top_v1_10.v": "69d4135c367efbb73f83c82ecd9871519e19b0d5c48bce2df0eac6b3dff50b87",
+    "rtl/ddrphy/ips2l_ddrphy_calib_mux_v1_0.vp": "676e36319e7ce80b93e3543e255d53708d9fc71606587a6e692eab1ec82ecaed",
+    "rtl/ddrphy/ips2l_ddrphy_calib_top_v1_10.vp": "04faf434cef120b5d712911dfc97c8f498901b0679fba720b806f596d688bded",
+    "rtl/ddrphy/ips2l_ddrphy_control_path_adj_v1_10.vp": "8cdd7b9ec01c143882217b038cbf840d77e52ee3037e629e75e10b03fc223a38",
+    "rtl/ddrphy/ips2l_ddrphy_cpd_ctrl_v1_3.vp": "56f52683adbe720c7d43da1a9f199f4ab3add3f3b5960e3f687f87f60267c161",
+    "rtl/ddrphy/ips2l_ddrphy_cpd_lock_v1_0.vp": "a6696f8e79e2d132a6e76ad4997d5366d6c9cf8f05c60f77feff1b47b50d0090",
+    "rtl/ddrphy/ips2l_ddrphy_data_slice_dqs_gate_cal_v1_10.vp": "8764275d4eeb8d1765b3a09aba527d6d3bf3e46f5e1d17eefc685d7e0dbe1520",
+    "rtl/ddrphy/ips2l_ddrphy_data_slice_v1_10.vp": "e13e33d97ecbfea1838c4dd28e7f9f1c57dcb974606179523be46bba75344d50",
+    "rtl/ddrphy/ips2l_ddrphy_data_slice_wrcal_v1_10.vp": "b7a9757c252f74c4b57eb0fb74738c57e4eed3e669ddd7ffeeca1acedd330b2e",
+    "rtl/ddrphy/ips2l_ddrphy_data_slice_wrlvl_v1_10.vp": "871874f4af0f068571416916898f83eb07052e6e015c5800ffdf65d67620cf7e",
+    "rtl/ddrphy/ips2l_ddrphy_dfi_v1_3.vp": "9828a1ef43a864d287a7a317910fe330bfc904f44e8f60c8773aafa1d8c1534e",
+    "rtl/ddrphy/ips2l_ddrphy_dll_update_ctrl_v1_3.vp": "bc4e8f402d2fb98920e050a3c1514d44ec959877217d7865a30b22b7da73cac6",
+    "rtl/ddrphy/ips2l_ddrphy_dqsi_rdel_cal_v1_3.vp": "ef7e57755ab7558b1b518aa73999384368f349efe7077cf9283e0911e711ac1a",
+    "rtl/ddrphy/ips2l_ddrphy_dqs_gate_coarse_cal_v1_0.vp": "950a0010929854894c2c92d9f3f8e9dce0fee6985fee70d4160540a058853ede",
+    "rtl/ddrphy/ips2l_ddrphy_dqs_rddata_align_v1_10.vp": "c0cab4287a7a7b6b720977c1c5f9259c5f48f8da18e9a3ca1173a073b1ccf025",
+    "rtl/ddrphy/ips2l_ddrphy_drift_ctrl_v1_0.vp": "8ea99ac6decf6fe14c0585b4f121d7a1acc17290d7a1c68725d984e704e277bc",
+    "rtl/ddrphy/ips2l_ddrphy_eyecal_v1_5.vp": "31977dd34339d163ecbd8b9949ac4b65f0eaa6fbcd9a75d787400ae73f7f51d2",
+    "rtl/ddrphy/ips2l_ddrphy_gatecal_v1_10.vp": "b6859250ca098e81ff05bcab08dfe8ffee77648218e90c040a1dd3838a0671f2",
+    "rtl/ddrphy/ips2l_ddrphy_gate_update_ctrl_v1_3.vp": "ce20eb3b9cbe3b392d8be0aa1d6787247bc7b2d91af36a1f734f35c9eb03d642",
+    "rtl/ddrphy/ips2l_ddrphy_gpll_phase_v1_0.vp": "ef8ebe3742d23848bd2a1492d4901f886ce49aa98dbc295873b67e4116ba8524",
+    "rtl/ddrphy/ips2l_ddrphy_info_v1_0.vp": "0794201be97885e7695a16b6c35848655b08c4bf191405d26417126512ce4aa8",
+    "rtl/ddrphy/ips2l_ddrphy_init_v1_0.vp": "817f9f32b2260a4c35af446e89ff4c2d4b065381b25cb2020c538d22b4a45088",
+    "rtl/ddrphy/ips2l_ddrphy_main_ctrl_v1_10.vp": "39d5024d7364b441340b131d265d0648d8b7c1f92cc417424d7c584413c5f4a6",
+    "rtl/ddrphy/ips2l_ddrphy_rdcal_v1_10.vp": "6b4c7f3c24a4750ac69b4e7882617105c6e31f02da712aaa87932b8561ccea2b",
+    "rtl/ddrphy/ips2l_ddrphy_reset_ctrl_v1_3.vp": "17189b59ed5307c4a27ec35485b33af5c98a89e6ee7f9c5d85aaed9c03a77163",
+    "rtl/ddrphy/ips2l_ddrphy_rst_clk_phase_adj_v1_0.vp": "dd1dbae71726d968df475fe7fbb2b7321411fa67786092c0dc2e065edcf39382",
+    "rtl/ddrphy/ips2l_ddrphy_rst_debounce_v1_0.vp": "bff7ed95c8d305dfb88e6002c6de8453a21c72c03a5a0521a76ddd105598dc4d",
+    "rtl/ddrphy/ips2l_ddrphy_slice_rddata_align_v1_0.vp": "befb44f07d851524109a6dc8e17c5b8062694aa274ed8dbc4f7326b8fe1c443e",
+    "rtl/ddrphy/ips2l_ddrphy_training_ctrl_v1_0.vp": "777e8ee9d8d819fdcf04b39b5a5d6086c52369a7f19f04dbd0d06f7a7d3d6110",
+    "rtl/ddrphy/ips2l_ddrphy_upcal_v1_0.vp": "afbca3503da609f7951ad7fbef386bd007f403c89f52377211ba521967c94455",
+    "rtl/ddrphy/ips2l_ddrphy_wdata_path_adj_v1_10.vp": "85f625ed4a09964442e8616074eea9e4757e43b4217589bb9e2f289c9748b272",
+    "rtl/ddrphy/ips2l_ddrphy_wrcal_v1_7.vp": "0a8cb0bb70bd40809260c50bcb85d092c16fea5d9ab2e4fbbe647ccbd1bfb1b0",
+    "rtl/ddrphy/ips2l_ddrphy_wrlvl_v1_0.vp": "00c086bd729be3ab8287f6eb786cfb3549c97aa92f8465c608b8fc2477df3edc",
+    "rtl/mcdq_ctrl/ips2l_mcdq_apb_cross_v1_2.vp": "62f7d55354a8afe4d02bc6f6d6dc30fc8e9960d3b21709988b887acc99d09cf5",
+    "rtl/mcdq_ctrl/ips2l_mcdq_calib_delay_v1_2.vp": "a52e992b9766b6cb22ed23aa01d1cc5ac9b6a429a8e49de7a13ac51dd70e9784",
+    "rtl/mcdq_ctrl/ips2l_mcdq_cfg_apb_v1_2.vp": "482cb280a614f70209f1d07892fdd773a259d2ca0f23e8f38b85a9faf00513b9",
+    "rtl/mcdq_ctrl/ips2l_mcdq_dcd_bm_v1_2.vp": "bfbd472dd8b427fe6b003dd510f73db89f915ac92d31fe8a779c40f9d4e56bee",
+    "rtl/mcdq_ctrl/ips2l_mcdq_dcd_rowaddr_v1_2.vp": "4ac4721747b13020e1895be6265e55df90968f05beb8056279589039394bb9be",
+    "rtl/mcdq_ctrl/ips2l_mcdq_dcd_sm_v1_2.vp": "d7e710e3ed4d1807fb0bdd4d84c264817247a4da41123c72439c555573821f49",
+    "rtl/mcdq_ctrl/ips2l_mcdq_dcd_top_v1_2.vp": "26ab4e142f555602c023f62b19df52056c6d51da5052401254066cae0655ddaa",
+    "rtl/mcdq_ctrl/ips2l_mcdq_dcp_back_ctrl_v1_2.vp": "fe7b340b41d80ec7428cc38329a41864bcf5c209a6310610d09c7bc8579e541f",
+    "rtl/mcdq_ctrl/ips2l_mcdq_dcp_buf_v1_2.vp": "dab35fa172243ecbb5426a8ebccc2c168368ea0a6ea0558c909b815d781b17d6",
+    "rtl/mcdq_ctrl/ips2l_mcdq_dcp_out_v1_2.vp": "9471082e23170b144dc619f7f7e08c94b8a03378f72da388f744d6acb728928b",
+    "rtl/mcdq_ctrl/ips2l_mcdq_dcp_top_v1_2.vp": "21b1f0e3b4660e1078b47000bfe50022346414f5d5e713ac9e522a4f39f76548",
+    "rtl/mcdq_ctrl/ips2l_mcdq_dfi_v1_2.vp": "abf138d692e634fabe5f569b98d897dfece8a8ae66cee1dba830a56d7e255df1",
+    "rtl/mcdq_ctrl/ips2l_mcdq_lp_v1_2.vp": "7a80ccb1e053e5c9d8f389169359570f256d709ff2e4ad2c51fda7a7a6a4239d",
+    "rtl/mcdq_ctrl/ips2l_mcdq_mrs_v1_2.vp": "f78133bc021a57cf469773daaf102817fc37069447e8accc80afa1f4b20b0ad6",
+    "rtl/mcdq_ctrl/ips2l_mcdq_prefetch_fifo_v1_2.vp": "ee3aa91e980fb3dd08231cf1806a28edf759f4ea8248adfd44407d607519b9e4",
+    "rtl/mcdq_ctrl/ips2l_mcdq_rdatapath_v1_2.vp": "72dd8ece021f4ee74fd576c1628c4f7d3606ef632f0e68b9569a288a092a6b0f",
+    "rtl/mcdq_ctrl/ips2l_mcdq_reg_fifo2_v1_2.vp": "bc9cff65e4002a51af0c20c2f0a9b9f17dacde5157b58691bbfb1c44348ee08a",
+    "rtl/mcdq_ctrl/ips2l_mcdq_ui_axi_v1_2a.vp": "145b69395412be2553835f9278cdf1cb1703d3beeb914abf7d985e3c69f817fb",
+    "rtl/mcdq_ctrl/ips2l_mcdq_wdatapath_v1_2.vp": "db648e90ff607ca2f9e2b5cca048de417439888d0b906288e0cec7cf038d9dee",
+    "rtl/mcdq_ctrl/ips2l_mcdq_wdp_align_v1_2.vp": "1645e9eb7fac3c9c13cd3e0d7367f132293f9cec16835ce188c6345993d2b730",
+    "rtl/mcdq_ctrl/ips2l_mcdq_wdp_dcp_v1_2.vp": "3f30be0f49f78f09915743995c950fa6ff8de5f14598ebc8802e73b5c6d140ee",
+    "rtl/mcdq_ctrl/ips2l_mcdq_wrapper_v1_2b.vp": "d35010f49be551fb15ab2655cbeffcaaaa74fdf3ccb0754b033fc979d615e805",
+    "rtl/pll/ips2l_ddrphy_gpll_v1_3.vp": "3fecc367573a4b5bd158e1a8ff106c5c401c5f180143e8e5abe6bb068e5078d2",
+    "rtl/pll/ips2l_ddrphy_ppll_v1_0.vp": "34bb46106b84eab147f130bd7526f1486d35caeb40b0258cd59656e50d19dddd",
+    "rtl/mcdq_ctrl/distributed_fifo/ips2l_distributed_fifo_v1_0.vp": "d6c0b0d8560b0f22128b4883933944fc686fd7597cfea0d6c545cc6af56c0b7a",
+    "rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_com_timing_v1_2.vp": "e3f19c4be6352ab64f07426973387f2876c540ee992f6eac9d3f2d470b3d49c2",
+    "rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_tfaw_timing_v1_2.vp": "c632619f042bebb4f059df7f20eee90eb2b51b81210430cb37d01958ad3cd30f",
+    "rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_tfaw_v1_2.vp": "ab87b7718bffc4fb2a2b27765576187f09b5266bbca7fc393c43c6dec96ff379",
+    "rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_timing_act2wr_pass_v1_2.vp": "1b3874b059923481f292ba382ad156f7dcdd9ad39da6c86dddd480290ccce498",
+    "rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_timing_act_pass_v1_2.vp": "9f32b6936e039c15f7b07b74480179d39d1b3787965e1b90bd067a7ede7fdd4c",
+    "rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_timing_pre_pass_v1_2.vp": "e40a64caec9725c231cd88dde69973eab3aca38c9d2e66a2c5c0bbddf3103ae0",
+    "rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_timing_rd_pass_v1_2.vp": "78b1de719a43ee0fc80e1a5464f7284439d91f1d4b3f83ef2ae5611920293988",
+    "rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_timing_ref_pass_v1_2.vp": "c79dde6f9a682c55aff7bb89c4863f76a069b874fb154dff7d3e4d4a7a88f9d1",
+    "rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_timing_wr_pass_v1_2.vp": "ea3470ca984554d4908ec950314f9242042417c6c4c6b3fd05ac5d6daab98c90",
+    "rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_trc_timing_v1_2.vp": "7234241e5968f91ec6e396794f0bb80f6c7d1bca2038aa004d5078d3937953da",
+    "rtl/mcdq_ctrl/distributed_fifo/rtl/ips2l_distributed_fifo_ctr_v1_0.vp": "fe31c8f44bea653ab20bb1830ad4f8ed41566e9cfef354bd5e2d48c7682f353d",
+    "rtl/mcdq_ctrl/distributed_fifo/rtl/ips2l_distributed_fifo_v1_0_distributed_fifo_v1_0.vp": "867ac91a1485dfe613a81f372d788e784bba8cd4b0497e56986135e92685ba73",
+    "rtl/mcdq_ctrl/distributed_fifo/rtl/ips2l_distributed_sdpram_v1_0_distributed_fifo_v1_0.vp": "3561bbbbd4e4432a538c3d20818d262b4f1e5517c48296f6b1b4cc8afdd19aef"
+  },
+  "changed_original_files": [
+    "ddr3_test.idf",
+    "ddr3_test.v",
+    "ddr3_test_ddrphy_top.v"
+  ],
+  "validation_scope": "Vendor clock/CL/CWL/memory timing rules and generation; original package-pin assignment retained unchanged; complete implementation and hardware not qualified by this helper",
+  "vendor_rules_sha256": "71752c92dd128a47c953f9e552620aece2f4be78f9f5115bba37757957d05fe9",
+  "pll_rules_sha256": "fab94565675415197defecf44f49c413f1c131ba51acc72a5b0460560a1b0db6",
+  "commands_passed": true,
+  "live_ip_unchanged": true,
+  "generated_directory": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\ddr_clock\\20261114-123302-687.5\\ddr3_test"
+}

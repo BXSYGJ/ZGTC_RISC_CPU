@@ -73,8 +73,8 @@ CPU UART NPU top1=0 last_class=7 last_p=0 c=31152093
 PACERV_NATIVE DDR requests=331 responses=331
 CPU_NATIVE expected report=NPU top1=0 last_class=7 last_p=0 c=31152093
 RESULT: PASS real CPU ROM MMIO launch, full native golden NPU, real result report and acknowledgement
-- /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/tb_pacerv_native_npu.sv:69: Verilog $finish
+- /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_fifo_registers_83m333/tb_pacerv_native_npu.sv:69: Verilog $finish
 - S i m u l a t i o n   R e p o r t: Verilator 5.040 2025-08-30
-- Verilator: $finish at 314ms; walltime 43.569 s; speed 7.423 ms/s
-- Verilator: cpu 42.275 s on 1 threads; alloced 201 MB
+- Verilator: $finish at 314ms; walltime 47.850 s; speed 6.726 ms/s
+- Verilator: cpu 46.653 s on 1 threads; alloced 201 MB
 wsl: 检测到 localhost 代理配置，但未镜像到 WSL。NAT 模式下的 WSL 不支持 localhost 代理。

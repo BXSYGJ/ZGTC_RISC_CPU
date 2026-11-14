@@ -1,0 +1,1421 @@
+{
+  "manifest": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261114-111645-full\\INPUTS.json",
+  "manifest_sha256": "e8af126f3e1215328049d390bd728c3cea15c3f4ce4bbe04a92bb3f8b9c98ee3",
+  "inputs": [
+    {
+      "path": "constraints/clock_groups_async.fdc",
+      "expected_sha256": "76cb4ae92035a14385bf78d1e5d27a601ee02f159379e21f3ac614044ea2c10e",
+      "checkout_sha256": "76cb4ae92035a14385bf78d1e5d27a601ee02f159379e21f3ac614044ea2c10e",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "constraints/ddr3_100h.fdc",
+      "expected_sha256": "8aca13a4d2280e86d6391d49c0139d023ad405400648e09acf845568fe4634e6",
+      "checkout_sha256": "8aca13a4d2280e86d6391d49c0139d023ad405400648e09acf845568fe4634e6",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "constraints/instrec_top.fdc",
+      "expected_sha256": "9748bd2da05a307614f34186b6ef422167ef669df7b7016749af2977adc95f41",
+      "checkout_sha256": "9748bd2da05a307614f34186b6ef422167ef669df7b7016749af2977adc95f41",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "constraints/pacerv_shared_system.fdc",
+      "expected_sha256": "90eeb0f7a7b4a0ac91f9cb2b8e125c86aee6a157b58040723820d64080d1f85d",
+      "checkout_sha256": "90eeb0f7a7b4a0ac91f9cb2b8e125c86aee6a157b58040723820d64080d1f85d",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/ddr3_test.idf",
+      "expected_sha256": "4e4ff35dcf0dfb4f23919072a014f56c8843e32994ca5aae2a5e5e02b273ec61",
+      "checkout_sha256": "4e4ff35dcf0dfb4f23919072a014f56c8843e32994ca5aae2a5e5e02b273ec61",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/ddr3_test.v",
+      "expected_sha256": "a66d9ea92e427875c0b6d1d0a42e7e0e6a4f498fdd241d0f6850b4350200e552",
+      "checkout_sha256": "a66d9ea92e427875c0b6d1d0a42e7e0e6a4f498fdd241d0f6850b4350200e552",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/ddr3_test_ddrphy_top.v",
+      "expected_sha256": "f8c58e03b1057919e90ed75447efa94ebfabd09f12f2d0bb00f8f9331662c96f",
+      "checkout_sha256": "f8c58e03b1057919e90ed75447efa94ebfabd09f12f2d0bb00f8f9331662c96f",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ddr3_test_slice_top_v1_10.v",
+      "expected_sha256": "69d4135c367efbb73f83c82ecd9871519e19b0d5c48bce2df0eac6b3dff50b87",
+      "checkout_sha256": "69d4135c367efbb73f83c82ecd9871519e19b0d5c48bce2df0eac6b3dff50b87",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_calib_mux_v1_0.vp",
+      "expected_sha256": "676e36319e7ce80b93e3543e255d53708d9fc71606587a6e692eab1ec82ecaed",
+      "checkout_sha256": "676e36319e7ce80b93e3543e255d53708d9fc71606587a6e692eab1ec82ecaed",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_calib_top_v1_10.vp",
+      "expected_sha256": "04faf434cef120b5d712911dfc97c8f498901b0679fba720b806f596d688bded",
+      "checkout_sha256": "04faf434cef120b5d712911dfc97c8f498901b0679fba720b806f596d688bded",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_control_path_adj_v1_10.vp",
+      "expected_sha256": "8cdd7b9ec01c143882217b038cbf840d77e52ee3037e629e75e10b03fc223a38",
+      "checkout_sha256": "8cdd7b9ec01c143882217b038cbf840d77e52ee3037e629e75e10b03fc223a38",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_cpd_ctrl_v1_3.vp",
+      "expected_sha256": "56f52683adbe720c7d43da1a9f199f4ab3add3f3b5960e3f687f87f60267c161",
+      "checkout_sha256": "56f52683adbe720c7d43da1a9f199f4ab3add3f3b5960e3f687f87f60267c161",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_cpd_lock_v1_0.vp",
+      "expected_sha256": "a6696f8e79e2d132a6e76ad4997d5366d6c9cf8f05c60f77feff1b47b50d0090",
+      "checkout_sha256": "a6696f8e79e2d132a6e76ad4997d5366d6c9cf8f05c60f77feff1b47b50d0090",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_data_slice_dqs_gate_cal_v1_10.vp",
+      "expected_sha256": "8764275d4eeb8d1765b3a09aba527d6d3bf3e46f5e1d17eefc685d7e0dbe1520",
+      "checkout_sha256": "8764275d4eeb8d1765b3a09aba527d6d3bf3e46f5e1d17eefc685d7e0dbe1520",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_data_slice_v1_10.vp",
+      "expected_sha256": "e13e33d97ecbfea1838c4dd28e7f9f1c57dcb974606179523be46bba75344d50",
+      "checkout_sha256": "e13e33d97ecbfea1838c4dd28e7f9f1c57dcb974606179523be46bba75344d50",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_data_slice_wrcal_v1_10.vp",
+      "expected_sha256": "b7a9757c252f74c4b57eb0fb74738c57e4eed3e669ddd7ffeeca1acedd330b2e",
+      "checkout_sha256": "b7a9757c252f74c4b57eb0fb74738c57e4eed3e669ddd7ffeeca1acedd330b2e",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_data_slice_wrlvl_v1_10.vp",
+      "expected_sha256": "871874f4af0f068571416916898f83eb07052e6e015c5800ffdf65d67620cf7e",
+      "checkout_sha256": "871874f4af0f068571416916898f83eb07052e6e015c5800ffdf65d67620cf7e",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_dfi_v1_3.vp",
+      "expected_sha256": "9828a1ef43a864d287a7a317910fe330bfc904f44e8f60c8773aafa1d8c1534e",
+      "checkout_sha256": "9828a1ef43a864d287a7a317910fe330bfc904f44e8f60c8773aafa1d8c1534e",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_dll_update_ctrl_v1_3.vp",
+      "expected_sha256": "bc4e8f402d2fb98920e050a3c1514d44ec959877217d7865a30b22b7da73cac6",
+      "checkout_sha256": "bc4e8f402d2fb98920e050a3c1514d44ec959877217d7865a30b22b7da73cac6",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_dqs_gate_coarse_cal_v1_0.vp",
+      "expected_sha256": "950a0010929854894c2c92d9f3f8e9dce0fee6985fee70d4160540a058853ede",
+      "checkout_sha256": "950a0010929854894c2c92d9f3f8e9dce0fee6985fee70d4160540a058853ede",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_dqs_rddata_align_v1_10.vp",
+      "expected_sha256": "c0cab4287a7a7b6b720977c1c5f9259c5f48f8da18e9a3ca1173a073b1ccf025",
+      "checkout_sha256": "c0cab4287a7a7b6b720977c1c5f9259c5f48f8da18e9a3ca1173a073b1ccf025",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_dqsi_rdel_cal_v1_3.vp",
+      "expected_sha256": "ef7e57755ab7558b1b518aa73999384368f349efe7077cf9283e0911e711ac1a",
+      "checkout_sha256": "ef7e57755ab7558b1b518aa73999384368f349efe7077cf9283e0911e711ac1a",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_drift_ctrl_v1_0.vp",
+      "expected_sha256": "8ea99ac6decf6fe14c0585b4f121d7a1acc17290d7a1c68725d984e704e277bc",
+      "checkout_sha256": "8ea99ac6decf6fe14c0585b4f121d7a1acc17290d7a1c68725d984e704e277bc",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_eyecal_v1_5.vp",
+      "expected_sha256": "31977dd34339d163ecbd8b9949ac4b65f0eaa6fbcd9a75d787400ae73f7f51d2",
+      "checkout_sha256": "31977dd34339d163ecbd8b9949ac4b65f0eaa6fbcd9a75d787400ae73f7f51d2",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_gate_update_ctrl_v1_3.vp",
+      "expected_sha256": "ce20eb3b9cbe3b392d8be0aa1d6787247bc7b2d91af36a1f734f35c9eb03d642",
+      "checkout_sha256": "ce20eb3b9cbe3b392d8be0aa1d6787247bc7b2d91af36a1f734f35c9eb03d642",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_gatecal_v1_10.vp",
+      "expected_sha256": "b6859250ca098e81ff05bcab08dfe8ffee77648218e90c040a1dd3838a0671f2",
+      "checkout_sha256": "b6859250ca098e81ff05bcab08dfe8ffee77648218e90c040a1dd3838a0671f2",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_gpll_phase_v1_0.vp",
+      "expected_sha256": "ef8ebe3742d23848bd2a1492d4901f886ce49aa98dbc295873b67e4116ba8524",
+      "checkout_sha256": "ef8ebe3742d23848bd2a1492d4901f886ce49aa98dbc295873b67e4116ba8524",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_info_v1_0.vp",
+      "expected_sha256": "0794201be97885e7695a16b6c35848655b08c4bf191405d26417126512ce4aa8",
+      "checkout_sha256": "0794201be97885e7695a16b6c35848655b08c4bf191405d26417126512ce4aa8",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_init_v1_0.vp",
+      "expected_sha256": "817f9f32b2260a4c35af446e89ff4c2d4b065381b25cb2020c538d22b4a45088",
+      "checkout_sha256": "817f9f32b2260a4c35af446e89ff4c2d4b065381b25cb2020c538d22b4a45088",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_main_ctrl_v1_10.vp",
+      "expected_sha256": "39d5024d7364b441340b131d265d0648d8b7c1f92cc417424d7c584413c5f4a6",
+      "checkout_sha256": "39d5024d7364b441340b131d265d0648d8b7c1f92cc417424d7c584413c5f4a6",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_rdcal_v1_10.vp",
+      "expected_sha256": "6b4c7f3c24a4750ac69b4e7882617105c6e31f02da712aaa87932b8561ccea2b",
+      "checkout_sha256": "6b4c7f3c24a4750ac69b4e7882617105c6e31f02da712aaa87932b8561ccea2b",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_reset_ctrl_v1_3.vp",
+      "expected_sha256": "17189b59ed5307c4a27ec35485b33af5c98a89e6ee7f9c5d85aaed9c03a77163",
+      "checkout_sha256": "17189b59ed5307c4a27ec35485b33af5c98a89e6ee7f9c5d85aaed9c03a77163",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_rst_clk_phase_adj_v1_0.vp",
+      "expected_sha256": "dd1dbae71726d968df475fe7fbb2b7321411fa67786092c0dc2e065edcf39382",
+      "checkout_sha256": "dd1dbae71726d968df475fe7fbb2b7321411fa67786092c0dc2e065edcf39382",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_rst_debounce_v1_0.vp",
+      "expected_sha256": "bff7ed95c8d305dfb88e6002c6de8453a21c72c03a5a0521a76ddd105598dc4d",
+      "checkout_sha256": "bff7ed95c8d305dfb88e6002c6de8453a21c72c03a5a0521a76ddd105598dc4d",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_slice_rddata_align_v1_0.vp",
+      "expected_sha256": "befb44f07d851524109a6dc8e17c5b8062694aa274ed8dbc4f7326b8fe1c443e",
+      "checkout_sha256": "befb44f07d851524109a6dc8e17c5b8062694aa274ed8dbc4f7326b8fe1c443e",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_training_ctrl_v1_0.vp",
+      "expected_sha256": "777e8ee9d8d819fdcf04b39b5a5d6086c52369a7f19f04dbd0d06f7a7d3d6110",
+      "checkout_sha256": "777e8ee9d8d819fdcf04b39b5a5d6086c52369a7f19f04dbd0d06f7a7d3d6110",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_upcal_v1_0.vp",
+      "expected_sha256": "afbca3503da609f7951ad7fbef386bd007f403c89f52377211ba521967c94455",
+      "checkout_sha256": "afbca3503da609f7951ad7fbef386bd007f403c89f52377211ba521967c94455",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_wdata_path_adj_v1_10.vp",
+      "expected_sha256": "85f625ed4a09964442e8616074eea9e4757e43b4217589bb9e2f289c9748b272",
+      "checkout_sha256": "85f625ed4a09964442e8616074eea9e4757e43b4217589bb9e2f289c9748b272",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_wrcal_v1_7.vp",
+      "expected_sha256": "0a8cb0bb70bd40809260c50bcb85d092c16fea5d9ab2e4fbbe647ccbd1bfb1b0",
+      "checkout_sha256": "0a8cb0bb70bd40809260c50bcb85d092c16fea5d9ab2e4fbbe647ccbd1bfb1b0",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ddrphy/ips2l_ddrphy_wrlvl_v1_0.vp",
+      "expected_sha256": "00c086bd729be3ab8287f6eb786cfb3549c97aa92f8465c608b8fc2477df3edc",
+      "checkout_sha256": "00c086bd729be3ab8287f6eb786cfb3549c97aa92f8465c608b8fc2477df3edc",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/ips2l_rst_sync_v1_3.vp",
+      "expected_sha256": "64b8d83f15f2ff373e6b1040405c42051d8761bd1857dec719c884c2eb59361a",
+      "checkout_sha256": "64b8d83f15f2ff373e6b1040405c42051d8761bd1857dec719c884c2eb59361a",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/distributed_fifo/ips2l_distributed_fifo_v1_0.vp",
+      "expected_sha256": "d6c0b0d8560b0f22128b4883933944fc686fd7597cfea0d6c545cc6af56c0b7a",
+      "checkout_sha256": "d6c0b0d8560b0f22128b4883933944fc686fd7597cfea0d6c545cc6af56c0b7a",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/distributed_fifo/rtl/ips2l_distributed_fifo_ctr_v1_0.vp",
+      "expected_sha256": "fe31c8f44bea653ab20bb1830ad4f8ed41566e9cfef354bd5e2d48c7682f353d",
+      "checkout_sha256": "fe31c8f44bea653ab20bb1830ad4f8ed41566e9cfef354bd5e2d48c7682f353d",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/distributed_fifo/rtl/ips2l_distributed_fifo_v1_0_distributed_fifo_v1_0.vp",
+      "expected_sha256": "867ac91a1485dfe613a81f372d788e784bba8cd4b0497e56986135e92685ba73",
+      "checkout_sha256": "867ac91a1485dfe613a81f372d788e784bba8cd4b0497e56986135e92685ba73",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/distributed_fifo/rtl/ips2l_distributed_sdpram_v1_0_distributed_fifo_v1_0.vp",
+      "expected_sha256": "3561bbbbd4e4432a538c3d20818d262b4f1e5517c48296f6b1b4cc8afdd19aef",
+      "checkout_sha256": "3561bbbbd4e4432a538c3d20818d262b4f1e5517c48296f6b1b4cc8afdd19aef",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_apb_cross_v1_2.vp",
+      "expected_sha256": "62f7d55354a8afe4d02bc6f6d6dc30fc8e9960d3b21709988b887acc99d09cf5",
+      "checkout_sha256": "62f7d55354a8afe4d02bc6f6d6dc30fc8e9960d3b21709988b887acc99d09cf5",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_calib_delay_v1_2.vp",
+      "expected_sha256": "a52e992b9766b6cb22ed23aa01d1cc5ac9b6a429a8e49de7a13ac51dd70e9784",
+      "checkout_sha256": "a52e992b9766b6cb22ed23aa01d1cc5ac9b6a429a8e49de7a13ac51dd70e9784",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_cfg_apb_v1_2.vp",
+      "expected_sha256": "482cb280a614f70209f1d07892fdd773a259d2ca0f23e8f38b85a9faf00513b9",
+      "checkout_sha256": "482cb280a614f70209f1d07892fdd773a259d2ca0f23e8f38b85a9faf00513b9",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_dcd_bm_v1_2.vp",
+      "expected_sha256": "bfbd472dd8b427fe6b003dd510f73db89f915ac92d31fe8a779c40f9d4e56bee",
+      "checkout_sha256": "bfbd472dd8b427fe6b003dd510f73db89f915ac92d31fe8a779c40f9d4e56bee",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_dcd_rowaddr_v1_2.vp",
+      "expected_sha256": "4ac4721747b13020e1895be6265e55df90968f05beb8056279589039394bb9be",
+      "checkout_sha256": "4ac4721747b13020e1895be6265e55df90968f05beb8056279589039394bb9be",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_dcd_sm_v1_2.vp",
+      "expected_sha256": "d7e710e3ed4d1807fb0bdd4d84c264817247a4da41123c72439c555573821f49",
+      "checkout_sha256": "d7e710e3ed4d1807fb0bdd4d84c264817247a4da41123c72439c555573821f49",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_dcd_top_v1_2.vp",
+      "expected_sha256": "26ab4e142f555602c023f62b19df52056c6d51da5052401254066cae0655ddaa",
+      "checkout_sha256": "26ab4e142f555602c023f62b19df52056c6d51da5052401254066cae0655ddaa",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_dcp_back_ctrl_v1_2.vp",
+      "expected_sha256": "fe7b340b41d80ec7428cc38329a41864bcf5c209a6310610d09c7bc8579e541f",
+      "checkout_sha256": "fe7b340b41d80ec7428cc38329a41864bcf5c209a6310610d09c7bc8579e541f",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_dcp_buf_v1_2.vp",
+      "expected_sha256": "dab35fa172243ecbb5426a8ebccc2c168368ea0a6ea0558c909b815d781b17d6",
+      "checkout_sha256": "dab35fa172243ecbb5426a8ebccc2c168368ea0a6ea0558c909b815d781b17d6",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_dcp_out_v1_2.vp",
+      "expected_sha256": "9471082e23170b144dc619f7f7e08c94b8a03378f72da388f744d6acb728928b",
+      "checkout_sha256": "9471082e23170b144dc619f7f7e08c94b8a03378f72da388f744d6acb728928b",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_dcp_top_v1_2.vp",
+      "expected_sha256": "21b1f0e3b4660e1078b47000bfe50022346414f5d5e713ac9e522a4f39f76548",
+      "checkout_sha256": "21b1f0e3b4660e1078b47000bfe50022346414f5d5e713ac9e522a4f39f76548",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_dfi_v1_2.vp",
+      "expected_sha256": "abf138d692e634fabe5f569b98d897dfece8a8ae66cee1dba830a56d7e255df1",
+      "checkout_sha256": "abf138d692e634fabe5f569b98d897dfece8a8ae66cee1dba830a56d7e255df1",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_lp_v1_2.vp",
+      "expected_sha256": "7a80ccb1e053e5c9d8f389169359570f256d709ff2e4ad2c51fda7a7a6a4239d",
+      "checkout_sha256": "7a80ccb1e053e5c9d8f389169359570f256d709ff2e4ad2c51fda7a7a6a4239d",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_mrs_v1_2.vp",
+      "expected_sha256": "f78133bc021a57cf469773daaf102817fc37069447e8accc80afa1f4b20b0ad6",
+      "checkout_sha256": "f78133bc021a57cf469773daaf102817fc37069447e8accc80afa1f4b20b0ad6",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_prefetch_fifo_v1_2.vp",
+      "expected_sha256": "ee3aa91e980fb3dd08231cf1806a28edf759f4ea8248adfd44407d607519b9e4",
+      "checkout_sha256": "ee3aa91e980fb3dd08231cf1806a28edf759f4ea8248adfd44407d607519b9e4",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_rdatapath_v1_2.vp",
+      "expected_sha256": "72dd8ece021f4ee74fd576c1628c4f7d3606ef632f0e68b9569a288a092a6b0f",
+      "checkout_sha256": "72dd8ece021f4ee74fd576c1628c4f7d3606ef632f0e68b9569a288a092a6b0f",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_reg_fifo2_v1_2.vp",
+      "expected_sha256": "bc9cff65e4002a51af0c20c2f0a9b9f17dacde5157b58691bbfb1c44348ee08a",
+      "checkout_sha256": "bc9cff65e4002a51af0c20c2f0a9b9f17dacde5157b58691bbfb1c44348ee08a",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_ui_axi_v1_2a.vp",
+      "expected_sha256": "145b69395412be2553835f9278cdf1cb1703d3beeb914abf7d985e3c69f817fb",
+      "checkout_sha256": "145b69395412be2553835f9278cdf1cb1703d3beeb914abf7d985e3c69f817fb",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_wdatapath_v1_2.vp",
+      "expected_sha256": "db648e90ff607ca2f9e2b5cca048de417439888d0b906288e0cec7cf038d9dee",
+      "checkout_sha256": "db648e90ff607ca2f9e2b5cca048de417439888d0b906288e0cec7cf038d9dee",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_wdp_align_v1_2.vp",
+      "expected_sha256": "1645e9eb7fac3c9c13cd3e0d7367f132293f9cec16835ce188c6345993d2b730",
+      "checkout_sha256": "1645e9eb7fac3c9c13cd3e0d7367f132293f9cec16835ce188c6345993d2b730",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_wdp_dcp_v1_2.vp",
+      "expected_sha256": "3f30be0f49f78f09915743995c950fa6ff8de5f14598ebc8802e73b5c6d140ee",
+      "checkout_sha256": "3f30be0f49f78f09915743995c950fa6ff8de5f14598ebc8802e73b5c6d140ee",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/ips2l_mcdq_wrapper_v1_2b.vp",
+      "expected_sha256": "d35010f49be551fb15ab2655cbeffcaaaa74fdf3ccb0754b033fc979d615e805",
+      "checkout_sha256": "d35010f49be551fb15ab2655cbeffcaaaa74fdf3ccb0754b033fc979d615e805",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_com_timing_v1_2.vp",
+      "expected_sha256": "e3f19c4be6352ab64f07426973387f2876c540ee992f6eac9d3f2d470b3d49c2",
+      "checkout_sha256": "e3f19c4be6352ab64f07426973387f2876c540ee992f6eac9d3f2d470b3d49c2",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_tfaw_timing_v1_2.vp",
+      "expected_sha256": "c632619f042bebb4f059df7f20eee90eb2b51b81210430cb37d01958ad3cd30f",
+      "checkout_sha256": "c632619f042bebb4f059df7f20eee90eb2b51b81210430cb37d01958ad3cd30f",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_tfaw_v1_2.vp",
+      "expected_sha256": "ab87b7718bffc4fb2a2b27765576187f09b5266bbca7fc393c43c6dec96ff379",
+      "checkout_sha256": "ab87b7718bffc4fb2a2b27765576187f09b5266bbca7fc393c43c6dec96ff379",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_timing_act2wr_pass_v1_2.vp",
+      "expected_sha256": "1b3874b059923481f292ba382ad156f7dcdd9ad39da6c86dddd480290ccce498",
+      "checkout_sha256": "1b3874b059923481f292ba382ad156f7dcdd9ad39da6c86dddd480290ccce498",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_timing_act_pass_v1_2.vp",
+      "expected_sha256": "9f32b6936e039c15f7b07b74480179d39d1b3787965e1b90bd067a7ede7fdd4c",
+      "checkout_sha256": "9f32b6936e039c15f7b07b74480179d39d1b3787965e1b90bd067a7ede7fdd4c",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_timing_pre_pass_v1_2.vp",
+      "expected_sha256": "e40a64caec9725c231cd88dde69973eab3aca38c9d2e66a2c5c0bbddf3103ae0",
+      "checkout_sha256": "e40a64caec9725c231cd88dde69973eab3aca38c9d2e66a2c5c0bbddf3103ae0",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_timing_rd_pass_v1_2.vp",
+      "expected_sha256": "78b1de719a43ee0fc80e1a5464f7284439d91f1d4b3f83ef2ae5611920293988",
+      "checkout_sha256": "78b1de719a43ee0fc80e1a5464f7284439d91f1d4b3f83ef2ae5611920293988",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_timing_ref_pass_v1_2.vp",
+      "expected_sha256": "c79dde6f9a682c55aff7bb89c4863f76a069b874fb154dff7d3e4d4a7a88f9d1",
+      "checkout_sha256": "c79dde6f9a682c55aff7bb89c4863f76a069b874fb154dff7d3e4d4a7a88f9d1",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_timing_wr_pass_v1_2.vp",
+      "expected_sha256": "ea3470ca984554d4908ec950314f9242042417c6c4c6b3fd05ac5d6daab98c90",
+      "checkout_sha256": "ea3470ca984554d4908ec950314f9242042417c6c4c6b3fd05ac5d6daab98c90",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_trc_timing_v1_2.vp",
+      "expected_sha256": "7234241e5968f91ec6e396794f0bb80f6c7d1bca2038aa004d5078d3937953da",
+      "checkout_sha256": "7234241e5968f91ec6e396794f0bb80f6c7d1bca2038aa004d5078d3937953da",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/pll/ips2l_ddrphy_gpll_v1_3.vp",
+      "expected_sha256": "3fecc367573a4b5bd158e1a8ff106c5c401c5f180143e8e5abe6bb068e5078d2",
+      "checkout_sha256": "3fecc367573a4b5bd158e1a8ff106c5c401c5f180143e8e5abe6bb068e5078d2",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/ddr3_test/rtl/pll/ips2l_ddrphy_ppll_v1_0.vp",
+      "expected_sha256": "34bb46106b84eab147f130bd7526f1486d35caeb40b0258cd59656e50d19dddd",
+      "checkout_sha256": "34bb46106b84eab147f130bd7526f1486d35caeb40b0258cd59656e50d19dddd",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/pll/.last_generated",
+      "expected_sha256": "1c43d3a8ce08cb98c936f37b3a9dbd0a470654c612f78796809b5e6fb2e8dd7d",
+      "checkout_sha256": "1c43d3a8ce08cb98c936f37b3a9dbd0a470654c612f78796809b5e6fb2e8dd7d",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/pll/.settings",
+      "expected_sha256": "18fb2deef6122d090455149a362445e24f09478da2ccfe5cebb4011392bbbf72",
+      "checkout_sha256": "18fb2deef6122d090455149a362445e24f09478da2ccfe5cebb4011392bbbf72",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/pll/pll.idf",
+      "expected_sha256": "6a0ffb23b6a838d5e8c1f38d595d4934df37bc305f0e521449fb25727652ff84",
+      "checkout_sha256": "6a0ffb23b6a838d5e8c1f38d595d4934df37bc305f0e521449fb25727652ff84",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/pll/pll.v",
+      "expected_sha256": "e70c5d8615ad252fbf85fba6fc77d1433ebb424d0480595b26f0fe38c3ac6add",
+      "checkout_sha256": "e70c5d8615ad252fbf85fba6fc77d1433ebb424d0480595b26f0fe38c3ac6add",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/pll/pll_tb.v",
+      "expected_sha256": "2815ac3cdf5278f30b0218e8b14764356015dc3fcb841389e33b83300f5c27e4",
+      "checkout_sha256": "2815ac3cdf5278f30b0218e8b14764356015dc3fcb841389e33b83300f5c27e4",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/pll/pll_tmpl.v",
+      "expected_sha256": "52f511802a9ae48878aaaf563338855d8191070c6a3f2bad091451ab432587f2",
+      "checkout_sha256": "52f511802a9ae48878aaaf563338855d8191070c6a3f2bad091451ab432587f2",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/pll/pll_tmpl.vhdl",
+      "expected_sha256": "a826268fc21d744868b86839f4cfd1f7026a134a548254d9a8523b92d73f7f71",
+      "checkout_sha256": "a826268fc21d744868b86839f4cfd1f7026a134a548254d9a8523b92d73f7f71",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/pll_audio/pll_audio.idf",
+      "expected_sha256": "760dea65625fb064d8f7e981bfa4fb705313bda51aa9c15109bac84e12381f64",
+      "checkout_sha256": "760dea65625fb064d8f7e981bfa4fb705313bda51aa9c15109bac84e12381f64",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/pll_audio/pll_audio.v",
+      "expected_sha256": "68a1951e0d473a16454ea8c20b99dec5276e438f7faa473fc1749d5f434c103b",
+      "checkout_sha256": "68a1951e0d473a16454ea8c20b99dec5276e438f7faa473fc1749d5f434c103b",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/pll_audio/pll_audio_tb.v",
+      "expected_sha256": "29af1285900fdb196ecd0a698958c53442c5fceafad968e7017417326e148f42",
+      "checkout_sha256": "29af1285900fdb196ecd0a698958c53442c5fceafad968e7017417326e148f42",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/pll_audio/pll_audio_tmpl.v",
+      "expected_sha256": "fc29c3c0a0d965ea96d8bfccb040dda0aa1d7b1413ff9b63943f8003c8eec1ea",
+      "checkout_sha256": "fc29c3c0a0d965ea96d8bfccb040dda0aa1d7b1413ff9b63943f8003c8eec1ea",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "ipcore/pll_audio/pll_audio_tmpl.vhdl",
+      "expected_sha256": "a826268fc21d744868b86839f4cfd1f7026a134a548254d9a8523b92d73f7f71",
+      "checkout_sha256": "a826268fc21d744868b86839f4cfd1f7026a134a548254d9a8523b92d73f7f71",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/audio/audio_cdc_fifo.v",
+      "expected_sha256": "eade0b2cac8eb723745f6fc71a3c75bf51ae41fb6777f3415ff2066b3af56689",
+      "checkout_sha256": "eade0b2cac8eb723745f6fc71a3c75bf51ae41fb6777f3415ff2066b3af56689",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/audio/audio_sink.v",
+      "expected_sha256": "004cfedcd76131291debccd13c9f6c965fb337558dcc4dc65e298cd1d28e1e09",
+      "checkout_sha256": "004cfedcd76131291debccd13c9f6c965fb337558dcc4dc65e298cd1d28e1e09",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/audio/i2s_clk_gen.v",
+      "expected_sha256": "b8b00d20b8ced86ce18b033d5a903e20bce49481cd5c99e976c4c553c415bb43",
+      "checkout_sha256": "b8b00d20b8ced86ce18b033d5a903e20bce49481cd5c99e976c4c553c415bb43",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/audio/i2s_rx.v",
+      "expected_sha256": "b9664a02cc88309f0a1483291754d68fe207917650b73ca0585126d55648e033",
+      "checkout_sha256": "b9664a02cc88309f0a1483291754d68fe207917650b73ca0585126d55648e033",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/audio/i2s_slave_rx.v",
+      "expected_sha256": "453923d5c5d1629946436e7fb0886ba3a6699c512906c580e8342f2ff573588f",
+      "checkout_sha256": "453923d5c5d1629946436e7fb0886ba3a6699c512906c580e8342f2ff573588f",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/audio/pcm1808_coeff_rom.v",
+      "expected_sha256": "2202fb99d5883e95fb96794274225658908ce29aacbfc8df89d44ceee6a0cc10",
+      "checkout_sha256": "2202fb99d5883e95fb96794274225658908ce29aacbfc8df89d44ceee6a0cc10",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/audio/pcm1808_resampler.v",
+      "expected_sha256": "116a33c5a5f5852c2d2818a3a0063a6e90001a5952fc51a59cce7de85caeefeb",
+      "checkout_sha256": "116a33c5a5f5852c2d2818a3a0063a6e90001a5952fc51a59cce7de85caeefeb",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/cpu/prog.hex",
+      "expected_sha256": "8757babe8ece9173b4c34fe38025c4cdc1e0b033cbd05e4358b1a222ac408f30",
+      "checkout_sha256": "8757babe8ece9173b4c34fe38025c4cdc1e0b033cbd05e4358b1a222ac408f30",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/cpu/prog_pacerv.hex",
+      "expected_sha256": "4a43efc149a5a6f2cdec7da5527cb5c5ff183ab9f325ba8c9f968b3626a3c30a",
+      "checkout_sha256": "4a43efc149a5a6f2cdec7da5527cb5c5ff183ab9f325ba8c9f968b3626a3c30a",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/cpu/rv32_cpu_subsys.sv",
+      "expected_sha256": "3caa8296a806186ad62c247a872ab5746d0b0841335a0fa7b92184a8c6bcac99",
+      "checkout_sha256": "3caa8296a806186ad62c247a872ab5746d0b0841335a0fa7b92184a8c6bcac99",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/cpu/vendor/pacerv_h3/rv32_alu.sv",
+      "expected_sha256": "125647d90b98f294743127637406d19479eebda82dccfaaba7acaf59d5ae38b1",
+      "checkout_sha256": "125647d90b98f294743127637406d19479eebda82dccfaaba7acaf59d5ae38b1",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/cpu/vendor/pacerv_h3/rv32_btb.sv",
+      "expected_sha256": "b1b3481343a2e1275cfd984c4eab05c5f9d92cb72dab652010463073eb86eb4f",
+      "checkout_sha256": "b1b3481343a2e1275cfd984c4eab05c5f9d92cb72dab652010463073eb86eb4f",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/cpu/vendor/pacerv_h3/rv32_core.sv",
+      "expected_sha256": "15f86ba74e955ce93c3937106c7650d367b0b6249ed8799e3b373f34f31da404",
+      "checkout_sha256": "15f86ba74e955ce93c3937106c7650d367b0b6249ed8799e3b373f34f31da404",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/cpu/vendor/pacerv_h3/rv32_decode.sv",
+      "expected_sha256": "9cb2b57b46ed775d85b6e70a3eebe92c2d5e49e9a6483993109e2c096d9a3ff3",
+      "checkout_sha256": "9cb2b57b46ed775d85b6e70a3eebe92c2d5e49e9a6483993109e2c096d9a3ff3",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/cpu/vendor/pacerv_h3/rv32_machine.sv",
+      "expected_sha256": "56b542e419c58216a08b0a5c83322506e42e2721fa28db50a6454ebe29607abd",
+      "checkout_sha256": "56b542e419c58216a08b0a5c83322506e42e2721fa28db50a6454ebe29607abd",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/cpu/vendor/pacerv_h3/rv32_muldiv.sv",
+      "expected_sha256": "64df4940f2d309fa68e8183f5ed1825e8843046703bf5f34ec8b885b03532246",
+      "checkout_sha256": "64df4940f2d309fa68e8183f5ed1825e8843046703bf5f34ec8b885b03532246",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/cpu/vendor/pacerv_h3/rv32_rvc_expand.sv",
+      "expected_sha256": "308ac8a65c9e29aeec27b38417483d0f43fd7c54487c26e89a3fa54b4647951b",
+      "checkout_sha256": "308ac8a65c9e29aeec27b38417483d0f43fd7c54487c26e89a3fa54b4647951b",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/cpu/vendor/pacerv_h3/rv32_rvc_frontend.sv",
+      "expected_sha256": "210b5ba9280c3840aafc27e7c3e35616085efde310793dc1661cc72f50984128",
+      "checkout_sha256": "210b5ba9280c3840aafc27e7c3e35616085efde310793dc1661cc72f50984128",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/ctrl/core_probe.v",
+      "expected_sha256": "1751ee66ec9ed4d6368385d7ea82ffc33a76f9f0b97115da28c903ad7a3a726c",
+      "checkout_sha256": "1751ee66ec9ed4d6368385d7ea82ffc33a76f9f0b97115da28c903ad7a3a726c",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/ctrl/instrec_top.v",
+      "expected_sha256": "a5e4848d294baf57afb11c5b117a0b9c5ff61d174ee951db56ae491c2f6d7191",
+      "checkout_sha256": "a5e4848d294baf57afb11c5b117a0b9c5ff61d174ee951db56ae491c2f6d7191",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/ctrl/logits_snap.v",
+      "expected_sha256": "323f1c7ceb6fcc3dacb18ac51a5b8f8c09c60f6f75b539bf91b07ae3f4044005",
+      "checkout_sha256": "323f1c7ceb6fcc3dacb18ac51a5b8f8c09c60f6f75b539bf91b07ae3f4044005",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/ctrl/self_test.v",
+      "expected_sha256": "2f97ebaeedc75cf3418fdc2ed08af95e6932e833d39c09c62eb2c90cc1c903f9",
+      "checkout_sha256": "2f97ebaeedc75cf3418fdc2ed08af95e6932e833d39c09c62eb2c90cc1c903f9",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/ctrl/sys_ctrl.v",
+      "expected_sha256": "d9739eab00916f2c27a97d54afe36a5da138e3687f63af34ce2cee12ec20e723",
+      "checkout_sha256": "d9739eab00916f2c27a97d54afe36a5da138e3687f63af34ce2cee12ec20e723",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/ctrl/top_core_only.v",
+      "expected_sha256": "b9bfd12d606806b384a5a5eda0673e3381632053aa05977b1bc20b5cd3304221",
+      "checkout_sha256": "b9bfd12d606806b384a5a5eda0673e3381632053aa05977b1bc20b5cd3304221",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/ctrl/top_rv_core.v",
+      "expected_sha256": "9bbd64f88524813b7c873b4e8798f185047b3f33df1a4df113d040d6f0e023b3",
+      "checkout_sha256": "9bbd64f88524813b7c873b4e8798f185047b3f33df1a4df113d040d6f0e023b3",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/ctrl/uart_debug.v",
+      "expected_sha256": "51323361036e86259040dd6ed78430c2a3707802a2f0220520c6d8aa7685a245",
+      "checkout_sha256": "51323361036e86259040dd6ed78430c2a3707802a2f0220520c6d8aa7685a245",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/ctrl/uart_rx.v",
+      "expected_sha256": "bd1700de878f472963b81ba55df7d958b98ed932ba096997cdd6a6e7bbf58dcb",
+      "checkout_sha256": "bd1700de878f472963b81ba55df7d958b98ed932ba096997cdd6a6e7bbf58dcb",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/ctrl/uart_tx.v",
+      "expected_sha256": "9ce20db2aa09f678ab0537ab97d131077400336a657c731860832350bf3cc762",
+      "checkout_sha256": "9ce20db2aa09f678ab0537ab97d131077400336a657c731860832350bf3cc762",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/ctrl/weight_loader.v",
+      "expected_sha256": "a7934f9d44f29bd39de92e8674972be050ce75070c4afb7f1c8af0e79a73c8be",
+      "checkout_sha256": "a7934f9d44f29bd39de92e8674972be050ce75070c4afb7f1c8af0e79a73c8be",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/ddr3/ddr3_arbiter.v",
+      "expected_sha256": "63e71d61e1a83202d616ce0b2f5406d833f3824964d11477f032040d716e85dd",
+      "checkout_sha256": "63e71d61e1a83202d616ce0b2f5406d833f3824964d11477f032040d716e85dd",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/ddr3/ddr3_ctrl_axi.v",
+      "expected_sha256": "f4850d3cebe8f296407319f4bbb1f570a45864f5dc27d605e7ac58caad4c994f",
+      "checkout_sha256": "f4850d3cebe8f296407319f4bbb1f570a45864f5dc27d605e7ac58caad4c994f",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/ddr3/ddr3_m3_share.v",
+      "expected_sha256": "64610b199c004b118f9bd45627e81ef589925e7389da9795461d77c532be5d6a",
+      "checkout_sha256": "64610b199c004b118f9bd45627e81ef589925e7389da9795461d77c532be5d6a",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/ddr3/ddr3_wrapper.v",
+      "expected_sha256": "d74b666fcd7a4e029545ef7b810e4511845b5775c148b2fb37d83cb54afe3d3b",
+      "checkout_sha256": "d74b666fcd7a4e029545ef7b810e4511845b5775c148b2fb37d83cb54afe3d3b",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/ddr3/pace_cpu_ddr_bridge.v",
+      "expected_sha256": "0630ec29b7df0a4f6e8e7c2cd060613c92b51d9a52bc15920d33eee2d7b59947",
+      "checkout_sha256": "0630ec29b7df0a4f6e8e7c2cd060613c92b51d9a52bc15920d33eee2d7b59947",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/diag/diag_readback.v",
+      "expected_sha256": "acd0dc39480b5ca0c37fc2b266d21e2908bb4a924625a6676a9fed973d613046",
+      "checkout_sha256": "acd0dc39480b5ca0c37fc2b266d21e2908bb4a924625a6676a9fed973d613046",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/diag/feat_dump.v",
+      "expected_sha256": "a5fb4ce891a3e0933c5491834feb075d6de3b45806e81b5b508c72ababd4c008",
+      "checkout_sha256": "a5fb4ce891a3e0933c5491834feb075d6de3b45806e81b5b508c72ababd4c008",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/hdmi/hdmi_tx_if.v",
+      "expected_sha256": "11b253b0dc0ad695f23ba00231284b90c13791fe849efb2d205e6308be35fb4a",
+      "checkout_sha256": "11b253b0dc0ad695f23ba00231284b90c13791fe849efb2d205e6308be35fb4a",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/hdmi/iic_dri.v",
+      "expected_sha256": "8516560f7ab3e27ef1bd19006b0d89fde9be31bb24a088bbe2d6a93e81c104a8",
+      "checkout_sha256": "8516560f7ab3e27ef1bd19006b0d89fde9be31bb24a088bbe2d6a93e81c104a8",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/hdmi/ms7200_ctl.v",
+      "expected_sha256": "67874f14e07601f1a7f50e967d0e4400e03c1fdd4f394d1f9cf0106638a215f7",
+      "checkout_sha256": "67874f14e07601f1a7f50e967d0e4400e03c1fdd4f394d1f9cf0106638a215f7",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/hdmi/ms7210_ctl.v",
+      "expected_sha256": "ab4e58be6f740e76b1f36f1c904bf5a9c7886d28c789f06fdceeecd7aa9f958b",
+      "checkout_sha256": "ab4e58be6f740e76b1f36f1c904bf5a9c7886d28c789f06fdceeecd7aa9f958b",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/hdmi/ms72xx_ctl.v",
+      "expected_sha256": "66818c4c616435b7145254ac07f578cc8e8d0f99bdad56b84eaa127e8af5ac6d",
+      "checkout_sha256": "66818c4c616435b7145254ac07f578cc8e8d0f99bdad56b84eaa127e8af5ac6d",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/hdmi/sync_vg.v",
+      "expected_sha256": "4433c8a8d6370c81969256877e7060ff0f8eeb2421f85c07b1ecbcf3d053c5d2",
+      "checkout_sha256": "4433c8a8d6370c81969256877e7060ff0f8eeb2421f85c07b1ecbcf3d053c5d2",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/ip/audio_pll.v",
+      "expected_sha256": "240a01e2ede525d66e440746839978cb23bc54a4970f486493eab065f22db30a",
+      "checkout_sha256": "240a01e2ede525d66e440746839978cb23bc54a4970f486493eab065f22db30a",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/mel/db_norm.v",
+      "expected_sha256": "80395100d67e5399a07a54402170a50b513099f415c08c598d86f1bea816e318",
+      "checkout_sha256": "80395100d67e5399a07a54402170a50b513099f415c08c598d86f1bea816e318",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/mel/exp_lut.hex",
+      "expected_sha256": "8276485fcc10945f17b4a0c8adb3a8fa6af797dc83434e524c2237834bf4a69b",
+      "checkout_sha256": "8276485fcc10945f17b4a0c8adb3a8fa6af797dc83434e524c2237834bf4a69b",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/mel/fft2048_sdf.v",
+      "expected_sha256": "4c3b11118f06105dee036e1be7ad54d61c2f7835b4d140fbda3308cf00cbe73f",
+      "checkout_sha256": "4c3b11118f06105dee036e1be7ad54d61c2f7835b4d140fbda3308cf00cbe73f",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/mel/hann_q15.hex",
+      "expected_sha256": "5c3085a5600662ccfce605a11de8a1fb0f77f5337d5e0957e6a958be889978b5",
+      "checkout_sha256": "5c3085a5600662ccfce605a11de8a1fb0f77f5337d5e0957e6a958be889978b5",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/mel/hann_rom.v",
+      "expected_sha256": "ccdd0e849975c007c407f49e4e124ce286170e426c8f3477e54d0275d6b6d659",
+      "checkout_sha256": "ccdd0e849975c007c407f49e4e124ce286170e426c8f3477e54d0275d6b6d659",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/mel/log2_lut.hex",
+      "expected_sha256": "5bd665f8794ed0b3f07df0be882152c7823595a8fb11092313bfe92ff5ae3848",
+      "checkout_sha256": "5bd665f8794ed0b3f07df0be882152c7823595a8fb11092313bfe92ff5ae3848",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/mel/mel_coo.hex",
+      "expected_sha256": "fb0a22bcd3b0cde777af7f536949329d18e077d8af89e7e294188dd0e11638cc",
+      "checkout_sha256": "fb0a22bcd3b0cde777af7f536949329d18e077d8af89e7e294188dd0e11638cc",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/mel/mel_coo_48k.hex",
+      "expected_sha256": "6a154583eca40119bc9b3ccf183cf4888a4c2398340b7fe6165fd2b33f5a136d",
+      "checkout_sha256": "6a154583eca40119bc9b3ccf183cf4888a4c2398340b7fe6165fd2b33f5a136d",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/mel/mel_engine.v",
+      "expected_sha256": "0145f79387ea443acdee79167819e47324d199b28ebfa7020dbf016d281d3c31",
+      "checkout_sha256": "0145f79387ea443acdee79167819e47324d199b28ebfa7020dbf016d281d3c31",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/mel/mel_filter.v",
+      "expected_sha256": "a04ea6a0a9e83bb3ab7ca6111b09932563be9f1d2e6138d660c4838af640d84d",
+      "checkout_sha256": "a04ea6a0a9e83bb3ab7ca6111b09932563be9f1d2e6138d660c4838af640d84d",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/mel/standardize.v",
+      "expected_sha256": "1b98baa56fd2e7d1b13c436b4e425adf271f2f82db277d757274babf1f50ae68",
+      "checkout_sha256": "1b98baa56fd2e7d1b13c436b4e425adf271f2f82db277d757274babf1f50ae68",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/mel/stft_framer.v",
+      "expected_sha256": "e7bdf972b51abe3e0937aa141f528716f9160c8f378d903a755317f85c08c764",
+      "checkout_sha256": "e7bdf972b51abe3e0937aa141f528716f9160c8f378d903a755317f85c08c764",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/mel/tw_rom_s.v",
+      "expected_sha256": "be96d008f04cc7d64f092dff0af63bbee2830241e874663aa1cdb35e5958ba39",
+      "checkout_sha256": "be96d008f04cc7d64f092dff0af63bbee2830241e874663aa1cdb35e5958ba39",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/mel/twiddle_q15.hex",
+      "expected_sha256": "5bbe38d69602539c4c0401da0e3e11093fd2e159f839147a7c966af5018e0504",
+      "checkout_sha256": "5bbe38d69602539c4c0401da0e3e11093fd2e159f839147a7c966af5018e0504",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/mel/twiddle_s10.hex",
+      "expected_sha256": "0a4ab0df4baf2199044bb4ca4f6fc4351737949aea4b64a1c2cef102dacef7ba",
+      "checkout_sha256": "0a4ab0df4baf2199044bb4ca4f6fc4351737949aea4b64a1c2cef102dacef7ba",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/mel/twiddle_s11.hex",
+      "expected_sha256": "5bbe38d69602539c4c0401da0e3e11093fd2e159f839147a7c966af5018e0504",
+      "checkout_sha256": "5bbe38d69602539c4c0401da0e3e11093fd2e159f839147a7c966af5018e0504",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/mel/twiddle_s2.hex",
+      "expected_sha256": "43172d25a1c9f97027c31ea20c1e29aaafbbb79e53bc7edfd243638023f6324b",
+      "checkout_sha256": "43172d25a1c9f97027c31ea20c1e29aaafbbb79e53bc7edfd243638023f6324b",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/mel/twiddle_s3.hex",
+      "expected_sha256": "76d5a0d2b9e19667a8adc7faf0dded3c60cfd8f164d6eae47348867ab66e364c",
+      "checkout_sha256": "76d5a0d2b9e19667a8adc7faf0dded3c60cfd8f164d6eae47348867ab66e364c",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/mel/twiddle_s4.hex",
+      "expected_sha256": "ce5f6f877d5b0ceaaacb7d30ab52a2f37353ec532522b4801daa0b1b1aa4a11c",
+      "checkout_sha256": "ce5f6f877d5b0ceaaacb7d30ab52a2f37353ec532522b4801daa0b1b1aa4a11c",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/mel/twiddle_s5.hex",
+      "expected_sha256": "d7baec67b3f1fc7c557690e383c9d9219168acc1afc4392874489f980bf38139",
+      "checkout_sha256": "d7baec67b3f1fc7c557690e383c9d9219168acc1afc4392874489f980bf38139",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/mel/twiddle_s6.hex",
+      "expected_sha256": "8f06b5c6719ac0a3d91cdf7d470b200a0040f0ee9055b819d363fcb804303d73",
+      "checkout_sha256": "8f06b5c6719ac0a3d91cdf7d470b200a0040f0ee9055b819d363fcb804303d73",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/mel/twiddle_s7.hex",
+      "expected_sha256": "560b2a5240350d8c4c489e8118f5a54f51d18177fe1c7d8b650630ace810f812",
+      "checkout_sha256": "560b2a5240350d8c4c489e8118f5a54f51d18177fe1c7d8b650630ace810f812",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/mel/twiddle_s8.hex",
+      "expected_sha256": "a54c575030b6b47313c737e33f9a75be843b3e42250a27f50e17ce4e05111d2e",
+      "checkout_sha256": "a54c575030b6b47313c737e33f9a75be843b3e42250a27f50e17ce4e05111d2e",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/mel/twiddle_s9.hex",
+      "expected_sha256": "286404cd9a64c2649d5ccdfeaa6fadb398089f05dc411be5990385a84180264f",
+      "checkout_sha256": "286404cd9a64c2649d5ccdfeaa6fadb398089f05dc411be5990385a84180264f",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/npu/activation_row_store_dynamic.v",
+      "expected_sha256": "6951fde43a1b7cca59a3cd8b76fb3dfacfcf30c3d2fe361924dc634ad76c1015",
+      "checkout_sha256": "6951fde43a1b7cca59a3cd8b76fb3dfacfcf30c3d2fe361924dc634ad76c1015",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/npu/activation_store_mux.v",
+      "expected_sha256": "0c79febbc563553ac9b995bcd7be74ff101e7f0799d8534ef4178ebe48a9792f",
+      "checkout_sha256": "0c79febbc563553ac9b995bcd7be74ff101e7f0799d8534ef4178ebe48a9792f",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/npu/conv_engine.v",
+      "expected_sha256": "da1e4e913ab8eb9ccff9bc057ef1489807e69e47f909670a4b4ad6144f24dea4",
+      "checkout_sha256": "da1e4e913ab8eb9ccff9bc057ef1489807e69e47f909670a4b4ad6144f24dea4",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/npu/fc_engine.v",
+      "expected_sha256": "39d61d64f6eb813a302a7cff5434b8a09e0189c4358a7b18f6758b7a579dc83e",
+      "checkout_sha256": "39d61d64f6eb813a302a7cff5434b8a09e0189c4358a7b18f6758b7a579dc83e",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/npu/gap_unit.v",
+      "expected_sha256": "f31e45c233af567f9ee8d8a9dfbd0e2e97c7375e58964c29a43eff2b6019c324",
+      "checkout_sha256": "f31e45c233af567f9ee8d8a9dfbd0e2e97c7375e58964c29a43eff2b6019c324",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/npu/npu_m1_bridge.v",
+      "expected_sha256": "7510a232de647efa232a5bb11b2bc7229f9571d5f4b13fa57684bea2e2f3cab6",
+      "checkout_sha256": "7510a232de647efa232a5bb11b2bc7229f9571d5f4b13fa57684bea2e2f3cab6",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/npu/npu_m1_owner.v",
+      "expected_sha256": "ce99ef8e780b72d9205da8c9ef8762cb891ce1d8bbf4295fd38372755a3157ca",
+      "checkout_sha256": "ce99ef8e780b72d9205da8c9ef8762cb891ce1d8bbf4295fd38372755a3157ca",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/npu/npu_stage_lifecycle.v",
+      "expected_sha256": "8ed6d69866c1bd7d60951a25722c77006941d774420170811e636fe0c1bfca11",
+      "checkout_sha256": "8ed6d69866c1bd7d60951a25722c77006941d774420170811e636fe0c1bfca11",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/npu/npu_top.v",
+      "expected_sha256": "7617dbfffc2a4750090c9d3f058abfb80f799f70fd164565c9f9a7f581350099",
+      "checkout_sha256": "7617dbfffc2a4750090c9d3f058abfb80f799f70fd164565c9f9a7f581350099",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/npu/pool_engine.v",
+      "expected_sha256": "fa2b81e0336f58b74d19f6e3ee1ad891a5881aecf056240ab00da7746e7025ea",
+      "checkout_sha256": "fa2b81e0336f58b74d19f6e3ee1ad891a5881aecf056240ab00da7746e7025ea",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/npu/requant_unit.v",
+      "expected_sha256": "e8114dd8533642d8f22946c449bf4765c69755200c7443b4ca4719f888761945",
+      "checkout_sha256": "e8114dd8533642d8f22946c449bf4765c69755200c7443b4ca4719f888761945",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/npu/softmax_top.v",
+      "expected_sha256": "9c51eb0ce2b3b96b0936c3f037acde2a9a28fbdb10e518be2f1091c8f396eef9",
+      "checkout_sha256": "9c51eb0ce2b3b96b0936c3f037acde2a9a28fbdb10e518be2f1091c8f396eef9",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/npu/wbuf.v",
+      "expected_sha256": "f8e51d756535e296009db8e37bbd81ca5a475d128e6c0f3cb9c18684b640f42b",
+      "checkout_sha256": "f8e51d756535e296009db8e37bbd81ca5a475d128e6c0f3cb9c18684b640f42b",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/npu/wdma.v",
+      "expected_sha256": "e484c511cca3e379a282aac8058fa3e98f52a4315118bb07b62203602ce2f994",
+      "checkout_sha256": "e484c511cca3e379a282aac8058fa3e98f52a4315118bb07b62203602ce2f994",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/npu/weight_read_aligner_hardened.v",
+      "expected_sha256": "da16035e397f3fcc97b0d7177a9e3b87313ad0836b50dd11992fb413c44bcf38",
+      "checkout_sha256": "da16035e397f3fcc97b0d7177a9e3b87313ad0836b50dd11992fb413c44bcf38",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/ui/bars_data.v",
+      "expected_sha256": "c29dc11ede3b716f48c5e52aa097ec5cefa873dc205f3a056ebaac7c6bc745e8",
+      "checkout_sha256": "c29dc11ede3b716f48c5e52aa097ec5cefa873dc205f3a056ebaac7c6bc745e8",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/ui/bars_disp.v",
+      "expected_sha256": "f701a485008e6510ebea163a8bf4149c07c05653e6c61bab21a550ada824d519",
+      "checkout_sha256": "f701a485008e6510ebea163a8bf4149c07c05653e6c61bab21a550ada824d519",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/ui/class_labels.hex",
+      "expected_sha256": "647afdf037b1a7094401bd77a53a178ad0343926016ea88349104d12b3b5f58b",
+      "checkout_sha256": "647afdf037b1a7094401bd77a53a178ad0343926016ea88349104d12b3b5f58b",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/ui/dashboard_ascii.hex",
+      "expected_sha256": "72436230eb6fa3455154e6ed2885810b6e7e1e1f17ad1dbe9a8b3e692ce8a534",
+      "checkout_sha256": "72436230eb6fa3455154e6ed2885810b6e7e1e1f17ad1dbe9a8b3e692ce8a534",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/ui/dashboard_classes.hex",
+      "expected_sha256": "d1b96b8ab0204cdc0450d2495f782df24a250f33842bdbf165b69d416e1f3047",
+      "checkout_sha256": "d1b96b8ab0204cdc0450d2495f782df24a250f33842bdbf165b69d416e1f3047",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/ui/dashboard_font.hex",
+      "expected_sha256": "e6656ebf5d7ee6f5aae3bfeb0a6bf350db617813fc290a7724cd7e403a3f499c",
+      "checkout_sha256": "e6656ebf5d7ee6f5aae3bfeb0a6bf350db617813fc290a7724cd7e403a3f499c",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/ui/dashboard_renderer.v",
+      "expected_sha256": "e414e7c6d20c292a5b89f83fd9d0d6b2d7ecfb229661d273a1a503ba0a6884e3",
+      "checkout_sha256": "e414e7c6d20c292a5b89f83fd9d0d6b2d7ecfb229661d273a1a503ba0a6884e3",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/ui/dashboard_text.v",
+      "expected_sha256": "cfe4bca5dd5ebd0a3fbbe99523eaba035a94f1c49eb4816b66489d55a03b20b7",
+      "checkout_sha256": "cfe4bca5dd5ebd0a3fbbe99523eaba035a94f1c49eb4816b66489d55a03b20b7",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/ui/dashboard_tiles.hex",
+      "expected_sha256": "a84ed90c2a0c2fda303976680fff81f29ebc1732b97d478f20749bfb920ccd64",
+      "checkout_sha256": "a84ed90c2a0c2fda303976680fff81f29ebc1732b97d478f20749bfb920ccd64",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/ui/demo_confidence.hex",
+      "expected_sha256": "bee7365c6b3089ef5143cf4470d34c19362625d11e641fb0816885a17d9b2d0e",
+      "checkout_sha256": "bee7365c6b3089ef5143cf4470d34c19362625d11e641fb0816885a17d9b2d0e",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/ui/demo_confidence_player.v",
+      "expected_sha256": "72535094b2f7df6c6c8e638330ea3dc09e4b9f8e552448c3b1a1a79f3591f024",
+      "checkout_sha256": "72535094b2f7df6c6c8e638330ea3dc09e4b9f8e552448c3b1a1a79f3591f024",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/ui/demo_dashboard_ascii.hex",
+      "expected_sha256": "7f7fe08a6743a307b9a7600aae28db7d68c5633ae1925ddc4918840a93b7aad4",
+      "checkout_sha256": "7f7fe08a6743a307b9a7600aae28db7d68c5633ae1925ddc4918840a93b7aad4",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/ui/demo_dashboard_classes.hex",
+      "expected_sha256": "630fd1ee6c7353253be76abd65813b6e76138a7d3d12628b791efdc6f68e0c30",
+      "checkout_sha256": "630fd1ee6c7353253be76abd65813b6e76138a7d3d12628b791efdc6f68e0c30",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/ui/demo_dashboard_font.hex",
+      "expected_sha256": "3fb7e70aee9aaa668bda33ac683373dda35897618c6e614d3f8bbe8a4fa3cfd0",
+      "checkout_sha256": "3fb7e70aee9aaa668bda33ac683373dda35897618c6e614d3f8bbe8a4fa3cfd0",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/ui/demo_dashboard_renderer.v",
+      "expected_sha256": "b5010dea88778b6d0ad674879fcb671b22fd33120d084c6ce67b9fb281e28b5f",
+      "checkout_sha256": "b5010dea88778b6d0ad674879fcb671b22fd33120d084c6ce67b9fb281e28b5f",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/ui/demo_dashboard_text.v",
+      "expected_sha256": "edbbdf38b4002b3e1ec647c59616509a13284f10cfea116ab809fa43c54a40fd",
+      "checkout_sha256": "edbbdf38b4002b3e1ec647c59616509a13284f10cfea116ab809fa43c54a40fd",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/ui/demo_dashboard_tiles.hex",
+      "expected_sha256": "c6d4761fa821793e0f0412e784b955de90d1f598894b507a5fb58aeccf85cb99",
+      "checkout_sha256": "c6d4761fa821793e0f0412e784b955de90d1f598894b507a5fb58aeccf85cb99",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/ui/demo_spec_source.v",
+      "expected_sha256": "53ad70ae4343c55a3dedcb33db3b446a16fee0a2bd6b7c07e732640d76066b33",
+      "checkout_sha256": "53ad70ae4343c55a3dedcb33db3b446a16fee0a2bd6b7c07e732640d76066b33",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/ui/demo_wave_source.v",
+      "expected_sha256": "2aaafef242d35ae091893ffbae5680eace03da8a9c0e0cbbf8d06f9eb04aac52",
+      "checkout_sha256": "2aaafef242d35ae091893ffbae5680eace03da8a9c0e0cbbf8d06f9eb04aac52",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/ui/feat_copy_engine.v",
+      "expected_sha256": "f51e3ee5fd4f9eac6aa534f9a66761eb0046c491f6f3093024e88729a5765775",
+      "checkout_sha256": "f51e3ee5fd4f9eac6aa534f9a66761eb0046c491f6f3093024e88729a5765775",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/ui/feat_page_buf.v",
+      "expected_sha256": "bb460faaf124c30add6d21fa079a820bf80fea7ae784fa269f18e1d1c1413d95",
+      "checkout_sha256": "bb460faaf124c30add6d21fa079a820bf80fea7ae784fa269f18e1d1c1413d95",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/ui/font8x16.hex",
+      "expected_sha256": "81ba90071d92e93d963e9fba21dbafa5dcb77c45a4abec1aab3a0f4423c23019",
+      "checkout_sha256": "81ba90071d92e93d963e9fba21dbafa5dcb77c45a4abec1aab3a0f4423c23019",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/ui/font_rom.v",
+      "expected_sha256": "f1eb29d2b04b79ce44077a4d5fb6b9eabff7e267c228da64198076f3d2ebf10d",
+      "checkout_sha256": "f1eb29d2b04b79ce44077a4d5fb6b9eabff7e267c228da64198076f3d2ebf10d",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/ui/spectrum_disp.v",
+      "expected_sha256": "7cbd6d069b23b26642a566513f862505c37574c6765dd207c01cc733c1f2de71",
+      "checkout_sha256": "7cbd6d069b23b26642a566513f862505c37574c6765dd207c01cc733c1f2de71",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/ui/text_disp.v",
+      "expected_sha256": "05ab693a8b4255ea1e20dbd002de81b5d18581acad949aedbd62eafd63f2edfd",
+      "checkout_sha256": "05ab693a8b4255ea1e20dbd002de81b5d18581acad949aedbd62eafd63f2edfd",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/ui/ui_coord_delay.v",
+      "expected_sha256": "607264adf5fa177c96fcd1b07238b783565e888e262c56bd2881d956ec021076",
+      "checkout_sha256": "607264adf5fa177c96fcd1b07238b783565e888e262c56bd2881d956ec021076",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/ui/ui_overlay.v",
+      "expected_sha256": "d4f1e4b1269dbd65beb05917eb04af4e2735d98dfa2969bcbbcbd5bad3fd00c7",
+      "checkout_sha256": "d4f1e4b1269dbd65beb05917eb04af4e2735d98dfa2969bcbbcbd5bad3fd00c7",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/ui/ui_renderer.v",
+      "expected_sha256": "20e86dce8bf95ff0e71f3a2a98e9e281d0fa29e6d01f457ef15b08e7ed2c4bdd",
+      "checkout_sha256": "20e86dce8bf95ff0e71f3a2a98e9e281d0fa29e6d01f457ef15b08e7ed2c4bdd",
+      "exit_status": 0,
+      "matches": true
+    },
+    {
+      "path": "src/ui/waveform_disp.v",
+      "expected_sha256": "93fa2346ef19f3ffc5d440d1f893e8e9c88c3d9f2f3dc492f43e379972e39ffe",
+      "checkout_sha256": "93fa2346ef19f3ffc5d440d1f893e8e9c88c3d9f2f3dc492f43e379972e39ffe",
+      "exit_status": 0,
+      "matches": true
+    }
+  ],
+  "passed": true
+}

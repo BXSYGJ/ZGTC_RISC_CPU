@@ -1,5 +1,5 @@
 {
-  "wrapper_sha256": "3caa8296a806186ad62c247a872ab5746d0b0841335a0fa7b92184a8c6bcac99",
+  "wrapper_sha256": "fce04d7b4c1367a7bd9ceb2da53fc67fd678eef9aa6731972fc900f38c17298c",
   "vendor_hashes_verified": 8,
   "results": [
     {
@@ -10,7 +10,7 @@
       "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga",
       "exit_status": 0,
       "output": "BUILT D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\experiments\\pacerv_integration\\pacerv_directed.hex used_bytes=780 checks=25\n",
-      "elapsed_seconds": 0.096
+      "elapsed_seconds": 0.076
     },
     {
       "command": [
@@ -34,7 +34,7 @@
       "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga",
       "exit_status": 0,
       "output": "",
-      "elapsed_seconds": 0.489
+      "elapsed_seconds": 0.413
     },
     {
       "command": [
@@ -45,7 +45,7 @@
       "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga",
       "exit_status": 0,
       "output": "PACERV_DIRECTED_PASS cycles=1704 retired=276 checks=25 DDR=11 traps=1 crossed=117 pairs=1303 request_stalls=1\nD:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\experiments\\pacerv_integration\\tb_pacerv_directed.sv:124: $finish called at 17095000 (1ps)\n",
-      "elapsed_seconds": 0.272
+      "elapsed_seconds": 0.268
     },
     {
       "command": [
@@ -69,7 +69,7 @@
       "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga",
       "exit_status": 0,
       "output": "",
-      "elapsed_seconds": 0.103
+      "elapsed_seconds": 0.09
     },
     {
       "command": [
@@ -80,7 +80,7 @@
       "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga",
       "exit_status": 0,
       "output": "PACERV_BACKPRESSURE_PASS local_hold=1500 DDR_hold=1500 ROM_pair_cases=8\nD:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\experiments\\pacerv_integration\\tb_pacerv_backpressure.sv:114: $finish called at 30320000 (1ps)\n",
-      "elapsed_seconds": 0.101
+      "elapsed_seconds": 0.106
     },
     {
       "command": [
@@ -104,7 +104,7 @@
       "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga",
       "exit_status": 0,
       "output": "",
-      "elapsed_seconds": 0.1
+      "elapsed_seconds": 0.098
     },
     {
       "command": [
@@ -115,7 +115,7 @@
       "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga",
       "exit_status": 0,
       "output": "PACERV_FETCH_FAULT_PASS cases=3 cause=1 pc_and_mtval_exact=1 no_alias=1\nD:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\experiments\\pacerv_integration\\tb_pacerv_fetch_fault.sv:61: $finish called at 575946 (1ps)\n",
-      "elapsed_seconds": 0.051
+      "elapsed_seconds": 0.05
     },
     {
       "command": [
@@ -139,7 +139,7 @@
       "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga",
       "exit_status": 0,
       "output": "",
-      "elapsed_seconds": 0.096
+      "elapsed_seconds": 0.098
     },
     {
       "command": [
@@ -150,7 +150,7 @@
       "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga",
       "exit_status": 0,
       "output": "WARNING: D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\rv32_cpu_subsys.sv:224: $readmemh(src/cpu/prog.hex): Not enough words in the file for the requested range [0:2047].\nCHECK PASS C10 firmware requested next inference after acknowledgement\n---- UART log (8 lines) ----\n\nRV32 BOOT\nRV32 MMIO OK\nRV32 ISA OK\nRV32 BENCH cycles=180016 inst=180008 acc=0xf2d8888b\nDDR OK STS 0x00000001\nNPU GO\nNPU top1=5 last_class=3 last_p=87 c=12345\n\nCHECK PASS C1 boot banner\nCHECK PASS C2 MMIO ID read-back\nCHECK PASS C3 ISA self-test\nCHECK PASS C4 mcycle/minstret measurement\nCHECK PASS C5 NPU event surfaced through MMIO\nCHECK PASS C6 CPU-triggered NPU start (CTRL[0])\nCHECK PASS C7 DDR status read-back\nCHECK PASS C8 firmware acknowledged and cleared NPU event\nCHECK PASS C9 result cycle snapshot survives live counter change\nRESULT: PASS\nD:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\experiments\\pacerv_integration\\tb_pacerv_audio.sv:229: $finish called at 1859335000 (1ps)\n",
-      "elapsed_seconds": 35.368
+      "elapsed_seconds": 43.38
     }
   ],
   "passed": true

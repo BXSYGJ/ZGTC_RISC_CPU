@@ -1,13 +1,14 @@
 PaceRV core + shared whole-system memory/peripherals
 
-Branch and checkout: {"branch": "XSY", "checkout_commit": "07ef12851f282280a3a6db467d31ae203b2863ea"}
-Selected operating point: {"target": "PG2L100H-6IFBG676", "system_clock_hz": 109375000, "pixel_clock_hz": 148500000, "declared_system_setup_hold_uncertainty_ns": 0.15}
+Branch and checkout: {"branch": "XSY", "checkout_commit": "a5189f2ec20e8cc81b6f6bea67774380cb273c02"}
+Selected operating point: {"target": "PG2L100H-6IFBG676", "system_clock_hz": 83333333, "pixel_clock_hz": 148500000, "declared_system_setup_hold_uncertainty_ns": 0.15}
 Changed: RV32IMC H3 execution core, paired local-ROM fetch, uncached CPU DDR data port,
 M3_MASK_ENABLE byte masks and locked M3 client ownership; native local data RAM;
 four-source UART acceptance, registered MMIO/activation/DDR commands, synchronous FC
 coefficient RAM, seven-clock display alignment, FETCH_ADDRESS_BITS=IAW+2 ROM qualification,
 register-based short weight FIFOs, digest_q/rdigest_q checksum staging,
-GAP synchronous block-RAM accumulator pipeline and matched actual DDR/system clock configuration.
+GAP synchronous block-RAM accumulator pipeline, scalar DDR/UART FIFO registers,
+and matched actual DDR/system clock configuration.
 
 Selected gates: {"baseline_passed": true, "cpu_passed": true, "native_npu_passed": true, "rollback_passed": true, "shared_ddr_passed": true, "shared_uart_passed": true, "standard_cpu_tb_passed": true, "checkout_inputs_match": true, "full_pds_qualified": false, "dashboard_equivalence_passed": true, "activation_mux_passed": true, "audio_clock_passed": true, "loader_gap_controls_passed": true}
 Physical status: {"full": "final_timing_evidence_pending"}
@@ -151,11 +152,11 @@ literal output:
 Verilator 5.040 2025-08-30 rev UNKNOWN.REV
 wsl: 检测到 localhost 代理配置，但未镜像到 WSL。NAT 模式下的 WSL 不支持 localhost 代理。
 
-command: ["wsl.exe", "-d", "Ubuntu-22.04", "--cd", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga", "--exec", "/home/bx/.local/src/verilator-5.040/bin/verilator", "--binary", "--timing", "-Wno-fatal", "--top-module", "tb_npu_full_native", "-j", "4", "--Mdir", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/obj_pacerv", "-CFLAGS", "-O2", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/tb_pacerv_native_npu.sv", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/activation_row_store_dynamic.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/activation_store_mux.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/conv_engine.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/fc_engine.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/gap_unit.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/npu_m1_bridge.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/npu_m1_owner.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/npu_stage_lifecycle.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/npu_top.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/pool_engine.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/requant_unit.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/softmax_top.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/wbuf.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/wdma.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/weight_read_aligner_hardened.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/ddr3/ddr3_ctrl_axi.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/ddr3/ddr3_arbiter.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/cpu/rv32_cpu_subsys.sv", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/cpu/vendor/pacerv_h3/rv32_core.sv", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/cpu/vendor/pacerv_h3/rv32_alu.sv", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/cpu/vendor/pacerv_h3/rv32_decode.sv", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/cpu/vendor/pacerv_h3/rv32_machine.sv", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/cpu/vendor/pacerv_h3/rv32_muldiv.sv", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/cpu/vendor/pacerv_h3/rv32_btb.sv", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/cpu/vendor/pacerv_h3/rv32_rvc_expand.sv", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/cpu/vendor/pacerv_h3/rv32_rvc_frontend.sv", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/pacerv_ddr3_axi_model_full.sv", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/ddr3/pace_cpu_ddr_bridge.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/ddr3/ddr3_m3_share.v"]
+command: ["wsl.exe", "-d", "Ubuntu-22.04", "--cd", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga", "--exec", "/home/bx/.local/src/verilator-5.040/bin/verilator", "--binary", "--timing", "-Wno-fatal", "--top-module", "tb_npu_full_native", "-j", "4", "--Mdir", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_fifo_registers_83m333/obj_pacerv", "-CFLAGS", "-O2", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_fifo_registers_83m333/tb_pacerv_native_npu.sv", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/activation_row_store_dynamic.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/activation_store_mux.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/conv_engine.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/fc_engine.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/gap_unit.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/npu_m1_bridge.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/npu_m1_owner.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/npu_stage_lifecycle.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/npu_top.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/pool_engine.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/requant_unit.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/softmax_top.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/wbuf.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/wdma.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/weight_read_aligner_hardened.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/ddr3/ddr3_ctrl_axi.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/ddr3/ddr3_arbiter.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/cpu/rv32_cpu_subsys.sv", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/cpu/vendor/pacerv_h3/rv32_core.sv", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/cpu/vendor/pacerv_h3/rv32_alu.sv", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/cpu/vendor/pacerv_h3/rv32_decode.sv", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/cpu/vendor/pacerv_h3/rv32_machine.sv", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/cpu/vendor/pacerv_h3/rv32_muldiv.sv", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/cpu/vendor/pacerv_h3/rv32_btb.sv", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/cpu/vendor/pacerv_h3/rv32_rvc_expand.sv", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/cpu/vendor/pacerv_h3/rv32_rvc_frontend.sv", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_fifo_registers_83m333/pacerv_ddr3_axi_model_full.sv", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/ddr3/pace_cpu_ddr_bridge.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/ddr3/ddr3_m3_share.v"]
 input/cwd: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga
 exit: 0
 literal output:
-make: Entering directory '/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/obj_pacerv'
+make: Entering directory '/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_fifo_registers_83m333/obj_pacerv'
 g++ -Os  -I.  -MMD -I/home/bx/.local/src/verilator-5.040/include -I/home/bx/.local/src/verilator-5.040/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -DVM_TRACE_SAIF=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -O2 -DVL_TIME_CONTEXT   -fcoroutines -c -o verilated.o /home/bx/.local/src/verilator-5.040/include/verilated.cpp
 g++ -Os  -I.  -MMD -I/home/bx/.local/src/verilator-5.040/include -I/home/bx/.local/src/verilator-5.040/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -DVM_TRACE_SAIF=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -O2 -DVL_TIME_CONTEXT   -fcoroutines -c -o verilated_timing.o /home/bx/.local/src/verilator-5.040/include/verilated_timing.cpp
 g++ -Os  -I.  -MMD -I/home/bx/.local/src/verilator-5.040/include -I/home/bx/.local/src/verilator-5.040/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -DVM_TRACE_SAIF=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -O2 -DVL_TIME_CONTEXT   -fcoroutines -c -o verilated_threads.o /home/bx/.local/src/verilator-5.040/include/verilated_threads.cpp
@@ -178,18 +179,18 @@ g++   -I.  -MMD -I/home/bx/.local/src/verilator-5.040/include -I/home/bx/.local/
 g++   -I.  -MMD -I/home/bx/.local/src/verilator-5.040/include -I/home/bx/.local/src/verilator-5.040/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -DVM_TRACE_SAIF=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -O2 -DVL_TIME_CONTEXT   -fcoroutines -include Vtb_npu_full_native__pch.h.slow -c -o Vtb_npu_full_native__Syms.o Vtb_npu_full_native__Syms.cpp
 g++    verilated.o verilated_timing.o verilated_threads.o Vtb_npu_full_native__ALL.a    -pthread -lpthread -latomic   -o Vtb_npu_full_native
 rm Vtb_npu_full_native__ALL.verilator_deplist.tmp
-make: Leaving directory '/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/obj_pacerv'
+make: Leaving directory '/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_fifo_registers_83m333/obj_pacerv'
 - V e r i l a t i o n   R e p o r t: Verilator 5.040 2025-08-30 rev UNKNOWN.REV
-- Verilator: Built from 5.913 MB sources in 31 modules, into 2.531 MB in 14 C++ files needing 0.007 MB
-- Verilator: Walltime 17.974 s (elab=0.066, cvt=0.585, bld=15.232); cpu 0.827 s on 4 threads; alloced 437.645 MB
+- Verilator: Built from 5.933 MB sources in 31 modules, into 2.578 MB in 14 C++ files needing 0.020 MB
+- Verilator: Walltime 16.152 s (elab=0.074, cvt=0.465, bld=14.294); cpu 0.741 s on 4 threads; alloced 437.980 MB
 w s l :   �hKm0R  l o c a l h o s t   �NtM�n�FO*g\��P0R  W S L 0N A T   !j_N�v  W S L   N/ec  l o c a l h o s t   �Nt0 
- %Warning-PINMISSING: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/tb_pacerv_native_npu.sv:13:36: Instance has missing pin: 'logits_out'
+ %Warning-PINMISSING: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_fifo_registers_83m333/tb_pacerv_native_npu.sv:13:36: Instance has missing pin: 'logits_out'
                      /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/npu_top.v:69:25: ... Location of port declaration
    69 |     output reg  [255:0] logits_out,
       |                         ^~~~~~~~~~
                      ... For warning description see https://verilator.org/warn/PINMISSING?v=5.040
                      ... Use "/* verilator lint_off PINMISSING */" and lint_on around source to disable this message.
-%Warning-PINMISSING: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/tb_pacerv_native_npu.sv:13:36: Instance has missing pin: 'logits_valid'
+%Warning-PINMISSING: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_fifo_registers_83m333/tb_pacerv_native_npu.sv:13:36: Instance has missing pin: 'logits_valid'
                      /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/npu_top.v:70:25: ... Location of port declaration
    70 |     output reg          logits_valid
       |                         ^~~~~~~~~~~~
@@ -461,69 +462,69 @@ w s l :   �hKm0R  l o c a l h o s t   �NtM�n�FO*g\��P0R  W S L 0
                                                                                                                  : ... note: In instance 'tb_npu_full_native.dut.u_store1'
   140 |                         else begin row<=row+1; row_base<=row_base+stride; state<=CREDIT; end
       |                                                                  ^
-%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/pacerv_ddr3_axi_model_full.sv:164:53: Operator ADD expects 26 bits on the RHS, but RHS's VARREF 'wr_beat_idx' generates 5 bits.
-                                                                                                                                                                      : ... note: In instance 'tb_npu_full_native.n_model'
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_fifo_registers_83m333/pacerv_ddr3_axi_model_full.sv:164:53: Operator ADD expects 26 bits on the RHS, but RHS's VARREF 'wr_beat_idx' generates 5 bits.
+                                                                                                                                                                              : ... note: In instance 'tb_npu_full_native.n_model'
   164 |     wire [25:0] wr_mem_idx = {1'b0,aw_addr_r[27:3]} + wr_beat_idx;
       |                                                     ^
-%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/pacerv_ddr3_axi_model_full.sv:165:53: Operator ADD expects 26 bits on the RHS, but RHS's VARREF 'rd_beat_idx' generates 5 bits.
-                                                                                                                                                                      : ... note: In instance 'tb_npu_full_native.n_model'
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_fifo_registers_83m333/pacerv_ddr3_axi_model_full.sv:165:53: Operator ADD expects 26 bits on the RHS, but RHS's VARREF 'rd_beat_idx' generates 5 bits.
+                                                                                                                                                                              : ... note: In instance 'tb_npu_full_native.n_model'
   165 |     wire [25:0] rd_mem_idx = {1'b0,ar_addr_r[27:3]} + rd_beat_idx;
       |                                                     ^
-%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/pacerv_ddr3_axi_model_full.sv:194:63: Bit extraction of array[262143:0] requires 18 bit index, not 26 bits.
-                                                                                                                                                                     : ... note: In instance 'tb_npu_full_native.n_model'
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_fifo_registers_83m333/pacerv_ddr3_axi_model_full.sv:194:63: Bit extraction of array[262143:0] requires 18 bit index, not 26 bits.
+                                                                                                                                                                             : ... note: In instance 'tb_npu_full_native.n_model'
   194 |     assign s_rdata  = (R_MODE == 1) ? {8{32'hB1B2_B3B4}} : mem[rd_mem_idx];
       |                                                               ^
-%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/pacerv_ddr3_axi_model_full.sv:209:20: Bit extraction of array[262143:0] requires 18 bit index, not 26 bits.
-                                                                                                                                                                     : ... note: In instance 'tb_npu_full_native.n_model'
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_fifo_registers_83m333/pacerv_ddr3_axi_model_full.sv:209:20: Bit extraction of array[262143:0] requires 18 bit index, not 26 bits.
+                                                                                                                                                                             : ... note: In instance 'tb_npu_full_native.n_model'
   209 |                 mem[wr_mem_idx] <= s_wdata;
       |                    ^
-%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/pacerv_ddr3_axi_model_full.sv:211:28: Bit extraction of array[262143:0] requires 18 bit index, not 26 bits.
-                                                                                                                                                                     : ... note: In instance 'tb_npu_full_native.n_model'
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_fifo_registers_83m333/pacerv_ddr3_axi_model_full.sv:211:28: Bit extraction of array[262143:0] requires 18 bit index, not 26 bits.
+                                                                                                                                                                             : ... note: In instance 'tb_npu_full_native.n_model'
   211 |                 w_tmp = mem[wr_mem_idx];
       |                            ^
-%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/pacerv_ddr3_axi_model_full.sv:217:20: Bit extraction of array[262143:0] requires 18 bit index, not 26 bits.
-                                                                                                                                                                     : ... note: In instance 'tb_npu_full_native.n_model'
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_fifo_registers_83m333/pacerv_ddr3_axi_model_full.sv:217:20: Bit extraction of array[262143:0] requires 18 bit index, not 26 bits.
+                                                                                                                                                                             : ... note: In instance 'tb_npu_full_native.n_model'
   217 |                 mem[wr_mem_idx] <= w_tmp;
       |                    ^
-%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/pacerv_ddr3_axi_model_full.sv:357:40: Operator SHIFTR expects 32 bits on the LHS, but LHS's VARREF 's_awaddr' generates 28 bits.
-                                                                                                                                                                      : ... note: In instance 'tb_npu_full_native.n_model'
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_fifo_registers_83m333/pacerv_ddr3_axi_model_full.sv:357:40: Operator SHIFTR expects 32 bits on the LHS, but LHS's VARREF 's_awaddr' generates 28 bits.
+                                                                                                                                                                              : ... note: In instance 'tb_npu_full_native.n_model'
   357 |  if(s_awvalid && s_awready && (s_awaddr>>3)+s_awlen>=MEM_BEATS) $fatal(1,"write memory address out of range");
       |                                        ^~
-%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/pacerv_ddr3_axi_model_full.sv:357:44: Operator ADD expects 32 bits on the RHS, but RHS's VARREF 's_awlen' generates 4 bits.
-                                                                                                                                                                      : ... note: In instance 'tb_npu_full_native.n_model'
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_fifo_registers_83m333/pacerv_ddr3_axi_model_full.sv:357:44: Operator ADD expects 32 bits on the RHS, but RHS's VARREF 's_awlen' generates 4 bits.
+                                                                                                                                                                              : ... note: In instance 'tb_npu_full_native.n_model'
   357 |  if(s_awvalid && s_awready && (s_awaddr>>3)+s_awlen>=MEM_BEATS) $fatal(1,"write memory address out of range");
       |                                            ^
-%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/pacerv_ddr3_axi_model_full.sv:358:40: Operator SHIFTR expects 32 bits on the LHS, but LHS's VARREF 's_araddr' generates 28 bits.
-                                                                                                                                                                      : ... note: In instance 'tb_npu_full_native.n_model'
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_fifo_registers_83m333/pacerv_ddr3_axi_model_full.sv:358:40: Operator SHIFTR expects 32 bits on the LHS, but LHS's VARREF 's_araddr' generates 28 bits.
+                                                                                                                                                                              : ... note: In instance 'tb_npu_full_native.n_model'
   358 |  if(s_arvalid && s_arready && (s_araddr>>3)+s_arlen>=MEM_BEATS) $fatal(1,"read memory address out of range");
       |                                        ^~
-%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/pacerv_ddr3_axi_model_full.sv:358:44: Operator ADD expects 32 bits on the RHS, but RHS's VARREF 's_arlen' generates 4 bits.
-                                                                                                                                                                      : ... note: In instance 'tb_npu_full_native.n_model'
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_fifo_registers_83m333/pacerv_ddr3_axi_model_full.sv:358:44: Operator ADD expects 32 bits on the RHS, but RHS's VARREF 's_arlen' generates 4 bits.
+                                                                                                                                                                              : ... note: In instance 'tb_npu_full_native.n_model'
   358 |  if(s_arvalid && s_arready && (s_araddr>>3)+s_arlen>=MEM_BEATS) $fatal(1,"read memory address out of range");
       |                                            ^
-%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/ddr3/ddr3_ctrl_axi.v:388:40: Operator ASSIGNDLY expects 3 bits on the Assign RHS, but Assign RHS's VARREF 'S_AW' generates 4 bits.
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/ddr3/ddr3_ctrl_axi.v:402:40: Operator ASSIGNDLY expects 3 bits on the Assign RHS, but Assign RHS's VARREF 'S_AW' generates 4 bits.
                                                                                                   : ... note: In instance 'tb_npu_full_native.n_ctrl'
-  388 |                         dbg_to_state_r <= S_AW;
+  402 |                         dbg_to_state_r <= S_AW;
       |                                        ^~
-%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/ddr3/ddr3_ctrl_axi.v:406:40: Operator ASSIGNDLY expects 3 bits on the Assign RHS, but Assign RHS's VARREF 'S_W' generates 4 bits.
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/ddr3/ddr3_ctrl_axi.v:420:40: Operator ASSIGNDLY expects 3 bits on the Assign RHS, but Assign RHS's VARREF 'S_W' generates 4 bits.
                                                                                                   : ... note: In instance 'tb_npu_full_native.n_ctrl'
-  406 |                         dbg_to_state_r <= S_W;
+  420 |                         dbg_to_state_r <= S_W;
       |                                        ^~
-%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/ddr3/ddr3_ctrl_axi.v:418:40: Operator ASSIGNDLY expects 3 bits on the Assign RHS, but Assign RHS's VARREF 'S_DW_AW' generates 4 bits.
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/ddr3/ddr3_ctrl_axi.v:432:40: Operator ASSIGNDLY expects 3 bits on the Assign RHS, but Assign RHS's VARREF 'S_DW_AW' generates 4 bits.
                                                                                                   : ... note: In instance 'tb_npu_full_native.n_ctrl'
-  418 |                         dbg_to_state_r <= S_DW_AW;
+  432 |                         dbg_to_state_r <= S_DW_AW;
       |                                        ^~
-%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/ddr3/ddr3_ctrl_axi.v:431:40: Operator ASSIGNDLY expects 3 bits on the Assign RHS, but Assign RHS's VARREF 'S_DW_W' generates 4 bits.
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/ddr3/ddr3_ctrl_axi.v:445:40: Operator ASSIGNDLY expects 3 bits on the Assign RHS, but Assign RHS's VARREF 'S_DW_W' generates 4 bits.
                                                                                                   : ... note: In instance 'tb_npu_full_native.n_ctrl'
-  431 |                         dbg_to_state_r <= S_DW_W;
+  445 |                         dbg_to_state_r <= S_DW_W;
       |                                        ^~
-%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/ddr3/ddr3_ctrl_axi.v:443:40: Operator ASSIGNDLY expects 3 bits on the Assign RHS, but Assign RHS's VARREF 'S_AR' generates 4 bits.
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/ddr3/ddr3_ctrl_axi.v:457:40: Operator ASSIGNDLY expects 3 bits on the Assign RHS, but Assign RHS's VARREF 'S_AR' generates 4 bits.
                                                                                                   : ... note: In instance 'tb_npu_full_native.n_ctrl'
-  443 |                         dbg_to_state_r <= S_AR;
+  457 |                         dbg_to_state_r <= S_AR;
       |                                        ^~
-%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/ddr3/ddr3_ctrl_axi.v:459:40: Operator ASSIGNDLY expects 3 bits on the Assign RHS, but Assign RHS's VARREF 'S_R' generates 4 bits.
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/ddr3/ddr3_ctrl_axi.v:473:40: Operator ASSIGNDLY expects 3 bits on the Assign RHS, but Assign RHS's VARREF 'S_R' generates 4 bits.
                                                                                                   : ... note: In instance 'tb_npu_full_native.n_ctrl'
-  459 |                         dbg_to_state_r <= S_R;
+  473 |                         dbg_to_state_r <= S_R;
       |                                        ^~
 %Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/ddr3/ddr3_m3_share.v:44:37: Operator ADD expects 32 bits on the LHS, but LHS's VARREF 'next_owner' generates 2 bits.
                                                                                                   : ... note: In instance 'tb_npu_full_native.pacerv_m3_share'
@@ -549,48 +550,48 @@ w s l :   �hKm0R  l o c a l h o s t   �NtM�n�FO*g\��P0R  W S L 0
                                                                                                                : ... note: In instance 'tb_npu_full_native.aligner'
    31 |     assign up_data=(offset==5'd0)?beats[emitted]:(pair >> {offset,3'd0});
       |                   ^
-%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/tb_pacerv_native_npu.sv:35:82: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's VARXREF 'layer' generates 4 bits.
-                                                                                                                                                               : ... note: In instance 'tb_npu_full_native'
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_fifo_registers_83m333/tb_pacerv_native_npu.sv:35:82: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's VARXREF 'layer' generates 4 bits.
+                                                                                                                                                                       : ... note: In instance 'tb_npu_full_native'
    35 |  if(dut.layer!=prev) begin $display("LAYER %0d cycle %0d",dut.layer,cycles); prev=dut.layer; end
       |                                                                                  ^
-%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/tb_pacerv_native_npu.sv:35:14: Operator NEQ expects 32 bits on the LHS, but LHS's VARXREF 'layer' generates 4 bits.
-                                                                                                                                                               : ... note: In instance 'tb_npu_full_native'
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_fifo_registers_83m333/tb_pacerv_native_npu.sv:35:14: Operator NEQ expects 32 bits on the LHS, but LHS's VARXREF 'layer' generates 4 bits.
+                                                                                                                                                                       : ... note: In instance 'tb_npu_full_native'
    35 |  if(dut.layer!=prev) begin $display("LAYER %0d cycle %0d",dut.layer,cycles); prev=dut.layer; end
       |              ^~
-%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/tb_pacerv_native_npu.sv:140:19: Operator NEQCASE expects 32 bits on the LHS, but LHS's VARXREF 'gap_wdata' generates 16 bits.
-                                                                                                                                                                : ... note: In instance 'tb_npu_full_native'
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_fifo_registers_83m333/tb_pacerv_native_npu.sv:140:19: Operator NEQCASE expects 32 bits on the LHS, but LHS's VARXREF 'gap_wdata' generates 16 bits.
+                                                                                                                                                                        : ... note: In instance 'tb_npu_full_native'
   140 |  if(dut.gap_wdata !== exp_gap[count_gap]) $fatal(1,"gap mismatch index=%0d got=%0d exp=%0d cycle=%0d",count_gap,dut.gap_wdata,exp_gap[count_gap],cycles);
       |                   ^~~
-%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/tb_pacerv_native_npu.sv:163:26: Bit extraction of array[7:0] requires 3 bit index, not 4 bits.
-                                                                                                                                                               : ... note: In instance 'tb_npu_full_native'
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_fifo_registers_83m333/tb_pacerv_native_npu.sv:163:26: Bit extraction of array[7:0] requires 3 bit index, not 4 bits.
+                                                                                                                                                                       : ... note: In instance 'tb_npu_full_native'
   163 | if(dut.sm_q16!==exp_probs[idx]) $fatal(1,"prob mismatch idx=%0d",idx);
       |                          ^
-%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/tb_pacerv_native_npu.sv:262:20: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's SEL generates 28 bits.
-                                                                                                                                                                : ... note: In instance 'tb_npu_full_native'
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_fifo_registers_83m333/tb_pacerv_native_npu.sv:262:20: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's SEL generates 28 bits.
+                                                                                                                                                                        : ... note: In instance 'tb_npu_full_native'
   262 |  if(wfirst<0)wfirst=n_mcmd[35:8];wlast=n_mcmd[35:8];
       |                    ^
-%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/tb_pacerv_native_npu.sv:262:39: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's SEL generates 28 bits.
-                                                                                                                                                                : ... note: In instance 'tb_npu_full_native'
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_fifo_registers_83m333/tb_pacerv_native_npu.sv:262:39: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's SEL generates 28 bits.
+                                                                                                                                                                        : ... note: In instance 'tb_npu_full_native'
   262 |  if(wfirst<0)wfirst=n_mcmd[35:8];wlast=n_mcmd[35:8];
       |                                       ^
-%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/tb_pacerv_native_npu.sv:263:27: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's SEL generates 28 bits.
-                                                                                                                                                                : ... note: In instance 'tb_npu_full_native'
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_fifo_registers_83m333/tb_pacerv_native_npu.sv:263:27: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's SEL generates 28 bits.
+                                                                                                                                                                        : ... note: In instance 'tb_npu_full_native'
   263 |  if(n_mcmd[35:8]<wmin)wmin=n_mcmd[35:8];if(n_mcmd[35:8]>wmax)wmax=n_mcmd[35:8];
       |                           ^
-%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/tb_pacerv_native_npu.sv:263:17: Operator LT expects 32 bits on the LHS, but LHS's SEL generates 28 bits.
-                                                                                                                                                                : ... note: In instance 'tb_npu_full_native'
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_fifo_registers_83m333/tb_pacerv_native_npu.sv:263:17: Operator LT expects 32 bits on the LHS, but LHS's SEL generates 28 bits.
+                                                                                                                                                                        : ... note: In instance 'tb_npu_full_native'
   263 |  if(n_mcmd[35:8]<wmin)wmin=n_mcmd[35:8];if(n_mcmd[35:8]>wmax)wmax=n_mcmd[35:8];
       |                 ^
-%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/tb_pacerv_native_npu.sv:263:66: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's SEL generates 28 bits.
-                                                                                                                                                                : ... note: In instance 'tb_npu_full_native'
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_fifo_registers_83m333/tb_pacerv_native_npu.sv:263:66: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's SEL generates 28 bits.
+                                                                                                                                                                        : ... note: In instance 'tb_npu_full_native'
   263 |  if(n_mcmd[35:8]<wmin)wmin=n_mcmd[35:8];if(n_mcmd[35:8]>wmax)wmax=n_mcmd[35:8];
       |                                                                  ^
-%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/tb_pacerv_native_npu.sv:263:56: Operator GT expects 32 bits on the LHS, but LHS's SEL generates 28 bits.
-                                                                                                                                                                : ... note: In instance 'tb_npu_full_native'
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_fifo_registers_83m333/tb_pacerv_native_npu.sv:263:56: Operator GT expects 32 bits on the LHS, but LHS's SEL generates 28 bits.
+                                                                                                                                                                        : ... note: In instance 'tb_npu_full_native'
   263 |  if(n_mcmd[35:8]<wmin)wmin=n_mcmd[35:8];if(n_mcmd[35:8]>wmax)wmax=n_mcmd[35:8];
       |                                                        ^
-%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/tb_pacerv_native_npu.sv:267:39: Operator SHIFTR expects 32 bits on the LHS, but LHS's SEL generates 28 bits.
-                                                                                                                                                                : ... note: In instance 'tb_npu_full_native'
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_fifo_registers_83m333/tb_pacerv_native_npu.sv:267:39: Operator SHIFTR expects 32 bits on the LHS, but LHS's SEL generates 28 bits.
+                                                                                                                                                                        : ... note: In instance 'tb_npu_full_native'
   267 |  if((aca>>5)==(native_weight_cmd[35:8]>>5))$fatal(1,"weight activation alias");end
       |                                       ^~
 %Warning-UNSIGNED: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/ddr3/ddr3_arbiter.v:135:37: Comparison is constant due to unsigned arithmetic
@@ -599,22 +600,22 @@ w s l :   �hKm0R  l o c a l h o s t   �NtM�n�FO*g\��P0R  W S L 0
       |                                     ^~
                    ... For warning description see https://verilator.org/warn/UNSIGNED?v=5.040
                    ... Use "/* verilator lint_off UNSIGNED */" and lint_on around source to disable this message.
-%Warning-CMPCONST: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/cpu/rv32_cpu_subsys.sv:428:47: Comparison is constant due to limited range
+%Warning-CMPCONST: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/cpu/rv32_cpu_subsys.sv:440:47: Comparison is constant due to limited range
                                                                                                   : ... note: In instance 'tb_npu_full_native.u_cpu'
-  428 |                       (d_req_address[DAW+1:2] <= DMEM_LAST);
+  440 |                       (d_req_address[DAW+1:2] <= DMEM_LAST);
       |                                               ^~
                    ... For warning description see https://verilator.org/warn/CMPCONST?v=5.040
                    ... Use "/* verilator lint_off CMPCONST */" and lint_on around source to disable this message.
-%Warning-UNSIGNED: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/pacerv_ddr3_axi_model_full.sv:174:32: Comparison is constant due to unsigned arithmetic
-                                                                                                                                                                   : ... note: In instance 'tb_npu_full_native.n_model'
+%Warning-UNSIGNED: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_fifo_registers_83m333/pacerv_ddr3_axi_model_full.sv:174:32: Comparison is constant due to unsigned arithmetic
+                                                                                                                                                                           : ... note: In instance 'tb_npu_full_native.n_model'
   174 |                        (aw_dly >= AW_DLY_C);
       |                                ^~
-%Warning-UNSIGNED: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/pacerv_ddr3_axi_model_full.sv:178:31: Comparison is constant due to unsigned arithmetic
-                                                                                                                                                                   : ... note: In instance 'tb_npu_full_native.n_model'
+%Warning-UNSIGNED: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_fifo_registers_83m333/pacerv_ddr3_axi_model_full.sv:178:31: Comparison is constant due to unsigned arithmetic
+                                                                                                                                                                           : ... note: In instance 'tb_npu_full_native.n_model'
   178 |                        (w_dly >= W_DLY_C);
       |                               ^~
-%Warning-UNSIGNED: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/pacerv_ddr3_axi_model_full.sv:186:32: Comparison is constant due to unsigned arithmetic
-                                                                                                                                                                   : ... note: In instance 'tb_npu_full_native.n_model'
+%Warning-UNSIGNED: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_fifo_registers_83m333/pacerv_ddr3_axi_model_full.sv:186:32: Comparison is constant due to unsigned arithmetic
+                                                                                                                                                                           : ... note: In instance 'tb_npu_full_native.n_model'
   186 |                        (ar_dly >= AR_DLY_C);
       |                                ^~
 %Warning-MULTIDRIVEN: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/cpu/vendor/pacerv_h3/rv32_core.sv:257:17: Bits [31:0] of signal 'tb_npu_full_native.u_cpu.u_core.frontend_pc' have multiple combinational drivers. This can cause performance degradation.
@@ -627,7 +628,7 @@ w s l :   �hKm0R  l o c a l h o s t   �NtM�n�FO*g\��P0R  W S L 0
                       ... For warning description see https://verilator.org/warn/MULTIDRIVEN?v=5.040
                       ... Use "/* verilator lint_off MULTIDRIVEN */" and lint_on around source to disable this message.
 
-command: ["wsl.exe", "-d", "Ubuntu-22.04", "--cd", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga", "--exec", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/obj_pacerv/Vtb_npu_full_native"]
+command: ["wsl.exe", "-d", "Ubuntu-22.04", "--cd", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga", "--exec", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_fifo_registers_83m333/obj_pacerv/Vtb_npu_full_native"]
 input/cwd: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga
 exit: 0
 literal output:
@@ -706,10 +707,10 @@ CPU UART NPU top1=0 last_class=7 last_p=0 c=31152093
 PACERV_NATIVE DDR requests=331 responses=331
 CPU_NATIVE expected report=NPU top1=0 last_class=7 last_p=0 c=31152093
 RESULT: PASS real CPU ROM MMIO launch, full native golden NPU, real result report and acknowledgement
-- /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/tb_pacerv_native_npu.sv:69: Verilog $finish
+- /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_fifo_registers_83m333/tb_pacerv_native_npu.sv:69: Verilog $finish
 - S i m u l a t i o n   R e p o r t: Verilator 5.040 2025-08-30
-- Verilator: $finish at 314ms; walltime 43.569 s; speed 7.423 ms/s
-- Verilator: cpu 42.275 s on 1 threads; alloced 201 MB
+- Verilator: $finish at 314ms; walltime 47.850 s; speed 6.726 ms/s
+- Verilator: cpu 46.653 s on 1 threads; alloced 201 MB
 wsl: 检测到 localhost 代理配置，但未镜像到 WSL。NAT 模式下的 WSL 不支持 localhost 代理。
 
 
@@ -757,27 +758,27 @@ D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\build\pacerv_shared_system\integration
 
 
 MODIFIED SHARED UART
-command: ["D:/AAAPP\\iverilog/bin\\iverilog.EXE", "-g2012", "-i", "-s", "tb_shared_uart", "-o", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\uart\\clock_109375\\test.vvp", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\experiments\\pacerv_integration\\tb_shared_uart.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\ctrl\\instrec_top.v", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\ctrl\\uart_tx.v"]
+command: ["D:\\AAAPP\\iverilog\\bin\\iverilog.EXE", "-g2012", "-i", "-s", "tb_shared_uart", "-Ptb_shared_uart.CLOCK_HALF_NS=6.000000024000", "-Ptb_shared_uart.SERIAL_BAUD_DIV=723", "-o", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\uart\\clock_83m333_register_fifo\\test.vvp", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\experiments\\pacerv_integration\\tb_shared_uart.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\ctrl\\instrec_top.v", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\ctrl\\uart_tx.v"]
 input/cwd: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga
 exit: 0
 literal output:
 D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\src\ctrl\instrec_top.v:588: warning: extra digits given for sized hex constant.
 
-command: ["D:/AAAPP\\iverilog/bin\\vvp.EXE", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\uart\\clock_109375\\test.vvp"]
+command: ["D:\\AAAPP\\iverilog\\bin\\vvp.EXE", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\uart\\clock_83m333_register_fifo\\test.vvp"]
 input/cwd: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga
 exit: 0
 literal output:
 SHARED_UART_PASS sources=4 bytes=32 no_duplicate_pop=1 wire_exact=1
-D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\sim\experiments\pacerv_integration\tb_shared_uart.sv:55: $finish called at 10820000 (1ps)
+D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\sim\experiments\pacerv_integration\tb_shared_uart.sv:58: $finish called at 2777190000 (1ps)
 
 
 STANDARD CPU TB (M and predictor disabled by this legacy TB)
-command: ["D:/AAAPP\\iverilog/bin\\iverilog.EXE", "-g2012", "-s", "tb_rv_cpu", "-o", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\standard_cpu_entry\\test.vvp", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\tb_rv_cpu.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\rv32_cpu_subsys.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_alu.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_btb.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_core.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_decode.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_machine.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_muldiv.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_rvc_expand.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_rvc_frontend.sv"]
+command: ["D:\\AAAPP\\iverilog\\bin\\iverilog.EXE", "-g2012", "-s", "tb_rv_cpu", "-o", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\standard_cpu_entry\\test.vvp", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\tb_rv_cpu.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\rv32_cpu_subsys.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_alu.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_btb.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_core.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_decode.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_machine.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_muldiv.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_rvc_expand.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_rvc_frontend.sv"]
 input/cwd: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga
 exit: 0
 literal output:
 
-command: ["D:/AAAPP\\iverilog/bin\\vvp.EXE", "-i", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\standard_cpu_entry\\test.vvp"]
+command: ["D:\\AAAPP\\iverilog\\bin\\vvp.EXE", "-i", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\standard_cpu_entry\\test.vvp"]
 input/cwd: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga
 exit: 0
 literal output:
@@ -852,27 +853,27 @@ two 132096-frame windows per clock; behavioural DDR completion after 512 cycles.
 Startup first window has one injected frame at each clock; stable second window
 contains only real frames, with exact sample order and zero FIFO overflow.
 system_clock_hz: 125000000
-compile command: ["wsl.exe", "-d", "Ubuntu-22.04", "--cd", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga", "--exec", "/home/bx/.local/src/verilator-5.040/bin/verilator", "--binary", "--timing", "-Wno-fatal", "--top-module", "tb_audio_chain", "-j", "2", "--Mdir", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/pacerv_shared_system/audio_clock/20261114-022103/125000000/obj", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/pacerv_shared_system/audio_clock/20261114-022103/125000000/tb_audio_chain.sv", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/audio/i2s_slave_rx.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/audio/audio_cdc_fifo.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/audio/audio_sink.v"]
+compile command: ["wsl.exe", "-d", "Ubuntu-22.04", "--cd", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga", "--exec", "/home/bx/.local/src/verilator-5.040/bin/verilator", "--binary", "--timing", "-Wno-fatal", "--top-module", "tb_audio_chain", "-j", "2", "--Mdir", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/pacerv_shared_system/audio_clock/20261114-123646/125000000/obj", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/pacerv_shared_system/audio_clock/20261114-123646/125000000/tb_audio_chain.sv", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/audio/i2s_slave_rx.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/audio/audio_cdc_fifo.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/audio/audio_sink.v"]
 exit: 0
-raw output: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\build\pacerv_shared_system\audio_clock\20261114-022103\125000000\compile.log
-raw output SHA256: 6e126dba5779770f80dc346b320249091338f4a982f7a2e7cd397577df30803f
-simulation command: ["wsl.exe", "-d", "Ubuntu-22.04", "--cd", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga", "--exec", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/pacerv_shared_system/audio_clock/20261114-022103/125000000/obj/Vtb_audio_chain", "+FULL", "+DLY=512"]
+raw output: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\build\pacerv_shared_system\audio_clock\20261114-123646\125000000\compile.log
+raw output SHA256: c6bcc9f17092f4f083f94b287a713c1c928e4f2f50d1678ffab6fdac01ca6775
+simulation command: ["wsl.exe", "-d", "Ubuntu-22.04", "--cd", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga", "--exec", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/pacerv_shared_system/audio_clock/20261114-123646/125000000/obj/Vtb_audio_chain", "+FULL", "+DLY=512"]
 exit: 0
-raw output: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\build\pacerv_shared_system\audio_clock\20261114-022103\125000000\simulation.log
-raw output SHA256: 0a8a2370261a76ca9bfd752dbf478e1bb117b1556247590376ce0cecf093012d
+raw output: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\build\pacerv_shared_system\audio_clock\20261114-123646\125000000\simulation.log
+raw output SHA256: 81220954b6afff24f732c8a00c92132ccc9f1d784d107d3cfee41d057f7d2b6d
 literal results:
 WIN 1: real=132095 inj=1 freeze_cyc=8494395 err=0 ovf=0
 WIN 2: real=132096 inj=0 freeze_cyc=8495424 err=0 ovf=0
 AUDIO_CLOCK_PASS real=132096 injection=0 overflow=0 errors=0 ordered_samples=1
-system_clock_hz: 109375000
-compile command: ["wsl.exe", "-d", "Ubuntu-22.04", "--cd", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga", "--exec", "/home/bx/.local/src/verilator-5.040/bin/verilator", "--binary", "--timing", "-Wno-fatal", "--top-module", "tb_audio_chain", "-j", "2", "--Mdir", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/pacerv_shared_system/audio_clock/20261114-022103/109375000/obj", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/pacerv_shared_system/audio_clock/20261114-022103/109375000/tb_audio_chain.sv", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/audio/i2s_slave_rx.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/audio/audio_cdc_fifo.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/audio/audio_sink.v"]
+system_clock_hz: 83333333
+compile command: ["wsl.exe", "-d", "Ubuntu-22.04", "--cd", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga", "--exec", "/home/bx/.local/src/verilator-5.040/bin/verilator", "--binary", "--timing", "-Wno-fatal", "--top-module", "tb_audio_chain", "-j", "2", "--Mdir", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/pacerv_shared_system/audio_clock/20261114-123646/83333333/obj", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/pacerv_shared_system/audio_clock/20261114-123646/83333333/tb_audio_chain.sv", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/audio/i2s_slave_rx.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/audio/audio_cdc_fifo.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/audio/audio_sink.v"]
 exit: 0
-raw output: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\build\pacerv_shared_system\audio_clock\20261114-022103\109375000\compile.log
-raw output SHA256: dfaaa344261e3fb13c9f9eab09fbe3d42d1c3f10d2411928350cfbec3afbd609
-simulation command: ["wsl.exe", "-d", "Ubuntu-22.04", "--cd", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga", "--exec", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/pacerv_shared_system/audio_clock/20261114-022103/109375000/obj/Vtb_audio_chain", "+FULL", "+DLY=512"]
+raw output: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\build\pacerv_shared_system\audio_clock\20261114-123646\83333333\compile.log
+raw output SHA256: 0e564253544bc40ffb2e63b3f5efd55eb3a12ba02f20b24c949a6d08137e055f
+simulation command: ["wsl.exe", "-d", "Ubuntu-22.04", "--cd", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga", "--exec", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/pacerv_shared_system/audio_clock/20261114-123646/83333333/obj/Vtb_audio_chain", "+FULL", "+DLY=512"]
 exit: 0
-raw output: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\build\pacerv_shared_system\audio_clock\20261114-022103\109375000\simulation.log
-raw output SHA256: 43b3e94a7e62fc7eb09e82c76b0c875723caeb811d7b7ba3b340b2a3ac91bd5c
+raw output: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\build\pacerv_shared_system\audio_clock\20261114-123646\83333333\simulation.log
+raw output SHA256: 85a43cd52d55030c39c197a563944c7e992610a2c0f20af783138571387597b9
 literal results:
 WIN 1: real=132095 inj=1 freeze_cyc=8494395 err=0 ovf=0
 WIN 2: real=132096 inj=0 freeze_cyc=8495424 err=0 ovf=0

@@ -126,6 +126,8 @@ def main() -> None:
     uart = read(uart_file)
     if not uart.get("passed"):
         raise RuntimeError("Production shared UART check has not passed")
+    if uart.get('system_clock_hz', selected_manifest['system_clock_hz']) != selected_manifest['system_clock_hz']:
+        raise RuntimeError('UART evidence uses a different system clock')
     for item in uart["inputs"]:
         if digest(Path(item["path"])) != item["sha256"]:
             raise RuntimeError("Shared UART inputs changed: " + item["path"])
@@ -186,6 +188,9 @@ def main() -> None:
         audio_clock = read(args.audio_clock_run / 'RESULT.json')
         if not audio_clock['passed'] or not audio_clock['live_inputs_unchanged']:
             raise RuntimeError('Audio clock comparison has not passed')
+        if not any(case['clock_hz'] == selected_manifest['system_clock_hz'] and case['passed']
+                   for case in audio_clock['cases']):
+            raise RuntimeError('Audio evidence lacks the selected system clock')
         for path, expected in audio_clock['inputs_sha256'].items():
             if digest(Path(path)) != expected:
                 raise RuntimeError('Audio clock input changed: ' + path)

@@ -3,14 +3,15 @@
   "audio_sample_rate_hz": 48000,
   "window_frames": 132096,
   "windows_per_case": 2,
+  "selected_system_clock_hz": 83333333,
   "inputs_sha256": {
     "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\audio\\i2s_slave_rx.v": "453923d5c5d1629946436e7fb0886ba3a6699c512906c580e8342f2ff573588f",
     "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\audio\\audio_cdc_fifo.v": "eade0b2cac8eb723745f6fc71a3c75bf51ae41fb6777f3415ff2066b3af56689",
     "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\audio\\audio_sink.v": "004cfedcd76131291debccd13c9f6c965fb337558dcc4dc65e298cd1d28e1e09",
     "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\tb_audio_chain.sv": "dc6c1aa27c9177b0dfea9de48ec1935d731902d7c487b47f79a5134294c832c8",
-    "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\ctrl\\instrec_top.v": "a5e4848d294baf57afb11c5b117a0b9c5ff61d174ee951db56ae491c2f6d7191",
-    "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\ipcore\\ddr3_test\\ddr3_test.idf": "4e4ff35dcf0dfb4f23919072a014f56c8843e32994ca5aae2a5e5e02b273ec61",
-    "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\constraints\\ddr3_100h.fdc": "8aca13a4d2280e86d6391d49c0139d023ad405400648e09acf845568fe4634e6"
+    "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\ctrl\\instrec_top.v": "59073a5283f2600e54050e31aecbb58b77cd0f968d2ec3aaa6761b214e95c34d",
+    "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\ipcore\\ddr3_test\\ddr3_test.idf": "e501751be82fa417ce56194ffb6c314c4d8d65ba9cffd0017d24c70345602c34",
+    "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\constraints\\ddr3_100h.fdc": "c751da0c0698b862a00701dcff864b7264357cde7fdd17dcc7ccc54469afba7b"
   },
   "live_inputs_unchanged": true,
   "cases": [
@@ -34,16 +35,18 @@
           "-j",
           "2",
           "--Mdir",
-          "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/pacerv_shared_system/audio_clock/20261114-022103/125000000/obj",
-          "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/pacerv_shared_system/audio_clock/20261114-022103/125000000/tb_audio_chain.sv",
+          "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/pacerv_shared_system/audio_clock/20261114-123646/125000000/obj",
+          "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/pacerv_shared_system/audio_clock/20261114-123646/125000000/tb_audio_chain.sv",
           "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/audio/i2s_slave_rx.v",
           "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/audio/audio_cdc_fifo.v",
           "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/audio/audio_sink.v"
         ],
         "exit_status": 0,
-        "seconds": 5.83786460000556,
-        "log": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\audio_clock\\20261114-022103\\125000000\\compile.log",
-        "log_sha256": "6e126dba5779770f80dc346b320249091338f4a982f7a2e7cd397577df30803f"
+        "seconds": 5.711534800007939,
+        "log": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\audio_clock\\20261114-123646\\125000000\\compile.log",
+        "log_sha256": "c6bcc9f17092f4f083f94b287a713c1c928e4f2f50d1678ffab6fdac01ca6775",
+        "stderr_log": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\audio_clock\\20261114-123646\\125000000\\compile.log.stderr",
+        "stderr_sha256": "c08d53ec85109f6dc36de2a6da3b74c78806f9b74bd970ebf0b2fe872a3b7d4f"
       },
       "tb_sha256": "fc3455822d88ffc7740bf40d012cce21481aef2801b449a93b369081bd9074e9",
       "passed": true,
@@ -55,14 +58,16 @@
           "--cd",
           "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga",
           "--exec",
-          "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/pacerv_shared_system/audio_clock/20261114-022103/125000000/obj/Vtb_audio_chain",
+          "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/pacerv_shared_system/audio_clock/20261114-123646/125000000/obj/Vtb_audio_chain",
           "+FULL",
           "+DLY=512"
         ],
         "exit_status": 0,
-        "seconds": 199.24838910000108,
-        "log": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\audio_clock\\20261114-022103\\125000000\\simulation.log",
-        "log_sha256": "0a8a2370261a76ca9bfd752dbf478e1bb117b1556247590376ce0cecf093012d"
+        "seconds": 197.25557200002368,
+        "log": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\audio_clock\\20261114-123646\\125000000\\simulation.log",
+        "log_sha256": "81220954b6afff24f732c8a00c92132ccc9f1d784d107d3cfee41d057f7d2b6d",
+        "stderr_log": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\audio_clock\\20261114-123646\\125000000\\simulation.log.stderr",
+        "stderr_sha256": "b280c454d6f559e56eb3f5ed39f3ba084b8d1744a3ff7fe016b21ff86dea1aca"
       },
       "literal_results": [
         "WIN 1: real=132095 inj=1 freeze_cyc=8494395 err=0 ovf=0",
@@ -71,7 +76,7 @@
       ]
     },
     {
-      "clock_hz": 109375000,
+      "clock_hz": 83333333,
       "ddr_done_delay_cycles": 512,
       "compile": {
         "command": [
@@ -90,18 +95,20 @@
           "-j",
           "2",
           "--Mdir",
-          "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/pacerv_shared_system/audio_clock/20261114-022103/109375000/obj",
-          "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/pacerv_shared_system/audio_clock/20261114-022103/109375000/tb_audio_chain.sv",
+          "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/pacerv_shared_system/audio_clock/20261114-123646/83333333/obj",
+          "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/pacerv_shared_system/audio_clock/20261114-123646/83333333/tb_audio_chain.sv",
           "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/audio/i2s_slave_rx.v",
           "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/audio/audio_cdc_fifo.v",
           "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/audio/audio_sink.v"
         ],
         "exit_status": 0,
-        "seconds": 5.831685699988157,
-        "log": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\audio_clock\\20261114-022103\\109375000\\compile.log",
-        "log_sha256": "dfaaa344261e3fb13c9f9eab09fbe3d42d1c3f10d2411928350cfbec3afbd609"
+        "seconds": 5.70354829999269,
+        "log": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\audio_clock\\20261114-123646\\83333333\\compile.log",
+        "log_sha256": "0e564253544bc40ffb2e63b3f5efd55eb3a12ba02f20b24c949a6d08137e055f",
+        "stderr_log": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\audio_clock\\20261114-123646\\83333333\\compile.log.stderr",
+        "stderr_sha256": "944d2c970d1cb70eb1a7eaf4ef23e0be3bf5d4e892b89fddf29ffb6d596fc3bb"
       },
-      "tb_sha256": "cc1bce1e6410dfde8d41e123bf76a1da8b29d6f9a7010ddb639ebc112b036ea7",
+      "tb_sha256": "e97f8135a0d1fcc0cd87d73b32c4ca1d395816070ac70cb261899bc08d2b60b1",
       "passed": true,
       "simulation": {
         "command": [
@@ -111,14 +118,16 @@
           "--cd",
           "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga",
           "--exec",
-          "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/pacerv_shared_system/audio_clock/20261114-022103/109375000/obj/Vtb_audio_chain",
+          "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/pacerv_shared_system/audio_clock/20261114-123646/83333333/obj/Vtb_audio_chain",
           "+FULL",
           "+DLY=512"
         ],
         "exit_status": 0,
-        "seconds": 179.55773190000036,
-        "log": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\audio_clock\\20261114-022103\\109375000\\simulation.log",
-        "log_sha256": "43b3e94a7e62fc7eb09e82c76b0c875723caeb811d7b7ba3b340b2a3ac91bd5c"
+        "seconds": 148.76839579999796,
+        "log": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\audio_clock\\20261114-123646\\83333333\\simulation.log",
+        "log_sha256": "85a43cd52d55030c39c197a563944c7e992610a2c0f20af783138571387597b9",
+        "stderr_log": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\audio_clock\\20261114-123646\\83333333\\simulation.log.stderr",
+        "stderr_sha256": "b280c454d6f559e56eb3f5ed39f3ba084b8d1744a3ff7fe016b21ff86dea1aca"
       },
       "literal_results": [
         "WIN 1: real=132095 inj=1 freeze_cyc=8494395 err=0 ovf=0",

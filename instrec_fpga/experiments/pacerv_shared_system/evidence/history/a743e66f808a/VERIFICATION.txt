@@ -1,0 +1,1036 @@
+PaceRV core + shared whole-system memory/peripherals
+
+Branch and checkout: {"branch": "XSY", "checkout_commit": "86d3387c7648e8225841b713a0140c319ad18de4"}
+Selected operating point: {"target": "PG2L100H-6IFBG676", "system_clock_hz": 109375000, "pixel_clock_hz": 148500000, "declared_system_setup_hold_uncertainty_ns": 0.15, "reported_system_setup_uncertainty_ns": [0.3], "reported_system_hold_uncertainty_ns": [0.15]}
+Changed: RV32IMC H3 execution core, paired local-ROM fetch, uncached CPU DDR data port,
+M3_MASK_ENABLE byte masks and locked M3 client ownership; native local data RAM;
+four-source UART acceptance, registered MMIO/activation/DDR commands, synchronous FC
+coefficient RAM, seven-clock display alignment, FETCH_ADDRESS_BITS=IAW+2 ROM qualification,
+register-based short weight FIFOs, digest_q/rdigest_q checksum staging,
+GAP synchronous block-RAM accumulator pipeline and matched actual DDR/system clock configuration.
+
+Selected gates: {"baseline_passed": true, "cpu_passed": true, "native_npu_passed": true, "rollback_passed": true, "shared_ddr_passed": true, "shared_uart_passed": true, "standard_cpu_tb_passed": true, "checkout_inputs_match": true, "full_pds_qualified": false, "dashboard_equivalence_passed": true, "activation_mux_passed": true, "audio_clock_passed": true, "loader_gap_controls_passed": true}
+Physical status: {"full": "complete"}
+
+Baseline and CPU/NPU exact commands, inputs, literal output and exits follow.
+MODIFIED_FILE: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\experiments\pacerv_shared_system\MODIFIED_FILE.sv
+DIFF_FILE: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\experiments\pacerv_shared_system\DIFF_FILE.patch
+VERIFICATION: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\experiments\pacerv_shared_system\VERIFICATION.txt
+ROLLBACK: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\experiments\pacerv_shared_system\ROLLBACK.sh
+
+Working directory: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga
+BASELINE exact command: python experiments/pacerv_shared_system/run_baseline_cpu.py
+Input: baseline commit 852f067db4a4a710f5355e3ab311f035ced5b48d, original prog.hex and RTL.
+Literal result: RV32 BENCH cycles=460012 inst=180008 acc=0xf2d8888b; RESULT: PASS; exit 0.
+MODIFIED exact command: python sim/experiments/pacerv_integration/run_pacerv_checks.py
+Input: same original prog.hex plus directed IMC/backpressure/fetch-fault cases and frozen H3 vendor core.
+Literal result: RV32 BENCH cycles=180016 inst=180008 acc=0xf2d8888b; PACERV_CHECKS_PASS cases=4 vendor_hashes=8; exit 0.
+ROLLBACK exact command: python experiments/pacerv_shared_system/run_integration_rollback.py
+Input: marked modified copy populated from current files; 31 original baseline files.
+Literal result: INTEGRATION_ROLLBACK_PASS files=31 cycles=460012 retired=180008 live_modified_unchanged=1; exit 0.
+
+BASELINE CPU
+command: ["D:\\AAAPP\\iverilog\\bin\\iverilog.EXE", "-g2012", "-s", "tb_rv_cpu", "-o", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\baseline\\verified_cpu.vvp", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\baseline\\source\\instrec_fpga\\sim\\tb_rv_cpu.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\baseline\\source\\instrec_fpga\\src\\cpu\\rv32_cpu_subsys.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\baseline\\source\\cpu\\rtl\\rv32_core.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\baseline\\source\\cpu\\rtl\\rv32_alu.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\baseline\\source\\cpu\\rtl\\rv32_decode.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\baseline\\source\\cpu\\rtl\\rv32_muldiv.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\baseline\\source\\cpu\\rtl\\rv32_btb.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\baseline\\source\\cpu\\rtl\\rv32_machine.sv"]
+input/cwd: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\build\pacerv_shared_system\baseline\source\instrec_fpga
+exit: 0
+literal output:
+
+command: ["D:\\AAAPP\\iverilog\\bin\\vvp.EXE", "-i", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\baseline\\verified_cpu.vvp"]
+input/cwd: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\build\pacerv_shared_system\baseline\source\instrec_fpga
+exit: 0
+literal output:
+WARNING: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\build\pacerv_shared_system\baseline\source\instrec_fpga\src\cpu\rv32_cpu_subsys.sv:184: $readmemh(src/cpu/prog.hex): Not enough words in the file for the requested range [0:2047].
+WARNING: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\build\pacerv_shared_system\baseline\source\instrec_fpga\src\cpu\rv32_cpu_subsys.sv:185: $readmemh(src/cpu/prog.hex): Not enough words in the file for the requested range [0:2047].
+dbg t=250000 pc=00000460 ireq=1/irdy=1 irsp=0 tr=0 nline=4 imem0=20002117
+CHECK PASS C10 firmware requested next inference after acknowledgement
+---- UART log (8 lines) ----
+
+RV32 BOOT
+RV32 MMIO OK
+RV32 ISA OK
+RV32 BENCH cycles=460012 inst=180008 acc=0xf2d8888b
+DDR OK STS 0x00000001
+NPU GO
+NPU top1=5 last_class=3 last_p=87 c=12345
+
+CHECK PASS C1 boot banner
+CHECK PASS C2 MMIO ID read-back
+CHECK PASS C3 ISA self-test
+CHECK PASS C4 mcycle/minstret measurement
+CHECK PASS C5 NPU event surfaced through MMIO
+CHECK PASS C6 CPU-triggered NPU start (CTRL[0])
+CHECK PASS C7 DDR status read-back
+CHECK PASS C8 firmware acknowledged and cleared NPU event
+CHECK PASS C9 result cycle snapshot survives live counter change
+RESULT: PASS
+D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\build\pacerv_shared_system\baseline\source\instrec_fpga\sim\tb_rv_cpu.sv:210: $finish called at 4740005000 (1ps)
+
+
+MODIFIED CPU
+command: ["D:\\Anaconda\\python.exe", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\experiments\\pacerv_integration\\build_pacerv_directed.py"]
+input/cwd: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga
+exit: 0
+literal output:
+BUILT D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\sim\experiments\pacerv_integration\pacerv_directed.hex used_bytes=780 checks=25
+
+command: ["D:\\AAAPP\\iverilog\\bin\\iverilog.EXE", "-g2012", "-s", "tb_pacerv_directed", "-o", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_integration\\tb_pacerv_directed.vvp", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\experiments\\pacerv_integration\\tb_pacerv_directed.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\rv32_cpu_subsys.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_core.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_alu.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_decode.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_machine.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_muldiv.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_btb.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_rvc_expand.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_rvc_frontend.sv"]
+input/cwd: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga
+exit: 0
+literal output:
+
+command: ["D:\\AAAPP\\iverilog\\bin\\vvp.EXE", "-i", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_integration\\tb_pacerv_directed.vvp"]
+input/cwd: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga
+exit: 0
+literal output:
+PACERV_DIRECTED_PASS cycles=1704 retired=276 checks=25 DDR=11 traps=1 crossed=117 pairs=1303 request_stalls=1
+D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\sim\experiments\pacerv_integration\tb_pacerv_directed.sv:124: $finish called at 17095000 (1ps)
+
+command: ["D:\\AAAPP\\iverilog\\bin\\iverilog.EXE", "-g2012", "-s", "tb_pacerv_backpressure", "-o", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_integration\\tb_pacerv_backpressure.vvp", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\experiments\\pacerv_integration\\tb_pacerv_backpressure.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\rv32_cpu_subsys.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_core.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_alu.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_decode.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_machine.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_muldiv.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_btb.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_rvc_expand.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_rvc_frontend.sv"]
+input/cwd: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga
+exit: 0
+literal output:
+
+command: ["D:\\AAAPP\\iverilog\\bin\\vvp.EXE", "-i", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_integration\\tb_pacerv_backpressure.vvp"]
+input/cwd: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga
+exit: 0
+literal output:
+PACERV_BACKPRESSURE_PASS local_hold=1500 DDR_hold=1500 ROM_pair_cases=8
+D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\sim\experiments\pacerv_integration\tb_pacerv_backpressure.sv:114: $finish called at 30320000 (1ps)
+
+command: ["D:\\AAAPP\\iverilog\\bin\\iverilog.EXE", "-g2012", "-s", "tb_pacerv_fetch_fault", "-o", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_integration\\tb_pacerv_fetch_fault.vvp", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\experiments\\pacerv_integration\\tb_pacerv_fetch_fault.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\rv32_cpu_subsys.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_core.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_alu.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_decode.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_machine.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_muldiv.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_btb.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_rvc_expand.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_rvc_frontend.sv"]
+input/cwd: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga
+exit: 0
+literal output:
+
+command: ["D:\\AAAPP\\iverilog\\bin\\vvp.EXE", "-i", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_integration\\tb_pacerv_fetch_fault.vvp"]
+input/cwd: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga
+exit: 0
+literal output:
+PACERV_FETCH_FAULT_PASS cases=3 cause=1 pc_and_mtval_exact=1 no_alias=1
+D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\sim\experiments\pacerv_integration\tb_pacerv_fetch_fault.sv:61: $finish called at 575946 (1ps)
+
+command: ["D:\\AAAPP\\iverilog\\bin\\iverilog.EXE", "-g2012", "-s", "tb_pacerv_audio", "-o", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_integration\\tb_pacerv_audio.vvp", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\experiments\\pacerv_integration\\tb_pacerv_audio.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\rv32_cpu_subsys.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_core.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_alu.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_decode.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_machine.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_muldiv.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_btb.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_rvc_expand.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_rvc_frontend.sv"]
+input/cwd: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga
+exit: 0
+literal output:
+
+command: ["D:\\AAAPP\\iverilog\\bin\\vvp.EXE", "-i", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_integration\\tb_pacerv_audio.vvp"]
+input/cwd: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga
+exit: 0
+literal output:
+WARNING: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\src\cpu\rv32_cpu_subsys.sv:224: $readmemh(src/cpu/prog.hex): Not enough words in the file for the requested range [0:2047].
+CHECK PASS C10 firmware requested next inference after acknowledgement
+---- UART log (8 lines) ----
+
+RV32 BOOT
+RV32 MMIO OK
+RV32 ISA OK
+RV32 BENCH cycles=180016 inst=180008 acc=0xf2d8888b
+DDR OK STS 0x00000001
+NPU GO
+NPU top1=5 last_class=3 last_p=87 c=12345
+
+CHECK PASS C1 boot banner
+CHECK PASS C2 MMIO ID read-back
+CHECK PASS C3 ISA self-test
+CHECK PASS C4 mcycle/minstret measurement
+CHECK PASS C5 NPU event surfaced through MMIO
+CHECK PASS C6 CPU-triggered NPU start (CTRL[0])
+CHECK PASS C7 DDR status read-back
+CHECK PASS C8 firmware acknowledged and cleared NPU event
+CHECK PASS C9 result cycle snapshot survives live counter change
+RESULT: PASS
+D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\sim\experiments\pacerv_integration\tb_pacerv_audio.sv:229: $finish called at 1859335000 (1ps)
+
+
+MODIFIED NPU
+command: ["wsl.exe", "-d", "Ubuntu-22.04", "--cd", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga", "--exec", "/home/bx/.local/src/verilator-5.040/bin/verilator", "--version"]
+input/cwd: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga
+exit: 0
+literal output:
+Verilator 5.040 2025-08-30 rev UNKNOWN.REV
+wsl: 检测到 localhost 代理配置，但未镜像到 WSL。NAT 模式下的 WSL 不支持 localhost 代理。
+
+command: ["wsl.exe", "-d", "Ubuntu-22.04", "--cd", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga", "--exec", "/home/bx/.local/src/verilator-5.040/bin/verilator", "--binary", "--timing", "-Wno-fatal", "--top-module", "tb_npu_full_native", "-j", "4", "--Mdir", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/obj_pacerv", "-CFLAGS", "-O2", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/tb_pacerv_native_npu.sv", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/activation_row_store_dynamic.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/activation_store_mux.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/conv_engine.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/fc_engine.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/gap_unit.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/npu_m1_bridge.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/npu_m1_owner.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/npu_stage_lifecycle.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/npu_top.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/pool_engine.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/requant_unit.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/softmax_top.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/wbuf.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/wdma.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/weight_read_aligner_hardened.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/ddr3/ddr3_ctrl_axi.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/ddr3/ddr3_arbiter.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/cpu/rv32_cpu_subsys.sv", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/cpu/vendor/pacerv_h3/rv32_core.sv", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/cpu/vendor/pacerv_h3/rv32_alu.sv", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/cpu/vendor/pacerv_h3/rv32_decode.sv", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/cpu/vendor/pacerv_h3/rv32_machine.sv", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/cpu/vendor/pacerv_h3/rv32_muldiv.sv", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/cpu/vendor/pacerv_h3/rv32_btb.sv", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/cpu/vendor/pacerv_h3/rv32_rvc_expand.sv", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/cpu/vendor/pacerv_h3/rv32_rvc_frontend.sv", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/pacerv_ddr3_axi_model_full.sv", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/ddr3/pace_cpu_ddr_bridge.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/ddr3/ddr3_m3_share.v"]
+input/cwd: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga
+exit: 0
+literal output:
+make: Entering directory '/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/obj_pacerv'
+g++ -Os  -I.  -MMD -I/home/bx/.local/src/verilator-5.040/include -I/home/bx/.local/src/verilator-5.040/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -DVM_TRACE_SAIF=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -O2 -DVL_TIME_CONTEXT   -fcoroutines -c -o verilated.o /home/bx/.local/src/verilator-5.040/include/verilated.cpp
+g++ -Os  -I.  -MMD -I/home/bx/.local/src/verilator-5.040/include -I/home/bx/.local/src/verilator-5.040/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -DVM_TRACE_SAIF=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -O2 -DVL_TIME_CONTEXT   -fcoroutines -c -o verilated_timing.o /home/bx/.local/src/verilator-5.040/include/verilated_timing.cpp
+g++ -Os  -I.  -MMD -I/home/bx/.local/src/verilator-5.040/include -I/home/bx/.local/src/verilator-5.040/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -DVM_TRACE_SAIF=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -O2 -DVL_TIME_CONTEXT   -fcoroutines -c -o verilated_threads.o /home/bx/.local/src/verilator-5.040/include/verilated_threads.cpp
+g++ -Os  -I.  -MMD -I/home/bx/.local/src/verilator-5.040/include -I/home/bx/.local/src/verilator-5.040/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -DVM_TRACE_SAIF=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -O2 -DVL_TIME_CONTEXT   -fcoroutines -x c++-header Vtb_npu_full_native__pch.h -o Vtb_npu_full_native__pch.h.fast.gch
+g++   -I.  -MMD -I/home/bx/.local/src/verilator-5.040/include -I/home/bx/.local/src/verilator-5.040/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -DVM_TRACE_SAIF=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -O2 -DVL_TIME_CONTEXT   -fcoroutines -x c++-header Vtb_npu_full_native__pch.h -o Vtb_npu_full_native__pch.h.slow.gch
+echo "" > Vtb_npu_full_native__ALL.verilator_deplist.tmp
+g++ -Os  -I.  -MMD -I/home/bx/.local/src/verilator-5.040/include -I/home/bx/.local/src/verilator-5.040/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -DVM_TRACE_SAIF=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -O2 -DVL_TIME_CONTEXT   -fcoroutines -include Vtb_npu_full_native__pch.h.fast -c -o Vtb_npu_full_native.o Vtb_npu_full_native.cpp
+g++ -Os  -I.  -MMD -I/home/bx/.local/src/verilator-5.040/include -I/home/bx/.local/src/verilator-5.040/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -DVM_TRACE_SAIF=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -O2 -DVL_TIME_CONTEXT   -fcoroutines -include Vtb_npu_full_native__pch.h.fast -c -o Vtb_npu_full_native___024root__DepSet_h81038fb9__0.o Vtb_npu_full_native___024root__DepSet_h81038fb9__0.cpp
+g++ -Os  -I.  -MMD -I/home/bx/.local/src/verilator-5.040/include -I/home/bx/.local/src/verilator-5.040/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -DVM_TRACE_SAIF=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -O2 -DVL_TIME_CONTEXT   -fcoroutines -include Vtb_npu_full_native__pch.h.fast -c -o Vtb_npu_full_native___024root__DepSet_h81038fb9__1.o Vtb_npu_full_native___024root__DepSet_h81038fb9__1.cpp
+g++ -Os  -I.  -MMD -I/home/bx/.local/src/verilator-5.040/include -I/home/bx/.local/src/verilator-5.040/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -DVM_TRACE_SAIF=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -O2 -DVL_TIME_CONTEXT   -fcoroutines -include Vtb_npu_full_native__pch.h.fast -c -o Vtb_npu_full_native___024root__DepSet_h251aa31a__0.o Vtb_npu_full_native___024root__DepSet_h251aa31a__0.cpp
+g++ -Os  -I.  -MMD -I/home/bx/.local/src/verilator-5.040/include -I/home/bx/.local/src/verilator-5.040/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -DVM_TRACE_SAIF=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -O2 -DVL_TIME_CONTEXT   -fcoroutines -include Vtb_npu_full_native__pch.h.fast -c -o Vtb_npu_full_native_activation_row_store_dynamic__DepSet_hd5c90ec9__0.o Vtb_npu_full_native_activation_row_store_dynamic__DepSet_hd5c90ec9__0.cpp
+g++ -Os  -I.  -MMD -I/home/bx/.local/src/verilator-5.040/include -I/home/bx/.local/src/verilator-5.040/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -DVM_TRACE_SAIF=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -O2 -DVL_TIME_CONTEXT   -fcoroutines -include Vtb_npu_full_native__pch.h.fast -c -o Vtb_npu_full_native__main.o Vtb_npu_full_native__main.cpp
+g++   -I.  -MMD -I/home/bx/.local/src/verilator-5.040/include -I/home/bx/.local/src/verilator-5.040/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -DVM_TRACE_SAIF=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -O2 -DVL_TIME_CONTEXT   -fcoroutines -include Vtb_npu_full_native__pch.h.slow -c -o Vtb_npu_full_native__ConstPool_0.o Vtb_npu_full_native__ConstPool_0.cpp
+g++   -I.  -MMD -I/home/bx/.local/src/verilator-5.040/include -I/home/bx/.local/src/verilator-5.040/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -DVM_TRACE_SAIF=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -O2 -DVL_TIME_CONTEXT   -fcoroutines -include Vtb_npu_full_native__pch.h.slow -c -o Vtb_npu_full_native___024root__Slow.o Vtb_npu_full_native___024root__Slow.cpp
+g++   -I.  -MMD -I/home/bx/.local/src/verilator-5.040/include -I/home/bx/.local/src/verilator-5.040/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -DVM_TRACE_SAIF=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -O2 -DVL_TIME_CONTEXT   -fcoroutines -include Vtb_npu_full_native__pch.h.slow -c -o Vtb_npu_full_native___024root__DepSet_h81038fb9__0__Slow.o Vtb_npu_full_native___024root__DepSet_h81038fb9__0__Slow.cpp
+g++   -I.  -MMD -I/home/bx/.local/src/verilator-5.040/include -I/home/bx/.local/src/verilator-5.040/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -DVM_TRACE_SAIF=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -O2 -DVL_TIME_CONTEXT   -fcoroutines -include Vtb_npu_full_native__pch.h.slow -c -o Vtb_npu_full_native___024root__DepSet_h251aa31a__0__Slow.o Vtb_npu_full_native___024root__DepSet_h251aa31a__0__Slow.cpp
+g++   -I.  -MMD -I/home/bx/.local/src/verilator-5.040/include -I/home/bx/.local/src/verilator-5.040/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -DVM_TRACE_SAIF=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -O2 -DVL_TIME_CONTEXT   -fcoroutines -include Vtb_npu_full_native__pch.h.slow -c -o Vtb_npu_full_native_activation_row_store_dynamic__Slow.o Vtb_npu_full_native_activation_row_store_dynamic__Slow.cpp
+g++   -I.  -MMD -I/home/bx/.local/src/verilator-5.040/include -I/home/bx/.local/src/verilator-5.040/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -DVM_TRACE_SAIF=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -O2 -DVL_TIME_CONTEXT   -fcoroutines -include Vtb_npu_full_native__pch.h.slow -c -o Vtb_npu_full_native_activation_row_store_dynamic__DepSet_hd5c90ec9__0__Slow.o Vtb_npu_full_native_activation_row_store_dynamic__DepSet_hd5c90ec9__0__Slow.cpp
+g++   -I.  -MMD -I/home/bx/.local/src/verilator-5.040/include -I/home/bx/.local/src/verilator-5.040/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -DVM_TRACE_SAIF=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -O2 -DVL_TIME_CONTEXT   -fcoroutines -include Vtb_npu_full_native__pch.h.slow -c -o Vtb_npu_full_native_activation_row_store_dynamic__DepSet_h716123ca__0__Slow.o Vtb_npu_full_native_activation_row_store_dynamic__DepSet_h716123ca__0__Slow.cpp
+g++   -I.  -MMD -I/home/bx/.local/src/verilator-5.040/include -I/home/bx/.local/src/verilator-5.040/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -DVM_TRACE_SAIF=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -O2 -DVL_TIME_CONTEXT   -fcoroutines -include Vtb_npu_full_native__pch.h.slow -c -o Vtb_npu_full_native__Syms.o Vtb_npu_full_native__Syms.cpp
+g++    verilated.o verilated_timing.o verilated_threads.o Vtb_npu_full_native__ALL.a    -pthread -lpthread -latomic   -o Vtb_npu_full_native
+rm Vtb_npu_full_native__ALL.verilator_deplist.tmp
+make: Leaving directory '/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/obj_pacerv'
+- V e r i l a t i o n   R e p o r t: Verilator 5.040 2025-08-30 rev UNKNOWN.REV
+- Verilator: Built from 5.913 MB sources in 31 modules, into 2.531 MB in 14 C++ files needing 0.007 MB
+- Verilator: Walltime 17.974 s (elab=0.066, cvt=0.585, bld=15.232); cpu 0.827 s on 4 threads; alloced 437.645 MB
+w s l :   �hKm0R  l o c a l h o s t   �NtM�n�FO*g\��P0R  W S L 0N A T   !j_N�v  W S L   N/ec  l o c a l h o s t   �Nt0 
+ %Warning-PINMISSING: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/tb_pacerv_native_npu.sv:13:36: Instance has missing pin: 'logits_out'
+                     /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/npu_top.v:69:25: ... Location of port declaration
+   69 |     output reg  [255:0] logits_out,
+      |                         ^~~~~~~~~~
+                     ... For warning description see https://verilator.org/warn/PINMISSING?v=5.040
+                     ... Use "/* verilator lint_off PINMISSING */" and lint_on around source to disable this message.
+%Warning-PINMISSING: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/tb_pacerv_native_npu.sv:13:36: Instance has missing pin: 'logits_valid'
+                     /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/npu_top.v:70:25: ... Location of port declaration
+   70 |     output reg          logits_valid
+      |                         ^~~~~~~~~~~~
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/cpu/rv32_cpu_subsys.sv:115:26: Operator VAR 'DMEM_LAST' expects 11 bits on the Initial value, but Initial value's SUB generates 32 bits.
+                                                                                                    : ... note: In instance 'tb_npu_full_native.u_cpu'
+  115 |     localparam [DAW-1:0] DMEM_LAST = DMEM_WORDS - 1;
+      |                          ^~~~~~~~~
+                     ... For warning description see https://verilator.org/warn/WIDTHTRUNC?v=5.040
+                     ... Use "/* verilator lint_off WIDTHTRUNC */" and lint_on around source to disable this message.
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/conv_engine.v:291:25: Operator VAR 'GRPL0' expects 4 bits on the Initial value, but Initial value's SUB generates 32 or 6 bits.
+                                                                                               : ... note: In instance 'tb_npu_full_native.dut.u_conv'
+  291 |     localparam [RG-1:0] GRPL0 = G0_GRP - 1;      
+      |                         ^~~~~
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/conv_engine.v:292:25: Operator VAR 'GRPL1' expects 4 bits on the Initial value, but Initial value's SUB generates 32 or 7 bits.
+                                                                                               : ... note: In instance 'tb_npu_full_native.dut.u_conv'
+  292 |     localparam [RG-1:0] GRPL1 = G1_GRP - 1;
+      |                         ^~~~~
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/conv_engine.v:293:25: Operator VAR 'GRPL2' expects 4 bits on the Initial value, but Initial value's SUB generates 32 or 8 bits.
+                                                                                               : ... note: In instance 'tb_npu_full_native.dut.u_conv'
+  293 |     localparam [RG-1:0] GRPL2 = G2_GRP - 1;
+      |                         ^~~~~
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/conv_engine.v:294:25: Operator VAR 'GRPL3' expects 4 bits on the Initial value, but Initial value's SUB generates 32 or 9 bits.
+                                                                                               : ... note: In instance 'tb_npu_full_native.dut.u_conv'
+  294 |     localparam [RG-1:0] GRPL3 = G3_GRP - 1;
+      |                         ^~~~~
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/gap_unit.v:43:22: Operator VAR 'GRP_LAST' expects 8 bits on the Initial value, but Initial value's SUB generates 32 or 9 bits.
+                                                                                           : ... note: In instance 'tb_npu_full_native.dut.u_gap'
+   43 |     localparam [7:0] GRP_LAST = (CIN / 16) - 1;
+      |                      ^~~~~~~~
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/fc_engine.v:97:42: Operator ADD expects 32 or 8 bits on the RHS, but RHS's SEL generates 4 bits.
+                                                                                             : ... note: In instance 'tb_npu_full_native.dut.u_fc2'
+   97 |     assign rq_m     = m_ram[grp_cnt * 16 + rq_cnt[3:0]];
+      |                                          ^
+                      ... For warning description see https://verilator.org/warn/WIDTHEXPAND?v=5.040
+                      ... Use "/* verilator lint_off WIDTHEXPAND */" and lint_on around source to disable this message.
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/fc_engine.v:98:42: Operator ADD expects 32 or 8 bits on the RHS, but RHS's SEL generates 4 bits.
+                                                                                             : ... note: In instance 'tb_npu_full_native.dut.u_fc2'
+   98 |     assign rq_shift = s_ram[grp_cnt * 16 + rq_cnt[3:0]];
+      |                                          ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/fc_engine.v:129:45: Bit extraction of array[127:0] requires 7 bit index, not 8 bits.
+                                                                                             : ... note: In instance 'tb_npu_full_native.dut.u_fc2'
+  129 |     wire signed [15:0] x_eff = $signed(x_buf[k_cnt]) - $signed({7'd0, ZP_IN});
+      |                                             ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/fc_engine.v:169:57: Bit extraction of array[15:0] requires 4 bit index, not 8 bits.
+                                                                                             : ... note: In instance 'tb_npu_full_native.dut.u_fc2'
+  169 |                 if (b_valid && b_cnt < COUT) begin b_ram[b_cnt] <= bias_s32; b_cnt <= b_cnt + 1; end
+      |                                                         ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/fc_engine.v:170:57: Bit extraction of array[15:0] requires 4 bit index, not 8 bits.
+                                                                                             : ... note: In instance 'tb_npu_full_native.dut.u_fc2'
+  170 |                 if (m_valid && m_cnt < COUT) begin m_ram[m_cnt] <= m_s32; m_cnt <= m_cnt + 1; end
+      |                                                         ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/fc_engine.v:171:57: Bit extraction of array[15:0] requires 4 bit index, not 8 bits.
+                                                                                             : ... note: In instance 'tb_npu_full_native.dut.u_fc2'
+  171 |                 if (s_valid && s_cnt < COUT) begin s_ram[s_cnt] <= shift; s_cnt <= s_cnt + 1; end
+      |                                                         ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/fc_engine.v:177:30: Bit extraction of array[127:0] requires 7 bit index, not 8 bits.
+                                                                                             : ... note: In instance 'tb_npu_full_native.dut.u_fc2'
+  177 |                         x_buf[x_cnt] <= x_s16;
+      |                              ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/wdma.v:192:30: Operator ASSIGNW expects 16 bits on the Assign RHS, but Assign RHS's SHIFTR generates 32 bits.
+                                                                                        : ... note: In instance 'tb_npu_full_native.dut.u_wdma'
+  192 |     wire [15:0]  total_beats = (total_bytes + 32'd31) >> 5;
+      |                              ^
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/wdma.v:206:37: Operator LT expects 10 bits on the LHS, but LHS's VARREF 'ctr_idx' generates 9 bits.
+                                                                                         : ... note: In instance 'tb_npu_full_native.dut.u_wdma'
+  206 |     wire        ctr_hit  = (ctr_idx < {1'b0, cout});
+      |                                     ^
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/wdma.v:218:50: Operator ADD expects 9 bits on the RHS, but RHS's SEL generates 4 bits.
+                                                                                         : ... note: In instance 'tb_npu_full_native.dut.u_wdma'
+  218 |     wire [8:0]  ctr_idx_n = {grp_mod[3:0], 4'd0} + c_cnt_n[3:0];
+      |                                                  ^
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/wdma.v:220:38: Operator LT expects 11 bits on the LHS, but LHS's VARREF 'c_cnt_n' generates 10 bits.
+                                                                                         : ... note: In instance 'tb_npu_full_native.dut.u_wdma'
+  220 |                             (c_cnt_n < ({2'b0, cout} + {2'b0, cout})) ?
+      |                                      ^
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/wdma.v:223:48: Operator COND expects 10 bits on the Conditional True, but Conditional True's VARREF 'ctr_idx_n' generates 9 bits.
+                                                                                         : ... note: In instance 'tb_npu_full_native.dut.u_wdma'
+  223 |     wire [9:0]  pa_cv     = (c_cnt_n < 10'd16) ? ctr_idx_n :
+      |                                                ^
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/wdma.v:256:24: Bit extraction of array[15:0] requires 4 bit index, not 3 bits.
+                                                                                         : ... note: In instance 'tb_npu_full_native.dut.u_wdma'
+  256 |             param_shift[cfg_idx[7:5]] <= rd_data;
+      |                        ^
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/wdma.v:263:37: Bit extraction of array[15:0] requires 4 bit index, not 3 bits.
+                                                                                         : ... note: In instance 'tb_npu_full_native.dut.u_wdma'
+  263 |         param_shift_q <= param_shift[pa[7:5]];
+      |                                     ^
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/wdma.v:292:28: Operator ASSIGNDLY expects 9 bits on the Assign RHS, but Assign RHS's CONST '6'h0' generates 6 bits.
+                                                                                         : ... note: In instance 'tb_npu_full_native.dut.u_wdma'
+  292 |             c_cnt          <= 6'd0;
+      |                            ^~
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/wdma.v:332:49: Operator ADD expects 16 bits on the LHS, but LHS's VARREF 'cout' generates 9 bits.
+                                                                                         : ... note: In instance 'tb_npu_full_native.dut.u_wdma'
+  332 |                         cfg_beats_left <= (cout + 9'd7) >> 3;
+      |                                                 ^
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/wdma.v:332:49: Operator ADD expects 16 bits on the RHS, but RHS's CONST '9'h7' generates 9 bits.
+                                                                                         : ... note: In instance 'tb_npu_full_native.dut.u_wdma'
+  332 |                         cfg_beats_left <= (cout + 9'd7) >> 3;
+      |                                                 ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/wdma.v:348:40: Operator ASSIGNDLY expects 28 bits on the Assign RHS, but Assign RHS's ADD generates 29 bits.
+                                                                                        : ... note: In instance 'tb_npu_full_native.dut.u_wdma'
+  348 |                         cfg_addr       <= cfg_addr + {19'd0, cfg_cmd_beats, 5'd0};
+      |                                        ^~
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/wdma.v:353:53: Operator ADD expects 16 bits on the LHS, but LHS's VARREF 'cout' generates 9 bits.
+                                                                                         : ... note: In instance 'tb_npu_full_native.dut.u_wdma'
+  353 |                             cfg_beats_left <= (cout + 9'd7) >> 3;
+      |                                                     ^
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/wdma.v:353:53: Operator ADD expects 16 bits on the RHS, but RHS's CONST '9'h7' generates 9 bits.
+                                                                                         : ... note: In instance 'tb_npu_full_native.dut.u_wdma'
+  353 |                             cfg_beats_left <= (cout + 9'd7) >> 3;
+      |                                                     ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/wdma.v:372:40: Operator ASSIGNDLY expects 28 bits on the Assign RHS, but Assign RHS's ADD generates 29 bits.
+                                                                                        : ... note: In instance 'tb_npu_full_native.dut.u_wdma'
+  372 |                         cfg_addr       <= cfg_addr + {19'd0, cfg_cmd_beats, 5'd0};
+      |                                        ^~
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/wdma.v:377:53: Operator ADD expects 16 bits on the LHS, but LHS's VARREF 'cout' generates 9 bits.
+                                                                                         : ... note: In instance 'tb_npu_full_native.dut.u_wdma'
+  377 |                             cfg_beats_left <= (cout + 9'd31) >> 5;
+      |                                                     ^
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/wdma.v:377:53: Operator ADD expects 16 bits on the RHS, but RHS's CONST '9'h1f' generates 9 bits.
+                                                                                         : ... note: In instance 'tb_npu_full_native.dut.u_wdma'
+  377 |                             cfg_beats_left <= (cout + 9'd31) >> 5;
+      |                                                     ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/wdma.v:402:40: Operator ASSIGNDLY expects 28 bits on the Assign RHS, but Assign RHS's ADD generates 29 bits.
+                                                                                        : ... note: In instance 'tb_npu_full_native.dut.u_wdma'
+  402 |                         cfg_addr       <= cfg_addr + {19'd0, cfg_cmd_beats, 5'd0};
+      |                                        ^~
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/wdma.v:441:44: Operator LT expects 10 bits on the LHS, but LHS's VARREF 'c_cnt' generates 9 bits.
+                                                                                         : ... note: In instance 'tb_npu_full_native.dut.u_wdma'
+  441 |                         end else if (c_cnt < {1'b0, cout} + {1'b0, cout}) begin
+      |                                            ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/wdma.v:484:38: Operator ASSIGNDLY expects 28 bits on the Assign RHS, but Assign RHS's ADD generates 29 bits.
+                                                                                        : ... note: In instance 'tb_npu_full_native.dut.u_wdma'
+  484 |                         cur_addr     <= cur_addr + {19'd0, cmd_beats, 5'd0};
+      |                                      ^~
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/wbuf.v:74:75: Operator COND expects 16 bits on the Conditional True, but Conditional True's CONST '11'h0' generates 11 bits.
+                                                                                        : ... note: In instance 'tb_npu_full_native.dut.u_wbuf'
+   74 |         rd_data_q <= mem[(rd_valid && rd_ready) ? ((rd_cnt_p1 >= tap_num) ? 11'd0 : rd_cnt_p1) : rd_cnt];
+      |                                                                           ^
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/wbuf.v:74:49: Operator COND expects 16 bits on the Conditional False, but Conditional False's VARREF 'rd_cnt' generates 11 bits.
+                                                                                        : ... note: In instance 'tb_npu_full_native.dut.u_wbuf'
+   74 |         rd_data_q <= mem[(rd_valid && rd_ready) ? ((rd_cnt_p1 >= tap_num) ? 11'd0 : rd_cnt_p1) : rd_cnt];
+      |                                                 ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/wbuf.v:74:25: Bit extraction of array[1727:0] requires 11 bit index, not 16 bits.
+                                                                                       : ... note: In instance 'tb_npu_full_native.dut.u_wbuf'
+   74 |         rd_data_q <= mem[(rd_valid && rd_ready) ? ((rd_cnt_p1 >= tap_num) ? 11'd0 : rd_cnt_p1) : rd_cnt];
+      |                         ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/softmax_top.v:142:35: Bit extraction of array[7:0] requires 3 bit index, not 4 bits.
+                                                                                               : ... note: In instance 'tb_npu_full_native.dut.u_softmax'
+  142 |     wire signed [31:0] dsel_n = lq[lane] - lmax;
+      |                                   ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/softmax_top.v:143:45: Bit extraction of array[7:0] requires 3 bit index, not 4 bits.
+                                                                                               : ... note: In instance 'tb_npu_full_native.dut.u_softmax'
+  143 |     wire signed [31:0] d69_n  = $signed(dsel[lane]) >>> 6;
+      |                                             ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/softmax_top.v:214:27: Bit extraction of array[7:0] requires 3 bit index, not 4 bits.
+                                                                                               : ... note: In instance 'tb_npu_full_native.dut.u_softmax'
+  214 |                         lq[lane]  <= mul_n;
+      |                           ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/softmax_top.v:244:25: Bit extraction of array[7:0] requires 3 bit index, not 4 bits.
+                                                                                               : ... note: In instance 'tb_npu_full_native.dut.u_softmax'
+  244 |                     dsel[lane] <= dsel_n;
+      |                         ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/softmax_top.v:264:25: Bit extraction of array[7:0] requires 3 bit index, not 4 bits.
+                                                                                               : ... note: In instance 'tb_npu_full_native.dut.u_softmax'
+  264 |                     expv[lane] <= exp_lut[idx_sr[71:63]];
+      |                         ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/softmax_top.v:274:40: Bit extraction of array[7:0] requires 3 bit index, not 4 bits.
+                                                                                               : ... note: In instance 'tb_npu_full_native.dut.u_softmax'
+  274 |                     esum <= esum + expv[lane];
+      |                                        ^
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/softmax_top.v:274:34: Operator ADD expects 32 bits on the RHS, but RHS's ARRAYSEL generates 16 bits.
+                                                                                                : ... note: In instance 'tb_npu_full_native.dut.u_softmax'
+  274 |                     esum <= esum + expv[lane];
+      |                                  ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/softmax_top.v:324:36: Bit extraction of array[7:0] requires 3 bit index, not 4 bits.
+                                                                                               : ... note: In instance 'tb_npu_full_native.dut.u_softmax'
+  324 |                     out_q16   <= pq[lane];
+      |                                    ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/softmax_top.v:328:44: Bit extraction of array[7:0] requires 3 bit index, not 4 bits.
+                                                                                               : ... note: In instance 'tb_npu_full_native.dut.u_softmax'
+  328 |                     out_pct   <= pct_rhe(pq[lane]);
+      |                                            ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/softmax_top.v:331:37: Bit extraction of array[7:0] requires 3 bit index, not 4 bits.
+                                                                                               : ... note: In instance 'tb_npu_full_native.dut.u_softmax'
+  331 |                         best_p <= pq[lane];
+      |                                     ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/softmax_top.v:330:27: Bit extraction of array[7:0] requires 3 bit index, not 4 bits.
+                                                                                               : ... note: In instance 'tb_npu_full_native.dut.u_softmax'
+  330 |                     if (pq[lane] > best_p) begin
+      |                           ^
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/gap_unit.v:68:48: Operator EQ expects 32 or 3 bits on the LHS, but LHS's VARREF 'row_cnt' generates 2 bits.
+                                                                                            : ... note: In instance 'tb_npu_full_native.dut.u_gap'
+   68 |     wire       last_beat = y_valid && (row_cnt == H_IN - 1) &&
+      |                                                ^~
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/gap_unit.v:69:37: Operator EQ expects 8 bits on the LHS, but LHS's VARREF 'grp_cnt' generates 4 bits.
+                                                                                            : ... note: In instance 'tb_npu_full_native.dut.u_gap'
+   69 |                            (grp_cnt == GRP_LAST) && (col_cnt == W_IN - 1) &&
+      |                                     ^~
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/gap_unit.v:69:62: Operator EQ expects 32 or 5 bits on the LHS, but LHS's VARREF 'col_cnt' generates 4 bits.
+                                                                                            : ... note: In instance 'tb_npu_full_native.dut.u_gap'
+   69 |                            (grp_cnt == GRP_LAST) && (col_cnt == W_IN - 1) &&
+      |                                                              ^~
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/gap_unit.v:136:45: Operator EQ expects 8 bits on the LHS, but LHS's VARREF 'grp_cnt' generates 4 bits.
+                                                                                             : ... note: In instance 'tb_npu_full_native.dut.u_gap'
+  136 |                                 if (grp_cnt == GRP_LAST) begin
+      |                                             ^~
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/gap_unit.v:134:41: Operator EQ expects 32 or 5 bits on the LHS, but LHS's VARREF 'col_cnt' generates 4 bits.
+                                                                                             : ... note: In instance 'tb_npu_full_native.dut.u_gap'
+  134 |                             if (col_cnt == W_IN - 1) begin
+      |                                         ^~
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/fc_engine.v:169:57: Bit extraction of array[127:0] requires 7 bit index, not 8 bits.
+                                                                                             : ... note: In instance 'tb_npu_full_native.dut.u_fc2'
+  169 |                 if (b_valid && b_cnt < COUT) begin b_ram[b_cnt] <= bias_s32; b_cnt <= b_cnt + 1; end
+      |                                                         ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/fc_engine.v:170:57: Bit extraction of array[127:0] requires 7 bit index, not 8 bits.
+                                                                                             : ... note: In instance 'tb_npu_full_native.dut.u_fc2'
+  170 |                 if (m_valid && m_cnt < COUT) begin m_ram[m_cnt] <= m_s32; m_cnt <= m_cnt + 1; end
+      |                                                         ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/fc_engine.v:171:57: Bit extraction of array[127:0] requires 7 bit index, not 8 bits.
+                                                                                             : ... note: In instance 'tb_npu_full_native.dut.u_fc2'
+  171 |                 if (s_valid && s_cnt < COUT) begin s_ram[s_cnt] <= shift; s_cnt <= s_cnt + 1; end
+      |                                                         ^
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/fc_engine.v:178:35: Operator EQ expects 32 or 9 bits on the LHS, but LHS's VARREF 'x_cnt' generates 8 bits.
+                                                                                              : ... note: In instance 'tb_npu_full_native.dut.u_fc2'
+  178 |                         if (x_cnt == CIN - 1) begin
+      |                                   ^~
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/fc_engine.v:198:35: Operator EQ expects 32 or 9 bits on the LHS, but LHS's VARREF 'k_cnt' generates 8 bits.
+                                                                                              : ... note: In instance 'tb_npu_full_native.dut.u_fc2'
+  198 |                         if (k_cnt == CIN - 1) begin
+      |                                   ^~
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/conv_engine.v:313:45: Operator ADD expects 16 bits on the LHS, but LHS's VARREF 'out_row_cnt' generates 7 bits.
+                                                                                                : ... note: In instance 'tb_npu_full_native.dut.u_conv'
+  313 |     assign x0_ingress_max_row = out_row_cnt + 16'd1;
+      |                                             ^
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/conv_engine.v:480:32: Operator COND expects 3 bits on the Conditional False, but Conditional False's SEL generates 2 bits.
+                                                                                                : ... note: In instance 'tb_npu_full_native.dut.u_conv'
+  480 |             add3 = (s >= 3'd3) ? (s - 3'd3) : s[1:0];
+      |                                ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/conv_engine.v:480:18: Operator ASSIGN expects 2 bits on the Assign RHS, but Assign RHS's COND generates 3 bits.
+                                                                                               : ... note: In instance 'tb_npu_full_native.dut.u_conv'
+  480 |             add3 = (s >= 3'd3) ? (s - 3'd3) : s[1:0];
+      |                  ^
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/conv_engine.v:653:65: Operator GT expects 16 bits on the LHS, but LHS's VARREF 'col_u' generates 11 bits.
+                                                                                                : ... note: In instance 'tb_npu_full_native.dut.u_conv'
+  653 |     wire          col_pad = (col_u == {(RW+2){1'b0}}) || (col_u > s_w);
+      |                                                                 ^
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/conv_engine.v:655:63: Operator GT expects 16 bits on the LHS, but LHS's VARREF 'wy_u' generates 9 bits.
+                                                                                                : ... note: In instance 'tb_npu_full_native.dut.u_conv'
+  655 |     wire          wy_pad  = (wy_u == {(RR+2){1'b0}}) || (wy_u > s_h);
+      |                                                               ^
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/conv_engine.v:830:38: Operator EQ expects 16 bits on the LHS, but LHS's VARREF 'out_col_cnt' generates 9 bits.
+                                                                                                : ... note: In instance 'tb_npu_full_native.dut.u_conv'
+  830 |     wire col_end      = (out_col_cnt == s_w - 1'b1);
+      |                                      ^~
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/conv_engine.v:832:49: Operator EQ expects 16 bits on the LHS, but LHS's VARREF 'out_row_cnt' generates 7 bits.
+                                                                                                : ... note: In instance 'tb_npu_full_native.dut.u_conv'
+  832 |     wire layer_end    = grp_end && (out_row_cnt == s_h - 1'b1);
+      |                                                 ^~
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/activation_row_store_dynamic.v:34:87: Operator ADD expects 32 or 13 bits on the RHS, but RHS's VARREF 'lane' generates 4 bits.
+                                                                                                                : ... note: In instance 'tb_npu_full_native.dut.u_store1'
+   34 |     wire [12:0] scatter=(geometry==0 ? col*48 : geometry==1 ? col*96 : col*192)+grp*16+lane;
+      |                                                                                       ^
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/activation_row_store_dynamic.v:120:66: Operator ADD expects 32 bits on the RHS, but RHS's VARREF 'stride' generates 13 bits.
+                                                                                                                 : ... note: In instance 'tb_npu_full_native.dut.u_store1'
+  120 |                         else begin row<=row+1; row_base<=row_base+stride; state<=FILL; end
+      |                                                                  ^
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/activation_row_store_dynamic.v:140:66: Operator ADD expects 32 bits on the RHS, but RHS's VARREF 'stride' generates 13 bits.
+                                                                                                                 : ... note: In instance 'tb_npu_full_native.dut.u_store1'
+  140 |                         else begin row<=row+1; row_base<=row_base+stride; state<=CREDIT; end
+      |                                                                  ^
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/pacerv_ddr3_axi_model_full.sv:164:53: Operator ADD expects 26 bits on the RHS, but RHS's VARREF 'wr_beat_idx' generates 5 bits.
+                                                                                                                                                                      : ... note: In instance 'tb_npu_full_native.n_model'
+  164 |     wire [25:0] wr_mem_idx = {1'b0,aw_addr_r[27:3]} + wr_beat_idx;
+      |                                                     ^
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/pacerv_ddr3_axi_model_full.sv:165:53: Operator ADD expects 26 bits on the RHS, but RHS's VARREF 'rd_beat_idx' generates 5 bits.
+                                                                                                                                                                      : ... note: In instance 'tb_npu_full_native.n_model'
+  165 |     wire [25:0] rd_mem_idx = {1'b0,ar_addr_r[27:3]} + rd_beat_idx;
+      |                                                     ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/pacerv_ddr3_axi_model_full.sv:194:63: Bit extraction of array[262143:0] requires 18 bit index, not 26 bits.
+                                                                                                                                                                     : ... note: In instance 'tb_npu_full_native.n_model'
+  194 |     assign s_rdata  = (R_MODE == 1) ? {8{32'hB1B2_B3B4}} : mem[rd_mem_idx];
+      |                                                               ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/pacerv_ddr3_axi_model_full.sv:209:20: Bit extraction of array[262143:0] requires 18 bit index, not 26 bits.
+                                                                                                                                                                     : ... note: In instance 'tb_npu_full_native.n_model'
+  209 |                 mem[wr_mem_idx] <= s_wdata;
+      |                    ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/pacerv_ddr3_axi_model_full.sv:211:28: Bit extraction of array[262143:0] requires 18 bit index, not 26 bits.
+                                                                                                                                                                     : ... note: In instance 'tb_npu_full_native.n_model'
+  211 |                 w_tmp = mem[wr_mem_idx];
+      |                            ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/pacerv_ddr3_axi_model_full.sv:217:20: Bit extraction of array[262143:0] requires 18 bit index, not 26 bits.
+                                                                                                                                                                     : ... note: In instance 'tb_npu_full_native.n_model'
+  217 |                 mem[wr_mem_idx] <= w_tmp;
+      |                    ^
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/pacerv_ddr3_axi_model_full.sv:357:40: Operator SHIFTR expects 32 bits on the LHS, but LHS's VARREF 's_awaddr' generates 28 bits.
+                                                                                                                                                                      : ... note: In instance 'tb_npu_full_native.n_model'
+  357 |  if(s_awvalid && s_awready && (s_awaddr>>3)+s_awlen>=MEM_BEATS) $fatal(1,"write memory address out of range");
+      |                                        ^~
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/pacerv_ddr3_axi_model_full.sv:357:44: Operator ADD expects 32 bits on the RHS, but RHS's VARREF 's_awlen' generates 4 bits.
+                                                                                                                                                                      : ... note: In instance 'tb_npu_full_native.n_model'
+  357 |  if(s_awvalid && s_awready && (s_awaddr>>3)+s_awlen>=MEM_BEATS) $fatal(1,"write memory address out of range");
+      |                                            ^
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/pacerv_ddr3_axi_model_full.sv:358:40: Operator SHIFTR expects 32 bits on the LHS, but LHS's VARREF 's_araddr' generates 28 bits.
+                                                                                                                                                                      : ... note: In instance 'tb_npu_full_native.n_model'
+  358 |  if(s_arvalid && s_arready && (s_araddr>>3)+s_arlen>=MEM_BEATS) $fatal(1,"read memory address out of range");
+      |                                        ^~
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/pacerv_ddr3_axi_model_full.sv:358:44: Operator ADD expects 32 bits on the RHS, but RHS's VARREF 's_arlen' generates 4 bits.
+                                                                                                                                                                      : ... note: In instance 'tb_npu_full_native.n_model'
+  358 |  if(s_arvalid && s_arready && (s_araddr>>3)+s_arlen>=MEM_BEATS) $fatal(1,"read memory address out of range");
+      |                                            ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/ddr3/ddr3_ctrl_axi.v:388:40: Operator ASSIGNDLY expects 3 bits on the Assign RHS, but Assign RHS's VARREF 'S_AW' generates 4 bits.
+                                                                                                  : ... note: In instance 'tb_npu_full_native.n_ctrl'
+  388 |                         dbg_to_state_r <= S_AW;
+      |                                        ^~
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/ddr3/ddr3_ctrl_axi.v:406:40: Operator ASSIGNDLY expects 3 bits on the Assign RHS, but Assign RHS's VARREF 'S_W' generates 4 bits.
+                                                                                                  : ... note: In instance 'tb_npu_full_native.n_ctrl'
+  406 |                         dbg_to_state_r <= S_W;
+      |                                        ^~
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/ddr3/ddr3_ctrl_axi.v:418:40: Operator ASSIGNDLY expects 3 bits on the Assign RHS, but Assign RHS's VARREF 'S_DW_AW' generates 4 bits.
+                                                                                                  : ... note: In instance 'tb_npu_full_native.n_ctrl'
+  418 |                         dbg_to_state_r <= S_DW_AW;
+      |                                        ^~
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/ddr3/ddr3_ctrl_axi.v:431:40: Operator ASSIGNDLY expects 3 bits on the Assign RHS, but Assign RHS's VARREF 'S_DW_W' generates 4 bits.
+                                                                                                  : ... note: In instance 'tb_npu_full_native.n_ctrl'
+  431 |                         dbg_to_state_r <= S_DW_W;
+      |                                        ^~
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/ddr3/ddr3_ctrl_axi.v:443:40: Operator ASSIGNDLY expects 3 bits on the Assign RHS, but Assign RHS's VARREF 'S_AR' generates 4 bits.
+                                                                                                  : ... note: In instance 'tb_npu_full_native.n_ctrl'
+  443 |                         dbg_to_state_r <= S_AR;
+      |                                        ^~
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/ddr3/ddr3_ctrl_axi.v:459:40: Operator ASSIGNDLY expects 3 bits on the Assign RHS, but Assign RHS's VARREF 'S_R' generates 4 bits.
+                                                                                                  : ... note: In instance 'tb_npu_full_native.n_ctrl'
+  459 |                         dbg_to_state_r <= S_R;
+      |                                        ^~
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/ddr3/ddr3_m3_share.v:44:37: Operator ADD expects 32 bits on the LHS, but LHS's VARREF 'next_owner' generates 2 bits.
+                                                                                                  : ... note: In instance 'tb_npu_full_native.pacerv_m3_share'
+   44 |                 candidate=next_owner+offset;
+      |                                     ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/ddr3/ddr3_m3_share.v:44:26: Operator ASSIGN expects 2 bits on the Assign RHS, but Assign RHS's ADD generates 32 bits.
+                                                                                                 : ... note: In instance 'tb_npu_full_native.pacerv_m3_share'
+   44 |                 candidate=next_owner+offset;
+      |                          ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/ddr3/pace_cpu_ddr_bridge.v:105:31: Operator ASSIGNDLY expects 32 bits on the Assign RHS, but Assign RHS's SHIFTR generates 256 bits.
+                                                                                                        : ... note: In instance 'tb_npu_full_native.pacerv_ddr_bridge'
+  105 |                         read_q<=m_rdata >> {word_q,5'b0}; read_seen<=1;
+      |                               ^~
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/weight_read_aligner_hardened.v:26:44: Operator ADD expects 5 bits on the RHS, but RHS's NEQ generates 1 bits.
+                                                                                                                : ... note: In instance 'tb_npu_full_native.aligner'
+   26 |     wire [4:0] physical_beats=request_beats+(up_cmd[12:8]!=5'd0);
+      |                                            ^
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/weight_read_aligner_hardened.v:31:34: Operator COND expects 512 bits on the Conditional True, but Conditional True's ARRAYSEL generates 256 bits.
+                                                                                                                : ... note: In instance 'tb_npu_full_native.aligner'
+   31 |     assign up_data=(offset==5'd0)?beats[emitted]:(pair >> {offset,3'd0});
+      |                                  ^
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/npu/weight_read_aligner_hardened.v:31:19: Operator ASSIGNW expects 256 bits on the Assign RHS, but Assign RHS's COND generates 512 bits.
+                                                                                                               : ... note: In instance 'tb_npu_full_native.aligner'
+   31 |     assign up_data=(offset==5'd0)?beats[emitted]:(pair >> {offset,3'd0});
+      |                   ^
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/tb_pacerv_native_npu.sv:35:82: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's VARXREF 'layer' generates 4 bits.
+                                                                                                                                                               : ... note: In instance 'tb_npu_full_native'
+   35 |  if(dut.layer!=prev) begin $display("LAYER %0d cycle %0d",dut.layer,cycles); prev=dut.layer; end
+      |                                                                                  ^
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/tb_pacerv_native_npu.sv:35:14: Operator NEQ expects 32 bits on the LHS, but LHS's VARXREF 'layer' generates 4 bits.
+                                                                                                                                                               : ... note: In instance 'tb_npu_full_native'
+   35 |  if(dut.layer!=prev) begin $display("LAYER %0d cycle %0d",dut.layer,cycles); prev=dut.layer; end
+      |              ^~
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/tb_pacerv_native_npu.sv:140:19: Operator NEQCASE expects 32 bits on the LHS, but LHS's VARXREF 'gap_wdata' generates 16 bits.
+                                                                                                                                                                : ... note: In instance 'tb_npu_full_native'
+  140 |  if(dut.gap_wdata !== exp_gap[count_gap]) $fatal(1,"gap mismatch index=%0d got=%0d exp=%0d cycle=%0d",count_gap,dut.gap_wdata,exp_gap[count_gap],cycles);
+      |                   ^~~
+%Warning-WIDTHTRUNC: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/tb_pacerv_native_npu.sv:163:26: Bit extraction of array[7:0] requires 3 bit index, not 4 bits.
+                                                                                                                                                               : ... note: In instance 'tb_npu_full_native'
+  163 | if(dut.sm_q16!==exp_probs[idx]) $fatal(1,"prob mismatch idx=%0d",idx);
+      |                          ^
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/tb_pacerv_native_npu.sv:262:20: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's SEL generates 28 bits.
+                                                                                                                                                                : ... note: In instance 'tb_npu_full_native'
+  262 |  if(wfirst<0)wfirst=n_mcmd[35:8];wlast=n_mcmd[35:8];
+      |                    ^
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/tb_pacerv_native_npu.sv:262:39: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's SEL generates 28 bits.
+                                                                                                                                                                : ... note: In instance 'tb_npu_full_native'
+  262 |  if(wfirst<0)wfirst=n_mcmd[35:8];wlast=n_mcmd[35:8];
+      |                                       ^
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/tb_pacerv_native_npu.sv:263:27: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's SEL generates 28 bits.
+                                                                                                                                                                : ... note: In instance 'tb_npu_full_native'
+  263 |  if(n_mcmd[35:8]<wmin)wmin=n_mcmd[35:8];if(n_mcmd[35:8]>wmax)wmax=n_mcmd[35:8];
+      |                           ^
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/tb_pacerv_native_npu.sv:263:17: Operator LT expects 32 bits on the LHS, but LHS's SEL generates 28 bits.
+                                                                                                                                                                : ... note: In instance 'tb_npu_full_native'
+  263 |  if(n_mcmd[35:8]<wmin)wmin=n_mcmd[35:8];if(n_mcmd[35:8]>wmax)wmax=n_mcmd[35:8];
+      |                 ^
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/tb_pacerv_native_npu.sv:263:66: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's SEL generates 28 bits.
+                                                                                                                                                                : ... note: In instance 'tb_npu_full_native'
+  263 |  if(n_mcmd[35:8]<wmin)wmin=n_mcmd[35:8];if(n_mcmd[35:8]>wmax)wmax=n_mcmd[35:8];
+      |                                                                  ^
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/tb_pacerv_native_npu.sv:263:56: Operator GT expects 32 bits on the LHS, but LHS's SEL generates 28 bits.
+                                                                                                                                                                : ... note: In instance 'tb_npu_full_native'
+  263 |  if(n_mcmd[35:8]<wmin)wmin=n_mcmd[35:8];if(n_mcmd[35:8]>wmax)wmax=n_mcmd[35:8];
+      |                                                        ^
+%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/tb_pacerv_native_npu.sv:267:39: Operator SHIFTR expects 32 bits on the LHS, but LHS's SEL generates 28 bits.
+                                                                                                                                                                : ... note: In instance 'tb_npu_full_native'
+  267 |  if((aca>>5)==(native_weight_cmd[35:8]>>5))$fatal(1,"weight activation alias");end
+      |                                       ^~
+%Warning-UNSIGNED: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/ddr3/ddr3_arbiter.v:135:37: Comparison is constant due to unsigned arithmetic
+                                                                                               : ... note: In instance 'tb_npu_full_native.n_ctrl.u_arbiter'
+  135 |     wire region_pcm_l = (check_addr >= 28'h000000) && (check_addr <= 28'h083FFF);
+      |                                     ^~
+                   ... For warning description see https://verilator.org/warn/UNSIGNED?v=5.040
+                   ... Use "/* verilator lint_off UNSIGNED */" and lint_on around source to disable this message.
+%Warning-CMPCONST: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/cpu/rv32_cpu_subsys.sv:428:47: Comparison is constant due to limited range
+                                                                                                  : ... note: In instance 'tb_npu_full_native.u_cpu'
+  428 |                       (d_req_address[DAW+1:2] <= DMEM_LAST);
+      |                                               ^~
+                   ... For warning description see https://verilator.org/warn/CMPCONST?v=5.040
+                   ... Use "/* verilator lint_off CMPCONST */" and lint_on around source to disable this message.
+%Warning-UNSIGNED: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/pacerv_ddr3_axi_model_full.sv:174:32: Comparison is constant due to unsigned arithmetic
+                                                                                                                                                                   : ... note: In instance 'tb_npu_full_native.n_model'
+  174 |                        (aw_dly >= AW_DLY_C);
+      |                                ^~
+%Warning-UNSIGNED: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/pacerv_ddr3_axi_model_full.sv:178:31: Comparison is constant due to unsigned arithmetic
+                                                                                                                                                                   : ... note: In instance 'tb_npu_full_native.n_model'
+  178 |                        (w_dly >= W_DLY_C);
+      |                               ^~
+%Warning-UNSIGNED: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/pacerv_ddr3_axi_model_full.sv:186:32: Comparison is constant due to unsigned arithmetic
+                                                                                                                                                                   : ... note: In instance 'tb_npu_full_native.n_model'
+  186 |                        (ar_dly >= AR_DLY_C);
+      |                                ^~
+%Warning-MULTIDRIVEN: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/cpu/vendor/pacerv_h3/rv32_core.sv:257:17: Bits [31:0] of signal 'tb_npu_full_native.u_cpu.u_core.frontend_pc' have multiple combinational drivers. This can cause performance degradation.
+                      /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/cpu/vendor/pacerv_h3/rv32_rvc_frontend.sv:150:24: ... Location of offending driver
+  150 |     assign predictor_pc=pc;
+      |                        ^
+                      /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/cpu/vendor/pacerv_h3/rv32_rvc_frontend.sv:151:18: ... Location of offending driver
+  151 |     assign out_pc=pc;
+      |                  ^
+                      ... For warning description see https://verilator.org/warn/MULTIDRIVEN?v=5.040
+                      ... Use "/* verilator lint_off MULTIDRIVEN */" and lint_on around source to disable this message.
+
+command: ["wsl.exe", "-d", "Ubuntu-22.04", "--cd", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga", "--exec", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/obj_pacerv/Vtb_npu_full_native"]
+input/cwd: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga
+exit: 0
+literal output:
+LAYER 0 cycle 0
+CPU UART 
+CPU UART PACERV RV32IMC SHARED SYSTEM
+CPU UART PACERV IMC OK 0
+CPU UART PACERV DDR OK 0 CRC=0xab60ce69
+CPU UART 
+CPU UART RV32 BOOT
+CPU UART RV32 MMIO OK
+CPU UART RV32 ISA OK
+CPU UART RV32 BENCH cycles=179874 inst=149878 acc=0xf2d8888b
+CPU UART DDR OK STS 0x00000001
+CPU_NATIVE launched by real firmware CTRL[0]
+NATIVE_MAP first=ffffffff last=00000000 min=0fffffff max=00000000 Amax=00000000 Bmax=00000000
+CPU UART NPU GO
+PROGRESS 1000000 layer 0 dma 10
+RESULT: PASS conv1 all 792576 outputs golden exact cycles=1105950
+LAYER 1 cycle 1105953
+LAYER 2 cycle 1107310
+NATIVE_MAP first=001003a0 last=00100320 min=00100200 max=00100520 Amax=004307e0 Bmax=00000000
+PROGRESS 2000000 layer 2 dma 10
+PROGRESS 3000000 layer 2 dma 10
+PROGRESS 4000000 layer 2 dma 10
+PROGRESS 5000000 layer 2 dma 10
+PROGRESS 6000000 layer 2 dma 10
+PROGRESS 7000000 layer 2 dma 10
+PROGRESS 8000000 layer 2 dma 10
+PROGRESS 9000000 layer 2 dma 10
+PROGRESS 10000000 layer 2 dma 10
+PROGRESS 11000000 layer 2 dma 10
+PROGRESS 12000000 layer 2 dma 10
+LAYER 3 cycle 12341119
+LAYER 4 cycle 12342026
+NATIVE_MAP first=001003a0 last=0010a660 min=00100200 max=0010aa60 Amax=004307e0 Bmax=00457fe0
+PROGRESS 13000000 layer 4 dma 10
+PROGRESS 14000000 layer 4 dma 10
+PROGRESS 15000000 layer 4 dma 10
+PROGRESS 16000000 layer 4 dma 10
+PROGRESS 17000000 layer 4 dma 10
+PROGRESS 18000000 layer 4 dma 10
+PROGRESS 19000000 layer 4 dma 10
+PROGRESS 20000000 layer 4 dma 10
+PROGRESS 21000000 layer 4 dma 10
+PROGRESS 22000000 layer 4 dma 10
+PROGRESS 23000000 layer 4 dma 10
+LAYER 5 cycle 23500445
+LAYER 6 cycle 23501788
+NATIVE_MAP first=001003a0 last=001330c0 min=00100200 max=001338c0 Amax=004307e0 Bmax=00457fe0
+PROGRESS 24000000 layer 6 dma 10
+PROGRESS 25000000 layer 6 dma 10
+PROGRESS 26000000 layer 6 dma 10
+PROGRESS 27000000 layer 6 dma 10
+PROGRESS 28000000 layer 6 dma 10
+PROGRESS 29000000 layer 6 dma 10
+PROGRESS 30000000 layer 6 dma 10
+PROGRESS 31000000 layer 6 dma 10
+RESULT: PASS four convs and DDR activation replay golden exact cycles=31142855
+LAYER 7 cycle 31142858
+LAYER 8 cycle 31142861
+LAYER 9 cycle 31143119
+FC1 group=  0 acc0=    -122616 acc1=      49645 b1=       -186 M1= 1441380553 s1= 40
+FC1 group=  1 acc0=     154345 acc1=      23857 b1=       -186 M1= 1441380553 s1= 40
+FC1 group=  2 acc0=     -72111 acc1=     -76375 b1=       -186 M1= 1441380553 s1= 40
+FC1 group=  3 acc0=     174990 acc1=      -5036 b1=       -186 M1= 1441380553 s1= 40
+FC1 group=  4 acc0=     164757 acc1=     -53848 b1=       -186 M1= 1441380553 s1= 40
+FC1 group=  5 acc0=     233981 acc1=     -73785 b1=       -186 M1= 1441380553 s1= 40
+FC1 group=  6 acc0=     243697 acc1=     184307 b1=       -186 M1= 1441380553 s1= 40
+FC1 group=  7 acc0=     179418 acc1=    -136396 b1=       -186 M1= 1441380553 s1= 40
+LAYER 10 cycle 31151326
+LAYER 11 cycle 31151753
+NATIVE_FINAL first=001003a0 last=001a8900 min=00100200 max=001a8b40 Amax=004307e0 Bmax=00457fe0
+RESULT: PASS full native controller npu_top golden inference cycles=31152094
+CPU UART NPU top1=0 last_class=7 last_p=0 c=31152093
+PACERV_NATIVE DDR requests=331 responses=331
+CPU_NATIVE expected report=NPU top1=0 last_class=7 last_p=0 c=31152093
+RESULT: PASS real CPU ROM MMIO launch, full native golden NPU, real result report and acknowledgement
+- /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/tb_pacerv_native_npu.sv:69: Verilog $finish
+- S i m u l a t i o n   R e p o r t: Verilator 5.040 2025-08-30
+- Verilator: $finish at 314ms; walltime 43.569 s; speed 7.423 ms/s
+- Verilator: cpu 42.275 s on 1 threads; alloced 201 MB
+wsl: 检测到 localhost 代理配置，但未镜像到 WSL。NAT 模式下的 WSL 不支持 localhost 代理。
+
+
+ROLLBACK CPU
+command: ["pwsh", "-NoProfile", "-Command", "& ([scriptblock]::Create([System.IO.File]::ReadAllText('D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\experiments\\pacerv_shared_system\\ROLLBACK.sh'))) -BaselineDirectory 'D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\baseline\\source' -TargetDirectory 'D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\integration_rollback\\restored_copy' -EvidenceDirectory 'D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\experiments\\pacerv_shared_system'"]
+input/cwd: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\build\pacerv_shared_system\integration_rollback\restored_copy\instrec_fpga
+exit: 0
+literal output:
+INTEGRATION_ROLLBACK_RESTORED files=31 isolated_copy=1
+
+command: ["D:\\AAAPP\\iverilog\\bin\\iverilog.EXE", "-g2012", "-s", "tb_rv_cpu", "-o", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\integration_rollback\\original.vvp", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\integration_rollback\\restored_copy\\instrec_fpga\\sim\\tb_rv_cpu.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\integration_rollback\\restored_copy\\instrec_fpga\\src\\cpu\\rv32_cpu_subsys.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\integration_rollback\\restored_copy\\cpu\\rtl\\rv32_core.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\integration_rollback\\restored_copy\\cpu\\rtl\\rv32_alu.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\integration_rollback\\restored_copy\\cpu\\rtl\\rv32_decode.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\integration_rollback\\restored_copy\\cpu\\rtl\\rv32_muldiv.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\integration_rollback\\restored_copy\\cpu\\rtl\\rv32_btb.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\integration_rollback\\restored_copy\\cpu\\rtl\\rv32_machine.sv"]
+input/cwd: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\build\pacerv_shared_system\integration_rollback\restored_copy\instrec_fpga
+exit: 0
+literal output:
+
+command: ["D:\\AAAPP\\iverilog\\bin\\vvp.EXE", "-i", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\integration_rollback\\original.vvp"]
+input/cwd: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\build\pacerv_shared_system\integration_rollback\restored_copy\instrec_fpga
+exit: 0
+literal output:
+WARNING: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\build\pacerv_shared_system\integration_rollback\restored_copy\instrec_fpga\src\cpu\rv32_cpu_subsys.sv:184: $readmemh(src/cpu/prog.hex): Not enough words in the file for the requested range [0:2047].
+WARNING: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\build\pacerv_shared_system\integration_rollback\restored_copy\instrec_fpga\src\cpu\rv32_cpu_subsys.sv:185: $readmemh(src/cpu/prog.hex): Not enough words in the file for the requested range [0:2047].
+dbg t=250000 pc=00000460 ireq=1/irdy=1 irsp=0 tr=0 nline=4 imem0=20002117
+CHECK PASS C10 firmware requested next inference after acknowledgement
+---- UART log (8 lines) ----
+
+RV32 BOOT
+RV32 MMIO OK
+RV32 ISA OK
+RV32 BENCH cycles=460012 inst=180008 acc=0xf2d8888b
+DDR OK STS 0x00000001
+NPU GO
+NPU top1=5 last_class=3 last_p=87 c=12345
+
+CHECK PASS C1 boot banner
+CHECK PASS C2 MMIO ID read-back
+CHECK PASS C3 ISA self-test
+CHECK PASS C4 mcycle/minstret measurement
+CHECK PASS C5 NPU event surfaced through MMIO
+CHECK PASS C6 CPU-triggered NPU start (CTRL[0])
+CHECK PASS C7 DDR status read-back
+CHECK PASS C8 firmware acknowledged and cleared NPU event
+CHECK PASS C9 result cycle snapshot survives live counter change
+RESULT: PASS
+D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\build\pacerv_shared_system\integration_rollback\restored_copy\instrec_fpga\sim\tb_rv_cpu.sv:210: $finish called at 4740005000 (1ps)
+
+
+MODIFIED SHARED UART
+command: ["D:/AAAPP\\iverilog/bin\\iverilog.EXE", "-g2012", "-i", "-s", "tb_shared_uart", "-o", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\uart\\clock_109375\\test.vvp", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\experiments\\pacerv_integration\\tb_shared_uart.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\ctrl\\instrec_top.v", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\ctrl\\uart_tx.v"]
+input/cwd: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga
+exit: 0
+literal output:
+D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\src\ctrl\instrec_top.v:588: warning: extra digits given for sized hex constant.
+
+command: ["D:/AAAPP\\iverilog/bin\\vvp.EXE", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\uart\\clock_109375\\test.vvp"]
+input/cwd: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga
+exit: 0
+literal output:
+SHARED_UART_PASS sources=4 bytes=32 no_duplicate_pop=1 wire_exact=1
+D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\sim\experiments\pacerv_integration\tb_shared_uart.sv:55: $finish called at 10820000 (1ps)
+
+
+STANDARD CPU TB (M and predictor disabled by this legacy TB)
+command: ["D:/AAAPP\\iverilog/bin\\iverilog.EXE", "-g2012", "-s", "tb_rv_cpu", "-o", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\standard_cpu_entry\\test.vvp", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\tb_rv_cpu.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\rv32_cpu_subsys.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_alu.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_btb.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_core.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_decode.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_machine.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_muldiv.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_rvc_expand.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\cpu\\vendor\\pacerv_h3\\rv32_rvc_frontend.sv"]
+input/cwd: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga
+exit: 0
+literal output:
+
+command: ["D:/AAAPP\\iverilog/bin\\vvp.EXE", "-i", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\standard_cpu_entry\\test.vvp"]
+input/cwd: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga
+exit: 0
+literal output:
+WARNING: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\src\cpu\rv32_cpu_subsys.sv:224: $readmemh(src/cpu/prog.hex): Not enough words in the file for the requested range [0:2047].
+CHECK PASS C10 firmware requested next inference after acknowledgement
+---- UART log (8 lines) ----
+
+RV32 BOOT
+RV32 MMIO OK
+RV32 ISA OK
+RV32 BENCH cycles=240009 inst=180008 acc=0xf2d8888b
+DDR OK STS 0x00000001
+NPU GO
+NPU top1=5 last_class=3 last_p=87 c=12345
+
+CHECK PASS C1 boot banner
+CHECK PASS C2 MMIO ID read-back
+CHECK PASS C3 ISA self-test
+CHECK PASS C4 mcycle/minstret measurement
+CHECK PASS C5 NPU event surfaced through MMIO
+CHECK PASS C6 CPU-triggered NPU start (CTRL[0])
+CHECK PASS C7 DDR status read-back
+CHECK PASS C8 firmware acknowledged and cleared NPU event
+CHECK PASS C9 result cycle snapshot survives live counter change
+RESULT: PASS
+D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\sim\tb_rv_cpu.sv:212: $finish called at 2479325000 (1ps)
+
+
+DISPLAY PIXEL EQUIVALENCE
+command: ["D:\\AAAPP\\iverilog\\bin\\iverilog.EXE", "-g2012", "-s", "tb_dashboard_ui", "-o", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\dashboard_equivalence_6clock\\baseline\\dashboard.vvp", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\dashboard_equivalence_6clock\\baseline\\tb_dashboard_ui.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\dashboard_equivalence_6clock\\baseline\\dashboard_renderer.v", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\dashboard_equivalence_6clock\\baseline\\dashboard_text.v"]
+input/cwd: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga
+exit: 0
+literal output:
+
+command: ["D:\\AAAPP\\iverilog\\bin\\vvp.EXE", "-i", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\dashboard_equivalence_6clock\\baseline\\dashboard.vvp"]
+input/cwd: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga
+exit: 0
+literal output:
+RESULT: PASS dashboard_ui frames=5 active_pixels=10368000 bar_checks=2000
+D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\build\pacerv_shared_system\dashboard_equivalence_6clock\baseline\tb_dashboard_ui.sv:112: $finish called at 104931600000 (1ps)
+
+command: ["D:\\AAAPP\\iverilog\\bin\\iverilog.EXE", "-g2012", "-s", "tb_dashboard_ui", "-o", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\dashboard_equivalence_7clock_timing_selector_register\\modified\\dashboard.vvp", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\dashboard_equivalence_7clock_timing_selector_register\\modified\\tb_dashboard_ui.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\dashboard_equivalence_7clock_timing_selector_register\\modified\\dashboard_renderer.v", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\dashboard_equivalence_7clock_timing_selector_register\\modified\\dashboard_text.v"]
+input/cwd: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga
+exit: 0
+literal output:
+
+command: ["D:\\AAAPP\\iverilog\\bin\\vvp.EXE", "-i", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\dashboard_equivalence_7clock_timing_selector_register\\modified\\dashboard.vvp"]
+input/cwd: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga
+exit: 0
+literal output:
+RESULT: PASS dashboard_ui frames=5 active_pixels=10368000 bar_checks=2000
+D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\build\pacerv_shared_system\dashboard_equivalence_7clock_timing_selector_register\modified\tb_dashboard_ui.sv:112: $finish called at 104931650000 (1ps)
+
+
+REGISTERED ACTIVATION MUX
+command: ["D:\\AAAPP\\iverilog\\bin\\iverilog.EXE", "-g2012", "-s", "tb_activation_store_mux", "-o", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\activation_mux\\mux.vvp", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\experiments\\activation_store\\tb_activation_store_mux.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\npu\\activation_store_mux.v"]
+input/cwd: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga
+exit: 0
+literal output:
+
+command: ["D:\\AAAPP\\iverilog\\bin\\vvp.EXE", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\activation_mux\\mux.vvp"]
+input/cwd: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga
+exit: 0
+literal output:
+RESULT: PASS activation store mux: 24 transactions, mixed immediate/delayed R
+D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\sim\experiments\activation_store\tb_activation_store_mux.sv:80: $finish called at 2240 (1s)
+
+
+PHYSICAL-RATE AUDIO CLOCK COMPARISON
+Input: 48 kHz stereo I2S, 27 MHz receiver, production CDC FIFO/audio sink;
+two 132096-frame windows per clock; behavioural DDR completion after 512 cycles.
+Startup first window has one injected frame at each clock; stable second window
+contains only real frames, with exact sample order and zero FIFO overflow.
+system_clock_hz: 125000000
+compile command: ["wsl.exe", "-d", "Ubuntu-22.04", "--cd", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga", "--exec", "/home/bx/.local/src/verilator-5.040/bin/verilator", "--binary", "--timing", "-Wno-fatal", "--top-module", "tb_audio_chain", "-j", "2", "--Mdir", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/pacerv_shared_system/audio_clock/20261114-022103/125000000/obj", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/pacerv_shared_system/audio_clock/20261114-022103/125000000/tb_audio_chain.sv", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/audio/i2s_slave_rx.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/audio/audio_cdc_fifo.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/audio/audio_sink.v"]
+exit: 0
+raw output: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\build\pacerv_shared_system\audio_clock\20261114-022103\125000000\compile.log
+raw output SHA256: 6e126dba5779770f80dc346b320249091338f4a982f7a2e7cd397577df30803f
+simulation command: ["wsl.exe", "-d", "Ubuntu-22.04", "--cd", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga", "--exec", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/pacerv_shared_system/audio_clock/20261114-022103/125000000/obj/Vtb_audio_chain", "+FULL", "+DLY=512"]
+exit: 0
+raw output: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\build\pacerv_shared_system\audio_clock\20261114-022103\125000000\simulation.log
+raw output SHA256: 0a8a2370261a76ca9bfd752dbf478e1bb117b1556247590376ce0cecf093012d
+literal results:
+WIN 1: real=132095 inj=1 freeze_cyc=8494395 err=0 ovf=0
+WIN 2: real=132096 inj=0 freeze_cyc=8495424 err=0 ovf=0
+AUDIO_CLOCK_PASS real=132096 injection=0 overflow=0 errors=0 ordered_samples=1
+system_clock_hz: 109375000
+compile command: ["wsl.exe", "-d", "Ubuntu-22.04", "--cd", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga", "--exec", "/home/bx/.local/src/verilator-5.040/bin/verilator", "--binary", "--timing", "-Wno-fatal", "--top-module", "tb_audio_chain", "-j", "2", "--Mdir", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/pacerv_shared_system/audio_clock/20261114-022103/109375000/obj", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/pacerv_shared_system/audio_clock/20261114-022103/109375000/tb_audio_chain.sv", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/audio/i2s_slave_rx.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/audio/audio_cdc_fifo.v", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/audio/audio_sink.v"]
+exit: 0
+raw output: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\build\pacerv_shared_system\audio_clock\20261114-022103\109375000\compile.log
+raw output SHA256: dfaaa344261e3fb13c9f9eab09fbe3d42d1c3f10d2411928350cfbec3afbd609
+simulation command: ["wsl.exe", "-d", "Ubuntu-22.04", "--cd", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga", "--exec", "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/pacerv_shared_system/audio_clock/20261114-022103/109375000/obj/Vtb_audio_chain", "+FULL", "+DLY=512"]
+exit: 0
+raw output: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\build\pacerv_shared_system\audio_clock\20261114-022103\109375000\simulation.log
+raw output SHA256: 43b3e94a7e62fc7eb09e82c76b0c875723caeb811d7b7ba3b340b2a3ac91bd5c
+literal results:
+WIN 1: real=132095 inj=1 freeze_cyc=8494395 err=0 ovf=0
+WIN 2: real=132096 inj=0 freeze_cyc=8495424 err=0 ovf=0
+AUDIO_CLOCK_PASS real=132096 injection=0 overflow=0 errors=0 ordered_samples=1
+
+CHECKSUM PIPELINE AND GAP STORAGE CONTROLS
+BASELINE exact command: python experiments/pacerv_shared_system/run_loader_gap_timing.py --mode BASELINE --label gap_sync_bram_20261114
+Input source hashes: [{"path": "src/ctrl/weight_loader.v", "sha256": "edfc91589316bf60134cf8b93839ec95998fbe64808a439a966d8e99e0109cf6"}, {"path": "src/npu/gap_unit.v", "sha256": "b24697c49780a01a768d015c594ef1512fc5cfe6a9f3798e6e6f227123b0acfc"}]
+command: ["D:\\AAAPP\\iverilog\\bin\\iverilog.EXE", "-g2012", "-s", "tb_weight_loader", "-o", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\gap_sync_bram_20261114\\BASELINE\\loader.vvp", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\gap_sync_bram_20261114\\BASELINE\\tb_weight_loader.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\gap_sync_bram_20261114\\BASELINE\\src\\ctrl\\weight_loader.v"]
+input/cwd: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga
+exit: 0
+literal output:
+
+command: ["D:\\AAAPP\\iverilog\\bin\\vvp.EXE", "-i", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\gap_sync_bram_20261114\\BASELINE\\loader.vvp"]
+input/cwd: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga
+exit: 0
+literal output:
+=== tb_weight_loader start ===
+OBS A: frame_cnt=4 weight_ok=1 weight_err=0 err_addr=00000000
+OBS A: rtl_digest=42851062 tb_digest=42851062 wr_cmds=4 rd_cmds=4 wr_beats=32 rd_beats=32
+UART_TEXT: KKKKWOK 42851062<0a>
+CHECK PASS: A four chunks accepted (4 x 'K')
+OBS A: terminal line bytes=13 (expect 13)
+CHECK PASS: A terminal line starts with 'WOK'
+CHECK PASS: A terminal line complete (13 = 'WOK ' + 8 hex + LF)
+CHECK PASS: A all eight digest characters
+CHECK PASS: A weight_ok
+CHECK PASS: A frame_cnt = 4
+CHECK PASS: A write-then-read-back digest matches
+CHECK PASS: A read-back covered all 4 chunks (rd_beats >= 32)
+OBS B: weight_ok=0 weight_err=1 err_addr=00000000 uart_len=1
+UART_TEXT: N
+CHECK PASS: B corrupt CRC rejected (weight_err)
+CHECK PASS: B NAK 'N' emitted
+OBS C: weight_ok=0 weight_err=0 frame_cnt=1 uart_len=1
+UART_TEXT: K
+CHECK PASS: C good chunk accepted after reset
+CHECK PASS: D changed DDR data detected
+CHECK PASS: D WERR reply retained
+=== tb_weight_loader done: 13 checks, 0 errors ===
+RESULT: PASS tb_weight_loader
+D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\build\pacerv_shared_system\timing_controls\gap_sync_bram_20261114\BASELINE\tb_weight_loader.sv:569: $finish called at 54745000 (1ps)
+
+command: ["D:\\AAAPP\\iverilog\\bin\\iverilog.EXE", "-g2012", "-s", "tb_gap_storage", "-o", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\gap_sync_bram_20261114\\BASELINE\\gap.vvp", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\gap_sync_bram_20261114\\BASELINE\\tb_gap_storage.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\gap_sync_bram_20261114\\BASELINE\\src\\npu\\gap_unit.v"]
+input/cwd: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga
+exit: 0
+literal output:
+
+command: ["D:\\AAAPP\\iverilog\\bin\\vvp.EXE", "-i", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\gap_sync_bram_20261114\\BASELINE\\gap.vvp"]
+input/cwd: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga
+exit: 0
+literal output:
+GAP_STORAGE_PASS frames=3 outputs=768 readbacks=768 stalls=1 rounding_ties=1 maximum=255
+D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\build\pacerv_shared_system\timing_controls\gap_sync_bram_20261114\BASELINE\tb_gap_storage.sv:68: $finish called at 551700000 (1ps)
+
+MODIFIED exact command: python experiments/pacerv_shared_system/run_loader_gap_timing.py --mode MODIFIED --label gap_sync_bram_20261114
+Input source hashes: [{"path": "src/ctrl/weight_loader.v", "sha256": "a7934f9d44f29bd39de92e8674972be050ce75070c4afb7f1c8af0e79a73c8be"}, {"path": "src/npu/gap_unit.v", "sha256": "f31e45c233af567f9ee8d8a9dfbd0e2e97c7375e58964c29a43eff2b6019c324"}]
+command: ["D:\\AAAPP\\iverilog\\bin\\iverilog.EXE", "-g2012", "-s", "tb_weight_loader", "-o", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\gap_sync_bram_20261114\\MODIFIED\\loader.vvp", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\gap_sync_bram_20261114\\MODIFIED\\tb_weight_loader.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\gap_sync_bram_20261114\\MODIFIED\\src\\ctrl\\weight_loader.v"]
+input/cwd: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga
+exit: 0
+literal output:
+
+command: ["D:\\AAAPP\\iverilog\\bin\\vvp.EXE", "-i", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\gap_sync_bram_20261114\\MODIFIED\\loader.vvp"]
+input/cwd: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga
+exit: 0
+literal output:
+=== tb_weight_loader start ===
+OBS A: frame_cnt=4 weight_ok=1 weight_err=0 err_addr=00000000
+OBS A: rtl_digest=42851062 tb_digest=42851062 wr_cmds=4 rd_cmds=4 wr_beats=32 rd_beats=32
+UART_TEXT: KKKKWOK 42851062<0a>
+CHECK PASS: A four chunks accepted (4 x 'K')
+OBS A: terminal line bytes=13 (expect 13)
+CHECK PASS: A terminal line starts with 'WOK'
+CHECK PASS: A terminal line complete (13 = 'WOK ' + 8 hex + LF)
+CHECK PASS: A all eight digest characters
+CHECK PASS: A weight_ok
+CHECK PASS: A frame_cnt = 4
+CHECK PASS: A write-then-read-back digest matches
+CHECK PASS: A read-back covered all 4 chunks (rd_beats >= 32)
+OBS B: weight_ok=0 weight_err=1 err_addr=00000000 uart_len=1
+UART_TEXT: N
+CHECK PASS: B corrupt CRC rejected (weight_err)
+CHECK PASS: B NAK 'N' emitted
+OBS C: weight_ok=0 weight_err=0 frame_cnt=1 uart_len=1
+UART_TEXT: K
+CHECK PASS: C good chunk accepted after reset
+CHECK PASS: D changed DDR data detected
+CHECK PASS: D WERR reply retained
+=== tb_weight_loader done: 13 checks, 0 errors ===
+RESULT: PASS tb_weight_loader
+D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\build\pacerv_shared_system\timing_controls\gap_sync_bram_20261114\MODIFIED\tb_weight_loader.sv:569: $finish called at 54745000 (1ps)
+
+command: ["D:\\AAAPP\\iverilog\\bin\\iverilog.EXE", "-g2012", "-s", "tb_gap_storage", "-o", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\gap_sync_bram_20261114\\MODIFIED\\gap.vvp", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\gap_sync_bram_20261114\\MODIFIED\\tb_gap_storage.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\gap_sync_bram_20261114\\MODIFIED\\src\\npu\\gap_unit.v"]
+input/cwd: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga
+exit: 0
+literal output:
+
+command: ["D:\\AAAPP\\iverilog\\bin\\vvp.EXE", "-i", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\gap_sync_bram_20261114\\MODIFIED\\gap.vvp"]
+input/cwd: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga
+exit: 0
+literal output:
+GAP_STORAGE_PASS frames=3 outputs=768 readbacks=768 stalls=1 rounding_ties=1 maximum=255
+D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\build\pacerv_shared_system\timing_controls\gap_sync_bram_20261114\MODIFIED\tb_gap_storage.sv:68: $finish called at 551730000 (1ps)
+
+ROLLBACK exact command: python experiments/pacerv_shared_system/run_loader_gap_timing.py --mode ROLLBACK --label gap_sync_bram_20261114
+Input source hashes: [{"path": "src/ctrl/weight_loader.v", "sha256": "edfc91589316bf60134cf8b93839ec95998fbe64808a439a966d8e99e0109cf6"}, {"path": "src/npu/gap_unit.v", "sha256": "b24697c49780a01a768d015c594ef1512fc5cfe6a9f3798e6e6f227123b0acfc"}]
+command: ["D:\\AAAPP\\iverilog\\bin\\iverilog.EXE", "-g2012", "-s", "tb_weight_loader", "-o", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\gap_sync_bram_20261114\\ROLLBACK\\loader.vvp", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\gap_sync_bram_20261114\\ROLLBACK\\tb_weight_loader.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\gap_sync_bram_20261114\\ROLLBACK\\src\\ctrl\\weight_loader.v"]
+input/cwd: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga
+exit: 0
+literal output:
+
+command: ["D:\\AAAPP\\iverilog\\bin\\vvp.EXE", "-i", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\gap_sync_bram_20261114\\ROLLBACK\\loader.vvp"]
+input/cwd: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga
+exit: 0
+literal output:
+=== tb_weight_loader start ===
+OBS A: frame_cnt=4 weight_ok=1 weight_err=0 err_addr=00000000
+OBS A: rtl_digest=42851062 tb_digest=42851062 wr_cmds=4 rd_cmds=4 wr_beats=32 rd_beats=32
+UART_TEXT: KKKKWOK 42851062<0a>
+CHECK PASS: A four chunks accepted (4 x 'K')
+OBS A: terminal line bytes=13 (expect 13)
+CHECK PASS: A terminal line starts with 'WOK'
+CHECK PASS: A terminal line complete (13 = 'WOK ' + 8 hex + LF)
+CHECK PASS: A all eight digest characters
+CHECK PASS: A weight_ok
+CHECK PASS: A frame_cnt = 4
+CHECK PASS: A write-then-read-back digest matches
+CHECK PASS: A read-back covered all 4 chunks (rd_beats >= 32)
+OBS B: weight_ok=0 weight_err=1 err_addr=00000000 uart_len=1
+UART_TEXT: N
+CHECK PASS: B corrupt CRC rejected (weight_err)
+CHECK PASS: B NAK 'N' emitted
+OBS C: weight_ok=0 weight_err=0 frame_cnt=1 uart_len=1
+UART_TEXT: K
+CHECK PASS: C good chunk accepted after reset
+CHECK PASS: D changed DDR data detected
+CHECK PASS: D WERR reply retained
+=== tb_weight_loader done: 13 checks, 0 errors ===
+RESULT: PASS tb_weight_loader
+D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\build\pacerv_shared_system\timing_controls\gap_sync_bram_20261114\ROLLBACK\tb_weight_loader.sv:569: $finish called at 54745000 (1ps)
+
+command: ["D:\\AAAPP\\iverilog\\bin\\iverilog.EXE", "-g2012", "-s", "tb_gap_storage", "-o", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\gap_sync_bram_20261114\\ROLLBACK\\gap.vvp", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\gap_sync_bram_20261114\\ROLLBACK\\tb_gap_storage.sv", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\gap_sync_bram_20261114\\ROLLBACK\\src\\npu\\gap_unit.v"]
+input/cwd: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga
+exit: 0
+literal output:
+
+command: ["D:\\AAAPP\\iverilog\\bin\\vvp.EXE", "-i", "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\gap_sync_bram_20261114\\ROLLBACK\\gap.vvp"]
+input/cwd: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga
+exit: 0
+literal output:
+GAP_STORAGE_PASS frames=3 outputs=768 readbacks=768 stalls=1 rounding_ties=1 maximum=255
+D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\build\pacerv_shared_system\timing_controls\gap_sync_bram_20261114\ROLLBACK\tb_gap_storage.sv:68: $finish called at 551700000 (1ps)
+
+
+DDR BASELINE/MODIFIED/ROLLBACK exact commands and all literal outputs:
+D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\sim\experiments\pacerv_shared_ddr\VERIFICATION.txt
+Rollback restored original behavior/hashes in a separate copy; live modified RTL remains.
+
+PDS exact commands, inputs and results are in evidence/*RESULT*.json,
+evidence/*INPUTS.json, evidence/*QUALIFICATION.json and evidence/*BUILD_RECIPE.tcl.
+Selected acceptance: 100Pro+ complete-system local PDS implementation and functional simulation.

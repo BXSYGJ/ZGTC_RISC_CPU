@@ -2,28 +2,37 @@
   "inputs": [
     {
       "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\experiments\\pacerv_integration\\tb_shared_uart.sv",
-      "sha256": "bb564e24c7b39c76fb064a14f929d555b0cb8937ace2e297c9dc6b831d711c2d"
+      "sha256": "c71d3696a347f509f2f49ee2ef92a02370b434c81bbcfbc1736d73b8819a22d6"
     },
     {
       "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\ctrl\\instrec_top.v",
-      "sha256": "a5e4848d294baf57afb11c5b117a0b9c5ff61d174ee951db56ae491c2f6d7191"
+      "sha256": "59073a5283f2600e54050e31aecbb58b77cd0f968d2ec3aaa6761b214e95c34d"
     },
     {
       "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\ctrl\\uart_tx.v",
       "sha256": "9ce20db2aa09f678ab0537ab97d131077400336a657c731860832350bf3cc762"
+    },
+    {
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\ipcore\\ddr3_test\\ddr3_test.idf",
+      "sha256": "e501751be82fa417ce56194ffb6c314c4d8d65ba9cffd0017d24c70345602c34"
     }
   ],
-  "scope": "production top UART arbitration and real serializer; other IP unelaborated",
+  "scope": "production top UART arbitration and real serializer at actual system clock/divisor; other IP unelaborated",
+  "system_clock_hz": 83333333,
+  "baud_div": 723,
+  "actual_baud": 115260.48824343015,
   "commands": [
     {
       "command": [
-        "D:/AAAPP\\iverilog/bin\\iverilog.EXE",
+        "D:\\AAAPP\\iverilog\\bin\\iverilog.EXE",
         "-g2012",
         "-i",
         "-s",
         "tb_shared_uart",
+        "-Ptb_shared_uart.CLOCK_HALF_NS=6.000000024000",
+        "-Ptb_shared_uart.SERIAL_BAUD_DIV=723",
         "-o",
-        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\uart\\clock_109375\\test.vvp",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\uart\\clock_83m333_register_fifo\\test.vvp",
         "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\experiments\\pacerv_integration\\tb_shared_uart.sv",
         "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\ctrl\\instrec_top.v",
         "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\ctrl\\uart_tx.v"
@@ -34,12 +43,12 @@
     },
     {
       "command": [
-        "D:/AAAPP\\iverilog/bin\\vvp.EXE",
-        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\uart\\clock_109375\\test.vvp"
+        "D:\\AAAPP\\iverilog\\bin\\vvp.EXE",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\uart\\clock_83m333_register_fifo\\test.vvp"
       ],
       "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga",
       "exit_status": 0,
-      "output": "SHARED_UART_PASS sources=4 bytes=32 no_duplicate_pop=1 wire_exact=1\r\nD:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\experiments\\pacerv_integration\\tb_shared_uart.sv:55: $finish called at 10820000 (1ps)\r\n"
+      "output": "SHARED_UART_PASS sources=4 bytes=32 no_duplicate_pop=1 wire_exact=1\r\nD:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\experiments\\pacerv_integration\\tb_shared_uart.sv:58: $finish called at 2777190000 (1ps)\r\n"
     }
   ],
   "passed": true

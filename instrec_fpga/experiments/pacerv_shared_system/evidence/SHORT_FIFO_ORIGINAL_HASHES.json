@@ -1,0 +1,12 @@
+﻿[
+  {
+    "path": "src/cpu/rv32_cpu_subsys.sv",
+    "sha256": "3caa8296a806186ad62c247a872ab5746d0b0841335a0fa7b92184a8c6bcac99",
+    "backup": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\short_fifo_registers_78125\\original\\src/cpu/rv32_cpu_subsys.sv"
+  },
+  {
+    "path": "src/ddr3/ddr3_ctrl_axi.v",
+    "sha256": "f4850d3cebe8f296407319f4bbb1f570a45864f5dc27d605e7ac58caad4c994f",
+    "backup": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\short_fifo_registers_78125\\original\\src/ddr3/ddr3_ctrl_axi.v"
+  }
+]
