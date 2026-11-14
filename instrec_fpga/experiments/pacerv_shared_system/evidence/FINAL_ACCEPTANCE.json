@@ -1,17 +1,17 @@
 {
   "objective": "Complete 100Pro+ whole-system timing acceptance",
-  "run": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261114-124245-full",
+  "run": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261114-133421-full",
   "checks": {
     "complete_physical_implementation": {
       "passed": false,
-      "reason": "[Errno 2] No such file or directory: 'D:\\\\AAAFPGA\\\\ZGTC_RISC_CPU_XSY\\\\instrec_fpga\\\\build\\\\pacerv_shared_system\\\\pds\\\\full-20261114-124245-full\\\\RESULT.json'"
+      "reason": "[Errno 2] No such file or directory: 'D:\\\\AAAFPGA\\\\ZGTC_RISC_CPU_XSY\\\\instrec_fpga\\\\build\\\\pacerv_shared_system\\\\pds\\\\full-20261114-133421-full\\\\RESULT.json'"
     },
     "frozen_live_committed_inputs_match": {
       "passed": true,
       "evidence": {
-        "committed_source": "a5189f2ec20e8cc81b6f6bea67774380cb273c02",
+        "committed_source": "df160bf892c38ec0d004062bdeb2de04e5fa2e29",
         "file_count": 202,
-        "manifest_sha256": "c02e64f69e5a2b9fbfb5daeb8d391b64d4375d55b9d8ba0a17a886eadcbfc4e5"
+        "manifest_sha256": "3509ae80da79ce5b92d4a63c0ed34a093408555dd0c6a6559ebb7c888e019141"
       }
     },
     "full_system_functional_evidence": {
@@ -31,7 +31,7 @@
         },
         "VERIFICATION.txt": {
           "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\experiments\\pacerv_shared_system\\VERIFICATION.txt",
-          "sha256": "8573bc6efe514bd1db2dd165a8f40f97db2ce1151423906a3224443d3fcfbdd4"
+          "sha256": "96f9df4854e1847a7c6156494db955c9dc154d8b3af5a2204d07806d2a5fead3"
         },
         "ROLLBACK.sh": {
           "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\experiments\\pacerv_shared_system\\ROLLBACK.sh",

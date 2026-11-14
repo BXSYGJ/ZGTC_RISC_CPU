@@ -8,7 +8,7 @@
 
 对话已经从论文修订推进到100Pro+音频整机集成。最新有效要求是采用“高性能PaceRV核心＋共享整机存储和外设”，并完成PG2L100H-6IFBG676本地PDS完整构建和快慢角时序验收。用户已取消远程上板，允许适度降频，要求继续设法使时序合格。
 
-当前候选系统时钟83.333333MHz、像素148.5MHz、音频48kHz。权重校验使用digest_q/rdigest_q；GAP已改为256×14同步原生块RAM和一拍读改写流水。DDR读FIFO16×256与CPU UART FIFO16×8采用显式标量寄存器，保持读出拍数。当前源码提交a5189f2，冻结run `full-20261114-124245-full` 的202项输入与该提交检出一致；父53944、runner97995，normal/seed5/hold12/180分钟，已完成布局并进入路由。映射38506LUT/50489FF/694DistributedRAM/129DRM/94APM，详细布局+1.113ns、TNS0。CPU、DDR、实际分频UART、完整NPU、连续音频及31文件回退均通过，最终物理资格待验。实时进展以STATUS顶部及HANDOFF最新追加段为准，目标保持active。
+当前候选系统时钟83.333333MHz、像素148.5MHz、音频48kHz。权重校验使用digest_q/rdigest_q；GAP已改为256×14同步原生块RAM和一拍读改写流水。DDR读FIFO16×256与CPU UART FIFO16×8采用显式标量寄存器，保持读出拍数。当前源码提交a5189f2，冻结run `full-20261114-133421-full` 的202项输入与该提交检出一致；父41788、runner61044，normal/seed5/hold12/180分钟，300/500/700ps工具修复目标，正在综合。映射38506LUT/50489FF/694DistributedRAM/129DRM/94APM，详细布局+1.113ns、TNS0。CPU、DDR、实际分频UART、完整NPU、连续音频及31文件回退均通过，最终物理资格待验。实时进展以STATUS顶部及HANDOFF最新追加段为准，目标保持active。
 
 ## 最初接续时的中断点（历史）
 
@@ -87,7 +87,7 @@ ROLLBACK.sh为UTF-8 BOM PowerShell源码，Git模式100755；常规PowerShell入
 
 ## 后续工作
 
-继续轮询124245的原runner97995，待实际结束后验收最终十表和位流。其83333333Hz配套配置、短FIFO显式寄存器、完整NPU、实际分频UART及连续音频已验证。111645的实际六阶段结果、未通过的最终时序及原输入均保留；旧035340和025700只用于历史比较。
+继续轮询124245的原runner61044，待实际结束后验收最终十表和位流。其83333333Hz配套配置、短FIFO显式寄存器、完整NPU、实际分频UART及连续音频已验证。111645的实际六阶段结果、未通过的最终时序及原输入均保留；旧035340和025700只用于历史比较。
 
 最终验收要求十张时序汇总表、Design Summary、实际系统/像素时钟、0.150ns及以上实际路径预算、冻结/活源/Git输入与位流一致。完整collector去掉pending后，audit_final_acceptance须退出0并输出GOAL_ACCEPTANCE_PASS。验证通过后更新STATUS、CHANGELOG、交接记录并本地提交XSY。
 
@@ -97,7 +97,7 @@ ROLLBACK.sh为UTF-8 BOM PowerShell源码，Git模式100755；常规PowerShell入
 继续 D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga 的 PaceRV 共享音频整机任务。
 先读 AGENTS.md、docs/STATUS.md 和 docs/CHAT_CONTINUATION_20261114.md。
 目标是完成100Pro+整机时序验收，保持active直至实际通过。
-当前run为full-20261114-124245-full，runner97995、父53944；83333333Hz系统、148500000Hz像素，normal/seed5/hold12/180分钟。
+当前run为full-20261114-133421-full，runner61044、父41788；83333333Hz系统、148500000Hz像素，normal/seed5/hold12/180分钟，300/500/700ps工具修复目标。
 源码a5189f2与202份冻结输入逐字节一致；完整NPU、CPU、DDR、实际分频UART、连续音频和31文件回退已过。
 保留同步块RAM GAP、digest_q/rdigest_q、DDR/CPU UART短FIFO显式寄存器和配套666.666667Mbps DDR。
 继续当前活跃run，完成最终十张快慢角表与位流验收，再完成无pending的collector及audit_final_acceptance。

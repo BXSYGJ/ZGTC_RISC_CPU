@@ -2,7 +2,7 @@
   "scope": "complete PG100 audio/NPU/display/PaceRV system",
   "stage": "full",
   "target": "PG2L100H-6IFBG676",
-  "source_commit": "86d3387c7648e8225841b713a0140c319ad18de4",
+  "source_commit": "df160bf892c38ec0d004062bdeb2de04e5fa2e29",
   "design_files": 82,
   "files": [
     {
@@ -1023,8 +1023,8 @@
   "system_clock_hz": 83333333,
   "pixel_clock_hz": 148500000,
   "hold_margin_ps": {
-    "post_route": 100,
-    "cross_srb": 400,
-    "clock_tree": 200
+    "post_route": 300,
+    "cross_srb": 700,
+    "clock_tree": 500
   }
 }

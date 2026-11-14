@@ -102,11 +102,13 @@ python experiments/pacerv_shared_system/inspect_pds.py <本轮远程构建目录
 新构建命令：
 
 ```powershell
-python experiments/pacerv_shared_system/prepare_pds.py --scope full --stage full --mode normal --seed 5 --hold-iterations 12 --run --minutes 180
+python experiments/pacerv_shared_system/prepare_pds.py --scope full --stage full --mode normal --seed 5 --hold-iterations 12 --hold-margin-ps 300 --hold-clock-margin-ps 500 --hold-cross-srb-margin-ps 700 --run --minutes 180
 python experiments/pacerv_shared_system/inspect_pds.py <构建目录> --require-qualified
 ```
 
 第二条命令同时检查十个时序汇总表、Design Summary、位流存在和冻结输入hash；退出0表示合格，退出2表示该构建仍有时序或输入问题。
+
+当前完整run为133421，202份硬件输入与124245一致。124245最终系统setup +0.150ns、slow hold +0.032ns，fast hold尚有三个端点最差-0.023ns；新run将post-route/clock-tree/cross-SRB的工具hold修复目标提高至300/500/700ps。实际FDC仍声明0.150ns不确定性，最终同时核对报告实际扣减值。
 
 ## 原155.25 MHz核心的隔离对照
 

@@ -1,0 +1,44 @@
+{
+  "objective": "Complete 100Pro+ whole-system timing acceptance",
+  "run": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261114-124245-full",
+  "checks": {
+    "complete_physical_implementation": {
+      "passed": false,
+      "reason": "[Errno 2] No such file or directory: 'D:\\\\AAAFPGA\\\\ZGTC_RISC_CPU_XSY\\\\instrec_fpga\\\\build\\\\pacerv_shared_system\\\\pds\\\\full-20261114-124245-full\\\\RESULT.json'"
+    },
+    "frozen_live_committed_inputs_match": {
+      "passed": true,
+      "evidence": {
+        "committed_source": "a5189f2ec20e8cc81b6f6bea67774380cb273c02",
+        "file_count": 202,
+        "manifest_sha256": "c02e64f69e5a2b9fbfb5daeb8d391b64d4375d55b9d8ba0a17a886eadcbfc4e5"
+      }
+    },
+    "full_system_functional_evidence": {
+      "passed": false,
+      "reason": "{'baseline_passed': True, 'cpu_passed': True, 'native_npu_passed': True, 'rollback_passed': True, 'shared_ddr_passed': True, 'shared_uart_passed': True, 'standard_cpu_tb_passed': True, 'checkout_inputs_match': True, 'full_pds_qualified': False, 'dashboard_equivalence_passed': True, 'activation_mux_passed': True, 'audio_clock_passed': True, 'loader_gap_controls_passed': True}"
+    },
+    "review_artifacts_and_rollback": {
+      "passed": true,
+      "evidence": {
+        "MODIFIED_FILE.sv": {
+          "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\experiments\\pacerv_shared_system\\MODIFIED_FILE.sv",
+          "sha256": "fce04d7b4c1367a7bd9ceb2da53fc67fd678eef9aa6731972fc900f38c17298c"
+        },
+        "DIFF_FILE.patch": {
+          "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\experiments\\pacerv_shared_system\\DIFF_FILE.patch",
+          "sha256": "c1427562b3a4cbc19f97146c96b83cc6128950d4ca98b07624b9e4d18d22361f"
+        },
+        "VERIFICATION.txt": {
+          "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\experiments\\pacerv_shared_system\\VERIFICATION.txt",
+          "sha256": "8573bc6efe514bd1db2dd165a8f40f97db2ce1151423906a3224443d3fcfbdd4"
+        },
+        "ROLLBACK.sh": {
+          "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\experiments\\pacerv_shared_system\\ROLLBACK.sh",
+          "sha256": "9fe28736500f529342b48847e9b29248c989443b7ba3c3d982fef724d70e4f64"
+        }
+      }
+    }
+  },
+  "passed": false
+}
