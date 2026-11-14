@@ -1,0 +1,29 @@
+{
+  "repository": "BXSYGJ/ZGTC_RISC_CPU",
+  "branch": "codex/rtos125-integration",
+  "verified_source_commit": "12d79828b8c67920f14750a23400a122bd0597c8",
+  "clock_hz": 125000000,
+  "tick_hz": 1000,
+  "kernel": "FreeRTOS-Kernel V11.3.3",
+  "functional_commands": 13,
+  "functional_commands_exit_zero": true,
+  "acceptance_gates_passed": 9,
+  "acceptance_gates_total": 9,
+  "archive_file_count": 586,
+  "archive_manifest_entries_reopened": 585,
+  "archive_manifest_all_hashes_pass": true,
+  "timing_constraints_met": false,
+  "board_test_executed": false,
+  "files": [
+    {
+      "name": "instrec_top_rtos125.sbit",
+      "bytes": 3791112,
+      "sha256": "525d08ea4b903de7604453b0457f131c0aa79d00e9611a4e43de6ba84a5eaf00"
+    },
+    {
+      "name": "rtos125-20261114-175148.zip",
+      "bytes": 5027483,
+      "sha256": "ed0ae7eac1a2c49879551fbd742abceb40572a154fb925e9d5f7e199484dd56d"
+    }
+  ]
+}

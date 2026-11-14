@@ -1,5 +1,7 @@
 # 125 MHz InstRec + FreeRTOS
 
+GitHub 发布分支为 [`codex/rtos125-integration`](https://github.com/BXSYGJ/ZGTC_RISC_CPU/tree/codex/rtos125-integration)。已验收的位流和完整交付 ZIP 位于 [`../releases/rtos125-20261114-175148/`](../releases/rtos125-20261114-175148/README.md)，该目录提供直接下载入口、原始 SHA256 和文件清单。
+
 本配置以原始 `full-20261113-223256-full` 整机为基线，加入真实的 FreeRTOS 抢占调度。系统时钟125 MHz，节拍1 kHz，程序ROM和数据RAM均为16 KiB。原125 MHz位流和202份输入保留，RTOS工程通过独立构建入口使用其冻结副本。
 
 FreeRTOS-Kernel固定为官方V11.3.3、提交`89592801dd8b73329a7583719b7e3567b50910e5`。`vendor/FreeRTOS-Kernel/PROVENANCE.json`记录37份原始文件哈希；内核源码按MIT许可证保留。机器态移植层位于`sw/port.c`、`sw/portASM.S`及`sw/portmacro.h`，PaceRV H3执行核心保持原值。
