@@ -1,0 +1,21 @@
+RTOS_UART 
+RTOS_UART PACERV RV32IMC SHARED SYSTEM
+RTOS_UART PACERV IMC OK 0
+RTOS_UART PACERV DDR OK 0 CRC=0xab60ce69
+RTOS_UART 
+RTOS_UART RV32 BOOT
+RTOS_UART RV32 MMIO OK
+RTOS_UART RV32 ISA OK
+RTOS_UART RV32 BENCH cycles=179874 inst=149878 acc=0xf2d8888b
+RTOS_UART DDR OK STS 0x00000001
+RTOS_NPU_START sequence=1 cycle=226246
+RTOS_UART NPU GO
+RTOS_NPU_INJECT result sequence=1 cycle=256247
+RTOS_UART NPU top1=5 last_class=3 last_p=87 c=12345
+RTOS_NPU_START sequence=2 cycle=257479
+BASELINE125_CPU_PASS hz=125000000 cycles=267481 starts=2 clears=1 DDR=331/331 UART=248
+- /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/sim/baseline125verified-20261114-154005-902905/inputs/tb_baseline125.sv:237: Verilog $finish
+- S i m u l a t i o n   R e p o r t: Verilator 5.040 2025-08-30
+- Verilator: $finish at 2ms; walltime 0.139 s; speed 16.322 ms/s
+- Verilator: cpu 0.131 s on 1 threads; alloced 190 MB
+wsl: 检测到 localhost 代理配置，但未镜像到 WSL。NAT 模式下的 WSL 不支持 localhost 代理。

@@ -1,0 +1,194 @@
+{
+  "repository": "https://github.com/FreeRTOS/FreeRTOS-Kernel",
+  "tag": "V11.3.3",
+  "commit": "89592801dd8b73329a7583719b7e3567b50910e5",
+  "license": "MIT",
+  "unmodified": true,
+  "files": [
+    {
+      "path": "tasks.c",
+      "sha256": "66460aa8b876b5b4b2bcbae1e05b48cd57747b4dd9224becb31fbfb3f0f43614",
+      "bytes": 374198
+    },
+    {
+      "path": "queue.c",
+      "sha256": "fea9d984e054252c1dbc558e4895e0579f36c7d4b6ed6b86af01edbe744fb59e",
+      "bytes": 134246
+    },
+    {
+      "path": "list.c",
+      "sha256": "cf7ad9e7624e49d0278ef99a0c34093c9172539c3b3310003da1da039d833673",
+      "bytes": 10389
+    },
+    {
+      "path": "timers.c",
+      "sha256": "9bb759c1a0902385b718b448c828da824badb7b83acc4eeefaeedb5e5a778844",
+      "bytes": 58726
+    },
+    {
+      "path": "event_groups.c",
+      "sha256": "de72eb2af49e6675d6d3c5d32ddbd4a3920b656036c1a91318fdc3b40325f6eb",
+      "bytes": 36754
+    },
+    {
+      "path": "stream_buffer.c",
+      "sha256": "75e841c28e93b569f267f284057dc620d283778cf3a95b4f24c2c944f182f66a",
+      "bytes": 78436
+    },
+    {
+      "path": "LICENSE.md",
+      "sha256": "9eb6f69d48a1dd764e8a33f14a584f460d3cec653477c136a95dd6df9c249211",
+      "bytes": 1055
+    },
+    {
+      "path": "README.md",
+      "sha256": "564cd37fdebe9043cf60fb912c377c5b5bf1883f9ffd8e386ba070860e2c966a",
+      "bytes": 7737
+    },
+    {
+      "path": "History.txt",
+      "sha256": "9bc3b487487f92416242d10aaca5f59c77f50dc435b4c69c6dd474eaeab90f61",
+      "bytes": 202148
+    },
+    {
+      "path": "include/atomic.h",
+      "sha256": "efd7fd3d5d6377d943c07ac439dfc989986095988e1c3d8fe32a219bc9ce0cda",
+      "bytes": 13751
+    },
+    {
+      "path": "include/croutine.h",
+      "sha256": "29f16072a9821c4554f8ccfc68c6a56f008e8f915bdf2ef7730ed99bada03058",
+      "bytes": 29339
+    },
+    {
+      "path": "include/deprecated_definitions.h",
+      "sha256": "ed40aa545d31221a40633785dac3518ff1d2f91b5727ed794f84d7f97ac9e7cc",
+      "bytes": 7799
+    },
+    {
+      "path": "include/event_groups.h",
+      "sha256": "6573c6c2691ff27614b5dca452b82c43d27a466ceeb72d7b01104bf609a0f610",
+      "bytes": 36608
+    },
+    {
+      "path": "include/FreeRTOS.h",
+      "sha256": "b565a6835dd835474213a8a734228363ca2ef62e086f9529134e2c54614e3af4",
+      "bytes": 109981
+    },
+    {
+      "path": "include/list.h",
+      "sha256": "845be2f2c721f723f1b59dee6d87b5690c605f69a205bf0519c9695b62c1085f",
+      "bytes": 25308
+    },
+    {
+      "path": "include/message_buffer.h",
+      "sha256": "9859fc4322780871e47777b771dbe217cb8901202426d5d74c6d14228d218c93",
+      "bytes": 45968
+    },
+    {
+      "path": "include/mpu_prototypes.h",
+      "sha256": "27351e3534c7272433d10b123b3f0ba72a3d69641149b23656bc3b5f1971b2f7",
+      "bytes": 33737
+    },
+    {
+      "path": "include/mpu_syscall_numbers.h",
+      "sha256": "4d53917fdb4d6ff709b4a0579b82ffb80b5f01cb3bbebbb8bb093b0d43d265fc",
+      "bytes": 5965
+    },
+    {
+      "path": "include/mpu_wrappers.h",
+      "sha256": "b49d2e0a3a3a5acdafeadabc93b434bb378f2b09228198631924fe8e15c9516e",
+      "bytes": 19434
+    },
+    {
+      "path": "include/newlib-freertos.h",
+      "sha256": "3d2e684af9caabce4c38f2a86403c7246afc69134fc79eb5e8e7bb65d0440a68",
+      "bytes": 2528
+    },
+    {
+      "path": "include/picolibc-freertos.h",
+      "sha256": "82f43e3b4bf9c110c2db88c9d111f07eded579c3abcdd926b71530dd6c19aff1",
+      "bytes": 4533
+    },
+    {
+      "path": "include/portable.h",
+      "sha256": "b864c6ec261e858cf47b66bdce99647b6a840908ef2ff160c80d844e71f65103",
+      "bytes": 12171
+    },
+    {
+      "path": "include/projdefs.h",
+      "sha256": "2c9dd8657f44cfd81ec983a10330a6983f899ca1f2a9e5c5e56d0d10a58b4505",
+      "bytes": 7489
+    },
+    {
+      "path": "include/queue.h",
+      "sha256": "e1fe0cb5a33d5195bd2c9505d7960d399c77481f125942f14d0315d22afc8b48",
+      "bytes": 75438
+    },
+    {
+      "path": "include/semphr.h",
+      "sha256": "2c51650d8c6c0d3393aadb27f24cb448776dc2bdc18ddb52c04cfe78db431123",
+      "bytes": 51464
+    },
+    {
+      "path": "include/stack_macros.h",
+      "sha256": "4239e46175b8954301cc9ff2f94dd1cd04b4902a09be316894b385cf3aba234d",
+      "bytes": 10063
+    },
+    {
+      "path": "include/StackMacros.h",
+      "sha256": "22fa28c85a52c5baaecc85a18bfd4449572e2b3aa4cc42cf8e484f10969bde98",
+      "bytes": 1607
+    },
+    {
+      "path": "include/stream_buffer.h",
+      "sha256": "7b473e712a72c27b3a611b70e5cbf2e0b616547e633924a66cfaee882a6c15bb",
+      "bytes": 59897
+    },
+    {
+      "path": "include/task.h",
+      "sha256": "7d78cfd7c7eb6d4104b82f0ba10e5a6a12d423324397be138b226481a15def6a",
+      "bytes": 174698
+    },
+    {
+      "path": "include/timers.h",
+      "sha256": "5ef3a3467ed838927157d89cabad96006b922675326ba7cebd0762bd852a51ef",
+      "bytes": 67453
+    },
+    {
+      "path": "portable/GCC/RISC-V/chip_extensions.cmake",
+      "sha256": "885f24afa9ffe06a4df7ab4ec8db7a52db8582c56f91748391d66b910848e7f0",
+      "bytes": 964
+    },
+    {
+      "path": "portable/GCC/RISC-V/Documentation.url",
+      "sha256": "dd983c0ac696fc7d92683f846b5bfe21e1d8759cd633e816fd30f06bfc28e883",
+      "bytes": 144
+    },
+    {
+      "path": "portable/GCC/RISC-V/port.c",
+      "sha256": "bae8f77df8f3cd78912873ee99ba3390268ad9c58f66a7c9cfe68a63fceb8067",
+      "bytes": 10047
+    },
+    {
+      "path": "portable/GCC/RISC-V/portASM.S",
+      "sha256": "6d42e72b31ef1ad4b8966a2d8c8dc26d0c691629ef22d53243da1d9fc313fd2d",
+      "bytes": 18838
+    },
+    {
+      "path": "portable/GCC/RISC-V/portContext.h",
+      "sha256": "3b9bab21632be7452fa836c4925233382867a910dc7603552fa74afd7cbe2d46",
+      "bytes": 17235
+    },
+    {
+      "path": "portable/GCC/RISC-V/portmacro.h",
+      "sha256": "11ca68647bd23e20761f50a5a0acafe404edf2a14900cc86ca9d5a880a9a736e",
+      "bytes": 8887
+    },
+    {
+      "path": "portable/GCC/RISC-V/readme.txt",
+      "sha256": "77f5a2b9a12ecdc5f4762838aad1280762f32e3f5a98ee2884e6117b745f8703",
+      "bytes": 1283
+    }
+  ]
+}

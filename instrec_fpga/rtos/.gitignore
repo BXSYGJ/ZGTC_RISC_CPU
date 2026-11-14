@@ -1,0 +1,4 @@
+# The project-wide IP ignore must not hide the self-contained 125 MHz inputs.
+!baseline125/ipcore/
+!baseline125/ipcore/**
+__pycache__/

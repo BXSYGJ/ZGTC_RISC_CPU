@@ -1,0 +1,99 @@
+{
+  "scope": "real FreeRTOS tasks on frozen 125 MHz PaceRV RTL; modeled NPU/DDR peripherals",
+  "clock_hz": 125000000,
+  "backend": "verilator-wsl",
+  "source_sha256": {
+    "rtos\\sim\\tb_rtos_cpu.sv": "ac43c47514726fbd895bef222318c58549b023d148e575bf19bb15249b92b922",
+    "build\\rtos\\firmware\\test\\prog.hex": "09efd7a324d265f7ee3a10903af806028066fd0bad346938b93eb7de87fabd5d",
+    "rtos\\rtl\\rv32_cpu_subsys.sv": "3e6974e357d424a686ad6b6fc33540bb6dd90b706a5afba23d420ed58b76c91f",
+    "rtos\\rtl\\machine_timer.v": "2c7cd24a27af87dc9214955f66ccb8ddc87919b6c9b18b5ed9a2870a107e227a",
+    "rtos\\baseline125\\src\\cpu\\vendor\\pacerv_h3\\rv32_alu.sv": "125647d90b98f294743127637406d19479eebda82dccfaaba7acaf59d5ae38b1",
+    "rtos\\baseline125\\src\\cpu\\vendor\\pacerv_h3\\rv32_btb.sv": "b1b3481343a2e1275cfd984c4eab05c5f9d92cb72dab652010463073eb86eb4f",
+    "rtos\\baseline125\\src\\cpu\\vendor\\pacerv_h3\\rv32_core.sv": "15f86ba74e955ce93c3937106c7650d367b0b6249ed8799e3b373f34f31da404",
+    "rtos\\baseline125\\src\\cpu\\vendor\\pacerv_h3\\rv32_decode.sv": "9cb2b57b46ed775d85b6e70a3eebe92c2d5e49e9a6483993109e2c096d9a3ff3",
+    "rtos\\baseline125\\src\\cpu\\vendor\\pacerv_h3\\rv32_machine.sv": "56b542e419c58216a08b0a5c83322506e42e2721fa28db50a6454ebe29607abd",
+    "rtos\\baseline125\\src\\cpu\\vendor\\pacerv_h3\\rv32_muldiv.sv": "64df4940f2d309fa68e8183f5ed1825e8843046703bf5f34ec8b885b03532246",
+    "rtos\\baseline125\\src\\cpu\\vendor\\pacerv_h3\\rv32_rvc_expand.sv": "308ac8a65c9e29aeec27b38417483d0f43fd7c54487c26e89a3fa54b4647951b",
+    "rtos\\baseline125\\src\\cpu\\vendor\\pacerv_h3\\rv32_rvc_frontend.sv": "210b5ba9280c3840aafc27e7c3e35616085efde310793dc1661cc72f50984128"
+  },
+  "input_sha256": {
+    "build\\rtos\\sim\\critical16-20261114-154726-633926\\inputs\\rtos\\sim\\tb_rtos_cpu.sv": "0c827f7826bee64114307297db4f1e0dcc017f1a01e7eb09cc48d80b288e600f",
+    "build\\rtos\\sim\\critical16-20261114-154726-633926\\inputs\\build\\rtos\\firmware\\test\\prog.hex": "09efd7a324d265f7ee3a10903af806028066fd0bad346938b93eb7de87fabd5d",
+    "build\\rtos\\sim\\critical16-20261114-154726-633926\\inputs\\rtos\\rtl\\rv32_cpu_subsys.sv": "3e6974e357d424a686ad6b6fc33540bb6dd90b706a5afba23d420ed58b76c91f",
+    "build\\rtos\\sim\\critical16-20261114-154726-633926\\inputs\\rtos\\rtl\\machine_timer.v": "2c7cd24a27af87dc9214955f66ccb8ddc87919b6c9b18b5ed9a2870a107e227a",
+    "build\\rtos\\sim\\critical16-20261114-154726-633926\\inputs\\rtos\\baseline125\\src\\cpu\\vendor\\pacerv_h3\\rv32_alu.sv": "125647d90b98f294743127637406d19479eebda82dccfaaba7acaf59d5ae38b1",
+    "build\\rtos\\sim\\critical16-20261114-154726-633926\\inputs\\rtos\\baseline125\\src\\cpu\\vendor\\pacerv_h3\\rv32_btb.sv": "b1b3481343a2e1275cfd984c4eab05c5f9d92cb72dab652010463073eb86eb4f",
+    "build\\rtos\\sim\\critical16-20261114-154726-633926\\inputs\\rtos\\baseline125\\src\\cpu\\vendor\\pacerv_h3\\rv32_core.sv": "15f86ba74e955ce93c3937106c7650d367b0b6249ed8799e3b373f34f31da404",
+    "build\\rtos\\sim\\critical16-20261114-154726-633926\\inputs\\rtos\\baseline125\\src\\cpu\\vendor\\pacerv_h3\\rv32_decode.sv": "9cb2b57b46ed775d85b6e70a3eebe92c2d5e49e9a6483993109e2c096d9a3ff3",
+    "build\\rtos\\sim\\critical16-20261114-154726-633926\\inputs\\rtos\\baseline125\\src\\cpu\\vendor\\pacerv_h3\\rv32_machine.sv": "56b542e419c58216a08b0a5c83322506e42e2721fa28db50a6454ebe29607abd",
+    "build\\rtos\\sim\\critical16-20261114-154726-633926\\inputs\\rtos\\baseline125\\src\\cpu\\vendor\\pacerv_h3\\rv32_muldiv.sv": "64df4940f2d309fa68e8183f5ed1825e8843046703bf5f34ec8b885b03532246",
+    "build\\rtos\\sim\\critical16-20261114-154726-633926\\inputs\\rtos\\baseline125\\src\\cpu\\vendor\\pacerv_h3\\rv32_rvc_expand.sv": "308ac8a65c9e29aeec27b38417483d0f43fd7c54487c26e89a3fa54b4647951b",
+    "build\\rtos\\sim\\critical16-20261114-154726-633926\\inputs\\rtos\\baseline125\\src\\cpu\\vendor\\pacerv_h3\\rv32_rvc_frontend.sv": "210b5ba9280c3840aafc27e7c3e35616085efde310793dc1661cc72f50984128"
+  },
+  "commands": [
+    {
+      "command": [
+        "wsl.exe",
+        "-d",
+        "Ubuntu-22.04",
+        "--cd",
+        "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga",
+        "--exec",
+        "/home/bx/.local/src/verilator-5.040/bin/verilator",
+        "--binary",
+        "--timing",
+        "-Wno-fatal",
+        "-j",
+        "2",
+        "--top-module",
+        "tb_rtos_cpu",
+        "--Mdir",
+        "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/sim/critical16-20261114-154726-633926/obj",
+        "-CFLAGS",
+        "-O2",
+        "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/sim/critical16-20261114-154726-633926/inputs/rtos/sim/tb_rtos_cpu.sv",
+        "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/sim/critical16-20261114-154726-633926/inputs/rtos/rtl/rv32_cpu_subsys.sv",
+        "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/sim/critical16-20261114-154726-633926/inputs/rtos/rtl/machine_timer.v",
+        "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/sim/critical16-20261114-154726-633926/inputs/rtos/baseline125/src/cpu/vendor/pacerv_h3/rv32_alu.sv",
+        "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/sim/critical16-20261114-154726-633926/inputs/rtos/baseline125/src/cpu/vendor/pacerv_h3/rv32_btb.sv",
+        "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/sim/critical16-20261114-154726-633926/inputs/rtos/baseline125/src/cpu/vendor/pacerv_h3/rv32_core.sv",
+        "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/sim/critical16-20261114-154726-633926/inputs/rtos/baseline125/src/cpu/vendor/pacerv_h3/rv32_decode.sv",
+        "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/sim/critical16-20261114-154726-633926/inputs/rtos/baseline125/src/cpu/vendor/pacerv_h3/rv32_machine.sv",
+        "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/sim/critical16-20261114-154726-633926/inputs/rtos/baseline125/src/cpu/vendor/pacerv_h3/rv32_muldiv.sv",
+        "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/sim/critical16-20261114-154726-633926/inputs/rtos/baseline125/src/cpu/vendor/pacerv_h3/rv32_rvc_expand.sv",
+        "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/sim/critical16-20261114-154726-633926/inputs/rtos/baseline125/src/cpu/vendor/pacerv_h3/rv32_rvc_frontend.sv"
+      ],
+      "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga",
+      "exit_status": 0,
+      "output": "make: Entering directory '/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/sim/critical16-20261114-154726-633926/obj'\ng++ -Os  -I.  -MMD -I/home/bx/.local/src/verilator-5.040/include -I/home/bx/.local/src/verilator-5.040/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -DVM_TRACE_SAIF=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -O2 -DVL_TIME_CONTEXT   -fcoroutines -c -o verilated.o /home/bx/.local/src/verilator-5.040/include/verilated.cpp\ng++ -Os  -I.  -MMD -I/home/bx/.local/src/verilator-5.040/include -I/home/bx/.local/src/verilator-5.040/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -DVM_TRACE_SAIF=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -O2 -DVL_TIME_CONTEXT   -fcoroutines -c -o verilated_timing.o /home/bx/.local/src/verilator-5.040/include/verilated_timing.cpp\ng++ -Os  -I.  -MMD -I/home/bx/.local/src/verilator-5.040/include -I/home/bx/.local/src/verilator-5.040/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -DVM_TRACE_SAIF=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -O2 -DVL_TIME_CONTEXT   -fcoroutines -c -o verilated_threads.o /home/bx/.local/src/verilator-5.040/include/verilated_threads.cpp\npython3 /home/bx/.local/src/verilator-5.040/bin/verilator_includer -DVL_INCLUDE_OPT=include Vtb_rtos_cpu.cpp Vtb_rtos_cpu___024root__DepSet_hde3e5d8f__0.cpp Vtb_rtos_cpu___024root__DepSet_h8d6660ba__0.cpp Vtb_rtos_cpu__main.cpp Vtb_rtos_cpu__ConstPool_0.cpp Vtb_rtos_cpu___024root__Slow.cpp Vtb_rtos_cpu___024root__DepSet_hde3e5d8f__0__Slow.cpp Vtb_rtos_cpu___024root__DepSet_h8d6660ba__0__Slow.cpp Vtb_rtos_cpu__Syms.cpp > Vtb_rtos_cpu__ALL.cpp\necho \"\" > Vtb_rtos_cpu__ALL.verilator_deplist.tmp\ng++ -Os  -I.  -MMD -I/home/bx/.local/src/verilator-5.040/include -I/home/bx/.local/src/verilator-5.040/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -DVM_TRACE_SAIF=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -O2 -DVL_TIME_CONTEXT   -fcoroutines -c -o Vtb_rtos_cpu__ALL.o Vtb_rtos_cpu__ALL.cpp\ng++    verilated.o verilated_timing.o verilated_threads.o Vtb_rtos_cpu__ALL.a    -pthread -lpthread -latomic   -o Vtb_rtos_cpu\nrm Vtb_rtos_cpu__ALL.verilator_deplist.tmp\nmake: Leaving directory '/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/sim/critical16-20261114-154726-633926/obj'\n- V e r i l a t i o n   R e p o r t: Verilator 5.040 2025-08-30 rev UNKNOWN.REV\n- Verilator: Built from 0.971 MB sources in 12 modules, into 0.972 MB in 9 C++ files needing 0.001 MB\n- Verilator: Walltime 8.607 s (elab=0.021, cvt=0.235, bld=7.053); cpu 0.297 s on 2 threads; alloced 225.430 MB\nw\u0000s\u0000l\u0000:\u0000 \u0000�hKm0R \u0000l\u0000o\u0000c\u0000a\u0000l\u0000h\u0000o\u0000s\u0000t\u0000 \u0000�N\u0006tM�n\f�FO*g\\��P0R \u0000W\u0000S\u0000L\u0000\u00020N\u0000A\u0000T\u0000 \u0000!j\u000f_\u000bN�v \u0000W\u0000S\u0000L\u0000 \u0000\rN/e\u0001c \u0000l\u0000o\u0000c\u0000a\u0000l\u0000h\u0000o\u0000s\u0000t\u0000 \u0000�N\u0006t\u00020\r\u0000\n\u0000%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/sim/critical16-20261114-154726-633926/inputs/rtos/sim/tb_rtos_cpu.sv:114:53: Operator ASSIGNDLY expects 32 bits on the Assign RHS, but Assign RHS's VARXREF 'tx_count' generates 5 bits.\n                                                                                                                                                          : ... note: In instance 'tb_rtos_cpu'\n  114 |             if (dut.tx_count > uart_peak) uart_peak <= dut.tx_count;\n      |                                                     ^~\n                      ... For warning description see https://verilator.org/warn/WIDTHEXPAND?v=5.040\n                      ... Use \"/* verilator lint_off WIDTHEXPAND */\" and lint_on around source to disable this message.\n%Warning-WIDTHEXPAND: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/sim/critical16-20261114-154726-633926/inputs/rtos/sim/tb_rtos_cpu.sv:114:30: Operator GT expects 32 bits on the LHS, but LHS's VARXREF 'tx_count' generates 5 bits.\n                                                                                                                                                          : ... note: In instance 'tb_rtos_cpu'\n  114 |             if (dut.tx_count > uart_peak) uart_peak <= dut.tx_count;\n      |                              ^\n%Warning-MULTIDRIVEN: /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/sim/critical16-20261114-154726-633926/inputs/rtos/baseline125/src/cpu/vendor/pacerv_h3/rv32_core.sv:257:17: Bits [31:0] of signal 'tb_rtos_cpu.dut.u_core.frontend_pc' have multiple combinational drivers. This can cause performance degradation.\n                      /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/sim/critical16-20261114-154726-633926/inputs/rtos/baseline125/src/cpu/vendor/pacerv_h3/rv32_rvc_frontend.sv:150:24: ... Location of offending driver\n  150 |     assign predictor_pc=pc;\n      |                        ^\n                      /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/sim/critical16-20261114-154726-633926/inputs/rtos/baseline125/src/cpu/vendor/pacerv_h3/rv32_rvc_frontend.sv:151:18: ... Location of offending driver\n  151 |     assign out_pc=pc;\n      |                  ^\n                      ... For warning description see https://verilator.org/warn/MULTIDRIVEN?v=5.040\n                      ... Use \"/* verilator lint_off MULTIDRIVEN */\" and lint_on around source to disable this message.\n",
+      "elapsed_seconds": 8.902
+    },
+    {
+      "command": [
+        "wsl.exe",
+        "-d",
+        "Ubuntu-22.04",
+        "--cd",
+        "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga",
+        "--exec",
+        "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/sim/critical16-20261114-154726-633926/obj/Vtb_rtos_cpu",
+        "+rtos_progress"
+      ],
+      "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga",
+      "exit_status": 0,
+      "output": "RTOS_PROGRESS cycle=0 pc=00000000 SP=00000000 ticks=0 yields=0 starts=0 LED=00\nRTOS_UART \nRTOS_UART RTOS BOOT hz=125000000 tick=1000\nRTOS_UART RTOS IMC OK\nRTOS_UART RTOS DDR OK\nRTOS_PROGRESS cycle=250000 pc=00000e94 SP=20000cd0 ticks=0 yields=0 starts=0 LED=00\nRTOS_UART RTOS CRITICAL PASS deferred=3 caught=3 depth=2 mie=0 pending=1\nRTOS_NPU_START sequence=1 cycle=451247\nRTOS_PROGRESS cycle=500000 pc=00000dcc SP=20001920 ticks=3 yields=4 starts=1 LED=00\nRTOS_PROGRESS cycle=750000 pc=00000d68 SP=20001920 ticks=5 yields=7 starts=1 LED=00\nRTOS_NPU_INJECT result sequence=1 cycle=826248\nRTOS_NPU_START sequence=2 cycle=918083\nRTOS_UART RTOS NPU top1=5 last_class=3 last_p=87 c=12345 seq=1 tick=7\nRTOS_PROGRESS cycle=1000000 pc=00000dd0 SP=20001920 ticks=7 yields=10 starts=2 LED=d0\nRTOS_NPU_INJECT timeout sequence=2 cycle=1168084\nRTOS_PROGRESS cycle=1250000 pc=00000d64 SP=20001920 ticks=9 yields=12 starts=2 LED=d0\nRTOS_NPU_START sequence=3 cycle=1293015\nRTOS_UART RTOS NPU TIMEOUT seq=2 tick=10\nRTOS_PROGRESS cycle=1500000 pc=00000d84 SP=20001920 ticks=11 yields=15 starts=3 LED=d0\nRTOS_NPU_INJECT result sequence=3 cycle=1668016\nRTOS_PROGRESS cycle=1750000 pc=00000db4 SP=20001920 ticks=13 yields=17 starts=3 LED=d0\nRTOS_NPU_START sequence=4 cycle=1793016\nRTOS_UART RTOS NPU top1=2 last_class=6 last_p=64 c=54321 seq=3 tick=14\nRTOS_PROGRESS cycle=2000000 pc=00000dac SP=20001920 ticks=15 yields=20 starts=4 LED=a0\nRTOS_UART RTOS TEST PASS ticks=16 queues=3 preempt=23010,20526\nRTOS_CPU_PASS hz=125000000 cycles=2053456 ticks=16 yields=22 mret=39 starts=4 results=2 clears=4 DDR=33/33 stalls=5 UART=335 peak=16 tick_min=272 tick_max=125000 catchup=3 compare=17\n- /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/sim/critical16-20261114-154726-633926/inputs/rtos/sim/tb_rtos_cpu.sv:273: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.040 2025-08-30\n- Verilator: $finish at 16ms; walltime 1.030 s; speed 16.065 ms/s\n- Verilator: cpu 1.023 s on 1 threads; alloced 190 MB\nwsl: 检测到 localhost 代理配置，但未镜像到 WSL。NAT 模式下的 WSL 不支持 localhost 代理。\r\n",
+      "elapsed_seconds": 1.158
+    }
+  ],
+  "passed": true,
+  "required_output": {
+    "RTOS_CPU_PASS": true,
+    "RTOS BOOT hz=125000000 tick=1000": true,
+    "RTOS NPU top1=5 last_class=3 last_p=87 c=12345": true,
+    "RTOS NPU TIMEOUT": true,
+    "RTOS NPU top1=2 last_class=6 last_p=64 c=54321": true,
+    "RTOS CRITICAL PASS": true,
+    "RTOS TEST PASS": true
+  },
+  "inputs_unchanged": true
+}

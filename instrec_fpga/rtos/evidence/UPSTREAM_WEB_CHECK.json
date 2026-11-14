@@ -1,0 +1,178 @@
+{
+  "version": "4.0.0-local",
+  "request_id": "d5a65bb8-0ebf-45c2-8c3a-5d34c39d511e",
+  "ok": true,
+  "status": "success",
+  "mode": "per-url-auto",
+  "requested": 2,
+  "succeeded": 2,
+  "failed": 0,
+  "results": [
+    {
+      "url": "https://github.com/FreeRTOS/FreeRTOS-Kernel/releases/tag/V11.3.3",
+      "ok": true,
+      "status": "content",
+      "title": "Release V11.3.3 · FreeRTOS/FreeRTOS-Kernel · GitHub",
+      "final_url": "https://github.com/FreeRTOS/FreeRTOS-Kernel/releases/tag/V11.3.3",
+      "canonical_url": null,
+      "http_status": null,
+      "content": "\n      \n  \n    \n    \n\n\n    \n\n\n\n\n\n\n\n\n    \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n  \n  \n  \n\n\n\n  \n\n\n\n\n    \n    \n\n\n\n    \n      \n\n  \n\n  \n  \n        \n  \n    \n        V11.3.3\n      \n        Latest\n          \n              \n\n          \n      \n    \n\n    \n      Latest\n    \n        \n          \n\n        \n  \n  \n                    \n  \n      \n    Compare\n      \n          \n      \n  \n\n\n    \n      \n  \n    \n      \n        Choose a tag to compare\n      \n        \n    \n    \n      \n    \n  \n              \n              \n  \n      \n        \n      \n    \n      \n                  Sorry, something went wrong.\n\n            \n            \n                \n      \n        Filter\n    \n  \n      \n        \n          \n      Loading\n\n      \n    \n      \n\n      \n  \n  \n  \n\n    \n\n\n      \n        \n          \n          \n            \n                \n  \n                  \n                    \n                      \n  \n                    \n                    \n                        \n                          \n                          Sorry, something went wrong.\n                        \n                    \n\n  \n    \n  \n    \n      \n\n              Uh oh!\n\n              There was an error while loading. Please reload this page.\n\n\n  \n  \n            \n            \n              No results found\n            \n        \n                \n            View all tags\n          \n\n  \n\n\n  \n\n\n  \n    \n  \n      \n      github-actions\n\n    released this\n\n      \n        30 Oct 16:52\n      \n  \n\n  \n        \n          ·\n          \n            0 commits\n          \n          to main\n          since this release\n        \n\n\n        \n          \n              \n              \n                V11.3.3\n              \n          \n        \n        \n          \n              8959280          \n        \n\n\n  \n        Contains source code for the FreeRTOS Kernel.\n\n  \n        \n          \n    \n          \n      Assets\n      3\n    \n\n            \n  \n        \n      Loading\n\n\n  \n    \n  \n    \n      \n\n              Uh oh!\n\n              There was an error while loading. Please reload this page.\n\n\n  \n  \n\n\n\n        \n\n\n          \n              \n      2 people reacted\n\n          \n\n\n\n\n\n\n  \n\n\n\n\n    ",
+      "chars": 2118,
+      "original_chars": 2118,
+      "truncated": false,
+      "content_sha256": "8d1508ad9677e31947cd7ba564abc4c3fc05f8377ef127f94d665c2108718a9d",
+      "source": "camofox-rendered",
+      "retrieved_at": "2026-11-14T07:19:36.364Z",
+      "published_date": null,
+      "published_date_source": null,
+      "date_status": "unknown",
+      "time_precision": null,
+      "modified_date": null,
+      "modified_date_status": "unknown",
+      "links": [
+        {
+          "title": "FreeRTOS",
+          "url": "https://github.com/FreeRTOS"
+        },
+        {
+          "title": "FreeRTOS-Kernel",
+          "url": "https://github.com/FreeRTOS/FreeRTOS-Kernel"
+        },
+        {
+          "title": "Code",
+          "url": "https://github.com/FreeRTOS/FreeRTOS-Kernel"
+        },
+        {
+          "title": "Issues50 (50)",
+          "url": "https://github.com/FreeRTOS/FreeRTOS-Kernel/issues"
+        },
+        {
+          "title": "Pull requests71 (71)",
+          "url": "https://github.com/FreeRTOS/FreeRTOS-Kernel/pulls"
+        },
+        {
+          "title": "Actions",
+          "url": "https://github.com/FreeRTOS/FreeRTOS-Kernel/actions"
+        },
+        {
+          "title": "Projects",
+          "url": "https://github.com/FreeRTOS/FreeRTOS-Kernel/projects"
+        },
+        {
+          "title": "Security and quality8 (8)",
+          "url": "https://github.com/FreeRTOS/FreeRTOS-Kernel/security"
+        },
+        {
+          "title": "Insights",
+          "url": "https://github.com/FreeRTOS/FreeRTOS-Kernel/pulse"
+        },
+        {
+          "title": "Releases",
+          "url": "https://github.com/FreeRTOS/FreeRTOS-Kernel/releases"
+        },
+        {
+          "title": "V11.3.3",
+          "url": "https://github.com/FreeRTOS/FreeRTOS-Kernel/releases/tag/V11.3.3"
+        },
+        {
+          "title": "Latest",
+          "url": "https://github.com/FreeRTOS/FreeRTOS-Kernel/releases/latest"
+        },
+        {
+          "title": "Latest",
+          "url": "https://github.com/FreeRTOS/FreeRTOS-Kernel/releases/latest"
+        },
+        {
+          "title": "Please reload this page",
+          "url": "https://github.com/FreeRTOS/FreeRTOS-Kernel/releases/tag/V11.3.3"
+        },
+        {
+          "title": "View all tags",
+          "url": "https://github.com/FreeRTOS/FreeRTOS-Kernel/tags"
+        },
+        {
+          "title": "github-actions",
+          "url": "https://github.com/apps/github-actions"
+        },
+        {
+          "title": "0 commits",
+          "url": "https://github.com/FreeRTOS/FreeRTOS-Kernel/compare/V11.3.3...main"
+        },
+        {
+          "title": "V11.3.3",
+          "url": "https://github.com/FreeRTOS/FreeRTOS-Kernel/tree/V11.3.3"
+        },
+        {
+          "title": "8959280",
+          "url": "https://github.com/FreeRTOS/FreeRTOS-Kernel/commit/89592801dd8b73329a7583719b7e3567b50910e5"
+        },
+        {
+          "title": "Please reload this page",
+          "url": "https://github.com/FreeRTOS/FreeRTOS-Kernel/releases/tag/V11.3.3"
+        }
+      ],
+      "steps": [
+        {
+          "tool": "camofox",
+          "ok": true,
+          "status": "content",
+          "motivo": null,
+          "elapsedMs": 5720
+        }
+      ],
+      "elapsedMs": 5720
+    },
+    {
+      "url": "https://www.freertos.org/Documentation/02-Kernel/03-Supported-devices/02-Customization",
+      "ok": true,
+      "status": "content",
+      "title": "Customization - FreeRTOS™",
+      "final_url": "https://www.freertos.org/Documentation/02-Kernel/03-Supported-devices/02-Customization",
+      "canonical_url": null,
+      "http_status": null,
+      "content": "Select your cookie preferencesWe use essential cookies and similar tools that are necessary to provide our site and services. We use performance cookies to collect anonymous statistics, so we can understand how customers use our site and make improvements. Essential cookies cannot be deactivated, but you can choose “Customize” or “Decline” to decline performance cookies.  If you agree, AWS and approved third parties will also use cookies to provide useful site features, remember your preferences, and display relevant content, including relevant advertising. To accept or decline all non-essential cookies, choose “Accept” or “Decline.” To make more detailed choices, choose “Customize.”AcceptDeclineCustomizeCustomize cookie preferencesWe use cookies and similar tools (collectively, \"cookies\") for the following purposes.EssentialEssential cookies are necessary to provide our site and services and cannot be deactivated. They are usually set in response to your actions on the site, such as setting your privacy preferences, signing in, or filling in forms. AllowedPerformancePerformance cookies provide anonymous statistics about how customers navigate our site so we can improve site experience and performance. Approved third parties may perform analytics on our behalf, but they cannot use the data for their own purposes.AllowedFunctionalFunctional cookies help us provide useful site features, remember your preferences, and display relevant content. Approved third parties may set these cookies to provide certain site features. If you do not allow these cookies, then some or all of these services may not function properly.AllowedAdvertisingAdvertising cookies may be set through our site by us or our advertising partners and help us deliver relevant marketing content. If you do not allow these cookies, you will experience less relevant advertising.AllowedBlocking some types of cookies may impact your experience of our sites. You may review and change your choices at any time by selecting Cookie preferences in the footer of this site. We and selected third-parties use cookies or similar technologies as specified in the AWS Cookie Notice.CancelSave preferencesYour privacy choicesWe and our advertising partners (“we”) may use information we collect from or about you to show you ads on other websites and online services. Under certain laws, this activity is referred to as “cross-context behavioral advertising” or “targeted advertising.”To opt out of our use of cookies or similar technologies to engage in these activities, select “Opt out of cross-context behavioral ads” and “Save preferences” below. If you clear your browser cookies or visit this site from a different device or browser, you will need to make your selection again. For more information about cookies and how we use them, read our Cookie Notice.Allow cross-context behavioral adsOpt out of cross-context behavioral adsTo opt out of the use of other identifiers, such as contact information, for these activities, fill out the form here.For more information about how AWS handles your information, read the AWS Privacy Notice.CancelSave preferencesUnable to save cookie preferencesWe will only store essential cookies at this time, because we were unable to save your cookie preferences.If you want to change your cookie preferences, try again later using the link in the AWS console footer, or contact support if the problem persists.Dismiss\n          \n        ",
+      "chars": 3460,
+      "original_chars": 3460,
+      "truncated": false,
+      "content_sha256": "d68c90e4f2a310f050683cb4bebba228540068055a9adb7386d5352130189e0a",
+      "source": "camofox-rendered",
+      "retrieved_at": "2026-11-14T07:19:35.758Z",
+      "published_date": null,
+      "published_date_source": null,
+      "date_status": "unknown",
+      "time_precision": null,
+      "modified_date": null,
+      "modified_date_status": "unknown",
+      "links": [
+        {
+          "title": "AWS Cookie Notice",
+          "url": "https://aws.amazon.com/legal/cookies/"
+        },
+        {
+          "title": "Cookie Notice",
+          "url": "https://aws.amazon.com/legal/cookies/"
+        },
+        {
+          "title": "here",
+          "url": "https://pulse.aws/application/ZRPLWLL6?p=0"
+        },
+        {
+          "title": "AWS Privacy Notice",
+          "url": "https://aws.amazon.com/privacy/"
+        }
+      ],
+      "steps": [
+        {
+          "tool": "camofox",
+          "ok": true,
+          "status": "content",
+          "motivo": null,
+          "elapsedMs": 4711
+        }
+      ],
+      "elapsedMs": 4711
+    }
+  ],
+  "retrieved_at": "2026-11-14T07:19:36.364Z",
+  "elapsedMs": 5771
+}

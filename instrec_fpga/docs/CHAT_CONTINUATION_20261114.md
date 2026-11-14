@@ -1,5 +1,8 @@
 # Revise CPU paper for reviewers (2)：接续记录
 
+> 当前接续任务已推进为125MHz基线FreeRTOS接入。rtos/README.md为构建入口；官方V11.3.3、真实抢占调度和三应用任务已落地，CPU/完整NPU/回退实测通过。整机map通过，PNR20988正在生成RTOS位流；工程build/rtos/pds/20261114-153018-rom_loop_fix-map，continuations/20261114-074722-356866。恢复时先检查真实PID及FULL_RESULT，保留运行实例。目标active，原时序优化paused。板卡USB目前未枚举，尚未进行板级测试。以下保留先前接续历史。
+
+
 2026-11-14，已从本机只读对话历史和实际工作区恢复当前工作。
 
 源对话ID：`01a192cc-2454-7771-8394-1f3fb567e0f9`。当前仓库为 `D:/AAAFPGA/ZGTC_RISC_CPU_XSY`，分支 `XSY`，活动目录为 `instrec_fpga`。接续前HEAD为 `80bcfa360bc1baf6a2a5732a9b578042a7f90381`；原整机比较基线为 `852f067db4a4a710f5355e3ab311f035ced5b48d`。

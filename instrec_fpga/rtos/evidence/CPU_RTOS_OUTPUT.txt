@@ -1,0 +1,31 @@
+RTOS_PROGRESS cycle=0 pc=00000000 SP=00000000 ticks=0 yields=0 starts=0 LED=00
+RTOS_UART 
+RTOS_UART RTOS BOOT hz=125000000 tick=1000
+RTOS_UART RTOS IMC OK
+RTOS_UART RTOS DDR OK
+RTOS_PROGRESS cycle=250000 pc=00000e94 SP=20000cd0 ticks=0 yields=0 starts=0 LED=00
+RTOS_UART RTOS CRITICAL PASS deferred=3 caught=3 depth=2 mie=0 pending=1
+RTOS_NPU_START sequence=1 cycle=451247
+RTOS_PROGRESS cycle=500000 pc=00000dcc SP=20001920 ticks=3 yields=4 starts=1 LED=00
+RTOS_PROGRESS cycle=750000 pc=00000d68 SP=20001920 ticks=5 yields=7 starts=1 LED=00
+RTOS_NPU_INJECT result sequence=1 cycle=826248
+RTOS_NPU_START sequence=2 cycle=918083
+RTOS_UART RTOS NPU top1=5 last_class=3 last_p=87 c=12345 seq=1 tick=7
+RTOS_PROGRESS cycle=1000000 pc=00000dd0 SP=20001920 ticks=7 yields=10 starts=2 LED=d0
+RTOS_NPU_INJECT timeout sequence=2 cycle=1168084
+RTOS_PROGRESS cycle=1250000 pc=00000d64 SP=20001920 ticks=9 yields=12 starts=2 LED=d0
+RTOS_NPU_START sequence=3 cycle=1293015
+RTOS_UART RTOS NPU TIMEOUT seq=2 tick=10
+RTOS_PROGRESS cycle=1500000 pc=00000d84 SP=20001920 ticks=11 yields=15 starts=3 LED=d0
+RTOS_NPU_INJECT result sequence=3 cycle=1668016
+RTOS_PROGRESS cycle=1750000 pc=00000db4 SP=20001920 ticks=13 yields=17 starts=3 LED=d0
+RTOS_NPU_START sequence=4 cycle=1793016
+RTOS_UART RTOS NPU top1=2 last_class=6 last_p=64 c=54321 seq=3 tick=14
+RTOS_PROGRESS cycle=2000000 pc=00000dac SP=20001920 ticks=15 yields=20 starts=4 LED=a0
+RTOS_UART RTOS TEST PASS ticks=16 queues=3 preempt=23010,20526
+RTOS_CPU_PASS hz=125000000 cycles=2053456 ticks=16 yields=22 mret=39 starts=4 results=2 clears=4 DDR=33/33 stalls=5 UART=335 peak=16 tick_min=272 tick_max=125000 catchup=3 compare=17
+- /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/sim/critical16-20261114-154726-633926/inputs/rtos/sim/tb_rtos_cpu.sv:273: Verilog $finish
+- S i m u l a t i o n   R e p o r t: Verilator 5.040 2025-08-30
+- Verilator: $finish at 16ms; walltime 1.030 s; speed 16.065 ms/s
+- Verilator: cpu 1.023 s on 1 threads; alloced 190 MB
+wsl: 检测到 localhost 代理配置，但未镜像到 WSL。NAT 模式下的 WSL 不支持 localhost 代理。

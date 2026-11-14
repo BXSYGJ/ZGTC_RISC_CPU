@@ -1,0 +1,118 @@
+{
+  "status": "pass",
+  "clock_hz": 125000000,
+  "production_RV32_ROM_bytes": 7148,
+  "before": {
+    "mode": "original 125 MHz wrapper and firmware",
+    "command": [
+      "python",
+      "-X",
+      "utf8",
+      "instrec_fpga/rtos/sim/run_native_rtos.py",
+      "--firmware",
+      "baseline125",
+      "--run-label",
+      "control1",
+      "--timeout",
+      "1200"
+    ],
+    "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY",
+    "exit_status": 0,
+    "DDR_requests": 331,
+    "DDR_responses": 331,
+    "controller_cycles": 31152091,
+    "firmware_captured_cycles": 31152090
+  },
+  "after": {
+    "mode": "production FreeRTOS firmware and machine-timer wrapper",
+    "command": [
+      "python",
+      "-X",
+      "utf8",
+      "instrec_fpga/rtos/sim/run_native_rtos.py",
+      "--run-label",
+      "control1",
+      "--timeout",
+      "1200"
+    ],
+    "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY",
+    "exit_status": 0,
+    "DDR_requests": 33,
+    "DDR_responses": 33,
+    "controller_cycles": 31152091,
+    "firmware_captured_cycles": 31152090,
+    "tick_interrupts": 250,
+    "yield_traps": 259,
+    "heartbeats_during_NPU_busy": 2,
+    "result_sequence": 1,
+    "result_tick": 250,
+    "literal_result": "CPU UART RTOS NPU top1=0 last_class=7 last_p=0 c=31152090 seq=1 tick=250"
+  },
+  "golden_output_counts": {
+    "conv1": 792576,
+    "conv2": 396288,
+    "conv3": 196608,
+    "conv4": 65536,
+    "pool1": 198144,
+    "pool2": 98304,
+    "pool3": 49152,
+    "pool4": 16384,
+    "gap": 256,
+    "fc1": 128,
+    "fc2_valid": 16,
+    "probs": 8
+  },
+  "all_layers_golden_exact": true,
+  "same_NPU_sources": {
+    "src/npu/activation_row_store_dynamic.v": "13e10014c5b917a257a0b61f6c6a8eec0a86fa910ad2f42051b2b8a3af9b6036",
+    "src/npu/activation_store_mux.v": "0c79febbc563553ac9b995bcd7be74ff101e7f0799d8534ef4178ebe48a9792f",
+    "src/npu/conv_engine.v": "da1e4e913ab8eb9ccff9bc057ef1489807e69e47f909670a4b4ad6144f24dea4",
+    "src/npu/fc_engine.v": "bf24dca55d48ab81fd4ce61a6c0f9c4bc41f2fa7f28937972b4cf36294f448ae",
+    "src/npu/gap_unit.v": "b24697c49780a01a768d015c594ef1512fc5cfe6a9f3798e6e6f227123b0acfc",
+    "src/npu/npu_m1_bridge.v": "7510a232de647efa232a5bb11b2bc7229f9571d5f4b13fa57684bea2e2f3cab6",
+    "src/npu/npu_m1_owner.v": "ce99ef8e780b72d9205da8c9ef8762cb891ce1d8bbf4295fd38372755a3157ca",
+    "src/npu/npu_stage_lifecycle.v": "8ed6d69866c1bd7d60951a25722c77006941d774420170811e636fe0c1bfca11",
+    "src/npu/npu_top.v": "7617dbfffc2a4750090c9d3f058abfb80f799f70fd164565c9f9a7f581350099",
+    "src/npu/pool_engine.v": "fa2b81e0336f58b74d19f6e3ee1ad891a5881aecf056240ab00da7746e7025ea",
+    "src/npu/requant_unit.v": "e8114dd8533642d8f22946c449bf4765c69755200c7443b4ca4719f888761945",
+    "src/npu/softmax_top.v": "9c51eb0ce2b3b96b0936c3f037acde2a9a28fbdb10e518be2f1091c8f396eef9",
+    "src/npu/wbuf.v": "f8e51d756535e296009db8e37bbd81ca5a475d128e6c0f3cb9c18684b640f42b",
+    "src/npu/wdma.v": "983c5e6cc76c0b26a8650810fe662efe8382558222caca85f163ba5f52211353",
+    "src/npu/weight_read_aligner_hardened.v": "54ae62714044ae28676e00d40e8e78d420eba1e9b366cf6da9e8b6487df385cd"
+  },
+  "same_assets_sha256": {
+    "conv1.hex": "f744be9af45aff03e6d07bf3e2d9887fa38c4054e972f434778a58683427c58f",
+    "conv2.hex": "c59b08b840754e7d2e95b0ee2c05bda24dad38144e4c79b893cdb996840384b1",
+    "conv3.hex": "8ff35c68fd4113b14ca533d2f39c9b5459066baeee88c25044a4390581c01f19",
+    "conv4.hex": "8905456a089a4734bd12dd565708bacd414af3dd3ccb95e2b520fa638aed5f30",
+    "fc1.hex": "54343755b42ef72ee5c017ee486167a5484af7a600b7dc5781b8f1c7a8b97d31",
+    "fc2_logits.hex": "a14f978238d2e4e0c484470a1c6662969dcf0b5d83f67c3d3d342acb2cf737cc",
+    "feat.hex": "422c7cf409543c8a6b681c4f6b0e0d6f76a55443c9003d8217226683dc11cea9",
+    "gap.hex": "c1d85b9046cd0a52c7c7ca749cab793b0021e7493fa10c92adfcda0b6764d568",
+    "pool1.hex": "e9cf9d44fcac2b0b4a85cba032f4dd1ac8547b0b9287bb6c87be0add4b37149e",
+    "pool2.hex": "bc1938bdf07aebdc6e4caa2c61f0ceb529c9705c40196271563397003ab7004b",
+    "pool3.hex": "0a21c12116729532819780b02d8a5ecae452ca6c3d4a1c212c62defb53baaa0d",
+    "pool4.hex": "6fb32deac3bf869f6dc3ae6c1226e9f714adfc2f4afc9a00fc3a9a2ccf31fc9d",
+    "probs.hex": "16ab41c7a4e7e3fc3cdf76c7beafef54d3568a63086a0ec3f51e9d417a71110b",
+    "weights.hex": "f06580e156661d6e32246f5bd912928cf4ecd820597b80c4e9fae7b2d3f29200"
+  },
+  "limitations": "Native simulation uses actual frozen NPU/CPU/DDR RTL and actual production RTOS ROM, with preloaded feature/weight assets and a behavioral DDR physical model. Audio acquisition, Mel computation, HDMI pins and physical board behavior are outside this simulation.",
+  "archives": {
+    "NATIVE_BASELINE125_OUTPUT.txt": {
+      "sha256": "f610f2fb295bb991c8a2bde5df840feb9efd4168a363c3e28c769b0378491b74",
+      "bytes": 3788
+    },
+    "NATIVE_BASELINE125_REPORT.json": {
+      "sha256": "f3edaf57fa8187373a5a6f49b92dbce70f1118f3979ed6e3acd5b61517b8fe8f",
+      "bytes": 93157
+    },
+    "NATIVE_RTOS_OUTPUT.txt": {
+      "sha256": "9ed7fa07e400e958ab03a6ab7dd0cb7b4528b541ed7e324349fe7990da49adc3",
+      "bytes": 3788
+    },
+    "NATIVE_RTOS_REPORT.json": {
+      "sha256": "6939bc5ca38a16aa87af4090b09e229a93f2edd704aebeb0ad8b397ef58763dc",
+      "bytes": 94106
+    }
+  }
+}

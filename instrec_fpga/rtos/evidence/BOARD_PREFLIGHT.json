@@ -1,0 +1,14 @@
+{
+  "checked_at": "2026-11-14T15:43:47.3621692+08:00",
+  "present_programmer_or_uart_devices": [],
+  "serial_ports": [
+    "COM4",
+    "COM5",
+    "COM8",
+    "COM3",
+    "COM9",
+    "COM6"
+  ],
+  "jtag_process_ids": [],
+  "board_test_executed": false
+}

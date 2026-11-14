@@ -1,5 +1,8 @@
 # 当前工作记忆：2026-11-14
 
+当前用户目标active：结合XSY与XSY2，为现在项目加入RTOS，以125MHz 223256版本为基线。实现位于instrec_fpga/rtos/，正式FreeRTOS V11.3.3，1kHz真实定时中断，三任务+idle，静态消息队列，16KiBROM/16KiBRAM。实际CPU、完整NPUgolden、嵌套临界区和原版副本回退通过；固件7148ROM/5600BSS。编译/综合/map通过128.5/155DRM，当前PNR唯一PID20988（父continuation工具，句柄由rtos_hardware代理持有），工程build/rtos/pds/20261114-153018-rom_loop_fix-map，continuations/20261114-074722-356866。继续检查实际进程与FULL_RESULT，勿重启同一flow；仅待完整位流，当前无FTDI/CP2102，板级待测。rtos/evidence/ACCEPTANCE.json当前6/7项通过。旧时序优化paused，CPU优化已结束。
+
+
 最近远端复核：2026-11-14 15:10（北京时间），XSY=0b8201e071c6c59b8d7ead23ad944684f4d0b24c，XSY2=8f902aec29c38bc4a32a4e95ab47d18411684b52。相对上次4d3d6f1新增3次提交：seed85八类整机位流归档、构建种子参数、烧录/I2S脚本修复；五组识别与RTOS无新上传。位流SHA256重算通过。当前仅fetch未合并，继续复用既定109.375/125MHz包，时序目标保持paused。
 
 

@@ -1,0 +1,3 @@
+# Hashes in build and test records refer to exact bytes, including newlines.
+# Preserve those bytes when checking out on either Windows or Linux.
+** -text

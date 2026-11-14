@@ -1,0 +1,1061 @@
+--- baseline125/src/cpu/rv32_cpu_subsys.sv
++++ rtos125/src/cpu/rv32_cpu_subsys.sv
+@@ -2,7 +2,7 @@
+ // File    : rv32_cpu_subsys.sv
+ // Module  : rv32_cpu_subsys
+ // Project : InstRec-FPGA (PG2L100H-6IFBG676, PDS 2022.2-SP6.4)
+-// Purpose : PaceRV H3 RV32IMC core with local boot storage and shared DDR data.
++// Purpose : 125 MHz PaceRV system with machine timer for the RTOS port.
+ //
+ // INTEGRATION
+ //   The frozen H3 execution core runs in the existing core_clk domain and
+@@ -52,6 +52,13 @@
+ //   0x8000_0024 W  CTRL        [0] NPU soft start (1-cycle pulse)
+ //                              [1] clear the sticky status bits
+ //   0x8000_0028 R  NPU_CYCLES  npu_top cycle counter
++//   0x8000_0030 RW MTIME_LO    free-running core-clock timer, low word
++//   0x8000_0034 RW MTIME_HI    timer high word; use hi/lo/hi reads
++//   0x8000_0038 RW MTIMECMP_LO machine timer compare, low word
++//   0x8000_003C RW MTIMECMP_HI compare high word (reset all ones)
++//   irq_timer is level-sensitive while MTIME >= MTIMECMP. All four timer
++//   registers support byte strobes. RV32 software rearms with compare high
++//   = all ones, then compare low, then final compare high.
+ // ---------------------------------------------------------------------------
+ `timescale 1ns / 1ps
+ 
+@@ -111,8 +118,8 @@
+ 
+     localparam integer IAW = $clog2(IMEM_WORDS);
+     localparam integer DAW = $clog2(DMEM_WORDS);
+-    localparam [31:13] DMEM_BASE_HI = 19'h10000;
+-    localparam [DAW-1:0] DMEM_LAST = DMEM_WORDS - 1;
++    localparam [31:0] DMEM_BASE = 32'h2000_0000;
++    localparam [31:0] DMEM_END = DMEM_BASE + DMEM_WORDS * 4;
+ 
+     localparam [31:0] CPU_ID = 32'h5256_4331;   // "RVC1"
+ 
+@@ -137,6 +144,23 @@
+     wire        maintenance_valid;
+     wire        maintenance_ready;
+     wire [63:0] cycle_count, retired_count;
++    wire [63:0] timer_value;
++    wire timer_irq;
++    wire [31:0] timer_rdata;
++    wire timer_write = d_req_valid && d_req_ready && d_req_write &&
++                       (d_req_address[31:4] == 28'h8000003);
++
++    machine_timer u_machine_timer (
++        .clk          (clk),
++        .rst_n        (rst_n),
++        .write_valid  (timer_write),
++        .word_address (d_req_address[3:2]),
++        .write_data   (d_req_data),
++        .write_strobe (d_req_strobe),
++        .read_data    (timer_rdata),
++        .timer_value  (timer_value),
++        .timer_irq    (timer_irq)
++    );
+ 
+     // PDS's front end rejects an empty '.port()' connection, so every unused
+     // observer output is parked on a named, deliberately unread net.
+@@ -184,10 +208,10 @@
+         .d_rsp_error      (d_rsp_error),
+         .maintenance_valid(maintenance_valid),
+         .maintenance_ready(maintenance_ready),
+-        .timer_value      (64'd0),
++        .timer_value      (timer_value),
+         .irq_external     (1'b0),
+         .irq_software     (1'b0),
+-        .irq_timer        (1'b0),
++        .irq_timer        (timer_irq),
+         .trace_valid      (trace_valid_u),
+         .trace_pc         (trace_pc_u),
+         .trace_instruction(trace_instruction_u),
+@@ -217,16 +241,36 @@
+ 
+     integer init_word;
+     initial begin
+-        for (init_word = 0; init_word < IMEM_WORDS/2; init_word = init_word + 1) begin
+-            imem[init_word*2] = 32'd0;
+-            imem[init_word*2+1] = 32'd0;
++        // Eight words per iteration stay below PDS's 2000-iteration limit
++        // with either the 16 KiB application ROM or a 32 KiB diagnostic ROM.
++        for (init_word = 0; init_word < IMEM_WORDS/8; init_word = init_word + 1) begin
++            imem[init_word*8] = 32'd0;
++            imem[init_word*8+1] = 32'd0;
++            imem[init_word*8+2] = 32'd0;
++            imem[init_word*8+3] = 32'd0;
++            imem[init_word*8+4] = 32'd0;
++            imem[init_word*8+5] = 32'd0;
++            imem[init_word*8+6] = 32'd0;
++            imem[init_word*8+7] = 32'd0;
+         end
+         $readmemh(PROG_HEX, imem);
+-        for (init_word = 0; init_word < IMEM_WORDS/2; init_word = init_word + 1) begin
+-            rom_d[init_word*2] = imem[init_word*2];
+-            rom_d[init_word*2+1] = imem[init_word*2+1];
+-            imem_even[init_word] = imem[init_word*2];
+-            imem_odd[init_word] = imem[init_word*2+1];
++        for (init_word = 0; init_word < IMEM_WORDS/8; init_word = init_word + 1) begin
++            rom_d[init_word*8] = imem[init_word*8];
++            rom_d[init_word*8+1] = imem[init_word*8+1];
++            rom_d[init_word*8+2] = imem[init_word*8+2];
++            rom_d[init_word*8+3] = imem[init_word*8+3];
++            rom_d[init_word*8+4] = imem[init_word*8+4];
++            rom_d[init_word*8+5] = imem[init_word*8+5];
++            rom_d[init_word*8+6] = imem[init_word*8+6];
++            rom_d[init_word*8+7] = imem[init_word*8+7];
++            imem_even[init_word*4] = imem[init_word*8];
++            imem_odd[init_word*4] = imem[init_word*8+1];
++            imem_even[init_word*4+1] = imem[init_word*8+2];
++            imem_odd[init_word*4+1] = imem[init_word*8+3];
++            imem_even[init_word*4+2] = imem[init_word*8+4];
++            imem_odd[init_word*4+2] = imem[init_word*8+5];
++            imem_even[init_word*4+3] = imem[init_word*8+6];
++            imem_odd[init_word*4+3] = imem[init_word*8+7];
+         end
+     end
+ 
+@@ -343,6 +387,8 @@
+             32'h8000_001C: mmio_rdata = retired_count[31:0];
+             32'h8000_0020: mmio_rdata = ddr_sts;
+             32'h8000_0028: mmio_rdata = result_cycles_q;
++            32'h8000_0030, 32'h8000_0034,
++            32'h8000_0038, 32'h8000_003C: mmio_rdata = timer_rdata;
+             default:       mmio_rdata = 32'h0000_0000;
+         endcase
+     end
+@@ -424,8 +470,8 @@
+     wire d_is_ddr   = (d_req_address[31:20] == 12'h400) ||
+                      ((d_req_address >= 32'h4100_0000) &&
+                       (d_req_address < 32'h4160_0000));
+-    wire d_is_ram   = (d_req_address[31:13] == DMEM_BASE_HI) &&
+-                      (d_req_address[DAW+1:2] <= DMEM_LAST);
++    wire d_is_ram   = (d_req_address >= DMEM_BASE) &&
++                      (d_req_address < DMEM_END);
+     wire d_is_rom   = (d_req_address[31:IAW+2] == {(32-IAW-2){1'b0}});
+     wire [DAW-1:0] d_word = d_req_address[DAW+1:2];
+     wire [IAW-1:0] d_rom_word = d_req_address[IAW+1:2];
+--- baseline125/src/ctrl/instrec_top.v
++++ rtos125/src/ctrl/instrec_top.v
+@@ -1070,6 +1070,8 @@
+         .ENABLE_C         (1),
+         .ENABLE_PREDICTOR (1),
+         .RESET_VECTOR     (32'h0000_0000),
++        .IMEM_WORDS       (4096),
++        .DMEM_WORDS       (4096),
+         .PROG_HEX         ("src/cpu/prog_pacerv.hex")
+     ) u_cpu (
+         .clk             (core_clk),
+--- /dev/null
++++ rtos/rtl/machine_timer.v
+@@ -0,0 +1,72 @@
++// Free-running 64-bit machine timer in the 125 MHz core clock domain.
++// Register words: 0=mtime low, 1=mtime high, 2=mtimecmp low, 3=mtimecmp high.
++// write_valid is a one-cycle pulse from an accepted CPU data transaction.
++// All registers support byte writes. mtime runs on edges without a nonzero
++// strobe time write; a direct time write replaces the selected bytes and
++// holds the remaining time bytes for that edge. mtimecmp resets to all ones.
++`timescale 1ns/1ps
++module machine_timer (
++    input  wire        clk,
++    input  wire        rst_n,
++    input  wire        write_valid,
++    input  wire [1:0]  word_address,
++    input  wire [31:0] write_data,
++    input  wire [3:0]  write_strobe,
++    output reg  [31:0] read_data,
++    output wire [63:0] timer_value,
++    output wire        timer_irq
++);
++    reg [63:0] mtime;
++    reg [63:0] mtimecmp;
++    wire write_time = write_valid && !word_address[1] && |write_strobe;
++    wire write_compare = write_valid && word_address[1] && |write_strobe;
++
++    function [31:0] merge_bytes;
++        input [31:0] previous;
++        input [31:0] incoming;
++        input [3:0] strobes;
++        integer lane;
++        begin
++            merge_bytes = previous;
++            for (lane=0; lane<4; lane=lane+1) begin
++                if (strobes[lane])
++                    merge_bytes[lane*8 +: 8] = incoming[lane*8 +: 8];
++            end
++        end
++    endfunction
++
++    assign timer_value = mtime;
++    assign timer_irq = (mtime >= mtimecmp);
++
++    always @* begin
++        case (word_address)
++            2'd0: read_data = mtime[31:0];
++            2'd1: read_data = mtime[63:32];
++            2'd2: read_data = mtimecmp[31:0];
++            2'd3: read_data = mtimecmp[63:32];
++            default: read_data = 32'd0;
++        endcase
++    end
++
++    always @(posedge clk or negedge rst_n) begin
++        if (!rst_n) begin
++            mtime <= 64'd0;
++            mtimecmp <= 64'hffff_ffff_ffff_ffff;
++        end else begin
++            if (write_time) begin
++                if (word_address[0])
++                    mtime[63:32] <= merge_bytes(mtime[63:32], write_data, write_strobe);
++                else
++                    mtime[31:0] <= merge_bytes(mtime[31:0], write_data, write_strobe);
++            end else begin
++                mtime <= mtime + 64'd1;
++            end
++            if (write_compare) begin
++                if (word_address[0])
++                    mtimecmp[63:32] <= merge_bytes(mtimecmp[63:32], write_data, write_strobe);
++                else
++                    mtimecmp[31:0] <= merge_bytes(mtimecmp[31:0], write_data, write_strobe);
++            end
++        end
++    end
++endmodule
+--- /dev/null
++++ rtos/sw/critical_test.c
+@@ -0,0 +1,71 @@
++#include "FreeRTOS.h"
++#include "task.h"
++#include "hal.h"
++
++extern volatile uint32_t ulPortTickInterrupts, ulPortCriticalNesting;
++
++static uint32_t ulMachineStatus(void) {
++    uint32_t value;
++    __asm__ volatile("csrr %0,mstatus" : "=r"(value));
++    return value;
++}
++
++static uint32_t ulMachinePending(void) {
++    uint32_t value;
++    __asm__ volatile("csrr %0,mip" : "=r"(value));
++    return value;
++}
++
++void vCriticalSelfTest(void) {
++    const uint32_t period = configCPU_CLOCK_HZ / configTICK_RATE_HZ;
++    TickType_t before, caught;
++    uint32_t irq_before, irq_after, deferred, elapsed_ticks;
++    uint64_t deadline, target, masked_now, catchup_limit, caught_now;
++    configASSERT((ulMachineStatus() & 8u) != 0u);
++    configASSERT(ulPortCriticalNesting == 0u);
++    taskENTER_CRITICAL();
++    taskENTER_CRITICAL();
++    before = xTaskGetTickCount();
++    irq_before = ulPortTickInterrupts;
++    if (ulPortCriticalNesting != 2u || (ulMachineStatus() & 8u) != 0u)
++        vApplicationFatal(0x44u, ulPortCriticalNesting);
++    /* The timer's current absolute deadline anchors the expected tick count.
++     * Cross three deadlines while nested, rather than delaying by host time. */
++    deadline = ((uint64_t)MTIMECMP_HI << 32) | MTIMECMP_LO;
++    target = deadline + 2u * period + period / 4u;
++    do { masked_now = ullMachineTime(); } while (masked_now < target);
++    deferred = 1u + (uint32_t)(masked_now - deadline) / period;
++    if (deferred < 2u || xTaskGetTickCount() != before ||
++        ulPortTickInterrupts != irq_before)
++        vApplicationFatal(0x45u, xTaskGetTickCount() - before);
++    if ((ulMachinePending() & 128u) == 0u)
++        vApplicationFatal(0x46u, ulMachinePending());
++    taskEXIT_CRITICAL();
++    if (ulPortCriticalNesting != 1u || (ulMachineStatus() & 8u) != 0u ||
++        xTaskGetTickCount() != before || ulPortTickInterrupts != irq_before ||
++        (ulMachinePending() & 128u) == 0u)
++        vApplicationFatal(0x47u, ulPortCriticalNesting);
++    taskEXIT_CRITICAL();
++    /* The priority-four monitor remains the running task while deferred ticks
++     * arrive. All elapsed deadlines must be processed after the outer exit. */
++    catchup_limit = masked_now + period;
++    while (xTaskGetTickCount() - before < deferred) {
++        if (ullMachineTime() > catchup_limit)
++            vApplicationFatal(0x48u, xTaskGetTickCount() - before);
++    }
++    if (ulPortCriticalNesting != 0u || (ulMachineStatus() & 8u) == 0u)
++        vApplicationFatal(0x4au, ulPortCriticalNesting);
++    taskENTER_CRITICAL();
++    caught = xTaskGetTickCount();
++    irq_after = ulPortTickInterrupts;
++    caught_now = ullMachineTime();
++    elapsed_ticks = 1u + (uint32_t)(caught_now - deadline) / period;
++    if (caught - before != elapsed_ticks || irq_after - irq_before != elapsed_ticks ||
++        elapsed_ticks < deferred || (ulMachinePending() & 128u) != 0u)
++        vApplicationFatal(0x49u, caught - before);
++    taskEXIT_CRITICAL();
++    vUartText("RTOS CRITICAL PASS deferred="); vUartDecimal(deferred);
++    vUartText(" caught="); vUartDecimal(caught - before);
++    vUartText(" depth=2 mie=0 pending=1\r\n");
++}
++
+--- /dev/null
++++ rtos/sw/FreeRTOSConfig.h
+@@ -0,0 +1,53 @@
++#ifndef INSTREC_FREERTOS_CONFIG_H
++#define INSTREC_FREERTOS_CONFIG_H
++
++#include <stdint.h>
++
++#define configCPU_CLOCK_HZ                       125000000UL
++#define configTICK_RATE_HZ                       1000UL
++#define configUSE_PREEMPTION                     1
++#define configUSE_TIME_SLICING                   1
++#define configUSE_PORT_OPTIMISED_TASK_SELECTION   0
++#define configMAX_PRIORITIES                     5
++#define configMINIMAL_STACK_SIZE                 160
++#define configMAX_TASK_NAME_LEN                  16
++#define configTICK_TYPE_WIDTH_IN_BITS            TICK_TYPE_WIDTH_32_BITS
++#define configIDLE_SHOULD_YIELD                   1
++#define configUSE_TASK_NOTIFICATIONS             1
++#define configTASK_NOTIFICATION_ARRAY_ENTRIES    1
++#define configSUPPORT_STATIC_ALLOCATION          1
++#define configSUPPORT_DYNAMIC_ALLOCATION         0
++#define configKERNEL_PROVIDED_STATIC_MEMORY      0
++#define configUSE_MUTEXES                        0
++#define configUSE_RECURSIVE_MUTEXES               0
++#define configUSE_COUNTING_SEMAPHORES            0
++#define configQUEUE_REGISTRY_SIZE                0
++#define configUSE_QUEUE_SETS                     0
++#define configUSE_TIMERS                         0
++#define configUSE_IDLE_HOOK                      0
++#define configUSE_TICK_HOOK                      0
++#define configCHECK_FOR_STACK_OVERFLOW           2
++#define configUSE_MALLOC_FAILED_HOOK             0
++#define configUSE_TRACE_FACILITY                 0
++#define configUSE_STATS_FORMATTING_FUNCTIONS     0
++#define configGENERATE_RUN_TIME_STATS            0
++#define configUSE_CO_ROUTINES                    0
++#define configMAX_CO_ROUTINE_PRIORITIES          1
++#define configUSE_APPLICATION_TASK_TAG           0
++#define configUSE_POSIX_ERRNO                    0
++#define configNUM_THREAD_LOCAL_STORAGE_POINTERS  0
++#define configUSE_NEWLIB_REENTRANT               0
++#define INCLUDE_vTaskDelay                       1
++#define INCLUDE_xTaskDelayUntil                  1
++#define INCLUDE_vTaskSuspend                     0
++#define INCLUDE_vTaskDelete                      0
++#define INCLUDE_xTaskGetSchedulerState           1
++#define INCLUDE_uxTaskGetStackHighWaterMark       1
++#define INCLUDE_xTaskGetCurrentTaskHandle        1
++#define INCLUDE_xTaskGetIdleTaskHandle           0
++#define INCLUDE_eTaskGetState                    0
++#define configASSERT(condition) do { if (!(condition)) vApplicationAssert(__LINE__); } while (0)
++
++void vApplicationAssert(unsigned line);
++
++#endif
+--- /dev/null
++++ rtos/sw/freestanding/stdlib.h
+@@ -0,0 +1,4 @@
++#ifndef INSTREC_STDLIB_H
++#define INSTREC_STDLIB_H
++#include <stddef.h>
++#endif
+--- /dev/null
++++ rtos/sw/freestanding/string.h
+@@ -0,0 +1,7 @@
++#ifndef INSTREC_STRING_H
++#define INSTREC_STRING_H
++#include <stddef.h>
++void *memcpy(void *destination, const void *source, size_t count);
++void *memset(void *destination, int byte, size_t count);
++int memcmp(const void *left, const void *right, size_t count);
++#endif
+--- /dev/null
++++ rtos/sw/hal.c
+@@ -0,0 +1,65 @@
++#include "hal.h"
++#include <stddef.h>
++
++uint64_t ullMachineTime(void) {
++    uint32_t hi, lo, again;
++    do { hi = MTIME_HI; lo = MTIME_LO; again = MTIME_HI; } while (hi != again);
++    return ((uint64_t)hi << 32) | lo;
++}
++
++void vMachineCompare(uint64_t value) {
++    /* RV32 safe update: suppress a transient match while writing both halves. */
++    MTIMECMP_HI = UINT32_MAX;
++    MTIMECMP_LO = (uint32_t)value;
++    MTIMECMP_HI = (uint32_t)(value >> 32);
++}
++
++static void vUartByte(char byte) {
++    while ((UART_ST & 1u) == 0u) { }
++    UART_TX = (uint32_t)(unsigned char)byte;
++}
++
++void vUartText(const char *text) { while (*text) vUartByte(*text++); }
++
++void vUartDecimal(uint32_t value) {
++    char digits[10];
++    unsigned count = 0;
++    do { digits[count++] = (char)('0' + value % 10u); value /= 10u; } while (value);
++    while (count) vUartByte(digits[--count]);
++}
++
++void vUartHex(uint32_t value) {
++    int shift;
++    vUartText("0x");
++    for (shift = 28; shift >= 0; shift -= 4) {
++        uint32_t digit = (value >> (unsigned)shift) & 15u;
++        vUartByte((char)(digit < 10u ? '0' + digit : 'a' + digit - 10u));
++    }
++}
++
++void vApplicationFatal(uint32_t code, uint32_t detail) {
++    __asm__ volatile("csrci mstatus,8" ::: "memory");
++    LED_REG = 0xeeu;
++    vUartText("\r\nRTOS FATAL code="); vUartHex(code);
++    vUartText(" detail="); vUartHex(detail); vUartText("\r\n");
++    for (;;) __asm__ volatile("wfi");
++}
++
++void *memset(void *destination, int byte, size_t count) {
++    unsigned char *out = destination;
++    while (count--) *out++ = (unsigned char)byte;
++    return destination;
++}
++
++void *memcpy(void *destination, const void *source, size_t count) {
++    unsigned char *out = destination;
++    const unsigned char *in = source;
++    while (count--) *out++ = *in++;
++    return destination;
++}
++
++int memcmp(const void *left, const void *right, size_t count) {
++    const unsigned char *a = left, *b = right;
++    while (count--) { if (*a != *b) return (int)*a - (int)*b; ++a; ++b; }
++    return 0;
++}
+--- /dev/null
++++ rtos/sw/hal.h
+@@ -0,0 +1,33 @@
++#ifndef INSTREC_RTOS_HAL_H
++#define INSTREC_RTOS_HAL_H
++
++#include <stdint.h>
++#define MMIO(address) (*(volatile uint32_t *)(uintptr_t)(address))
++#define SYS_ID      MMIO(0x80000000u)
++#define SYS_STATUS  MMIO(0x80000004u)
++#define SYS_PROBS   MMIO(0x80000008u)
++#define UART_TX     MMIO(0x8000000cu)
++#define UART_ST     MMIO(0x80000010u)
++#define LED_REG     MMIO(0x80000014u)
++#define DDR_STS     MMIO(0x80000020u)
++#define NPU_CTRL    MMIO(0x80000024u)
++#define NPU_CYCLES  MMIO(0x80000028u)
++#define MTIME_LO    MMIO(0x80000030u)
++#define MTIME_HI    MMIO(0x80000034u)
++#define MTIMECMP_LO MMIO(0x80000038u)
++#define MTIMECMP_HI MMIO(0x8000003cu)
++#define ST_NPU_BUSY    (1u << 0)
++#define ST_NPU_DONE    (1u << 1)
++#define ST_NPU_TIMEOUT (1u << 2)
++#define ST_PROBS       (1u << 3)
++#define ST_DDR_OK      (1u << 5)
++#define ST_DDR_ERR     (1u << 6)
++
++uint64_t ullMachineTime(void);
++void vMachineCompare(uint64_t value);
++void vUartText(const char *text);
++void vUartDecimal(uint32_t value);
++void vUartHex(uint32_t value);
++void vApplicationFatal(uint32_t code, uint32_t detail) __attribute__((noreturn));
++
++#endif
+--- /dev/null
++++ rtos/sw/link.ld
+@@ -0,0 +1,29 @@
++OUTPUT_ARCH(riscv)
++ENTRY(_start)
++MEMORY {
++    ROM (rx) : ORIGIN = 0x00000000, LENGTH = 16K
++    RAM (rw) : ORIGIN = 0x20000000, LENGTH = 16K
++}
++SECTIONS {
++    .text : { KEEP(*(.text.start)) *(.text .text.*) } > ROM
++    .rodata : { *(.rodata .rodata.*) *(.srodata .srodata.*) . = ALIGN(4); } > ROM
++    .data : {
++        . = ALIGN(4);
++        __data_start = .;
++        *(.data .data.*) *(.sdata .sdata.*)
++        . = ALIGN(4);
++        __data_end = .;
++    } > RAM AT > ROM
++    __data_load_start = LOADADDR(.data);
++    .bss (NOLOAD) : {
++        . = ALIGN(16);
++        __bss_start = .;
++        *(.bss .bss.*) *(.sbss .sbss.*) *(COMMON)
++        . = ALIGN(16);
++        __bss_end = .;
++    } > RAM
++    __stack_top = ORIGIN(RAM) + LENGTH(RAM);
++    __global_pointer$ = __data_start + 0x400;
++    ASSERT(__bss_end <= __stack_top - 1024, "RTOS static storage overlaps boot stack")
++    /DISCARD/ : { *(.comment) *(.riscv.attributes) }
++}
+--- /dev/null
++++ rtos/sw/main.c
+@@ -0,0 +1,197 @@
++/* InstRec hardware remains the audio/Mel/NPU producer. FreeRTOS supervises
++ * complete inference windows, passes immutable results through a queue, and
++ * gives UART output a single task owner. No classifier runs on the CPU.
++ */
++#include "FreeRTOS.h"
++#include "task.h"
++#include "queue.h"
++#include "hal.h"
++
++#ifndef RTOS_TEST
++#define RTOS_TEST 0
++#endif
++
++enum { RESULT_INFERENCE = 1, RESULT_TIMEOUT = 2, RESULT_HEARTBEAT = 3 };
++typedef struct {
++    uint32_t kind, sequence, tick, top1, last_class, last_pct, cycles;
++} Result;
++
++static StaticTask_t xControlTCB, xResultTCB, xHeartbeatTCB, xIdleTCB;
++static StackType_t xControlStack[256], xResultStack[320], xHeartbeatStack[192];
++static StackType_t xIdleStack[configMINIMAL_STACK_SIZE];
++static StaticQueue_t xResultQueueStorage;
++static uint8_t ucResultQueueBytes[8 * sizeof(Result)];
++static QueueHandle_t xResultQueue;
++volatile uint32_t ulApplicationResults, ulApplicationTimeouts;
++volatile uint32_t ulApplicationQueueReceived;
++
++void vApplicationGetIdleTaskMemory(StaticTask_t **tcb, StackType_t **stack,
++                                  configSTACK_DEPTH_TYPE *depth) {
++    *tcb = &xIdleTCB; *stack = xIdleStack; *depth = configMINIMAL_STACK_SIZE;
++}
++
++void vApplicationStackOverflowHook(TaskHandle_t task, char *name) {
++    (void)task; (void)name;
++    vApplicationFatal(0x20u, 0u);
++}
++
++void vApplicationAssert(unsigned line) { vApplicationFatal(0x21u, line); }
++
++static void vSubmit(const Result *result) {
++    if (xQueueSend(xResultQueue, result, portMAX_DELAY) != pdPASS)
++        vApplicationFatal(0x22u, result->kind);
++}
++
++static void vRecognitionControl(void *argument) {
++    uint32_t sequence = 0;
++    (void)argument;
++    /* Boot performs the DDR check before the scheduler. The normal window
++     * producer and NPU native M1 owner retain their existing arbitration. */
++    NPU_CTRL = 2u;
++    NPU_CTRL = 1u;
++    for (;;) {
++        uint32_t status = SYS_STATUS;
++        if ((status & ST_NPU_TIMEOUT) != 0u) {
++            Result result = { RESULT_TIMEOUT, ++sequence, xTaskGetTickCount(),
++                              0u, 0u, 0u, NPU_CYCLES };
++            NPU_CTRL = 2u;
++            vSubmit(&result);
++            NPU_CTRL = 1u;
++        } else if ((status & (ST_NPU_DONE | ST_PROBS | ST_NPU_BUSY)) ==
++                   (ST_NPU_DONE | ST_PROBS)) {
++            uint32_t probability = SYS_PROBS;
++            Result result = { RESULT_INFERENCE, ++sequence, xTaskGetTickCount(),
++                              (status >> 8) & 15u, probability & 15u,
++                              (probability >> 8) & 255u, NPU_CYCLES };
++            /* Copy every field before clearing: later hardware updates cannot
++             * alter the message already handed to the consumer. */
++            NPU_CTRL = 2u;
++            vSubmit(&result);
++            NPU_CTRL = 1u;
++        }
++        vTaskDelay(pdMS_TO_TICKS(1));
++    }
++}
++
++static void vResultPublisher(void *argument) {
++    Result result;
++    (void)argument;
++    for (;;) {
++        configASSERT(xQueueReceive(xResultQueue, &result, portMAX_DELAY) == pdPASS);
++        ++ulApplicationQueueReceived;
++        if (result.kind == RESULT_INFERENCE) {
++            vUartText("RTOS NPU top1="); vUartDecimal(result.top1);
++            vUartText(" last_class="); vUartDecimal(result.last_class);
++            vUartText(" last_p="); vUartDecimal(result.last_pct);
++            vUartText(" c="); vUartDecimal(result.cycles);
++            vUartText(" seq="); vUartDecimal(result.sequence);
++            vUartText(" tick="); vUartDecimal(result.tick); vUartText("\r\n");
++            ++ulApplicationResults;
++            LED_REG = 0x80u | ((result.top1 & 7u) << 4);
++        } else if (result.kind == RESULT_TIMEOUT) {
++            vUartText("RTOS NPU TIMEOUT seq="); vUartDecimal(result.sequence);
++            vUartText(" tick="); vUartDecimal(result.tick); vUartText("\r\n");
++            ++ulApplicationTimeouts;
++        } else {
++            vUartText("RTOS HEARTBEAT tick="); vUartDecimal(result.tick);
++            vUartText(" results="); vUartDecimal(ulApplicationResults);
++            vUartText("\r\n");
++        }
++    }
++}
++
++static void vHeartbeat(void *argument) {
++    TickType_t last = xTaskGetTickCount();
++    (void)argument;
++    for (;;) {
++        Result result = { RESULT_HEARTBEAT, 0u, 0u, 0u, 0u, 0u, 0u };
++        xTaskDelayUntil(&last, pdMS_TO_TICKS(100));
++        result.tick = xTaskGetTickCount();
++        vSubmit(&result);
++    }
++}
++
++static void vBootChecks(void) {
++    volatile uint32_t *words = (volatile uint32_t *)0x400ff000u;
++    uint32_t i, misa;
++    __asm__ volatile("csrr %0,misa" : "=r"(misa));
++    if (SYS_ID != 0x52564331u || (misa & 0x1104u) != 0x1104u)
++        vApplicationFatal(0x30u, misa);
++    vUartText("RTOS IMC OK\r\n");
++    while ((SYS_STATUS & (ST_DDR_OK | ST_DDR_ERR)) == 0u) { }
++    if ((SYS_STATUS & ST_DDR_ERR) != 0u) vApplicationFatal(0x31u, DDR_STS);
++    for (i = 0; i < 16u; ++i) words[i] = 0x13579bdfu ^ (i * 0x10204081u);
++    for (i = 0; i < 16u; ++i)
++        if (words[i] != (0x13579bdfu ^ (i * 0x10204081u)))
++            vApplicationFatal(0x32u, i);
++    if (MMIO(0x41300000u) != 0x5a5a00ffu) vApplicationFatal(0x33u, 0u);
++    vUartText("RTOS DDR OK\r\n");
++}
++
++#if RTOS_TEST
++extern volatile uint32_t ulPortTickInterrupts, ulPortYieldTraps;
++volatile uint32_t ulRegisterProbeA, ulRegisterProbeB, ulRegisterProbeFailure;
++static StaticTask_t xProbeATCB, xProbeBTCB, xMonitorTCB;
++static StackType_t xProbeAStack[192], xProbeBStack[192], xMonitorStack[256];
++static StaticQueue_t xEmptyQueueStorage;
++static uint8_t ucEmptyQueueBytes[sizeof(uint32_t)];
++static QueueHandle_t xEmptyQueue;
++extern void vRegisterProbe(volatile uint32_t *counter, volatile uint32_t *failure,
++                           uint32_t seed) __attribute__((noreturn));
++static void vProbeA(void *argument) {
++    (void)argument;
++    vRegisterProbe(&ulRegisterProbeA, &ulRegisterProbeFailure, 0x1357u);
++}
++static void vProbeB(void *argument) {
++    (void)argument;
++    vRegisterProbe(&ulRegisterProbeB, &ulRegisterProbeFailure, 0x2468u);
++}
++void vCriticalSelfTest(void);
++static void vTestMonitor(void *argument) {
++    uint32_t dummy;
++    TickType_t start = (vCriticalSelfTest(), xTaskGetTickCount());
++    (void)argument;
++    if (xQueueReceive(xEmptyQueue, &dummy, 2u) != errQUEUE_EMPTY ||
++        xTaskGetTickCount() - start < 2u) vApplicationFatal(0x40u, 0u);
++    if (xTaskGetTickCount() < 16u) vTaskDelay(16u - xTaskGetTickCount());
++    if (ulApplicationResults < 2u || ulApplicationTimeouts < 1u)
++        vApplicationFatal(0x41u, ulApplicationResults);
++    if (ulRegisterProbeA < 20u || ulRegisterProbeB < 20u || ulRegisterProbeFailure)
++        vApplicationFatal(0x42u, ulRegisterProbeFailure);
++    if (ulPortTickInterrupts < 16u || ulPortYieldTraps == 0u)
++        vApplicationFatal(0x43u, ulPortTickInterrupts);
++    vUartText("RTOS TEST PASS ticks="); vUartDecimal(ulPortTickInterrupts);
++    vUartText(" queues="); vUartDecimal(ulApplicationQueueReceived);
++    vUartText(" preempt="); vUartDecimal(ulRegisterProbeA);
++    vUartText(","); vUartDecimal(ulRegisterProbeB); vUartText("\r\n");
++    LED_REG = 0xa5u;
++    for (;;) vTaskDelay(1000u);
++}
++#endif
++
++int main(void) {
++    vUartText("\r\nRTOS BOOT hz=125000000 tick=1000\r\n");
++    vBootChecks();
++    xResultQueue = xQueueCreateStatic(8u, sizeof(Result), ucResultQueueBytes,
++                                     &xResultQueueStorage);
++    configASSERT(xResultQueue != NULL);
++    configASSERT(xTaskCreateStatic(vRecognitionControl, "recognition", 256, NULL,
++                                   3, xControlStack, &xControlTCB) != NULL);
++    configASSERT(xTaskCreateStatic(vResultPublisher, "result_uart", 320, NULL,
++                                   2, xResultStack, &xResultTCB) != NULL);
++    configASSERT(xTaskCreateStatic(vHeartbeat, "heartbeat", 192, NULL,
++                                   1, xHeartbeatStack, &xHeartbeatTCB) != NULL);
++#if RTOS_TEST
++    xEmptyQueue = xQueueCreateStatic(1u, sizeof(uint32_t), ucEmptyQueueBytes,
++                                    &xEmptyQueueStorage);
++    configASSERT(xEmptyQueue != NULL);
++    configASSERT(xTaskCreateStatic(vProbeA, "register_A", 192, NULL, 1,
++                                   xProbeAStack, &xProbeATCB) != NULL);
++    configASSERT(xTaskCreateStatic(vProbeB, "register_B", 192, NULL, 1,
++                                   xProbeBStack, &xProbeBTCB) != NULL);
++    configASSERT(xTaskCreateStatic(vTestMonitor, "test_monitor", 256, NULL, 4,
++                                   xMonitorStack, &xMonitorTCB) != NULL);
++#endif
++    vTaskStartScheduler();
++    vApplicationFatal(0x50u, 0u);
++}
+--- /dev/null
++++ rtos/sw/port.c
+@@ -0,0 +1,90 @@
++/* Machine-mode RV32IMC port for the frozen PaceRV H3 execution core.
++ * The 144-byte context has x1..x31 at their architectural index * 4,
++ * mepc at 128, mstatus at 132, critical depth at 136, and a pad at 140.
++ * Only machine timer and machine ECALL traps enter the scheduler.
++ */
++#include "FreeRTOS.h"
++#include "task.h"
++#include "hal.h"
++
++volatile uint32_t ulPortCriticalNesting;
++volatile uint32_t ulPortTickInterrupts;
++volatile uint32_t ulPortYieldTraps;
++static uint64_t ullNextTick;
++uint32_t xPortISRStack[256] __attribute__((aligned(16)));
++extern void xPortStartFirstTask(void) __attribute__((noreturn));
++extern void vPortTrapEntry(void);
++
++static void vTaskReturned(void) { vApplicationFatal(0x10u, 0u); }
++
++StackType_t *pxPortInitialiseStack(StackType_t *top, TaskFunction_t entry, void *argument) {
++    uintptr_t aligned = ((uintptr_t)(top + 1)) & ~(uintptr_t)15u;
++    StackType_t *frame = (StackType_t *)(aligned - 144u);
++    uint32_t gp;
++    unsigned i;
++    __asm__ volatile("mv %0,gp" : "=r"(gp));
++    for (i = 0; i < 36u; ++i) frame[i] = 0u;
++    frame[1] = (StackType_t)(uintptr_t)vTaskReturned;
++    frame[2] = (StackType_t)aligned;
++    frame[3] = gp;
++    frame[10] = (StackType_t)(uintptr_t)argument;
++    frame[32] = (StackType_t)(uintptr_t)entry;
++    frame[33] = 0x1880u; /* MPP=M, MPIE=1; mret enables interrupts. */
++    return frame;
++}
++
++BaseType_t xPortStartScheduler(void) {
++    __asm__ volatile("csrci mstatus,8" ::: "memory");
++    __asm__ volatile("csrw mtvec,%0" :: "r"(vPortTrapEntry) : "memory");
++    ulPortCriticalNesting = 0u;
++    ullNextTick = ullMachineTime() + configCPU_CLOCK_HZ / configTICK_RATE_HZ;
++    vMachineCompare(ullNextTick);
++    __asm__ volatile("li t0,128\ncsrs mie,t0" ::: "t0", "memory");
++    xPortStartFirstTask();
++}
++
++void vPortEndScheduler(void) { vApplicationFatal(0x11u, 0u); }
++
++void vPortEnterCritical(void) {
++    portDISABLE_INTERRUPTS();
++    ++ulPortCriticalNesting;
++    portMEMORY_BARRIER();
++}
++
++void vPortExitCritical(void) {
++    configASSERT(ulPortCriticalNesting != 0u);
++    --ulPortCriticalNesting;
++    if (ulPortCriticalNesting == 0u) portENABLE_INTERRUPTS();
++}
++
++uint32_t ulPortSetInterruptMask(void) {
++    uint32_t previous;
++    __asm__ volatile("csrrci %0,mstatus,8" : "=r"(previous) :: "memory");
++    return previous;
++}
++
++void vPortClearInterruptMask(uint32_t previous) {
++    if ((previous & 8u) != 0u) portENABLE_INTERRUPTS();
++}
++
++void vPortYieldFromISR(BaseType_t required) {
++    /* The trap prologue has already saved the interrupted task. */
++    if (required != pdFALSE) vTaskSwitchContext();
++}
++
++void vPortTrapDispatch(uint32_t *frame) {
++    uint32_t cause;
++    __asm__ volatile("csrr %0,mcause" : "=r"(cause));
++    if (cause == 0x80000007u) {
++        ullNextTick += configCPU_CLOCK_HZ / configTICK_RATE_HZ;
++        vMachineCompare(ullNextTick);
++        ++ulPortTickInterrupts;
++        if (xTaskIncrementTick() != pdFALSE) vTaskSwitchContext();
++    } else if (cause == 11u) {
++        frame[32] += 4u; /* ECALL is always 32 bits, including RV32C code. */
++        ++ulPortYieldTraps;
++        vTaskSwitchContext();
++    } else {
++        vApplicationFatal(cause, frame[32]);
++    }
++}
+--- /dev/null
++++ rtos/sw/portASM.S
+@@ -0,0 +1,104 @@
++.section .text.port,"ax",@progbits
++.option norvc
++.balign 4
++.global vPortYield
++vPortYield:
++    ecall
++    ret
++
++.balign 4
++.global vPortTrapEntry
++vPortTrapEntry:
++    addi sp,sp,-144
++    sw ra,4(sp)
++    sw gp,12(sp)
++    sw tp,16(sp)
++    sw t0,20(sp)
++    sw t1,24(sp)
++    sw t2,28(sp)
++    sw s0,32(sp)
++    sw s1,36(sp)
++    sw a0,40(sp)
++    sw a1,44(sp)
++    sw a2,48(sp)
++    sw a3,52(sp)
++    sw a4,56(sp)
++    sw a5,60(sp)
++    sw a6,64(sp)
++    sw a7,68(sp)
++    sw s2,72(sp)
++    sw s3,76(sp)
++    sw s4,80(sp)
++    sw s5,84(sp)
++    sw s6,88(sp)
++    sw s7,92(sp)
++    sw s8,96(sp)
++    sw s9,100(sp)
++    sw s10,104(sp)
++    sw s11,108(sp)
++    sw t3,112(sp)
++    sw t4,116(sp)
++    sw t5,120(sp)
++    sw t6,124(sp)
++    csrr t0,mepc
++    sw t0,128(sp)
++    csrr t0,mstatus
++    sw t0,132(sp)
++    la t0,ulPortCriticalNesting
++    lw t1,0(t0)
++    sw t1,136(sp)
++    la t0,pxCurrentTCB
++    lw t1,0(t0)
++    sw sp,0(t1)
++    mv a0,sp
++    la sp,xPortISRStack
++    addi sp,sp,1024
++    call vPortTrapDispatch
++    j vPortRestoreContext
++
++.balign 4
++.global xPortStartFirstTask
++xPortStartFirstTask:
++vPortRestoreContext:
++    la t0,pxCurrentTCB
++    lw t1,0(t0)
++    lw sp,0(t1)
++    lw t0,128(sp)
++    csrw mepc,t0
++    lw t0,132(sp)
++    csrw mstatus,t0
++    lw t1,136(sp)
++    la t0,ulPortCriticalNesting
++    sw t1,0(t0)
++    lw ra,4(sp)
++    lw gp,12(sp)
++    lw tp,16(sp)
++    lw t0,20(sp)
++    lw t1,24(sp)
++    lw t2,28(sp)
++    lw s0,32(sp)
++    lw s1,36(sp)
++    lw a0,40(sp)
++    lw a1,44(sp)
++    lw a2,48(sp)
++    lw a3,52(sp)
++    lw a4,56(sp)
++    lw a5,60(sp)
++    lw a6,64(sp)
++    lw a7,68(sp)
++    lw s2,72(sp)
++    lw s3,76(sp)
++    lw s4,80(sp)
++    lw s5,84(sp)
++    lw s6,88(sp)
++    lw s7,92(sp)
++    lw s8,96(sp)
++    lw s9,100(sp)
++    lw s10,104(sp)
++    lw s11,108(sp)
++    lw t3,112(sp)
++    lw t4,116(sp)
++    lw t5,120(sp)
++    lw t6,124(sp)
++    addi sp,sp,144
++    mret
+--- /dev/null
++++ rtos/sw/portmacro.h
+@@ -0,0 +1,46 @@
++#ifndef INSTREC_PORTMACRO_H
++#define INSTREC_PORTMACRO_H
++
++#include <stdint.h>
++#include <stddef.h>
++
++#define portSTACK_TYPE uint32_t
++#define portBASE_TYPE int32_t
++typedef portSTACK_TYPE StackType_t;
++typedef int32_t BaseType_t;
++typedef uint32_t UBaseType_t;
++typedef uint32_t TickType_t;
++#define portMAX_DELAY UINT32_MAX
++#define portTICK_TYPE_IS_ATOMIC 1
++#define portSTACK_GROWTH (-1)
++#define portBYTE_ALIGNMENT 16
++#define portTICK_PERIOD_MS ((TickType_t)1000 / configTICK_RATE_HZ)
++#define portCRITICAL_NESTING_IN_TCB 0
++#define portDONT_DISCARD __attribute__((used))
++#define portFORCE_INLINE inline __attribute__((always_inline))
++#define portINLINE __inline
++#define portNOP() __asm__ volatile("nop")
++#define portMEMORY_BARRIER() __asm__ volatile("" ::: "memory")
++
++void vPortEnterCritical(void);
++void vPortExitCritical(void);
++void vPortYield(void);
++uint32_t ulPortSetInterruptMask(void);
++void vPortClearInterruptMask(uint32_t previous);
++void vPortYieldFromISR(BaseType_t required);
++
++#define portYIELD() vPortYield()
++#define portYIELD_WITHIN_API() portYIELD()
++#define portDISABLE_INTERRUPTS() __asm__ volatile("csrci mstatus,8" ::: "memory")
++#define portENABLE_INTERRUPTS() __asm__ volatile("csrsi mstatus,8" ::: "memory")
++#define portENTER_CRITICAL() vPortEnterCritical()
++#define portEXIT_CRITICAL() vPortExitCritical()
++#define portSET_INTERRUPT_MASK_FROM_ISR() ulPortSetInterruptMask()
++#define portCLEAR_INTERRUPT_MASK_FROM_ISR(previous) vPortClearInterruptMask(previous)
++#define portEND_SWITCHING_ISR(required) vPortYieldFromISR(required)
++#define portYIELD_FROM_ISR(required) portEND_SWITCHING_ISR(required)
++#define portTASK_FUNCTION_PROTO(function, parameters) void function(void *parameters)
++#define portTASK_FUNCTION(function, parameters) void function(void *parameters)
++#define portASSERT_IF_INTERRUPT_PRIORITY_INVALID() do { } while (0)
++
++#endif
+--- /dev/null
++++ rtos/sw/probe.S
+@@ -0,0 +1,62 @@
++/* Two CPU-bound tasks execute this with distinct seeds. No yield/delay occurs
++ * in the loop: only timer preemption lets both make progress. s-registers and
++ * caller-clobbered t3..t6 remain live across arbitrary timer interrupts.
++ */
++.section .text.probe,"ax",@progbits
++.option norvc
++.global vRegisterProbe
++vRegisterProbe:
++    mv s0,a2
++    mv s1,a0
++    mv s2,a1
++    addi s3,a2,3
++    addi s4,a2,4
++    addi s5,a2,5
++    addi s6,a2,6
++    addi s7,a2,7
++    addi s8,a2,8
++    addi s9,a2,9
++    addi s10,a2,10
++    addi s11,a2,11
++    addi t3,a2,64
++    addi t4,a2,80
++    addi t5,a2,96
++    addi t6,a2,112
++1:  bne s0,a2,3f
++    bne s1,a0,3f
++    bne s2,a1,3f
++    addi t0,a2,3
++    bne s3,t0,3f
++    addi t0,a2,4
++    bne s4,t0,3f
++    addi t0,a2,5
++    bne s5,t0,3f
++    addi t0,a2,6
++    bne s6,t0,3f
++    addi t0,a2,7
++    bne s7,t0,3f
++    addi t0,a2,8
++    bne s8,t0,3f
++    addi t0,a2,9
++    bne s9,t0,3f
++    addi t0,a2,10
++    bne s10,t0,3f
++    addi t0,a2,11
++    bne s11,t0,3f
++    addi t0,a2,64
++    bne t3,t0,3f
++    addi t0,a2,80
++    bne t4,t0,3f
++    addi t0,a2,96
++    bne t5,t0,3f
++    addi t0,a2,112
++    bne t6,t0,3f
++    lw t1,0(s1)
++    addi t1,t1,1
++    sw t1,0(s1)
++    mul t2,t1,s0
++    j 1b
++3:  li t0,1
++    sw t0,0(a1)
++4:  wfi
++    j 4b
+--- /dev/null
++++ rtos/sw/start.S
+@@ -0,0 +1,37 @@
++.section .text.start,"ax",@progbits
++.option norvc
++.global _start
++_start:
++    csrci mstatus,8
++    csrw mie,zero
++    la sp,__stack_top
++    .option push
++    .option norelax
++    la gp,__global_pointer$
++    .option pop
++    la t0,__data_load_start
++    la t1,__data_start
++    la t2,__data_end
++1:  bgeu t1,t2,2f
++    lw t3,0(t0)
++    sw t3,0(t1)
++    addi t0,t0,4
++    addi t1,t1,4
++    j 1b
++2:  la t0,__bss_start
++    la t1,__bss_end
++3:  bgeu t0,t1,4f
++    sw zero,0(t0)
++    addi t0,t0,4
++    j 3b
++4:  la t0,boot_trap
++    csrw mtvec,t0
++    call main
++5:  wfi
++    j 5b
++.balign 4
++boot_trap:
++    csrr a0,mcause
++    csrr a1,mepc
++    call vApplicationFatal
++    j 5b

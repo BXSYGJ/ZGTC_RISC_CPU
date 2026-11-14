@@ -1,0 +1,23 @@
+{
+  "command": [
+    "D:\\PDS_2022.2-SP6.4\\bin\\pds_shell.exe",
+    "-file",
+    "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\pds\\20261114-153018-rom_loop_fix-map\\build.tcl",
+    "-work_dir",
+    "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\pds\\20261114-153018-rom_loop_fix-map",
+    "-project_name",
+    "instrec_rtos_125"
+  ],
+  "exit_code": 0,
+  "seconds": 745.878,
+  "stages": {
+    "compile": true,
+    "synthesize": true,
+    "dev_map": true,
+    "pnr": false,
+    "report_timing": false,
+    "gen_bit_stream": false
+  },
+  "errors": [],
+  "frozen_inputs_unchanged": true
+}

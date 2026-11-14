@@ -1,0 +1,102 @@
+{
+  "repository": "https://github.com/BXSYGJ/ZGTC_RISC_CPU",
+  "branches": {
+    "XSY": "0b8201e071c6c59b8d7ead23ad944684f4d0b24c",
+    "XSY2": "8f902aec29c38bc4a32a4e95ab47d18411684b52"
+  },
+  "baseline": "full-20261113-223256-full / 125 MHz",
+  "integration": {
+    "XSY": "125 MHz PaceRV full-system integration and immutable inference results",
+    "XSY2": "native M1 ownership, bridge/aligner and safe Mel-window CPU launch protocol",
+    "shared_model": "Five-group frozen source retained as application follow-up; existing eight-class accelerator geometry retained for this RTOS integration"
+  },
+  "files": [
+    {
+      "path": "src/npu/npu_m1_owner.v",
+      "sha256": {
+        "XSY": "e15430c6760343e5d21f325217bc142b4e15c1d801061b8ddf05e7259dd6ab79",
+        "XSY2": "e15430c6760343e5d21f325217bc142b4e15c1d801061b8ddf05e7259dd6ab79"
+      },
+      "branches_identical": true,
+      "baseline125_present": true,
+      "baseline125_sha256": "ce99ef8e780b72d9205da8c9ef8762cb891ce1d8bbf4295fd38372755a3157ca",
+      "baseline_matches_normalized": {
+        "XSY": true,
+        "XSY2": true
+      }
+    },
+    {
+      "path": "src/npu/npu_m1_bridge.v",
+      "sha256": {
+        "XSY": "9a8a7da8f2501e3139bf06607cbe4b75fb9f7b434a6cb5d8d47f2a42547db849",
+        "XSY2": "9a8a7da8f2501e3139bf06607cbe4b75fb9f7b434a6cb5d8d47f2a42547db849"
+      },
+      "branches_identical": true,
+      "baseline125_present": true,
+      "baseline125_sha256": "7510a232de647efa232a5bb11b2bc7229f9571d5f4b13fa57684bea2e2f3cab6",
+      "baseline_matches_normalized": {
+        "XSY": true,
+        "XSY2": true
+      }
+    },
+    {
+      "path": "src/npu/weight_read_aligner_hardened.v",
+      "sha256": {
+        "XSY": "c2f060faba86ca23fb60b3c10374284411a63139b0b31284a03f76bfa9750aca",
+        "XSY2": "c2f060faba86ca23fb60b3c10374284411a63139b0b31284a03f76bfa9750aca"
+      },
+      "branches_identical": true,
+      "baseline125_present": true,
+      "baseline125_sha256": "54ae62714044ae28676e00d40e8e78d420eba1e9b366cf6da9e8b6487df385cd",
+      "baseline_matches_normalized": {
+        "XSY": true,
+        "XSY2": true
+      }
+    },
+    {
+      "path": "sw/rv32/main.c",
+      "sha256": {
+        "XSY": "e5c4387b4281cd6794b5c0a3b42f0a4a650a38a527e2a6b3645ce05e180c94d8",
+        "XSY2": "e5c4387b4281cd6794b5c0a3b42f0a4a650a38a527e2a6b3645ce05e180c94d8"
+      },
+      "branches_identical": true,
+      "baseline125_present": false
+    },
+    {
+      "path": "sim/experiments/cpu_native_joint/native_owner.vh",
+      "sha256": {
+        "XSY": "dd8296e5ac1cc8c22f828cd89edc4a0b93795974e0db93dd8ced063febaf0466",
+        "XSY2": "dd8296e5ac1cc8c22f828cd89edc4a0b93795974e0db93dd8ced063febaf0466"
+      },
+      "branches_identical": true,
+      "baseline125_present": false
+    },
+    {
+      "path": "models/group5_v3_float_20261102/model_source.py",
+      "sha256": {
+        "XSY": "4d3399ab2980fec032c12ccb33ccb6186a56979cd55beee91d4066a3da46c383",
+        "XSY2": "4d3399ab2980fec032c12ccb33ccb6186a56979cd55beee91d4066a3da46c383"
+      },
+      "branches_identical": true,
+      "baseline125_present": false
+    },
+    {
+      "path": "models/group5_v3_float_20261102/float_state.npz",
+      "sha256": {
+        "XSY": "0fb659348612629a91818cba45280e38b721047f3d8122e0726fa4a6e8ac4826",
+        "XSY2": "0fb659348612629a91818cba45280e38b721047f3d8122e0726fa4a6e8ac4826"
+      },
+      "branches_identical": true,
+      "baseline125_present": false
+    },
+    {
+      "path": "models/group5_v3_float_20261102/reference_vectors.npz",
+      "sha256": {
+        "XSY": "584fb765a5270a869db855e8c4b9c6d803d906fcbcd470c8e3795c6097f9acaa",
+        "XSY2": "584fb765a5270a869db855e8c4b9c6d803d906fcbcd470c8e3795c6097f9acaa"
+      },
+      "branches_identical": true,
+      "baseline125_present": false
+    }
+  ]
+}
