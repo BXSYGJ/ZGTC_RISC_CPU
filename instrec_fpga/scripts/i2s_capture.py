@@ -509,9 +509,9 @@ def run_capture(args):
         print(f'UART {args.port} @ {args.baud} open; waiting for boot tokens '
               f'({" / ".join(BOOT_TOKENS)})')
         if args.skip_boot:
-            ok, lines, missing = True, [], []
+            ok, lines = True, []
         else:
-            ok, lines, missing = wait_for_tokens(port, BOOT_TOKENS, args.boot_timeout, log)
+            ok, lines = wait_for_tokens(port, BOOT_TOKENS, args.boot_timeout, log)
         for line in lines:
             print(f'  boot: {line}')
         if not ok:

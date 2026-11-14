@@ -9,7 +9,7 @@
 - 上板验证三件套全过：DDR3 自检 pattern 3/3、mel 与 golden exact 100% max|d|=0、
   同窗口 NPU logits 8/8 完全相等（top1 均 class4）。
 - 新增工具：scripts/seed_sweep.ps1（多种子扫描+看门狗+CSV）、build/heartbeat_build.ps1、
-  scripts/usb_switch.py、scripts/flash_bitstream.py（下载器掉线自动断电重启+烧录自愈）。
+  scripts/flash_bitstream.py（烧录入口：自动确保 jtagserver、按 .sbit 烧录、失败重试）。
 
 ## 2026-11-13（第五轮）：重编 + 板级验证 —— mel 修复生效，dB 谱与 golden 逐位相同
 

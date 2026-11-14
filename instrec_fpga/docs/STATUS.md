@@ -39,8 +39,7 @@
 >
 > **配套工具（本轮新增，已入库）**：`scripts/seed_sweep.ps1`（通宵多种子扫描 + 看门狗 + CSV 台账）、
 > `build/heartbeat_build.ps1`（schtasks 后台构建包装，绕过 2 分钟后台回收）、
-> `scripts/usb_switch.py` + `scripts/flash_bitstream.py`（下载器掉线自动断电重启 + 烧录自愈；
-> 开关在 COM4，但实测其下游口尚未接到 USB Cable II，接线后生效）。
+> `scripts/flash_bitstream.py`（烧录入口：自动确保 jtagserver、按 .sbit 烧录、失败重试）。
 
 > **2026-11-13（离线参考量化契约错误修正 —— 板级链路与 golden 逐位一致，先读这节）**
 > **根因**：`golden_pipeline.run_mel_pipeline()` 的 `inv_s_in/zp_in` 默认取
