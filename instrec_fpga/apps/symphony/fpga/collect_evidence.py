@@ -172,6 +172,19 @@ def verify_full_bindings(run: Path, full: dict) -> None:
             "Full implementation refers to another run's timing report")
 
 
+def verify_resource_report(path: Path, run: Path, full: dict, input_count: int) -> dict:
+    data = read(path)
+    require(Path(data["run"]).resolve()==run.resolve(),"Resource report refers to another run")
+    require(data["frozen_input_count"]==input_count and data["changed_inputs"]==[]
+            and data["clock_contract"]["passed"] is True,"Resource report input/clock binding changed")
+    for label,hash_field in (("timing_report","timing_sha256"),("bitstream","bitstream_sha256")):
+        require(Path(data[label]).resolve()==Path(full[label]["path"]).resolve()
+                and data[hash_field]==full[label]["sha256"],"Resource report "+label+" binding changed")
+    require(data["timing"]["complete_ten_tables"] is True,"Final timing tables are incomplete")
+    return {"path":str(path.resolve()),"sha256":sha(path),"qualified":data["qualified"],
+            "resources":data["routed_resources"]}
+
+
 def verify_collected_delivery(data: dict) -> Path:
     """Reopen every accepted binding before and after a release is copied."""
     require(data["status"]=="pass","Passing native delivery report required")
@@ -193,6 +206,9 @@ def verify_collected_delivery(data: dict) -> Path:
     for label in ("bitstream","timing_report"):
         require(verify_record(data[label],"Accepted "+label)==Path(full[label]["path"]).resolve()
                 and data[label]["sha256"]==full[label]["sha256"],"Accepted "+label+" differs from the implementation")
+    resource_path = verify_record(data["resource_report"],"Accepted resource/timing report")
+    require(verify_resource_report(resource_path,run,full,len(manifest["files"]))==data["resource_report"],
+            "Accepted resource/timing metadata changed")
     sys.path.insert(0,str(ROOT / "rtos"))
     from audit_mapped_rom import verify_report
     require(verify_report(run)["status"]=="pass","Accepted mapped ROM audit failed")
@@ -280,6 +296,7 @@ def main() -> int:
     integration = verify_unit(args.integration_report.resolve(strict=True),"SYMPHONY_INTEGRATION_PASS")
     runtime = verify_runtime_inputs(HERE / "evidence/RUNTIME_INPUTS.json")
     ui_rom = verify_ui_rom_audit(HERE / "evidence/UI_ROM_AUDIT.json",run)
+    resources = verify_resource_report(HERE / "evidence/PDS_TIMING_AND_RESOURCES.json",run,full,len(manifest["files"]))
     result={"status":"pass","collected_utc":datetime.now(timezone.utc).isoformat(),
             "branch":"rtos125-integration","application":"Native FPGA HDMI guide and recognition-window library",
             "display":{"connection":"FPGA HDMI","width":1920,"height":1080,"pixel_clock_hz":148500000,"latency_clocks":5},
@@ -291,6 +308,7 @@ def main() -> int:
             "simulations":{"state":state,"commit_and_rollback":commit,"pixel":pixel,"integration":integration},
             "runtime_inputs":runtime,
             "ui_rom_audit":ui_rom,
+            "resource_report":resources,
             "map":{"path":str(run / "RESULT.json"),"sha256":sha(run / "RESULT.json"),"seconds":mapping["seconds"]},
             "implementation":{"path":str(run / "FULL_RESULT.json"),"sha256":sha(run / "FULL_RESULT.json"),"seconds":full["seconds"]},
             "rom_audit":{"path":str(run / "ROM_AUDIT.json"),"sha256":sha(run / "ROM_AUDIT.json"),"status":"pass"},

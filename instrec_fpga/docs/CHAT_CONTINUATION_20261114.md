@@ -2,7 +2,9 @@
 
 > **2026-11-15当前应用工作：** 用户要求交响乐可视化导赏＋识别窗口检索与标记，最终显示器只接FPGA。已采用KEY1短按选择、双击标记、长按切页，完成 `apps/symphony/fpga/` 原生1080p中文双页、64槽真实结果历史和筛选反馈。导赏短按选类别，长按进库后短按选匹配窗口，双击标记；历史按到达毫秒/序号记录、复位清空。浏览器版本保留为电脑开发预览。state235、实际按键像素联动23/同步145035、四帧8294400像素/9900436视频时钟及事件扩展独立回退均通过，最终renderer fc0d9441…96d1c6、state8e11800f…9109e0。
 >
-> 唯一run `build/rtos/pds/20261115-011139-symphony-native-full` 已完成编译/综合/映射和7148B实际程序ROM审计，212冻结输入不变；`continuations/20261114-172709-240059` 正按125MHz/seed2/hold8布局布线。此检查点新应用位流待生成。接续需跟完原run，收集DELIVERY和发布包并更新状态；原始202基线、旧125/109.375/RTOS成品保留，时序优化paused。实时状态以STATUS顶部为准。
+> 唯一run `build/rtos/pds/20261115-011139-symphony-native-full` 已完成六阶段、退出0，PDS进程0，212冻结输入及原202基线保持。实际7148B程序ROM与UI存储初始化审计通过；最终37884LUT/40150FF/1431distributed RAM/94APM/130.5DRM。新位流3791112字节，SHA256 `59a0e54a229681934f55ef3bfef45cac4fa96ddac3fecef4421bddd673bf5ee8`。固定125MHz/148.5MHz/seed2/hold8；系统/像素slow setup −1.921/−0.591ns，系统slow/fast hold −0.130/−0.138ns，qualified=false和原报告保留，时序优化paused。
+>
+> 完整交付已归档 `releases/symphony-hdmi-20261115/`，ZIP共287项逐项解压校验，3862895字节、SHA256 `c5dad9a451ee5f3a32656e7766f292acb7cba7512865c42b5737f944ebd814cb`。DELIVERY、位流、冻结输入、权重/上传器及实际验证记录同包；根目录START_HERE/LOAD_WEIGHTS.ps1的显式路径及解压默认布局dry-run exit0。发布沿用用户授权的 `rtos125-integration` 分支。物理板卡HDMI与KEY1尚待接板验收，下一步使用同包权重及PCM1808音源验收；旧125/109.375/RTOS成品保留。实时状态以STATUS顶部为准。
 
 > 用户又要求同时上传之前的 125 MHz 与 109.375 MHz 基线。三版本统一入口为 `releases/RTOS_AND_BASELINES_20261114.md`，发布分支 `rtos125-integration`；原始基线成品在 `releases/selected-baselines-20261114/`，RTOS 成品在 `releases/rtos125-20261114-175148/`，原始 ZIP 和位流均按原 SHA256 保留。
 

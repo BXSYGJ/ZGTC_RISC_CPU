@@ -1,0 +1,90 @@
+{
+  "schema": "symphony-weight-launcher-v1",
+  "passed": true,
+  "dry_run": true,
+  "serial_port_opened": false,
+  "exit_status": 0,
+  "files": [
+    {
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\apps\\symphony\\fpga\\load_weights.ps1",
+      "bytes": 2435,
+      "sha256": "51d3a0d01b171403a01e20579283939fa51ab4b79554a333214181d29ca65e42"
+    },
+    {
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\scripts\\weight_upload.py",
+      "bytes": 5763,
+      "sha256": "e70c3959988e7d34d68b4ea6e4cd9e09cebedb935c61de6f9ab14dd77d0b01f5"
+    },
+    {
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\scripts\\outputs\\weights_image.bin",
+      "bytes": 691040,
+      "sha256": "19a74dbec29d3a0f16ab06dc30f70312849977de0c6b345710b046b1908f5d7a"
+    }
+  ],
+  "inputs_unchanged": true,
+  "launcher_utf8_bom": true,
+  "commands": [
+    {
+      "argv": [
+        "C:\\Users\\dxlgy\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell\\pwsh.exe",
+        "-NoLogo",
+        "-NoProfile",
+        "-NonInteractive",
+        "-File",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\apps\\symphony\\fpga\\load_weights.ps1",
+        "-SerialPort",
+        "COM1",
+        "-PythonExe",
+        "D:\\Anaconda\\python.exe",
+        "-ImagePath",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\scripts\\outputs\\weights_image.bin",
+        "-UploaderPath",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\scripts\\weight_upload.py",
+        "-DryRun"
+      ],
+      "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga",
+      "exit_status": 0,
+      "output": "image D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\scripts\\outputs\\weights_image.bin: 691040 bytes, sha256 19a74dbec29d3a0f16ab06dc30f70312849977de0c6b345710b046b1908f5d7a\nframes: 2701 (including end frame)\nfirst frame: aa 55 00 00 00 01 49 52 57 31 06 00 01 00 60 8b ...\nWEIGHT_LAUNCHER_PASS mode=dry-run bytes=691040 sha256=19a74dbec29d3a0f16ab06dc30f70312849977de0c6b345710b046b1908f5d7a uploader_exit=0\n",
+      "seconds": 0.783358
+    },
+    {
+      "argv": [
+        "C:\\Users\\dxlgy\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell\\pwsh.exe",
+        "-NoLogo",
+        "-NoProfile",
+        "-NonInteractive",
+        "-File",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\symphony\\weight_launcher\\20261115-020948-637166\\LOAD_WEIGHTS.ps1",
+        "-SerialPort",
+        "COM1",
+        "-PythonExe",
+        "D:\\Anaconda\\python.exe",
+        "-DryRun"
+      ],
+      "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga",
+      "exit_status": 0,
+      "output": "image D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\symphony\\weight_launcher\\20261115-020948-637166\\runtime\\weights_image.bin: 691040 bytes, sha256 19a74dbec29d3a0f16ab06dc30f70312849977de0c6b345710b046b1908f5d7a\nframes: 2701 (including end frame)\nfirst frame: aa 55 00 00 00 01 49 52 57 31 06 00 01 00 60 8b ...\nWEIGHT_LAUNCHER_PASS mode=dry-run bytes=691040 sha256=19a74dbec29d3a0f16ab06dc30f70312849977de0c6b345710b046b1908f5d7a uploader_exit=0\n",
+      "seconds": 0.772669
+    }
+  ],
+  "default_layout_directory": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\symphony\\weight_launcher\\20261115-020948-637166",
+  "default_layout_files": [
+    {
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\symphony\\weight_launcher\\20261115-020948-637166\\LOAD_WEIGHTS.ps1",
+      "bytes": 2435,
+      "sha256": "51d3a0d01b171403a01e20579283939fa51ab4b79554a333214181d29ca65e42"
+    },
+    {
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\symphony\\weight_launcher\\20261115-020948-637166\\runtime\\weight_upload.py",
+      "bytes": 5763,
+      "sha256": "e70c3959988e7d34d68b4ea6e4cd9e09cebedb935c61de6f9ab14dd77d0b01f5"
+    },
+    {
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\symphony\\weight_launcher\\20261115-020948-637166\\runtime\\weights_image.bin",
+      "bytes": 691040,
+      "sha256": "19a74dbec29d3a0f16ab06dc30f70312849977de0c6b345710b046b1908f5d7a"
+    }
+  ],
+  "python_version": "3.13.9 | packaged by Anaconda, Inc. | (main, Oct 21 2025, 19:09:58) [MSC v.1929 64 bit (AMD64)]",
+  "finished_utc": "2026-11-14T18:09:50.205076+00:00"
+}

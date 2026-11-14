@@ -1524,3 +1524,10 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 - 新增独立RTOS125副本集成：原bars_data增加真实frame_update脉冲，顶层路由KEY1；现有H3、8类NPU、FreeRTOS固件及202原始输入保持。
 - 实际state235、KEY1像素联动23/同步145035、四帧8294400像素及原版/修改/回退通过；权重691040B/2701帧dry-run通过，结果和截图纳管。
 - 固定125MHz/seed2/hold8完整run 20261115-011139-symphony-native-full已映射/程序ROM审计通过，正在同输入PNR；本检查点新位流待生成，旧成品保留。
+
+## 2026-11-15：原生 HDMI 整机位流及可解压启动包交付
+
+- 原run完成compile/synthesize/dev_map/pnr/report_timing/gen_bit_stream，退出0；212冻结输入与原202基线保持，PDS进程0。位流3791112字节，SHA256 `59a0e54a229681934f55ef3bfef45cac4fa96ddac3fecef4421bddd673bf5ee8`。
+- 最终37884LUT/40150FF/1431distributed RAM/94APM/130.5DRM；固定125MHz/148.5MHz/seed2/hold8。系统/像素slow setup −1.921/−0.591ns，系统slow/fast hold −0.130/−0.138ns，保留实际十表和qualified=false，未追加时序优化。
+- DELIVERY重新校验全部输入、实际映射ROM、四幅RTL帧和真实按键联动。新增PowerShell7权重加载入口，显式路径及真实解压布局两次dry-run退出0，691040字节权重/2701协议帧。
+- `releases/symphony-hdmi-20261115/` 归档新位流、完整ZIP及清单。ZIP共287项全部逐项解压校验，3862895字节、SHA256 `c5dad9a451ee5f3a32656e7766f292acb7cba7512865c42b5737f944ebd814cb`；包内提供根目录START_HERE/LOAD_WEIGHTS、权重、上传器、冻结输入与全部应用证据。沿用用户授权的rtos125-integration发布分支，物理板卡显示与按键仍待接板验收。

@@ -1,10 +1,12 @@
 # InstRec-FPGA 当前状态（STATUS）
 
-> **2026-11-15：乐境原生 FPGA HDMI 应用已实现，固定 125 MHz 整机正在布局布线。** 最新目标是补充交响乐可视化导赏、识别窗口检索与标记；用户明确显示器只接 FPGA，并选择 KEY1 短按选择、双击标记、长按切页。入口 `apps/symphony/README.md`，原生代码在 `apps/symphony/fpga/`。采用暖白/深绿 1080p 中文两页，导赏显示实际八类概率与筛选反馈，库页查询最近64个真实结果并标记；时间表示识别结果到达毫秒，历史/书签复位清空。
+> **2026-11-15：乐境原生 FPGA HDMI 双页应用、新整机位流及完整发布包交付完成。** 用户明确显示器只接 FPGA，并选择 KEY1 短按选择、双击标记、长按切页。入口 `apps/symphony/README.md`，发布目录 `releases/symphony-hdmi-20261115/`。采用暖白/深绿 1080p 中文两页，导赏显示实际八类概率与筛选反馈，库页查询最近64个真实结果并标记；时间表示识别结果到达毫秒，历史/书签复位清空。
 >
 > 实际验证：state 235检查；真实KEY1→状态→HDMI联动9场景/23RGB采样/145035同步检查；四幅完整RTL帧8294400可见像素/9900436视频时钟、五拍对齐；新增frame_update事件的原版/修改/独立回退分别编译执行exit0。报告与实际RTL截图在 `apps/symphony/fpga/evidence/`；截图使用明确的仿真向量。电脑浏览器版本保留为开发预览，正式入口为原生HDMI。现有八类模型和125MHz H3/FreeRTOS固件沿用，原始202基线文件保持原哈希。
 >
-> 当前完整run为 `build/rtos/pds/20261115-011139-symphony-native-full`，212份输入冻结，compile/synthesize/dev_map已exit0，映射130.5DRM/94APM，7148B程序ROM实际映射审计通过。固定seed2/hold8的受保护续跑 `continuations/20261114-172709-240059` 正在PNR；截至本检查点，新应用位流尚待生成。原始125/109.375MHz及旧RTOS成品继续保留；原时序优化保持paused。
+> 完整run `build/rtos/pds/20261115-011139-symphony-native-full` 已完成六阶段，退出0；212份冻结输入、实际程序ROM和UI存储初始化审计通过，原202份基线哈希保持。最终37884LUT/40150FF/1431distributed RAM/94APM/130.5DRM（容量155），新位流3791112字节、SHA256 `59a0e54a229681934f55ef3bfef45cac4fa96ddac3fecef4421bddd673bf5ee8`。固定125MHz/148.5MHz/seed2/hold8；系统/像素slow setup为−1.921/−0.591ns，系统slow/fast hold为−0.130/−0.138ns，按用户安排保留工作点及原报告，qualified=false；当前PDS进程0。
+>
+> `apps/symphony/fpga/evidence/DELIVERY.json` 已重验通过，发布ZIP共287项逐项解压重开核对，3862895字节、SHA256 `c5dad9a451ee5f3a32656e7766f292acb7cba7512865c42b5737f944ebd814cb`。包内包含位流、212份冻结输入、八类权重与上传器、根目录START_HERE/LOAD_WEIGHTS.ps1和全部应用验证记录；加载器显式路径和解压默认路径dry-run均exit0。发布分支为 `rtos125-integration`。物理板卡HDMI与KEY1尚待接板验收；下一步使用同包八类权重和现有PCM1808音源确认屏幕与手势。原始125/109.375MHz及旧RTOS成品继续保留，原时序优化paused。
 
 > **2026-11-14：三套版本统一归档到 `rtos125-integration`。** 按用户追加要求，同时提供原始 125 MHz（223256）、原始 109.375 MHz（021145）及 125 MHz FreeRTOS 版本。三版位流和 ZIP 入口见 `releases/RTOS_AND_BASELINES_20261114.md`；两个原始基线包分别包含 202 份冻结输入、原最终时序报告和构建配方，成品逐字节保留原 SHA256。
 

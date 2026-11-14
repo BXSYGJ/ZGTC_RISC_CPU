@@ -4,7 +4,9 @@
 
 最终renderer SHA fc0d9441296bde0d586c40bbd4f6fc3a71197fc4cbc697c2d2ae49ddb296d1c6，state SHA8e11800f183bf63990e5653d64e93a3d35807520740e12f2cd7df4f3989109e0。真实state235检查、实际KEY1联动23RGB/145035同步、四RTL帧8294400像素/9900436时钟、五拍对齐，以及bars_data新增frame_update的原版/修改/独立回退均exit0。证据在apps/symphony/fpga/evidence。时间是识别结果到达毫秒，64条历史和书签复位清空。
 
-当前唯一完整构建：build/rtos/pds/20261115-011139-symphony-native-full，固定125MHz/148.5MHz/seed2/hold8，冻结212份输入，原始202基线与H3保持原哈希。compile/synthesize/dev_map exit0，实际7148B程序ROM映射审计pass；受保护continuations/20261114-172709-240059正在PNR，新应用位流待生成。原时序优化paused。应用入口apps/symphony/README.md；最终需要结合新FULL_RESULT收集DELIVERY、打包位流/权重/源码、更新状态并提交。当前分支rtos125-integration。
+完整构建build/rtos/pds/20261115-011139-symphony-native-full六阶段已完成，exit0，PDS进程0。固定125MHz/148.5MHz/seed2/hold8，212冻结输入和原202基线/H3哈希保持；实际7148B程序ROM及16384字UI存储初始化审计通过。最终37884LUT/40150FF/1431distributed RAM/94APM/130.5DRM，新位流3791112字节，SHA256 59a0e54a229681934f55ef3bfef45cac4fa96ddac3fecef4421bddd673bf5ee8。系统/像素slow setup −1.921/−0.591ns，系统slow/fast hold −0.130/−0.138ns；qualified=false及原十表随包保留，原时序优化paused。
+
+交付入口releases/symphony-hdmi-20261115/README.md，完整ZIP3862895字节、SHA256 c5dad9a451ee5f3a32656e7766f292acb7cba7512865c42b5737f944ebd814cb，共287项全部解压重开校验。DELIVERY绑定新位流、时序/资源、所有冻结输入与实际仿真；包内START_HERE和LOAD_WEIGHTS.ps1使用同包runtime权重/上传器，显式路径及解压默认布局两次dry-run exit0。原始125/109.375MHz和旧RTOS包均保留。当前发布分支rtos125-integration，用户既有GitHub上传授权持续有效。物理板卡HDMI显示与KEY1待接板验收；下一步按同包说明加载八类权重并连接PCM1808实际音源。
 
 以下保留此前归档记录。
 

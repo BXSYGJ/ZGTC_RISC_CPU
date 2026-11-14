@@ -10,7 +10,7 @@ import shutil
 import sys
 import zipfile
 
-from collect_evidence import verify_collected_delivery
+from collect_evidence import verify_collected_delivery, verify_record
 
 HERE=Path(__file__).resolve().parent
 ROOT=HERE.parents[2]
@@ -18,6 +18,27 @@ ROOT=HERE.parents[2]
 
 def sha(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def verify_weight_launcher(weights: Path, uploader: Path) -> Path:
+    report_path=HERE / "evidence/WEIGHT_LAUNCHER.json"
+    report=json.loads(report_path.read_text(encoding="utf-8"))
+    launcher=HERE / "load_weights.ps1"
+    if (report.get("passed") is not True or report.get("exit_status")!=0
+            or report.get("dry_run") is not True or report.get("serial_port_opened") is not False
+            or report.get("inputs_unchanged") is not True or report.get("launcher_utf8_bom") is not True):
+        raise RuntimeError("Weight launcher dry-run did not pass")
+    if {verify_record(row,"Weight launcher input") for row in report["files"]}!={launcher,weights,uploader}:
+        raise RuntimeError("Weight launcher input binding changed")
+    if not launcher.read_bytes().startswith(b"\xef\xbb\xbf"):
+        raise RuntimeError("Weight launcher must retain UTF-8 BOM encoding")
+    if not report["commands"]: raise RuntimeError("Weight launcher actual commands are missing")
+    for command in report["commands"]:
+        if (command["exit_status"]!=0 or "-DryRun" not in command["argv"]
+                or "frames: 2701 (including end frame)" not in command["output"]
+                or "WEIGHT_LAUNCHER_PASS mode=dry-run" not in command["output"]):
+            raise RuntimeError("Weight launcher actual dry-run result changed")
+    return launcher
 
 
 def main() -> int:
@@ -40,6 +61,8 @@ def main() -> int:
     runtime={Path(row["path"]).name:Path(row["path"]) for row in data["runtime_inputs"]["files"]}
     weights=runtime["weights_image.bin"]
     uploader=runtime["weight_upload.py"]
+    launcher=verify_weight_launcher(weights,uploader)
+    launcher_report_sha256=sha(HERE / "evidence/WEIGHT_LAUNCHER.json")
     release=ROOT / "releases" / args.label
     if release.exists(): raise FileExistsError("Prior release is preserved: "+str(release))
     release.mkdir(parents=True)
@@ -48,7 +71,8 @@ def main() -> int:
         raise RuntimeError("Copied bitstream differs from accepted delivery")
     # The reproducible repository helpers remain authoritative. This archive
     # also holds the exact PDS inputs and the actual successful map/PNR records.
-    files={"instrec_top.sbit":bit,"runtime/weights_image.bin":weights,"runtime/weight_upload.py":uploader}
+    files={"instrec_top.sbit":bit,"runtime/weights_image.bin":weights,"runtime/weight_upload.py":uploader,
+           "LOAD_WEIGHTS.ps1":launcher,"START_HERE.md":HERE / "START_HERE.md"}
     for path in (run / "inputs").rglob("*"):
         if path.is_file(): files["frozen_inputs/"+path.relative_to(run / "inputs").as_posix()]=path
     for name in ("INPUTS.json","APPLICATION.patch","PREPARED_RTOS_INPUTS.json","build.tcl",
@@ -64,6 +88,8 @@ def main() -> int:
              "model_classes":8,"history_depth":64,"key":"KEY1 C23: short select; double bookmark; long page",
              "bitstream":{"file":"instrec_top.sbit","bytes":bit.stat().st_size,"sha256":sha(bit)},
              "delivery_sha256":delivery_sha256,"pds_run":run.name,"physical_board_test":data["physical_board_test"],
+             "resources":data["resource_report"]["resources"],"timing_qualified":data["resource_report"]["qualified"],
+             "weight_launcher_evidence_sha256":launcher_report_sha256,
              "files":[{"path":name,"bytes":path.stat().st_size,"sha256":sha(path)} for name,path in sorted(files.items())]}
     archive=release / (args.label+".zip")
     with zipfile.ZipFile(archive,"w",compression=zipfile.ZIP_DEFLATED,compresslevel=6) as package:
@@ -78,6 +104,9 @@ def main() -> int:
                 raise RuntimeError("Archive readback failed: "+row["path"])
         if json.loads(package.read("MANIFEST.json"))!=summary: raise RuntimeError("Archive manifest readback failed")
     verify_collected_delivery(data)
+    verify_weight_launcher(weights,uploader)
+    if sha(HERE / "evidence/WEIGHT_LAUNCHER.json")!=launcher_report_sha256:
+        raise RuntimeError("Weight launcher evidence changed during packaging")
     if sha(args.delivery)!=delivery_sha256: raise RuntimeError("Delivery report changed during packaging")
     if sha(release / "instrec_top.sbit")!=data["bitstream"]["sha256"]:
         raise RuntimeError("Released bitstream differs from accepted delivery")
@@ -88,7 +117,7 @@ def main() -> int:
     readme="\n".join([
         "# "+summary["application"],"",
         "显示器直接连接 FPGA HDMI，KEY1 短按选择、双击标记、长按切页。",
-        "启动时使用 ZIP 内 runtime/weight_upload.py 加载同目录 weights_image.bin 八类权重，上传器运行依赖 pyserial。",
+        "先完整解压 ZIP，按根目录 START_HERE.md 执行 LOAD_WEIGHTS.ps1 加载同包八类权重；运行依赖 PowerShell 7、Python 和 pyserial。",
         "导赏页显示八类真实概率和最近窗口；检索页按类别选择窗口并标记。",
         "识别结果到达时间按开机毫秒记录，64 槽历史与书签复位清空。","",
         "- 位流：[instrec_top.sbit](instrec_top.sbit)",
@@ -99,6 +128,10 @@ def main() -> int:
         "ZIP SHA256：`"+sha(archive)+"`。",
         "ZIP 内全部 "+str(len(files)+1)+" 项均已逐一重开并核对 SHA256。",
         "125 MHz / 148.5 MHz、seed2/hold8 固定，原始最终时序报告在 ZIP 的 build/final_timing.rtr。",
+        "最终资源："+str(summary["resources"]["lut"])+" LUT、"+str(summary["resources"]["ff"])+" FF、"
+        +str(summary["resources"]["distributed_ram"])+" distributed RAM、"+str(summary["resources"]["apm"])
+        +" APM、"+str(summary["resources"]["drm"])+"/155 DRM。",
+        "最终时序 qualified="+str(summary["timing_qualified"]).lower()+"；按用户安排保留当前工作点及原始报告。",
         "物理板卡显示与按键实测状态："+data["physical_board_test"]+"。","",
     ])
     (release / "README.md").write_text(readme,encoding="utf-8")
