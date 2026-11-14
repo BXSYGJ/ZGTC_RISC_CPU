@@ -1,11 +1,11 @@
 # 125 MHz InstRec + FreeRTOS 交付
 
-本目录归档已验收提交 `12d79828b8c67920f14750a23400a122bd0597c8` 的最终位流与原始交付 ZIP。发布分支为 [`codex/rtos125-integration`](https://github.com/BXSYGJ/ZGTC_RISC_CPU/tree/codex/rtos125-integration)；源码、构建和验证入口见 [`../../rtos/README.md`](../../rtos/README.md)。
+本目录归档已验收提交 `12d79828b8c67920f14750a23400a122bd0597c8` 的最终位流与原始交付 ZIP。发布分支为 [`rtos125-integration`](https://github.com/BXSYGJ/ZGTC_RISC_CPU/tree/rtos125-integration)；源码、构建和验证入口见 [`../../rtos/README.md`](../../rtos/README.md)。
 
 | 文件 | 大小 | 下载 |
 | --- | ---: | --- |
-| `instrec_top_rtos125.sbit` | 3,791,112 字节 | [直接下载位流](https://github.com/BXSYGJ/ZGTC_RISC_CPU/raw/refs/heads/codex/rtos125-integration/instrec_fpga/releases/rtos125-20261114-175148/instrec_top_rtos125.sbit) |
-| `rtos125-20261114-175148.zip` | 5,027,483 字节 | [直接下载交付 ZIP](https://github.com/BXSYGJ/ZGTC_RISC_CPU/raw/refs/heads/codex/rtos125-integration/instrec_fpga/releases/rtos125-20261114-175148/rtos125-20261114-175148.zip) |
+| `instrec_top_rtos125.sbit` | 3,791,112 字节 | [直接下载位流](https://github.com/BXSYGJ/ZGTC_RISC_CPU/raw/refs/heads/rtos125-integration/instrec_fpga/releases/rtos125-20261114-175148/instrec_top_rtos125.sbit) |
+| `rtos125-20261114-175148.zip` | 5,027,483 字节 | [直接下载交付 ZIP](https://github.com/BXSYGJ/ZGTC_RISC_CPU/raw/refs/heads/rtos125-integration/instrec_fpga/releases/rtos125-20261114-175148/rtos125-20261114-175148.zip) |
 
 ZIP 包含 586 个文件，提供位流、固件、源码、冻结基线、重建配方、最终原始时序报告及验证证据。归档包内 manifest 的 585 条记录已逐项重新读取、核对长度与 SHA256，manifest 本身构成第 586 个文件。
 

@@ -1,6 +1,6 @@
 # 当前工作记忆：2026-11-14
 
-用户已明确要求把相关内容上传 GitHub，并允许新建分支。当前发布分支为 `codex/rtos125-integration`，起点是验收完成的 `12d79828b8c67920f14750a23400a122bd0597c8`；仓库仍为 BXSYGJ/ZGTC_RISC_CPU。源码、RTOS 验证记录随分支提供，位流与原交付 ZIP 复制归档到 `instrec_fpga/releases/rtos125-20261114-175148/`，两份成品哈希与 DELIVERY.json 一致，README/RELEASE.json 提供远端入口。后续上传和分支核验使用本轮明确授权。
+用户已明确要求把相关内容上传 GitHub，并允许新建分支。当前发布分支为 `rtos125-integration`，起点是验收完成的 `12d79828b8c67920f14750a23400a122bd0597c8`；仓库仍为 BXSYGJ/ZGTC_RISC_CPU。源码、RTOS 验证记录随分支提供，位流与原交付 ZIP 复制归档到 `instrec_fpga/releases/rtos125-20261114-175148/`，两份成品哈希与 DELIVERY.json 一致，README/RELEASE.json 提供远端入口。后续上传和分支核验使用本轮明确授权。
 
 当前RTOS实现目标已完成：结合XSY/XSY2，以125MHz 223256基线接入FreeRTOS V11.3.3、1kHz、三应用任务/静态队列；H3和202原始输入不变。最新162656-direct_rom_final-map整机六阶段完成，207输入和map.adf/controls前后相同；1789.913秒exit0，PDS=0。实际ROM全容量/22位SMT/控制/厂商模型/12真实负例全部通过；最终统一verify094556含13命令PASS，8→9/9，source/VERIFICATION均UTF8无NUL。交付build/rtos/releases/rtos125-20261114-175148.zip，586文件SHA全部重开通过，bit3791112B SHA525d08ea4b903de7604453b0457f131c0aa79d00e9611a4e43de6ba84a5eaf00。最终资源36749LUT/39739FF/136.5DRM/94APM；最终rtr系统slow setup -11.834ns、pixel -1.140ns、slow hold+0.020ns、fast hold-0.035ns，用户已接受时序违例，原报告保留。无FTDI/CP2102，上板未测。原时序优化paused，五组应用资产保持；后续工作按用户新指令推进。构建入口rtos/README.md，证据ACCEPTANCE/DELIVERY/VERIFICATION，最后本地提交不push。
 

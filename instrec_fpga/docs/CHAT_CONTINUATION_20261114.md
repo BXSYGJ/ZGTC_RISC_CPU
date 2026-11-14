@@ -1,6 +1,6 @@
 # Revise CPU paper for reviewers (2)：接续记录
 
-> 最新用户指令为上传 GitHub。发布分支 `codex/rtos125-integration` 从已验收的 `12d7982` 建立，源码/验证记录与 `releases/rtos125-20261114-175148/` 的位流和交付 ZIP 一并提供；下载入口及原始哈希见该目录 README/RELEASE.json。本轮新增内容是发布归档及文档。
+> 最新用户指令为上传 GitHub。发布分支 `rtos125-integration` 从已验收的 `12d7982` 建立，源码/验证记录与 `releases/rtos125-20261114-175148/` 的位流和交付 ZIP 一并提供；下载入口及原始哈希见该目录 README/RELEASE.json。本轮新增内容是发布归档及文档。
 
 > 当前接续工作已完成125MHz基线FreeRTOS代码、位流及交付，专项9/9。最终162656-direct_rom_final-map六阶段完成，PDS=0，bit SHA525d08ea…4a5eaf00；完整包build/rtos/releases/rtos125-20261114-175148.zip的586文件重开通过。最终verify094556含13条命令全部pass，ROM实际INIT/22位SMT/厂商模型/12负例和双入口回退均通过，日志UTF8无NUL。入口rtos/README.md与evidence/DELIVERY.json，正式最终时序违例报告随包保留；USB板卡未枚举，上板尚未实测。H3与202原基线保持，原时序优化paused。以下保留先前接续历史。
 

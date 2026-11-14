@@ -1,6 +1,6 @@
 {
   "repository": "BXSYGJ/ZGTC_RISC_CPU",
-  "branch": "codex/rtos125-integration",
+  "branch": "rtos125-integration",
   "verified_source_commit": "12d79828b8c67920f14750a23400a122bd0597c8",
   "clock_hz": 125000000,
   "tick_hz": 1000,
