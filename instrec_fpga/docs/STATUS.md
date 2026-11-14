@@ -1,5 +1,12 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+> **2026-11-14最新安排：时序优化已结束，直接使用已有109.375MHz与125MHz版本。** 用户要求当前轮完成后停止追加时序修复和PDS构建；持续时序验收目标状态为paused。主选109.375MHz的021145，125MHz备选223256；使用入口见[所选版本](SELECTED_BUILD_VERSIONS_20261114.md)。两个包各含原位流、202份对应输入和原最终报告，ZIP及逐文件哈希均已重验。
+>
+> 最后一轮133421已结束：719.426秒、退出1；500ps时钟树hold修复参数超出工具0至200ps范围，compile/synthesize/dev_map完成，pnr入口报错，无新时序报告或位流。202份冻结输入未变，当前PDS进程0。终态及日志哈希见experiments/pacerv_shared_system/evidence/BUILD_CLOSEOUT_20261114.json。当前83.333333MHz活动源码作为实验记录保留；使用时取所选包对应的RTL/IP/HEX/约束。
+
+## 以下为本次安排之前的实验记录
+
+
 > **2026-11-14 当前：83.333333MHz整机setup已通过，继续修复三项微小fast hold违例**。124245完整六阶段完成、退出0、用时2929.94秒、202份冻结输入未变。最终系统slow setup +0.150ns、slow hold +0.032ns、fast hold -0.023ns（3失败端点、THS -0.034ns），其余时序表通过；最终38231LUT/50492FF/694DistributedRAM/129DRM/94APM。剩余端点为store0 lane25的DRM地址、weight_loader摘要寄存器及softmax移位寄存器。原两个短FIFO写地址违例已消除。下一轮保留全部202份源与实际时钟/FDC，normal/seed5/hold12，将实现优化目标从post100/clock200/cross400ps提高至300/500/700ps；这组数值控制工具修复裕量，FDC仍保留0.150ns预算。
 >
 > 新run `full-20261114-133421-full` 已启动，父41788、runner61044，源码与配方提交df160bf，正在综合。202份冻结输入与124245完全相同、与Git检出逐字节一致；当前仅有这一项PDS flow。新最终资格仍待验。

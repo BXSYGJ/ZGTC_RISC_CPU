@@ -145,9 +145,30 @@
     "full": {
       "run": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261114-133421-full",
       "target": "PG2L100H-6IFBG676",
-      "status": "final_timing_evidence_pending",
+      "status": "failed_pnr_option_out_of_range",
       "qualified": false,
-      "frozen_input_count": 202
+      "frozen_input_count": 202,
+      "exit_code": 1,
+      "seconds": 719.4263244000031,
+      "stages": {
+        "compile": true,
+        "synthesize": true,
+        "dev_map": true,
+        "pnr": false,
+        "report_timing": false,
+        "gen_bit_stream": false
+      },
+      "errors": [
+        "E: Flow-0186: Value \"500\" is not in legal for option \"Fix Hold Violation Threshold For Clock Path On Clock Tree(ps)\", the legal value range is \"0 ~ 200\".",
+        "E: Flow-0075: The value for option 'fix_hold_violation_threshold_for_clk_tree' is not set or is invalid on command 'pnr'.",
+        "E: ",
+        "E: Flow-0163: Failed to parse file \"D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261114-133421-full\\build.tcl\" at line 94. Check if the command options or arguments are valid.",
+        "E: Flow-0186: Value \"500\" is not in legal for option \"Fix Hold Violation Threshold For Clock Path On Clock Tree(ps)\", the legal value range is \"0 ~ 200\".",
+        "E: Flow-0075: The value for option 'fix_hold_violation_threshold_for_clk_tree' is not set or is invalid on command 'pnr'.",
+        "E: Failed to execute the script : "
+      ],
+      "bitstream": null,
+      "timing_report": null
     }
   },
   "board": null,
@@ -301,7 +322,32 @@
       "file": "FULL_BUILD_RECIPE.tcl",
       "bytes": 13488,
       "sha256": "9c7f347a6d5cd80d0b8568396901502b536d0d767439c603619cd464cc3ac14e"
+    },
+    {
+      "source": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261114-133421-full\\RESULT.json",
+      "file": "FULL_PDS_RESULT.json",
+      "bytes": 1550,
+      "sha256": "71959cc9b66b1ec96bfc1ccdc8aefe37a071467e0bc0445841557270d6935143"
+    },
+    {
+      "source": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\experiments\\pacerv_shared_system\\evidence\\BUILD_CLOSEOUT_20261114.json",
+      "file": "BUILD_CLOSEOUT_20261114.json",
+      "bytes": 5311,
+      "sha256": "b0e9679cda6ef04b2a570ff1a26152e61034a9cb007eb0b1f97d60069ed2ce4a"
+    },
+    {
+      "source": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\experiments\\pacerv_shared_system\\evidence\\SELECTED_VERSIONS_20261114.json",
+      "file": "SELECTED_VERSIONS_20261114.json",
+      "bytes": 9477,
+      "sha256": "418567b96c5fd4043d6eb82140bf594a99c7d0981cf42518bbbf21afd432f919"
     }
   ],
-  "scope": "PG100 complete-system implementation and functional simulation; local PDS qualification requested; board testing not selected"
+  "scope": "Historical PG100 integration evidence; timing-closure goal paused by user; selected existing 125/109.375 MHz versions are recorded separately.",
+  "current_user_direction": {
+    "timing_goal_status": "paused",
+    "selected_versions": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\experiments\\pacerv_shared_system\\evidence\\SELECTED_VERSIONS_20261114.json",
+    "build_closeout": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\experiments\\pacerv_shared_system\\evidence\\BUILD_CLOSEOUT_20261114.json",
+    "primary": "109M375_main",
+    "additional_builds": false
+  }
 }

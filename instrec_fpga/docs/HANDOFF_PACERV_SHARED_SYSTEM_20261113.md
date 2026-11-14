@@ -169,3 +169,13 @@ CPU四组、标准测试、DDR五组996检查、实际生产时钟与分频的�
 继续同一202份输入及同一normal/seed5，新增prepare_pds参数--hold-margin-ps 300 --hold-clock-margin-ps 500 --hold-cross-srb-margin-ps 700，hold12/180分钟，从独立目录完整六阶段重跑。三个threshold是官方PDS实现优化目标（本机QCH手册及pds_shell -help已核对），FDC 0.150ns和RTL均保持；期望增加短路径修复余量。新最终结果出来前目标继续active。完整功能记录无需重跑，输入哈希仍匹配；collector选择后续实际新run。
 
 当前新run为full-20261114-133421-full，父41788、runner61044，正在综合，唯一PDS flow。df160bf892c38ec0d004062bdeb2de04e5fa2e29已提交配方；202份冻结输入与124245的files列表完全一致，CHECKOUT_INPUTS 202/mismatches0。collector已选133421 pending，12/13功能与输入门槛全过；原124245实际最终报告按SHA保存history。继续原runner至实际终态，最终collector仍用NPU timing_fifo_registers_83m333、UART clock_83m333_register_fifo、audio20261114-123646、GAP gap_sync_bram_20261114和原七拍显示。当前audit未完成构建仍退出2，最终须0。
+
+## 2026-11-14最新用户安排：结束时序优化，使用已有版本
+
+用户要求当前一轮完成后停止时序优化，回到125MHz和约109.5MHz中违例较小的版本。原持续时序验收目标已设为paused，以上继续优化及必须通过验收的计划按此新安排结束。
+
+133421原runner61044已结束：719.426秒、exit1。500ps时钟树hold修复参数超出PDS允许的0至200ps范围，compile/synthesize/dev_map完成，pnr入口报错，无最终时序报告及新位流。202份冻结输入未变，当前PDS进程0。原日志和失败配方保留，终态记录为evidence/BUILD_CLOSEOUT_20261114.json。
+
+七个已完成PG100整机125MHz/109.375MHz版本逐一比较，均核对六阶段exit0、202份冻结输入、十张最终表和原位流。主选109.375MHz的021145：setup TNS -33.413ns、155失败端点，为两档中总违例最小；125MHz默认备选223256：setup -1.414ns、TNS -346.334ns，slow/fast hold +0.052/0.000ns。213918具有125MHz最好的最差setup裕量-1.262ns；010622具有125MHz最小setup TNS -214.737ns，均保留在完整比较。
+
+交付入口docs/SELECTED_BUILD_VERSIONS_20261114.md；ZIP位于build/pacerv_shared_system/selected_versions_20261114/109M375_main.zip及125M_hold_clean.zip。每包保留对应202份输入、原位流、最终报告和逐文件哈希，两个ZIP均重新打开验证。当前83.333333MHz活动源码、CPU功能和回退证据保留。后续按用户的新工作要求接续，使用各包对应的RTL/IP/HEX/约束。

@@ -1,0 +1,102 @@
+{
+  "user_direction": "Finish the active build, stop timing-closure work, and use previous 125/109.375 MHz versions.",
+  "timing_goal_status": "paused",
+  "additional_builds_requested": false,
+  "pds_processes_observed_after_exit": 0,
+  "run": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261114-133421-full",
+  "status": "failed_pnr_option_out_of_range",
+  "result": {
+    "command": [
+      "D:\\PDS_2022.2-SP6.4\\bin\\pds_shell.exe",
+      "-file",
+      "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261114-133421-full\\build.tcl",
+      "-work_dir",
+      "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261114-133421-full",
+      "-project_name",
+      "pacerv_shared_100h"
+    ],
+    "exit_code": 1,
+    "seconds": 719.4263244000031,
+    "frozen_inputs_unchanged": true,
+    "stages": {
+      "compile": true,
+      "synthesize": true,
+      "dev_map": true,
+      "pnr": false,
+      "report_timing": false,
+      "gen_bit_stream": false
+    },
+    "errors": [
+      "E: Flow-0186: Value \"500\" is not in legal for option \"Fix Hold Violation Threshold For Clock Path On Clock Tree(ps)\", the legal value range is \"0 ~ 200\".",
+      "E: Flow-0075: The value for option 'fix_hold_violation_threshold_for_clk_tree' is not set or is invalid on command 'pnr'.",
+      "E: ",
+      "E: Flow-0163: Failed to parse file \"D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261114-133421-full\\build.tcl\" at line 94. Check if the command options or arguments are valid.",
+      "E: Flow-0186: Value \"500\" is not in legal for option \"Fix Hold Violation Threshold For Clock Path On Clock Tree(ps)\", the legal value range is \"0 ~ 200\".",
+      "E: Flow-0075: The value for option 'fix_hold_violation_threshold_for_clk_tree' is not set or is invalid on command 'pnr'.",
+      "E: Failed to execute the script : "
+    ]
+  },
+  "frozen_input_count": 202,
+  "frozen_inputs_reverified": true,
+  "final_timing_report": null,
+  "new_bitstream": null,
+  "logs": [
+    {
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261114-133421-full\\RESULT.json",
+      "bytes": 1550,
+      "sha256": "71959cc9b66b1ec96bfc1ccdc8aefe37a071467e0bc0445841557270d6935143"
+    },
+    {
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261114-133421-full\\INPUTS.json",
+      "bytes": 36495,
+      "sha256": "3509ae80da79ce5b92d4a63c0ed34a093408555dd0c6a6559ebb7c888e019141"
+    },
+    {
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261114-133421-full\\build.tcl",
+      "bytes": 13488,
+      "sha256": "9c7f347a6d5cd80d0b8568396901502b536d0d767439c603619cd464cc3ac14e"
+    },
+    {
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261114-133421-full\\pds.stdout.log",
+      "bytes": 2715787,
+      "sha256": "d0d2a3047928c472b9e1422cfb627b0583599a241eed6e7133fe4b410395e54e"
+    }
+  ],
+  "literal_output_tail": [
+    "Saving design to DB.",
+    "Action dev_map: Real time elapsed is 0h:2m:32s",
+    "Action dev_map: CPU time elapsed is 0h:1m:16s",
+    "Action dev_map: Process CPU time elapsed is 0h:1m:18s",
+    "Current time: Sat Nov 14 13:46:21 2026",
+    "Action dev_map: Peak memory pool usage is 1,162 MB",
+    "Action from compile to dev_map: Total Real Time elapsed is 0h:11m:54s",
+    "Action from compile to dev_map: Total CPU time elapsed is 0h:4m:21s",
+    "Action from compile to dev_map: Total Process CPU Time elapsed is 0h:4m:38s",
+    "Process \"Device Map\" done.",
+    "Executing : dev_map successfully.",
+    "",
+    "",
+    "E: Flow-0186: Value \"500\" is not in legal for option \"Fix Hold Violation Threshold For Clock Path On Clock Tree(ps)\", the legal value range is \"0 ~ 200\".",
+    "E: Flow-0075: The value for option 'fix_hold_violation_threshold_for_clk_tree' is not set or is invalid on command 'pnr'.",
+    "E: Failed to execute the script : "
+  ],
+  "selected_packages": {
+    "109M375_main": {
+      "directory": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\selected_versions_20261114\\109M375_main",
+      "zip": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\selected_versions_20261114\\109M375_main.zip",
+      "zip_sha256": "ce7045c73c9ab5bbf3fd16d259073b9fcfed0bfd43e5bef368c61b23c3dc96f7",
+      "run": "full-20261114-021145-full",
+      "verified_input_count": 202,
+      "verified_files": 208
+    },
+    "125M_hold_clean": {
+      "directory": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\selected_versions_20261114\\125M_hold_clean",
+      "zip": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\selected_versions_20261114\\125M_hold_clean.zip",
+      "zip_sha256": "ad412610e43e1ca588b2f8b3f59ff6b1e5b7bdf14e73abb9a04225dd42ed3f37",
+      "run": "full-20261113-223256-full",
+      "verified_input_count": 202,
+      "verified_files": 208
+    }
+  },
+  "package_files_reverified": 416
+}

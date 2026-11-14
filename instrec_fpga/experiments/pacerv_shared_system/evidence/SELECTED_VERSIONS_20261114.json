@@ -1,0 +1,186 @@
+{
+  "user_direction": "Finish the active build, stop timing-closure work, and use previous 125/109.375 MHz versions.",
+  "all_completed_requested_clock_builds": [
+    {
+      "run": "full-20261113-191537-full",
+      "run_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261113-191537-full",
+      "system_clock_hz": 125000000,
+      "slow_setup_ns": -2.419,
+      "slow_setup_tns_ns": -2252.108,
+      "slow_setup_failing_endpoints": 3822,
+      "slow_hold_ns": -0.108,
+      "fast_hold_ns": -0.121,
+      "timing_qualified": false,
+      "input_count": 202,
+      "bitstream_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261113-191537-full\\generate_bitstream\\instrec_top.sbit",
+      "bitstream_sha256": "f3641b899ca5d0c2c011c87ac9200a23c48992f55c5c35b46cb7e96da63c0963",
+      "timing_report_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261113-191537-full\\report_timing\\instrec_top.rtr",
+      "timing_sha256": "65ffc49d0b59cd97e96375c5e3d9d48811eb0f9cbc4d47f0c893f86ed3c99975",
+      "resources": {
+        "lut": 37468,
+        "ff": 39420,
+        "distributed_ram": 2402,
+        "apm": 94,
+        "drm": 124
+      }
+    },
+    {
+      "run": "full-20261113-213918-full",
+      "run_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261113-213918-full",
+      "system_clock_hz": 125000000,
+      "slow_setup_ns": -1.262,
+      "slow_setup_tns_ns": -801.129,
+      "slow_setup_failing_endpoints": 2669,
+      "slow_hold_ns": 0.024,
+      "fast_hold_ns": -0.029,
+      "timing_qualified": false,
+      "input_count": 202,
+      "bitstream_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261113-213918-full\\generate_bitstream\\instrec_top.sbit",
+      "bitstream_sha256": "104b5a89b8067ee64b114eead1837e9ad470fb2e93d6c0d45d5988ce413dfc73",
+      "timing_report_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261113-213918-full\\report_timing\\instrec_top.rtr",
+      "timing_sha256": "c7ff0a40c7609340e4996d6fe2007fd5be46869dd7fbc42548966036f7f57f92",
+      "resources": {
+        "lut": 36299,
+        "ff": 39487,
+        "distributed_ram": 1378,
+        "apm": 94,
+        "drm": 126
+      }
+    },
+    {
+      "run": "full-20261113-223256-full",
+      "run_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261113-223256-full",
+      "system_clock_hz": 125000000,
+      "slow_setup_ns": -1.414,
+      "slow_setup_tns_ns": -346.334,
+      "slow_setup_failing_endpoints": 1136,
+      "slow_hold_ns": 0.052,
+      "fast_hold_ns": 0.0,
+      "timing_qualified": false,
+      "input_count": 202,
+      "bitstream_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261113-223256-full\\generate_bitstream\\instrec_top.sbit",
+      "bitstream_sha256": "20bbda7e0194917111e76c7b797bc196bc8fdf6f02f00598f2eb297a6b76b157",
+      "timing_report_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261113-223256-full\\report_timing\\instrec_top.rtr",
+      "timing_sha256": "f86ec5e56057e559f4ecbdfb56bad71f30ac645107d6f7f93c43a045728d6129",
+      "resources": {
+        "lut": 36215,
+        "ff": 39550,
+        "distributed_ram": 1378,
+        "apm": 94,
+        "drm": 126.5
+      }
+    },
+    {
+      "run": "full-20261113-232600-full",
+      "run_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261113-232600-full",
+      "system_clock_hz": 125000000,
+      "slow_setup_ns": -2.437,
+      "slow_setup_tns_ns": -1683.575,
+      "slow_setup_failing_endpoints": 3820,
+      "slow_hold_ns": -0.008,
+      "fast_hold_ns": -0.058,
+      "timing_qualified": false,
+      "input_count": 202,
+      "bitstream_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261113-232600-full\\generate_bitstream\\instrec_top.sbit",
+      "bitstream_sha256": "b01f94eacf4a0b8dd25091043fecae957391a491d6a69890ae2614180fdf0196",
+      "timing_report_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261113-232600-full\\report_timing\\instrec_top.rtr",
+      "timing_sha256": "8bafdbef0ecd9e29f3a9aa3418cde8f0b9ed5ca5df8a593d4b58c3cb5bf128a0",
+      "resources": {
+        "lut": 34595,
+        "ff": 34329,
+        "distributed_ram": 1378,
+        "apm": 94,
+        "drm": 128.5
+      }
+    },
+    {
+      "run": "full-20261114-010622-full",
+      "run_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261114-010622-full",
+      "system_clock_hz": 125000000,
+      "slow_setup_ns": -1.438,
+      "slow_setup_tns_ns": -214.737,
+      "slow_setup_failing_endpoints": 710,
+      "slow_hold_ns": -0.119,
+      "fast_hold_ns": -0.128,
+      "timing_qualified": false,
+      "input_count": 202,
+      "bitstream_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261114-010622-full\\generate_bitstream\\instrec_top.sbit",
+      "bitstream_sha256": "4579fa4befe10f362a53cbf35041ce646d9cd95772521259e82f0d8e3662ea63",
+      "timing_report_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261114-010622-full\\report_timing\\instrec_top.rtr",
+      "timing_sha256": "8534ad69b49102a143880d6f73c2996b7886d9c049636beb50be849c550aef50",
+      "resources": {
+        "lut": 34391,
+        "ff": 34162,
+        "distributed_ram": 1378,
+        "apm": 94,
+        "drm": 128.5
+      }
+    },
+    {
+      "run": "full-20261114-021145-full",
+      "run_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261114-021145-full",
+      "system_clock_hz": 109375000,
+      "slow_setup_ns": -1.633,
+      "slow_setup_tns_ns": -33.413,
+      "slow_setup_failing_endpoints": 155,
+      "slow_hold_ns": -0.127,
+      "fast_hold_ns": -0.136,
+      "timing_qualified": false,
+      "input_count": 202,
+      "bitstream_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261114-021145-full\\generate_bitstream\\instrec_top.sbit",
+      "bitstream_sha256": "bb484f2153523d8045631abe9d314e6ddffd658b01be0b35f2d76edc20d7f576",
+      "timing_report_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261114-021145-full\\report_timing\\instrec_top.rtr",
+      "timing_sha256": "6cd1098c6f11d11d7b03e08b810870a075c05c8b551aaf1211703ada9f5124e9",
+      "resources": {
+        "lut": 37599,
+        "ff": 46348,
+        "distributed_ram": 1058,
+        "apm": 94,
+        "drm": 128.5
+      }
+    },
+    {
+      "run": "full-20261114-111645-full",
+      "run_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261114-111645-full",
+      "system_clock_hz": 109375000,
+      "slow_setup_ns": -1.839,
+      "slow_setup_tns_ns": -737.311,
+      "slow_setup_failing_endpoints": 1799,
+      "slow_hold_ns": -0.16,
+      "fast_hold_ns": -0.162,
+      "timing_qualified": false,
+      "input_count": 202,
+      "bitstream_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261114-111645-full\\generate_bitstream\\instrec_top.sbit",
+      "bitstream_sha256": "2e30e867f9506eebf1ea06a4ea288ad831f56708513a98188af881d5636f4ac4",
+      "timing_report_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261114-111645-full\\report_timing\\instrec_top.rtr",
+      "timing_sha256": "e47f5e6a40bccc1ea88da55f00b7a615739e9f647979754002b1e9a0d265db00",
+      "resources": {
+        "lut": 37271,
+        "ff": 46426,
+        "distributed_ram": 826,
+        "apm": 94,
+        "drm": 129
+      }
+    }
+  ],
+  "selected_packages": {
+    "109M375_main": {
+      "directory": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\selected_versions_20261114\\109M375_main",
+      "zip": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\selected_versions_20261114\\109M375_main.zip",
+      "zip_sha256": "ce7045c73c9ab5bbf3fd16d259073b9fcfed0bfd43e5bef368c61b23c3dc96f7",
+      "run": "full-20261114-021145-full",
+      "verified_input_count": 202,
+      "verified_files": 208
+    },
+    "125M_hold_clean": {
+      "directory": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\selected_versions_20261114\\125M_hold_clean",
+      "zip": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\selected_versions_20261114\\125M_hold_clean.zip",
+      "zip_sha256": "ad412610e43e1ca588b2f8b3f59ff6b1e5b7bdf14e73abb9a04225dd42ed3f37",
+      "run": "full-20261113-223256-full",
+      "verified_input_count": 202,
+      "verified_files": 208
+    }
+  },
+  "primary": "109M375_main",
+  "selection_reason": "109.375 MHz 021145 has the smallest setup TNS and fewest setup failures; 125 MHz 223256 preserves nonnegative hold at both corners. 125 MHz 213918 has the best worst setup slack; 010622 has the lowest 125 MHz setup TNS."
+}

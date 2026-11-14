@@ -1,0 +1,31 @@
+{
+  "command": [
+    "D:\\PDS_2022.2-SP6.4\\bin\\pds_shell.exe",
+    "-file",
+    "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261114-133421-full\\build.tcl",
+    "-work_dir",
+    "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261114-133421-full",
+    "-project_name",
+    "pacerv_shared_100h"
+  ],
+  "exit_code": 1,
+  "seconds": 719.4263244000031,
+  "frozen_inputs_unchanged": true,
+  "stages": {
+    "compile": true,
+    "synthesize": true,
+    "dev_map": true,
+    "pnr": false,
+    "report_timing": false,
+    "gen_bit_stream": false
+  },
+  "errors": [
+    "E: Flow-0186: Value \"500\" is not in legal for option \"Fix Hold Violation Threshold For Clock Path On Clock Tree(ps)\", the legal value range is \"0 ~ 200\".",
+    "E: Flow-0075: The value for option 'fix_hold_violation_threshold_for_clk_tree' is not set or is invalid on command 'pnr'.",
+    "E: ",
+    "E: Flow-0163: Failed to parse file \"D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261114-133421-full\\build.tcl\" at line 94. Check if the command options or arguments are valid.",
+    "E: Flow-0186: Value \"500\" is not in legal for option \"Fix Hold Violation Threshold For Clock Path On Clock Tree(ps)\", the legal value range is \"0 ~ 200\".",
+    "E: Flow-0075: The value for option 'fix_hold_violation_threshold_for_clk_tree' is not set or is invalid on command 'pnr'.",
+    "E: Failed to execute the script : "
+  ]
+}

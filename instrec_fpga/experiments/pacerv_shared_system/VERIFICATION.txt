@@ -1,3 +1,14 @@
+USER-DIRECTED CLOSEOUT: 2026-11-14
+Branch: XSY. Timing-closure goal: paused by user. Additional PDS builds: none.
+Use selected existing versions: 109.375 MHz 021145 main; 125 MHz 223256 backup.
+Selection evidence: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\experiments\pacerv_shared_system\evidence\SELECTED_VERSIONS_20261114.json
+Build closeout: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\experiments\pacerv_shared_system\evidence\BUILD_CLOSEOUT_20261114.json
+Current run 133421: exit 1, 719.4263244000031 seconds; compile/synthesize/dev_map completed.
+Literal error: E: Flow-0186: Value "500" is not in legal for option "Fix Hold Violation Threshold For Clock Path On Clock Tree(ps)", the legal value range is "0 ~ 200".
+pnr/report_timing/gen_bit_stream incomplete; no new bitstream or final timing report.
+Frozen inputs reverified: 202. Selected package inputs: 404; ZIP hashes and all files verified.
+Baseline, modified and isolated rollback evidence below remains valid; live modified source is retained.
+
 PaceRV core + shared whole-system memory/peripherals
 
 Branch and checkout: {"branch": "XSY", "checkout_commit": "df160bf892c38ec0d004062bdeb2de04e5fa2e29"}
@@ -11,7 +22,7 @@ GAP synchronous block-RAM accumulator pipeline, scalar DDR/UART FIFO registers,
 and matched actual DDR/system clock configuration.
 
 Selected gates: {"baseline_passed": true, "cpu_passed": true, "native_npu_passed": true, "rollback_passed": true, "shared_ddr_passed": true, "shared_uart_passed": true, "standard_cpu_tb_passed": true, "checkout_inputs_match": true, "full_pds_qualified": false, "dashboard_equivalence_passed": true, "activation_mux_passed": true, "audio_clock_passed": true, "loader_gap_controls_passed": true}
-Physical status: {"full": "final_timing_evidence_pending"}
+Physical status: {"full": "failed_pnr_option_out_of_range", "exit_code": 1, "new_bitstream": null}
 
 Baseline and CPU/NPU exact commands, inputs, literal output and exits follow.
 MODIFIED_FILE: D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\experiments\pacerv_shared_system\MODIFIED_FILE.sv
