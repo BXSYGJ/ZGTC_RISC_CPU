@@ -143,3 +143,5 @@ collector会核对INTERRUPTION记录的manifest及stdout/stderr哈希，并在RE
 结束后先确认GAP推断原生DRM，再inspect_pds.py --require-qualified核验全部十表/时钟/位流。最终collector选择新run、新NPU目录与gap_sync_bram_20261114控制实验，显示/音频/UART目录仍沿用已匹配的109.375MHz记录。collect_evidence的GAP说明已改为同步块RAM。物理合格前allow-pending-timing仅记录进展，full_pds_qualified继续为false。
 
 综合报告已确认u_npu/u_gap/acc_mem为256×14、SIMPLE_DUAL_PORT、GTP_DRM18K_E1；GAP没有属性忽略警告。collector对新pending run会将旧FULL_PDS_INTERRUPTION.json按SHA归档，保持选中物理记录与当前run对应。
+
+111645已完成详细布局（最差+0.801ns、TNS0）并进入详细布线，映射37548LUT/46422FF/826DistributedRAM/129DRM/94APM。新增audit_final_acceptance.py，最终collector完成后以--full-build指定同一实际run；审计六阶段、十张时序表、时钟与报告实际不确定性、资源、非空位流、冻结/活源/Git字节、十三项功能门槛、独立回退及四件artifact。当前真实未完成构建的负例退出2，输入与artifact两项通过，物理和全功能最终门槛未过；evidence/FINAL_ACCEPTANCE.json记录原因。最终必须取得退出0及GOAL_ACCEPTANCE_PASS后再完成目标。

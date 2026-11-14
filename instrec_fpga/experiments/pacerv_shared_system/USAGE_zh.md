@@ -97,12 +97,12 @@ python experiments/pacerv_shared_system/inspect_pds.py <本轮远程构建目录
 
 ## 本轮时序收敛改动
 
-当前完整系统使用normal布局布线模式、109.375MHz系统时钟、148.5MHz像素时钟，FDC声明0.150ns时钟不确定性；最终还核对报告中的实际扣减值。DDR采用厂商规则生成的875Mbps配置，FDC和UART/音频时间常数同步匹配。DDR桥请求分级，FC系数使用同步DRM，激活写入payload独立于valid，显示控制七拍；ROM物理取指13位，短权重FIFO采用寄存器映射。权重摘要先寄存再比较；GAP使用显式32位寄存器组，保留共享加法器与原有输出时序。最新完整NPU标签timing_digest_gap_bank，31,152,093周期，58份输入hash匹配。显示等价记录在build/pacerv_shared_system/dashboard_equivalence_7clock_timing_selector_register。
+当前完整系统使用normal布局布线模式、109.375MHz系统时钟、148.5MHz像素时钟，FDC声明0.150ns时钟不确定性；最终还核对报告中的实际扣减值。DDR采用厂商规则生成的875Mbps配置，FDC和UART/音频时间常数同步匹配。DDR桥请求分级，FC系数使用同步DRM，激活写入payload独立于valid，显示控制七拍；ROM物理取指13位，短权重FIFO采用寄存器映射。权重摘要先寄存再比较；GAP为256×14同步块RAM及一拍读改写流水，末拍增加一次drain，舍入语义保持。最新完整NPU标签timing_gap_sync_bram，控制器31,152,094周期、固件结果窗口31,152,093周期，58份输入hash匹配。显示等价记录在build/pacerv_shared_system/dashboard_equivalence_7clock_timing_selector_register。
 
 新构建命令：
 
 ```powershell
-python experiments/pacerv_shared_system/prepare_pds.py --scope full --stage full --mode normal --seed 3 --hold-iterations 12 --run --minutes 120
+python experiments/pacerv_shared_system/prepare_pds.py --scope full --stage full --mode normal --seed 4 --hold-iterations 12 --run --minutes 180
 python experiments/pacerv_shared_system/inspect_pds.py <构建目录> --require-qualified
 ```
 
@@ -125,3 +125,5 @@ python experiments/pacerv_shared_system/run_loader_gap_timing.py --mode ROLLBACK
 ```
 
 BASELINE和该控制实验的ROLLBACK使用021145实际冻结输入；整机原始31文件回退另由run_integration_rollback.py核验Git 852f067的原始字节。最终collect_evidence.py加`--loader-gap-study build/pacerv_shared_system/timing_controls/<label>`。构建未完成时可加`--allow-pending-timing`生成明确未合格的功能记录；最终交付去掉此选项并要求inspect_pds.py --require-qualified退出0。旧物理记录保存在evidence/history，当前目录不会混入旧构建的时序表。
+
+最终证据收集完成后，执行`audit_final_acceptance.py --full-build <构建目录>`。审计读取实际六阶段结果、十张快慢角表、时钟与不确定性、位流、资源占用、202份冻结/活源/Git提交字节、完整功能门槛及四件交付。退出0并输出GOAL_ACCEPTANCE_PASS表示这些要求全部通过；未完成的运行退出2，并在evidence/FINAL_ACCEPTANCE.json保存具体未通过项。
