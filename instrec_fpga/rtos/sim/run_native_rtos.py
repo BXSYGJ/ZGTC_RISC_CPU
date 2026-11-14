@@ -20,6 +20,8 @@ import sys
 import time
 from types import SimpleNamespace
 
+from output_decode import decode_mixed_output
+
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
 BASE = ROOT / 'sim/experiments/cpu_native_joint'
@@ -41,11 +43,7 @@ def linux_path(path):
 
 
 def decode(data):
-    if data.startswith((b'\xff\xfe', b'\xfe\xff')):
-        return data.decode('utf-16', errors='replace')
-    if data.count(b'\x00') > len(data) // 8:
-        return data.decode('utf-16-le', errors='replace')
-    return data.decode('utf-8', errors='replace')
+    return decode_mixed_output(data)
 
 
 SHARED_DDR = r'''
@@ -313,7 +311,10 @@ end
                        contract, weights, ROOT / 'scripts/outputs/mel_tables.json',
                        ROOT / 'sim/experiments/npu_conv1/feat_u8.bin',
                        ROOT / 'src/mel/exp_lut.hex']
-        paths += [Path(__file__).resolve(), ROOT / 'rtos/BASELINE.json']
+        decoder_source = HERE / 'output_decode.py'
+        decoder_copy = work / 'output_decode.py'
+        shutil.copyfile(decoder_source, decoder_copy)
+        paths += [Path(__file__).resolve(), decoder_source, decoder_copy, ROOT / 'rtos/BASELINE.json']
         if is_rtos:
             paths += rom_banks
             paths += [ROOT / 'build/rtos/firmware/BUILD.json']

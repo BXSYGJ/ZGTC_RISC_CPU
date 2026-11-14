@@ -1,0 +1,228 @@
+{
+  "status": "pass",
+  "decoder": "rtos/sim/output_decode.py",
+  "decoder_sha256": "f0ae6db2402a42a040d3b1a356c47f695091fcfbca544230067ef47902c560e1",
+  "unit_cases": 9,
+  "truncated_UTF16_rejected": true,
+  "actual_raw_stderr_logs": 39,
+  "UTF16_WSL_notice_logs": 39,
+  "preserved_notice_count": 39,
+  "literal_Chinese_notice": "wsl: 检测到 localhost 代理配置，但未镜像到 WSL。NAT 模式下的 WSL 不支持 localhost 代理。\r\n",
+  "decoded_NUL_count": 0,
+  "decoded_replacement_character_count": 0,
+  "all_compiler_warnings_unchanged": true,
+  "all_raw_logs_unchanged": true,
+  "protected_input_count": 264,
+  "protected_RTL_SW_auditor_models_runtime_unchanged": true,
+  "raw_inputs": [
+    {
+      "raw_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\sim\\baseline125-20261114-153830-378392\\command-0.stderr.log",
+      "raw_bytes": 4091,
+      "raw_sha256": "9b7c6bced9344c9d4283fd98bfc1420e89b9a19cc17168ffafb2f64b09084387"
+    },
+    {
+      "raw_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\sim\\baseline125-20261114-153830-378392\\command-1.stderr.log",
+      "raw_bytes": 132,
+      "raw_sha256": "b280c454d6f559e56eb3f5ed39f3ba084b8d1744a3ff7fe016b21ff86dea1aca"
+    },
+    {
+      "raw_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\sim\\baseline125verified-20261114-154005-902905\\command-0.stderr.log",
+      "raw_bytes": 4179,
+      "raw_sha256": "69b5c684c1d20c2b041edcb5ef6a9d716b7a130701d0700192b5a765316d75f2"
+    },
+    {
+      "raw_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\sim\\baseline125verified-20261114-154005-902905\\command-1.stderr.log",
+      "raw_bytes": 132,
+      "raw_sha256": "b280c454d6f559e56eb3f5ed39f3ba084b8d1744a3ff7fe016b21ff86dea1aca"
+    },
+    {
+      "raw_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\sim\\critical16-20261114-154726-633926\\command-0.stderr.log",
+      "raw_bytes": 2626,
+      "raw_sha256": "7422fd6964cf359647f189d1927497e96878218ba4f877cdcd809a6aa46d3123"
+    },
+    {
+      "raw_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\sim\\critical16-20261114-154726-633926\\command-1.stderr.log",
+      "raw_bytes": 132,
+      "raw_sha256": "b280c454d6f559e56eb3f5ed39f3ba084b8d1744a3ff7fe016b21ff86dea1aca"
+    },
+    {
+      "raw_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\sim\\critical16banks-20261114-162531-617856\\command-0.stderr.log",
+      "raw_bytes": 2661,
+      "raw_sha256": "0b3edcad233c541d0b45cb8eddb6ac4391a140affd3216036c35ff45b41e5f13"
+    },
+    {
+      "raw_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\sim\\critical16banks-20261114-162531-617856\\command-1.stderr.log",
+      "raw_bytes": 132,
+      "raw_sha256": "b280c454d6f559e56eb3f5ed39f3ba084b8d1744a3ff7fe016b21ff86dea1aca"
+    },
+    {
+      "raw_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\sim\\rollback125-20261114-154142-184076\\command-0.stderr.log",
+      "raw_bytes": 4091,
+      "raw_sha256": "da93c1bbc3d7ee27211b6f1caea873b360a9b610ab813e338082918fb04cfbc5"
+    },
+    {
+      "raw_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\sim\\rollback125-20261114-154142-184076\\command-1.stderr.log",
+      "raw_bytes": 132,
+      "raw_sha256": "b280c454d6f559e56eb3f5ed39f3ba084b8d1744a3ff7fe016b21ff86dea1aca"
+    },
+    {
+      "raw_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\sim\\verified16-20261114-153830-387307\\command-0.stderr.log",
+      "raw_bytes": 2626,
+      "raw_sha256": "c5a1c86a98a0251cc4c47137162a93c5701893c264f64b579c7c46cc1de795ce"
+    },
+    {
+      "raw_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\sim\\verified16-20261114-153830-387307\\command-1.stderr.log",
+      "raw_bytes": 132,
+      "raw_sha256": "b280c454d6f559e56eb3f5ed39f3ba084b8d1744a3ff7fe016b21ff86dea1aca"
+    },
+    {
+      "raw_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\sim\\verifybase_20261114-090908-524718-20261114-170914-444529\\command-0.stderr.log",
+      "raw_bytes": 4333,
+      "raw_sha256": "c90cc5f8504060357f1f2e40587bc0d83f190b419f94c0bc60d351fe3fc6c0e6"
+    },
+    {
+      "raw_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\sim\\verifybase_20261114-090908-524718-20261114-170914-444529\\command-1.stderr.log",
+      "raw_bytes": 132,
+      "raw_sha256": "b280c454d6f559e56eb3f5ed39f3ba084b8d1744a3ff7fe016b21ff86dea1aca"
+    },
+    {
+      "raw_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\sim\\verifyrollback_20261114-090908-524718-20261114-170935-474779\\command-0.stderr.log",
+      "raw_bytes": 4377,
+      "raw_sha256": "a7294d210383e91b0dc01586ec1dbc9475a57d6fa3bc3a3cfb5633936db46884"
+    },
+    {
+      "raw_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\sim\\verifyrollback_20261114-090908-524718-20261114-170935-474779\\command-1.stderr.log",
+      "raw_bytes": 132,
+      "raw_sha256": "b280c454d6f559e56eb3f5ed39f3ba084b8d1744a3ff7fe016b21ff86dea1aca"
+    },
+    {
+      "raw_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\sim\\verifyrtos_20261114-090908-524718-20261114-170925-271014\\command-0.stderr.log",
+      "raw_bytes": 2787,
+      "raw_sha256": "62d86b4616730af8f4c0d23e7fb7df310076f5df32f43d7c74908106e0817107"
+    },
+    {
+      "raw_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\sim\\verifyrtos_20261114-090908-524718-20261114-170925-271014\\command-1.stderr.log",
+      "raw_bytes": 132,
+      "raw_sha256": "b280c454d6f559e56eb3f5ed39f3ba084b8d1744a3ff7fe016b21ff86dea1aca"
+    },
+    {
+      "raw_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\sim\\cpu_native_joint_baseline125_control1\\compiling.stderr.log",
+      "raw_bytes": 55535,
+      "raw_sha256": "20d7ac87f7ff1ec233d112d5d3030b38f34916c7c37d76a1c819ab22f29150c9"
+    },
+    {
+      "raw_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\sim\\cpu_native_joint_baseline125_control1\\prepared.stderr.log",
+      "raw_bytes": 132,
+      "raw_sha256": "b280c454d6f559e56eb3f5ed39f3ba084b8d1744a3ff7fe016b21ff86dea1aca"
+    },
+    {
+      "raw_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\sim\\cpu_native_joint_baseline125_control1\\running.stderr.log",
+      "raw_bytes": 132,
+      "raw_sha256": "b280c454d6f559e56eb3f5ed39f3ba084b8d1744a3ff7fe016b21ff86dea1aca"
+    },
+    {
+      "raw_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\sim\\cpu_native_joint_baseline125_verify_20261114-090908-524718\\compiling.stderr.log",
+      "raw_bytes": 56585,
+      "raw_sha256": "e01f1832ec0a5023371165858fe51d9fcfeb96018802d2f9e758bd072a46d4d3"
+    },
+    {
+      "raw_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\sim\\cpu_native_joint_baseline125_verify_20261114-090908-524718\\prepared.stderr.log",
+      "raw_bytes": 132,
+      "raw_sha256": "b280c454d6f559e56eb3f5ed39f3ba084b8d1744a3ff7fe016b21ff86dea1aca"
+    },
+    {
+      "raw_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\sim\\cpu_native_joint_baseline125_verify_20261114-090908-524718\\running.stderr.log",
+      "raw_bytes": 132,
+      "raw_sha256": "b280c454d6f559e56eb3f5ed39f3ba084b8d1744a3ff7fe016b21ff86dea1aca"
+    },
+    {
+      "raw_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\sim\\cpu_native_joint_rtos125_control1\\compiling.stderr.log",
+      "raw_bytes": 54176,
+      "raw_sha256": "fc413c1a0d112e5b8aa6adf145071476fa4eba650026bc2409ce902a696d93fe"
+    },
+    {
+      "raw_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\sim\\cpu_native_joint_rtos125_control1\\prepared.stderr.log",
+      "raw_bytes": 132,
+      "raw_sha256": "b280c454d6f559e56eb3f5ed39f3ba084b8d1744a3ff7fe016b21ff86dea1aca"
+    },
+    {
+      "raw_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\sim\\cpu_native_joint_rtos125_control1\\running.stderr.log",
+      "raw_bytes": 132,
+      "raw_sha256": "b280c454d6f559e56eb3f5ed39f3ba084b8d1744a3ff7fe016b21ff86dea1aca"
+    },
+    {
+      "raw_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\sim\\cpu_native_joint_rtos125_direct_rom1\\compiling.stderr.log",
+      "raw_bytes": 54326,
+      "raw_sha256": "3a997b50b20f98ac799e837d735bd3ee8837f9503e5e0d64db5a086e508e7534"
+    },
+    {
+      "raw_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\sim\\cpu_native_joint_rtos125_direct_rom1\\prepared.stderr.log",
+      "raw_bytes": 132,
+      "raw_sha256": "b280c454d6f559e56eb3f5ed39f3ba084b8d1744a3ff7fe016b21ff86dea1aca"
+    },
+    {
+      "raw_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\sim\\cpu_native_joint_rtos125_direct_rom1\\running.stderr.log",
+      "raw_bytes": 132,
+      "raw_sha256": "b280c454d6f559e56eb3f5ed39f3ba084b8d1744a3ff7fe016b21ff86dea1aca"
+    },
+    {
+      "raw_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\sim\\cpu_native_joint_rtos125_final2\\compiling.stderr.log",
+      "raw_bytes": 54076,
+      "raw_sha256": "b4c2e263d625570d17cc359222b2f435c297d8d7c97d6a566acfb564d60f95cd"
+    },
+    {
+      "raw_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\sim\\cpu_native_joint_rtos125_final2\\prepared.stderr.log",
+      "raw_bytes": 132,
+      "raw_sha256": "b280c454d6f559e56eb3f5ed39f3ba084b8d1744a3ff7fe016b21ff86dea1aca"
+    },
+    {
+      "raw_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\sim\\cpu_native_joint_rtos125_final2\\running.stderr.log",
+      "raw_bytes": 132,
+      "raw_sha256": "b280c454d6f559e56eb3f5ed39f3ba084b8d1744a3ff7fe016b21ff86dea1aca"
+    },
+    {
+      "raw_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\sim\\cpu_native_joint_rtos125_full2\\compiling.stderr.log",
+      "raw_bytes": 54026,
+      "raw_sha256": "3dcc55120b17c2e25b108306f832606e593462e291fdc55eb0d98e7a89f7dd78"
+    },
+    {
+      "raw_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\sim\\cpu_native_joint_rtos125_full2\\prepared.stderr.log",
+      "raw_bytes": 132,
+      "raw_sha256": "b280c454d6f559e56eb3f5ed39f3ba084b8d1744a3ff7fe016b21ff86dea1aca"
+    },
+    {
+      "raw_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\sim\\cpu_native_joint_rtos125_full2\\running.stderr.log",
+      "raw_bytes": 132,
+      "raw_sha256": "b280c454d6f559e56eb3f5ed39f3ba084b8d1744a3ff7fe016b21ff86dea1aca"
+    },
+    {
+      "raw_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\sim\\cpu_native_joint_rtos125_verify_20261114-090908-524718\\compiling.stderr.log",
+      "raw_bytes": 55226,
+      "raw_sha256": "fe7c20c69c87bf2ccce4a5ce99355c1431dbcf4827fee4379d336e047f193c65"
+    },
+    {
+      "raw_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\sim\\cpu_native_joint_rtos125_verify_20261114-090908-524718\\prepared.stderr.log",
+      "raw_bytes": 132,
+      "raw_sha256": "b280c454d6f559e56eb3f5ed39f3ba084b8d1744a3ff7fe016b21ff86dea1aca"
+    },
+    {
+      "raw_path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\sim\\cpu_native_joint_rtos125_verify_20261114-090908-524718\\running.stderr.log",
+      "raw_bytes": 132,
+      "raw_sha256": "b280c454d6f559e56eb3f5ed39f3ba084b8d1744a3ff7fe016b21ff86dea1aca"
+    }
+  ],
+  "complete_reports": [
+    {
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\output_decode\\20261114-092730-502606\\DECODER_REPORT.json",
+      "sha256": "c2f29e85a02547fff15372cf56de9ce04a4567d47cd3d56d24b939a475a0e47b"
+    },
+    {
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\output_decode\\20261114-092730-502606\\AST_ENTRY_REPORT.json",
+      "sha256": "22d30cb856eb986a514880d76b041f0ea4b88590b99524032bf466505ff3700b"
+    },
+    {
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\output_decode\\20261114-092730-502606\\PROTECTED_INPUTS.json",
+      "sha256": "a81091a444d1100b129ac078d074e597bc7b6ceec30126f374a3ec797c0a8267"
+    }
+  ]
+}

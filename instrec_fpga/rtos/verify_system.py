@@ -19,6 +19,8 @@ import time
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
+sys.path.insert(0, str(HERE / "sim"))
+from output_decode import decode_mixed_output
 
 
 def sha(path: Path) -> str:
@@ -39,6 +41,24 @@ def assert_commands(report: dict, status: str) -> None:
     if not report.get("commands") or any(
             row.get("exit_status", row.get("exit_code")) != 0 for row in report["commands"]):
         raise RuntimeError("A functional test contains a failed command")
+
+
+def rollback_archived_command(workspace: Path) -> list[str]:
+    """Execute the archived PowerShell source with its real file context."""
+    def quoted(value: str) -> str:
+        return "'" + value.replace("'", "''") + "'"
+
+    code = (
+        "[Console]::OutputEncoding = [System.Text.Encoding]::UTF8; "
+        "$ErrorActionPreference = 'Stop'; try { "
+        "$entry = [System.IO.Path]::Combine(" + quoted(HERE.as_posix()) + ", 'ROLLBACK.sh'); "
+        "$tokens = $null; $parseErrors = $null; "
+        "$ast = [System.Management.Automation.Language.Parser]::ParseFile($entry, [ref]$tokens, [ref]$parseErrors); "
+        "if ($parseErrors.Count -gt 0) { throw 'Rollback parse failed' }; "
+        "$script = $ast.GetScriptBlock(); & $script -Workspace " + quoted(workspace.resolve().as_posix()) + "; "
+        "} catch { Write-Error $_; exit 1 }"
+    )
+    return ["pwsh", "-NoProfile", "-Command", code]
 
 
 def native_comparison(before_path: Path, after_path: Path) -> dict:
@@ -166,7 +186,8 @@ def main() -> int:
         shutil.copytree(evidence, study / "previous_evidence")
     else:
         evidence.mkdir()
-    orchestration = {"status": "running", "pds_run": str(pds), "study": str(study), "commands": []}
+    orchestration = {"status": "running", "pds_run": str(pds), "study": str(study),
+                     "decoder_sha256": sha(HERE / "sim/output_decode.py"), "commands": []}
 
     def execute(name: str, command: list[str], timeout: int = 1800) -> dict:
         number = len(orchestration["commands"])
@@ -181,13 +202,9 @@ def main() -> int:
                 code = proc.returncode
             except subprocess.TimeoutExpired:
                 code = "timeout"
-        def decode(path: Path) -> str:
-            raw = path.read_bytes()
-            encoding = "utf-16" if raw.startswith((b"\xff\xfe", b"\xfe\xff")) else (
-                "utf-16-le" if raw.count(b"\x00") > len(raw) // 8 else "utf-8")
-            return raw.decode(encoding, "replace")
         row = {"command": command, "cwd": str(ROOT), "exit_status": code,
-               "seconds": round(time.monotonic() - started, 3), "output": decode(log) + decode(errors)}
+               "seconds": round(time.monotonic() - started, 3),
+               "output": decode_mixed_output(log.read_bytes()) + decode_mixed_output(errors.read_bytes())}
         orchestration["commands"].append(row)
         write(study / "RESULT.json", orchestration)
         if code != 0:
@@ -239,11 +256,30 @@ def main() -> int:
         cpu_archive("CPU_RTOS", python("rtos_cpu", "sim/run_rtos_test.py", "--label", "verifyrtos_" + stamp), "RTOS_CPU_EVIDENCE")
         rollback = study / "rollback_copy"
         shutil.copytree(pds / "inputs", rollback)
+        wrapper_before = sha(HERE / "rtl/rv32_cpu_subsys.sv")
         execute("rollback", ["pwsh", "-NoProfile", "-File", str(HERE / "ROLLBACK.ps1"), "-Workspace", str(rollback)])
+        archived_entry = execute("rollback_archived_entry", rollback_archived_command(rollback))
         restored = read(HERE / "BASELINE.json")
         removed = ("machine_timer.v", "prog_pacerv_even.hex", "prog_pacerv_odd.hex")
-        if (any(sha(rollback / row["path"]) != row["sha256"] for row in restored["files"]) or
-                any((rollback / "src/cpu" / name).exists() for name in removed)):
+        restored_ok = all(sha(rollback / row["path"]) == row["sha256"] for row in restored["files"])
+        added_removed = not any((rollback / "src/cpu" / name).exists() for name in removed)
+        wrapper_after = sha(HERE / "rtl/rv32_cpu_subsys.sv")
+        identical = (HERE / "ROLLBACK.ps1").read_bytes() == (HERE / "ROLLBACK.sh").read_bytes()
+        rollback_entry = {
+            "passed": (restored_ok and added_removed and identical and wrapper_before == wrapper_after and
+                       "ROLLBACK_RESTORED files=202 clock_hz=125000000 timer_removed=1" in archived_entry["output"]),
+            "command": archived_entry["command"], "cwd": archived_entry["cwd"],
+            "exit_status": archived_entry["exit_status"], "literal_output": archived_entry["output"],
+            "interpreter": "PowerShell 7 ParseFile/GetScriptBlock preserves the actual .sh file execution context",
+            "input_manifest_sha256": sha(HERE / "BASELINE.json"),
+            "rollback_script_sha256": sha(HERE / "ROLLBACK.sh"),
+            "source_wrapper_sha256_before": wrapper_before, "source_wrapper_sha256_after": wrapper_after,
+            "restored_files": len(restored["files"]) if restored_ok else 0,
+            "isolated_copy": str(rollback), "PowerShell_entrypoints_identical": identical,
+            "added_files_removed": added_removed,
+        }
+        write(evidence / "ROLLBACK_ENTRYPOINT.json", rollback_entry)
+        if not rollback_entry["passed"]:
             raise RuntimeError("Rollback did not restore the 202 baseline files")
         rolled = cpu_archive("ROLLBACK_CPU", python("rollback_cpu", "sim/run_baseline.py", "--source-dir", str(rollback), "--label", "verifyrollback_" + stamp), "BASELINE125_EVIDENCE")
         if original["benchmark"] != rolled["benchmark"]:

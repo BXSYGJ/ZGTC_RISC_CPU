@@ -1,6 +1,6 @@
 # 当前工作记忆：2026-11-14
 
-当前用户目标active：结合XSY/XSY2，以125MHz 223256基线接入FreeRTOS。V11.3.3、1kHz、三应用任务/静态队列，正式固件7148B已实现。162656-direct_rom_final-map完成compile/synthesize/map，207输入一致、136.5/155DRM。正式ROM_AUDIT于17:07 PASS，全部8192数组词、22位SMT地址、8实例控制和两路固件SHA均过；VENDOR_ROM_MODEL及MAPPED_ROM_NEGATIVES（12真实篡改）归档。统一verify_system090908全部pass，8/9门槛只待bitstream。唯一PNR53608（hardware代理持有session80994），continuations/20261114-091420-953401，布局完成进入布线；固定seed2/hold8、90分钟，保持原map RESULT/INPUTS不变。原ROM数组复制全零失败证据保留；H3/202冻结基线保持，原时序优化paused；无USB板卡。位流结束后root strict collector→package/reopen→更新STATUS/CHANGELOG/memory→commit。
+当前RTOS实现目标已完成：结合XSY/XSY2，以125MHz 223256基线接入FreeRTOS V11.3.3、1kHz、三应用任务/静态队列；H3和202原始输入不变。最新162656-direct_rom_final-map整机六阶段完成，207输入和map.adf/controls前后相同；1789.913秒exit0，PDS=0。实际ROM全容量/22位SMT/控制/厂商模型/12真实负例全部通过；最终统一verify094556含13命令PASS，8→9/9，source/VERIFICATION均UTF8无NUL。交付build/rtos/releases/rtos125-20261114-175148.zip，586文件SHA全部重开通过，bit3791112B SHA525d08ea4b903de7604453b0457f131c0aa79d00e9611a4e43de6ba84a5eaf00。最终资源36749LUT/39739FF/136.5DRM/94APM；最终rtr系统slow setup -11.834ns、pixel -1.140ns、slow hold+0.020ns、fast hold-0.035ns，用户已接受时序违例，原报告保留。无FTDI/CP2102，上板未测。原时序优化paused，五组应用资产保持；后续工作按用户新指令推进。构建入口rtos/README.md，证据ACCEPTANCE/DELIVERY/VERIFICATION，最后本地提交不push。
 
 
 最近远端复核：2026-11-14 15:10（北京时间），XSY=0b8201e071c6c59b8d7ead23ad944684f4d0b24c，XSY2=8f902aec29c38bc4a32a4e95ab47d18411684b52。相对上次4d3d6f1新增3次提交：seed85八类整机位流归档、构建种子参数、烧录/I2S脚本修复；五组识别与RTOS无新上传。位流SHA256重算通过。当前仅fetch未合并，继续复用既定109.375/125MHz包，时序目标保持paused。

@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-11-14T15:43:47.3621692+08:00",
+  "checked_at": "2026-11-14T17:44:38.4494567+08:00",
   "present_programmer_or_uart_devices": [],
   "serial_ports": [
     "COM4",
@@ -8,6 +8,38 @@
     "COM3",
     "COM9",
     "COM6"
+  ],
+  "serial_devices": [
+    {
+      "DeviceID": "COM4",
+      "Name": "蓝牙链接上的标准串行 (COM4)",
+      "PNPDeviceID": "BTHENUM\\{00001101-0000-1000-8000-00805F9B34FB}_LOCALMFG&0000\\7&2DAE0741&0&000000000000_0000000A"
+    },
+    {
+      "DeviceID": "COM5",
+      "Name": "蓝牙链接上的标准串行 (COM5)",
+      "PNPDeviceID": "BTHENUM\\{00001101-0000-1000-8000-00805F9B34FB}_LOCALMFG&0000\\7&2DAE0741&0&000000000000_0000001E"
+    },
+    {
+      "DeviceID": "COM8",
+      "Name": "蓝牙链接上的标准串行 (COM8)",
+      "PNPDeviceID": "BTHENUM\\{00001101-0000-1000-8000-00805F9B34FB}_LOCALMFG&0000\\7&2DAE0741&0&000000000000_00000020"
+    },
+    {
+      "DeviceID": "COM3",
+      "Name": "蓝牙链接上的标准串行 (COM3)",
+      "PNPDeviceID": "BTHENUM\\{00001101-0000-1000-8000-00805F9B34FB}_VID&000105D6_PID&000A\\7&2DAE0741&0&0CAEBDE73E64_C00000000"
+    },
+    {
+      "DeviceID": "COM9",
+      "Name": "蓝牙链接上的标准串行 (COM9)",
+      "PNPDeviceID": "BTHENUM\\{00001101-0000-1000-8000-00805F9B34FB}_VID&0001027D_PID&4104\\7&2DAE0741&0&308AF711C9A8_C00000000"
+    },
+    {
+      "DeviceID": "COM6",
+      "Name": "蓝牙链接上的标准串行 (COM6)",
+      "PNPDeviceID": "BTHENUM\\{00001101-0000-1000-8000-00805F9B34FB}_VID&000105D6_PID&000A\\7&2DAE0741&0&978CEBC4415B_C00000000"
+    }
   ],
   "jtag_process_ids": [],
   "board_test_executed": false

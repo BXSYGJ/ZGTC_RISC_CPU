@@ -16,6 +16,8 @@ import subprocess
 import sys
 import time
 
+from output_decode import decode_mixed_output
+
 ROOT = Path(__file__).resolve().parents[2]
 HERE = Path(__file__).resolve().parent
 
@@ -60,9 +62,13 @@ def main() -> int:
     text = text.replace('"rtos/baseline125/src/cpu/prog_pacerv.hex"', '"' + firmware_path + '"')
     bench.write_text(text, encoding="ascii")
     copies.append(bench)
+    decoder = HERE / "output_decode.py"
+    frozen_decoder = out / "inputs/output_decode.py"
+    shutil.copy2(decoder, frozen_decoder)
+    copies.append(frozen_decoder)
     report = {"scope": "original selected 125 MHz firmware on the frozen PaceRV RTL, modeled NPU/DDR",
               "source_dir": str(source), "clock_hz": 125000000, "backend": args.backend,
-              "source_sha256": {str(p): sha(p) for p in originals},
+              "source_sha256": {str(p): sha(p) for p in [*originals, decoder]},
               "frozen_sha256": {str(p.relative_to(out)): sha(p) for p in copies},
               "commands": [], "passed": False}
 
@@ -77,12 +83,7 @@ def main() -> int:
                 status = proc.returncode
             except subprocess.TimeoutExpired:
                 status = "timeout"
-        def decode(path: Path) -> str:
-            raw = path.read_bytes()
-            encoding = "utf-16" if raw.startswith((b"\xff\xfe", b"\xfe\xff")) else (
-                "utf-16-le" if raw.count(b"\x00") > len(raw) // 8 else "utf-8")
-            return raw.decode(encoding, "replace")
-        output = decode(log) + decode(error_log)
+        output = decode_mixed_output(log.read_bytes()) + decode_mixed_output(error_log.read_bytes())
         row = {"command": command, "cwd": str(ROOT), "exit_status": status,
                "elapsed_seconds": round(time.monotonic() - start, 3), "output": output}
         report["commands"].append(row)

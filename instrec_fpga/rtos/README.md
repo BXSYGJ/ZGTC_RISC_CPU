@@ -68,7 +68,11 @@ RESULT: PASS production FreeRTOS tasks, full native golden NPU, immutable queue 
 
 综合审计发现，原先经临时数组复制的ROM写法使PDS生成的正常取指内容全零；失效网表和逐位证据保存在`evidence/MAPPED_ROM_AUDIT.json`，该轮布局布线已经停止。RTOS配置已改成三个实际ROM各自直接加载HEX，新整机映射使用136.5/155 DRM、36964 LUT、94 APM。全部ROM字及补零区、22位实际地址选择、8个存储实例的控制信号均核验通过；从指令库及数据ROM重建的7148字节固件哈希一致。独立厂商模型和12项真实篡改检查也已通过。
 
-最终源码已通过`verify_system.py`统一复验，CPU抢占、完整NPU及回退证据已更新；固定seed2/hold8的完整实现正在运行。位流及板级结果以`evidence/`和`VERIFICATION.txt`的实测更新为准。
+最终源码已通过`verify_system.py --require-complete`统一复验，9/9项验收通过。固定seed2/hold8的编译、综合、映射、布局布线、时序报告及位流生成全部完成，退出状态为0，当前PDS进程为0。位流为3791112字节，SHA-256为`525d08ea4b903de7604453b0457f131c0aa79d00e9611a4e43de6ba84a5eaf00`，位于`build/rtos/pds/20261114-162656-direct_rom_final-map/generate_bitstream/instrec_top.sbit`。
+
+最终路由资源为36749 LUT、39739 FF、1378分布式RAM、136.5 DRM及94 APM。最终独立时序报告的系统slow setup WNS为-11.834 ns，像素slow setup WNS为-1.140 ns，slow hold为+0.020 ns，fast hold为-0.035 ns（5个失败端点）；配置保持125 MHz系统时钟和148.5 MHz像素时钟。原始最终报告随交付包保留。
+
+机器当前枚举到的串口均为蓝牙端口，FTDI/CP2102设备为0，板级实测待设备连接。全项目Python回归另记录430通过、13跳过、10失败及47错误，旧外部训练资产路径与既有契约断言的归因见`evidence/PROJECT_REGRESSION.json`。RTOS专项及完整NPU对照的实际命令、输入、输出和退出码见`VERIFICATION.txt`。
 
 ## 从新检出重做功能核验
 

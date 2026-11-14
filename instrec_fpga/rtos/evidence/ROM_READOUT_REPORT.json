@@ -8,21 +8,21 @@
         "-s",
         "tb_rom_readout",
         "-o",
-        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_readout\\20261114-170913-409339\\tb_rom_readout.vvp",
-        "-DROM_PROG_HEX=\"D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/rom_readout/20261114-170913-409339/inputs/build/rtos/firmware/prog.hex\"",
-        "-DROM_EVEN_HEX=\"D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/rom_readout/20261114-170913-409339/inputs/build/rtos/firmware/prog_even.hex\"",
-        "-DROM_ODD_HEX=\"D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/rom_readout/20261114-170913-409339/inputs/build/rtos/firmware/prog_odd.hex\"",
-        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_readout\\20261114-170913-409339\\inputs\\rtos\\sim\\tb_rom_readout.sv",
-        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_readout\\20261114-170913-409339\\inputs\\rtos\\rtl\\rv32_cpu_subsys.sv",
-        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_readout\\20261114-170913-409339\\inputs\\rtos\\rtl\\machine_timer.v",
-        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_readout\\20261114-170913-409339\\inputs\\rtos\\baseline125\\src\\cpu\\vendor\\pacerv_h3\\rv32_alu.sv",
-        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_readout\\20261114-170913-409339\\inputs\\rtos\\baseline125\\src\\cpu\\vendor\\pacerv_h3\\rv32_btb.sv",
-        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_readout\\20261114-170913-409339\\inputs\\rtos\\baseline125\\src\\cpu\\vendor\\pacerv_h3\\rv32_core.sv",
-        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_readout\\20261114-170913-409339\\inputs\\rtos\\baseline125\\src\\cpu\\vendor\\pacerv_h3\\rv32_decode.sv",
-        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_readout\\20261114-170913-409339\\inputs\\rtos\\baseline125\\src\\cpu\\vendor\\pacerv_h3\\rv32_machine.sv",
-        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_readout\\20261114-170913-409339\\inputs\\rtos\\baseline125\\src\\cpu\\vendor\\pacerv_h3\\rv32_muldiv.sv",
-        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_readout\\20261114-170913-409339\\inputs\\rtos\\baseline125\\src\\cpu\\vendor\\pacerv_h3\\rv32_rvc_expand.sv",
-        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_readout\\20261114-170913-409339\\inputs\\rtos\\baseline125\\src\\cpu\\vendor\\pacerv_h3\\rv32_rvc_frontend.sv"
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_readout\\20261114-174601-632422\\tb_rom_readout.vvp",
+        "-DROM_PROG_HEX=\"D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/rom_readout/20261114-174601-632422/inputs/build/rtos/firmware/prog.hex\"",
+        "-DROM_EVEN_HEX=\"D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/rom_readout/20261114-174601-632422/inputs/build/rtos/firmware/prog_even.hex\"",
+        "-DROM_ODD_HEX=\"D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/rom_readout/20261114-174601-632422/inputs/build/rtos/firmware/prog_odd.hex\"",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_readout\\20261114-174601-632422\\inputs\\rtos\\sim\\tb_rom_readout.sv",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_readout\\20261114-174601-632422\\inputs\\rtos\\rtl\\rv32_cpu_subsys.sv",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_readout\\20261114-174601-632422\\inputs\\rtos\\rtl\\machine_timer.v",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_readout\\20261114-174601-632422\\inputs\\rtos\\baseline125\\src\\cpu\\vendor\\pacerv_h3\\rv32_alu.sv",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_readout\\20261114-174601-632422\\inputs\\rtos\\baseline125\\src\\cpu\\vendor\\pacerv_h3\\rv32_btb.sv",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_readout\\20261114-174601-632422\\inputs\\rtos\\baseline125\\src\\cpu\\vendor\\pacerv_h3\\rv32_core.sv",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_readout\\20261114-174601-632422\\inputs\\rtos\\baseline125\\src\\cpu\\vendor\\pacerv_h3\\rv32_decode.sv",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_readout\\20261114-174601-632422\\inputs\\rtos\\baseline125\\src\\cpu\\vendor\\pacerv_h3\\rv32_machine.sv",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_readout\\20261114-174601-632422\\inputs\\rtos\\baseline125\\src\\cpu\\vendor\\pacerv_h3\\rv32_muldiv.sv",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_readout\\20261114-174601-632422\\inputs\\rtos\\baseline125\\src\\cpu\\vendor\\pacerv_h3\\rv32_rvc_expand.sv",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_readout\\20261114-174601-632422\\inputs\\rtos\\baseline125\\src\\cpu\\vendor\\pacerv_h3\\rv32_rvc_frontend.sv"
       ],
       "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga",
       "exit_status": 0,
@@ -32,11 +32,11 @@
       "command": [
         "D:\\AAAPP\\iverilog\\bin\\vvp.EXE",
         "-i",
-        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_readout\\20261114-170913-409339\\tb_rom_readout.vvp"
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_readout\\20261114-174601-632422\\tb_rom_readout.vvp"
       ],
       "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga",
       "exit_status": 0,
-      "output": "WARNING: D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_readout\\20261114-170913-409339\\inputs\\rtos\\rtl\\rv32_cpu_subsys.sv:267: $readmemh(D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/rom_readout/20261114-170913-409339/inputs/build/rtos/firmware/prog_even.hex): Not enough words in the file for the requested range [0:2047].\nWARNING: D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_readout\\20261114-170913-409339\\inputs\\rtos\\rtl\\rv32_cpu_subsys.sv:268: $readmemh(D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/rom_readout/20261114-170913-409339/inputs/build/rtos/firmware/prog_odd.hex): Not enough words in the file for the requested range [0:2047].\nWARNING: D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_readout\\20261114-170913-409339\\inputs\\rtos\\rtl\\rv32_cpu_subsys.sv:269: $readmemh(D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/rom_readout/20261114-170913-409339/inputs/build/rtos/firmware/prog.hex): Not enough words in the file for the requested range [0:4095].\nWARNING: D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_readout\\20261114-170913-409339\\inputs\\rtos\\sim\\tb_rom_readout.sv:129: $readmemh(D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/rom_readout/20261114-170913-409339/inputs/build/rtos/firmware/prog.hex): Not enough words in the file for the requested range [0:4095].\nROM_READOUT_PASS words=4096 fetches=4102 data_reads=4098 stalled_cycles=958 first=30047073 last=00000000\nD:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_readout\\20261114-170913-409339\\inputs\\rtos\\sim\\tb_rom_readout.sv:147: $finish called at 204496000 (1ps)\n"
+      "output": "WARNING: D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_readout\\20261114-174601-632422\\inputs\\rtos\\rtl\\rv32_cpu_subsys.sv:267: $readmemh(D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/rom_readout/20261114-174601-632422/inputs/build/rtos/firmware/prog_even.hex): Not enough words in the file for the requested range [0:2047].\nWARNING: D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_readout\\20261114-174601-632422\\inputs\\rtos\\rtl\\rv32_cpu_subsys.sv:268: $readmemh(D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/rom_readout/20261114-174601-632422/inputs/build/rtos/firmware/prog_odd.hex): Not enough words in the file for the requested range [0:2047].\nWARNING: D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_readout\\20261114-174601-632422\\inputs\\rtos\\rtl\\rv32_cpu_subsys.sv:269: $readmemh(D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/rom_readout/20261114-174601-632422/inputs/build/rtos/firmware/prog.hex): Not enough words in the file for the requested range [0:4095].\nWARNING: D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_readout\\20261114-174601-632422\\inputs\\rtos\\sim\\tb_rom_readout.sv:129: $readmemh(D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/rom_readout/20261114-174601-632422/inputs/build/rtos/firmware/prog.hex): Not enough words in the file for the requested range [0:4095].\nROM_READOUT_PASS words=4096 fetches=4102 data_reads=4098 stalled_cycles=958 first=30047073 last=00000000\nD:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_readout\\20261114-174601-632422\\inputs\\rtos\\sim\\tb_rom_readout.sv:147: $finish called at 204496000 (1ps)\n"
     }
   ],
   "passed": true,

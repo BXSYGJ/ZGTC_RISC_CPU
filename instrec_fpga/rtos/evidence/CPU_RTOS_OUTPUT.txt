@@ -16,8 +16,8 @@ RTOS_NPU_START sequence=4 cycle=1793016
 RTOS_UART RTOS NPU top1=2 last_class=6 last_p=64 c=54321 seq=3 tick=14
 RTOS_UART RTOS TEST PASS ticks=16 queues=3 preempt=23010,20526
 RTOS_CPU_PASS hz=125000000 cycles=2053456 ticks=16 yields=22 mret=39 starts=4 results=2 clears=4 DDR=33/33 stalls=5 UART=335 peak=16 tick_min=272 tick_max=125000 catchup=3 compare=17
-- /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/sim/verifyrtos_20261114-090908-524718-20261114-170925-271014/inputs/rtos/sim/tb_rtos_cpu.sv:287: Verilog $finish
+- /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/sim/verifyrtos_20261114-094556-317108-20261114-174612-010963/inputs/rtos/sim/tb_rtos_cpu.sv:287: Verilog $finish
 - S i m u l a t i o n   R e p o r t: Verilator 5.040 2025-08-30
-- Verilator: $finish at 16ms; walltime 0.872 s; speed 19.554 ms/s
-- Verilator: cpu 0.840 s on 1 threads; alloced 190 MB
+- Verilator: $finish at 16ms; walltime 0.938 s; speed 18.280 ms/s
+- Verilator: cpu 0.899 s on 1 threads; alloced 190 MB
 wsl: 检测到 localhost 代理配置，但未镜像到 WSL。NAT 模式下的 WSL 不支持 localhost 代理。

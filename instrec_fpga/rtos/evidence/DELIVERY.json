@@ -1,0 +1,10 @@
+{
+  "directory": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\releases\\rtos125-20261114-175148",
+  "archive": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\releases\\rtos125-20261114-175148.zip",
+  "archive_sha256": "ed0ae7eac1a2c49879551fbd742abceb40572a154fb925e9d5f7e199484dd56d",
+  "bitstream": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\releases\\rtos125-20261114-175148\\instrec_top_rtos125.sbit",
+  "bitstream_sha256": "525d08ea4b903de7604453b0457f131c0aa79d00e9611a4e43de6ba84a5eaf00",
+  "file_count": 586,
+  "archive_reopened_all_hashes_pass": true,
+  "board_test_executed": false
+}

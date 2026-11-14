@@ -16,6 +16,7 @@ import time
 from pathlib import Path
 
 from rom_banks import validate_banks
+from output_decode import decode_mixed_output
 
 ROOT = Path(__file__).resolve().parents[2]
 HERE = Path(__file__).resolve().parent
@@ -59,14 +60,15 @@ def main() -> int:
     rtl += sorted(vendor.glob("*.sv"))
     if len(rtl) != 10:
         raise RuntimeError("Expected 8 frozen PaceRV sources and 2 integration sources")
-    source_files = [HERE / "tb_rtos_cpu.sv", HERE / "rom_banks.py", firmware, even, odd, *rtl]
+    source_files = [HERE / "tb_rtos_cpu.sv", HERE / "rom_banks.py", HERE / "output_decode.py",
+                    firmware, even, odd, *rtl]
     frozen_files = []
     for path in source_files:
         target = out / "inputs" / path.relative_to(ROOT)
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(path, target)
         frozen_files.append(target)
-    bench, helper, frozen_firmware, frozen_even, frozen_odd, *frozen_rtl = frozen_files
+    bench, helper, decoder, frozen_firmware, frozen_even, frozen_odd, *frozen_rtl = frozen_files
     validate_banks(frozen_firmware, frozen_even, frozen_odd, 4096)
     files = frozen_files
     report = {
@@ -83,24 +85,17 @@ def main() -> int:
         begin = time.monotonic()
         log = out / ("command-" + str(len(report["commands"])) + ".log")
         error_log = out / ("command-" + str(len(report["commands"])) + ".stderr.log")
-        def decode(path: Path) -> str:
-            data = path.read_bytes()
-            if data.startswith((b"\xff\xfe", b"\xfe\xff")):
-                return data.decode("utf-16", "replace")
-            if data.count(b"\x00") > len(data) // 8:
-                return data.decode("utf-16-le", "replace")
-            return data.decode("utf-8", "replace")
         try:
             with log.open("wb") as output, error_log.open("wb") as errors:
                 proc = subprocess.run(command, cwd=ROOT, stdout=output,
                                       stderr=errors, timeout=timeout)
             record = {"command": command, "cwd": str(ROOT),
                       "exit_status": proc.returncode,
-                      "output": decode(log) + decode(error_log),
+                      "output": decode_mixed_output(log.read_bytes()) + decode_mixed_output(error_log.read_bytes()),
                       "elapsed_seconds": round(time.monotonic() - begin, 3)}
         except subprocess.TimeoutExpired as exc:
             record = {"command": command, "cwd": str(ROOT), "exit_status": "timeout",
-                      "output": decode(log) + decode(error_log),
+                      "output": decode_mixed_output(log.read_bytes()) + decode_mixed_output(error_log.read_bytes()),
                       "elapsed_seconds": round(time.monotonic() - begin, 3)}
         report["commands"].append(record)
         return record

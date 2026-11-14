@@ -1,6 +1,6 @@
 # Revise CPU paper for reviewers (2)：接续记录
 
-> 当前接续：125MHz基线FreeRTOS active。162656-direct_rom_final-map已map完成exit0、207输入一致、136.5/155DRM，ROM真实内容/22位SMT地址/控制/厂商模型/12真实篡改与统一功能复验090908全部通过，8/9门槛只待bit。唯一PNR53608，hardware代理持有session80994，continuations/20261114-091420-953401，已完成布局进入布线，固定seed2/hold8，不重启该flow。结束后strict collector/package并重开哈希，再本地commit。原失败ROM全零/旧PNR已停止证据保留，H3和202原输入不变。USB未枚举，旧时序优化paused。
+> 当前接续工作已完成125MHz基线FreeRTOS代码、位流及交付，专项9/9。最终162656-direct_rom_final-map六阶段完成，PDS=0，bit SHA525d08ea…4a5eaf00；完整包build/rtos/releases/rtos125-20261114-175148.zip的586文件重开通过。最终verify094556含13条命令全部pass，ROM实际INIT/22位SMT/厂商模型/12负例和双入口回退均通过，日志UTF8无NUL。入口rtos/README.md与evidence/DELIVERY.json，正式最终时序违例报告随包保留；USB板卡未枚举，上板尚未实测。H3与202原基线保持，原时序优化paused。以下保留先前接续历史。
 
 
 2026-11-14，已从本机只读对话历史和实际工作区恢复当前工作。

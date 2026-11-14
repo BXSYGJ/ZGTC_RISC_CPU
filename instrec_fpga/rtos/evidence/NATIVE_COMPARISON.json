@@ -4,7 +4,7 @@
   "production_RV32_ROM_bytes": 7148,
   "before": {
     "mode": "original 125 MHz wrapper and firmware",
-    "report": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\sim\\cpu_native_joint_baseline125_verify_20261114-090908-524718\\PACERV_NATIVE_REPORT.json",
+    "report": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\sim\\cpu_native_joint_baseline125_verify_20261114-094556-317108\\PACERV_NATIVE_REPORT.json",
     "command": [
       "wsl.exe",
       "-d",
@@ -12,7 +12,7 @@
       "--cd",
       "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga",
       "--exec",
-      "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_baseline125_verify_20261114-090908-524718/obj_pacerv/Vtb_npu_full_native"
+      "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_baseline125_verify_20261114-094556-317108/obj_pacerv/Vtb_npu_full_native"
     ],
     "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga",
     "exit_status": 0,
@@ -23,7 +23,7 @@
   },
   "after": {
     "mode": "production FreeRTOS firmware and machine-timer wrapper",
-    "report": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\sim\\cpu_native_joint_rtos125_verify_20261114-090908-524718\\PACERV_NATIVE_REPORT.json",
+    "report": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\sim\\cpu_native_joint_rtos125_verify_20261114-094556-317108\\PACERV_NATIVE_REPORT.json",
     "command": [
       "wsl.exe",
       "-d",
@@ -31,7 +31,7 @@
       "--cd",
       "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga",
       "--exec",
-      "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_rtos125_verify_20261114-090908-524718/obj_pacerv/Vtb_npu_full_native"
+      "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_rtos125_verify_20261114-094556-317108/obj_pacerv/Vtb_npu_full_native"
     ],
     "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga",
     "exit_status": 0,
@@ -46,18 +46,18 @@
     "result_tick": 250
   },
   "golden_output_counts": {
-    "conv3": 196608,
-    "fc1": 128,
-    "gap": 256,
-    "pool3": 49152,
-    "fc2_logits": 8,
-    "conv1": 792576,
     "pool1": 198144,
+    "gap": 256,
+    "fc1": 128,
+    "pool2": 98304,
+    "conv1": 792576,
+    "pool3": 49152,
     "conv4": 65536,
-    "pool4": 16384,
-    "probs": 8,
+    "conv3": 196608,
+    "fc2_logits": 8,
     "conv2": 396288,
-    "pool2": 98304
+    "probs": 8,
+    "pool4": 16384
   },
   "all_layers_golden_exact": true,
   "same_NPU_sources": {
@@ -96,19 +96,19 @@
   "limitations": "Actual frozen NPU/CPU/DDR RTL and production RTOS ROM execute with preloaded feature/weight assets and a behavioral DDR physical model. Audio/Mel acquisition, HDMI pins and physical board behavior have separate validation.",
   "archives": {
     "NATIVE_BASELINE125_REPORT.json": {
-      "sha256": "de7e49d435d4d88ed7f97c812074ea7a24bfc9adf9a4e252b9195b0a92fbda83",
-      "bytes": 94709
+      "sha256": "2d34d93305ee1791b92b3d30827996ef57017fd405fd4576b120c0dd75d128bb",
+      "bytes": 94914
     },
     "NATIVE_BASELINE125_OUTPUT.txt": {
-      "sha256": "5010cf0fced2d91987cb11976a2d947624d84ad96cfa29c45e1b510460b4b80b",
+      "sha256": "8880d16a082643f21583ed526dbc1243494aee4ac5a63008e3e10493ef421791",
       "bytes": 3809
     },
     "NATIVE_RTOS_REPORT.json": {
-      "sha256": "bd10234f2c4b10e75d820667ed88f94ad9643add0161932782ff46330009d51f",
-      "bytes": 97016
+      "sha256": "7d40ae2889802cd1cea6bd49a3db09fd542b4bf57f9dfbef06f45c530a52d502",
+      "bytes": 97216
     },
     "NATIVE_RTOS_OUTPUT.txt": {
-      "sha256": "3de8a96a5be43e2ae2a52a9983bd801dbd0a1145a321eca36ecebe200e16f9b2",
+      "sha256": "48d69d93862a1c2184ed8eebe74cc3bbfdbefa6021a6bcbd5c6ccfa75456c421",
       "bytes": 3809
     }
   }
