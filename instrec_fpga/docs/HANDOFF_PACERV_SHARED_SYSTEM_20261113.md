@@ -145,3 +145,5 @@ collector会核对INTERRUPTION记录的manifest及stdout/stderr哈希，并在RE
 综合报告已确认u_npu/u_gap/acc_mem为256×14、SIMPLE_DUAL_PORT、GTP_DRM18K_E1；GAP没有属性忽略警告。collector对新pending run会将旧FULL_PDS_INTERRUPTION.json按SHA归档，保持选中物理记录与当前run对应。
 
 111645已完成详细布局（最差+0.801ns、TNS0）并进入详细布线，映射37548LUT/46422FF/826DistributedRAM/129DRM/94APM。新增audit_final_acceptance.py，最终collector完成后以--full-build指定同一实际run；审计六阶段、十张时序表、时钟与报告实际不确定性、资源、非空位流、冻结/活源/Git字节、十三项功能门槛、独立回退及四件artifact。当前真实未完成构建的负例退出2，输入与artifact两项通过，物理和全功能最终门槛未过；evidence/FINAL_ACCEPTANCE.json记录原因。最终必须取得退出0及GOAL_ACCEPTANCE_PASS后再完成目标。
+
+111645详细布线已于539轮/1051.12秒结束，全部104088子网连通。保持时间修复前三轮498.45/313.34/289.42秒，第四轮仍在计算；父35636、工作进程65832、runner47328保持同一flow。当前仍无最终验收结果，源码不变；819e38b提交后的202项CHECKOUT_INPUTS再次通过，mismatches=0。继续轮询同一runner，待其实际退出后检查最终十表和位流。
