@@ -1,6 +1,7 @@
 {
   "branch": "XSY",
   "inherited_source_commit": "80bcfa360bc1baf6a2a5732a9b578042a7f90381",
+  "source_checkout_commit": "e22754055b79f35f4eaa77270f5f3b0ff72f914c",
   "changed_fields": [
     "weight_loader.digest_q/rdigest_q",
     "gap_unit.g_acc[].acc_word",
@@ -20,7 +21,7 @@
     "VERIFICATION.txt": {
       "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\experiments\\pacerv_shared_system\\VERIFICATION.txt",
       "bytes": 115808,
-      "sha256": "f7e2beffe9d30f160ad06df5a72c57654c2ee16d9d2897dc53db5bc250f77468"
+      "sha256": "2d09e5425f9d90b7b415651bf90654edb10c698c82c88fb02b8cb919c4de3788"
     },
     "ROLLBACK.sh": {
       "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\experiments\\pacerv_shared_system\\ROLLBACK.sh",

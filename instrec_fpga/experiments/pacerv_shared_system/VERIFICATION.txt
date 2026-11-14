@@ -1,6 +1,6 @@
 PaceRV core + shared whole-system memory/peripherals
 
-Branch and checkout: {"branch": "XSY", "checkout_commit": "80bcfa360bc1baf6a2a5732a9b578042a7f90381"}
+Branch and checkout: {"branch": "XSY", "checkout_commit": "e22754055b79f35f4eaa77270f5f3b0ff72f914c"}
 Selected operating point: {"target": "PG2L100H-6IFBG676", "system_clock_hz": 109375000, "pixel_clock_hz": 148500000, "declared_system_setup_hold_uncertainty_ns": 0.15}
 Changed: RV32IMC H3 execution core, paired local-ROM fetch, uncached CPU DDR data port,
 M3_MASK_ENABLE byte masks and locked M3 client ownership; native local data RAM;
