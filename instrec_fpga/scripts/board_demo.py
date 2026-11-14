@@ -1,28 +1,48 @@
 #!/usr/bin/env python3
 """Score the board on the Medley-solos-DB 8-class demo clips (in-domain).
 
-The IRMAS excerpts are outside the model's training distribution (offline
-scores ~17%), so a board accuracy number there only reflects the model, not
-the FPGA.  These demo clips are the model's OWN domain -- one clip per class,
-labelled by their filename (sample_N_<name>.wav) -- so the board should score
-close to the model's reported 77% if the whole FPGA chain is healthy.
+Why this tool exists
+--------------------
+The IRMAS excerpts are outside the model's training distribution (offline scores
+~17%), so a board number there measures the model, not the FPGA.  These demo
+clips are the model's OWN domain -- one clip per class, labelled by filename
+(sample_N_<name>.wav) -- so the board should land near the model's reported 77%
+if the whole chain is healthy.
 
-Each clip is peak-normalised, looped to a whole hardware window, played on the
-Realtek endpoint, and its logits are read over the diag 'G' command.  The same
-window is also run through the offline golden pipeline for a per-clip
-board-vs-golden check.
+Two measurement traps this tool guards against (both produced bogus 1/8 runs):
+
+* **Muted / dead output.**  A muted endpoint or a loose 3.5 mm plug still
+  accepts waveOut without error, so the board records silence and every clip
+  collapses to the same logits.  Guard: unmute + pin the endpoint volume, then
+  require the board's own PCM std to clear ``--std-min`` before trusting a
+  capture (replay otherwise).
+* **Stale / discontinuous window.**  The diag lock freezes whichever ping-pong
+  half the Mel engine is about to consume; right after playback starts that
+  half can still hold the tail of the previous capture (audio then silence),
+  which makes the classifier see mostly silence and score nonsense.  Guard:
+  read the half back and require every 8 KiB block to carry signal, else
+  unlock, wait and re-capture.
+
+The report separates three numbers, because they answer three different
+questions:
+
+    board            what the FPGA's NPU actually produced
+    goldCap          golden run on the *same* window the FPGA consumed
+                     -> must equal `board`; if it does, the FPGA chain is
+                        correct and any accuracy gap is upstream
+    clean            golden run on the clip as played, i.e. what the board
+                     should have heard
 
 Usage
 -----
-    python scripts/board_demo.py                 # data/demo/sample_*.wav (8 clips)
-    python scripts/board_demo.py --demo-dir D:/0000/111/001/Pango/InstRec/data/demo
+    python scripts/board_demo.py --device-hint NICEHCK
+    python scripts/board_demo.py --demo-dir D:/0000/111/001/Pango/InstRec/data/demo --json out.json
 """
 from __future__ import annotations
 
 import argparse
 import sys
 import time
-from collections import Counter
 from pathlib import Path
 
 import numpy as np
@@ -59,18 +79,99 @@ def prep_clip_any(path: Path, peak_dbfs: float = -1.0) -> np.ndarray:
         return np.clip(x * (target / peak), -32768, 32767).round().astype(np.int16)
 
 
+def prepare_endpoint(hint: str, volume: int) -> None:
+    """Unmute the render endpoint and pin its volume.
+
+    A muted endpoint still accepts waveOut without error, so the board simply
+    records silence and every clip collapses to the same logits.
+    """
+    try:
+        from comtypes import CLSCTX_ALL
+        from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
+    except Exception as exc:                                  # pragma: no cover
+        print("  (pycaw unavailable, cannot check mute: %s)" % exc)
+        return
+    for d in AudioUtilities.GetAllDevices():
+        name = str(d.FriendlyName)
+        if hint.lower() not in name.lower() or name.startswith("麦克风"):
+            continue
+        try:
+            vol = d._dev.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None
+                                  ).QueryInterface(IAudioEndpointVolume)
+        except Exception:
+            continue
+        was_muted = bool(vol.GetMute())
+        vol.SetMute(0, None)
+        vol.SetMasterVolumeLevelScalar(max(0.0, min(1.0, volume / 100.0)), None)
+        print("  endpoint '%s': mute %s -> 0, volume -> %d%%"
+              % (name, was_muted, volume))
+        return
+    print("  (no endpoint matched %r; leaving audio settings alone)" % hint)
+
+
+def window_continuity(pcm: np.ndarray, block: int = 8192, floor: float = 200.0) -> float:
+    """Fraction of blocks that carry signal.  A gap (stale half) shows up here."""
+    if pcm.size < block:
+        return 0.0
+    env = np.array([np.abs(pcm[i:i + block]).max()
+                    for i in range(0, pcm.size - block + 1, block)])
+    return float((env > floor).mean())
+
+
+def golden_logits(pcm, tables, contract, weights, rec):
+    import golden_pipeline as gp
+    feat = gp.run_mel_pipeline(pcm, tables,
+                               inv_s_in=int(rec["inv_s_in"]),
+                               zp_in=int(rec["zp_in"]))["feat"]
+    out = gp.npu_forward(feat, contract, tables["exp_lut"], weights=weights)
+    return int(out["top1"]), [int(v) for v in out["logits"]]
+
+
+def capture_window(ser, dd, ds, half_rule: str, window: int):
+    """Lock, read the half the Mel engine consumes, return (win, half, pcm)."""
+    dd.read_status(ser)
+    ser.write(b"L")
+    time.sleep(0.05)
+    st = dd.read_status(ser)
+    win = st["win"]
+    half = (0 if (win & 1) else 1) if half_rule == "prev" else (win & 1)
+    raw = ds.read_ddr_robust(ser, dd.PCM_LASE + dd.PCM_WIN_STRIDE * half,
+                             dd.PCM_WIN_BYTES)
+    ser.write(b"U")
+    time.sleep(0.05)
+    pcm = np.frombuffer(raw, dtype="<i2").astype(np.int16)[:window]
+    return win, half, pcm
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--demo-dir", default=str(DEFAULT_DEMO))
     ap.add_argument("--port", default="COM5")
-    ap.add_argument("--wait", type=float, default=7.0)
-    ap.add_argument("--reads", type=int, default=2)
+    ap.add_argument("--wait", type=float, default=10.0,
+                    help="seconds of playback before locking")
     ap.add_argument("--json", default=None)
+    ap.add_argument("--device-hint", default="NICEHCK",
+                    help="render endpoint to play into (default NICEHCK: the 3.5 mm "
+                         "cable currently hangs off that DAC)")
+    ap.add_argument("--no-unmute", action="store_true",
+                    help="do not touch the endpoint mute/volume")
+    ap.add_argument("--volume", type=int, default=50)
+    ap.add_argument("--attempts", type=int, default=4, help="captures per clip")
+    ap.add_argument("--std-min", type=float, default=300.0,
+                    help="minimum board PCM std for a capture to count")
+    ap.add_argument("--min-fill", type=float, default=0.3,
+                    help="minimum fraction of 8 KiB blocks that must carry signal. "
+                         "Music clips legitimately contain rests, so this is only a "
+                         "sanity floor -- a dead link reads ~0.0")
+    ap.add_argument("--half", choices=("prev", "curr"), default="prev",
+                    help="ping-pong half the Mel engine consumes; 'prev' matches the "
+                         "win_base fix (bitstream 20261113 onward)")
     args = ap.parse_args(argv)
 
     import audio_player as apx
     import diag_dump as dd
+    import diag_spectrum as ds
     import golden_pipeline as gp
     import serial
 
@@ -83,56 +184,101 @@ def main(argv=None) -> int:
     tables = gp.load_mel_tables(SCRIPTS / "outputs" / "mel_tables_48k.json")
     contract = gp.load_layer_contract(SCRIPTS / "outputs" / "medley_48k" / "layer_contract.json")
     weights = gp.load_weights_from_image(contract, SCRIPTS / "outputs" / "medley_48k" / "weights_image.bin")
+    rec = contract.get("quant_stub_input_contract", contract)
     window = gp.WINDOW_SAMPLES
 
     ser = serial.Serial(args.port, 115200, timeout=0.4)
     time.sleep(0.2)
-    dev = apx.resolve_device("Realtek")
-    print("play device = Realtek (%d)" % dev)
+    dev = apx.resolve_device(args.device_hint)
+    print("play device = %s (%d)" % (args.device_hint, dev))
+    if not args.no_unmute:
+        prepare_endpoint(args.device_hint, args.volume)
 
     rows = []
-    ok = 0
-    agree = 0
+    ok = same = clean_ok = 0
     for clip in clips:
         truth = int(clip.stem.split("_")[1])
         pcm48 = prep_clip_any(clip, -1.0)
         unit = np.tile(pcm48, int(np.ceil(window / max(1, pcm48.size))))[:window]
-        pcm = ba.loop_to(unit, args.wait + 4)
+        # Long enough to survive every capture attempt: reading one ping-pong
+        # half back takes ~31 s over 115200 baud, so a short buffer runs dry
+        # mid-retry and the captured window ends up half silence.
+        pcm = ba.loop_to(unit, args.wait + 60 * max(1, args.attempts))
 
+        # One continuous playback, several capture attempts.  Restarting the
+        # player for every retry was the original mistake: waveOut + the DAC
+        # need ~2.5 s to actually start, so every retry landed on the same
+        # silence-to-audio transition window (~50-70% fill) and never improved.
+        cap = None
+        std = fill = 0.0
+        logits = []
         player = apx.StreamingPlayer(pcm, sr=48000, channels=2,
-                                     device_hint="Realtek", gain_db=0.0,
+                                     device_hint=args.device_hint, gain_db=0.0,
                                      buf_ms=60, queued=4).start()
-        reads = []
         try:
             time.sleep(args.wait)
-            for k in range(max(1, args.reads)):
-                reads.append(dd.read_logits(ser))
-                if k + 1 < max(1, args.reads):
-                    time.sleep(2.5)
+            for attempt in range(1, max(1, args.attempts) + 1):
+                std = ba.board_pcm_std(ser, dd)
+                if std < args.std_min:
+                    print("      attempt %d/%d: board PCM std %.0f < %.0f, waiting"
+                          % (attempt, args.attempts, std, args.std_min))
+                    time.sleep(1.5)
+                    continue
+                win, half, cand = capture_window(ser, dd, ds, args.half, window)
+                fill = window_continuity(cand)
+                if fill < args.min_fill:
+                    print("      attempt %d/%d: win=%d half=%d only %.0f%% of the "
+                          "window carries signal, waiting for a full window"
+                          % (attempt, args.attempts, win, half, 100.0 * fill))
+                    time.sleep(1.5)
+                    continue
+                logits = dd.read_logits(ser)
+                cap = cand
+                break
         finally:
             player.stop()
+            time.sleep(0.3)
 
-        logits = reads[-1] if reads else []
-        votes = [int(np.argmax(r)) for r in reads]
-        got = Counter(votes).most_common(1)[0][0] if votes else -1
-        ref = ba.offline_top1(unit, tables, contract, weights, window)[0]
+        if cap is None:
+            rows.append({"file": str(clip), "truth": truth, "board": -1,
+                         "golden_captured": -1, "golden_clean": -1,
+                         "pcm_std": round(std, 1), "fill": round(fill, 3),
+                         "logits": []})
+            print("[%d/%d] %-36s truth=%d  NO VALID CAPTURE (std=%.0f fill=%.2f)"
+                  % (len(rows), len(clips), clip.name, truth, std, fill))
+            continue
+
+        got = int(np.argmax(logits)) if logits else -1
+        ref_cap, lg_cap = golden_logits(cap, tables, contract, weights, rec)
+        ref_clean, _ = golden_logits(unit, tables, contract, weights, rec)
+
         hit = got == truth
         ok += hit
-        agree += (ref == got)
+        same += (ref_cap == got)
+        clean_ok += (ref_clean == truth)
 
         rows.append({"file": str(clip), "truth": truth, "board": got,
-                     "offline": ref, "logits": [int(v) for v in logits]})
-        print("[%d/%d] %-40s truth=%d(%s) board=%d(%s) %s  off=%d  logits=%s" % (
-            len(rows), len(clips), clip.name, truth, ba.CLASS_NAMES[truth][:10],
-            got, ba.CLASS_NAMES[got][:10] if got >= 0 else "?",
-            "OK  " if hit else "MISS", ref, [int(v) for v in logits]))
-        time.sleep(0.5)
+                     "golden_captured": ref_cap, "golden_clean": ref_clean,
+                     "pcm_std": round(std, 1), "fill": round(fill, 3),
+                     "logits": [int(v) for v in logits],
+                     "logits_golden_captured": lg_cap})
+        print("[%d/%d] %-36s truth=%d(%s) board=%d(%s) %s  goldCap=%d %s  clean=%d %s"
+              "  std=%.0f fill=%.2f" % (
+                  len(rows), len(clips), clip.name, truth, ba.CLASS_NAMES[truth][:9],
+                  got, ba.CLASS_NAMES[got][:9] if got >= 0 else "?",
+                  "OK  " if hit else "MISS", ref_cap,
+                  "SAME" if ref_cap == got else "DIFF", ref_clean,
+                  "OK" if ref_clean == truth else "MISS", std, fill))
+        time.sleep(0.3)
 
     ser.close()
     n = len(rows)
+    valid = sum(1 for r in rows if r["board"] >= 0)
     print("")
-    print("BOARD accuracy on Medley-solos-DB demo = %d/%d = %.1f%%" % (ok, n, 100.0 * ok / n))
-    print("board vs offline agreement            = %d/%d = %.1f%%" % (agree, n, 100.0 * agree / n))
+    print("BOARD accuracy            = %d/%d = %.1f%%   (valid captures %d/%d)"
+          % (ok, n, 100.0 * ok / n, valid, n))
+    print("board == golden(captured) = %d/%d" % (same, valid))
+    print("golden(clean) accuracy    = %d/%d = %.1f%%" % (clean_ok, n, 100.0 * clean_ok / n))
     if args.json:
         import json
         Path(args.json).write_text(json.dumps(rows, indent=2), encoding="utf-8")
