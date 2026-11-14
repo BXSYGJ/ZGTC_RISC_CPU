@@ -49,6 +49,7 @@ cfg_scan_chain
 cfg_assign_file -file %(sbit)s -device_index 0
 cfg_program -device_index 0
 cfg_disconnect
+puts "PROGRAM FLOW DONE"
 exit
 """
 
@@ -161,6 +162,10 @@ def main(argv=None) -> int:
         print("attempt %d/%d failed: %s" % (attempt, attempts, reason))
         if attempt == attempts:
             print(text[-800:])
+            break
+        # Only a missing cable is worth a power-cycle; a tool error would just
+        # repeat itself.
+        if not missing:
             break
         if not args.no_recover:
             if not usb_switch.recover(args.switch_port):
