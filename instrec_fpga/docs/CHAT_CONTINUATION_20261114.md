@@ -8,7 +8,7 @@
 
 对话已经从论文修订推进到100Pro+音频整机集成。最新有效要求是采用“高性能PaceRV核心＋共享整机存储和外设”，并完成PG2L100H-6IFBG676本地PDS完整构建和快慢角时序验收。用户已取消远程上板，允许适度降频，要求继续设法使时序合格。
 
-当前候选系统时钟83.333333MHz、像素148.5MHz、音频48kHz。权重校验使用digest_q/rdigest_q；GAP已改为256×14同步原生块RAM和一拍读改写流水。DDR读FIFO16×256与CPU UART FIFO16×8采用显式标量寄存器，保持读出拍数。当前源码提交a5189f2，冻结run `full-20261114-124245-full` 的202项输入与该提交检出一致；父53944、runner97995，normal/seed5/hold12/180分钟，正在综合。CPU、DDR、实际分频UART、完整NPU、连续音频及31文件回退均通过，最终物理资格待验。实时进展以STATUS顶部及HANDOFF最新追加段为准，目标保持active。
+当前候选系统时钟83.333333MHz、像素148.5MHz、音频48kHz。权重校验使用digest_q/rdigest_q；GAP已改为256×14同步原生块RAM和一拍读改写流水。DDR读FIFO16×256与CPU UART FIFO16×8采用显式标量寄存器，保持读出拍数。当前源码提交a5189f2，冻结run `full-20261114-124245-full` 的202项输入与该提交检出一致；父53944、runner97995，normal/seed5/hold12/180分钟，已完成布局并进入路由。映射38506LUT/50489FF/694DistributedRAM/129DRM/94APM，详细布局+1.113ns、TNS0。CPU、DDR、实际分频UART、完整NPU、连续音频及31文件回退均通过，最终物理资格待验。实时进展以STATUS顶部及HANDOFF最新追加段为准，目标保持active。
 
 ## 最初接续时的中断点（历史）
 

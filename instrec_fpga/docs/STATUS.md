@@ -1,6 +1,6 @@
 # InstRec-FPGA 当前状态（STATUS）
 
-> **2026-11-14 当前：83.333333MHz配套DDR与短FIFO寄存器方案正在完整综合**。唯一完整PDS为 `full-20261114-124245-full`，父53944、runner97995，normal/seed5/hold12、180分钟。源码提交a5189f2，202份冻结输入与该提交检出逐字节一致。111645的109.375MHz构建六阶段完成、退出0、202份冻结输入未变，最终slow setup -1.839ns、slow hold -0.160ns、fast hold -0.162ns，像素setup +0.782ns，qualified=false。位流和最终十表保留；37271LUT/46426FF/826DistributedRAM/129DRM/94APM。setup已转移到层号经池化启动/反压至池化RAM写使能及DDR校准逻辑；hold位于DDR读FIFO和CPU UART FIFO的LUT-RAM写地址。
+> **2026-11-14 当前：83.333333MHz配套DDR与短FIFO寄存器方案已完成布局，正在路由**。唯一完整PDS为 `full-20261114-124245-full`，父53944、runner97995，normal/seed5/hold12、180分钟。源码提交a5189f2，202份冻结输入与该提交检出逐字节一致。映射38506LUT/50489FF/694DistributedRAM/129DRM/94APM，详细布局+1.113ns、TNS0，最终时序待验。111645的109.375MHz构建六阶段完成、退出0、202份冻结输入未变，最终slow setup -1.839ns、slow hold -0.160ns、fast hold -0.162ns，像素setup +0.782ns，qualified=false。位流和最终十表保留；37271LUT/46426FF/826DistributedRAM/129DRM/94APM。setup已转移到层号经池化启动/反压至池化RAM写使能及DDR校准逻辑；hold位于DDR读FIFO和CPU UART FIFO的LUT-RAM写地址。
 >
 > GAP使用同步块RAM和一拍读改写流水，按255×4×16=16320上界配置14位无符号存储。同一通道重访间隔至少16个有效拍；S_DRAIN提交末样本并预读通道0，之后每拍一输出。该实现保留round-half-even数值语义，以块RAM替代256×32位逻辑累加寄存器组及大读出选择器。综合报告已确认acc_mem为256×14、SIMPLE_DUAL_PORT、GTP_DRM18K_E1，没有该RAM的属性忽略警告。
 >

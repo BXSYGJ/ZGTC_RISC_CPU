@@ -161,3 +161,5 @@ CPU四组、标准测试、DDR五组996检查、实际生产时钟与分频的�
 下一步提交本轮源，再创建新的独立完整run，normal/seed5/hold12/180分钟；123333仅为准备和应用配置的快照，尚未启动。先核对短FIFO实际映射为FF，再等待最终十表与位流；最终collector改选新run、NPU timing_fifo_registers_83m333、UART clock_83m333_register_fifo、audio 20261114-123646，GAP控制实验仍gap_sync_bram_20261114，七拍显示目录不变。最终需audit_final_acceptance退出0和GOAL_ACCEPTANCE_PASS，目标继续active。
 
 当前新flow已启动：full-20261114-124245-full，父53944、runner97995，正在综合，normal/seed5/hold12/180分钟。源码提交a5189f2ec20e8cc81b6f6bea67774380cb273c02，CHECKOUT_INPUTS total202/mismatches0；freeze时HEAD仍为86d3387、修改已暂存，冻结manifest保留原时刻记录，独立检出审计证明202份实际输入与随后提交a5189f2逐字节一致。最新collector已选择新run与全部新功能记录，12/13门槛通过、物理pending；111645实际最终报告按SHA移入history。FINAL_ACCEPTANCE当前退出2，输入和四件artifact通过，最终物理仍待结果。综合RAM报告已无rd_fifo/txq/pc_beat_buf条目，DDR控制器4204FF、分布式RAM0，CPU1653FF/438DistributedRAM；GAP仍256×14原生DRM。
+
+124245最新进度：映射38506LUT/50489FF/694DistributedRAM/129DRM/94APM，全部容量内。详细布局220.19秒、最差+1.113ns、TNS0后进入路由，工作进程63172属于父53944的同一flow，继续原runner97995。源码和运行输入保持冻结。
