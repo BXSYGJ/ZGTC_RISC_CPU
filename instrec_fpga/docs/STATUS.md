@@ -4,6 +4,31 @@
 
 
 
+
+> **2026-11-14（夜，新增串口注入 PCM 通路：不再依赖模拟回环）**
+> 动机：DAC → 3.5 mm → PCM1808 这条回环是整个台架最不稳的环节（松线半频、几分钟静音、
+> 端点静音、左声道全 0）。既然 DDR3 之后的链路已被证明逐位正确，就让主机直接把
+> 132,096 样本窗口写进 DDR，绕过模拟段。
+>
+> RTL（commit `bd5e8206`）：
+> - `mel_engine` 新增 `diag_tick` / `diag_base`：可由诊断模块直接启动一次窗口，`win_base`
+>   取诊断给的基址，不再依赖 `audio_sink` 的 `win_tick`。
+> - `diag_readback` 新增三条命令：`'I'`（注入模式开）、`'X'`（关）、`'T'`（触发一次 mel）。
+> - `instrec_top` 增加第二个 `weight_loader`（`BASE_ADDR=0`，即 PCM 窗口 A），与权重加载器
+>   按 `dg_inject_mode` 互斥共用 UART 与 m1 写端口（两者本来就不可能并发）。
+>
+> 主机侧 `scripts/inject_audio.py`：`'U'` 清锁 → `'L'` 冻结音频写入（`audio_sink` 的
+> `frame_event` 已由 `diag_lock` 门控，冻结期间不会覆盖 DDR）→ 用与权重上传相同的
+> CRC 分帧协议推 264,192 B（1032 帧，约 26 s）→ `'X'` → `'T'` 触发 → `'G'` 读 logits，
+> `--golden` 还会用参考实现算同一窗口做逐位对比。
+>
+> 时序上的安全性：注入期间 `diag_lock=1`，`audio_sink` 不产生 `frame_event`，因此没有
+> `win_tick` 与注入数据竞争；`native_fault` 只由 m1 owner / bridge / aligner / DDR 错误
+> 驱动，音频 FIFO 溢出不会中断注入。
+>
+> 验证：`check_rtl` 79 文件 0 violation；sim `mel / mel_48k / mel_credit /
+> audio_chain_full / full_top_ctrl` 全 PASS；`pytest` 469 passed；
+> `run_pds_full.ps1 -StopAfter compile` 通过（3m24s）证明新逻辑可展开。全量位流构建已启动。
 > **2026-11-14（夜，f/2 消失 + 板级逐位复验通过；准确率仍被模拟掉线挡住）**
 > 用户重新插好 I2S 接线后复测：**播放 2000 Hz → 板子采到 2000.0 Hz（1:1）**，此前的 2:1 半频
 > 彻底消失。⇒ 「PCM1808 模块坏」的判断作废，半频是**接线/接触**问题；`board_player.py` 的
