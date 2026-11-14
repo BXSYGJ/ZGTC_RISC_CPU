@@ -444,6 +444,8 @@ module instrec_top #(
         .rst_n         (core_clk_rst_n),
         .win_tick      (win_tick),
         .win_id        (win_id),
+        .diag_tick     (dg_mel_trigger),
+        .diag_base     (28'd0),
         .m2_cmd_valid  (mel_m2_cmd_valid),
         .m2_cmd        (mel_m2_cmd),
         .m2_wdata      (mel_m2_wdata),
@@ -610,8 +612,14 @@ module instrec_top #(
     );
 
     // ---- DDR3 arbitration + IP contract adaptation ----
-    wire        wl_tx_valid, wl_tx_ready;
-    wire [7:0]  wl_tx_data;
+    wire        wlu_tx_valid, wl_tx_ready;   // weight loader (DDR base 0x100000)
+    wire [7:0]  wlu_tx_data;
+    wire        inj_tx_valid;                // PCM injection loader (DDR base 0)
+    wire [7:0]  inj_tx_data;
+    // Exactly one loader owns the UART at a time; dg_inject_mode picks which.
+    wire        wl_tx_valid = dg_inject_mode ? inj_tx_valid : wlu_tx_valid;
+    wire [7:0]  wl_tx_data  = dg_inject_mode ? inj_tx_data  : wlu_tx_data;
+    wire        dg_inject_mode, dg_mel_trigger;
     wire        wl_cmd_valid, wl_done, wl_wready;
     wire [36:0] wl_cmd;
     wire [255:0] wl_wdata;
@@ -668,7 +676,10 @@ module instrec_top #(
         .protocol_error(bridge_error),.transaction_failed(bridge_failed));
     npu_m1_owner u_npu_m1_owner(
         .clk(core_clk),.rst_n(core_clk_rst_n),.loader_allowed(!npu_busy_u && !npu_start && !native_fault),
-        .l_valid(wl_cmd_valid),.l_cmd(wl_cmd),.l_wdata(wl_wdata),.l_rd_ready(wl_rd_ready),
+        .l_valid(dg_inject_mode ? inj_cmd_valid : wl_cmd_valid),
+        .l_cmd(dg_inject_mode ? inj_cmd : wl_cmd),
+        .l_wdata(dg_inject_mode ? inj_wdata : wl_wdata),
+        .l_rd_ready(dg_inject_mode ? inj_rd_ready : wl_rd_ready),
         .l_wready(loader_m1_wready),.l_rvalid(loader_m1_rvalid),.l_done(loader_m1_done),
         .n_valid(bridge_mvalid),.n_cmd(bridge_mcmd),.n_wdata(bridge_mwdata),.n_rd_ready(bridge_mready),
         .n_wready(bridge_wready),.n_rvalid(bridge_rvalid),.n_done(bridge_done),.n_abort(bridge_abort),
@@ -816,6 +827,8 @@ module instrec_top #(
         .m3_rd_ready    (dg_m3_rd_ready),
         .m3_done        (ddr_done[3]),
         .diag_lock      (dg_lock),
+        .inject_mode    (dg_inject_mode),
+        .mel_trigger    (dg_mel_trigger),
         .rx_in_arg      (dg_rx_in_arg),
         .win_id         (win_id),
         .mel_done       (mel_done),
@@ -955,10 +968,10 @@ module instrec_top #(
         // The two protocols cannot legitimately overlap (a weight upload needs
         // a quiet UART), so dropping it here costs nothing.
         .rx_valid    (rx_byte_valid && !npu_busy_u && !npu_start && !native_fault &&
-                      !(dg_rx_in_arg && (rx_byte_data == 8'hAA))),
+                      !dg_inject_mode && !dg_rx_in_arg),
         .rx_data     (rx_byte_data),
-        .tx_valid    (wl_tx_valid),
-        .tx_data     (wl_tx_data),
+        .tx_valid    (wlu_tx_valid),
+        .tx_data     (wlu_tx_data),
         .tx_ready    (wl_tx_ready),
         .cmd_valid   (wl_cmd_valid),
         .cmd         (wl_cmd),
@@ -974,6 +987,49 @@ module instrec_top #(
         .err_addr    (wl_err_unused),
         .frame_cnt   (wl_cnt_unused),
         .digest      (wl_digest_unused)
+    );
+
+    // ---- Serial PCM injection loader (diag 'I' mode) ----
+    //
+    // A second, otherwise identical loader aimed at DDR3 base 0x0, i.e. the
+    // first ping-pong PCM half.  The host pushes a whole 132096-sample window
+    // (264192 B = 1032 chunks of 256 B) with the same framed protocol the
+    // weight upload uses, so the CRC/ACK path is already proven at this size.
+    // diag_readback raises inject_mode for 'I' and drops it for 'X'; the 'T'
+    // command then starts mel on that window, which lets the whole inference
+    // chain run with **no analogue loop at all** (DAC -> 3.5 mm -> PCM1808 is
+    // the flakiest part of the bench).
+    wire        inj_cmd_valid, inj_wready, inj_rd_ready, inj_done;
+    wire [36:0] inj_cmd;
+    wire [255:0] inj_wdata;
+    wire        inj_busy, inj_ok_unused, inj_err_unused;
+    wire [27:0] inj_err_addr_unused;
+    wire [15:0] inj_frames_unused;
+    wire [31:0] inj_digest_unused;
+
+    weight_loader #(.BASE_ADDR(28'd0)) u_inject_loader (
+        .clk         (core_clk),
+        .rst_n       (core_clk_rst_n),
+        .rx_valid    (rx_byte_valid && !npu_busy_u && !npu_start && !native_fault &&
+                      dg_inject_mode),
+        .rx_data     (rx_byte_data),
+        .tx_valid    (inj_tx_valid),
+        .tx_data     (inj_tx_data),
+        .tx_ready    (wl_tx_ready),
+        .cmd_valid   (inj_cmd_valid),
+        .cmd         (inj_cmd),
+        .wdata       (inj_wdata),
+        .wready_beat (loader_m1_wready),
+        .done        (loader_m1_done),
+        .rd_ready    (inj_rd_ready),
+        .rd_data     (rd_data_1),
+        .rd_valid    (loader_m1_rvalid),
+        .busy        (inj_busy),
+        .weight_ok   (inj_ok_unused),
+        .weight_err  (inj_err_unused),
+        .err_addr    (inj_err_addr_unused),
+        .frame_cnt   (inj_frames_unused),
+        .digest      (inj_digest_unused)
     );
 
     // ---- NPU top (T-M2-06): instantiated but gated off until the mel

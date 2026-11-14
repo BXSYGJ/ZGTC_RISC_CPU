@@ -223,6 +223,14 @@ module mel_engine #(
     input  wire        win_tick,
     input  wire [15:0] win_id,
 
+    // Diagnostic window start (serial PCM injection): when the host has
+    // pushed a whole 132096-sample window into DDR over UART there is no
+    // audio_sink tick to start the engine, so the diag module pulses
+    // diag_tick and hands over the DDR base of the injected half.  Only
+    // honoured from ST_IDLE, exactly like win_tick.
+    input  wire        diag_tick,
+    input  wire [27:0] diag_base,
+
     // DDR3 master port 2 (per-master signals; instrec_top packs them
     // into the ddr3_ctrl_axi buses - m2_cmd level-held until done_m2).
     output reg         m2_cmd_valid,
@@ -530,7 +538,7 @@ module mel_engine #(
             db_start_pulse  <= 1'b0;
             std_start_pulse <= 1'b0;
         end else begin
-            win_start_pulse <= (state == ST_IDLE) && win_tick;
+            win_start_pulse <= (state == ST_IDLE) && (win_tick || diag_tick);
             // The 259th frame_mel_done (frm_out == 258) completes the
             // full log2 spectrum including the reflect-lead frame 0.
             db_start_pulse  <= run_active && frame_mel_done
@@ -575,7 +583,7 @@ module mel_engine #(
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
             pc_credit <= 19'd0;
-        end else if ((state == ST_IDLE) && win_tick) begin
+        end else if ((state == ST_IDLE) && (win_tick || diag_tick)) begin
             pc_credit <= FILL_CREDIT[18:0];
         end else begin
             pc_credit <= pc_credit + (frame_fft_done ? HOP_CREDIT[18:0] : 19'd0)
@@ -597,7 +605,7 @@ module mel_engine #(
             pc_beat_cnt <= 5'd0;
             pc_beat_buf <= 256'd0;
             pc_samp_ph  <= 4'd0;
-        end else if ((state == ST_IDLE) && win_tick) begin
+        end else if ((state == ST_IDLE) && (win_tick || diag_tick)) begin
             pc_state    <= PC_IDLE;
             pc_cmd_cnt  <= 10'd0;
             pc_beat_cnt <= 5'd0;
@@ -793,7 +801,7 @@ module mel_engine #(
             end
             case (state)
                 ST_IDLE: begin
-                    if (win_tick) begin
+                    if (win_tick || diag_tick) begin
                         state    <= ST_RUN;
                         // audio_sink increments win_id on the SAME edge that
                         // raises win_tick, so the value visible here is already
@@ -804,7 +812,8 @@ module mel_engine #(
                         // corrupted the first frames of the window (measured
                         // 0-75 leading frames off by 2..60 dB, count varying
                         // per capture).
-                        win_base <= win_id[0] ? 28'd0 : PCM_WIN_STRIDE;
+                        win_base <= diag_tick ? diag_base
+                                              : (win_id[0] ? 28'd0 : PCM_WIN_STRIDE);
                         frm_out  <= 9'd0;
                         stats_seen <= 1'b0;
                         mel_cycle_cnt <= 32'd0;

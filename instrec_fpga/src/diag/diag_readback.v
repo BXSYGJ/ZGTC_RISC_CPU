@@ -72,6 +72,17 @@ module diag_readback #(
     // window lock request (audio_sink freezes new frames while high)
     output reg          diag_lock,
 
+    // Serial PCM injection handshake.
+    //   'I' -> inject_mode = 1: the top level routes UART bytes to the
+    //          injection loader (a second weight_loader aimed at DDR base 0)
+    //          and keeps the weight loader off the stream.
+    //   'X' -> inject_mode = 0.
+    //   'T' -> one-cycle mel_trigger: start mel on the injected window.
+    // Injection exists so inference can be exercised without the analogue
+    // loop (DAC -> 3.5 mm -> PCM1808), which is the flakiest part of the bench.
+    output reg          inject_mode,
+    output reg          mel_trigger,
+
     // Argument-collection flag: high while the FSM is swallowing the 4-byte
     // address + 2-byte length of an 'R'.  The top level lets 0xAA through on
     // this window only, because it otherwise drops every 0xAA byte (the
@@ -439,6 +450,8 @@ module diag_readback #(
             m3_cmd       <= 37'd0;
             m3_rd_ready  <= 1'b0;
             diag_lock    <= 1'b0;
+            inject_mode  <= 1'b0;
+            mel_trigger  <= 1'b0;
             st_win       <= 16'd0;
             st_lock      <= 1'b0;
             st_mel       <= 1'b0;
@@ -446,6 +459,7 @@ module diag_readback #(
             st_logits    <= 1'b0;
         end else begin
             msg_start <= 1'b0;
+            mel_trigger <= 1'b0;      // one-cycle pulse (set by 'T')
 
             case (state)
                 S_IDLE: begin
@@ -490,6 +504,24 @@ module diag_readback #(
                                 msg_kind    <= KIND_FRAME;
                                 msg_start   <= 1'b1;
                                 state       <= S_TX;
+                            end
+                            8'h49: begin            // 'I' inject mode on
+                                inject_mode <= 1'b1;
+                                msg_kind  <= KIND_K;
+                                msg_start <= 1'b1;
+                                state     <= S_TX;
+                            end
+                            8'h58: begin            // 'X' inject mode off
+                                inject_mode <= 1'b0;
+                                msg_kind  <= KIND_K;
+                                msg_start <= 1'b1;
+                                state     <= S_TX;
+                            end
+                            8'h54: begin            // 'T' trigger mel once
+                                mel_trigger <= 1'b1;
+                                msg_kind  <= KIND_K;
+                                msg_start <= 1'b1;
+                                state     <= S_TX;
                             end
                             8'h52: begin            // 'R'
                                 arg_addr <= 32'd0;

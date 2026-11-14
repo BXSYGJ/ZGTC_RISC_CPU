@@ -91,6 +91,8 @@ module tb_mel_engine_48k;
         .rst_n        (rst_n),
         .win_tick     (win_tick),
         .win_id       (win_id),
+        .diag_tick    (1'b0),
+        .diag_base    (28'd0),
         .m2_cmd_valid (m2_cmd_valid),
         .m2_cmd       (m2_cmd),
         .m2_wdata     (m2_wdata),
