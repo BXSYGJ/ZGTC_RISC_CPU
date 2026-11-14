@@ -1,10 +1,12 @@
 # InstRec-FPGA 当前状态（STATUS）
 
-> **2026-11-14 当前：同步块RAM GAP方案在100Pro+完成全部布线，正在修复保持时间**。唯一完整PDS flow为 `full-20261114-111645-full`，父进程35636，runner47328；109.375MHz系统/148.5MHz像素，normal/seed4/12轮hold修复，时限180分钟。202项冻结输入与Git检出一致。映射37548LUT/46422FF/826DistributedRAM/129DRM/94APM，详细布局后最差裕量+0.801ns、TNS0；详细布线在539轮/1051.12秒完成，104088条子网全部连通。最终布线时序待验。
+> **2026-11-14 当前：83.333333MHz配套DDR与短FIFO寄存器方案已通过功能验证，准备完整实现**。111645的109.375MHz构建六阶段完成、退出0、202份冻结输入未变，最终slow setup -1.839ns、slow hold -0.160ns、fast hold -0.162ns，像素setup +0.782ns，qualified=false。位流和最终十表保留；37271LUT/46426FF/826DistributedRAM/129DRM/94APM。setup已转移到层号经池化启动/反压至池化RAM写使能及DDR校准逻辑；hold位于DDR读FIFO和CPU UART FIFO的LUT-RAM写地址。
 >
 > GAP使用同步块RAM和一拍读改写流水，按255×4×16=16320上界配置14位无符号存储。同一通道重访间隔至少16个有效拍；S_DRAIN提交末样本并预读通道0，之后每拍一输出。该实现保留round-half-even数值语义，以块RAM替代256×32位逻辑累加寄存器组及大读出选择器。综合报告已确认acc_mem为256×14、SIMPLE_DUAL_PORT、GTP_DRM18K_E1，没有该RAM的属性忽略警告。
 >
-> 三组控制实验 `gap_sync_bram_20261114` 全部通过，权重13项、GAP三帧768输出和768读回均正确；RTL81文件零违例，31文件独立回退恢复原CPU460012周期及全部原始哈希。完整NPU目录 `cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram` 已通过，各层golden精确，控制器31,152,094周期、固件结果计数31,152,093，331次CPU DDR请求/返回；相对上一版增加1周期。当前源保持冻结，下一步验收十张最终快慢角时序表与位流，再运行audit_final_acceptance.py逐项核对物理、功能、输入及四件交付。
+> DDR读FIFO的16×256位及CPU UART FIFO的16×8位均改成显式标量寄存器组，深度、push/pop及组合读出时序保持。厂商规则对687.5Mbps请求生成666.666667Mbps实际DDR速率，系统83.333333MHz；配套IP、FDC、UART分频723及音频补样1736拍等六份配置同步应用，像素148.5MHz与音频48kHz独立。625Mbps请求实际生成583.333333Mbps，仅留作生成记录，未启用。
+>
+> CPU四组及标准测试、共享DDR五组含996检查、实际系统时钟/分频的四路32字节UART、31文件独立回退全部通过。完整NPU目录 `cpu_native_joint_pacerv_h3_imc_timing_fifo_registers_83m333` 各层golden精确，控制器31,152,094周期、固件31,152,093，331次CPU DDR请求/返回；CPU固定循环仍180016周期。连续音频 `audio_clock/20261114-123646` 在125MHz和83333333Hz各验证两个132096帧窗口，稳定第二窗全真实输入、补零/溢出/超时均0。权重/GAP未再变，三组控制实验继续匹配。下一步冻结新完整run，normal/seed5/hold12、180分钟，核对两项FIFO的实际映射、最终十表与位流，再执行完整验收审计。
 
 ## 上一接续检查点（以下为111645之前的记录）
 

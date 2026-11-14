@@ -165,10 +165,25 @@ module ddr3_ctrl_axi #(
 
     // 16 x 256-bit elastic read fifo (depth = max burst length).
     localparam RD_FIFO_DEPTH = 16;
-    reg [255:0] rd_fifo_mem [0:RD_FIFO_DEPTH-1];
+    // Scalar words retain flop storage and avoid LUT-RAM write-address holds.
+    wire [RD_FIFO_DEPTH*256-1:0] rd_fifo_words;
     reg [3:0]   rd_fifo_wr_ptr;
     reg [3:0]   rd_fifo_rd_ptr;
     reg [4:0]   rd_fifo_count;
+
+    genvar rd_fifo_slot;
+    generate
+        for (rd_fifo_slot = 0; rd_fifo_slot < RD_FIFO_DEPTH;
+             rd_fifo_slot = rd_fifo_slot + 1) begin : g_rd_fifo
+            reg [255:0] data_word;
+            assign rd_fifo_words[rd_fifo_slot*256 +: 256] = data_word;
+            always @(posedge clk) begin
+                if (rst_n && (state == S_R) && axi_rvalid &&
+                    (rd_fifo_wr_ptr == rd_fifo_slot))
+                    data_word <= axi_rdata;
+            end
+        end
+    endgenerate
 
     // ------------------------------------------------------------------
     // Arbitration (ddr3_arbiter instance)
@@ -254,7 +269,7 @@ module ddr3_ctrl_axi #(
 
     // Read fifo drain: data routes to the master that owns the fifo.
     wire rd_fifo_pop = (rd_fifo_count != 5'd0) && rd_ready[cur_rd_master];
-    wire [255:0] rd_fifo_head = rd_fifo_mem[rd_fifo_rd_ptr];
+    wire [255:0] rd_fifo_head = rd_fifo_words[{rd_fifo_rd_ptr, 8'd0} +: 256];
 
     assign rd_valid = (rd_fifo_count != 5'd0) ? (4'b0001 << cur_rd_master)
                                               : 4'b0000;
@@ -308,7 +323,6 @@ module ddr3_ctrl_axi #(
             // Push happens while S_R streams beats; pop happens whenever
             // the drain master asserts ready with data available.
             if ((state == S_R) && axi_rvalid) begin
-                rd_fifo_mem[rd_fifo_wr_ptr] <= axi_rdata;
                 rd_fifo_wr_ptr <= rd_fifo_wr_ptr + 4'd1;
             end
             if (rd_fifo_pop) begin

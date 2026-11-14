@@ -10,7 +10,7 @@
 //   clk       27 MHz board crystal (D18), reference of video GPLL
 //   clk_nco   27 MHz audio processing clock (alias of board clk)
 //   pix_clk   148.5 MHz pixel clock (hdmi_tx_if / demo GPLL_B IP)
-//   core_clk  109.375 MHz DDR3 controller user clock (ddr3_wrapper IP output)
+//   core_clk  83.3333 MHz DDR3 controller user clock (ddr3_wrapper IP output)
 //
 // Reset tree (design doc section 1.3):
 //   rst_n     asynchronous board reset (KEY0, C22)
@@ -408,7 +408,7 @@ module instrec_top #(
         end
     end
 
-    audio_sink #(.INJECT_GAP_CYCLES(14'd2279), .WR_TIMEOUT_CYCLES(23'd3670016)) u_audio_sink (
+    audio_sink #(.INJECT_GAP_CYCLES(14'd1736), .WR_TIMEOUT_CYCLES(23'd2796203)) u_audio_sink (
         .clk           (core_clk),
         .rst_n         (core_clk_rst_n),
         .fifo_rd_en    (fifo_rd_en),
@@ -706,7 +706,7 @@ module instrec_top #(
     assign m2_wdata      = mel_m2_wdata;
     assign axi_rvalid_ctrl = ddr_init_done && axi_rvalid;
 
-    ddr3_ctrl_axi #(.M3_MASK_ENABLE(1), .P3_QUOTA_TIMEOUT(109375)) u_ddr3_ctrl_axi (
+    ddr3_ctrl_axi #(.M3_MASK_ENABLE(1), .P3_QUOTA_TIMEOUT(83333)) u_ddr3_ctrl_axi (
         .clk            (core_clk),
         .rst_n          (core_clk_rst_n),
         .cmd_valid      (ddr_cmd_valid),
@@ -873,7 +873,7 @@ module instrec_top #(
 
     wire weight_start_unused;
 
-    sys_ctrl #(.PLL_TIMEOUT_CYCLES(546875000), .DDR_TIMEOUT_CYCLES(10937500)) u_sys_ctrl (
+    sys_ctrl #(.PLL_TIMEOUT_CYCLES(416666665), .DDR_TIMEOUT_CYCLES(8333333)) u_sys_ctrl (
         .weight_ok    (weight_ok),
         .weight_err   (weight_err),
         .weight_start (weight_start_unused),
@@ -946,7 +946,7 @@ module instrec_top #(
     wire        cpu_npu_start;
     wire        cpu_tx_ready;
 
-    uart_tx #(.BAUD_DIV(949)) u_uart_tx (
+    uart_tx #(.BAUD_DIV(723)) u_uart_tx (
         .clk         (core_clk),
         .rst_n       (core_clk_rst_n),
         .byte_wdata  (wl_tx_valid ? wl_tx_data :
@@ -963,7 +963,7 @@ module instrec_top #(
     assign cpu_tx_ready = tx_accept_ready & ~wl_tx_valid & ~dbg_tx_valid & ~dg_tx_valid;
     assign dg_tx_ready  = tx_accept_ready & ~wl_tx_valid & ~dbg_tx_valid;
 
-    uart_rx #(.BAUD_DIV(949)) u_uart_rx (
+    uart_rx #(.BAUD_DIV(723)) u_uart_rx (
         .clk         (core_clk),
         .rst_n       (core_clk_rst_n),
         .uart_rxd    (uart_rx),

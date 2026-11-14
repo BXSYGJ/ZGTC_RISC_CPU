@@ -9,12 +9,12 @@
 
 # ---- Clocks: differential 125 MHz reference -> DDR controller core clocks ----
 create_clock -name {ref_clk} [get_ports {ref_clk_p}] -period {8.000} -waveform {0.000 4.000}
-create_generated_clock -name {rst_clk} -source [get_ports {ref_clk_p}] [get_pins {ddr3_wrapper.I_ips_ddr_top.u_ddrphy_top.rst_clk_gpll/clkout0}] -master_clock [get_clocks {ref_clk}] -multiply_by {14} -divide_by {14}
-create_generated_clock -name {ddrphy_sysclk} -source [get_ports {ref_clk_p}] [get_pins {ddr3_wrapper.I_ips_ddr_top.u_ddrphy_top.ddrphy_gpll/clkout0}] -master_clock [get_clocks {ref_clk}] -multiply_by {14} -divide_by {16}
-create_generated_clock -name {phy_dq_clk_0} -source [get_ports {ref_clk_p}] [get_pins {ddr3_wrapper.I_ips_ddr_top.u_ddrphy_top.ddrphy_slice_top.i_dqs_bank[0].ddrphy_ppll/clkoutphy}] -master_clock [get_clocks {ref_clk}] -multiply_by {14} -divide_by {2}
+create_generated_clock -name {rst_clk} -source [get_ports {ref_clk_p}] [get_pins {ddr3_wrapper.I_ips_ddr_top.u_ddrphy_top.rst_clk_gpll/clkout0}] -master_clock [get_clocks {ref_clk}] -multiply_by {16} -divide_by {16}
+create_generated_clock -name {ddrphy_sysclk} -source [get_ports {ref_clk_p}] [get_pins {ddr3_wrapper.I_ips_ddr_top.u_ddrphy_top.ddrphy_gpll/clkout0}] -master_clock [get_clocks {ref_clk}] -multiply_by {16} -divide_by {24}
+create_generated_clock -name {phy_dq_clk_0} -source [get_ports {ref_clk_p}] [get_pins {ddr3_wrapper.I_ips_ddr_top.u_ddrphy_top.ddrphy_slice_top.i_dqs_bank[0].ddrphy_ppll/clkoutphy}] -master_clock [get_clocks {ref_clk}] -multiply_by {16} -divide_by {3}
 create_generated_clock -name {phy_dq_sysclk_0} -source [get_pins {ddr3_wrapper.I_ips_ddr_top.u_ddrphy_top.ddrphy_slice_top.i_dqs_bank[0].ddrphy_ppll/clkoutphy}] [get_pins {ddr3_wrapper.I_ips_ddr_top.u_ddrphy_top.ddrphy_slice_top.i_dqs_bank[0].u_ddrphy_ioclkdiv/CLKDIVOUT}] -master_clock [get_clocks {phy_dq_clk_0}] -edges {5 13 21} -edge_shift {0 0 0}
 set_multicycle_path 2 -from [get_clocks ddrphy_sysclk] -to [get_clocks phy_dq_sysclk_0]
-create_generated_clock -name {phy_dq_clk_1} -source [get_ports {ref_clk_p}] [get_pins {ddr3_wrapper.I_ips_ddr_top.u_ddrphy_top.ddrphy_slice_top.i_dqs_bank[1].ddrphy_ppll/clkoutphy}] -master_clock [get_clocks {ref_clk}] -multiply_by {14} -divide_by {2}
+create_generated_clock -name {phy_dq_clk_1} -source [get_ports {ref_clk_p}] [get_pins {ddr3_wrapper.I_ips_ddr_top.u_ddrphy_top.ddrphy_slice_top.i_dqs_bank[1].ddrphy_ppll/clkoutphy}] -master_clock [get_clocks {ref_clk}] -multiply_by {16} -divide_by {3}
 create_generated_clock -name {phy_dq_sysclk_1} -source [get_pins {ddr3_wrapper.I_ips_ddr_top.u_ddrphy_top.ddrphy_slice_top.i_dqs_bank[1].ddrphy_ppll/clkoutphy}] [get_pins {ddr3_wrapper.I_ips_ddr_top.u_ddrphy_top.ddrphy_slice_top.i_dqs_bank[1].u_ddrphy_ioclkdiv/CLKDIVOUT}] -master_clock [get_clocks {phy_dq_clk_1}] -edges {5 13 21} -edge_shift {0 0 0}
 set_multicycle_path 2 -from [get_clocks ddrphy_sysclk] -to [get_clocks phy_dq_sysclk_1]
 set_clock_uncertainty {0.4} -from [get_clocks {ddrphy_sysclk}] -to [get_clocks {phy_dq_sysclk_0}] -setup -hold

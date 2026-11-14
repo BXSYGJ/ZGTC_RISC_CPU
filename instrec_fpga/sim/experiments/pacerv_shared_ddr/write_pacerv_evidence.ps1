@@ -39,6 +39,7 @@ try {
     $lines = [System.Collections.Generic.List[string]]::new()
     $lines.Add('PaceRV shared DDR bridge verification')
     $lines.Add('Changed fields: M3_MASK_ENABLE=0 legacy default / m3_wstrb byte mask; CPU APP/OBS range decode; M3 locked ownership, round-robin, drain completion and abort termination.')
+    $lines.Add('The 16 x 256-bit read FIFO uses scalar register words to remove LUT-RAM write-address hold paths; push/pop, depth and combinational head timing are preserved.')
     $lines.Add('APP CPU 0x40000000..0x400fffff maps to DDR 0x00600000..0x006fffff. OBS CPU 0x41000000..0x415fffff reads only existing legal PCM/weight/spectrum/self-test/activation windows. CPU word-bus requests require address[1:0]=0; data/strobes encode subword stores.')
     $lines.Add('Dummy write remains zero mask. Byte addresses are shifted right by two only at the IP boundary. The new TB indexes the IP word address right by three with no address truncation.')
     $lines.Add('M3 client done preserves the raw hardware-completion edge, including final write-ready. Ownership/read routing stay locked until registered done plus full read drain. Abort forwards an owner termination with its error. CPU-only timeout freezes payload, drains late traffic and preserves subsequent diagnostic service.')

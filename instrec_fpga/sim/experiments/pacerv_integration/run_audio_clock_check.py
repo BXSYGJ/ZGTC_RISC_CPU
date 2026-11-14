@@ -6,8 +6,10 @@ import datetime as dt
 import hashlib
 import json
 from pathlib import Path
+import re
 import subprocess
 import time
+import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[3]
 VERILATOR = "/home/bx/.local/src/verilator-5.040/bin/verilator"
@@ -41,6 +43,14 @@ def main() -> int:
                ("i2s_slave_rx.v", "audio_cdc_fifo.v", "audio_sink.v")]
     original_tb = ROOT / "sim/tb_audio_chain.sv"
     top = ROOT / "src/ctrl/instrec_top.v"
+    parameters = {p.findtext('name'): p.findtext('value') for p in ET.parse(
+        ROOT / 'ipcore/ddr3_test/ddr3_test.idf').findall('./param_list/param')}
+    selected_hz = round(float(parameters['ACTUAL_RATE']) * 1e6 / 8)
+    timing = re.search(r"audio_sink\s*#\(\.INJECT_GAP_CYCLES\(14'd(\d+)\),\s*"
+                       r"\.WR_TIMEOUT_CYCLES\(23'd(\d+)\)\)\s*u_audio_sink", top.read_text(encoding='utf-8'))
+    expected = (round(selected_hz / 48000), round(4194304 * selected_hz / 125000000))
+    if not timing or tuple(map(int, timing.groups())) != expected:
+        raise RuntimeError('Production audio parameters differ from the actual DDR user clock')
     monitored = [*sources, original_tb, top, ROOT / "ipcore/ddr3_test/ddr3_test.idf",
                  ROOT / "constraints/ddr3_100h.fdc"]
     inputs = {str(p): sha(p) for p in monitored}
@@ -104,10 +114,11 @@ def main() -> int:
 
     print("AUDIO_CLOCK_PREPARED " + str(out), flush=True)
     with concurrent.futures.ThreadPoolExecutor(max_workers=2) as pool:
-        reports = list(pool.map(case, (125000000, 109375000)))
+        reports = list(pool.map(case, tuple(dict.fromkeys((125000000, selected_hz)))))
     unchanged = all(sha(Path(name)) == expected for name, expected in inputs.items())
     report = {"scope": "Physical-rate I2S, CDC FIFO and production audio sink; behavioural DDR completion",
               "audio_sample_rate_hz": 48000, "window_frames": 132096, "windows_per_case": 2,
+              "selected_system_clock_hz": selected_hz,
               "inputs_sha256": inputs, "live_inputs_unchanged": unchanged,
               "cases": reports, "passed": unchanged and all(r["passed"] for r in reports)}
     (out / "RESULT.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")

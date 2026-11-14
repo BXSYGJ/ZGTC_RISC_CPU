@@ -17,11 +17,11 @@ module  ddr3_test_ddrphy_top  #(
 
   parameter [7:0]   TMOD         =  12/4   ,
   
-  parameter [7:0]   TXPR         =  34     ,
+  parameter [7:0]   TXPR         =  26     ,
   
   parameter [7:0]   TRP          =  2     ,
   
-  parameter [7:0]   TRFC         =  33     ,
+  parameter [7:0]   TRFC         =  25     ,
     
   parameter [7:0]   TRCD         =  2     ,
   
@@ -150,9 +150,9 @@ localparam EYECAL_EN    =  1         ;
 
 localparam PPLL_IDIV    =  1         ;
 
-localparam PPLL_FDIV    =  14         ;
+localparam PPLL_FDIV    =  16         ;
 
-localparam PPLL_ODIVPHY =  2         ;
+localparam PPLL_ODIVPHY =  3         ;
 
 
 localparam TEST_DATA_PATTERN0  = 64'h55_aa_55_aa_08_f7_08_f7;
@@ -179,13 +179,13 @@ localparam      GPLL_INTERNAL_FB = "CLKOUTF" ;
 //MR0_DDR3
 localparam [0:0] DDR3_PPD      = 1'b1;
 
-localparam [2:0] DDR3_WR       = 3'd3; 
+localparam [2:0] DDR3_WR       = 3'd1; 
 
 localparam [0:0] DDR3_DLL      = 1'b1;
 localparam [0:0] DDR3_TM       = 1'b0;
 localparam [0:0] DDR3_RBT      = 1'b0;
 
-localparam [3:0] DDR3_CL       = 4'd6;
+localparam [3:0] DDR3_CL       = 4'd4;
 
 localparam [1:0] DDR3_BL       = 2'b00;
 localparam [15:0] MR0_DDR3     = {3'b000, DDR3_PPD, DDR3_WR, DDR3_DLL, DDR3_TM, DDR3_CL[3:1], DDR3_RBT, DDR3_CL[0], DDR3_BL};
@@ -208,7 +208,7 @@ localparam [1:0] DDR3_RTT_WR   = 2'b00;
 localparam [0:0] DDR3_SRT      = 1'b0;
 localparam [0:0] DDR3_ASR      = 1'b0;
 
-localparam [2:0] DDR3_CWL      = 6 - 5;
+localparam [2:0] DDR3_CWL      = 5 - 5;
 
 localparam [2:0] DDR3_PASR     = 3'b000;
 localparam [15:0] MR2_DDR3     = {5'b00000, DDR3_RTT_WR, 1'b0, DDR3_SRT, DDR3_ASR, DDR3_CWL, DDR3_PASR};
@@ -266,7 +266,7 @@ localparam [15:0] EMR_LPDDR    = {8'd0,LPDDR_DS,5'd0};
 localparam [9:0]   TZQINIT      =  10'd128 ;
 
 
-localparam DFI_CLK_PERIOD =  9142;
+localparam DFI_CLK_PERIOD =  12000;
 
 
 `ifdef IPS_DDR_SPEEDUP_SIM                                                  

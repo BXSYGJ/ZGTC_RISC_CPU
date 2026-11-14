@@ -1,4 +1,4 @@
-# PaceRV and system DDR user logic share the 109.375 MHz user clock.
+# PaceRV and system DDR user logic share the 83.3333 MHz user clock.
 # Load after ddr3_100h.fdc and clock_groups_async.fdc.
 # Explicit clock-to-clock form gives one 0.150 ns path budget. The clock-only
 # form is applied to both ends by this PDS release (0.300 ns on a self path).

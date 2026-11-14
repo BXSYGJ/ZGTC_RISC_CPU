@@ -335,7 +335,8 @@ def main() -> None:
              "four-source UART acceptance, registered MMIO/activation/DDR commands, synchronous FC",
              "coefficient RAM, seven-clock display alignment, FETCH_ADDRESS_BITS=IAW+2 ROM qualification,",
              "register-based short weight FIFOs, digest_q/rdigest_q checksum staging,",
-             "GAP synchronous block-RAM accumulator pipeline and matched actual DDR/system clock configuration.",
+             "GAP synchronous block-RAM accumulator pipeline, scalar DDR/UART FIFO registers,",
+             "and matched actual DDR/system clock configuration.",
              "", "Selected gates: " + json.dumps(verdict),
              "Physical status: " + json.dumps({label: item.get('status', 'complete')
                                              for label, item in physical.items()}), "",

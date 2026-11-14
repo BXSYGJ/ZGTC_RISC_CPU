@@ -298,7 +298,8 @@ module rv32_cpu_subsys #(
     // =====================================================================
     // UART transmit FIFO (16 bytes)
     // =====================================================================
-    reg [7:0]  txq [0:15];
+    // Scalar words retain flop storage and avoid LUT-RAM write-address holds.
+    wire [127:0] txq_words;
     reg [4:0]  tx_wr, tx_rd;
 
     wire [4:0] tx_count  = tx_wr - tx_rd;
@@ -307,7 +308,19 @@ module rv32_cpu_subsys #(
     wire       tx_ready  = (tx_count != 5'd16);
 
     assign uart_valid = (tx_count != 5'd0);
-    assign uart_data  = txq[tx_rd[3:0]];
+    assign uart_data  = txq_words[{tx_rd[3:0], 3'd0} +: 8];
+
+    genvar txq_slot;
+    generate
+        for (txq_slot = 0; txq_slot < 16; txq_slot = txq_slot + 1) begin : g_txq
+            reg [7:0] data_word;
+            assign txq_words[txq_slot*8 +: 8] = data_word;
+            always @(posedge clk) begin
+                if (rst_n && tx_push && (tx_wr[3:0] == txq_slot))
+                    data_word <= d_req_data[7:0];
+            end
+        end
+    endgenerate
 
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
@@ -315,7 +328,6 @@ module rv32_cpu_subsys #(
             tx_rd <= 5'd0;
         end else begin
             if (tx_push) begin
-                txq[tx_wr[3:0]] <= d_req_data[7:0];
                 tx_wr <= tx_wr + 5'd1;
             end
             if (uart_valid && uart_ready) begin

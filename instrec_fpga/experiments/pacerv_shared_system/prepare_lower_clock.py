@@ -32,8 +32,8 @@ def main() -> None:
     if not clock["commands_passed"] or not clock["live_ip_unchanged"]:
         raise ValueError("DDR generation must have passed")
     hz = int(clock["system_clock_hz"])
-    if hz not in (109375000, 93750000) or args.seed < 1:
-        raise ValueError("Use an evaluated 109.375 or 93.75 MHz point and a positive seed")
+    if hz not in (109375000, 93750000, 83333333) or args.seed < 1:
+        raise ValueError("Use an evaluated 109.375, 93.75 or 83.333333 MHz point and a positive seed")
     generated = directory / "ddr3_test"
     live_ip = ROOT / "ipcore/ddr3_test"
     for relative, expected in clock["original_ip_hashes"].items():

@@ -147,3 +147,15 @@ collector会核对INTERRUPTION记录的manifest及stdout/stderr哈希，并在RE
 111645已完成详细布局（最差+0.801ns、TNS0）并进入详细布线，映射37548LUT/46422FF/826DistributedRAM/129DRM/94APM。新增audit_final_acceptance.py，最终collector完成后以--full-build指定同一实际run；审计六阶段、十张时序表、时钟与报告实际不确定性、资源、非空位流、冻结/活源/Git字节、十三项功能门槛、独立回退及四件artifact。当前真实未完成构建的负例退出2，输入与artifact两项通过，物理和全功能最终门槛未过；evidence/FINAL_ACCEPTANCE.json记录原因。最终必须取得退出0及GOAL_ACCEPTANCE_PASS后再完成目标。
 
 111645详细布线已于539轮/1051.12秒结束，全部104088子网连通。保持时间修复前三轮498.45/313.34/289.42秒，第四轮仍在计算；父35636、工作进程65832、runner47328保持同一flow。当前仍无最终验收结果，源码不变；819e38b提交后的202项CHECKOUT_INPUTS再次通过，mismatches=0。继续轮询同一runner，待其实际退出后检查最终十表和位流。
+
+## 当前覆盖：2026-11-14，83.333333MHz及短FIFO寄存器方案
+
+111645已完成六阶段、退出0，用时4293.93秒；全部202份冻结输入未变。最终十表完整但未合格：系统slow setup -1.839ns（1799失败端点）、slow hold -0.160ns（8）、fast hold -0.162ns（17）；像素slow setup +0.782ns。最差setup从u_npu/layer经pool_start/out_pop/accept_y到u_pool/od0_lo/WEA，另两条严重setup位于厂商DDR gate calibration。最差hold从rd_fifo_wr_ptr到综合命名pc_beat_buf的WADDR以及CPU tx_wr到txq/WADDR。GAP累加器已脱离上述最差路径。最终资源37271LUT/46426FF/826DistributedRAM/129DRM/94APM；报告SHA e47f5e6a40bccc1ea88da55f00b7a615739e9f647979754002b1e9a0d265db00，位流SHA 2e30e867f9506eebf1ea06a4ea288ad831f56708513a98188af881d5636f4ac4。父35636与runner47328已结束，当前未运行PDS。
+
+新DDR读FIFO16×256及CPU UART FIFO16×8采用generate内标量data_word，扁平向量组合选读，保持原深度、push/pop、原读出拍数。原始两份文件保存在build/pacerv_shared_system/short_fifo_registers_78125/original，CPU原hash3caa8296a806186ad62c247a872ab5746d0b0841335a0fa7b92184a8c6bcac99，DDR原hashf4850d3cebe8f296407319f4bbb1f570a45864f5dc27d605e7ac58caad4c994f。目录名来自最初频点设想，实际启用频率由下列厂商报告为准。
+
+prepare_ddr_clock --rate-mbps 687.5生成build/pacerv_shared_system/ddr_clock/20261114-123302-687.5：实际666.666667Mbps、83333333.333Hz系统时钟，23项参数变化，厂商规则与生成通过，原IP不变。625请求生成583.333333Mbps，未使用。prepare_lower_clock已支持83333333整数Hz，准备123333候选后应用其六项配置；原配置与新hash保存在short_fifo_registers_78125/clock_original/CLOCK_APPLICATION.json。UART723、audio注入1736拍，像素148.5MHz、采样48kHz与0.150ns不确定性保留。
+
+CPU四组、标准测试、DDR五组996检查、实际生产时钟与分频的四路32字节UART全部通过。完整NPU timing_fifo_registers_83m333（runner55926退出0）全层golden，控制器31152094、固件31152093，331次DDR。连续音频audio_clock/20261114-123646（runner70054退出0）125MHz/83333333Hz各两窗，稳定第二窗132096真实帧，零补样/溢出/超时。31文件回退runner34276退出0，原hash与460012周期恢复，活源不变。新的音频脚本从IP读取真实频率并核对生产audio参数；UART脚本核对生产分频并按真实位周期采样，移除固定4分频覆盖。
+
+下一步提交本轮源，再创建新的独立完整run，normal/seed5/hold12/180分钟；123333仅为准备和应用配置的快照，尚未启动。先核对短FIFO实际映射为FF，再等待最终十表与位流；最终collector改选新run、NPU timing_fifo_registers_83m333、UART clock_83m333_register_fifo、audio 20261114-123646，GAP控制实验仍gap_sync_bram_20261114，七拍显示目录不变。最终需audit_final_acceptance退出0和GOAL_ACCEPTANCE_PASS，目标继续active。

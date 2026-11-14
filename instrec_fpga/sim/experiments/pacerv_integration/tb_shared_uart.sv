@@ -1,13 +1,16 @@
 `timescale 1ns/1ps
 // Exercise the production top's actual UART arbitration. Unrelated IP is
 // left unelaborated with Icarus -i; the real UART transmitter remains present.
-module tb_shared_uart;
+module tb_shared_uart #(
+    parameter real CLOCK_HALF_NS = 4.0,
+    parameter integer SERIAL_BAUD_DIV = 4
+);
+    localparam real BIT_NS = CLOCK_HALF_NS * 2.0 * SERIAL_BAUD_DIV;
     reg clk=0,rst_n=0;
-    always #4 clk=~clk;
+    always #(CLOCK_HALF_NS) clk=~clk;
     wire tx;
     instrec_top dut(.clk(clk),.rst_n(rst_n),.key1_n(1'b1),.uart_rx(1'b1),.uart_tx(tx),
         .i2s_bck(1'b0),.i2s_lrck(1'b0),.i2s_sd(1'b0),.ref_clk_p(clk),.ref_clk_n(!clk));
-    defparam dut.u_uart_tx.BAUD_DIV=4;
     reg [3:0] valid=0;
     wire w_valid=valid[3],b_valid=valid[2],d_valid=valid[1],c_valid=valid[0];
     reg [7:0] w_data=8'h10,b_data=8'h30,d_data=8'h50,c_data=8'h70;
@@ -25,7 +28,7 @@ module tb_shared_uart;
         repeat(8) @(negedge clk);
         rst_n=1;
         valid=4'hf;
-        #100000; $fatal(1,"Shared UART timeout accepted=%0d received=%0d",accepted,received);
+        #(BIT_NS * 600.0); $fatal(1,"Shared UART timeout accepted=%0d received=%0d",accepted,received);
     end
     always @(posedge clk) if(rst_n) begin
         pops=0;
@@ -56,9 +59,9 @@ module tb_shared_uart;
         end
     end
     initial forever begin
-        @(negedge tx); #48;
+        @(negedge tx); #(BIT_NS * 1.5);
         for(bit_index=0;bit_index<8;bit_index=bit_index+1) begin
-            value[bit_index]=tx; #32;
+            value[bit_index]=tx; #(BIT_NS);
         end
         if(tx!==1 || value!==expected[received])
             $fatal(1,"Shared UART wire mismatch byte=%0d got=%h expected=%h",received,value,expected[received]);

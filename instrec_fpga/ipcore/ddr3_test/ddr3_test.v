@@ -133,13 +133,13 @@ module ddr3_test #(
 //MR0_DDR3
 localparam [0:0] DDR3_PPD      = 1'b1;
 
-localparam [2:0] DDR3_WR       = 3'd3; 
+localparam [2:0] DDR3_WR       = 3'd1; 
 
 localparam [0:0] DDR3_DLL      = 1'b1;
 localparam [0:0] DDR3_TM       = 1'b0;
 localparam [0:0] DDR3_RBT      = 1'b0;
 
-localparam [3:0] DDR3_CL       = 4'd6;
+localparam [3:0] DDR3_CL       = 4'd4;
 
 localparam [1:0] DDR3_BL       = 2'b00;
 localparam [15:0] MR0_DDR3     = {3'b000, DDR3_PPD, DDR3_WR, DDR3_DLL, DDR3_TM, DDR3_CL[3:1], DDR3_RBT, DDR3_CL[0], DDR3_BL};
@@ -162,7 +162,7 @@ localparam [1:0] DDR3_RTT_WR   = 2'b00;
 localparam [0:0] DDR3_SRT      = 1'b0;
 localparam [0:0] DDR3_ASR      = 1'b0;
 
-localparam [2:0] DDR3_CWL      = 6 - 5;
+localparam [2:0] DDR3_CWL      = 5 - 5;
 
 localparam [2:0] DDR3_PASR     = 3'b000;
 localparam [15:0] MR2_DDR3     = {5'b00000, DDR3_RTT_WR, 1'b0, DDR3_SRT, DDR3_ASR, DDR3_CWL, DDR3_PASR};
@@ -226,37 +226,37 @@ localparam DDR_TYPE = (MEM_TYPE == "DDR3") ? 2'b00 : (MEM_TYPE == "DDR2") ? 2'b0
 
   localparam [7:0]   PHY_TMOD         =  12/4   ;
   
-  localparam [7:0]   PHY_TXPR         =  34   ;
+  localparam [7:0]   PHY_TXPR         =  26   ;
   
   localparam [7:0]   PHY_TRP          =  2   ;
   
-  localparam [7:0]   PHY_TRFC         =  33   ;
+  localparam [7:0]   PHY_TRFC         =  25   ;
     
   localparam [7:0]   PHY_TRCD         =  2   ;
             
   localparam DDRC_TXSDLL               = 512  ;
    
-  localparam DDRC_TXP                  = 4   ;
+  localparam DDRC_TXP                  = 3   ;
  
-  localparam DDRC_TFAW                 = 19   ;
+  localparam DDRC_TFAW                 = 15   ;
 
-  localparam DDRC_TRAS                 = 17   ;
+  localparam DDRC_TRAS                 = 13   ;
    
-  localparam DDRC_TRCD                 = 6   ;
+  localparam DDRC_TRCD                 = 5   ;
     
-  localparam DDRC_TREFI                = 3412   ;
+  localparam DDRC_TREFI                = 2600   ;
    
-  localparam DDRC_TRFC                 = 132   ;
+  localparam DDRC_TRFC                 = 100   ;
      
-  localparam DDRC_TRC                  = 22   ;
+  localparam DDRC_TRC                  = 17   ;
 
-  localparam DDRC_TRP                  = 6   ;
+  localparam DDRC_TRP                  = 5   ;
 
-  localparam DDRC_TRRD                 = 5   ;  
+  localparam DDRC_TRRD                 = 4   ;  
 
   localparam DDRC_TRTP                 = 4   ;
 
-  localparam DDRC_TWR                  = 7   ;
+  localparam DDRC_TWR                  = 5   ;
 
   localparam DDRC_TWTR                 = 4    ;
  
