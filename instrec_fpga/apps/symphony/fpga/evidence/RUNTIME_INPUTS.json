@@ -1,0 +1,28 @@
+{
+  "passed": true,
+  "scope": "8-class UART weight framing only; no serial port opened",
+  "files": [
+    {
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\scripts\\weight_upload.py",
+      "bytes": 5763,
+      "sha256": "e70c3959988e7d34d68b4ea6e4cd9e09cebedb935c61de6f9ab14dd77d0b01f5"
+    },
+    {
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\scripts\\outputs\\weights_image.bin",
+      "bytes": 691040,
+      "sha256": "19a74dbec29d3a0f16ab06dc30f70312849977de0c6b345710b046b1908f5d7a"
+    }
+  ],
+  "command": [
+    "D:\\Anaconda\\python.exe",
+    "-X",
+    "utf8",
+    "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\scripts\\weight_upload.py",
+    "--image",
+    "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\scripts\\outputs\\weights_image.bin",
+    "--dry-run"
+  ],
+  "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga",
+  "output": "image D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\scripts\\outputs\\weights_image.bin: 691040 bytes, sha256 19a74dbec29d3a0f16ab06dc30f70312849977de0c6b345710b046b1908f5d7a\nframes: 2701 (including end frame)\nfirst frame: aa 55 00 00 00 01 49 52 57 31 06 00 01 00 60 8b ...\n",
+  "exit_status": 0
+}

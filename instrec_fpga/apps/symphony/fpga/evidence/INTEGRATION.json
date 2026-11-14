@@ -1,0 +1,180 @@
+{
+  "passed": true,
+  "started_utc": "2026-11-14T17:09:41.483923+00:00",
+  "scope": "Real state + renderer + real font/tile ROMs; actual physical-key pin gestures; accelerated ms divider only; RGB/DE/HS/VS checked at five pipeline stages",
+  "source_sha256": {
+    "apps/symphony/fpga/symphony_state.v": "8e11800f183bf63990e5653d64e93a3d35807520740e12f2cd7df4f3989109e0",
+    "apps/symphony/fpga/symphony_renderer.v": "fc0d9441296bde0d586c40bbd4f6fc3a71197fc4cbc697c2d2ae49ddb296d1c6",
+    "apps/symphony/fpga/sim/tb_symphony_integration.sv": "3438a891f7b00b787ee0126ab561443256da14e3f4f1e0c4d676d181047477f5",
+    "apps/symphony/fpga/sim/run_integration.py": "67535b9c244d91ad3624ca9f205738342ff8cbc71f174b9d81a714f90e90f519",
+    "apps/symphony/fpga/assets/symphony_font.hex": "6d7177a10fa8139210dcbd93c43795401a4d44855e460d7aa9f579dd69850887",
+    "apps/symphony/fpga/assets/symphony_guide.hex": "2044ac4a1dbea968c61d5fae452169a12b4c298be67abf04f60bdd16a8fc22e5",
+    "apps/symphony/fpga/assets/symphony_library.hex": "8150e1fe5a3aeeca82bea88e833f7da2625bed70d704f02c2f30590813854d49",
+    "apps/symphony/fpga/assets/ASSETS.json": "29683b5ddfebd2818052bcd05660201ae70c2309daee9b36533865bafcc539ea"
+  },
+  "input_sha256": {
+    "build/symphony/integration/20261115-010941-400001/inputs/apps/symphony/fpga/symphony_state.v": "8e11800f183bf63990e5653d64e93a3d35807520740e12f2cd7df4f3989109e0",
+    "build/symphony/integration/20261115-010941-400001/inputs/apps/symphony/fpga/symphony_renderer.v": "fc0d9441296bde0d586c40bbd4f6fc3a71197fc4cbc697c2d2ae49ddb296d1c6",
+    "build/symphony/integration/20261115-010941-400001/inputs/apps/symphony/fpga/sim/tb_symphony_integration.sv": "3438a891f7b00b787ee0126ab561443256da14e3f4f1e0c4d676d181047477f5",
+    "build/symphony/integration/20261115-010941-400001/inputs/apps/symphony/fpga/sim/run_integration.py": "67535b9c244d91ad3624ca9f205738342ff8cbc71f174b9d81a714f90e90f519",
+    "build/symphony/integration/20261115-010941-400001/inputs/apps/symphony/fpga/assets/symphony_font.hex": "6d7177a10fa8139210dcbd93c43795401a4d44855e460d7aa9f579dd69850887",
+    "build/symphony/integration/20261115-010941-400001/inputs/apps/symphony/fpga/assets/symphony_guide.hex": "2044ac4a1dbea968c61d5fae452169a12b4c298be67abf04f60bdd16a8fc22e5",
+    "build/symphony/integration/20261115-010941-400001/inputs/apps/symphony/fpga/assets/symphony_library.hex": "8150e1fe5a3aeeca82bea88e833f7da2625bed70d704f02c2f30590813854d49",
+    "build/symphony/integration/20261115-010941-400001/inputs/apps/symphony/fpga/assets/ASSETS.json": "29683b5ddfebd2818052bcd05660201ae70c2309daee9b36533865bafcc539ea"
+  },
+  "commands": [
+    {
+      "command": [
+        "D:\\AAAPP\\iverilog\\bin\\iverilog.EXE",
+        "-g2005-sv",
+        "-s",
+        "tb_symphony_integration",
+        "-o",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\symphony\\integration\\20261115-010941-400001\\integration.vvp",
+        "-DSYMPHONY_FONT_HEX=\"D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/symphony/integration/20261115-010941-400001/inputs/apps/symphony/fpga/assets/symphony_font.hex\"",
+        "-DSYMPHONY_GUIDE_HEX=\"D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/symphony/integration/20261115-010941-400001/inputs/apps/symphony/fpga/assets/symphony_guide.hex\"",
+        "-DSYMPHONY_LIBRARY_HEX=\"D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/symphony/integration/20261115-010941-400001/inputs/apps/symphony/fpga/assets/symphony_library.hex\"",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\symphony\\integration\\20261115-010941-400001\\inputs\\apps\\symphony\\fpga\\symphony_state.v",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\symphony\\integration\\20261115-010941-400001\\inputs\\apps\\symphony\\fpga\\symphony_renderer.v",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\symphony\\integration\\20261115-010941-400001\\inputs\\apps\\symphony\\fpga\\sim\\tb_symphony_integration.sv"
+      ],
+      "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga",
+      "exit_code": 0,
+      "output": "",
+      "log": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\symphony\\integration\\20261115-010941-400001\\compile.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "D:\\AAAPP\\iverilog\\bin\\vvp.EXE",
+        "-i",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\symphony\\integration\\20261115-010941-400001\\integration.vvp"
+      ],
+      "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga",
+      "exit_code": 0,
+      "output": "SYMPHONY_PIXEL x=30 y=280 rgb=36574a\nSYMPHONY_PIXEL x=480 y=310 rgb=ffffff\nSYMPHONY_PIXEL x=1410 y=904 rgb=75b79d\nSYMPHONY_PIXEL x=1590 y=394 rgb=75b79d\nSYMPHONY_PIXEL x=1610 y=394 rgb=ecf0e5\nSYMPHONY_PIXEL x=1798 y=394 rgb=ffffff\nSYMPHONY_PIXEL x=1410 y=888 rgb=ffffff\nSYMPHONY_PIXEL x=1410 y=888 rgb=244a36\nSYMPHONY_PIXEL x=1798 y=394 rgb=e8f2e2\nSYMPHONY_PIXEL x=30 y=280 rgb=18332e\nSYMPHONY_PIXEL x=480 y=310 rgb=dcebd8\nSYMPHONY_PIXEL x=1800 y=470 rgb=e8f2e2\nSYMPHONY_PIXEL x=1800 y=534 rgb=ffffff\nSYMPHONY_PIXEL x=1812 y=480 rgb=244a36\nSYMPHONY_PIXEL x=1800 y=470 rgb=ffffff\nSYMPHONY_PIXEL x=1800 y=534 rgb=e8f2e2\nSYMPHONY_PIXEL x=1812 y=544 rgb=e8f2e2\nSYMPHONY_PIXEL x=1812 y=544 rgb=244a36\nSYMPHONY_PIXEL x=1812 y=544 rgb=e8f2e2\nSYMPHONY_PIXEL x=30 y=280 rgb=36574a\nSYMPHONY_PIXEL x=30 y=280 rgb=36574a\nSYMPHONY_PIXEL x=300 y=280 rgb=f4f6ef\nSYMPHONY_PIXEL x=30 y=280 rgb=36574a\nSYMPHONY_INTEGRATION_PASS assertions=9 pixel_checks=23 sync_checks=145035 latency=5 retained=3 selected=1\nD:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\symphony\\integration\\20261115-010941-400001\\inputs\\apps\\symphony\\fpga\\sim\\tb_symphony_integration.sv:205: $finish called at 483496000 (1ps)\n",
+      "log": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\symphony\\integration\\20261115-010941-400001\\simulation.log",
+      "sha256": "c68d3bfe1032a2267a4723626a4b79a351345d0e0df9876dc0a6877cff55b982"
+    }
+  ],
+  "pixel_samples": [
+    {
+      "x": 30,
+      "y": 280,
+      "rgb": "36574a"
+    },
+    {
+      "x": 480,
+      "y": 310,
+      "rgb": "ffffff"
+    },
+    {
+      "x": 1410,
+      "y": 904,
+      "rgb": "75b79d"
+    },
+    {
+      "x": 1590,
+      "y": 394,
+      "rgb": "75b79d"
+    },
+    {
+      "x": 1610,
+      "y": 394,
+      "rgb": "ecf0e5"
+    },
+    {
+      "x": 1798,
+      "y": 394,
+      "rgb": "ffffff"
+    },
+    {
+      "x": 1410,
+      "y": 888,
+      "rgb": "ffffff"
+    },
+    {
+      "x": 1410,
+      "y": 888,
+      "rgb": "244a36"
+    },
+    {
+      "x": 1798,
+      "y": 394,
+      "rgb": "e8f2e2"
+    },
+    {
+      "x": 30,
+      "y": 280,
+      "rgb": "18332e"
+    },
+    {
+      "x": 480,
+      "y": 310,
+      "rgb": "dcebd8"
+    },
+    {
+      "x": 1800,
+      "y": 470,
+      "rgb": "e8f2e2"
+    },
+    {
+      "x": 1800,
+      "y": 534,
+      "rgb": "ffffff"
+    },
+    {
+      "x": 1812,
+      "y": 480,
+      "rgb": "244a36"
+    },
+    {
+      "x": 1800,
+      "y": 470,
+      "rgb": "ffffff"
+    },
+    {
+      "x": 1800,
+      "y": 534,
+      "rgb": "e8f2e2"
+    },
+    {
+      "x": 1812,
+      "y": 544,
+      "rgb": "e8f2e2"
+    },
+    {
+      "x": 1812,
+      "y": 544,
+      "rgb": "244a36"
+    },
+    {
+      "x": 1812,
+      "y": 544,
+      "rgb": "e8f2e2"
+    },
+    {
+      "x": 30,
+      "y": 280,
+      "rgb": "36574a"
+    },
+    {
+      "x": 30,
+      "y": 280,
+      "rgb": "36574a"
+    },
+    {
+      "x": 300,
+      "y": 280,
+      "rgb": "f4f6ef"
+    },
+    {
+      "x": 30,
+      "y": 280,
+      "rgb": "36574a"
+    }
+  ],
+  "sources_unchanged": true,
+  "inputs_unchanged": true,
+  "finished_utc": "2026-11-14T17:09:42.189195+00:00"
+}

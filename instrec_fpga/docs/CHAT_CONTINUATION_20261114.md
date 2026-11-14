@@ -1,5 +1,9 @@
 # Revise CPU paper for reviewers (2)：接续记录
 
+> **2026-11-15当前应用工作：** 用户要求交响乐可视化导赏＋识别窗口检索与标记，最终显示器只接FPGA。已采用KEY1短按选择、双击标记、长按切页，完成 `apps/symphony/fpga/` 原生1080p中文双页、64槽真实结果历史和筛选反馈。导赏短按选类别，长按进库后短按选匹配窗口，双击标记；历史按到达毫秒/序号记录、复位清空。浏览器版本保留为电脑开发预览。state235、实际按键像素联动23/同步145035、四帧8294400像素/9900436视频时钟及事件扩展独立回退均通过，最终renderer fc0d9441…96d1c6、state8e11800f…9109e0。
+>
+> 唯一run `build/rtos/pds/20261115-011139-symphony-native-full` 已完成编译/综合/映射和7148B实际程序ROM审计，212冻结输入不变；`continuations/20261114-172709-240059` 正按125MHz/seed2/hold8布局布线。此检查点新应用位流待生成。接续需跟完原run，收集DELIVERY和发布包并更新状态；原始202基线、旧125/109.375/RTOS成品保留，时序优化paused。实时状态以STATUS顶部为准。
+
 > 用户又要求同时上传之前的 125 MHz 与 109.375 MHz 基线。三版本统一入口为 `releases/RTOS_AND_BASELINES_20261114.md`，发布分支 `rtos125-integration`；原始基线成品在 `releases/selected-baselines-20261114/`，RTOS 成品在 `releases/rtos125-20261114-175148/`，原始 ZIP 和位流均按原 SHA256 保留。
 
 > 最新用户指令为上传 GitHub。发布分支 `rtos125-integration` 从已验收的 `12d7982` 建立，源码/验证记录与 `releases/rtos125-20261114-175148/` 的位流和交付 ZIP 一并提供；下载入口及原始哈希见该目录 README/RELEASE.json。本轮新增内容是发布归档及文档。

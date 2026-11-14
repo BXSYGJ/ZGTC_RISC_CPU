@@ -1516,3 +1516,11 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 
 - 新增releases/pacerv-instrec8-20261103独立源码包，冻结0c138d4f/1497FAF4真实推理系统，筛除未引用资产与开发注释，CPU本地化，保留175文件hash及原始验证身份。后续应用报告切换此源码依据。
 - 56份RTL token一致、固件ROM重建一致、独立PDS compile PASS/lint43零违规、安全与权重检查通过；未新综合/PNR/烧录，原时序与准确率结论保持，不混入五类或无NPU演示。导出脚本保存于scripts/freeze_instrec8_release.py。
+
+
+## 2026-11-15：原生 HDMI 导赏、识别窗口检索与 KEY1 标记
+
+- 新增 apps/symphony/fpga 的1080p中文两页、158字模与页面ROM、64条真实结果历史及分类筛选；KEY1短按选择、双击标记、900ms长按切页。显示器直接接FPGA，浏览器仅作开发预览。
+- 新增独立RTOS125副本集成：原bars_data增加真实frame_update脉冲，顶层路由KEY1；现有H3、8类NPU、FreeRTOS固件及202原始输入保持。
+- 实际state235、KEY1像素联动23/同步145035、四帧8294400像素及原版/修改/回退通过；权重691040B/2701帧dry-run通过，结果和截图纳管。
+- 固定125MHz/seed2/hold8完整run 20261115-011139-symphony-native-full已映射/程序ROM审计通过，正在同输入PNR；本检查点新位流待生成，旧成品保留。

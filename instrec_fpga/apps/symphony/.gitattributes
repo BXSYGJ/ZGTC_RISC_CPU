@@ -1,0 +1,5 @@
+# Build, simulation and ROM reports bind to exact file bytes.
+** -text
+** whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+# Frozen evidence includes original bytes and literal unified diff context.
+fpga/evidence/** -whitespace

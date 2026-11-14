@@ -1,4 +1,12 @@
-# 当前工作记忆：2026-11-14
+# 当前工作记忆：2026-11-15
+
+当前目标：交响乐可视化导赏终端＋识别窗口检索与标记终端，参加紫光同创赛题一。用户强调显示器仅接FPGA，选择KEY1短按选择、双击标记、长按切页。原生1080p双页、158字模、64真实结果环形历史、筛选/书签已经实现，位于apps/symphony/fpga。当前八类概率语义保持；5组模型迁移仍为后续工作。电脑浏览器应用保留为开发预览。
+
+最终renderer SHA fc0d9441296bde0d586c40bbd4f6fc3a71197fc4cbc697c2d2ae49ddb296d1c6，state SHA8e11800f183bf63990e5653d64e93a3d35807520740e12f2cd7df4f3989109e0。真实state235检查、实际KEY1联动23RGB/145035同步、四RTL帧8294400像素/9900436时钟、五拍对齐，以及bars_data新增frame_update的原版/修改/独立回退均exit0。证据在apps/symphony/fpga/evidence。时间是识别结果到达毫秒，64条历史和书签复位清空。
+
+当前唯一完整构建：build/rtos/pds/20261115-011139-symphony-native-full，固定125MHz/148.5MHz/seed2/hold8，冻结212份输入，原始202基线与H3保持原哈希。compile/synthesize/dev_map exit0，实际7148B程序ROM映射审计pass；受保护continuations/20261114-172709-240059正在PNR，新应用位流待生成。原时序优化paused。应用入口apps/symphony/README.md；最终需要结合新FULL_RESULT收集DELIVERY、打包位流/权重/源码、更新状态并提交。当前分支rtos125-integration。
+
+以下保留此前归档记录。
 
 用户追加要求将之前的 125 MHz 和 109.375 MHz 基线同时上传。`rtos125-integration` 现提供三版本下载索引 `instrec_fpga/releases/RTOS_AND_BASELINES_20261114.md`；原始基线为 223256（125 MHz）和 021145（109.375 MHz），两份 ZIP 及直接下载位流归档到 `releases/selected-baselines-20261114/`。各包原 202 份输入及原始报告均保留，位流 SHA 分别为 20bbda7e…76b157 与 bb484f21…d7f576。先前临时 `codex/rtos125-integration` 已在核验新远端分支保留全部提交后移除。
 

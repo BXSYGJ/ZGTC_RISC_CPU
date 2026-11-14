@@ -1,0 +1,49 @@
+{
+  "passed": true,
+  "started_utc": "2026-11-14T16:58:22.961816+00:00",
+  "scope": "Actual symphony_state RTL; 10 clocks per simulated millisecond, real gesture durations 900/300 ms; production divider defaults to 148500000 Hz",
+  "source_sha256": {
+    "apps\\symphony\\fpga\\symphony_state.v": "8e11800f183bf63990e5653d64e93a3d35807520740e12f2cd7df4f3989109e0",
+    "apps\\symphony\\fpga\\sim\\tb_symphony_state.sv": "b62cc40b1913d3445ab41722776106aac52e4c0ecf695582ed920af67d97ed11",
+    "apps\\symphony\\fpga\\sim\\run_state_test.py": "c0a53f3cac40466896500637fe80bb03488d23ca167e65b3f05ffa65f52ae8db"
+  },
+  "input_sha256": {
+    "build\\symphony\\state\\20261115-005822-888614\\inputs\\apps\\symphony\\fpga\\symphony_state.v": "8e11800f183bf63990e5653d64e93a3d35807520740e12f2cd7df4f3989109e0",
+    "build\\symphony\\state\\20261115-005822-888614\\inputs\\apps\\symphony\\fpga\\sim\\tb_symphony_state.sv": "b62cc40b1913d3445ab41722776106aac52e4c0ecf695582ed920af67d97ed11",
+    "build\\symphony\\state\\20261115-005822-888614\\inputs\\apps\\symphony\\fpga\\sim\\run_state_test.py": "c0a53f3cac40466896500637fe80bb03488d23ca167e65b3f05ffa65f52ae8db"
+  },
+  "commands": [
+    {
+      "command": [
+        "D:\\AAAPP\\iverilog\\bin\\iverilog.EXE",
+        "-g2005-sv",
+        "-s",
+        "tb_symphony_state",
+        "-o",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\symphony\\state\\20261115-005822-888614\\state.vvp",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\symphony\\state\\20261115-005822-888614\\inputs\\apps\\symphony\\fpga\\symphony_state.v",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\symphony\\state\\20261115-005822-888614\\inputs\\apps\\symphony\\fpga\\sim\\tb_symphony_state.sv"
+      ],
+      "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga",
+      "output": "",
+      "exit_code": 0,
+      "log": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\symphony\\state\\20261115-005822-888614\\compile.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "D:\\AAAPP\\iverilog\\bin\\vvp.EXE",
+        "-i",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\symphony\\state\\20261115-005822-888614\\state.vvp"
+      ],
+      "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga",
+      "output": "SYMPHONY_STATE_PASS checks=235 observed=78 retained=64 last_sequence=78 dropped=1 filter_count=8 divider_hz=10000 long_ms=900 double_ms=300\nD:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\symphony\\state\\20261115-005822-888614\\inputs\\apps\\symphony\\fpga\\sim\\tb_symphony_state.sv:199: $finish called at 1026176000 (1ps)\n",
+      "exit_code": 0,
+      "log": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\symphony\\state\\20261115-005822-888614\\simulation.log",
+      "sha256": "7e2f9b5b7f8fce85757ef112c23a2167b9c8ab3c6bd26b38c37f1119d6cceade"
+    }
+  ],
+  "inputs_unchanged": true,
+  "sources_unchanged": true,
+  "finished_utc": "2026-11-14T16:58:23.394353+00:00"
+}

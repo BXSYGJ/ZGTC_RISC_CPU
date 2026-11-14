@@ -1,0 +1,685 @@
+{
+  "passed": true,
+  "schema": "symphony-ui-rom-init-v1",
+  "started_utc": "2026-11-14T17:34:23.344364+00:00",
+  "run": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\pds\\20261115-011139-symphony-native-full",
+  "scope": "all logical UI-ROM words reconstructed from actual synthesized DRM INIT and output-pin connectivity",
+  "mapped_pixel_address_cone_verified": false,
+  "address_boundary": "logical glyph/glyph_y or tile_address nets; upstream pixel-selection logic is outside this INIT audit",
+  "arrays": [
+    {
+      "array": "font_rom",
+      "output_bus": "font_q",
+      "expected_words": 8192,
+      "reconstructed_words": 8192,
+      "all_words_match": true,
+      "mismatch_count": 0,
+      "mismatches": [],
+      "nonzero_expected_words": 3514,
+      "nonzero_reconstructed_words": 3514,
+      "optimized_unused_zero_bits": [],
+      "physical_compared_bits": 131072,
+      "expected_words_sha256": "31bf872e7ccdcf296152879361457365fbf7c2fbc06d4bec7f533a6b8e0e7264",
+      "actual_words_sha256": "31bf872e7ccdcf296152879361457365fbf7c2fbc06d4bec7f533a6b8e0e7264",
+      "physical_read_controls": {
+        "font_rom_0:A": {
+          "data_width": 4,
+          "clock": "pix_clk",
+          "controls": {
+            "we": 0,
+            "ce": 1,
+            "reset": 0,
+            "hold": 0
+          },
+          "cs_mask": 7
+        },
+        "font_rom_1:A": {
+          "data_width": 4,
+          "clock": "pix_clk",
+          "controls": {
+            "we": 0,
+            "ce": 1,
+            "reset": 0,
+            "hold": 0
+          },
+          "cs_mask": 7
+        },
+        "font_rom_2:A": {
+          "data_width": 4,
+          "clock": "pix_clk",
+          "controls": {
+            "we": 0,
+            "ce": 1,
+            "reset": 0,
+            "hold": 0
+          },
+          "cs_mask": 7
+        },
+        "font_rom_3:A": {
+          "data_width": 4,
+          "clock": "pix_clk",
+          "controls": {
+            "we": 0,
+            "ce": 1,
+            "reset": 0,
+            "hold": 0
+          },
+          "cs_mask": 7
+        }
+      },
+      "instances": [
+        "font_rom_0",
+        "font_rom_1",
+        "font_rom_2",
+        "font_rom_3"
+      ]
+    },
+    {
+      "array": "guide_rom",
+      "output_bus": "guide_q",
+      "expected_words": 4096,
+      "reconstructed_words": 4096,
+      "all_words_match": true,
+      "mismatch_count": 0,
+      "mismatches": [],
+      "nonzero_expected_words": 485,
+      "nonzero_reconstructed_words": 485,
+      "optimized_unused_zero_bits": [
+        10
+      ],
+      "physical_compared_bits": 61440,
+      "expected_words_sha256": "fdb4ae1acad0b4c15c58846cd6ccf73ee72ee4341f7a459bf69013592e18c8fe",
+      "actual_words_sha256": "fdb4ae1acad0b4c15c58846cd6ccf73ee72ee4341f7a459bf69013592e18c8fe",
+      "physical_read_controls": {
+        "guide_rom_2_concat_4_0:A": {
+          "data_width": 8,
+          "clock": "pix_clk",
+          "controls": {
+            "we": 0,
+            "ce": 1,
+            "reset": 0,
+            "hold": 0
+          },
+          "cs_mask": 7
+        },
+        "guide_rom_2_concat_4_1_0:A": {
+          "data_width": 8,
+          "clock": "pix_clk",
+          "controls": {
+            "we": 0,
+            "ce": 1,
+            "reset": 0,
+            "hold": 0
+          },
+          "cs_mask": 7
+        },
+        "guide_rom_2_concat_4_1_1_0:A": {
+          "data_width": 8,
+          "clock": "pix_clk",
+          "controls": {
+            "we": 0,
+            "ce": 1,
+            "reset": 0,
+            "hold": 0
+          },
+          "cs_mask": 7
+        },
+        "guide_rom_2_concat_4_1_1_1:A": {
+          "data_width": 8,
+          "clock": "pix_clk",
+          "controls": {
+            "we": 0,
+            "ce": 1,
+            "reset": 0,
+            "hold": 0
+          },
+          "cs_mask": 7
+        }
+      },
+      "instances": [
+        "guide_rom_2_concat_4_0",
+        "guide_rom_2_concat_4_1_0",
+        "guide_rom_2_concat_4_1_1_0",
+        "guide_rom_2_concat_4_1_1_1"
+      ]
+    },
+    {
+      "array": "library_rom",
+      "output_bus": "library_q",
+      "expected_words": 4096,
+      "reconstructed_words": 4096,
+      "all_words_match": true,
+      "mismatch_count": 0,
+      "mismatches": [],
+      "nonzero_expected_words": 426,
+      "nonzero_reconstructed_words": 426,
+      "optimized_unused_zero_bits": [
+        10
+      ],
+      "physical_compared_bits": 61440,
+      "expected_words_sha256": "14c7515bd27882d6ad8395f43242793c8edfebb14231537b01bb01ee99bc89c0",
+      "actual_words_sha256": "14c7515bd27882d6ad8395f43242793c8edfebb14231537b01bb01ee99bc89c0",
+      "physical_read_controls": {
+        "guide_rom_2_concat_4_0:A": {
+          "data_width": 8,
+          "clock": "pix_clk",
+          "controls": {
+            "we": 0,
+            "ce": 1,
+            "reset": 0,
+            "hold": 0
+          },
+          "cs_mask": 7
+        },
+        "guide_rom_2_concat_4_1_0:A": {
+          "data_width": 8,
+          "clock": "pix_clk",
+          "controls": {
+            "we": 0,
+            "ce": 1,
+            "reset": 0,
+            "hold": 0
+          },
+          "cs_mask": 7
+        },
+        "guide_rom_2_concat_4_1_1_0:A": {
+          "data_width": 8,
+          "clock": "pix_clk",
+          "controls": {
+            "we": 0,
+            "ce": 1,
+            "reset": 0,
+            "hold": 0
+          },
+          "cs_mask": 7
+        },
+        "guide_rom_2_concat_4_1_1_1:A": {
+          "data_width": 8,
+          "clock": "pix_clk",
+          "controls": {
+            "we": 0,
+            "ce": 1,
+            "reset": 0,
+            "hold": 0
+          },
+          "cs_mask": 7
+        }
+      },
+      "instances": [
+        "guide_rom_2_concat_4_0",
+        "guide_rom_2_concat_4_1_0",
+        "guide_rom_2_concat_4_1_1_0",
+        "guide_rom_2_concat_4_1_1_1"
+      ]
+    }
+  ],
+  "inputs": [
+    {
+      "role": "synthesized_netlist",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\pds\\20261115-011139-symphony-native-full\\synthesize\\instrec_top_syn.vm",
+      "bytes": 44289987,
+      "sha256": "9dd81034a3c3bf834efada661dc6adce97145245e05f64e9647c557f743c06ef"
+    },
+    {
+      "role": "mapped_database",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\pds\\20261115-011139-symphony-native-full\\device_map\\instrec_top_map.adf",
+      "bytes": 8473735,
+      "sha256": "db0efde01abdf3cbd1e3cdee4a52f20cac2cefcdc5b31b30e436b75cc8f4188c"
+    },
+    {
+      "role": "frozen_manifest",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\pds\\20261115-011139-symphony-native-full\\INPUTS.json",
+      "bytes": 40087,
+      "sha256": "5e866ab37cdef959f0e394b7effefa9ac97d311c51b2c1845bc8395a49204bae"
+    },
+    {
+      "role": "mapped_flow_result",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\pds\\20261115-011139-symphony-native-full\\RESULT.json",
+      "bytes": 645,
+      "sha256": "0a793a03c00e00dc88ea7536d9ddd50453a578a577e70f675a583dc8d711790d"
+    },
+    {
+      "role": "frozen_renderer",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\pds\\20261115-011139-symphony-native-full\\inputs\\src\\ui\\symphony_renderer.v",
+      "bytes": 18180,
+      "sha256": "fc0d9441296bde0d586c40bbd4f6fc3a71197fc4cbc697c2d2ae49ddb296d1c6"
+    },
+    {
+      "role": "auditor_source",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\apps\\symphony\\fpga\\audit_ui_rom.py",
+      "bytes": 14579,
+      "sha256": "030e9408121719950dd13cb13181160e6775801e16e88a457069aa62d3d6dfbd"
+    },
+    {
+      "role": "primitive_decode_helper",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\rtos\\audit_mapped_rom.py",
+      "bytes": 31446,
+      "sha256": "95c982e67196aebf5d8e7f8b4bab9e0b37bf8095e635b94c049dd1471547d750"
+    },
+    {
+      "role": "asset_generator",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\apps\\symphony\\fpga\\gen_assets.py",
+      "bytes": 7857,
+      "sha256": "530047c4f9e2ef2d07acd23fe105a34c1b243768c2d5f04de69ca135f23bfe94"
+    },
+    {
+      "role": "asset_manifest",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\apps\\symphony\\fpga\\assets\\ASSETS.json",
+      "bytes": 3258,
+      "sha256": "29683b5ddfebd2818052bcd05660201ae70c2309daee9b36533865bafcc539ea"
+    },
+    {
+      "role": "vendor_drm_model",
+      "path": "D:\\PDS_2022.2-SP6.4\\arch\\vendor\\pango\\verilog\\simulation\\GTP_DRM18K_E1.v",
+      "bytes": 43795,
+      "sha256": "73a4dc428a369fe4ff6f6995bb9d79b58c0963e5812e6e9bfbaaf85dc237ab60"
+    },
+    {
+      "role": "vendor_drm_model",
+      "path": "D:\\PDS_2022.2-SP6.4\\arch\\vendor\\pango\\verilog\\simulation\\GTP_DRM36K_E1.v",
+      "bytes": 75646,
+      "sha256": "3e372cd60025a439eb7435d770930260e22c40f148ae83c4bdf7398fb65ddb66"
+    },
+    {
+      "role": "frozen_font_rom",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\pds\\20261115-011139-symphony-native-full\\inputs\\src\\ui\\symphony_font.hex",
+      "bytes": 49152,
+      "sha256": "6d7177a10fa8139210dcbd93c43795401a4d44855e460d7aa9f579dd69850887"
+    },
+    {
+      "role": "loaded_font_rom",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\pds\\20261115-011139-symphony-native-full\\src\\ui\\symphony_font.hex",
+      "bytes": 49152,
+      "sha256": "6d7177a10fa8139210dcbd93c43795401a4d44855e460d7aa9f579dd69850887"
+    },
+    {
+      "role": "current_font_rom",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\apps\\symphony\\fpga\\assets\\symphony_font.hex",
+      "bytes": 49152,
+      "sha256": "6d7177a10fa8139210dcbd93c43795401a4d44855e460d7aa9f579dd69850887"
+    },
+    {
+      "role": "frozen_guide_rom",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\pds\\20261115-011139-symphony-native-full\\inputs\\src\\ui\\symphony_guide.hex",
+      "bytes": 24576,
+      "sha256": "2044ac4a1dbea968c61d5fae452169a12b4c298be67abf04f60bdd16a8fc22e5"
+    },
+    {
+      "role": "loaded_guide_rom",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\pds\\20261115-011139-symphony-native-full\\src\\ui\\symphony_guide.hex",
+      "bytes": 24576,
+      "sha256": "2044ac4a1dbea968c61d5fae452169a12b4c298be67abf04f60bdd16a8fc22e5"
+    },
+    {
+      "role": "current_guide_rom",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\apps\\symphony\\fpga\\assets\\symphony_guide.hex",
+      "bytes": 24576,
+      "sha256": "2044ac4a1dbea968c61d5fae452169a12b4c298be67abf04f60bdd16a8fc22e5"
+    },
+    {
+      "role": "frozen_library_rom",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\pds\\20261115-011139-symphony-native-full\\inputs\\src\\ui\\symphony_library.hex",
+      "bytes": 24576,
+      "sha256": "8150e1fe5a3aeeca82bea88e833f7da2625bed70d704f02c2f30590813854d49"
+    },
+    {
+      "role": "loaded_library_rom",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\pds\\20261115-011139-symphony-native-full\\src\\ui\\symphony_library.hex",
+      "bytes": 24576,
+      "sha256": "8150e1fe5a3aeeca82bea88e833f7da2625bed70d704f02c2f30590813854d49"
+    },
+    {
+      "role": "current_library_rom",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\apps\\symphony\\fpga\\assets\\symphony_library.hex",
+      "bytes": 24576,
+      "sha256": "8150e1fe5a3aeeca82bea88e833f7da2625bed70d704f02c2f30590813854d49"
+    }
+  ],
+  "errors": [],
+  "instances": [
+    {
+      "name": "font_rom_0",
+      "source": "font_rom_0",
+      "primitive": "GTP_DRM36K_E1",
+      "literal_sha256": "babdc0e0d9abcdbd1f20334e56c83b4a9f762595c481cde4759ca8f9e0f8ccd8",
+      "init_cells_sha256": "b33d3ac0ff2f0a0e51773d0c6c6ff9bcc9b909f05d87fe4038cb3b13762baa4f",
+      "ports": {
+        "DOA": "{\\font_rom_0_DOA[35]_floating , \\font_rom_0_DOA[34]_floating , \\font_rom_0_DOA[33]_floating , \\font_rom_0_DOA[32]_floating , \\font_rom_0_DOA[31]_floating , \\font_rom_0_DOA[30]_floating , \\font_rom_0_DOA[29]_floating , \\font_rom_0_DOA[28]_floating , \\font_rom_0_DOA[27]_floating , \\font_rom_0_DOA[26]_floating , \\font_rom_0_DOA[25]_floating , \\font_rom_0_DOA[24]_floating , \\font_rom_0_DOA[23]_floating , \\font_rom_0_DOA[22]_floating , \\font_rom_0_DOA[21]_floating , \\font_rom_0_DOA[20]_floating , \\font_rom_0_DOA[19]_floating , \\font_rom_0_DOA[18]_floating , \\font_rom_0_DOA[17]_floating , \\font_rom_0_DOA[16]_floating , \\font_rom_0_DOA[15]_floating , \\font_rom_0_DOA[14]_floating , \\font_rom_0_DOA[13]_floating , \\font_rom_0_DOA[12]_floating , \\font_rom_0_DOA[11]_floating , \\font_rom_0_DOA[10]_floating , \\font_rom_0_DOA[9]_floating , \\font_rom_0_DOA[8]_floating , \\font_rom_0_DOA[7]_floating , \\font_rom_0_DOA[6]_floating , \\font_rom_0_DOA[5]_floating , \\font_rom_0_DOA[4]_floating , font_q[3], font_q[2], font_q[1], font_q[0]}",
+        "DOB": "",
+        "ECC_PARITY": "",
+        "ECC_RDADDR": "",
+        "ADDRA": "{1'b1, glyph[7], glyph[6], glyph[5], glyph[4], glyph[3], glyph[2], glyph[1], glyph[0], glyph_y[4], glyph_y[3], glyph_y[2], glyph_y[1], glyph_y[0], 1'b1, 1'b1}",
+        "ADDRB": "",
+        "BWEA": "{1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0}",
+        "BWEB": "",
+        "CSA": "{1'b1, 1'b1, 1'b1}",
+        "CSB": "",
+        "DIA": "{1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0}",
+        "DIB": "",
+        "COUTA": "",
+        "COUTB": "",
+        "ECC_DBITERR": "",
+        "ECC_SBITERR": "",
+        "ADDRA_HOLD": "1'b0",
+        "ADDRB_HOLD": "",
+        "CEA": "1'b1",
+        "CEB": "1'b0",
+        "CINA": "",
+        "CINB": "",
+        "CLKA": "pix_clk",
+        "CLKB": "",
+        "INJECT_DBITERR": "",
+        "INJECT_SBITERR": "",
+        "ORCEA": "",
+        "ORCEB": "",
+        "RSTA": "1'b0",
+        "RSTB": "",
+        "WEA": "1'b0",
+        "WEB": ""
+      }
+    },
+    {
+      "name": "font_rom_1",
+      "source": "font_rom_1",
+      "primitive": "GTP_DRM36K_E1",
+      "literal_sha256": "8a157889a5329e7d21cd9e3a104827bc0486b68a80e33381368fbc821b3efb0d",
+      "init_cells_sha256": "6112e2f9b3d5fd0d9a11a4c07f447beebd6f4b2e03fda32c8b8e4f77bca7d36e",
+      "ports": {
+        "DOA": "{\\font_rom_1_DOA[35]_floating , \\font_rom_1_DOA[34]_floating , \\font_rom_1_DOA[33]_floating , \\font_rom_1_DOA[32]_floating , \\font_rom_1_DOA[31]_floating , \\font_rom_1_DOA[30]_floating , \\font_rom_1_DOA[29]_floating , \\font_rom_1_DOA[28]_floating , \\font_rom_1_DOA[27]_floating , \\font_rom_1_DOA[26]_floating , \\font_rom_1_DOA[25]_floating , \\font_rom_1_DOA[24]_floating , \\font_rom_1_DOA[23]_floating , \\font_rom_1_DOA[22]_floating , \\font_rom_1_DOA[21]_floating , \\font_rom_1_DOA[20]_floating , \\font_rom_1_DOA[19]_floating , \\font_rom_1_DOA[18]_floating , \\font_rom_1_DOA[17]_floating , \\font_rom_1_DOA[16]_floating , \\font_rom_1_DOA[15]_floating , \\font_rom_1_DOA[14]_floating , \\font_rom_1_DOA[13]_floating , \\font_rom_1_DOA[12]_floating , \\font_rom_1_DOA[11]_floating , \\font_rom_1_DOA[10]_floating , \\font_rom_1_DOA[9]_floating , \\font_rom_1_DOA[8]_floating , \\font_rom_1_DOA[7]_floating , \\font_rom_1_DOA[6]_floating , \\font_rom_1_DOA[5]_floating , \\font_rom_1_DOA[4]_floating , font_q[7], font_q[6], font_q[5], font_q[4]}",
+        "DOB": "",
+        "ECC_PARITY": "",
+        "ECC_RDADDR": "",
+        "ADDRA": "{1'b1, glyph[7], glyph[6], glyph[5], glyph[4], glyph[3], glyph[2], glyph[1], glyph[0], glyph_y[4], glyph_y[3], glyph_y[2], glyph_y[1], glyph_y[0], 1'b1, 1'b1}",
+        "ADDRB": "",
+        "BWEA": "{1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0}",
+        "BWEB": "",
+        "CSA": "{1'b1, 1'b1, 1'b1}",
+        "CSB": "",
+        "DIA": "{1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0}",
+        "DIB": "",
+        "COUTA": "",
+        "COUTB": "",
+        "ECC_DBITERR": "",
+        "ECC_SBITERR": "",
+        "ADDRA_HOLD": "1'b0",
+        "ADDRB_HOLD": "",
+        "CEA": "1'b1",
+        "CEB": "1'b0",
+        "CINA": "",
+        "CINB": "",
+        "CLKA": "pix_clk",
+        "CLKB": "",
+        "INJECT_DBITERR": "",
+        "INJECT_SBITERR": "",
+        "ORCEA": "",
+        "ORCEB": "",
+        "RSTA": "1'b0",
+        "RSTB": "",
+        "WEA": "1'b0",
+        "WEB": ""
+      }
+    },
+    {
+      "name": "font_rom_2",
+      "source": "font_rom_2",
+      "primitive": "GTP_DRM36K_E1",
+      "literal_sha256": "9bc1e123b0a63b08762088edfc48fc877ef5ac21f2c6f416996e5a796776648e",
+      "init_cells_sha256": "9f4dbf0ebed15cfa9a75e462619b64951e9b38a0d7a9fcd7b9d2e3ac42604283",
+      "ports": {
+        "DOA": "{\\font_rom_2_DOA[35]_floating , \\font_rom_2_DOA[34]_floating , \\font_rom_2_DOA[33]_floating , \\font_rom_2_DOA[32]_floating , \\font_rom_2_DOA[31]_floating , \\font_rom_2_DOA[30]_floating , \\font_rom_2_DOA[29]_floating , \\font_rom_2_DOA[28]_floating , \\font_rom_2_DOA[27]_floating , \\font_rom_2_DOA[26]_floating , \\font_rom_2_DOA[25]_floating , \\font_rom_2_DOA[24]_floating , \\font_rom_2_DOA[23]_floating , \\font_rom_2_DOA[22]_floating , \\font_rom_2_DOA[21]_floating , \\font_rom_2_DOA[20]_floating , \\font_rom_2_DOA[19]_floating , \\font_rom_2_DOA[18]_floating , \\font_rom_2_DOA[17]_floating , \\font_rom_2_DOA[16]_floating , \\font_rom_2_DOA[15]_floating , \\font_rom_2_DOA[14]_floating , \\font_rom_2_DOA[13]_floating , \\font_rom_2_DOA[12]_floating , \\font_rom_2_DOA[11]_floating , \\font_rom_2_DOA[10]_floating , \\font_rom_2_DOA[9]_floating , \\font_rom_2_DOA[8]_floating , \\font_rom_2_DOA[7]_floating , \\font_rom_2_DOA[6]_floating , \\font_rom_2_DOA[5]_floating , \\font_rom_2_DOA[4]_floating , font_q[11], font_q[10], font_q[9], font_q[8]}",
+        "DOB": "",
+        "ECC_PARITY": "",
+        "ECC_RDADDR": "",
+        "ADDRA": "{1'b1, glyph[7], glyph[6], glyph[5], glyph[4], glyph[3], glyph[2], glyph[1], glyph[0], glyph_y[4], glyph_y[3], glyph_y[2], glyph_y[1], glyph_y[0], 1'b1, 1'b1}",
+        "ADDRB": "",
+        "BWEA": "{1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0}",
+        "BWEB": "",
+        "CSA": "{1'b1, 1'b1, 1'b1}",
+        "CSB": "",
+        "DIA": "{1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0}",
+        "DIB": "",
+        "COUTA": "",
+        "COUTB": "",
+        "ECC_DBITERR": "",
+        "ECC_SBITERR": "",
+        "ADDRA_HOLD": "1'b0",
+        "ADDRB_HOLD": "",
+        "CEA": "1'b1",
+        "CEB": "1'b0",
+        "CINA": "",
+        "CINB": "",
+        "CLKA": "pix_clk",
+        "CLKB": "",
+        "INJECT_DBITERR": "",
+        "INJECT_SBITERR": "",
+        "ORCEA": "",
+        "ORCEB": "",
+        "RSTA": "1'b0",
+        "RSTB": "",
+        "WEA": "1'b0",
+        "WEB": ""
+      }
+    },
+    {
+      "name": "font_rom_3",
+      "source": "font_rom_3",
+      "primitive": "GTP_DRM36K_E1",
+      "literal_sha256": "5a686c093ba866725339205aa0306ce5ebd963dd02e191efd3b1ea6bc867bc87",
+      "init_cells_sha256": "2c66757c08a0a318614e4f0e7eeb6aa0814c55a6d36fdb605f5a4dae27dd2d53",
+      "ports": {
+        "DOA": "{\\font_rom_3_DOA[35]_floating , \\font_rom_3_DOA[34]_floating , \\font_rom_3_DOA[33]_floating , \\font_rom_3_DOA[32]_floating , \\font_rom_3_DOA[31]_floating , \\font_rom_3_DOA[30]_floating , \\font_rom_3_DOA[29]_floating , \\font_rom_3_DOA[28]_floating , \\font_rom_3_DOA[27]_floating , \\font_rom_3_DOA[26]_floating , \\font_rom_3_DOA[25]_floating , \\font_rom_3_DOA[24]_floating , \\font_rom_3_DOA[23]_floating , \\font_rom_3_DOA[22]_floating , \\font_rom_3_DOA[21]_floating , \\font_rom_3_DOA[20]_floating , \\font_rom_3_DOA[19]_floating , \\font_rom_3_DOA[18]_floating , \\font_rom_3_DOA[17]_floating , \\font_rom_3_DOA[16]_floating , \\font_rom_3_DOA[15]_floating , \\font_rom_3_DOA[14]_floating , \\font_rom_3_DOA[13]_floating , \\font_rom_3_DOA[12]_floating , \\font_rom_3_DOA[11]_floating , \\font_rom_3_DOA[10]_floating , \\font_rom_3_DOA[9]_floating , \\font_rom_3_DOA[8]_floating , \\font_rom_3_DOA[7]_floating , \\font_rom_3_DOA[6]_floating , \\font_rom_3_DOA[5]_floating , \\font_rom_3_DOA[4]_floating , font_q[15], font_q[14], font_q[13], font_q[12]}",
+        "DOB": "",
+        "ECC_PARITY": "",
+        "ECC_RDADDR": "",
+        "ADDRA": "{1'b1, glyph[7], glyph[6], glyph[5], glyph[4], glyph[3], glyph[2], glyph[1], glyph[0], glyph_y[4], glyph_y[3], glyph_y[2], glyph_y[1], glyph_y[0], 1'b1, 1'b1}",
+        "ADDRB": "",
+        "BWEA": "{1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0}",
+        "BWEB": "",
+        "CSA": "{1'b1, 1'b1, 1'b1}",
+        "CSB": "",
+        "DIA": "{1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0}",
+        "DIB": "",
+        "COUTA": "",
+        "COUTB": "",
+        "ECC_DBITERR": "",
+        "ECC_SBITERR": "",
+        "ADDRA_HOLD": "1'b0",
+        "ADDRB_HOLD": "",
+        "CEA": "1'b1",
+        "CEB": "1'b0",
+        "CINA": "",
+        "CINB": "",
+        "CLKA": "pix_clk",
+        "CLKB": "",
+        "INJECT_DBITERR": "",
+        "INJECT_SBITERR": "",
+        "ORCEA": "",
+        "ORCEB": "",
+        "RSTA": "1'b0",
+        "RSTB": "",
+        "WEA": "1'b0",
+        "WEB": ""
+      }
+    },
+    {
+      "name": "guide_rom_2_concat_4_0",
+      "source": "guide_rom_2_concat_4_0",
+      "primitive": "GTP_DRM36K_E1",
+      "literal_sha256": "a64361d48d2aeb2df0809378d86b1ee1c696f68780cf04f5036847d98af9507a",
+      "init_cells_sha256": "4fce125d5fb5c6223420e944a9bee6db1257d4e5f3d0657e6e21ec0a4a064bbc",
+      "ports": {
+        "DOA": "{\\guide_rom_2_concat_4_0_DOA[35]_floating , \\guide_rom_2_concat_4_0_DOA[34]_floating , \\guide_rom_2_concat_4_0_DOA[33]_floating , \\guide_rom_2_concat_4_0_DOA[32]_floating , \\guide_rom_2_concat_4_0_DOA[31]_floating , \\guide_rom_2_concat_4_0_DOA[30]_floating , \\guide_rom_2_concat_4_0_DOA[29]_floating , \\guide_rom_2_concat_4_0_DOA[28]_floating , \\guide_rom_2_concat_4_0_DOA[27]_floating , \\guide_rom_2_concat_4_0_DOA[26]_floating , \\guide_rom_2_concat_4_0_DOA[25]_floating , \\guide_rom_2_concat_4_0_DOA[24]_floating , \\guide_rom_2_concat_4_0_DOA[23]_floating , \\guide_rom_2_concat_4_0_DOA[22]_floating , \\guide_rom_2_concat_4_0_DOA[21]_floating , \\guide_rom_2_concat_4_0_DOA[20]_floating , \\guide_rom_2_concat_4_0_DOA[19]_floating , \\guide_rom_2_concat_4_0_DOA[18]_floating , \\guide_rom_2_concat_4_0_DOA[17]_floating , \\guide_rom_2_concat_4_0_DOA[16]_floating , \\guide_rom_2_concat_4_0_DOA[15]_floating , \\guide_rom_2_concat_4_0_DOA[14]_floating , \\guide_rom_2_concat_4_0_DOA[13]_floating , \\guide_rom_2_concat_4_0_DOA[12]_floating , \\guide_rom_2_concat_4_0_DOA[11]_floating , \\guide_rom_2_concat_4_0_DOA[10]_floating , \\guide_rom_2_concat_4_0_DOA[9]_floating , \\guide_rom_2_concat_4_0_DOA[8]_floating , guide_q[7], guide_q[6], guide_q[5], guide_q[4], guide_q[3], guide_q[2], guide_q[1], guide_q[0]}",
+        "DOB": "",
+        "ECC_PARITY": "",
+        "ECC_RDADDR": "",
+        "ADDRA": "{1'b1, tile_address[11], tile_address[10], tile_address[9], tile_address[8], tile_address[7], tile_address[6], tile_address[5], tile_address[4], tile_address[3], tile_address[2], tile_address[1], tile_address[0], 1'b1, 1'b1, 1'b1}",
+        "ADDRB": "",
+        "BWEA": "{1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0}",
+        "BWEB": "",
+        "CSA": "{1'b1, 1'b1, 1'b1}",
+        "CSB": "",
+        "DIA": "{1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0}",
+        "DIB": "",
+        "COUTA": "",
+        "COUTB": "",
+        "ECC_DBITERR": "",
+        "ECC_SBITERR": "",
+        "ADDRA_HOLD": "1'b0",
+        "ADDRB_HOLD": "",
+        "CEA": "1'b1",
+        "CEB": "1'b0",
+        "CINA": "",
+        "CINB": "",
+        "CLKA": "pix_clk",
+        "CLKB": "",
+        "INJECT_DBITERR": "",
+        "INJECT_SBITERR": "",
+        "ORCEA": "",
+        "ORCEB": "",
+        "RSTA": "1'b0",
+        "RSTB": "",
+        "WEA": "1'b0",
+        "WEB": ""
+      }
+    },
+    {
+      "name": "guide_rom_2_concat_4_1_0",
+      "source": "guide_rom_2_concat_4_1_0",
+      "primitive": "GTP_DRM36K_E1",
+      "literal_sha256": "cef49fd79f7bff7df3d3170da4273af9f47f4254b9cbabd54d122aedee4b18fb",
+      "init_cells_sha256": "a8088b4e838fb26ea38748ee367a8e994cacee386780906185197195e3ddafab",
+      "ports": {
+        "DOA": "{\\guide_rom_2_concat_4_1_0_DOA[35]_floating , \\guide_rom_2_concat_4_1_0_DOA[34]_floating , \\guide_rom_2_concat_4_1_0_DOA[33]_floating , \\guide_rom_2_concat_4_1_0_DOA[32]_floating , \\guide_rom_2_concat_4_1_0_DOA[31]_floating , \\guide_rom_2_concat_4_1_0_DOA[30]_floating , \\guide_rom_2_concat_4_1_0_DOA[29]_floating , \\guide_rom_2_concat_4_1_0_DOA[28]_floating , \\guide_rom_2_concat_4_1_0_DOA[27]_floating , \\guide_rom_2_concat_4_1_0_DOA[26]_floating , \\guide_rom_2_concat_4_1_0_DOA[25]_floating , \\guide_rom_2_concat_4_1_0_DOA[24]_floating , \\guide_rom_2_concat_4_1_0_DOA[23]_floating , \\guide_rom_2_concat_4_1_0_DOA[22]_floating , \\guide_rom_2_concat_4_1_0_DOA[21]_floating , \\guide_rom_2_concat_4_1_0_DOA[20]_floating , \\guide_rom_2_concat_4_1_0_DOA[19]_floating , \\guide_rom_2_concat_4_1_0_DOA[18]_floating , \\guide_rom_2_concat_4_1_0_DOA[17]_floating , \\guide_rom_2_concat_4_1_0_DOA[16]_floating , \\guide_rom_2_concat_4_1_0_DOA[15]_floating , \\guide_rom_2_concat_4_1_0_DOA[14]_floating , \\guide_rom_2_concat_4_1_0_DOA[13]_floating , \\guide_rom_2_concat_4_1_0_DOA[12]_floating , \\guide_rom_2_concat_4_1_0_DOA[11]_floating , \\guide_rom_2_concat_4_1_0_DOA[10]_floating , \\guide_rom_2_concat_4_1_0_DOA[9]_floating , \\guide_rom_2_concat_4_1_0_DOA[8]_floating , library_q[0], guide_q[15], guide_q[14], guide_q[13], guide_q[12], guide_q[11], guide_q[9], guide_q[8]}",
+        "DOB": "",
+        "ECC_PARITY": "",
+        "ECC_RDADDR": "",
+        "ADDRA": "{1'b1, tile_address[11], tile_address[10], tile_address[9], tile_address[8], tile_address[7], tile_address[6], tile_address[5], tile_address[4], tile_address[3], tile_address[2], tile_address[1], tile_address[0], 1'b1, 1'b1, 1'b1}",
+        "ADDRB": "",
+        "BWEA": "{1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0}",
+        "BWEB": "",
+        "CSA": "{1'b1, 1'b1, 1'b1}",
+        "CSB": "",
+        "DIA": "{1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0}",
+        "DIB": "",
+        "COUTA": "",
+        "COUTB": "",
+        "ECC_DBITERR": "",
+        "ECC_SBITERR": "",
+        "ADDRA_HOLD": "1'b0",
+        "ADDRB_HOLD": "",
+        "CEA": "1'b1",
+        "CEB": "1'b0",
+        "CINA": "",
+        "CINB": "",
+        "CLKA": "pix_clk",
+        "CLKB": "",
+        "INJECT_DBITERR": "",
+        "INJECT_SBITERR": "",
+        "ORCEA": "",
+        "ORCEB": "",
+        "RSTA": "1'b0",
+        "RSTB": "",
+        "WEA": "1'b0",
+        "WEB": ""
+      }
+    },
+    {
+      "name": "guide_rom_2_concat_4_1_1_0",
+      "source": "guide_rom_2_concat_4_1_1_0",
+      "primitive": "GTP_DRM36K_E1",
+      "literal_sha256": "582ce7d56a7234c78d417f3d5c78b3fd033407e0714ed6b626777bc0a7f0b15c",
+      "init_cells_sha256": "8b508a4a190b0f0ee3a355bfa36c2e7f61acaeaacfbe94c202347afa7b45843b",
+      "ports": {
+        "DOA": "{\\guide_rom_2_concat_4_1_1_0_DOA[35]_floating , \\guide_rom_2_concat_4_1_1_0_DOA[34]_floating , \\guide_rom_2_concat_4_1_1_0_DOA[33]_floating , \\guide_rom_2_concat_4_1_1_0_DOA[32]_floating , \\guide_rom_2_concat_4_1_1_0_DOA[31]_floating , \\guide_rom_2_concat_4_1_1_0_DOA[30]_floating , \\guide_rom_2_concat_4_1_1_0_DOA[29]_floating , \\guide_rom_2_concat_4_1_1_0_DOA[28]_floating , \\guide_rom_2_concat_4_1_1_0_DOA[27]_floating , \\guide_rom_2_concat_4_1_1_0_DOA[26]_floating , \\guide_rom_2_concat_4_1_1_0_DOA[25]_floating , \\guide_rom_2_concat_4_1_1_0_DOA[24]_floating , \\guide_rom_2_concat_4_1_1_0_DOA[23]_floating , \\guide_rom_2_concat_4_1_1_0_DOA[22]_floating , \\guide_rom_2_concat_4_1_1_0_DOA[21]_floating , \\guide_rom_2_concat_4_1_1_0_DOA[20]_floating , \\guide_rom_2_concat_4_1_1_0_DOA[19]_floating , \\guide_rom_2_concat_4_1_1_0_DOA[18]_floating , \\guide_rom_2_concat_4_1_1_0_DOA[17]_floating , \\guide_rom_2_concat_4_1_1_0_DOA[16]_floating , \\guide_rom_2_concat_4_1_1_0_DOA[15]_floating , \\guide_rom_2_concat_4_1_1_0_DOA[14]_floating , \\guide_rom_2_concat_4_1_1_0_DOA[13]_floating , \\guide_rom_2_concat_4_1_1_0_DOA[12]_floating , \\guide_rom_2_concat_4_1_1_0_DOA[11]_floating , \\guide_rom_2_concat_4_1_1_0_DOA[10]_floating , \\guide_rom_2_concat_4_1_1_0_DOA[9]_floating , \\guide_rom_2_concat_4_1_1_0_DOA[8]_floating , library_q[8], library_q[7], library_q[6], library_q[5], library_q[4], library_q[3], library_q[2], library_q[1]}",
+        "DOB": "",
+        "ECC_PARITY": "",
+        "ECC_RDADDR": "",
+        "ADDRA": "{1'b1, tile_address[11], tile_address[10], tile_address[9], tile_address[8], tile_address[7], tile_address[6], tile_address[5], tile_address[4], tile_address[3], tile_address[2], tile_address[1], tile_address[0], 1'b1, 1'b1, 1'b1}",
+        "ADDRB": "",
+        "BWEA": "{1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0}",
+        "BWEB": "",
+        "CSA": "{1'b1, 1'b1, 1'b1}",
+        "CSB": "",
+        "DIA": "{1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0}",
+        "DIB": "",
+        "COUTA": "",
+        "COUTB": "",
+        "ECC_DBITERR": "",
+        "ECC_SBITERR": "",
+        "ADDRA_HOLD": "1'b0",
+        "ADDRB_HOLD": "",
+        "CEA": "1'b1",
+        "CEB": "1'b0",
+        "CINA": "",
+        "CINB": "",
+        "CLKA": "pix_clk",
+        "CLKB": "",
+        "INJECT_DBITERR": "",
+        "INJECT_SBITERR": "",
+        "ORCEA": "",
+        "ORCEB": "",
+        "RSTA": "1'b0",
+        "RSTB": "",
+        "WEA": "1'b0",
+        "WEB": ""
+      }
+    },
+    {
+      "name": "guide_rom_2_concat_4_1_1_1",
+      "source": "guide_rom_2_concat_4_1_1_1",
+      "primitive": "GTP_DRM36K_E1",
+      "literal_sha256": "450eb8fe7c5bf6d5fb498543a237bcfacb5d897b3d23a1bd932c8b208216c528",
+      "init_cells_sha256": "22c2e822f1778ed0ac17ff9e7214266d914915fb555565129434c41d80efe692",
+      "ports": {
+        "DOA": "{\\guide_rom_2_concat_4_1_1_1_DOA[35]_floating , \\guide_rom_2_concat_4_1_1_1_DOA[34]_floating , \\guide_rom_2_concat_4_1_1_1_DOA[33]_floating , \\guide_rom_2_concat_4_1_1_1_DOA[32]_floating , \\guide_rom_2_concat_4_1_1_1_DOA[31]_floating , \\guide_rom_2_concat_4_1_1_1_DOA[30]_floating , \\guide_rom_2_concat_4_1_1_1_DOA[29]_floating , \\guide_rom_2_concat_4_1_1_1_DOA[28]_floating , \\guide_rom_2_concat_4_1_1_1_DOA[27]_floating , \\guide_rom_2_concat_4_1_1_1_DOA[26]_floating , \\guide_rom_2_concat_4_1_1_1_DOA[25]_floating , \\guide_rom_2_concat_4_1_1_1_DOA[24]_floating , \\guide_rom_2_concat_4_1_1_1_DOA[23]_floating , \\guide_rom_2_concat_4_1_1_1_DOA[22]_floating , \\guide_rom_2_concat_4_1_1_1_DOA[21]_floating , \\guide_rom_2_concat_4_1_1_1_DOA[20]_floating , \\guide_rom_2_concat_4_1_1_1_DOA[19]_floating , \\guide_rom_2_concat_4_1_1_1_DOA[18]_floating , \\guide_rom_2_concat_4_1_1_1_DOA[17]_floating , \\guide_rom_2_concat_4_1_1_1_DOA[16]_floating , \\guide_rom_2_concat_4_1_1_1_DOA[15]_floating , \\guide_rom_2_concat_4_1_1_1_DOA[14]_floating , \\guide_rom_2_concat_4_1_1_1_DOA[13]_floating , \\guide_rom_2_concat_4_1_1_1_DOA[12]_floating , \\guide_rom_2_concat_4_1_1_1_DOA[11]_floating , \\guide_rom_2_concat_4_1_1_1_DOA[10]_floating , \\guide_rom_2_concat_4_1_1_1_DOA[9]_floating , \\guide_rom_2_concat_4_1_1_1_DOA[8]_floating , \\guide_rom_2_concat_4_1_1_1_DOA[7]_floating , \\guide_rom_2_concat_4_1_1_1_DOA[6]_floating , library_q[15], library_q[14], library_q[13], library_q[12], library_q[11], library_q[9]}",
+        "DOB": "",
+        "ECC_PARITY": "",
+        "ECC_RDADDR": "",
+        "ADDRA": "{1'b1, tile_address[11], tile_address[10], tile_address[9], tile_address[8], tile_address[7], tile_address[6], tile_address[5], tile_address[4], tile_address[3], tile_address[2], tile_address[1], tile_address[0], 1'b1, 1'b1, 1'b1}",
+        "ADDRB": "",
+        "BWEA": "{1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0}",
+        "BWEB": "",
+        "CSA": "{1'b1, 1'b1, 1'b1}",
+        "CSB": "",
+        "DIA": "{1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0}",
+        "DIB": "",
+        "COUTA": "",
+        "COUTB": "",
+        "ECC_DBITERR": "",
+        "ECC_SBITERR": "",
+        "ADDRA_HOLD": "1'b0",
+        "ADDRB_HOLD": "",
+        "CEA": "1'b1",
+        "CEB": "1'b0",
+        "CINA": "",
+        "CINB": "",
+        "CLKA": "pix_clk",
+        "CLKB": "",
+        "INJECT_DBITERR": "",
+        "INJECT_SBITERR": "",
+        "ORCEA": "",
+        "ORCEB": "",
+        "RSTA": "1'b0",
+        "RSTB": "",
+        "WEA": "1'b0",
+        "WEB": ""
+      }
+    }
+  ],
+  "inputs_unchanged": true,
+  "covered_words": 16384,
+  "covered_payload_bits": 262144,
+  "physical_compared_bits": 253952,
+  "finished_utc": "2026-11-14T17:35:05.392427+00:00",
+  "exit_status": 0,
+  "command": {
+    "argv": [
+      "D:\\Anaconda\\python.exe",
+      "D:/AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\apps\\symphony\\fpga\\audit_ui_rom.py",
+      "--run",
+      "D:/AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\pds\\20261115-011139-symphony-native-full"
+    ],
+    "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga"
+  },
+  "literal_output": "SYMPHONY_UI_ROM_AUDIT_PASS font=8192 guide=4096 library=4096 payload_bits=262144"
+}

@@ -1,5 +1,11 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+> **2026-11-15：乐境原生 FPGA HDMI 应用已实现，固定 125 MHz 整机正在布局布线。** 最新目标是补充交响乐可视化导赏、识别窗口检索与标记；用户明确显示器只接 FPGA，并选择 KEY1 短按选择、双击标记、长按切页。入口 `apps/symphony/README.md`，原生代码在 `apps/symphony/fpga/`。采用暖白/深绿 1080p 中文两页，导赏显示实际八类概率与筛选反馈，库页查询最近64个真实结果并标记；时间表示识别结果到达毫秒，历史/书签复位清空。
+>
+> 实际验证：state 235检查；真实KEY1→状态→HDMI联动9场景/23RGB采样/145035同步检查；四幅完整RTL帧8294400可见像素/9900436视频时钟、五拍对齐；新增frame_update事件的原版/修改/独立回退分别编译执行exit0。报告与实际RTL截图在 `apps/symphony/fpga/evidence/`；截图使用明确的仿真向量。电脑浏览器版本保留为开发预览，正式入口为原生HDMI。现有八类模型和125MHz H3/FreeRTOS固件沿用，原始202基线文件保持原哈希。
+>
+> 当前完整run为 `build/rtos/pds/20261115-011139-symphony-native-full`，212份输入冻结，compile/synthesize/dev_map已exit0，映射130.5DRM/94APM，7148B程序ROM实际映射审计通过。固定seed2/hold8的受保护续跑 `continuations/20261114-172709-240059` 正在PNR；截至本检查点，新应用位流尚待生成。原始125/109.375MHz及旧RTOS成品继续保留；原时序优化保持paused。
+
 > **2026-11-14：三套版本统一归档到 `rtos125-integration`。** 按用户追加要求，同时提供原始 125 MHz（223256）、原始 109.375 MHz（021145）及 125 MHz FreeRTOS 版本。三版位流和 ZIP 入口见 `releases/RTOS_AND_BASELINES_20261114.md`；两个原始基线包分别包含 202 份冻结输入、原最终时序报告和构建配方，成品逐字节保留原 SHA256。
 
 > **2026-11-14：GitHub 发布分支 `rtos125-integration`。** 用户授权上传本轮 RTOS 成果；分支从已验收的 `12d7982` 建立，包含完整源码、冻结基线、验证记录和复现入口。位流与原始交付 ZIP 按原 SHA256 归档到 `releases/rtos125-20261114-175148/`，下载及文件清单见该目录 README/RELEASE.json。125 MHz、1 kHz、三任务配置和既有 9/9 专项证据随分支提供。

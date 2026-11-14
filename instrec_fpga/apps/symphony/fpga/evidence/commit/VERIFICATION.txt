@@ -1,0 +1,70 @@
+branch=rtos125-integration
+changed_field=bars_data.frame_update
+original_sha256=c29dc11ede3b716f48c5e52aa097ec5cefa873dc205f3a056ebaac7c6bc745e8
+modified_sha256=587cf986111e8eaa5f293aa70173d547f45528a74e5b7b49f086a526b9385d83
+MODIFIED_FILE.v=D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\apps\symphony\fpga\evidence\commit\MODIFIED_FILE.v
+DIFF_FILE.patch=D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\apps\symphony\fpga\evidence\commit\DIFF_FILE.patch
+VERIFICATION.txt=D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\apps\symphony\fpga\evidence\commit\VERIFICATION.txt
+ROLLBACK.sh=D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\apps\symphony\fpga\evidence\commit\ROLLBACK.sh
+
+BASELINE_COMPILE
+command=D:\AAAPP\iverilog\bin\iverilog.EXE -g2012 -s tb_symphony_commit -o D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\apps\symphony\fpga\evidence\commit\baseline.vvp D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\apps\symphony\fpga\evidence\commit\tb_symphony_commit.sv D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\apps\symphony\fpga\evidence\commit\BASELINE.v
+cwd=D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\apps\symphony\fpga\evidence\commit
+input=D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\apps\symphony\fpga\evidence\commit\tb_symphony_commit.sv
+literal_output:
+
+exit_status=0
+
+BASELINE
+command=D:\AAAPP\iverilog\bin\vvp.EXE -i D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\apps\symphony\fpga\evidence\commit\baseline.vvp
+cwd=D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\apps\symphony\fpga\evidence\commit
+input=D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\apps\symphony\fpga\evidence\commit\tb_symphony_commit.sv
+literal_output:
+BASELINE_PASS coherent_snapshots=3 repeated_class_events=2 sticky_ready=1 idle_frames=5 checks=10
+D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\apps\symphony\fpga\evidence\commit\tb_symphony_commit.sv:109: $finish called at 936000 (1ps)
+exit_status=0
+
+MODIFIED_COMPILE
+command=D:\AAAPP\iverilog\bin\iverilog.EXE -g2012 -s tb_symphony_commit -o D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\apps\symphony\fpga\evidence\commit\modified.vvp -DHAS_FRAME_UPDATE D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\apps\symphony\fpga\evidence\commit\tb_symphony_commit.sv D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\apps\symphony\fpga\evidence\commit\MODIFIED_FILE.v
+cwd=D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\apps\symphony\fpga\evidence\commit
+input=D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\apps\symphony\fpga\evidence\commit\tb_symphony_commit.sv
+literal_output:
+
+exit_status=0
+
+MODIFIED
+command=D:\AAAPP\iverilog\bin\vvp.EXE -i D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\apps\symphony\fpga\evidence\commit\modified.vvp
+cwd=D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\apps\symphony\fpga\evidence\commit
+input=D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\apps\symphony\fpga\evidence\commit\tb_symphony_commit.sv
+literal_output:
+MODIFIED_PASS coherent_snapshots=3 repeated_class_events=2 update_pulses=3 idle_frames=5 checks=10
+D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\apps\symphony\fpga\evidence\commit\tb_symphony_commit.sv:109: $finish called at 936000 (1ps)
+exit_status=0
+
+ROLLBACK_SCRIPT
+command=C:\Users\dxlgy\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\powershell\pwsh.EXE -NoProfile -CommandWithArgs "& ([scriptblock]::Create([System.IO.File]::ReadAllText($args[0]))) -Target $args[1] -FixtureRoot $args[2]" D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\apps\symphony\fpga\evidence\commit\ROLLBACK.sh D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\apps\symphony\fpga\evidence\commit\rollback_copy.v D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\apps\symphony\fpga\evidence\commit
+cwd=D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\apps\symphony\fpga\evidence\commit
+input=D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\apps\symphony\fpga\evidence\commit\rollback_copy.v
+literal_output:
+ROLLBACK_RESTORED original_sha256=c29dc11ede3b716f48c5e52aa097ec5cefa873dc205f3a056ebaac7c6bc745e8
+exit_status=0
+
+ROLLBACK_COMPILE
+command=D:\AAAPP\iverilog\bin\iverilog.EXE -g2012 -s tb_symphony_commit -o D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\apps\symphony\fpga\evidence\commit\rollback.vvp D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\apps\symphony\fpga\evidence\commit\tb_symphony_commit.sv D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\apps\symphony\fpga\evidence\commit\rollback_copy.v
+cwd=D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\apps\symphony\fpga\evidence\commit
+input=D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\apps\symphony\fpga\evidence\commit\tb_symphony_commit.sv
+literal_output:
+
+exit_status=0
+
+ROLLBACK
+command=D:\AAAPP\iverilog\bin\vvp.EXE -i D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\apps\symphony\fpga\evidence\commit\rollback.vvp
+cwd=D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\apps\symphony\fpga\evidence\commit
+input=D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\apps\symphony\fpga\evidence\commit\tb_symphony_commit.sv
+literal_output:
+BASELINE_PASS coherent_snapshots=3 repeated_class_events=2 sticky_ready=1 idle_frames=5 checks=10
+D:\AAAFPGA\ZGTC_RISC_CPU_XSY\instrec_fpga\apps\symphony\fpga\evidence\commit\tb_symphony_commit.sv:109: $finish called at 936000 (1ps)
+exit_status=0
+
+restored_behavior=Original coherent snapshots and sticky frame_ready; no frame_update extension
+passed=True

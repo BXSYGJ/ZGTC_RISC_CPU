@@ -1,0 +1,309 @@
+{
+  "passed": true,
+  "started_utc": "2026-11-14T16:43:39.054Z",
+  "command": [
+    "D:\\AAAGOOGLE\\node.exe",
+    "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\apps\\symphony\\tests\\browser_smoke.mjs",
+    "--out",
+    "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\symphony\\browser-smoke-final"
+  ],
+  "cwd": "D:\\AAAFPGA",
+  "tests": [
+    {
+      "name": "demo_source_and_guide",
+      "passed": true,
+      "elapsed_ms": 172,
+      "source": "交互演示",
+      "dimensions": {
+        "width": 1440,
+        "document": 1440,
+        "body": 1440
+      }
+    },
+    {
+      "name": "reference_backend",
+      "passed": true,
+      "elapsed_ms": 236,
+      "status": 200,
+      "keys": [
+        "schema_version",
+        "source",
+        "group_order",
+        "group_order_zh",
+        "sample_rate_hz",
+        "segment_seconds",
+        "continuous",
+        "audio_available",
+        "activity_activation",
+        "dominance_activation",
+        "samples"
+      ]
+    },
+    {
+      "name": "demo_transport",
+      "passed": true,
+      "elapsed_ms": 325,
+      "initial_position": 21.5,
+      "playback_position": 21.7,
+      "seek": 32,
+      "dominant": "铜管"
+    },
+    {
+      "name": "library_search_and_group_intersection",
+      "passed": true,
+      "elapsed_ms": 739,
+      "all": 13,
+      "term_matches": 4,
+      "ungrouped_annotation_matches": 1,
+      "any": 7,
+      "intersection": 2,
+      "intervals": [
+        [
+          16,
+          42
+        ],
+        [
+          57,
+          86
+        ]
+      ]
+    },
+    {
+      "name": "annotation_save_persist_export",
+      "passed": true,
+      "elapsed_ms": 1159,
+      "json": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\symphony\\browser-smoke-final\\annotation-export.json",
+      "csv": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\symphony\\browser-smoke-final\\annotation-export.csv",
+      "persisted": true
+    },
+    {
+      "name": "json_import_changes_data",
+      "passed": true,
+      "elapsed_ms": 283,
+      "file": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\symphony\\browser-smoke-final\\annotation-imported.json",
+      "modified_annotation_imported": true
+    },
+    {
+      "name": "invalid_json_preserves_current_session",
+      "passed": true,
+      "elapsed_ms": 388,
+      "active_session_preserved": true
+    },
+    {
+      "name": "local_audio_validation_and_metadata",
+      "passed": true,
+      "elapsed_ms": 947,
+      "valid_file": "browser-fixture.wav",
+      "mime": "audio/wav",
+      "samples": 96000,
+      "sample_rate": 48000,
+      "duration": 2,
+      "source_kind": "manual",
+      "generated_inference_frames": 0,
+      "invalid_file_rejected_without_data_loss": true
+    },
+    {
+      "name": "reference_picker_uses_actual_model_values",
+      "passed": true,
+      "elapsed_ms": 246,
+      "sample_id": "group5-row-17287",
+      "samples": 5,
+      "activity": [
+        0.9999977687771461,
+        0.9938023330160151,
+        0.9969937396244415,
+        4.1824460191102385e-16,
+        1.2251732621546678e-9
+      ],
+      "dominance": [
+        0.2569208175262147,
+        0.45395978902468515,
+        0.2891193934491001,
+        0,
+        0
+      ],
+      "independent_window": true
+    },
+    {
+      "name": "uart_eight_class_observation_keeps_group_session",
+      "passed": true,
+      "elapsed_ms": 343,
+      "summary": "八类推理 1 次 · 心跳 1 次 · 超时 1 次\n最近分类：单簧管 · seq 1 · 31152090 周期\n末概率通道：7，值 0%\n五组时间轴使用单独的五组结果数据。",
+      "group_session_unchanged": true
+    },
+    {
+      "name": "mobile_layout_and_tabs",
+      "passed": true,
+      "elapsed_ms": 1220,
+      "guide": {
+        "width": 390,
+        "document": 390,
+        "body": 390
+      },
+      "library": {
+        "width": 390,
+        "document": 390,
+        "body": 390
+      },
+      "source_picker_accessible": true,
+      "reference_and_uart_controls_accessible": true
+    },
+    {
+      "name": "browser_clean",
+      "passed": true,
+      "elapsed_ms": 0,
+      "page_errors": 0,
+      "console_errors": 0,
+      "request_failures": 0
+    }
+  ],
+  "browser_errors": [],
+  "request_failures": [],
+  "screenshots": [
+    {
+      "file": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\symphony\\browser-smoke-final\\desktop-guide.png",
+      "sha256": "4c907c679cdb1031e7ff75f2ff06fb2a07471016ebd65e89c11d2b466a925a94",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "full_page": false
+    },
+    {
+      "file": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\symphony\\browser-smoke-final\\desktop-guide-full.png",
+      "sha256": "07a2ad0ed15a6bcb7acd60bab2a1462a5289c919a2b53b44ce6a33fafb7914f2",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "full_page": true
+    },
+    {
+      "file": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\symphony\\browser-smoke-final\\desktop-library.png",
+      "sha256": "71981f03278a96b87ef12dc87ae39d5ac68c45ce162651535f4710c409ad5961",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "full_page": false
+    },
+    {
+      "file": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\symphony\\browser-smoke-final\\desktop-library-full.png",
+      "sha256": "8c3874cadac5552d21533ff778f7aa6b63190dedf043bead9a9514617b188371",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "full_page": true
+    },
+    {
+      "file": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\symphony\\browser-smoke-final\\desktop-uart-observation.png",
+      "sha256": "0685e711470f467fdc066ed507864374b3f6baece774df849dfeed63ecfbceb6",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "full_page": false
+    },
+    {
+      "file": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\symphony\\browser-smoke-final\\desktop-uart-observation-full.png",
+      "sha256": "d35ffa86295f757230b921608ad35fe86a53d8a88fcb7e968c85208dd89354d0",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "full_page": true
+    },
+    {
+      "file": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\symphony\\browser-smoke-final\\mobile-guide.png",
+      "sha256": "58f6866cc40fb18740a12e5393b3c395e3d4f0e67cd7fa4077ba4c6a706a325b",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "full_page": false
+    },
+    {
+      "file": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\symphony\\browser-smoke-final\\mobile-guide-full.png",
+      "sha256": "e1f81481192834ad2383c5c9952150f7ec402c29dd4afaf0030de0de4474df1e",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "full_page": true
+    },
+    {
+      "file": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\symphony\\browser-smoke-final\\mobile-sources.png",
+      "sha256": "1fffcd2ede12bd712f1800043cc4957cde9b9ef1bd394b9a8aaef4be5369ae32",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "full_page": false
+    },
+    {
+      "file": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\symphony\\browser-smoke-final\\mobile-sources-full.png",
+      "sha256": "ad69322a0f79ea9b6862fba539827f9ae060dc8cc1effd161481308fbb07a02a",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "full_page": true
+    },
+    {
+      "file": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\symphony\\browser-smoke-final\\mobile-library.png",
+      "sha256": "931a71e67e78d28e32a1a933b99db638b033125b955a7d43b7d04e26716c6ff3",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "full_page": false
+    },
+    {
+      "file": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\symphony\\browser-smoke-final\\mobile-library-full.png",
+      "sha256": "d2ada933bbe9a53c53e99504df1c71bb5a0f1f2073dd96d389b3a6123a546390",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "full_page": true
+    }
+  ],
+  "input_sha256": {
+    "app.mjs": "1916171a3cdc138f6af31eebbb7da7505d40104b106e459e022109be625fb478",
+    "index.html": "22b81b5897f57fea746d6df57ea476021ee305044e9b2714c9b8b4a6251837c9",
+    "mark.svg": "141569b4336e0fde6348abc2df97fdb97d6bed476be89c59f4c2d4cbd54b48b1",
+    "model.mjs": "dd1e7da2a55efb8d46f594b0d661d3485958aacafaab615606faad0031b0ba94",
+    "run.ps1": "b8628d1bcf57dab89679ff601bbdc72643d9ed356cbef2ec3942f4edfe6ffa35",
+    "server.py": "f64f47321a82d0b687a3a287abcb42f4431e9132c38ca14d84178c1396bb138a",
+    "styles.css": "67e113c32ada7d73234d3f2003d7aec5df4d63d447c7c4e027b68cabaae66616",
+    "tests/browser_smoke.mjs": "a1f26f1fdc48893e6344403ac21912c5d4cb31767cb46d6d7a60f4a099d81009",
+    "tests/model.test.mjs": "58e03aaeaaf6c75a60cde4306af96ad2ec566d0dcbf56787a08e43ab9865c7cc",
+    "test_server.py": "e7746e3cd86909a831b2fda7f4d2aba16284df59fc81de43e4c8edd16e628bee"
+  },
+  "server_command": [
+    "python",
+    "-X",
+    "utf8",
+    "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\apps\\symphony\\server.py",
+    "--port",
+    "10421"
+  ],
+  "url": "http://127.0.0.1:10421",
+  "playwright_module": "C:\\Users\\dxlgy\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\playwright",
+  "playwright_version": "1.62.1",
+  "browser_version": "157.0.4341.46",
+  "browser_launch": {
+    "headless": true,
+    "channel": "msedge"
+  },
+  "server_exit": {
+    "code": null,
+    "signal": "SIGTERM"
+  },
+  "finished_utc": "2026-11-14T16:43:47.560Z",
+  "elapsed_ms": 8506,
+  "changed_inputs": [],
+  "inputs_unchanged": true,
+  "exit_status": 0
+}

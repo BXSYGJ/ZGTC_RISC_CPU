@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#172c2b">
+  <title>乐境 · 交响乐导赏与片段标注</title>
+  <link rel="icon" href="./mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳至内容</a>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="主导航">
+      <a class="brand" href="#guide" aria-label="乐境首页"><img src="./mark.svg" width="38" height="38" alt=""><span>乐境<small>SYMPHONY STUDIO</small></span></a>
+      <div class="nav-caption">探索音乐的层次</div>
+      <nav>
+        <button id="nav-guide" class="nav-item active" aria-current="page"><span class="nav-symbol">◉</span>交响导赏<span class="nav-number">01</span></button>
+        <button id="nav-library" class="nav-item"><span class="nav-symbol">▤</span>片段与标注<span class="nav-number">02</span></button>
+      </nav>
+      <div class="sidebar-session">
+        <span class="tiny-label">当前会话</span><strong id="sidebar-title">声部的交接</strong>
+        <p id="sidebar-description">从乐器组的进入与退出，听见交响乐的结构。</p><label class="sr-only" for="session-select">切换保存的会话</label><select id="session-select" class="session-select" aria-label="切换保存的会话"></select>
+        <button id="open-sources" class="subtle-button">切换数据与设备 <span>↗</span></button>
+      </div>
+      <div class="sidebar-bottom"><div class="system-dot"></div><div>InstRec · RISC-V + FreeRTOS<small id="project-state">125 MHz 应用工作台</small></div></div>
+    </aside>
+
+    <div class="workspace">
+      <header class="topbar"><div class="breadcrumb">音乐工作台 <span>/</span> <strong id="breadcrumb-current">交响导赏</strong></div><div class="topbar-actions"><button id="source-label" class="source-badge" aria-label="切换数据来源与设备">交互演示</button><button id="open-help" class="icon-button" aria-label="使用帮助">?</button></div></header>
+      <main id="main" tabindex="-1">
+        <section id="guide-view" aria-labelledby="guide-title">
+          <div class="page-heading"><div><div class="eyebrow">LISTEN BEYOND THE MELODY</div><h1 id="guide-title">听见，每一个声部。</h1><p class="page-intro">跟随乐队的呼吸，探索交响乐中的层次与交接。</p></div><button id="load-audio" class="primary-button"><span aria-hidden="true">＋</span>载入音乐</button></div>
+          <div class="session-banner"><div><span class="tiny-label" id="session-kicker">交互演示 · 90 秒</span><h2 id="track-title">声部的交接</h2><p id="track-subtitle">弦乐铺底，木管加入，铜管把旋律推向前方。</p></div><div class="banner-art" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div></div>
+          <div class="guide-grid">
+            <section class="panel stage-panel" aria-labelledby="stage-heading">
+              <div class="panel-heading"><div><span class="eyebrow">THE ORCHESTRA</span><h2 id="stage-heading">此刻的乐队</h2></div><span id="active-count" class="muted">等待窗口结果</span></div>
+              <div id="orchestra-stage" class="orchestra-stage" aria-label="乐器组分区，可选择一个声部聚焦"></div>
+              <div class="stage-caption"><span class="conductor-mark" aria-hidden="true">⌁</span><span>点击乐器组，聚焦它在时间轴中的轨迹</span><button id="clear-focus" class="text-button" hidden>取消聚焦</button></div>
+              <div class="dominant-strip"><div><span class="tiny-label">当前主导组</span><strong id="dominant-name">等待结果</strong></div><p id="dominant-description">播放或拖动进度，观察声部之间的交接。</p></div>
+            </section>
+            <section class="panel activity-panel" aria-labelledby="activity-heading"><div class="panel-heading"><div><span class="eyebrow">FIVE INDEPENDENT VOICES</span><h2 id="activity-heading">乐器组活跃度</h2></div><span class="tooltip-label" title="五个独立分数可以同时升高；主导组由独立输出头决定。">ⓘ</span></div><div id="activity-bars"></div><p class="microcopy" id="activity-footnote">五个独立的模型分数，保留合奏中的每个声部。</p></section>
+          </div>
+          <section class="panel timeline-panel" aria-labelledby="timeline-heading"><div class="panel-heading"><div><span class="eyebrow">A MAP OF THE MUSIC</span><h2 id="timeline-heading">声部活动时间轴</h2></div><button id="add-annotation" class="secondary-button">＋ 添加标注</button></div><div class="timeline-scroll"><div id="timeline" class="timeline"></div></div><div class="timeline-legend"><span><i class="legend-auto"></i>识别片段</span><span><i class="legend-note"></i>人工标注</span><span>点击片段定位 · 空格播放 / 暂停</span></div></section>
+          <div class="bottom-grid"><section class="panel narrative-panel"><div class="panel-heading"><h2>这段音乐，正在发生什么？</h2><span class="muted">基于当前窗口</span></div><p id="listening-note">从第一个声部开始，慢慢听见音乐的层次。</p><div id="event-chips" class="event-chips"></div></section><section class="panel recent-panel"><div class="panel-heading"><h2>我的标注</h2><button id="view-annotations" class="text-button">查看全部 ↗</button></div><div id="recent-annotations" class="empty-mini">在喜欢的片段留下一个记号。</div></section></div>
+        </section>
+
+        <section id="library-view" hidden aria-labelledby="library-title">
+          <div class="page-heading"><div><div class="eyebrow">FIND THE MOMENT</div><h1 id="library-title">值得重听的片刻。</h1><p class="page-intro">按乐器组寻找片段，用自己的语言留下聆听笔记。</p></div><button id="library-add-annotation" class="primary-button">＋ 新建标注</button></div>
+          <section class="panel search-panel" aria-label="片段检索条件"><label class="search-field"><span aria-hidden="true">⌕</span><input id="search-query" type="search" placeholder="搜索声部、片段标题或标注内容…" aria-label="搜索片段"><kbd>/</kbd></label><div class="filter-row"><div id="group-filters" class="group-filters"></div><button id="clear-filters" class="text-button">重置筛选</button></div><div class="filter-options"><label>组合方式<select id="search-mode"><option value="any">任一所选乐器组</option><option value="all">所选乐器组同时出现</option></select></label><label>片段来源<select id="segment-source"><option value="all">全部片段</option><option value="auto">自动识别</option><option value="manual">人工标注</option></select></label><label>最短时长<select id="minimum-duration"><option value="0">不限</option><option value="1">1 秒</option><option value="3">3 秒</option><option value="5">5 秒</option></select></label><label class="checkbox-label"><input id="dominant-only" type="checkbox">仅看主导片段</label></div></section>
+          <div class="results-heading"><div><strong id="result-count">0 个片段</strong><span id="result-context" class="muted"></span></div><div class="export-actions"><button id="export-csv" class="secondary-button">导出 CSV</button><button id="export-json" class="secondary-button">保存会话 JSON</button></div></div>
+          <section id="result-list" class="result-list" aria-label="检索结果"></section>
+          <div class="library-footer"><span>标注随会话保存在本机浏览器，可通过 JSON 备份与恢复。</span><button id="import-session" class="text-button">导入结果 / 会话 ↗</button></div>
+        </section>
+      </main>
+      <footer class="transport" aria-label="播放控制"><div class="transport-track"><div class="album-mark" aria-hidden="true">♫</div><div><strong id="player-title">声部的交接</strong><small id="player-mode">交互演示 · 无音频</small></div></div><div class="playback"><button id="skip-back" class="icon-button" aria-label="后退五秒">↶</button><button id="play-toggle" class="play-button" aria-label="播放">▶</button><button id="skip-forward" class="icon-button" aria-label="前进五秒">↷</button><span id="elapsed" class="time">00:00</span><label class="seek-label"><span class="sr-only">播放位置</span><input id="seek" type="range" min="0" max="90" step="0.05" value="0"></label><span id="duration" class="time">01:30</span><button id="loop-toggle" class="icon-button" aria-label="循环所选片段" aria-pressed="false">↻</button></div><button id="player-annotate" class="icon-button" aria-label="标注当前位置">＋</button></footer>
+    </div>
+  </div>
+
+  <dialog id="annotation-dialog" aria-labelledby="annotation-title"><form id="annotation-form"><div class="dialog-heading"><div><div class="eyebrow">YOUR LISTENING NOTES</div><h2 id="annotation-title">给这一刻，留个记号。</h2></div><button type="button" class="icon-button" data-close-dialog aria-label="关闭标注">×</button></div><label class="form-field">标注标题<input id="annotation-label" required maxlength="100" placeholder="例如：铜管加入，音乐走向高潮"></label><div class="form-columns"><label class="form-field">开始时间<input id="annotation-start" required placeholder="00:12.5" inputmode="decimal"></label><label class="form-field">结束时间<input id="annotation-end" required placeholder="00:18.0" inputmode="decimal"></label></div><fieldset class="group-fieldset"><legend>关联乐器组</legend><div id="annotation-groups" class="group-filters"></div></fieldset><label class="form-field">聆听笔记<textarea id="annotation-notes" rows="3" maxlength="2000" placeholder="记录音色、情绪或下一次想注意的细节…"></textarea></label><p id="annotation-error" class="form-error" role="alert"></p><div class="dialog-actions"><button id="delete-annotation" type="button" class="danger-button" hidden>删除标注</button><button type="button" class="secondary-button" data-close-dialog>取消</button><button id="save-annotation" type="submit" class="primary-button">保存标注</button></div></form></dialog>
+
+  <dialog id="sources-dialog" aria-labelledby="sources-title"><div class="dialog-heading"><div><div class="eyebrow">CHOOSE YOUR SOURCE</div><h2 id="sources-title">从这里，开始聆听。</h2></div><button class="icon-button" data-close-dialog aria-label="关闭数据来源">×</button></div><p class="dialog-intro">选择音乐和已有识别结果，或用演示熟悉操作。</p><div class="source-cards"><button id="demo-source" class="source-card"><strong>交互演示 <span>立即体验</span></strong><p>90 秒示意时间轴，体验导赏、筛选与标注。</p></button><button id="source-load-audio" class="source-card"><strong>本地音乐 <span>留在本机</span></strong><p>载入音频即可播放、选段与手动标注。</p></button><button id="source-import-session" class="source-card"><strong>已有识别结果 <span>JSON</span></strong><p>载入五组结果及其时间信息，生成可检索片段。</p></button><button id="reference-source" class="source-card"><strong>模型参考样本 <span>项目资产</span></strong><p>查看现有五组模型的独立参考结果。</p></button></div><div id="reference-picker" hidden><label class="form-field">选择独立样本<select id="reference-select"></select></label><button id="load-reference" class="secondary-button">查看此参考样本</button><p class="microcopy">样本各自独立，保留原模型输出与来源记录。</p></div><section class="device-section"><h3>当前板卡观测</h3><p class="microcopy">接收现有八类模型的串口结果，查看分类、心跳与运行状态。</p><div class="device-controls"><select id="serial-port" aria-label="串口"><option value="">选择串口</option></select><button id="refresh-ports" class="secondary-button">刷新</button><button id="connect-serial" class="secondary-button">连接</button><button id="import-log" class="text-button">导入串口日志</button></div><p id="serial-status" class="microcopy">设备状态在连接后显示。</p><div id="telemetry-summary" class="telemetry-summary" hidden></div></section><p id="source-error" class="form-error" role="alert"></p></dialog>
+
+  <dialog id="help-dialog" aria-labelledby="help-title"><div class="dialog-heading"><h2 id="help-title">把注意力留给音乐。</h2><button class="icon-button" data-close-dialog aria-label="关闭帮助">×</button></div><ol class="help-steps"><li><strong>选择数据</strong><p>演示可直接体验。本地音频用于播放与人工标注；导入对应五组结果后显示自动分析。</p></li><li><strong>探索声部</strong><p>点击乐队分区或时间轴片段定位，在“片段与标注”中筛选单个或同时活跃的乐器组。</p></li><li><strong>留下注释</strong><p>选择起止时间，关联声部，填写笔记。JSON 保存完整会话，CSV 导出当前筛选片段。</p></li></ol><div class="keyboard-help"><kbd>Space</kbd>播放 / 暂停 <kbd>← →</kbd>前后 5 秒 <kbd>N</kbd>新建标注 <kbd>/</kbd>搜索</div><p class="microcopy">本地音频保留在当前浏览器页面；刷新后可重新关联音频文件。内置演示为界面示意数据。</p></dialog>
+  <input id="file-audio" type="file" accept="audio/*,.wav,.mp3,.flac,.ogg,.m4a" hidden><input id="file-session" type="file" accept=".json,application/json" hidden><input id="file-log" type="file" accept=".txt,.log,text/plain" hidden>
+  <audio id="audio" preload="metadata"></audio><div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+  <script type="module" src="./app.mjs"></script>
+</body>
+</html>
