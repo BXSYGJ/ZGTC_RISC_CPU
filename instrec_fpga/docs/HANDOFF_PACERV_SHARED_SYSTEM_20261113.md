@@ -163,3 +163,7 @@ CPU四组、标准测试、DDR五组996检查、实际生产时钟与分频的�
 当前新flow已启动：full-20261114-124245-full，父53944、runner97995，正在综合，normal/seed5/hold12/180分钟。源码提交a5189f2ec20e8cc81b6f6bea67774380cb273c02，CHECKOUT_INPUTS total202/mismatches0；freeze时HEAD仍为86d3387、修改已暂存，冻结manifest保留原时刻记录，独立检出审计证明202份实际输入与随后提交a5189f2逐字节一致。最新collector已选择新run与全部新功能记录，12/13门槛通过、物理pending；111645实际最终报告按SHA移入history。FINAL_ACCEPTANCE当前退出2，输入和四件artifact通过，最终物理仍待结果。综合RAM报告已无rd_fifo/txq/pc_beat_buf条目，DDR控制器4204FF、分布式RAM0，CPU1653FF/438DistributedRAM；GAP仍256×14原生DRM。
 
 124245最新进度：映射38506LUT/50489FF/694DistributedRAM/129DRM/94APM，全部容量内。详细布局220.19秒、最差+1.113ns、TNS0后进入路由，工作进程63172属于父53944的同一flow，继续原runner97995。源码和运行输入保持冻结。
+
+124245现已结束六阶段，exit0、2929.94秒。详细布线236轮/591.78秒全部107901子网连通；保持时间修复约六轮，最终系统slow setup +0.150ns、slow hold +0.032ns、fast hold -0.023ns，只有3失败端点、THS -0.034ns。fast前三路径为store0/lane_bank25/wa_r2至DRM ADA5（-0.023）、weight_loader/racc1至rdigest_q（-0.010）、softmax idx_sr17至35（-0.001）。原DDR及CPU UART FIFO写地址违例已消除。时序SHA d72e2888aca75c137b88ee66ce64f8d5dcf1149233c82c047fb941ba06b313d8，位流e8da283809bce1b213280249c9a82ed979c0c930303658eeb5ce65a288ab987e；最终38231LUT/50492FF/694DistributedRAM/129DRM/94APM，全部202份输入不变。父53944、runner97995已结束。
+
+继续同一202份输入及同一normal/seed5，新增prepare_pds参数--hold-margin-ps 300 --hold-clock-margin-ps 500 --hold-cross-srb-margin-ps 700，hold12/180分钟，从独立目录完整六阶段重跑。三个threshold是官方PDS实现优化目标（本机QCH手册及pds_shell -help已核对），FDC 0.150ns和RTL均保持；期望增加短路径修复余量。新最终结果出来前目标继续active。完整功能记录无需重跑，输入哈希仍匹配；collector选择后续实际新run。

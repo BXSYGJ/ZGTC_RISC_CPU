@@ -21,9 +21,14 @@ def digest(path: Path) -> str:
 
 
 def prepare(stage: str, seed: int = 1, hold_iterations: int = 4,
-            pnr_mode: str = 'performance', router_threads: int = 1) -> Path:
+            pnr_mode: str = 'performance', router_threads: int = 1,
+            hold_margin_ps: int = 100, hold_clock_margin_ps: int = 200,
+            hold_cross_srb_margin_ps: int = 400) -> Path:
     if router_threads != 1:
         raise ValueError('PG2L100H uses the vendor single-thread router')
+    if not all(0 <= value <= 2000 for value in
+               (hold_margin_ps, hold_clock_margin_ps, hold_cross_srb_margin_ps)):
+        raise ValueError('Hold optimization margins must be within 0..2000 ps')
     stamp = dt.datetime.now().strftime("%Y%m%d-%H%M%S")
     out = ROOT / "build/pacerv_shared_system/pds" / ("full-" + stamp + "-" + stage)
     out.mkdir(parents=True, exist_ok=False)
@@ -74,9 +79,9 @@ def prepare(stage: str, seed: int = 1, hold_iterations: int = 4,
         lines += [f"pnr -mode {pnr_mode} -gplace_seed {seed} "
                   "-optimize_multi_corner_timing -fix_hold_violation "
                   f"-fix_hold_violation_in_route TRUE -fix_hold_violation_iterations {hold_iterations} "
-                  "-fix_hold_violation_threshold 100 "
-                  "-fix_hold_violation_threshold_for_clock_path_cross_srb 400 "
-                  "-fix_hold_violation_threshold_for_clk_tree 200 "
+                  f"-fix_hold_violation_threshold {hold_margin_ps} "
+                  f"-fix_hold_violation_threshold_for_clock_path_cross_srb {hold_cross_srb_margin_ps} "
+                  f"-fix_hold_violation_threshold_for_clk_tree {hold_clock_margin_ps} "
                   "-max_hold_violated_paths_num 50000",
                   "report_timing", "gen_bit_stream"]
     lines.append("exit")
@@ -91,7 +96,9 @@ def prepare(stage: str, seed: int = 1, hold_iterations: int = 4,
                 "pnr_mode": pnr_mode, "router_threads": router_threads,
                 "system_clock_hz": round(float(ddr_parameters['ACTUAL_RATE']) * 1e6 / 8),
                 "pixel_clock_hz": 148500000,
-                "hold_margin_ps": {"post_route": 100, "cross_srb": 400, "clock_tree": 200}}
+                "hold_margin_ps": {"post_route": hold_margin_ps,
+                                   "cross_srb": hold_cross_srb_margin_ps,
+                                   "clock_tree": hold_clock_margin_ps}}
     (out / "INPUTS.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     print("PDS_PREPARED " + str(out), flush=True)
     return out
@@ -215,6 +222,9 @@ if __name__ == "__main__":
     ap.add_argument("--minutes", type=int, default=30)
     ap.add_argument("--seed", type=int, default=1)
     ap.add_argument("--hold-iterations", type=int, default=4)
+    ap.add_argument('--hold-margin-ps', type=int, default=100)
+    ap.add_argument('--hold-clock-margin-ps', type=int, default=200)
+    ap.add_argument('--hold-cross-srb-margin-ps', type=int, default=400)
     ap.add_argument("--mode", choices=('normal', 'performance', 'fast'), default='performance')
     ap.add_argument("--router-threads", type=int, choices=(1,), default=1,
                     help="Routing workers; vendor documents PG2L100H as a single-thread routing device")
@@ -224,6 +234,7 @@ if __name__ == "__main__":
     if not 1 <= args.router_threads <= (os.cpu_count() or 1):
         ap.error('Router threads must be between one and the host logical CPU count')
     output = args.restart if args.restart else (prepare_remote(args.stage) if args.scope == "remote" else prepare(
-        args.stage, args.seed, args.hold_iterations, args.mode, args.router_threads))
+        args.stage, args.seed, args.hold_iterations, args.mode, args.router_threads,
+        args.hold_margin_ps, args.hold_clock_margin_ps, args.hold_cross_srb_margin_ps))
     if args.run:
         run(output, args.minutes, restart=bool(args.restart))
