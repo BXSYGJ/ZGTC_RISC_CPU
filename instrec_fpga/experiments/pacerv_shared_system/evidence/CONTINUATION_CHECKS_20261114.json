@@ -1,0 +1,109 @@
+{
+  "branch": "XSY",
+  "inherited_source_commit": "80bcfa360bc1baf6a2a5732a9b578042a7f90381",
+  "changed_fields": [
+    "weight_loader.digest_q/rdigest_q",
+    "gap_unit.g_acc[].acc_word",
+    "physical.full.status=interrupted_timeout"
+  ],
+  "artifacts": {
+    "MODIFIED_FILE.sv": {
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\experiments\\pacerv_shared_system\\MODIFIED_FILE.sv",
+      "bytes": 23410,
+      "sha256": "3caa8296a806186ad62c247a872ab5746d0b0841335a0fa7b92184a8c6bcac99"
+    },
+    "DIFF_FILE.patch": {
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\experiments\\pacerv_shared_system\\DIFF_FILE.patch",
+      "bytes": 734015,
+      "sha256": "286e7a946a63e24a145689565796a16f6ff15f596dd375e76450a06fbeda9e41"
+    },
+    "VERIFICATION.txt": {
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\experiments\\pacerv_shared_system\\VERIFICATION.txt",
+      "bytes": 115808,
+      "sha256": "f7e2beffe9d30f160ad06df5a72c57654c2ee16d9d2897dc53db5bc250f77468"
+    },
+    "ROLLBACK.sh": {
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\experiments\\pacerv_shared_system\\ROLLBACK.sh",
+      "bytes": 2448,
+      "sha256": "9fe28736500f529342b48847e9b29248c989443b7ba3c3d982fef724d70e4f64"
+    }
+  },
+  "control_regressions": {
+    "BASELINE": {
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\chat_continuation_20261114\\BASELINE\\RESULT.json",
+      "sha256": "d637eed7ec81b9ee4b950b6fc5718a762543a9acaa43947af66928af1df6957b",
+      "passed": true,
+      "literal_result": "LOADER_GAP_BASELINE_PASS checksum_corruption=1 gap_outputs=768 live_unchanged=1",
+      "exit_status": 0,
+      "inputs": [
+        {
+          "path": "src/ctrl/weight_loader.v",
+          "sha256": "edfc91589316bf60134cf8b93839ec95998fbe64808a439a966d8e99e0109cf6"
+        },
+        {
+          "path": "src/npu/gap_unit.v",
+          "sha256": "b24697c49780a01a768d015c594ef1512fc5cfe6a9f3798e6e6f227123b0acfc"
+        }
+      ]
+    },
+    "MODIFIED": {
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\chat_continuation_20261114\\MODIFIED\\RESULT.json",
+      "sha256": "3bdae604cd915ebb41fbdc634280fe1160ddc5b77c7348a442874f4953408fdd",
+      "passed": true,
+      "literal_result": "LOADER_GAP_MODIFIED_PASS checksum_corruption=1 gap_outputs=768 live_unchanged=1",
+      "exit_status": 0,
+      "inputs": [
+        {
+          "path": "src/ctrl/weight_loader.v",
+          "sha256": "a7934f9d44f29bd39de92e8674972be050ce75070c4afb7f1c8af0e79a73c8be"
+        },
+        {
+          "path": "src/npu/gap_unit.v",
+          "sha256": "ec69967158709c08dede247f55f6cd17fb398d4ac01abb04828210f57e25f563"
+        }
+      ]
+    },
+    "ROLLBACK": {
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\chat_continuation_20261114\\ROLLBACK\\RESULT.json",
+      "sha256": "b8a3243d53b1556995a8b93d8b4e1bf53bbed9b4c0ce3babedffac6ff5245f3c",
+      "passed": true,
+      "literal_result": "LOADER_GAP_ROLLBACK_PASS checksum_corruption=1 gap_outputs=768 live_unchanged=1",
+      "exit_status": 0,
+      "inputs": [
+        {
+          "path": "src/ctrl/weight_loader.v",
+          "sha256": "edfc91589316bf60134cf8b93839ec95998fbe64808a439a966d8e99e0109cf6"
+        },
+        {
+          "path": "src/npu/gap_unit.v",
+          "sha256": "b24697c49780a01a768d015c594ef1512fc5cfe6a9f3798e6e6f227123b0acfc"
+        }
+      ]
+    }
+  },
+  "rollback_files_verified": 31,
+  "restored_cpu_cycles": 460012,
+  "modified_cpu_cycles": 180016,
+  "live_modified_files_unchanged": true,
+  "passed_gates": 12,
+  "total_gates": 13,
+  "physical_qualified": false,
+  "reverse_patch_check": {
+    "command": [
+      "git",
+      "apply",
+      "--check",
+      "--reverse",
+      "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\experiments\\pacerv_shared_system\\DIFF_FILE.patch"
+    ],
+    "output": "",
+    "exit_status": 0
+  },
+  "rollback_git_mode": "100755",
+  "passed": true,
+  "inherited_literal_output_encoding": {
+    "source": "FULL_NPU_IMC_RESULTS.json commands; original WSL diagnostic",
+    "replacement_characters_preserved": 8,
+    "new_document_replacement_characters": 0
+  }
+}

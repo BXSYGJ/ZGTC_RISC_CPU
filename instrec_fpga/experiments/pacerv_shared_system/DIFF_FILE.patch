@@ -15485,6 +15485,69 @@ index 6bcfefc..26f49d8 100644
 +                  npu_busy_u, cpu_trap, cpu_alive, heartbeat};
 +
 +endmodule
+diff --git a/instrec_fpga/src/ctrl/weight_loader.v b/instrec_fpga/src/ctrl/weight_loader.v
+index 5a021c2..428427f 100644
+--- a/instrec_fpga/src/ctrl/weight_loader.v
++++ b/instrec_fpga/src/ctrl/weight_loader.v
+@@ -91,6 +91,7 @@ module weight_loader #(
+ 
+     reg [31:0]  acc0, acc1, acc2, acc3;
+     reg [31:0]  racc0, racc1, racc2, racc3;
++    reg [31:0]  digest_q, rdigest_q;
+     reg [15:0]  rd_seq;
+     reg [15:0]  last_len;
+ 
+@@ -174,6 +175,8 @@ module weight_loader #(
+             racc1      <= 32'd0;
+             racc2      <= 32'd0;
+             racc3      <= 32'd0;
++            digest_q   <= 32'd0;
++            rdigest_q  <= 32'd0;
+             rd_seq     <= 16'd0;
+             last_len   <= 16'd0;
+             rd_ready   <= 1'b0;
+@@ -339,6 +342,9 @@ module weight_loader #(
+ 
+                 S_RD_SET: begin
+                     if (rd_seq == frame_cnt) begin
++                        // Separate the folding tree from comparison and text.
++                        digest_q  <= digest_c;
++                        rdigest_q <= rdigest_c;
+                         state <= S_RD_CHK;
+                     end else begin
+                         cmd       <= {1'b0, (BASE_ADDR + {4'd0, rd_seq, 8'd0}), rd_cmd_len_c};
+@@ -368,7 +374,7 @@ module weight_loader #(
+                     tx_line[1] <= 8'h4F;  // 'O'
+                     tx_line[2] <= 8'h4B;  // 'K'
+                     tx_line[3] <= 8'h20;  // ' '
+-                    if (rdigest_c != digest_c) begin
++                    if (rdigest_q != digest_q) begin
+                         tx_line[1] <= 8'h45;  // 'E'
+                         tx_line[2] <= 8'h52;  // 'R'
+                         tx_line[3] <= 8'h52;  // 'R'
+@@ -377,14 +383,14 @@ module weight_loader #(
+                     end else begin
+                         weight_ok <= 1'b1;
+                     end
+-                    tx_line[4]  <= hex_ascii(rdigest_c[31:28]);
+-                    tx_line[5]  <= hex_ascii(rdigest_c[27:24]);
+-                    tx_line[6]  <= hex_ascii(rdigest_c[23:20]);
+-                    tx_line[7]  <= hex_ascii(rdigest_c[19:16]);
+-                    tx_line[8]  <= hex_ascii(rdigest_c[15:12]);
+-                    tx_line[9]  <= hex_ascii(rdigest_c[11:8]);
+-                    tx_line[10] <= hex_ascii(rdigest_c[7:4]);
+-                    tx_line[11] <= hex_ascii(rdigest_c[3:0]);
++                    tx_line[4]  <= hex_ascii(rdigest_q[31:28]);
++                    tx_line[5]  <= hex_ascii(rdigest_q[27:24]);
++                    tx_line[6]  <= hex_ascii(rdigest_q[23:20]);
++                    tx_line[7]  <= hex_ascii(rdigest_q[19:16]);
++                    tx_line[8]  <= hex_ascii(rdigest_q[15:12]);
++                    tx_line[9]  <= hex_ascii(rdigest_q[11:8]);
++                    tx_line[10] <= hex_ascii(rdigest_q[7:4]);
++                    tx_line[11] <= hex_ascii(rdigest_q[3:0]);
+                     tx_line[12] <= 8'h0A;  // newline
+                     tx_pos      <= 4'd0;
+                     state       <= S_END;
 diff --git a/instrec_fpga/src/ddr3/ddr3_arbiter.v b/instrec_fpga/src/ddr3/ddr3_arbiter.v
 index 7aa9803..342ac1d 100644
 --- a/instrec_fpga/src/ddr3/ddr3_arbiter.v
@@ -15899,6 +15962,59 @@ index 47756a3..4b55b8d 100644
                      // 16 out_valid pulses before advancing.
                      if (rq_cnt < 5'd16) rq_cnt <= rq_cnt + 5'd1;
                      if (rq_ok) begin
+diff --git a/instrec_fpga/src/npu/gap_unit.v b/instrec_fpga/src/npu/gap_unit.v
+index b58d9c7..f23fa8a 100644
+--- a/instrec_fpga/src/npu/gap_unit.v
++++ b/instrec_fpga/src/npu/gap_unit.v
+@@ -41,7 +41,7 @@ module gap_unit #(
+ 
+     localparam [7:0] GRP_LAST = (CIN / 16) - 1;
+ 
+-    reg signed [31:0] acc [0:255];
++    wire signed [31:0] acc [0:255];
+     reg [15:0]        result [0:255];
+ 
+     reg [1:0]  row_cnt;
+@@ -60,6 +60,21 @@ module gap_unit #(
+     wire       last_beat = y_valid && (row_cnt == H_IN - 1) &&
+                            (grp_cnt == GRP_LAST) && (col_cnt == W_IN - 1) &&
+                            (lane_cnt == 4'd15);
++    wire signed [31:0] acc_next = (row_cnt == 2'd0 && col_cnt == 4'd0)
++        ? {24'd0, y_u8} : acc[ch] + {24'd0, y_u8};
++
++    // Scalar registers avoid the dual-read RAM write-address hold path.
++    genvar acc_index;
++    generate
++        for (acc_index = 0; acc_index < 256; acc_index = acc_index + 1) begin : g_acc
++            reg signed [31:0] acc_word;
++            assign acc[acc_index] = acc_word;
++            always @(posedge clk) begin
++                if (rst_n && state == S_ACC && y_valid && ch == acc_index)
++                    acc_word <= acc_next;
++            end
++        end
++    endgenerate
+ 
+     // round-half-even divide by 64 for a non-negative s32 value.
+     function [15:0] rhe_shift6;
+@@ -97,10 +112,6 @@ module gap_unit #(
+                 S_ACC: begin
+                     busy <= 1'b1;
+                     if (y_valid) begin
+-                        if (row_cnt == 2'd0 && col_cnt == 4'd0)
+-                            acc[ch] <= {{24{1'b0}}, y_u8};   // first visit
+-                        else
+-                            acc[ch] <= acc[ch] + {{24{1'b0}}, y_u8};
+                         if (lane_cnt == 4'd15) begin
+                             lane_cnt <= 4'd0;
+                             if (col_cnt == W_IN - 1) begin
+@@ -158,4 +169,4 @@ module gap_unit #(
+         end
+     end
+ 
+-endmodule
+\ No newline at end of file
++endmodule
 diff --git a/instrec_fpga/src/npu/wdma.v b/instrec_fpga/src/npu/wdma.v
 index 55d8441..92869d2 100644
 --- a/instrec_fpga/src/npu/wdma.v

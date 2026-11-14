@@ -1,0 +1,131 @@
+{
+  "scope": "Physical-rate I2S, CDC FIFO and production audio sink; behavioural DDR completion",
+  "audio_sample_rate_hz": 48000,
+  "window_frames": 132096,
+  "windows_per_case": 2,
+  "inputs_sha256": {
+    "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\audio\\i2s_slave_rx.v": "453923d5c5d1629946436e7fb0886ba3a6699c512906c580e8342f2ff573588f",
+    "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\audio\\audio_cdc_fifo.v": "eade0b2cac8eb723745f6fc71a3c75bf51ae41fb6777f3415ff2066b3af56689",
+    "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\audio\\audio_sink.v": "004cfedcd76131291debccd13c9f6c965fb337558dcc4dc65e298cd1d28e1e09",
+    "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\tb_audio_chain.sv": "dc6c1aa27c9177b0dfea9de48ec1935d731902d7c487b47f79a5134294c832c8",
+    "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\ctrl\\instrec_top.v": "a5e4848d294baf57afb11c5b117a0b9c5ff61d174ee951db56ae491c2f6d7191",
+    "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\ipcore\\ddr3_test\\ddr3_test.idf": "4e4ff35dcf0dfb4f23919072a014f56c8843e32994ca5aae2a5e5e02b273ec61",
+    "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\constraints\\ddr3_100h.fdc": "8aca13a4d2280e86d6391d49c0139d023ad405400648e09acf845568fe4634e6"
+  },
+  "live_inputs_unchanged": true,
+  "cases": [
+    {
+      "clock_hz": 125000000,
+      "ddr_done_delay_cycles": 512,
+      "compile": {
+        "command": [
+          "wsl.exe",
+          "-d",
+          "Ubuntu-22.04",
+          "--cd",
+          "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga",
+          "--exec",
+          "/home/bx/.local/src/verilator-5.040/bin/verilator",
+          "--binary",
+          "--timing",
+          "-Wno-fatal",
+          "--top-module",
+          "tb_audio_chain",
+          "-j",
+          "2",
+          "--Mdir",
+          "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/pacerv_shared_system/audio_clock/20261114-022103/125000000/obj",
+          "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/pacerv_shared_system/audio_clock/20261114-022103/125000000/tb_audio_chain.sv",
+          "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/audio/i2s_slave_rx.v",
+          "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/audio/audio_cdc_fifo.v",
+          "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/audio/audio_sink.v"
+        ],
+        "exit_status": 0,
+        "seconds": 5.83786460000556,
+        "log": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\audio_clock\\20261114-022103\\125000000\\compile.log",
+        "log_sha256": "6e126dba5779770f80dc346b320249091338f4a982f7a2e7cd397577df30803f"
+      },
+      "tb_sha256": "fc3455822d88ffc7740bf40d012cce21481aef2801b449a93b369081bd9074e9",
+      "passed": true,
+      "simulation": {
+        "command": [
+          "wsl.exe",
+          "-d",
+          "Ubuntu-22.04",
+          "--cd",
+          "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga",
+          "--exec",
+          "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/pacerv_shared_system/audio_clock/20261114-022103/125000000/obj/Vtb_audio_chain",
+          "+FULL",
+          "+DLY=512"
+        ],
+        "exit_status": 0,
+        "seconds": 199.24838910000108,
+        "log": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\audio_clock\\20261114-022103\\125000000\\simulation.log",
+        "log_sha256": "0a8a2370261a76ca9bfd752dbf478e1bb117b1556247590376ce0cecf093012d"
+      },
+      "literal_results": [
+        "WIN 1: real=132095 inj=1 freeze_cyc=8494395 err=0 ovf=0",
+        "WIN 2: real=132096 inj=0 freeze_cyc=8495424 err=0 ovf=0",
+        "AUDIO_CLOCK_PASS real=132096 injection=0 overflow=0 errors=0 ordered_samples=1"
+      ]
+    },
+    {
+      "clock_hz": 109375000,
+      "ddr_done_delay_cycles": 512,
+      "compile": {
+        "command": [
+          "wsl.exe",
+          "-d",
+          "Ubuntu-22.04",
+          "--cd",
+          "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga",
+          "--exec",
+          "/home/bx/.local/src/verilator-5.040/bin/verilator",
+          "--binary",
+          "--timing",
+          "-Wno-fatal",
+          "--top-module",
+          "tb_audio_chain",
+          "-j",
+          "2",
+          "--Mdir",
+          "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/pacerv_shared_system/audio_clock/20261114-022103/109375000/obj",
+          "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/pacerv_shared_system/audio_clock/20261114-022103/109375000/tb_audio_chain.sv",
+          "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/audio/i2s_slave_rx.v",
+          "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/audio/audio_cdc_fifo.v",
+          "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/src/audio/audio_sink.v"
+        ],
+        "exit_status": 0,
+        "seconds": 5.831685699988157,
+        "log": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\audio_clock\\20261114-022103\\109375000\\compile.log",
+        "log_sha256": "dfaaa344261e3fb13c9f9eab09fbe3d42d1c3f10d2411928350cfbec3afbd609"
+      },
+      "tb_sha256": "cc1bce1e6410dfde8d41e123bf76a1da8b29d6f9a7010ddb639ebc112b036ea7",
+      "passed": true,
+      "simulation": {
+        "command": [
+          "wsl.exe",
+          "-d",
+          "Ubuntu-22.04",
+          "--cd",
+          "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga",
+          "--exec",
+          "/mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/pacerv_shared_system/audio_clock/20261114-022103/109375000/obj/Vtb_audio_chain",
+          "+FULL",
+          "+DLY=512"
+        ],
+        "exit_status": 0,
+        "seconds": 179.55773190000036,
+        "log": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\audio_clock\\20261114-022103\\109375000\\simulation.log",
+        "log_sha256": "43b3e94a7e62fc7eb09e82c76b0c875723caeb811d7b7ba3b340b2a3ac91bd5c"
+      },
+      "literal_results": [
+        "WIN 1: real=132095 inj=1 freeze_cyc=8494395 err=0 ovf=0",
+        "WIN 2: real=132096 inj=0 freeze_cyc=8495424 err=0 ovf=0",
+        "AUDIO_CLOCK_PASS real=132096 injection=0 overflow=0 errors=0 ordered_samples=1"
+      ]
+    }
+  ],
+  "passed": true
+}

@@ -10,11 +10,11 @@
       ],
       "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\integration_rollback\\restored_copy\\instrec_fpga",
       "exit_status": 0,
-      "output": "INTEGRATION_ROLLBACK_RESTORED files=29 isolated_copy=1\r\n"
+      "output": "INTEGRATION_ROLLBACK_RESTORED files=31 isolated_copy=1\r\n"
     },
     {
       "command": [
-        "D:/AAAPP\\iverilog/bin\\iverilog.EXE",
+        "D:\\AAAPP\\iverilog\\bin\\iverilog.EXE",
         "-g2012",
         "-s",
         "tb_rv_cpu",
@@ -35,7 +35,7 @@
     },
     {
       "command": [
-        "D:/AAAPP\\iverilog/bin\\vvp.EXE",
+        "D:\\AAAPP\\iverilog\\bin\\vvp.EXE",
         "-i",
         "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\integration_rollback\\original.vvp"
       ],

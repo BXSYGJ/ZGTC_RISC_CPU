@@ -41,7 +41,7 @@ module gap_unit #(
 
     localparam [7:0] GRP_LAST = (CIN / 16) - 1;
 
-    reg signed [31:0] acc [0:255];
+    wire signed [31:0] acc [0:255];
     reg [15:0]        result [0:255];
 
     reg [1:0]  row_cnt;
@@ -60,6 +60,21 @@ module gap_unit #(
     wire       last_beat = y_valid && (row_cnt == H_IN - 1) &&
                            (grp_cnt == GRP_LAST) && (col_cnt == W_IN - 1) &&
                            (lane_cnt == 4'd15);
+    wire signed [31:0] acc_next = (row_cnt == 2'd0 && col_cnt == 4'd0)
+        ? {24'd0, y_u8} : acc[ch] + {24'd0, y_u8};
+
+    // Scalar registers avoid the dual-read RAM write-address hold path.
+    genvar acc_index;
+    generate
+        for (acc_index = 0; acc_index < 256; acc_index = acc_index + 1) begin : g_acc
+            reg signed [31:0] acc_word;
+            assign acc[acc_index] = acc_word;
+            always @(posedge clk) begin
+                if (rst_n && state == S_ACC && y_valid && ch == acc_index)
+                    acc_word <= acc_next;
+            end
+        end
+    endgenerate
 
     // round-half-even divide by 64 for a non-negative s32 value.
     function [15:0] rhe_shift6;
@@ -97,10 +112,6 @@ module gap_unit #(
                 S_ACC: begin
                     busy <= 1'b1;
                     if (y_valid) begin
-                        if (row_cnt == 2'd0 && col_cnt == 4'd0)
-                            acc[ch] <= {{24{1'b0}}, y_u8};   // first visit
-                        else
-                            acc[ch] <= acc[ch] + {{24{1'b0}}, y_u8};
                         if (lane_cnt == 4'd15) begin
                             lane_cnt <= 4'd0;
                             if (col_cnt == W_IN - 1) begin

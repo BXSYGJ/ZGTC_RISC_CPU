@@ -23,6 +23,23 @@ def read(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8-sig"))
 
 
+def observed_uncertainty(text: str) -> dict:
+    observed = {'setup': set(), 'hold': set()}
+    for block in text.split('Startpoint  :')[1:]:
+        if not re.search(r'Path Group\s*:\s*ddrphy_sysclk\b', block):
+            continue
+        kind = re.search(r'Path Type\s*:\s*(max|min) \((?:slow|fast) corner\)', block)
+        value = re.search(r'clock uncertainty\s+(-?[\d.]+)', block)
+        if kind and value:
+            observed['setup' if kind[1] == 'max' else 'hold'].add(abs(float(value[1])))
+    if any(not values for values in observed.values()):
+        raise RuntimeError('System setup/hold path uncertainty is missing from the timing report')
+    if any(value < 0.150 for values in observed.values() for value in values):
+        raise RuntimeError('Reported system path uncertainty is below the declared 0.150 ns budget')
+    return {'reported_system_' + kind + '_uncertainty_ns': sorted(values)
+            for kind, values in observed.items()}
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--full-build", type=Path, required=True)
@@ -32,6 +49,9 @@ def main() -> None:
     parser.add_argument("--uart-run", type=Path,
                         default=ROOT / 'build/pacerv_shared_system/uart/clock_109375')
     parser.add_argument("--audio-clock-run", type=Path)
+    parser.add_argument("--loader-gap-study", type=Path)
+    parser.add_argument("--allow-pending-timing", action="store_true",
+                        help="Publish functional evidence with an explicit unqualified pending timing gate")
     parser.add_argument("--dashboard-run", type=Path,
                         default=ROOT / 'build/pacerv_shared_system/dashboard_equivalence_7clock')
     args = parser.parse_args()
@@ -46,7 +66,7 @@ def main() -> None:
     operating_point = {'target': selected_manifest['target'],
                        'system_clock_hz': selected_manifest['system_clock_hz'],
                        'pixel_clock_hz': selected_manifest['pixel_clock_hz'],
-                       'system_setup_hold_uncertainty_ns': float(uncertainty[1])}
+                       'declared_system_setup_hold_uncertainty_ns': float(uncertainty[1])}
     git_context = {key: subprocess.check_output(['git', *git_args], cwd=ROOT, text=True,
                                                 creationflags=subprocess.CREATE_NO_WINDOW).strip()
                    for key, git_args in (('branch', ['branch', '--show-current']),
@@ -131,6 +151,36 @@ def main() -> None:
                 raise RuntimeError(key + ' input changed: ' + item['path'])
         retain(source, key.upper() + '_RESULTS.json')
         pipeline_checks[key] = check
+    control_checks = {}
+    original_hashes = {row['path'].removeprefix('instrec_fpga/'): row['sha256']
+                       for row in read(HERE / 'BASELINE_MANIFEST.json')['files']}
+    control_sources = ('src/ctrl/weight_loader.v', 'src/npu/gap_unit.v')
+    if any(digest(ROOT / path) != original_hashes[path] for path in control_sources):
+        if not args.loader_gap_study:
+            raise RuntimeError('Modified loader/GAP requires --loader-gap-study evidence')
+    if args.loader_gap_study:
+        for mode in ('BASELINE', 'MODIFIED', 'ROLLBACK'):
+            source = args.loader_gap_study / mode / 'RESULT.json'
+            check = read(source)
+            if check.get('mode') != mode or not check.get('passed') or not check.get('live_sources_unchanged'):
+                raise RuntimeError('Loader/GAP control failed: ' + mode)
+            baseline_manifest = Path(check['baseline_manifest'])
+            if digest(baseline_manifest) != check['baseline_manifest_sha256']:
+                raise RuntimeError('Loader/GAP frozen baseline manifest changed')
+            control_baseline_hashes = {item['path']: item['sha256']
+                                       for item in read(baseline_manifest)['files']}
+            for item in check['inputs']:
+                expected = (digest(ROOT / item['path']) if mode == 'MODIFIED'
+                            else control_baseline_hashes[item['path']])
+                if item['sha256'] != expected:
+                    raise RuntimeError('Loader/GAP control source mismatch: ' + mode + ' ' + item['path'])
+            for item in check['test_inputs']:
+                if digest(Path(item['path'])) != item['sha256']:
+                    raise RuntimeError('Loader/GAP test input changed: ' + item['path'])
+            retain(source, 'LOADER_GAP_' + mode + '_RESULTS.json')
+            control_checks[mode] = check
+        if len({check['baseline_manifest_sha256'] for check in control_checks.values()}) != 1:
+            raise RuntimeError('Loader/GAP controls use different frozen baselines')
     audio_clock = None
     if args.audio_clock_run:
         audio_clock = read(args.audio_clock_run / 'RESULT.json')
@@ -155,11 +205,46 @@ def main() -> None:
     if args.remote_build:
         selected_builds.append(("REMOTE", args.remote_build))
     for label, run in selected_builds:
-        qualification = inspect(run)
-        for item in read(run / "INPUTS.json")["files"]:
+        build_manifest = read(run / "INPUTS.json")
+        for item in build_manifest["files"]:
             current = ROOT / item["path"]
             if not current.is_file() or digest(current) != item["sha256"]:
                 raise RuntimeError("Selected build differs from current input: " + str(current))
+        if args.allow_pending_timing and label == 'FULL' and not list((run / 'report_timing').glob('*.rtr')):
+            physical['full'] = {'run': str(run.resolve()), 'target': build_manifest['target'],
+                                'status': 'final_timing_evidence_pending', 'qualified': False,
+                                'frozen_input_count': len(build_manifest['files'])}
+            interruption_file = run / 'INTERRUPTION.json'
+            if interruption_file.is_file():
+                interruption = read(interruption_file)
+                if interruption['manifest_sha256'] != digest(run / 'INPUTS.json'):
+                    raise RuntimeError('Interrupted build manifest changed')
+                for record in interruption['logs']:
+                    if digest(run / record['path']) != record['sha256']:
+                        raise RuntimeError('Interrupted build log changed: ' + record['path'])
+                if interruption['status'] != 'interrupted_timeout' or interruption['supervisor_exit_status'] != 1:
+                    raise RuntimeError('Unexpected interrupted build status')
+                physical['full'].update(status=interruption['status'],
+                                        supervisor_exit_status=interruption['supervisor_exit_status'],
+                                        last_route_iteration=interruption['last_route_iteration'],
+                                        last_unrouted_subnets=interruption['last_unrouted_subnets'])
+                retain(interruption_file, 'FULL_PDS_INTERRUPTION.json')
+            for name in ('FULL_PDS_RESULT.json', 'FULL_PDS_QUALIFICATION.json', 'FULL_TIMING.rtr',
+                         'FULL_ROUTED_RESOURCES.prr', 'FULL_RAM_INFERENCE.txt'):
+                old = evidence / name
+                if old.is_file():
+                    historical = evidence / 'history' / digest(old)[:12] / name
+                    historical.parent.mkdir(parents=True, exist_ok=True)
+                    if historical.exists() and historical.read_bytes() != old.read_bytes():
+                        raise RuntimeError('Historical physical evidence collision: ' + name)
+                    shutil.copy2(old, historical)
+                    if historical.read_bytes() != old.read_bytes():
+                        raise RuntimeError('Physical evidence archive mismatch: ' + name)
+                    old.unlink()
+            retain(run / 'INPUTS.json', label + '_PDS_INPUTS.json')
+            retain(run / 'build.tcl', label + '_BUILD_RECIPE.tcl')
+            continue
+        qualification = inspect(run)
         if read(run / 'QUALIFICATION.json') != qualification:
             raise RuntimeError('Stored PDS qualification is stale: ' + str(run))
         retain(run / 'QUALIFICATION.json', label + '_PDS_QUALIFICATION.json')
@@ -174,6 +259,9 @@ def main() -> None:
         retain(resource_reports[0], label + "_ROUTED_RESOURCES.prr")
         retain(run / "synthesize/apm_drm_lutram_utilization.log", label + "_RAM_INFERENCE.txt")
         physical[label.lower()] = qualification
+        if label == 'FULL':
+            operating_point.update(observed_uncertainty(
+                Path(qualification['timing_report']).read_text(encoding='utf-8')))
     board = None
     if args.board_run:
         board = read(args.board_run / "result.json")
@@ -197,6 +285,8 @@ def main() -> None:
     verdict.update({key + '_passed': value['passed'] for key, value in pipeline_checks.items()})
     if audio_clock:
         verdict['audio_clock_passed'] = audio_clock['passed']
+    if control_checks:
+        verdict['loader_gap_controls_passed'] = all(check['passed'] for check in control_checks.values())
     if args.remote_build:
         verdict.update(remote_pds_qualified=physical["remote"]["qualified"],
                        remote_board_passed=board_pass)
@@ -208,6 +298,7 @@ def main() -> None:
                     ROOT / 'src/npu/activation_store_mux.v', ROOT / 'src/npu/activation_row_store_dynamic.v',
                     ROOT / 'src/npu/fc_engine.v', ROOT / 'src/npu/wdma.v',
                     ROOT / 'src/npu/weight_read_aligner_hardened.v',
+                    ROOT / 'src/ctrl/weight_loader.v', ROOT / 'src/npu/gap_unit.v',
                     ROOT / 'ipcore/ddr3_test/ddr3_test.idf', ROOT / 'constraints/ddr3_100h.fdc',
                     ROOT / 'src/ui/dashboard_text.v',
                     ROOT / 'src/ui/dashboard_renderer.v']
@@ -224,6 +315,14 @@ def main() -> None:
                "scope": "PG100 complete-system implementation and functional simulation; "
                         + ("optional PG200 board evidence" if args.board_run else
                            "local PDS qualification requested; board testing not selected")}
+    for name in ('RESULTS.json', 'VERIFICATION.txt'):
+        old = HERE / name
+        if old.is_file():
+            historical = evidence / 'history' / digest(old)[:12] / name
+            historical.parent.mkdir(parents=True, exist_ok=True)
+            if historical.exists() and historical.read_bytes() != old.read_bytes():
+                raise RuntimeError('Historical review artifact collision: ' + name)
+            shutil.copy2(old, historical)
     (HERE / "RESULTS.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
     lines = ["PaceRV core + shared whole-system memory/peripherals", "",
              'Branch and checkout: ' + json.dumps(git_context),
@@ -232,8 +331,11 @@ def main() -> None:
              "M3_MASK_ENABLE byte masks and locked M3 client ownership; native local data RAM;",
              "four-source UART acceptance, registered MMIO/activation/DDR commands, synchronous FC",
              "coefficient RAM, seven-clock display alignment, FETCH_ADDRESS_BITS=IAW+2 ROM qualification,",
-             "register-based short weight FIFOs and matched actual DDR/system clock configuration.",
-             "", "Selected gates: " + json.dumps(verdict), "",
+             "register-based short weight FIFOs, digest_q/rdigest_q checksum staging,",
+             "GAP acc scalar register bank and matched actual DDR/system clock configuration.",
+             "", "Selected gates: " + json.dumps(verdict),
+             "Physical status: " + json.dumps({label: item.get('status', 'complete')
+                                             for label, item in physical.items()}), "",
              "Baseline and CPU/NPU exact commands, inputs, literal output and exits follow."]
     lines += [name + ": " + path for name, path in artifacts.items()]
     lines += ["", "Working directory: " + str(ROOT),
@@ -244,8 +346,8 @@ def main() -> None:
               "Input: same original prog.hex plus directed IMC/backpressure/fetch-fault cases and frozen H3 vendor core.",
               "Literal result: RV32 BENCH cycles=180016 inst=180008 acc=0xf2d8888b; PACERV_CHECKS_PASS cases=4 vendor_hashes=8; exit 0.",
               "ROLLBACK exact command: python experiments/pacerv_shared_system/run_integration_rollback.py",
-              "Input: marked modified copy populated from current files; 29 original baseline files.",
-              "Literal result: INTEGRATION_ROLLBACK_PASS files=29 cycles=460012 retired=180008 live_modified_unchanged=1; exit 0."]
+              f"Input: marked modified copy populated from current files; {len(original_hashes)} original baseline files.",
+              f"Literal result: INTEGRATION_ROLLBACK_PASS files={len(original_hashes)} cycles=460012 retired=180008 live_modified_unchanged=1; exit 0."]
     for label, report, key in (("BASELINE CPU", baseline, "commands"),
                                 ("MODIFIED CPU", cpu, "results"),
                                 ("MODIFIED NPU", npu, "commands"),
@@ -274,6 +376,16 @@ def main() -> None:
                           "exit: " + str(record['exit_status']),
                           "raw output: " + record['log'], "raw output SHA256: " + record['log_sha256']]
             lines += ["literal results:", *case['literal_results']]
+    if control_checks:
+        lines += ['', 'CHECKSUM PIPELINE AND GAP STORAGE CONTROLS']
+        for mode, report in control_checks.items():
+            lines += [mode + ' exact command: python experiments/pacerv_shared_system/run_loader_gap_timing.py '
+                      '--mode ' + mode + ' --label ' + args.loader_gap_study.name,
+                      'Input source hashes: ' + json.dumps(report['inputs'])]
+            for record in report['commands']:
+                lines += ['command: ' + json.dumps(record['command']),
+                          'input/cwd: ' + record['cwd'], 'exit: ' + str(record['exit_status']),
+                          'literal output:', record['output']]
     lines += ["", "DDR BASELINE/MODIFIED/ROLLBACK exact commands and all literal outputs:",
               str(ROOT / "sim/experiments/pacerv_shared_ddr/VERIFICATION.txt"),
               "Rollback restored original behavior/hashes in a separate copy; live modified RTL remains.",

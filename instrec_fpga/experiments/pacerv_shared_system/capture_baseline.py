@@ -26,6 +26,8 @@ FILES = [
     "instrec_fpga/src/npu/fc_engine.v",
     "instrec_fpga/src/npu/weight_read_aligner_hardened.v",
     "instrec_fpga/src/npu/wdma.v",
+    "instrec_fpga/src/npu/gap_unit.v",
+    "instrec_fpga/src/ctrl/weight_loader.v",
     "instrec_fpga/ipcore/ddr3_test/ddr3_test.idf",
     "instrec_fpga/ipcore/ddr3_test/ddr3_test.v",
     "instrec_fpga/ipcore/ddr3_test/ddr3_test_ddrphy_top.v",

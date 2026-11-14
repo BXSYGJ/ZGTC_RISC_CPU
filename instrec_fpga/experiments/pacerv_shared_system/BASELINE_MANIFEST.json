@@ -82,6 +82,16 @@
       "sha256": "64c5fefad819b1f91d0b4908dfa9c30bdb682c93c2adcf0a595d9d26538de084"
     },
     {
+      "path": "instrec_fpga/src/npu/gap_unit.v",
+      "bytes": 5515,
+      "sha256": "51831e5f4ee8ac3f162785f91777d54d2aca3e2fc657762f4adb5c3d071fba90"
+    },
+    {
+      "path": "instrec_fpga/src/ctrl/weight_loader.v",
+      "bytes": 17392,
+      "sha256": "2252c6f7bb9b8ac35d1ddce1db018a93c71de27065b5fa9daa3dab870af0e035"
+    },
+    {
       "path": "instrec_fpga/ipcore/ddr3_test/ddr3_test.idf",
       "bytes": 74344,
       "sha256": "7073459a54322e49d70e6b3d63a5c540ed420794e4e65fca19be5db13a3aca3a"

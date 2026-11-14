@@ -105,3 +105,29 @@ runner26725已返回：完整六阶段均成功、exit0、3789.377秒，202项�
 最差setup实际来自u_weight_loader/racc0，经rdigest_c XOR、比较进入weight_err、weight_ok及tx_line，5级逻辑但约89%的数据路径耗时来自路由；最差hold来自u_npu/u_gap/lane_cnt[2]直接到acc_b_2_20、acc_b_2_21等RAM64 WADDR[2]。下一轮先读对应RTL，按协议拆解校验数据路径并处理GAP存储映射/写地址保持，禁止通过放宽时序或假路径掩盖真实路径。不要猜测本轮仍是CPU分支或之前两级FIFO；最终报告已给出新的关键路径。新改源须进入基线/差分/回退覆盖并重新做相关功能验证，再选择同频或合法较低频率完整实现。
 
 用户本轮询问相对XSY2的语音影响：原125MHz NPU31,141,255周期约249.130ms，新109.375MHz 31,152,093周期约284.819ms，增加35.689ms；固定整数循环3.680096→1.645861ms，快约2.236倍。采样48kHz、窗口132096帧/2.752s及像素域不变，两档连续I2S稳态完整样本一致，固定特征的完整NPU逐层golden一致。约36ms是NPU增量，完整采音至显示延迟还包括Mel和共享DDR等待。docs/AUDIO_FREQUENCY_IMPACT_20261114.md已同步最终物理状态。此轮只更新四份状态/说明文档，无RTL/约束/实验脚本改动；主VERIFICATION仍待最终合格实现后收集，不能作为109.375MHz合格证明。
+
+## 当前覆盖：2026-11-14 04:01，显式GAP寄存器组进入完整实现
+
+本轮为实际RTL进展。weight_loader增加digest_q/rdigest_q，在S_RD_SET末尾捕获两个折叠摘要，S_RD_CHK比较并生成十六进制文本；流水状态数不变。GAP改为256项32位标量寄存器g_acc[].acc_word，公共acc_next加法器与原访存/输出时序保持。最初仅加syn_ramstyle=registers的034633轮综合内部错误：日志明确忽略双读数组的属性，原日志/输入保留，无位流；显式寄存器035340已通过综合。
+
+当前唯一PDS为build/pacerv_shared_system/pds/full-20261114-035340-full，runner19992/PDS62028，normal/seed3/12轮hold，系统109.375MHz/像素148.5MHz，202项CHECKOUT_INPUT_AUDIT全匹配。不要重启活进程。93.75MHz旧快照未含新GAP与摘要，不能直接启用；若后续要降频须从当前源重新准备。当前不得声称时序闭合。
+
+新增run_loader_gap_timing.py与tb_gap_storage.sv。当前完整实验目录build/pacerv_shared_system/timing_controls/digest_gap_bank，BASELINE/MODIFIED/ROLLBACK全通过：权重13项含完整8字符摘要、CRC拒绝及篡改DDR内容后WERR；GAP三帧768个输出、768个同步读回、停顿、奇偶舍入中点、最大255。该实验BASELINE与ROLLBACK使用021145的实际冻结字节；原始Git 852f067的31文件整机回退是另一项，均通过。不要把两种原始哈希混成同一个版本（存在历史行尾差异）。evidence已保存三组控制JSON，collector核验共同冻结manifest与逐项源/测试输入哈希。
+
+完整NPU新目录build/sim/cpu_native_joint_pacerv_h3_imc_timing_digest_gap_bank，58份输入hash匹配、全层golden精确、31,152,093周期、331次CPU DDR请求/返回，runner21385已退出0；整机31文件回退runner89518退出0，恢复460012/180008/f2d8888b、live新源不变。CPU、UART、显示、DDR、音频源均未再变，相关既有证据继续匹配。
+
+collect_evidence.py新增--loader-gap-study，以及--allow-pending-timing用于当前中间记录；pending路径显式qualified=false，旧物理报告移动到按SHA保存的history，当前evidence不混用旧时序。最终必须去掉pending选项。collector现在从rtr的实际系统路径读不确定性：021145显示setup 0.300ns、hold 0.150ns，FDC声明0.150ns保留；实际低于0.150或缺少setup/hold记录会拒绝。已用真实报告、降预算样本和空样本验证。不要为了匹配声明删减实际约束。
+
+最终collector参数：--full-build build/pacerv_shared_system/pds/full-20261114-035340-full --npu-run build/sim/cpu_native_joint_pacerv_h3_imc_timing_digest_gap_bank --dashboard-run build/pacerv_shared_system/dashboard_equivalence_7clock_timing_selector_register --uart-run build/pacerv_shared_system/uart/clock_109375 --audio-clock-run build/pacerv_shared_system/audio_clock/20261114-022103 --loader-gap-study build/pacerv_shared_system/timing_controls/digest_gap_bank。等待实际PDS结果，逐表核验全部十项、真实时钟、0.150ns及以上报告预算；目标未完成，保持active。MODIFIED_FILE/DIFF/ROLLBACK已刷新，VERIFICATION与RESULTS为当前功能通过、物理pending记录。
+
+## 当前覆盖：2026-11-14，对话接续与中断状态恢复
+
+源对话为“Revise CPU paper for reviewers (2)”，thread 01a192cc-2454-7771-8394-1f3fb567e0f9。本次已读最后14条用户消息、最后执行结果、实时STATUS及当前源码。最新有效目标仍为高性能PaceRV＋共享整机存储和外设，在100Pro+本地完成完整PDS和时序验收；保留快慢角及真实约束，远程上板已结束。
+
+035340并未继续运行。原对话ordinal92842的最终命令记录表明，runner因7200秒超时返回1；原始stdout保留至详细布线第587轮，最后未布线子网2607。compile/synthesize/dev_map均完成，pnr/report_timing/gen_bit_stream均未完成，最终时序报告和位流均不存在。当前PDS进程0；202份冻结输入逐份重验，202份当前生产输入与冻结值也全部一致。保存 `build/pacerv_shared_system/pds/full-20261114-035340-full/INTERRUPTION.json` 和 `experiments/pacerv_shared_system/evidence/CONVERSATION_RECOVERY_20261114.json`，包含原命令、原输出、监督退出1及全部输入与日志哈希。PDS子进程实际退出码没有记录，未用监督退出码代替。
+
+本次重跑原CPU基线及新CPU四组，固定循环仍分别460012与180016周期，均180008条退休、f2d8888b；新控制实验 `build/pacerv_shared_system/timing_controls/chat_continuation_20261114` 的BASELINE/MODIFIED/ROLLBACK全部通过，13项权重检查和三帧768项GAP输出/读回一致。31文件独立回退成功恢复原始哈希和460012周期，生产新源保持。时序解析6项通过；check_rtl检查81文件零违例。collector重新核对完整NPU、DDR、UART、显示、音频各份源哈希，12项功能与输入门槛通过，唯一未过门槛仍是full_pds_qualified。
+
+collector会核对INTERRUPTION记录的manifest及stdout/stderr哈希，并在RESULTS/VERIFICATION中明确写入interrupted_timeout、qualified=false；该记录保存在FULL_PDS_INTERRUPTION.json。最新控制实验参数改为 `--loader-gap-study build/pacerv_shared_system/timing_controls/chat_continuation_20261114`，其余NPU/显示/UART/音频参数同上。四件artifact重新生成并打开核对，ROLLBACK.sh继续保留Git executable位并由pwsh执行。
+
+下一步从当前源建立新的独立冻结run，分析显式GAP寄存器组对应的映射占用和路由状态，继续完整物理验收。原035340没有RESULT.json，现有--restart入口要求该文件，直接使用会在启动前失败；新目录保留原始中断记录。旧93.75MHz快照缺少最新GAP和摘要修改，若启用须重新生成并重验频率相关功能。完整接续入口及可复用提示在 `docs/CHAT_CONTINUATION_20261114.md`。本次未启动新的PDS，当前无活跃构建。

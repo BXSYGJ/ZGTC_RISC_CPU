@@ -1,8 +1,8 @@
 # InstRec-FPGA 当前状态（STATUS）
 
-> **2026-11-14 PaceRV共享整机：100Pro+ 109.375 MHz时序收敛中**。完整五级RV32IMC核心与整机音频、NPU、显示、UART、DDR已接通。相同固件固定循环460,012→180,016周期，退休指令均180,008，结果f2d8888b；CPU四组、996项DDR、四路UART、标准CPU入口及29文件独立回退通过。
+> **2026-11-14 对话接续核验：100Pro+ 109.375 MHz候选功能通过，最新PDS超时中断**。已继承“Revise CPU paper for reviewers (2)”的最新工作。完整五级RV32IMC核心与整机音频、NPU、显示、UART、DDR已接通。相同固件固定循环460,012→180,016周期，退休指令均180,008，结果f2d8888b；本轮重跑CPU四组、权重/GAP三组控制实验及31文件独立回退通过，现有NPU、DDR、UART、显示、连续音频证据的输入哈希仍与当前源匹配。
 >
-> 当前冻结run为 `full-20261114-021145-full`，PG2L100H-6IFBG676，系统109.375MHz/像素148.5MHz，202份检出输入一致。官方规则生成的875Mbps DDR IP、FDC、UART分频和音频时间常数已同步启用；程序ROM取指物理地址限制为13位，完整PC和数据地址仍32位；两级短权重FIFO改用寄存器映射以处理保持时间路径。完整NPU golden一致，31,152,093周期、331次CPU DDR请求/返回。七拍显示五帧10,368,000像素与原版一致，2000项检查通过。当前normal/seed2/12轮hold修复完整重跑；旧125MHz的010622轮全部阶段完成但时序未合格，原报告保留。
+> 当前冻结run为 `full-20261114-035340-full`，PG2L100H-6IFBG676，系统109.375MHz/像素148.5MHz；本轮逐份重验202个冻结文件及202个当前输入，哈希全部一致。官方规则生成的875Mbps DDR IP、FDC、UART分频和音频时间常数已同步启用；程序ROM取指物理地址限制为13位，完整PC和数据地址仍32位。两级短权重FIFO与GAP累加器使用寄存器，权重摘要比较增加digest_q/rdigest_q寄存级。完整NPU标签timing_digest_gap_bank，golden一致，31,152,093周期、331次CPU DDR请求/返回。七拍显示五帧10,368,000像素与原版一致，2000项检查通过。normal/seed3/12轮hold配置已完成compile/synthesize/dev_map和布局，在详细布线第587轮遭7200秒时限终止；日志最后一条未布线计数为2607。最终时序报告、位流均未生成。
 >
 > 125MHz及109.375MHz连续I²S仿真各完成两个132,096帧窗口；稳定后的第二窗均全部为真实输入，顺序一致、补零0、FIFO溢出0、写超时0。启动首窗各有1次补零。新频率下NPU周期折算284.819ms，原125MHz折算249.217ms。音频采样48kHz及像素148.5MHz保持独立。
 >
@@ -10,9 +10,9 @@
 >
 > 本轮只验收100Pro+本地完整系统，远程工作已结束；旧正式latest位流不变。说明 `docs/PACERV_SHARED_SYSTEM_20261113.md`；复现 `experiments/pacerv_shared_system/USAGE_zh.md`；恢复 `docs/HANDOFF_PACERV_SHARED_SYSTEM_20261113.md`。
 >
-> 最新物理进展：021145已综合、映射和详细布局，映射37,843LUT/46,345FF/1,058DistributedRAM/128.5DRM/94APM；布局后初步最差裕量+0.999ns、TNS=0，正在详细布线。PDS父29272、布线子75172、runner26725。另存025700的93.75MHz备用快照，厂商812.5Mbps请求实际生成750Mbps；UART814、补零1953及时间常数配套，202份输入hash正确，尚未运行，生产仍109.375MHz。
+> 当前PDS进程数为0；原父62028及runner19992已结束，监督命令退出1。新增 `experiments/pacerv_shared_system/evidence/CONVERSATION_RECOVERY_20261114.json` 保存原对话最终命令、字面输出、退出状态、日志哈希和202份输入哈希，原run另存 `INTERRUPTION.json`。GAP直接添加syn_ramstyle=registers的034633轮在综合触发内部错误，无位流；日志确认PDS把双读数组判为不同读时钟并忽略属性，现为256项显式32位标量寄存器和共享更新加法器。本轮 `chat_continuation_20261114` 三组控制实验均过：权重13项检查含八位摘要文本、CRC和DDR读回损坏；GAP三帧768输出、768读回、输入停顿、偶数舍入和最大值均通过。原始哈希与31文件回退保存。025700的93.75MHz快照仍未启动，且未包含本轮GAP/校验修改，启用前须重新准备。
 >
-> 最终更新：021145完整六阶段结束，exit0，202份冻结输入未变，位流已生成；最终时序未合格。系统slow setup -1.633ns（155个失败端点）、slow hold -0.127ns（8个）、fast hold -0.136ns（28个）；像素slow setup +0.611ns。最终布线37,599LUT/46,348FF/1,058DistributedRAM/128.5DRM/94APM。最差setup来自weight_loader的racc0，经rdigest_c与比较进入weight_err/weight_ok；最差hold为GAP lane_cnt[2]直达acc_b的RAM64写地址。下一步按这些实际路径修复，不把降频当作hold修复。备用93.75MHz快照仍未启动，生产109.375MHz未变；当前没有活跃PDS构建。
+> 上一轮021145最终时序：slow setup -1.633ns、slow hold -0.127ns、fast hold -0.136ns，像素slow setup +0.611ns；37,599LUT/46,348FF/128.5DRM/94APM。setup来自权重摘要比较，hold来自GAP累加RAM写地址，构成本轮修改依据。RESULTS/VERIFICATION对应035340及当前功能证据，物理状态为interrupted_timeout、qualified=false；旧125MHz/109.375MHz报告已按SHA保存到evidence/history。最终报告将同时核对FDC声明0.150ns和路径实际扣减值；021145实际setup扣减0.300ns、hold扣减0.150ns。下一步检查显式GAP寄存器组的映射资源与布线拥塞，为当前源码建立新的独立冻结run，继续完成十张快慢角时序表及位流验收。接续入口见 `docs/CHAT_CONTINUATION_20261114.md`。
 
 > **2026-11-13（离线参考量化契约错误修正 —— 板级链路与 golden 逐位一致，先读这节）**
 > **根因**：`golden_pipeline.run_mel_pipeline()` 的 `inv_s_in/zp_in` 默认取

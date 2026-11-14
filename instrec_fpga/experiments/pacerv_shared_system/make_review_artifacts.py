@@ -18,7 +18,8 @@ def main() -> None:
                'src/ddr3/ddr3_arbiter.v', 'src/ddr3/ddr3_ctrl_axi.v',
                'src/npu/activation_store_mux.v', 'src/npu/activation_row_store_dynamic.v',
                'src/npu/fc_engine.v', 'src/npu/weight_read_aligner_hardened.v',
-               'src/npu/wdma.v', 'ipcore/ddr3_test/ddr3_test.idf',
+               'src/npu/wdma.v', 'src/npu/gap_unit.v', 'src/ctrl/weight_loader.v',
+               'ipcore/ddr3_test/ddr3_test.idf',
                'ipcore/ddr3_test/ddr3_test.v', 'ipcore/ddr3_test/ddr3_test_ddrphy_top.v',
                'constraints/ddr3_100h.fdc', 'src/ui/dashboard_renderer.v',
                'src/ui/dashboard_text.v', 'sim/tb_dashboard_ui.sv']

@@ -97,12 +97,12 @@ python experiments/pacerv_shared_system/inspect_pds.py <本轮远程构建目录
 
 ## 本轮时序收敛改动
 
-当前完整系统使用normal布局布线模式、109.375MHz系统时钟、148.5MHz像素时钟及0.150ns时钟不确定性。DDR采用厂商规则生成的875Mbps配置，FDC和UART/音频时间常数同步匹配。DDR桥请求分级，FC系数使用同步DRM，激活写入payload独立于valid，显示控制七拍；ROM物理取指13位，短权重FIFO采用寄存器映射。最新完整NPU标签timing_rom_range_ff_fifos，31,152,093周期，58份输入hash匹配。显示等价记录在build/pacerv_shared_system/dashboard_equivalence_7clock_timing_selector_register。
+当前完整系统使用normal布局布线模式、109.375MHz系统时钟、148.5MHz像素时钟，FDC声明0.150ns时钟不确定性；最终还核对报告中的实际扣减值。DDR采用厂商规则生成的875Mbps配置，FDC和UART/音频时间常数同步匹配。DDR桥请求分级，FC系数使用同步DRM，激活写入payload独立于valid，显示控制七拍；ROM物理取指13位，短权重FIFO采用寄存器映射。权重摘要先寄存再比较；GAP使用显式32位寄存器组，保留共享加法器与原有输出时序。最新完整NPU标签timing_digest_gap_bank，31,152,093周期，58份输入hash匹配。显示等价记录在build/pacerv_shared_system/dashboard_equivalence_7clock_timing_selector_register。
 
 新构建命令：
 
 ```powershell
-python experiments/pacerv_shared_system/prepare_pds.py --scope full --stage full --mode normal --seed 2 --hold-iterations 12 --run --minutes 120
+python experiments/pacerv_shared_system/prepare_pds.py --scope full --stage full --mode normal --seed 3 --hold-iterations 12 --run --minutes 120
 python experiments/pacerv_shared_system/inspect_pds.py <构建目录> --require-qualified
 ```
 
@@ -115,3 +115,13 @@ python experiments/pacerv_shared_system/inspect_pds.py <构建目录> --require-
 PG2L100H使用厂商单线程路由，不能传通用`-number_of_router_thread`选项。当前电脑24逻辑线程、16GB内存；一个完整布线与轻量仿真可并行。每轮保持独立输入、日志及位流。需要重跑已有冻结工程时，使用`prepare_pds.py --restart <构建目录> --run --minutes 120`；入口先归档原尝试，再重跑完整配方。
 
 连续48kHz音频验证命令为`python sim/experiments/pacerv_integration/run_audio_clock_check.py`。它同时比较125MHz与109.375MHz，各运行两个完整窗口；报告明确记录启动首窗1次补零及稳定第二窗的132,096帧全真实输入。DDR使用512周期行为完成模型。
+
+权重摘要/GAP修改的独立验证采用新label，已有目录保留：
+
+```powershell
+python experiments/pacerv_shared_system/run_loader_gap_timing.py --mode BASELINE --label new_study
+python experiments/pacerv_shared_system/run_loader_gap_timing.py --mode MODIFIED --label new_study
+python experiments/pacerv_shared_system/run_loader_gap_timing.py --mode ROLLBACK --label new_study
+```
+
+BASELINE和该控制实验的ROLLBACK使用021145实际冻结输入；整机原始31文件回退另由run_integration_rollback.py核验Git 852f067的原始字节。最终collect_evidence.py加`--loader-gap-study build/pacerv_shared_system/timing_controls/<label>`。构建未完成时可加`--allow-pending-timing`生成明确未合格的功能记录；最终交付去掉此选项并要求inspect_pds.py --require-qualified退出0。旧物理记录保存在evidence/history，当前目录不会混入旧构建的时序表。

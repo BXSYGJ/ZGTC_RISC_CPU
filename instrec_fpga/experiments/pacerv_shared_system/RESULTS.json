@@ -10,9 +10,21 @@
     "checkout_inputs_match": true,
     "full_pds_qualified": false,
     "dashboard_equivalence_passed": true,
-    "activation_mux_passed": true
+    "activation_mux_passed": true,
+    "audio_clock_passed": true,
+    "loader_gap_controls_passed": true
   },
   "all_selected_gates_passed": false,
+  "git_context": {
+    "branch": "XSY",
+    "checkout_commit": "80bcfa360bc1baf6a2a5732a9b578042a7f90381"
+  },
+  "operating_point": {
+    "target": "PG2L100H-6IFBG676",
+    "system_clock_hz": 109375000,
+    "pixel_clock_hz": 148500000,
+    "declared_system_setup_hold_uncertainty_ns": 0.15
+  },
   "artifacts": {
     "MODIFIED_FILE": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\experiments\\pacerv_shared_system\\MODIFIED_FILE.sv",
     "DIFF_FILE": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\experiments\\pacerv_shared_system\\DIFF_FILE.patch",
@@ -22,11 +34,11 @@
   "source_hashes": [
     {
       "path": "src\\cpu\\rv32_cpu_subsys.sv",
-      "sha256": "4c7fa9f104c33423c76fb3fbba2da29f65fdff0444e50b3e96abf7ef342b8f9c"
+      "sha256": "3caa8296a806186ad62c247a872ab5746d0b0841335a0fa7b92184a8c6bcac99"
     },
     {
       "path": "src\\ctrl\\instrec_top.v",
-      "sha256": "67fb1e361ab497a877a07c0f62ede47ab142eeb7bd6fd2254cd4bcbe4c7f0c32"
+      "sha256": "a5e4848d294baf57afb11c5b117a0b9c5ff61d174ee951db56ae491c2f6d7191"
     },
     {
       "path": "src\\cpu\\vendor\\pacerv_h3\\rv32_alu.sv",
@@ -97,6 +109,30 @@
       "sha256": "39d61d64f6eb813a302a7cff5434b8a09e0189c4358a7b18f6758b7a579dc83e"
     },
     {
+      "path": "src\\npu\\wdma.v",
+      "sha256": "e484c511cca3e379a282aac8058fa3e98f52a4315118bb07b62203602ce2f994"
+    },
+    {
+      "path": "src\\npu\\weight_read_aligner_hardened.v",
+      "sha256": "da16035e397f3fcc97b0d7177a9e3b87313ad0836b50dd11992fb413c44bcf38"
+    },
+    {
+      "path": "src\\ctrl\\weight_loader.v",
+      "sha256": "a7934f9d44f29bd39de92e8674972be050ce75070c4afb7f1c8af0e79a73c8be"
+    },
+    {
+      "path": "src\\npu\\gap_unit.v",
+      "sha256": "ec69967158709c08dede247f55f6cd17fb398d4ac01abb04828210f57e25f563"
+    },
+    {
+      "path": "ipcore\\ddr3_test\\ddr3_test.idf",
+      "sha256": "4e4ff35dcf0dfb4f23919072a014f56c8843e32994ca5aae2a5e5e02b273ec61"
+    },
+    {
+      "path": "constraints\\ddr3_100h.fdc",
+      "sha256": "8aca13a4d2280e86d6391d49c0139d023ad405400648e09acf845568fe4634e6"
+    },
+    {
       "path": "src\\ui\\dashboard_text.v",
       "sha256": "cfe4bca5dd5ebd0a3fbbe99523eaba035a94f1c49eb4816b66489d55a03b20b7"
     },
@@ -107,564 +143,14 @@
   ],
   "physical": {
     "full": {
-      "run": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261114-010622-full",
-      "scope": "complete PG100 audio/NPU/display/PaceRV system",
+      "run": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261114-035340-full",
       "target": "PG2L100H-6IFBG676",
+      "status": "interrupted_timeout",
+      "qualified": false,
       "frozen_input_count": 202,
-      "changed_inputs": [],
-      "timing_report": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261114-010622-full\\report_timing\\instrec_top.rtr",
-      "timing_sha256": "8534ad69b49102a143880d6f73c2996b7886d9c049636beb50be849c550aef50",
-      "timing": {
-        "complete_ten_tables": true,
-        "design_summary_met": false,
-        "all_constraints_met": false,
-        "tables": [
-          {
-            "check": "Setup",
-            "corner": "Slow",
-            "rows": [
-              {
-                "launch_clock": "clk",
-                "capture_clock": "clk",
-                "slack_ns": 31.54,
-                "total_negative_slack_ns": 0.0,
-                "failing_endpoints": 0,
-                "total_endpoints": 307
-              },
-              {
-                "launch_clock": "pix_clk",
-                "capture_clock": "pix_clk",
-                "slack_ns": 0.751,
-                "total_negative_slack_ns": 0.0,
-                "failing_endpoints": 0,
-                "total_endpoints": 1515
-              },
-              {
-                "launch_clock": "cfg_clk",
-                "capture_clock": "cfg_clk",
-                "slack_ns": 90.268,
-                "total_negative_slack_ns": 0.0,
-                "failing_endpoints": 0,
-                "total_endpoints": 652
-              },
-              {
-                "launch_clock": "rst_clk",
-                "capture_clock": "rst_clk",
-                "slack_ns": 3.653,
-                "total_negative_slack_ns": 0.0,
-                "failing_endpoints": 0,
-                "total_endpoints": 419
-              },
-              {
-                "launch_clock": "ddrphy_sysclk",
-                "capture_clock": "ddrphy_sysclk",
-                "slack_ns": -1.438,
-                "total_negative_slack_ns": -214.737,
-                "failing_endpoints": 710,
-                "total_endpoints": 115434
-              }
-            ],
-            "passed": false
-          },
-          {
-            "check": "Hold",
-            "corner": "Slow",
-            "rows": [
-              {
-                "launch_clock": "clk",
-                "capture_clock": "clk",
-                "slack_ns": 0.287,
-                "total_negative_slack_ns": 0.0,
-                "failing_endpoints": 0,
-                "total_endpoints": 307
-              },
-              {
-                "launch_clock": "pix_clk",
-                "capture_clock": "pix_clk",
-                "slack_ns": 0.349,
-                "total_negative_slack_ns": 0.0,
-                "failing_endpoints": 0,
-                "total_endpoints": 1515
-              },
-              {
-                "launch_clock": "cfg_clk",
-                "capture_clock": "cfg_clk",
-                "slack_ns": 0.204,
-                "total_negative_slack_ns": 0.0,
-                "failing_endpoints": 0,
-                "total_endpoints": 652
-              },
-              {
-                "launch_clock": "rst_clk",
-                "capture_clock": "rst_clk",
-                "slack_ns": 0.201,
-                "total_negative_slack_ns": 0.0,
-                "failing_endpoints": 0,
-                "total_endpoints": 419
-              },
-              {
-                "launch_clock": "ddrphy_sysclk",
-                "capture_clock": "ddrphy_sysclk",
-                "slack_ns": -0.119,
-                "total_negative_slack_ns": -1.089,
-                "failing_endpoints": 21,
-                "total_endpoints": 115434
-              }
-            ],
-            "passed": false
-          },
-          {
-            "check": "Recovery",
-            "corner": "Slow",
-            "rows": [
-              {
-                "launch_clock": "clk",
-                "capture_clock": "clk",
-                "slack_ns": 34.46,
-                "total_negative_slack_ns": 0.0,
-                "failing_endpoints": 0,
-                "total_endpoints": 98
-              },
-              {
-                "launch_clock": "pix_clk",
-                "capture_clock": "pix_clk",
-                "slack_ns": 1.618,
-                "total_negative_slack_ns": 0.0,
-                "failing_endpoints": 0,
-                "total_endpoints": 151
-              },
-              {
-                "launch_clock": "cfg_clk",
-                "capture_clock": "cfg_clk",
-                "slack_ns": 90.425,
-                "total_negative_slack_ns": 0.0,
-                "failing_endpoints": 0,
-                "total_endpoints": 19
-              },
-              {
-                "launch_clock": "rst_clk",
-                "capture_clock": "rst_clk",
-                "slack_ns": 5.142,
-                "total_negative_slack_ns": 0.0,
-                "failing_endpoints": 0,
-                "total_endpoints": 96
-              },
-              {
-                "launch_clock": "ddrphy_sysclk",
-                "capture_clock": "ddrphy_sysclk",
-                "slack_ns": 1.276,
-                "total_negative_slack_ns": 0.0,
-                "failing_endpoints": 0,
-                "total_endpoints": 13116
-              }
-            ],
-            "passed": true
-          },
-          {
-            "check": "Removal",
-            "corner": "Slow",
-            "rows": [
-              {
-                "launch_clock": "clk",
-                "capture_clock": "clk",
-                "slack_ns": 0.505,
-                "total_negative_slack_ns": 0.0,
-                "failing_endpoints": 0,
-                "total_endpoints": 98
-              },
-              {
-                "launch_clock": "pix_clk",
-                "capture_clock": "pix_clk",
-                "slack_ns": 1.453,
-                "total_negative_slack_ns": 0.0,
-                "failing_endpoints": 0,
-                "total_endpoints": 151
-              },
-              {
-                "launch_clock": "cfg_clk",
-                "capture_clock": "cfg_clk",
-                "slack_ns": 1.133,
-                "total_negative_slack_ns": 0.0,
-                "failing_endpoints": 0,
-                "total_endpoints": 19
-              },
-              {
-                "launch_clock": "rst_clk",
-                "capture_clock": "rst_clk",
-                "slack_ns": 0.394,
-                "total_negative_slack_ns": 0.0,
-                "failing_endpoints": 0,
-                "total_endpoints": 96
-              },
-              {
-                "launch_clock": "ddrphy_sysclk",
-                "capture_clock": "ddrphy_sysclk",
-                "slack_ns": 0.209,
-                "total_negative_slack_ns": 0.0,
-                "failing_endpoints": 0,
-                "total_endpoints": 13116
-              }
-            ],
-            "passed": true
-          },
-          {
-            "check": "Minimum Pulse Width",
-            "corner": "Slow",
-            "rows": [
-              {
-                "launch_clock": "clk",
-                "capture_clock": "clk",
-                "slack_ns": 17.558,
-                "total_negative_slack_ns": 0.0,
-                "failing_endpoints": 0,
-                "total_endpoints": 100
-              },
-              {
-                "launch_clock": "pix_clk",
-                "capture_clock": "pix_clk",
-                "slack_ns": 2.407,
-                "total_negative_slack_ns": 0.0,
-                "failing_endpoints": 0,
-                "total_endpoints": 516
-              },
-              {
-                "launch_clock": "cfg_clk",
-                "capture_clock": "cfg_clk",
-                "slack_ns": 47.139,
-                "total_negative_slack_ns": 0.0,
-                "failing_endpoints": 0,
-                "total_endpoints": 121
-              },
-              {
-                "launch_clock": "rst_clk",
-                "capture_clock": "rst_clk",
-                "slack_ns": 3.8,
-                "total_negative_slack_ns": 0.0,
-                "failing_endpoints": 0,
-                "total_endpoints": 97
-              },
-              {
-                "launch_clock": "ddrphy_sysclk",
-                "capture_clock": "ddrphy_sysclk",
-                "slack_ns": 2.655,
-                "total_negative_slack_ns": 0.0,
-                "failing_endpoints": 0,
-                "total_endpoints": 27157
-              },
-              {
-                "launch_clock": "phy_dq_clk_0",
-                "capture_clock": "phy_dq_clk_0",
-                "slack_ns": 0.035,
-                "total_negative_slack_ns": 0.0,
-                "failing_endpoints": 0,
-                "total_endpoints": 35
-              },
-              {
-                "launch_clock": "phy_dq_sysclk_0",
-                "capture_clock": "phy_dq_sysclk_0",
-                "slack_ns": 1.85,
-                "total_negative_slack_ns": 0.0,
-                "failing_endpoints": 0,
-                "total_endpoints": 35
-              },
-              {
-                "launch_clock": "phy_dq_clk_1",
-                "capture_clock": "phy_dq_clk_1",
-                "slack_ns": 0.035,
-                "total_negative_slack_ns": 0.0,
-                "failing_endpoints": 0,
-                "total_endpoints": 84
-              },
-              {
-                "launch_clock": "phy_dq_sysclk_1",
-                "capture_clock": "phy_dq_sysclk_1",
-                "slack_ns": 2.4,
-                "total_negative_slack_ns": 0.0,
-                "failing_endpoints": 0,
-                "total_endpoints": 84
-              }
-            ],
-            "passed": true
-          },
-          {
-            "check": "Setup",
-            "corner": "Fast",
-            "rows": [
-              {
-                "launch_clock": "clk",
-                "capture_clock": "clk",
-                "slack_ns": 33.558,
-                "total_negative_slack_ns": 0.0,
-                "failing_endpoints": 0,
-                "total_endpoints": 307
-              },
-              {
-                "launch_clock": "pix_clk",
-                "capture_clock": "pix_clk",
-                "slack_ns": 1.671,
-                "total_negative_slack_ns": 0.0,
-                "failing_endpoints": 0,
-                "total_endpoints": 1515
-              },
-              {
-                "launch_clock": "cfg_clk",
-                "capture_clock": "cfg_clk",
-                "slack_ns": 92.485,
-                "total_negative_slack_ns": 0.0,
-                "failing_endpoints": 0,
-                "total_endpoints": 652
-              },
-              {
-                "launch_clock": "rst_clk",
-                "capture_clock": "rst_clk",
-                "slack_ns": 5.132,
-                "total_negative_slack_ns": 0.0,
-                "failing_endpoints": 0,
-                "total_endpoints": 419
-              },
-              {
-                "launch_clock": "ddrphy_sysclk",
-                "capture_clock": "ddrphy_sysclk",
-                "slack_ns": 2.051,
-                "total_negative_slack_ns": 0.0,
-                "failing_endpoints": 0,
-                "total_endpoints": 115434
-              }
-            ],
-            "passed": true
-          },
-          {
-            "check": "Hold",
-            "corner": "Fast",
-            "rows": [
-              {
-                "launch_clock": "clk",
-                "capture_clock": "clk",
-                "slack_ns": 0.187,
-                "total_negative_slack_ns": 0.0,
-                "failing_endpoints": 0,
-                "total_endpoints": 307
-              },
-              {
-                "launch_clock": "pix_clk",
-                "capture_clock": "pix_clk",
-                "slack_ns": 0.25,
-                "total_negative_slack_ns": 0.0,
-                "failing_endpoints": 0,
-                "total_endpoints": 1515
-              },
-              {
-                "launch_clock": "cfg_clk",
-                "capture_clock": "cfg_clk",
-                "slack_ns": 0.146,
-                "total_negative_slack_ns": 0.0,
-                "failing_endpoints": 0,
-                "total_endpoints": 652
-              },
-              {
-                "launch_clock": "rst_clk",
-                "capture_clock": "rst_clk",
-                "slack_ns": 0.149,
-                "total_negative_slack_ns": 0.0,
-                "failing_endpoints": 0,
-                "total_endpoints": 419
-              },
-              {
-                "launch_clock": "ddrphy_sysclk",
-                "capture_clock": "ddrphy_sysclk",
-                "slack_ns": -0.128,
-                "total_negative_slack_ns": -2.32,
-                "failing_endpoints": 45,
-                "total_endpoints": 115434
-              }
-            ],
-            "passed": false
-          },
-          {
-            "check": "Recovery",
-            "corner": "Fast",
-            "rows": [
-              {
-                "launch_clock": "clk",
-                "capture_clock": "clk",
-                "slack_ns": 35.496,
-                "total_negative_slack_ns": 0.0,
-                "failing_endpoints": 0,
-                "total_endpoints": 98
-              },
-              {
-                "launch_clock": "pix_clk",
-                "capture_clock": "pix_clk",
-                "slack_ns": 2.242,
-                "total_negative_slack_ns": 0.0,
-                "failing_endpoints": 0,
-                "total_endpoints": 151
-              },
-              {
-                "launch_clock": "cfg_clk",
-                "capture_clock": "cfg_clk",
-                "slack_ns": 92.575,
-                "total_negative_slack_ns": 0.0,
-                "failing_endpoints": 0,
-                "total_endpoints": 19
-              },
-              {
-                "launch_clock": "rst_clk",
-                "capture_clock": "rst_clk",
-                "slack_ns": 6.138,
-                "total_negative_slack_ns": 0.0,
-                "failing_endpoints": 0,
-                "total_endpoints": 96
-              },
-              {
-                "launch_clock": "ddrphy_sysclk",
-                "capture_clock": "ddrphy_sysclk",
-                "slack_ns": 3.564,
-                "total_negative_slack_ns": 0.0,
-                "failing_endpoints": 0,
-                "total_endpoints": 13116
-              }
-            ],
-            "passed": true
-          },
-          {
-            "check": "Removal",
-            "corner": "Fast",
-            "rows": [
-              {
-                "launch_clock": "clk",
-                "capture_clock": "clk",
-                "slack_ns": 0.355,
-                "total_negative_slack_ns": 0.0,
-                "failing_endpoints": 0,
-                "total_endpoints": 98
-              },
-              {
-                "launch_clock": "pix_clk",
-                "capture_clock": "pix_clk",
-                "slack_ns": 1.006,
-                "total_negative_slack_ns": 0.0,
-                "failing_endpoints": 0,
-                "total_endpoints": 151
-              },
-              {
-                "launch_clock": "cfg_clk",
-                "capture_clock": "cfg_clk",
-                "slack_ns": 0.797,
-                "total_negative_slack_ns": 0.0,
-                "failing_endpoints": 0,
-                "total_endpoints": 19
-              },
-              {
-                "launch_clock": "rst_clk",
-                "capture_clock": "rst_clk",
-                "slack_ns": 0.276,
-                "total_negative_slack_ns": 0.0,
-                "failing_endpoints": 0,
-                "total_endpoints": 96
-              },
-              {
-                "launch_clock": "ddrphy_sysclk",
-                "capture_clock": "ddrphy_sysclk",
-                "slack_ns": 0.1,
-                "total_negative_slack_ns": 0.0,
-                "failing_endpoints": 0,
-                "total_endpoints": 13116
-              }
-            ],
-            "passed": true
-          },
-          {
-            "check": "Minimum Pulse Width",
-            "corner": "Fast",
-            "rows": [
-              {
-                "launch_clock": "clk",
-                "capture_clock": "clk",
-                "slack_ns": 17.948,
-                "total_negative_slack_ns": 0.0,
-                "failing_endpoints": 0,
-                "total_endpoints": 100
-              },
-              {
-                "launch_clock": "pix_clk",
-                "capture_clock": "pix_clk",
-                "slack_ns": 2.797,
-                "total_negative_slack_ns": 0.0,
-                "failing_endpoints": 0,
-                "total_endpoints": 516
-              },
-              {
-                "launch_clock": "cfg_clk",
-                "capture_clock": "cfg_clk",
-                "slack_ns": 47.529,
-                "total_negative_slack_ns": 0.0,
-                "failing_endpoints": 0,
-                "total_endpoints": 121
-              },
-              {
-                "launch_clock": "rst_clk",
-                "capture_clock": "rst_clk",
-                "slack_ns": 3.8,
-                "total_negative_slack_ns": 0.0,
-                "failing_endpoints": 0,
-                "total_endpoints": 97
-              },
-              {
-                "launch_clock": "ddrphy_sysclk",
-                "capture_clock": "ddrphy_sysclk",
-                "slack_ns": 3.202,
-                "total_negative_slack_ns": 0.0,
-                "failing_endpoints": 0,
-                "total_endpoints": 27157
-              },
-              {
-                "launch_clock": "phy_dq_clk_0",
-                "capture_clock": "phy_dq_clk_0",
-                "slack_ns": 0.035,
-                "total_negative_slack_ns": 0.0,
-                "failing_endpoints": 0,
-                "total_endpoints": 35
-              },
-              {
-                "launch_clock": "phy_dq_sysclk_0",
-                "capture_clock": "phy_dq_sysclk_0",
-                "slack_ns": 1.85,
-                "total_negative_slack_ns": 0.0,
-                "failing_endpoints": 0,
-                "total_endpoints": 35
-              },
-              {
-                "launch_clock": "phy_dq_clk_1",
-                "capture_clock": "phy_dq_clk_1",
-                "slack_ns": 0.035,
-                "total_negative_slack_ns": 0.0,
-                "failing_endpoints": 0,
-                "total_endpoints": 84
-              },
-              {
-                "launch_clock": "phy_dq_sysclk_1",
-                "capture_clock": "phy_dq_sysclk_1",
-                "slack_ns": 2.4,
-                "total_negative_slack_ns": 0.0,
-                "failing_endpoints": 0,
-                "total_endpoints": 84
-              }
-            ],
-            "passed": true
-          }
-        ]
-      },
-      "routed_resources": {
-        "lut": 34391,
-        "ff": 34162,
-        "distributed_ram": 1378,
-        "apm": 94,
-        "drm": 128.5
-      },
-      "bitstream": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261114-010622-full\\generate_bitstream\\instrec_top.sbit",
-      "bitstream_sha256": "4579fa4befe10f362a53cbf35041ce646d9cd95772521259e82f0d8e3662ea63",
-      "qualified": false
+      "supervisor_exit_status": 1,
+      "last_route_iteration": 587,
+      "last_unrouted_subnets": 2607
     }
   },
   "board": null,
@@ -672,14 +158,14 @@
     {
       "source": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_integration\\pacerv_checks.json",
       "file": "PACERV_CPU_CHECKS.json",
-      "bytes": 7526,
-      "sha256": "b1753e4e248328d9e11271d1a46ec213252376b5c39fba78e4d11c58b25721ce"
+      "bytes": 9555,
+      "sha256": "90b73e80a24a328ab8fc1aa8bbf3710844f3a8c4f3bebf889472ae02d6cc93ec"
     },
     {
       "source": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\baseline\\BASELINE_CPU_RESULTS.json",
       "file": "BASELINE_CPU_RESULTS.json",
       "bytes": 3488,
-      "sha256": "fe6a7c7733c92b7d8b9525bf4430836c00d79dcb22b6e22602ec1fc97c09b217"
+      "sha256": "752aa88e0929b0c2cb6cd900f4d099ca722069ee9ff35ffdda493a1f722e0848"
     },
     {
       "source": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\baseline\\BASELINE_CPU_OUTPUT.txt",
@@ -688,16 +174,16 @@
       "sha256": "f6015bebd9ff4929bc93a4628d24f2c9258900492a718bfb0260af00d17c2553"
     },
     {
-      "source": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\sim\\cpu_native_joint_pacerv_h3_imc_timing_store_payload\\PACERV_NATIVE_REPORT.json",
+      "source": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\sim\\cpu_native_joint_pacerv_h3_imc_timing_digest_gap_bank\\PACERV_NATIVE_REPORT.json",
       "file": "FULL_NPU_IMC_RESULTS.json",
-      "bytes": 89484,
-      "sha256": "594903a3fc7d4c690b81bea6b4016e2293e64f3d3a7bbd60fa028ddd96fe366b"
+      "bytes": 89630,
+      "sha256": "346ed8230ae31d9d41797a92278a8083572ac42a1a4cb74b9085d29fc2b64d93"
     },
     {
-      "source": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\sim\\cpu_native_joint_pacerv_h3_imc_timing_store_payload\\pacerv_native_npu.log",
+      "source": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\sim\\cpu_native_joint_pacerv_h3_imc_timing_digest_gap_bank\\pacerv_native_npu.log",
       "file": "FULL_NPU_IMC_OUTPUT.txt",
-      "bytes": 3800,
-      "sha256": "bb599ccae43ff78a2cc96838b0d14a6ef498c4c78b304a384365ddcc790d0bca"
+      "bytes": 3802,
+      "sha256": "9cff8f8339d12b94dce0a3c0cbe5a2cc99d92cf41eccc0c2d10e1a2d6345a88c"
     },
     {
       "source": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\experiments\\pacerv_shared_ddr\\BASELINE_RESULTS.json",
@@ -736,10 +222,10 @@
       "sha256": "52fb8ca00879b57a77d6f8720c4f67b23e792257478b610f2aefb04044cd3b81"
     },
     {
-      "source": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\uart\\after_priority_fix\\RESULT.json",
+      "source": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\uart\\clock_109375\\RESULT.json",
       "file": "SHARED_UART_RESULTS.json",
-      "bytes": 2101,
-      "sha256": "a6c5fed01dc64ced00316e921c34125ae30117458b5b98bf4420b48f437d1748"
+      "bytes": 2085,
+      "sha256": "7b922a2eb6134b3388b4ce3b9b88925c47b2fd574d8f90cb843817c9e1db0663"
     },
     {
       "source": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\uart\\before_priority_fix_v2\\RESULT.json",
@@ -750,8 +236,8 @@
     {
       "source": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\standard_cpu_entry\\RESULT.json",
       "file": "STANDARD_CPU_TB_RESULTS.json",
-      "bytes": 5007,
-      "sha256": "b425ceb1f6a84de99ec42bade5b2b94623685680344ee66c1b1225233704828f"
+      "bytes": 5003,
+      "sha256": "309ba2a40dc3f944de86e0b3d97777491a8de8c64433e08550b150e73925d026"
     },
     {
       "source": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\dashboard_equivalence_7clock_timing_selector_register\\RESULT.json",
@@ -766,52 +252,64 @@
       "sha256": "969b2d81132b0a5a1bb2b4a04c55bda428c2864d2df76e850ad5540de8b60907"
     },
     {
-      "source": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261114-010622-full\\CHECKOUT_INPUT_AUDIT.json",
+      "source": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\chat_continuation_20261114\\BASELINE\\RESULT.json",
+      "file": "LOADER_GAP_BASELINE_RESULTS.json",
+      "bytes": 5644,
+      "sha256": "d637eed7ec81b9ee4b950b6fc5718a762543a9acaa43947af66928af1df6957b"
+    },
+    {
+      "source": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\chat_continuation_20261114\\MODIFIED\\RESULT.json",
+      "file": "LOADER_GAP_MODIFIED_RESULTS.json",
+      "bytes": 5644,
+      "sha256": "3bdae604cd915ebb41fbdc634280fe1160ddc5b77c7348a442874f4953408fdd"
+    },
+    {
+      "source": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\chat_continuation_20261114\\ROLLBACK\\RESULT.json",
+      "file": "LOADER_GAP_ROLLBACK_RESULTS.json",
+      "bytes": 5644,
+      "sha256": "b8a3243d53b1556995a8b93d8b4e1bf53bbed9b4c0ce3babedffac6ff5245f3c"
+    },
+    {
+      "source": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\audio_clock\\20261114-022103\\RESULT.json",
+      "file": "AUDIO_CLOCK_RESULTS.json",
+      "bytes": 6305,
+      "sha256": "a8ec001fae4d75226cf858d4f30b0c7862b0996abd8d8f27a55ab9cda3439a45"
+    },
+    {
+      "source": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\audio_clock\\20261114-022103\\125000000\\simulation.log",
+      "file": "AUDIO_CLOCK_125000000_OUTPUT.txt",
+      "bytes": 803,
+      "sha256": "0a8a2370261a76ca9bfd752dbf478e1bb117b1556247590376ce0cecf093012d"
+    },
+    {
+      "source": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\audio_clock\\20261114-022103\\109375000\\simulation.log",
+      "file": "AUDIO_CLOCK_109375000_OUTPUT.txt",
+      "bytes": 803,
+      "sha256": "43b3e94a7e62fc7eb09e82c76b0c875723caeb811d7b7ba3b340b2a3ac91bd5c"
+    },
+    {
+      "source": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261114-035340-full\\CHECKOUT_INPUT_AUDIT.json",
       "file": "FULL_CHECKOUT_INPUT_AUDIT.json",
       "bytes": 62460,
-      "sha256": "6d858d0b1734bd595647d5e6a9f20f5893bbe3fed501ac9e255b4f51f5b901d4"
+      "sha256": "872a47f238a49cf0d4286c76878f5b973af2590615f02de38dd15e0e0498d7cf"
     },
     {
-      "source": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261114-010622-full\\QUALIFICATION.json",
-      "file": "FULL_PDS_QUALIFICATION.json",
-      "bytes": 17517,
-      "sha256": "fe9ed784b219d81631c2966c07cf8c845b6e7853e7c4ace8ac38f4f89dc9bc3e"
+      "source": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261114-035340-full\\INTERRUPTION.json",
+      "file": "FULL_PDS_INTERRUPTION.json",
+      "bytes": 40340,
+      "sha256": "2e0005076e0049c4d887c1979226c874bafa933de810d543bfaabd2ea0757021"
     },
     {
-      "source": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261114-010622-full\\INPUTS.json",
+      "source": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261114-035340-full\\INPUTS.json",
       "file": "FULL_PDS_INPUTS.json",
-      "bytes": 36308,
-      "sha256": "28cc14ea20a4f03d30d2f0b6513cea11778c0690861f9819cb8700c2382b4dc0"
+      "bytes": 36496,
+      "sha256": "1dbd4a9c5d09ee3ad9da5ec91076fb51eb88618c2595f17979cc97d50c289ed7"
     },
     {
-      "source": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261114-010622-full\\RESULT.json",
-      "file": "FULL_PDS_RESULT.json",
-      "bytes": 853,
-      "sha256": "4dc641bdcdcf2520be2dc4d784c2d57a7b99b4b4f932e9a1b82d5306b5266aa7"
-    },
-    {
-      "source": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261114-010622-full\\report_timing\\instrec_top.rtr",
-      "file": "FULL_TIMING.rtr",
-      "bytes": 863543,
-      "sha256": "8534ad69b49102a143880d6f73c2996b7886d9c049636beb50be849c550aef50"
-    },
-    {
-      "source": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261114-010622-full\\build.tcl",
+      "source": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261114-035340-full\\build.tcl",
       "file": "FULL_BUILD_RECIPE.tcl",
-      "bytes": 13313,
-      "sha256": "f85fe713d8276e3ac9674c3b88d0adf35006897ccf688bb1ce018d053b5bcf8f"
-    },
-    {
-      "source": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261114-010622-full\\place_route\\instrec_top.prr",
-      "file": "FULL_ROUTED_RESOURCES.prr",
-      "bytes": 148569,
-      "sha256": "8f95158fcba7b096098db8b38745fdf64ae380bc8c5b8f9058a1024d47a187b2"
-    },
-    {
-      "source": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261114-010622-full\\synthesize\\apm_drm_lutram_utilization.log",
-      "file": "FULL_RAM_INFERENCE.txt",
-      "bytes": 184502,
-      "sha256": "e0c30afd3c6c4e776586eaf5397f4bfbdc8e88d3e7d1931901d721f024bd4163"
+      "bytes": 13488,
+      "sha256": "ae49c710afdaf3c337c7a4a7d498b4324d7049da0ed71698232e9e7628dbb8fa"
     }
   ],
   "scope": "PG100 complete-system implementation and functional simulation; local PDS qualification requested; board testing not selected"

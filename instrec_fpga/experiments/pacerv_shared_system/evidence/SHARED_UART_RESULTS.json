@@ -6,7 +6,7 @@
     },
     {
       "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\ctrl\\instrec_top.v",
-      "sha256": "67fb1e361ab497a877a07c0f62ede47ab142eeb7bd6fd2254cd4bcbe4c7f0c32"
+      "sha256": "a5e4848d294baf57afb11c5b117a0b9c5ff61d174ee951db56ae491c2f6d7191"
     },
     {
       "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\ctrl\\uart_tx.v",
@@ -17,13 +17,13 @@
   "commands": [
     {
       "command": [
-        "D:\\AAAPP\\iverilog\\bin\\iverilog.EXE",
+        "D:/AAAPP\\iverilog/bin\\iverilog.EXE",
         "-g2012",
         "-i",
         "-s",
         "tb_shared_uart",
         "-o",
-        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\uart\\after_priority_fix\\test.vvp",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\uart\\clock_109375\\test.vvp",
         "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\experiments\\pacerv_integration\\tb_shared_uart.sv",
         "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\ctrl\\instrec_top.v",
         "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\src\\ctrl\\uart_tx.v"
@@ -34,8 +34,8 @@
     },
     {
       "command": [
-        "D:\\AAAPP\\iverilog\\bin\\vvp.EXE",
-        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\uart\\after_priority_fix\\test.vvp"
+        "D:/AAAPP\\iverilog/bin\\vvp.EXE",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\uart\\clock_109375\\test.vvp"
       ],
       "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga",
       "exit_status": 0,

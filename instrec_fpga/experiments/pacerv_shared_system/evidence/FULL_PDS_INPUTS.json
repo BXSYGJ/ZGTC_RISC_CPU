@@ -2,7 +2,7 @@
   "scope": "complete PG100 audio/NPU/display/PaceRV system",
   "stage": "full",
   "target": "PG2L100H-6IFBG676",
-  "source_commit": "852f067db4a4a710f5355e3ab311f035ced5b48d",
+  "source_commit": "80bcfa360bc1baf6a2a5732a9b578042a7f90381",
   "design_files": 82,
   "files": [
     {
@@ -13,7 +13,7 @@
     {
       "path": "constraints/ddr3_100h.fdc",
       "bytes": 31170,
-      "sha256": "00d9761dbb4f8f3e37fb1f784aa5b6a5534dc1988c12977766262a2a6e8af495"
+      "sha256": "8aca13a4d2280e86d6391d49c0139d023ad405400648e09acf845568fe4634e6"
     },
     {
       "path": "constraints/instrec_top.fdc",
@@ -22,23 +22,23 @@
     },
     {
       "path": "constraints/pacerv_shared_system.fdc",
-      "bytes": 387,
-      "sha256": "158d2d6ec37ebf49158729b10941f25ed1b1843ba1779b4c469cd9ea9e44266c"
+      "bytes": 396,
+      "sha256": "90eeb0f7a7b4a0ac91f9cb2b8e125c86aee6a157b58040723820d64080d1f85d"
     },
     {
       "path": "ipcore/ddr3_test/ddr3_test.idf",
-      "bytes": 77018,
-      "sha256": "b600d6102995be4e76b060dd45786b5e1497bd2e7499bbc04b870de9355f2747"
+      "bytes": 76999,
+      "sha256": "4e4ff35dcf0dfb4f23919072a014f56c8843e32994ca5aae2a5e5e02b273ec61"
     },
     {
       "path": "ipcore/ddr3_test/ddr3_test.v",
       "bytes": 22196,
-      "sha256": "3c5441b4bff33dff73811c3a025ede3b6348cb5779e21778653659b6cbfb84e0"
+      "sha256": "a66d9ea92e427875c0b6d1d0a42e7e0e6a4f498fdd241d0f6850b4350200e552"
     },
     {
       "path": "ipcore/ddr3_test/ddr3_test_ddrphy_top.v",
       "bytes": 53206,
-      "sha256": "a95c28f225d2984401a798f673efff209154ae5beb8a7356d303136b71ea49d5"
+      "sha256": "f8c58e03b1057919e90ed75447efa94ebfabd09f12f2d0bb00f8f9331662c96f"
     },
     {
       "path": "ipcore/ddr3_test/rtl/ddrphy/ddr3_test_slice_top_v1_10.v",
@@ -507,8 +507,8 @@
     },
     {
       "path": "src/cpu/rv32_cpu_subsys.sv",
-      "bytes": 23407,
-      "sha256": "4c7fa9f104c33423c76fb3fbba2da29f65fdff0444e50b3e96abf7ef342b8f9c"
+      "bytes": 23410,
+      "sha256": "3caa8296a806186ad62c247a872ab5746d0b0841335a0fa7b92184a8c6bcac99"
     },
     {
       "path": "src/cpu/vendor/pacerv_h3/rv32_alu.sv",
@@ -557,8 +557,8 @@
     },
     {
       "path": "src/ctrl/instrec_top.v",
-      "bytes": 49518,
-      "sha256": "67fb1e361ab497a877a07c0f62ede47ab142eeb7bd6fd2254cd4bcbe4c7f0c32"
+      "bytes": 49715,
+      "sha256": "a5e4848d294baf57afb11c5b117a0b9c5ff61d174ee951db56ae491c2f6d7191"
     },
     {
       "path": "src/ctrl/logits_snap.v",
@@ -602,8 +602,8 @@
     },
     {
       "path": "src/ctrl/weight_loader.v",
-      "bytes": 17840,
-      "sha256": "edfc91589316bf60134cf8b93839ec95998fbe64808a439a966d8e99e0109cf6"
+      "bytes": 18123,
+      "sha256": "a7934f9d44f29bd39de92e8674972be050ce75070c4afb7f1c8af0e79a73c8be"
     },
     {
       "path": "src/ddr3/ddr3_arbiter.v",
@@ -817,8 +817,8 @@
     },
     {
       "path": "src/npu/gap_unit.v",
-      "bytes": 5675,
-      "sha256": "b24697c49780a01a768d015c594ef1512fc5cfe6a9f3798e6e6f227123b0acfc"
+      "bytes": 6055,
+      "sha256": "ec69967158709c08dede247f55f6cd17fb398d4ac01abb04828210f57e25f563"
     },
     {
       "path": "src/npu/npu_m1_bridge.v",
@@ -862,13 +862,13 @@
     },
     {
       "path": "src/npu/wdma.v",
-      "bytes": 27128,
-      "sha256": "983c5e6cc76c0b26a8650810fe662efe8382558222caca85f163ba5f52211353"
+      "bytes": 27161,
+      "sha256": "e484c511cca3e379a282aac8058fa3e98f52a4315118bb07b62203602ce2f994"
     },
     {
       "path": "src/npu/weight_read_aligner_hardened.v",
-      "bytes": 4357,
-      "sha256": "54ae62714044ae28676e00d40e8e78d420eba1e9b366cf6da9e8b6487df385cd"
+      "bytes": 4390,
+      "sha256": "da16035e397f3fcc97b0d7177a9e3b87313ad0836b50dd11992fb413c44bcf38"
     },
     {
       "path": "src/ui/bars_data.v",
@@ -1016,7 +1016,15 @@
       "sha256": "93fa2346ef19f3ffc5d440d1f893e8e9c88c3d9f2f3dc492f43e379972e39ffe"
     }
   ],
-  "placement_seed": 1,
+  "placement_seed": 3,
   "hold_fix_iterations": 12,
-  "pnr_mode": "normal"
+  "pnr_mode": "normal",
+  "router_threads": 1,
+  "system_clock_hz": 109375000,
+  "pixel_clock_hz": 148500000,
+  "hold_margin_ps": {
+    "post_route": 100,
+    "cross_srb": 400,
+    "clock_tree": 200
+  }
 }

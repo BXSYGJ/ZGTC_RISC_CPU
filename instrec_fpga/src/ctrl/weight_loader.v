@@ -91,6 +91,7 @@ module weight_loader #(
 
     reg [31:0]  acc0, acc1, acc2, acc3;
     reg [31:0]  racc0, racc1, racc2, racc3;
+    reg [31:0]  digest_q, rdigest_q;
     reg [15:0]  rd_seq;
     reg [15:0]  last_len;
 
@@ -174,6 +175,8 @@ module weight_loader #(
             racc1      <= 32'd0;
             racc2      <= 32'd0;
             racc3      <= 32'd0;
+            digest_q   <= 32'd0;
+            rdigest_q  <= 32'd0;
             rd_seq     <= 16'd0;
             last_len   <= 16'd0;
             rd_ready   <= 1'b0;
@@ -339,6 +342,9 @@ module weight_loader #(
 
                 S_RD_SET: begin
                     if (rd_seq == frame_cnt) begin
+                        // Separate the folding tree from comparison and text.
+                        digest_q  <= digest_c;
+                        rdigest_q <= rdigest_c;
                         state <= S_RD_CHK;
                     end else begin
                         cmd       <= {1'b0, (BASE_ADDR + {4'd0, rd_seq, 8'd0}), rd_cmd_len_c};
@@ -368,7 +374,7 @@ module weight_loader #(
                     tx_line[1] <= 8'h4F;  // 'O'
                     tx_line[2] <= 8'h4B;  // 'K'
                     tx_line[3] <= 8'h20;  // ' '
-                    if (rdigest_c != digest_c) begin
+                    if (rdigest_q != digest_q) begin
                         tx_line[1] <= 8'h45;  // 'E'
                         tx_line[2] <= 8'h52;  // 'R'
                         tx_line[3] <= 8'h52;  // 'R'
@@ -377,14 +383,14 @@ module weight_loader #(
                     end else begin
                         weight_ok <= 1'b1;
                     end
-                    tx_line[4]  <= hex_ascii(rdigest_c[31:28]);
-                    tx_line[5]  <= hex_ascii(rdigest_c[27:24]);
-                    tx_line[6]  <= hex_ascii(rdigest_c[23:20]);
-                    tx_line[7]  <= hex_ascii(rdigest_c[19:16]);
-                    tx_line[8]  <= hex_ascii(rdigest_c[15:12]);
-                    tx_line[9]  <= hex_ascii(rdigest_c[11:8]);
-                    tx_line[10] <= hex_ascii(rdigest_c[7:4]);
-                    tx_line[11] <= hex_ascii(rdigest_c[3:0]);
+                    tx_line[4]  <= hex_ascii(rdigest_q[31:28]);
+                    tx_line[5]  <= hex_ascii(rdigest_q[27:24]);
+                    tx_line[6]  <= hex_ascii(rdigest_q[23:20]);
+                    tx_line[7]  <= hex_ascii(rdigest_q[19:16]);
+                    tx_line[8]  <= hex_ascii(rdigest_q[15:12]);
+                    tx_line[9]  <= hex_ascii(rdigest_q[11:8]);
+                    tx_line[10] <= hex_ascii(rdigest_q[7:4]);
+                    tx_line[11] <= hex_ascii(rdigest_q[3:0]);
                     tx_line[12] <= 8'h0A;  // newline
                     tx_pos      <= 4'd0;
                     state       <= S_END;
