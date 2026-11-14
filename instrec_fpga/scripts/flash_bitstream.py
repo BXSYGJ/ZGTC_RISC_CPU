@@ -158,3 +158,7 @@ def main(argv=None) -> int:
         time.sleep(3.0)
         ensure_jtagserver()
     return 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
