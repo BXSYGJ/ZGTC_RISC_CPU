@@ -26,12 +26,19 @@ module top_pcm1808_probe (
     reg [31:0] input_q, output_q, nonzero_q, range_q, last_q;
     reg [7:0] flags_q;
     reg fire, heartbeat;
+    // 2026-11-14: zero-crossing counter on the decoded LEFT samples.  A pure
+    // tone crossing zero twice per period makes F/2 the actual frequency of
+    // the data i2s_slave_rx produced, which is the direct test of the board
+    // "frequency halved" observation (no FFT, no DDR, no npu needed).
+    reg [15:0] prev_l;
+    reg [31:0] zc_count, zc_q;
     always @(posedge clk or negedge reset_ok) begin
         if (!reset_ok) begin
             timer <= 0; input_count <= 0; output_count <= 0; nonzero_count <= 0;
             sample_min <= 16'sh7fff; sample_max <= 16'sh8000; last_pair <= 0;
             input_q <= 0; output_q <= 0; nonzero_q <= 0; range_q <= 0;
             last_q <= 0; flags_q <= 0; fire <= 0; heartbeat <= 0;
+            prev_l <= 16'sd0; zc_count <= 0; zc_q <= 0;
         end else begin
             fire <= 0;
             if (sample_valid) begin
@@ -39,6 +46,8 @@ module top_pcm1808_probe (
                 if (sample_l != 0 || sample_r != 0) nonzero_count <= nonzero_count + 1'b1;
                 if ($signed(sample_l) < sample_min) sample_min <= sample_l;
                 if ($signed(sample_l) > sample_max) sample_max <= sample_l;
+                if (sample_l[15] != prev_l[15]) zc_count <= zc_count + 1'b1;
+                prev_l <= sample_l;
             end
             if (filtered_valid) begin
                 output_count <= output_count + 1'b1;
@@ -49,21 +58,25 @@ module top_pcm1808_probe (
                 input_q <= input_count; output_q <= output_count;
                 nonzero_q <= nonzero_count; range_q <= {sample_min,sample_max};
                 last_q <= last_pair; flags_q <= {6'b0,overrun,idle};
+                zc_q <= zc_count;
                 input_count <= sample_valid ? 1 : 0;
                 output_count <= filtered_valid ? 1 : 0;
                 nonzero_count <= sample_valid && (sample_l != 0 || sample_r != 0) ? 1 : 0;
                 sample_min <= sample_valid ? sample_l : 16'sh7fff;
                 sample_max <= sample_valid ? sample_l : 16'sh8000;
+                zc_count <= (sample_valid && (sample_l[15] != prev_l[15])) ? 1 : 0;
             end else timer <= timer + 1'b1;
         end
     end
     wire [7:0] tx_data;
     wire tx_valid, tx_ready, report_busy;
     // Existing generic format uses UIDEMO tag; A=50434D38 identifies PCM8.
+    // 2026-11-14: F now carries the per-second zero-crossing count of the
+    // decoded LEFT samples (frequency = F/2), see the counter above.
     diag_uart_report #(.BAUD_DIV(234)) u_report (
         .clk(clk), .rst_n(reset_ok), .fire(fire), .frame_tag(2'd1),
         .f_a(32'h50434d38), .f_b(input_q), .f_c(output_q),
-        .f_d(nonzero_q), .f_e(range_q), .f_f(last_q), .f_g(flags_q), .f_h(8'd27),
+        .f_d(nonzero_q), .f_e(range_q), .f_f(zc_q), .f_g(flags_q), .f_h(8'd27),
         .busy(report_busy), .tx_byte_data(tx_data), .tx_byte_valid(tx_valid), .tx_byte_ready(tx_ready));
     uart_tx #(.BAUD_DIV(234)) u_tx (
         .clk(clk), .rst_n(reset_ok), .byte_wdata(tx_data), .byte_wvalid(tx_valid),
