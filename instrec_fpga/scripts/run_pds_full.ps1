@@ -51,6 +51,13 @@ param(
     [ValidateSet('', 'compile', 'synthesize', 'dev_map')]
     [string]$StopAfter = '',
 
+    # Placement seed base handed to 'pnr -gplace_seed'.  The template's default
+    # (7) is the layout every archived build used; a different base asks PDS for
+    # a different set of -parallel candidates, which is the only lever that
+    # moves WNS on this design (the failing paths are placement-bound, not
+    # logic-depth-bound).  Recorded in build/instrec-latest.json.
+    [int]$PlacementSeed = 7,
+
     [switch]$DryRun
 )
 
@@ -198,6 +205,13 @@ try {
         $tcl = $tcl.Replace($token, $tokenValues[$token])
     }
     if ($tcl.Contains('__')) { throw 'build.tcl still contains an unexpanded __TOKEN__ placeholder.' }
+
+    # Placement seed override (see the -PlacementSeed comment): only the pnr
+    # line carries it, and the template default stays 7 for every archived run.
+    if ($PlacementSeed -ne 7) {
+        $tcl = [regex]::Replace($tcl, '-gplace_seed\s+\d+', "-gplace_seed $PlacementSeed")
+        Write-Output ("PlacementSeed={0} (template default 7 overridden)." -f $PlacementSeed)
+    }
 
     # -StopAfter: insert an 'exit' line in front of the next stage instead of
     # editing build_full.tcl (the template stays the single six-stage source).
@@ -424,6 +438,7 @@ try {
         BuildSet = $BuildSet
         RunName = $runName
         StopAfter = $StopAfter
+        PlacementSeed = $PlacementSeed
         SourceManifest = $sourceManifestPath
         SourcesUnchanged = $true
         BuildDirectory = $buildRoot

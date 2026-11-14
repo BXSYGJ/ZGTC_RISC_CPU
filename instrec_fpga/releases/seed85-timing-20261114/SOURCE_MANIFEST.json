@@ -1,0 +1,582 @@
+{
+  "Schema": 1,
+  "BuildSet": "full",
+  "CapturedUtc": "2026-11-13T17:23:25.9953928Z",
+  "Files": [
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\cpu\\rtl\\rv32_alu.sv",
+      "Sha256": "F462CB16E30E6BC2143DEA6319CB768A33875FD40B1588C5FD74F8284CCD1E66",
+      "LastWriteUtc": "2026-09-11T08:07:43.8618480Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\cpu\\rtl\\rv32_btb.sv",
+      "Sha256": "188E78886BDAA8B16B1B298B511EFA04985AEC946214639A9E60D783D034AC77",
+      "LastWriteUtc": "2026-09-11T08:07:43.8628481Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\cpu\\rtl\\rv32_core.sv",
+      "Sha256": "55B04C7971C2CFC039B8B7C2266BE720E3D553166CD5197279C858A6C22C066E",
+      "LastWriteUtc": "2026-09-11T08:07:43.8638483Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\cpu\\rtl\\rv32_decode.sv",
+      "Sha256": "8B28BB62FDEC586ECE047627CB9E0593CDF541FCF0793E166E73824D8A6FC1CC",
+      "LastWriteUtc": "2026-09-07T03:16:02.6000298Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\cpu\\rtl\\rv32_machine.sv",
+      "Sha256": "3AF396762B415330F55DBD0EC747C4B55482F6AE729EFB59EBF052BE0C2A1900",
+      "LastWriteUtc": "2026-09-07T03:16:02.6000298Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\cpu\\rtl\\rv32_muldiv.sv",
+      "Sha256": "4F13DA11D528BFF2EDCD561401D17B46B65BC92CCDA09907294EF9317A35DEA6",
+      "LastWriteUtc": "2026-09-11T08:07:43.8648494Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\constraints\\clock_groups_async.fdc",
+      "Sha256": "76CB4AE92035A14385BF78D1E5D27A601EE02F159379E21F3AC614044EA2C10E",
+      "LastWriteUtc": "2026-11-03T06:47:49.9096904Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\constraints\\ddr3_100h.fdc",
+      "Sha256": "00D9761DBB4F8F3E37FB1F784AA5B6A5534DC1988C12977766262A2A6E8AF495",
+      "LastWriteUtc": "2026-10-26T15:26:54.5426432Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\constraints\\instrec_top.fdc",
+      "Sha256": "9748BD2DA05A307614F34186B6EF422167EF669DF7B7016749AF2977ADC95F41",
+      "LastWriteUtc": "2026-11-03T06:47:49.9086552Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\ipcore\\ddr3_test\\ddr3_test.idf",
+      "Sha256": "B600D6102995BE4E76B060DD45786B5E1497BD2E7499BBC04B870DE9355F2747",
+      "LastWriteUtc": "2026-10-31T03:21:15.0984523Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\ipcore\\pll_audio\\pll_audio.idf",
+      "Sha256": "CA9ED620B83000AAF05C416DDB175F84875F1AF5F16090B7AFA9F83C4FE3CBC6",
+      "LastWriteUtc": "2026-10-26T15:43:32.7121346Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\ipcore\\pll\\pll.idf",
+      "Sha256": "6A0FFB23B6A838D5E8C1F38D595D4934DF37BC305F0E521449FB25727652FF84",
+      "LastWriteUtc": "2026-10-26T14:29:22.1359160Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\scripts\\build_full.tcl",
+      "Sha256": "9DE1949D7857B6342C6E6EAB686CDC508A6F4353347BFED29F05C4C8634C9D99",
+      "LastWriteUtc": "2026-11-12T07:07:09.3047108Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\scripts\\build_sets.json",
+      "Sha256": "11BF54A49B4C5B5DBFF8DE24035F6993B969682299FABE19558CCCA11EC34ECD",
+      "LastWriteUtc": "2026-11-10T04:22:58.8523513Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\scripts\\run_pds_full.ps1",
+      "Sha256": "AE4D902EA37BB3E28E434726180F20C08FE8DDB21186B5252CDEDDE41972E274",
+      "LastWriteUtc": "2026-11-13T12:52:51.8976944Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\audio\\audio_cdc_fifo.v",
+      "Sha256": "EADE0B2CAC8EB723745F6FC71A3C75BF51AE41FB6777F3415FF2066B3AF56689",
+      "LastWriteUtc": "2026-11-02T07:29:12.0734562Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\audio\\audio_sink.v",
+      "Sha256": "1AD81A8E58AD9DA6F7658A1EDB9740331042599BDF57775798913CAF3566937A",
+      "LastWriteUtc": "2026-11-10T16:30:35.6625725Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\audio\\i2s_clk_gen.v",
+      "Sha256": "D3AB3EA6BB815824204949AA02DABA7540DB0A5965B97E383FFC26C0082A129A",
+      "LastWriteUtc": "2026-10-26T15:00:53.2605696Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\audio\\i2s_rx.v",
+      "Sha256": "B9664A02CC88309F0A1483291754D68FE207917650B73CA0585126D55648E033",
+      "LastWriteUtc": "2026-11-02T04:48:34.5352799Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\audio\\i2s_slave_rx.v",
+      "Sha256": "453923D5C5D1629946436E7FB0886BA3A6699C512906C580E8342F2FF573588F",
+      "LastWriteUtc": "2026-11-04T11:56:58.4935982Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\audio\\pcm1808_coeff_rom.v",
+      "Sha256": "2202FB99D5883E95FB96794274225658908CE29AACBFC8DF89D44CEEE6A0CC10",
+      "LastWriteUtc": "2026-11-03T06:46:18.0785034Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\audio\\pcm1808_resampler.v",
+      "Sha256": "116A33C5A5F5852C2D2818A3A0063A6E90001A5952FC51A59CCE7DE85CAEEFEB",
+      "LastWriteUtc": "2026-11-03T06:46:18.0800678Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\cpu\\prog.hex",
+      "Sha256": "8757BABE8ECE9173B4C34FE38025C4CDC1E0B033CBD05E4358B1A222AC408F30",
+      "LastWriteUtc": "2026-11-02T06:02:54.6995110Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\cpu\\rv32_cpu_subsys.sv",
+      "Sha256": "BE33B7C296BC52778A7428200A2FAF3E6CFF69C7D3FFB2C521ECE135320A40EC",
+      "LastWriteUtc": "2026-11-01T03:20:07.2746702Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\ctrl\\core_probe.v",
+      "Sha256": "BA86893313044460F1AC430C570EA484A3E4C3AED5EF2E646F0ACB656ABF8E8C",
+      "LastWriteUtc": "2026-10-27T16:23:10.2712590Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\ctrl\\instrec_top.v",
+      "Sha256": "5D716BCBFD907041E3AA02D33706D1351D5C6CD5D80F6DFA0A15E54EBB29537E",
+      "LastWriteUtc": "2026-11-13T11:06:02.8000780Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\ctrl\\logits_snap.v",
+      "Sha256": "E707EFF04AFCF0E6ACD00E9411555893B54438DCFAD2C4CE5391F6BC7E733FD6",
+      "LastWriteUtc": "2026-11-03T17:18:42.5403527Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\ctrl\\self_test.v",
+      "Sha256": "2F97EBAEEDC75CF3418FDC2ED08AF95E6932E833D39C09C62EB2C90CC1C903F9",
+      "LastWriteUtc": "2026-11-02T14:14:32.6272315Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\ctrl\\sys_ctrl.v",
+      "Sha256": "E219E5FA0FE5EBD3AA17C37118D52FAF385C22938BBE3D05A14290CBF9842A9C",
+      "LastWriteUtc": "2026-11-10T16:31:01.9506283Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\ctrl\\top_core_only.v",
+      "Sha256": "B9BFD12D606806B384A5A5EDA0673E3381632053AA05977B1BC20B5CD3304221",
+      "LastWriteUtc": "2026-11-01T15:06:13.6965021Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\ctrl\\top_rv_core.v",
+      "Sha256": "9BBD64F88524813B7C873B4E8798F185047B3F33DF1A4DF113D040D6F0E023B3",
+      "LastWriteUtc": "2026-11-01T15:06:13.6925017Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\ctrl\\uart_debug.v",
+      "Sha256": "51323361036E86259040DD6ED78430C2A3707802A2F0220520C6D8AA7685A245",
+      "LastWriteUtc": "2026-11-07T07:41:28.4321320Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\ctrl\\uart_rx.v",
+      "Sha256": "BD1700DE878F472963B81BA55DF7D958B98ED932BA096997CDD6A6E7BBF58DCB",
+      "LastWriteUtc": "2026-11-02T04:12:21.3942507Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\ctrl\\uart_tx.v",
+      "Sha256": "9CE20DB2AA09F678AB0537AB97D131077400336A657C731860832350BF3CC762",
+      "LastWriteUtc": "2026-10-30T11:15:52.8908342Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\ctrl\\weight_loader.v",
+      "Sha256": "2252C6F7BB9B8AC35D1DDCE1DB018A93C71DE27065B5FA9DAA3DAB870AF0E035",
+      "LastWriteUtc": "2026-10-31T16:28:51.0438699Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\ddr3\\ddr3_arbiter.v",
+      "Sha256": "059E0E1DBC581DAB3A45A9773DD56D72C3E38EB97718E5E8F1208E3801BA7D81",
+      "LastWriteUtc": "2026-11-01T13:55:06.8848802Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\ddr3\\ddr3_ctrl_axi.v",
+      "Sha256": "D7458CBA8B1D5F30DECCB8B38B78E5581CD584627499E3BD8126D0397420F3C4",
+      "LastWriteUtc": "2026-11-11T06:50:15.7446661Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\ddr3\\ddr3_wrapper.v",
+      "Sha256": "D74B666FCD7A4E029545EF7B810E4511845B5775C148B2FB37D83CB54AFE3D3B",
+      "LastWriteUtc": "2026-10-26T14:52:44.4710439Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\diag\\diag_readback.v",
+      "Sha256": "ACD0DC39480B5CA0C37FC2B266D21E2908BB4A924625A6676A9FED973D613046",
+      "LastWriteUtc": "2026-11-13T08:22:19.0388711Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\diag\\feat_dump.v",
+      "Sha256": "3CD06335EC3518ECBDB26E3AD55A3F42172A4712E25A8BDC245EC77933481952",
+      "LastWriteUtc": "2026-11-10T04:22:21.2203892Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\hdmi\\hdmi_tx_if.v",
+      "Sha256": "D616D2236B8F460F3BE2CFCD14F66B4AED55A4C60B4E217CAB5680B01E40BD3A",
+      "LastWriteUtc": "2026-11-02T06:01:49.0216152Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\hdmi\\iic_dri.v",
+      "Sha256": "5F60BC8BCAC110F0125A278C332065D2594874C465EC961C603662F92C16B13E",
+      "LastWriteUtc": "2026-10-26T14:13:46.5801242Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\hdmi\\ms7200_ctl.v",
+      "Sha256": "501521C4CCEECD48DE5741D3116EB7062C93A70A606A386682E1D8756A494199",
+      "LastWriteUtc": "2026-10-26T14:13:46.6597437Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\hdmi\\ms7210_ctl.v",
+      "Sha256": "C9B101E58F381DDF3C6D663D0003C18065302659424B8345022161413CCF09AE",
+      "LastWriteUtc": "2026-10-26T14:13:46.9029685Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\hdmi\\ms72xx_ctl.v",
+      "Sha256": "D9B3D714739066B32153DD7D406D489E833E7A9B92FA0415DB676A480E107302",
+      "LastWriteUtc": "2026-11-01T04:57:26.5848576Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\hdmi\\sync_vg.v",
+      "Sha256": "062EA3EC1C4479CE7DDC28314030228E81BAAB4FEF2A96CBFC1827668292C21E",
+      "LastWriteUtc": "2026-10-26T14:13:46.5119454Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\ip\\audio_pll.v",
+      "Sha256": "8518A5CB74D8697CEED2E7F26DDC9A794AA3042AD0AE8405C1BEF96C81E48F7C",
+      "LastWriteUtc": "2026-10-26T15:00:53.2807352Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\mel\\db_norm.v",
+      "Sha256": "80395100D67E5399A07A54402170A50B513099F415C08C598D86F1BEA816E318",
+      "LastWriteUtc": "2026-11-02T09:15:07.3358020Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\mel\\exp_lut.hex",
+      "Sha256": "2548A1CEAF4EFB2DA0F14086B5840C108ED86FE3762FEB4508E3CEAE32D337B3",
+      "LastWriteUtc": "2026-10-27T16:54:15.6536714Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\mel\\fft2048_sdf.v",
+      "Sha256": "25C577D554BD2AF1940258480EC4211562D159BC107302B105CD9E41BE66FDE6",
+      "LastWriteUtc": "2026-10-31T18:46:47.5335952Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\mel\\hann_q15.hex",
+      "Sha256": "29FFC36C88991D5784C64F4AD9C5F4C97451A25D63D02358781028F621650730",
+      "LastWriteUtc": "2026-10-26T16:36:43.9285005Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\mel\\hann_rom.v",
+      "Sha256": "CCDD0E849975C007C407F49E4E124CE286170E426C8F3477E54D0275D6B6D659",
+      "LastWriteUtc": "2026-10-26T16:26:47.1485037Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\mel\\log2_lut.hex",
+      "Sha256": "D4E13C08AED1F6C660EB17D82B30330E397B76D8ECC340812BA2B57A181192BC",
+      "LastWriteUtc": "2026-10-27T01:29:11.3189018Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\mel\\mel_coo_48k.hex",
+      "Sha256": "8ACA0239F739FEF4DED6D4D7DEA6F019B0937B257B63FDCACA49EEC69F833A9F",
+      "LastWriteUtc": "2026-11-06T11:16:57.8279170Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\mel\\mel_coo.hex",
+      "Sha256": "1CA294AFBCFB8AB54F11BC810483F379BA607ADC28EFCC4A7168B6F150B2DD61",
+      "LastWriteUtc": "2026-10-27T01:30:31.2137404Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\mel\\mel_engine.v",
+      "Sha256": "0145F79387EA443ACDEE79167819E47324D199B28EBFA7020DBF016D281D3C31",
+      "LastWriteUtc": "2026-11-13T08:22:07.5922740Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\mel\\mel_filter.v",
+      "Sha256": "E06D6917F6ECBF794EE35BD7C2B4CB01712DCADFDF51E28D4C8B76A1FDF1B720",
+      "LastWriteUtc": "2026-11-04T07:39:54.4689793Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\mel\\standardize.v",
+      "Sha256": "696F92E44B673429EECEFBB5DA93AF5CA1B262982649C2B7BB8D30A7E95E50D0",
+      "LastWriteUtc": "2026-11-12T00:36:12.7737468Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\mel\\stft_framer.v",
+      "Sha256": "BA21718175B1025A57E6D335627F6B8F82B2AF9DDB04B4FC071F3FCF097B1CB2",
+      "LastWriteUtc": "2026-11-02T07:53:34.9629400Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\mel\\tw_rom_s.v",
+      "Sha256": "BE96D008F04CC7D64F092DFF0AF63BBEE2830241E874663AA1CDB35E5958BA39",
+      "LastWriteUtc": "2026-10-26T16:40:20.1518192Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\mel\\twiddle_q15.hex",
+      "Sha256": "5BBE38D69602539C4C0401DA0E3E11093FD2E159F839147A7C966AF5018E0504",
+      "LastWriteUtc": "2026-10-31T18:46:05.1680177Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\mel\\twiddle_s10.hex",
+      "Sha256": "0A4AB0DF4BAF2199044BB4CA4F6FC4351737949AEA4B64A1C2CEF102DACEF7BA",
+      "LastWriteUtc": "2026-10-31T18:46:05.2310201Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\mel\\twiddle_s11.hex",
+      "Sha256": "5BBE38D69602539C4C0401DA0E3E11093FD2E159F839147A7C966AF5018E0504",
+      "LastWriteUtc": "2026-10-31T18:46:05.2430145Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\mel\\twiddle_s2.hex",
+      "Sha256": "43172D25A1C9F97027C31EA20C1E29AAAFBBB79E53BC7EDFD243638023F6324B",
+      "LastWriteUtc": "2026-10-31T18:46:05.1769818Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\mel\\twiddle_s3.hex",
+      "Sha256": "76D5A0D2B9E19667A8ADC7FAF0DDED3C60CFD8F164D6EAE47348867AB66E364C",
+      "LastWriteUtc": "2026-10-31T18:46:05.1789964Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\mel\\twiddle_s4.hex",
+      "Sha256": "CE5F6F877D5B0CEAAACB7D30AB52A2F37353EC532522B4801DAA0B1B1AA4A11C",
+      "LastWriteUtc": "2026-10-31T18:46:05.1860069Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\mel\\twiddle_s5.hex",
+      "Sha256": "D7BAEC67B3F1FC7C557690E383C9D9219168ACC1AFC4392874489F980BF38139",
+      "LastWriteUtc": "2026-10-31T18:46:05.1930152Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\mel\\twiddle_s6.hex",
+      "Sha256": "8F06B5C6719AC0A3D91CDF7D470B200A0040F0EE9055B819D363FCB804303D73",
+      "LastWriteUtc": "2026-10-31T18:46:05.2000185Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\mel\\twiddle_s7.hex",
+      "Sha256": "560B2A5240350D8C4C489E8118F5A54F51D18177FE1C7D8B650630ACE810F812",
+      "LastWriteUtc": "2026-10-31T18:46:05.2090159Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\mel\\twiddle_s8.hex",
+      "Sha256": "A54C575030B6B47313C737E33F9A75BE843B3E42250A27F50E17CE4E05111D2E",
+      "LastWriteUtc": "2026-10-31T18:46:05.2160287Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\mel\\twiddle_s9.hex",
+      "Sha256": "286404CD9A64C2649D5CCDFEAA6FADB398089F05DC411BE5990385A84180264F",
+      "LastWriteUtc": "2026-10-31T18:46:05.2240323Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\npu\\activation_row_store_dynamic.v",
+      "Sha256": "13E10014C5B917A257A0B61F6C6A8EEC0A86FA910AD2F42051B2B8A3AF9B6036",
+      "LastWriteUtc": "2026-11-12T12:16:15.8085375Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\npu\\activation_store_mux.v",
+      "Sha256": "C02117DC8345A6AA132E63ADE9544D1C00CABD45296DC5686F1EDE7B1CDC96F9",
+      "LastWriteUtc": "2026-11-01T13:55:06.8728841Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\npu\\conv_engine.v",
+      "Sha256": "DA1E4E913AB8EB9CCFF9BC057EF1489807E69E47F909670A4B4AD6144F24DEA4",
+      "LastWriteUtc": "2026-11-12T15:13:24.1284134Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\npu\\fc_engine.v",
+      "Sha256": "BF24DCA55D48AB81FD4CE61A6C0F9C4BC41F2FA7F28937972B4CF36294F448AE",
+      "LastWriteUtc": "2026-11-12T15:13:24.1284134Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\npu\\gap_unit.v",
+      "Sha256": "51831E5F4EE8AC3F162785F91777D54D2ACA3E2FC657762F4ADB5C3D071FBA90",
+      "LastWriteUtc": "2026-10-27T16:20:29.3771520Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\npu\\npu_m1_bridge.v",
+      "Sha256": "7510A232DE647EFA232A5BB11B2BC7229F9571D5F4B13FA57684BEA2E2F3CAB6",
+      "LastWriteUtc": "2026-11-01T13:55:06.8788808Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\npu\\npu_m1_owner.v",
+      "Sha256": "CE99EF8E780B72D9205DA8C9EF8762CB891CE1D8BBF4295FD38372755A3157CA",
+      "LastWriteUtc": "2026-11-01T13:55:06.8808815Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\npu\\npu_stage_lifecycle.v",
+      "Sha256": "8ED6D69866C1BD7D60951A25722C77006941D774420170811E636FE0C1BFCA11",
+      "LastWriteUtc": "2026-11-01T13:55:06.8748815Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\npu\\npu_top.v",
+      "Sha256": "7617DBFFFC2A4750090C9D3F058ABFB80F799F70FD164565C9F9A7F581350099",
+      "LastWriteUtc": "2026-11-10T03:24:33.6308519Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\npu\\pool_engine.v",
+      "Sha256": "FA2B81E0336F58B74D19F6E3EE1AD891A5881AECF056240AB00DA7746E7025EA",
+      "LastWriteUtc": "2026-11-01T13:55:06.8558794Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\npu\\requant_unit.v",
+      "Sha256": "E8114DD8533642D8F22946C449BF4765C69755200C7443B4CA4719F888761945",
+      "LastWriteUtc": "2026-11-12T15:13:24.1284134Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\npu\\softmax_top.v",
+      "Sha256": "9C51EB0CE2B3B96B0936C3F037ACDE2A9A28FBDB10E518BE2F1091C8F396EEF9",
+      "LastWriteUtc": "2026-10-28T18:08:15.3886275Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\npu\\wbuf.v",
+      "Sha256": "9EA29AB7629D89E7794742260835462930CABCC584DB6E3B86BE80B9CC5032BD",
+      "LastWriteUtc": "2026-11-01T13:55:06.8668853Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\npu\\wdma.v",
+      "Sha256": "983C5E6CC76C0B26A8650810FE662EFE8382558222CACA85F163BA5F52211353",
+      "LastWriteUtc": "2026-11-01T14:01:26.8514164Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\npu\\weight_read_aligner_hardened.v",
+      "Sha256": "54AE62714044AE28676E00D40E8E78D420EBA1E9B366CF6DA9E8B6487DF385CD",
+      "LastWriteUtc": "2026-11-01T13:55:06.8768856Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\ui\\bars_data.v",
+      "Sha256": "C29DC11EDE3B716F48C5E52AA097EC5CEFA873DC205F3A056EBAAC7C6BC745E8",
+      "LastWriteUtc": "2026-11-02T11:59:30.3141109Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\ui\\bars_disp.v",
+      "Sha256": "F6BAEAF3233A4A564433F27106A342204253EA6329CF5B637136090E075CE3B6",
+      "LastWriteUtc": "2026-10-28T06:15:01.5184842Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\ui\\class_labels.hex",
+      "Sha256": "11B7EB59407E96278D08134CB274737C12D80FC9F03A299BA23ED921C9AF4103",
+      "LastWriteUtc": "2026-10-28T07:33:09.6017663Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\ui\\dashboard_ascii.hex",
+      "Sha256": "72436230EB6FA3455154E6ED2885810B6E7E1E1F17AD1DBE9A8B3E692CE8A534",
+      "LastWriteUtc": "2026-11-02T12:04:57.3127943Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\ui\\dashboard_classes.hex",
+      "Sha256": "D1B96B8AB0204CDC0450D2495F782DF24A250F33842BDBF165B69D416E1F3047",
+      "LastWriteUtc": "2026-11-02T12:04:57.3127943Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\ui\\dashboard_font.hex",
+      "Sha256": "E6656EBF5D7EE6F5AAE3BFEB0A6BF350DB617813FC290A7724CD7E403A3F499C",
+      "LastWriteUtc": "2026-11-02T12:04:57.3087942Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\ui\\dashboard_renderer.v",
+      "Sha256": "23D3946D7684ACCF2A5BD5361EE137FDCAFBC556D2618BC6FD679C78211DCE50",
+      "LastWriteUtc": "2026-11-12T00:42:10.6270395Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\ui\\dashboard_text.v",
+      "Sha256": "8237F05100F7CF5EC1A2B3D6F05EE09440A1C58013CF1404CE58A2CACAF1BC50",
+      "LastWriteUtc": "2026-11-02T14:02:10.7460565Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\ui\\dashboard_tiles.hex",
+      "Sha256": "A84ED90C2A0C2FDA303976680FFF81F29EBC1732B97D478F20749BFB920CCD64",
+      "LastWriteUtc": "2026-11-02T12:04:57.3117946Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\ui\\demo_confidence_player.v",
+      "Sha256": "72535094B2F7DF6C6C8E638330EA3DC09E4B9F8E552448C3B1A1A79F3591F024",
+      "LastWriteUtc": "2026-11-03T10:22:56.0962049Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\ui\\demo_confidence.hex",
+      "Sha256": "BEE7365C6B3089EF5143CF4470D34C19362625D11E641FB0816885A17D9B2D0E",
+      "LastWriteUtc": "2026-11-03T10:22:56.0946637Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\ui\\demo_dashboard_ascii.hex",
+      "Sha256": "7F7FE08A6743A307B9A7600AAE28DB7D68C5633AE1925DDC4918840A93B7AAD4",
+      "LastWriteUtc": "2026-11-03T10:22:56.4048511Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\ui\\demo_dashboard_classes.hex",
+      "Sha256": "630FD1EE6C7353253BE76ABD65813B6E76138A7D3D12628B791EFDC6F68E0C30",
+      "LastWriteUtc": "2026-11-03T10:22:56.4048511Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\ui\\demo_dashboard_font.hex",
+      "Sha256": "3FB7E70AEE9AAA668BDA33AC683373DDA35897618C6E614D3F8BBE8A4FA3CFD0",
+      "LastWriteUtc": "2026-11-03T10:22:56.4016800Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\ui\\demo_dashboard_renderer.v",
+      "Sha256": "B5010DEA88778B6D0AD674879FCB671B22FD33120D084C6CE67B9FB281E28B5F",
+      "LastWriteUtc": "2026-11-03T10:22:56.7313637Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\ui\\demo_dashboard_text.v",
+      "Sha256": "EDBBDF38B4002B3E1EC647C59616509A13284F10CFEA116AB809FA43C54A40FD",
+      "LastWriteUtc": "2026-11-03T10:22:56.7324282Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\ui\\demo_dashboard_tiles.hex",
+      "Sha256": "C6D4761FA821793E0F0412E784B955DE90D1F598894B507A5FB58AECCF85CB99",
+      "LastWriteUtc": "2026-11-03T10:22:56.4033258Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\ui\\demo_spec_source.v",
+      "Sha256": "B8BE8C6907621D57AB1BA0421B3F721F0E4699C49980DBE17B027DB6B8F71A42",
+      "LastWriteUtc": "2026-10-31T05:12:54.5248860Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\ui\\demo_wave_source.v",
+      "Sha256": "92D3B56D218FC318872A693E491225B3A6EF551445EB77BA6A489D6DB2A637F6",
+      "LastWriteUtc": "2026-10-31T09:51:25.5112134Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\ui\\feat_copy_engine.v",
+      "Sha256": "2BEB55255EA4EEBDAEAA35D36D61459462FE366020E6006281FE5C46882BDF83",
+      "LastWriteUtc": "2026-11-02T09:07:37.7447723Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\ui\\feat_page_buf.v",
+      "Sha256": "BB460FAAF124C30ADD6D21FA079A820BF80FEA7AE784FA269F18E1D1C1413D95",
+      "LastWriteUtc": "2026-11-02T09:15:07.3368072Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\ui\\font_rom.v",
+      "Sha256": "A0FB920D653E95B7BA4B014723FA094D25B9B6F1DD567F3EE7A6B8BC5FFFDE57",
+      "LastWriteUtc": "2026-10-28T04:53:31.1356245Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\ui\\font8x16.hex",
+      "Sha256": "9E9833F03CD6424E7EDA17364254E8C3BCC8CC50F51E5BDE46A79BE0CAA11318",
+      "LastWriteUtc": "2026-10-28T04:53:04.7022472Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\ui\\spectrum_disp.v",
+      "Sha256": "7CBD6D069B23B26642A566513F862505C37574C6765DD207C01CC733C1F2DE71",
+      "LastWriteUtc": "2026-11-02T09:15:07.3378034Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\ui\\text_disp.v",
+      "Sha256": "05AB693A8B4255EA1E20DBD002DE81B5D18581ACAD949AEDBD62EAFD63F2EDFD",
+      "LastWriteUtc": "2026-11-02T08:43:37.8255196Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\ui\\ui_coord_delay.v",
+      "Sha256": "544A8F346B6396B6B710AFD2F53192EAA1912E5AC8981B362350BA7FA89366BD",
+      "LastWriteUtc": "2026-11-02T09:07:37.7437319Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\ui\\ui_overlay.v",
+      "Sha256": "7F7CAC77602AF0A161211099EABC2008831408B86256F750D44D55289E842B52",
+      "LastWriteUtc": "2026-10-28T09:33:36.0847103Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\ui\\ui_renderer.v",
+      "Sha256": "20E86DCE8BF95FF0E71F3A2A98E9E281D0FA29E6D01F457EF15B08E7ED2C4BDD",
+      "LastWriteUtc": "2026-11-01T04:52:15.7252631Z"
+    },
+    {
+      "Path": "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\src\\ui\\waveform_disp.v",
+      "Sha256": "93FA2346EF19F3FFC5D440D1F893E8E9C88C3D9F2F3DC492F43E379972E39FFE",
+      "LastWriteUtc": "2026-10-26T14:54:13.3213394Z"
+    }
+  ]
+}
