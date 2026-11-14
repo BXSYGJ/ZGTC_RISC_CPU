@@ -1,5 +1,8 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+> **2026-11-14 15:10远端更新复核：XSY新增3次上传，XSY2未变。** XSY从4d3d6f1更新到0b8201e，新增seed85整机位流归档、PlacementSeed参数、I2S启动等待返回值修复及烧录脚本入口修复；XSY2仍为8f902ae。归档位流3,791,112字节，SHA256 88e10b450cb8657321ad8bdb136f8e395ef48c555ba2db4c030671ed339fa7fd，已从Git对象重算一致。新归档仍为八通道NPU；五组模型、推理与RTOS在这次增量中未变。详见SYMPHONY_GROUP5_CODE_AUDIT_20261114.md末尾复核记录。仅fetch和读取远端对象，未合并、构建或烧录；所选109.375/125MHz版本及暂停时序优化安排保持。
+
+
 > **2026-11-14应用主线确认：赛题一交响乐多乐器组识别。** 用户明确CPU相关工作已完成，目标是同时出现的乐器及进入/退出。已核对GitHub XSY(4d3d6f1)与XSY2(8f902ae)：两者都有五组多标签双头模型，XSY还包含INT8权重、契约与8906样本历史离线评估。核验入口：[SYMPHONY_GROUP5_CODE_AUDIT_20261114.md](SYMPHONY_GROUP5_CODE_AUDIT_20261114.md)。后续复用五组成果接入所选整机并形成活动时间轴，RTOS仍处方案评估阶段。原时序验收目标保持paused。
 
 

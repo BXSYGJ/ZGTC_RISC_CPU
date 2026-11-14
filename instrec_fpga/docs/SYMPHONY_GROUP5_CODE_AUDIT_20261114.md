@@ -53,3 +53,22 @@ XSY还包含：
 建议应用主线：五组多标签识别→乐器组进入/退出事件→HDMI活动时间轴。RTOS用于窗口事件、推理服务、结果整理、显示与记录的协作；当前仅完成方案讨论，尚未开始RTOS移植。
 
 原时序验收目标保持paused，125/109.375MHz所选包继续保留。本轮没有新增PDS构建、上板操作或CPU修改。
+
+
+## 2026-11-14 15:10再次检查上传
+
+以上分支表为首次核验时的快照。本次重新查询远端并fetch后，XSY最新为0b8201e071c6c59b8d7ead23ad944684f4d0b24c；XSY2仍为8f902aec29c38bc4a32a4e95ab47d18411684b52。
+
+| 北京时间 | 提交 | 新增内容 |
+|---|---|---|
+| 14:31:08 | 394481e | 归档seed85整机位流，构建脚本新增PlacementSeed |
+| 14:48:12 | e155db9 | 移除USB开关支持，修复i2s_capture等待函数返回值解包 |
+| 14:50:18 | 0b8201e | 补回flash_bitstream.py的__main__入口 |
+
+增量共10个文件，683行新增、208行删除。五组模型、量化权重、golden推理及RTOS实现均未出现在本次变更清单中。
+
+远端归档为instrec_fpga/releases/seed85-timing-20261114/artifacts/instrec_top_seed85.sbit，3,791,112字节。直接读取Git对象并重算SHA256：88e10b450cb8657321ad8bdb136f8e395ef48c555ba2db4c030671ed339fa7fd，与SHA256SUMS一致，校验退出0。
+
+归档README记录ddrphy_sysclk slow setup WNS -0.809ns / 352失败端点，hold -0.117ns / 2端点；历史上板记录为DDR3 pattern 3/3、mel exact 100%及八个logits逐项匹配。此处引用上传者归档，本轮只核查文件和哈希，未执行板级重测。八通道结果对应现有八类识别；五组交响乐识别迁移和进入/退出事件仍为应用待办。
+
+本次未checkout、merge、运行PDS或烧录。新归档与此前所选PaceRV整机包是不同源码快照；保留109.375MHz主版和125MHz备版的选择。
