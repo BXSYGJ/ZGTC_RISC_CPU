@@ -1,5 +1,16 @@
 # InstRec-FPGA 变更日志
 
+## 2026-11-14（早）：时序种子扫描收口 —— 种子 85 上板全过，定为新基线
+
+- 给 run_pds_full.ps1 加 -PlacementSeed；通宵扫描 7/40/55/70/85/100/115，WNS 依次
+  -1.234 / -1.902 / -1.479 / -1.597 / **-0.809** / 布不通 / 布不通。
+- 胜出种子 85（位流 88E10B45）：setup −1.234→−0.809、失败端点 761→352；代价 2 个 hold 端点
+  （WHS −0.117 ns），板级功能实测无异常。
+- 上板验证三件套全过：DDR3 自检 pattern 3/3、mel 与 golden exact 100% max|d|=0、
+  同窗口 NPU logits 8/8 完全相等（top1 均 class4）。
+- 新增工具：scripts/seed_sweep.ps1（多种子扫描+看门狗+CSV）、build/heartbeat_build.ps1、
+  scripts/usb_switch.py、scripts/flash_bitstream.py（下载器掉线自动断电重启+烧录自愈）。
+
 ## 2026-11-13（第五轮）：重编 + 板级验证 —— mel 修复生效，dB 谱与 golden 逐位相同
 
 - 位流 `20261113-165611-7a005af1`：六阶段 OK、`Unrouted 0`、1h12m58s，SHA-256 `15206FB8…`；

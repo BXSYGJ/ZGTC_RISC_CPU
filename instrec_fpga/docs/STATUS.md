@@ -1,5 +1,36 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+> **2026-11-14（早，时序优化收口：种子 85 上板全过，定为新基线）**
+> 给 `run_pds_full.ps1` 加了 `-PlacementSeed`（模板默认 7 不变，归档可复现），通宵跑了 6 个种子：
+>
+> | 种子 | WNS (setup) | WHS | 失败端点 | 结论 |
+> |---|---|---|---|---|
+> | 7   | −1.234 | +0.050 | 761 | 现版 EC2FEB92 |
+> | 40  | −1.902 | +0.017 | — | 更差 |
+> | 55  | −1.479 | +0.137 | — | 更差 |
+> | 70  | −1.597 | +0.008 | — | 更差 |
+> | 85  | **−0.809** | −0.117 | 352 | **胜出（2 个 hold 端点）** |
+> | 100 | 布不通 | — | — | 105 min 看门狗杀 |
+> | 115 | 布不通 | — | — | 105 min 看门狗杀 |
+>
+> （全部在 `ddrphy_sysclk` 域；`clk` 域始终 +33 ns 以上收敛。100/115 两轮是 PDS 自己挑的候选布局
+> 从一开始就差，路由跑 100+ 分钟仍数千未布，被 `build/seed_sweep.ps1` 的看门狗终止，时间与日志已留证。）
+>
+> **种子 85 上板验证（位流 `88E10B45…`，`build/instrec-latest.sbit` 已指向它）**：
+> - DDR3 自检 pattern 3/3 逐位一致；
+> - mel 与 golden **exact 100%、max|d|=0、corr 1.0000**（`diag_spectrum --half both`，正确半区 0 坏帧）；
+> - 同窗口 NPU：板级 logits `[-28,7,6,-16,17,7,-34,3]` 与 golden **8 个通道完全相同**，top1 均 class4。
+> ⇒ 三项功能全过，setup 从 −1.234 提到 −0.809、失败端点 761→352。
+>
+> **代价（照实记录）**：出现 2 个 hold 违例（`ddrphy_sysclk` 域，WHS −0.117 ns / THS −0.234），
+> 板级功能实测未受影响（DDR pattern、整窗读回、NPU 全对）；低温/慢晶振下的 hold 余量风险仍在，
+> 属「能跑但有记录」的口径，不是「完全收敛」。
+>
+> **配套工具（本轮新增，已入库）**：`scripts/seed_sweep.ps1`（通宵多种子扫描 + 看门狗 + CSV 台账）、
+> `build/heartbeat_build.ps1`（schtasks 后台构建包装，绕过 2 分钟后台回收）、
+> `scripts/usb_switch.py` + `scripts/flash_bitstream.py`（下载器掉线自动断电重启 + 烧录自愈；
+> 开关在 COM4，但实测其下游口尚未接到 USB Cable II，接线后生效）。
+
 > **2026-11-13（离线参考量化契约错误修正 —— 板级链路与 golden 逐位一致，先读这节）**
 > **根因**：`golden_pipeline.run_mel_pipeline()` 的 `inv_s_in/zp_in` 默认取
 > `scripts/outputs/layer_contract.json`（44.1 kHz：zp_in=49、inv_s_in=267723430），
