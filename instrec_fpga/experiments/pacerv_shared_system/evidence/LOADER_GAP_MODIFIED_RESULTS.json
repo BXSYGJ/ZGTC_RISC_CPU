@@ -7,22 +7,22 @@
     },
     {
       "path": "src/npu/gap_unit.v",
-      "sha256": "ec69967158709c08dede247f55f6cd17fb398d4ac01abb04828210f57e25f563"
+      "sha256": "f31e45c233af567f9ee8d8a9dfbd0e2e97c7375e58964c29a43eff2b6019c324"
     }
   ],
   "baseline_manifest": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261114-021145-full\\INPUTS.json",
   "baseline_manifest_sha256": "e62a047530898debe58ad6e8f04358799ec0d9a2e4e4699afd8ac5ac2909440c",
   "test_inputs": [
     {
-      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\chat_continuation_20261114\\MODIFIED\\tb_weight_loader.sv",
-      "sha256": "16d74876e780f5238984b1de65cd58e0eb99439e3dd1aec6c118f7df7ec191af"
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\gap_sync_bram_20261114\\MODIFIED\\tb_weight_loader.sv",
+      "sha256": "90042f5a11a94d75992b1a7299c5af38adfbf95b6bf9f4cf6e75968c9e0807da"
     },
     {
-      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\chat_continuation_20261114\\MODIFIED\\tb_gap_storage.sv",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\gap_sync_bram_20261114\\MODIFIED\\tb_gap_storage.sv",
       "sha256": "7909b5210dd4cd84752a8e216595cbdda6b1714f4d3c38b5cf1f7e90d661f114"
     },
     {
-      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\chat_continuation_20261114\\MODIFIED\\payload.hex",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\gap_sync_bram_20261114\\MODIFIED\\payload.hex",
       "sha256": "858179fc63a26c0a03892e5bfb97d51d0050ecf2dc9a400dfb394c6faeb23dd3"
     }
   ],
@@ -34,9 +34,9 @@
         "-s",
         "tb_weight_loader",
         "-o",
-        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\chat_continuation_20261114\\MODIFIED\\loader.vvp",
-        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\chat_continuation_20261114\\MODIFIED\\tb_weight_loader.sv",
-        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\chat_continuation_20261114\\MODIFIED\\src\\ctrl\\weight_loader.v"
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\gap_sync_bram_20261114\\MODIFIED\\loader.vvp",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\gap_sync_bram_20261114\\MODIFIED\\tb_weight_loader.sv",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\gap_sync_bram_20261114\\MODIFIED\\src\\ctrl\\weight_loader.v"
       ],
       "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga",
       "exit_status": 0,
@@ -47,12 +47,12 @@
       "command": [
         "D:\\AAAPP\\iverilog\\bin\\vvp.EXE",
         "-i",
-        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\chat_continuation_20261114\\MODIFIED\\loader.vvp"
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\gap_sync_bram_20261114\\MODIFIED\\loader.vvp"
       ],
       "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga",
       "exit_status": 0,
-      "output": "=== tb_weight_loader start ===\r\nOBS A: frame_cnt=4 weight_ok=1 weight_err=0 err_addr=00000000\r\nOBS A: rtl_digest=42851062 tb_digest=42851062 wr_cmds=4 rd_cmds=4 wr_beats=32 rd_beats=32\r\nUART_TEXT: KKKKWOK 42851062<0a>\r\nCHECK PASS: A four chunks accepted (4 x 'K')\r\nOBS A: terminal line bytes=13 (expect 13)\r\nCHECK PASS: A terminal line starts with 'WOK'\r\nCHECK PASS: A terminal line complete (13 = 'WOK ' + 8 hex + LF)\r\nCHECK PASS: A all eight digest characters\r\nCHECK PASS: A weight_ok\r\nCHECK PASS: A frame_cnt = 4\r\nCHECK PASS: A write-then-read-back digest matches\r\nCHECK PASS: A read-back covered all 4 chunks (rd_beats >= 32)\r\nOBS B: weight_ok=0 weight_err=1 err_addr=00000000 uart_len=1\r\nUART_TEXT: N\r\nCHECK PASS: B corrupt CRC rejected (weight_err)\r\nCHECK PASS: B NAK 'N' emitted\r\nOBS C: weight_ok=0 weight_err=0 frame_cnt=1 uart_len=1\r\nUART_TEXT: K\r\nCHECK PASS: C good chunk accepted after reset\r\nCHECK PASS: D changed DDR data detected\r\nCHECK PASS: D WERR reply retained\r\n=== tb_weight_loader done: 13 checks, 0 errors ===\r\nRESULT: PASS tb_weight_loader\r\nD:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\chat_continuation_20261114\\MODIFIED\\tb_weight_loader.sv:569: $finish called at 54745000 (1ps)\r\n",
-      "log_sha256": "36aab38c07cd3080fccbce064a785ea394a98b18696fcbd8618ead86fb30650f"
+      "output": "=== tb_weight_loader start ===\r\nOBS A: frame_cnt=4 weight_ok=1 weight_err=0 err_addr=00000000\r\nOBS A: rtl_digest=42851062 tb_digest=42851062 wr_cmds=4 rd_cmds=4 wr_beats=32 rd_beats=32\r\nUART_TEXT: KKKKWOK 42851062<0a>\r\nCHECK PASS: A four chunks accepted (4 x 'K')\r\nOBS A: terminal line bytes=13 (expect 13)\r\nCHECK PASS: A terminal line starts with 'WOK'\r\nCHECK PASS: A terminal line complete (13 = 'WOK ' + 8 hex + LF)\r\nCHECK PASS: A all eight digest characters\r\nCHECK PASS: A weight_ok\r\nCHECK PASS: A frame_cnt = 4\r\nCHECK PASS: A write-then-read-back digest matches\r\nCHECK PASS: A read-back covered all 4 chunks (rd_beats >= 32)\r\nOBS B: weight_ok=0 weight_err=1 err_addr=00000000 uart_len=1\r\nUART_TEXT: N\r\nCHECK PASS: B corrupt CRC rejected (weight_err)\r\nCHECK PASS: B NAK 'N' emitted\r\nOBS C: weight_ok=0 weight_err=0 frame_cnt=1 uart_len=1\r\nUART_TEXT: K\r\nCHECK PASS: C good chunk accepted after reset\r\nCHECK PASS: D changed DDR data detected\r\nCHECK PASS: D WERR reply retained\r\n=== tb_weight_loader done: 13 checks, 0 errors ===\r\nRESULT: PASS tb_weight_loader\r\nD:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\gap_sync_bram_20261114\\MODIFIED\\tb_weight_loader.sv:569: $finish called at 54745000 (1ps)\r\n",
+      "log_sha256": "1e7ae741afa688e293ed0e7d507886b6de146cfade23554101b7106ec8d1cf20"
     },
     {
       "command": [
@@ -61,9 +61,9 @@
         "-s",
         "tb_gap_storage",
         "-o",
-        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\chat_continuation_20261114\\MODIFIED\\gap.vvp",
-        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\chat_continuation_20261114\\MODIFIED\\tb_gap_storage.sv",
-        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\chat_continuation_20261114\\MODIFIED\\src\\npu\\gap_unit.v"
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\gap_sync_bram_20261114\\MODIFIED\\gap.vvp",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\gap_sync_bram_20261114\\MODIFIED\\tb_gap_storage.sv",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\gap_sync_bram_20261114\\MODIFIED\\src\\npu\\gap_unit.v"
       ],
       "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga",
       "exit_status": 0,
@@ -74,12 +74,12 @@
       "command": [
         "D:\\AAAPP\\iverilog\\bin\\vvp.EXE",
         "-i",
-        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\chat_continuation_20261114\\MODIFIED\\gap.vvp"
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\gap_sync_bram_20261114\\MODIFIED\\gap.vvp"
       ],
       "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga",
       "exit_status": 0,
-      "output": "GAP_STORAGE_PASS frames=3 outputs=768 readbacks=768 stalls=1 rounding_ties=1 maximum=255\r\nD:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\chat_continuation_20261114\\MODIFIED\\tb_gap_storage.sv:68: $finish called at 551700000 (1ps)\r\n",
-      "log_sha256": "49ad567edcdbe9a7fc8ac520afdf3a35d3e1140d729d2586578e5f93cd431176"
+      "output": "GAP_STORAGE_PASS frames=3 outputs=768 readbacks=768 stalls=1 rounding_ties=1 maximum=255\r\nD:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\gap_sync_bram_20261114\\MODIFIED\\tb_gap_storage.sv:68: $finish called at 551730000 (1ps)\r\n",
+      "log_sha256": "97658bb4504d62031b6e775a7a6744b2af5eed3076db01d229e4b179d2635cbc"
     }
   ],
   "passed": true,

@@ -2,7 +2,7 @@
   "scope": "complete PG100 audio/NPU/display/PaceRV system",
   "stage": "full",
   "target": "PG2L100H-6IFBG676",
-  "source_commit": "80bcfa360bc1baf6a2a5732a9b578042a7f90381",
+  "source_commit": "07ef12851f282280a3a6db467d31ae203b2863ea",
   "design_files": 82,
   "files": [
     {
@@ -817,8 +817,8 @@
     },
     {
       "path": "src/npu/gap_unit.v",
-      "bytes": 6055,
-      "sha256": "ec69967158709c08dede247f55f6cd17fb398d4ac01abb04828210f57e25f563"
+      "bytes": 7078,
+      "sha256": "f31e45c233af567f9ee8d8a9dfbd0e2e97c7375e58964c29a43eff2b6019c324"
     },
     {
       "path": "src/npu/npu_m1_bridge.v",
@@ -1016,7 +1016,7 @@
       "sha256": "93fa2346ef19f3ffc5d440d1f893e8e9c88c3d9f2f3dc492f43e379972e39ffe"
     }
   ],
-  "placement_seed": 3,
+  "placement_seed": 4,
   "hold_fix_iterations": 12,
   "pnr_mode": "normal",
   "router_threads": 1,

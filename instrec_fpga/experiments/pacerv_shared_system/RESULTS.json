@@ -17,7 +17,7 @@
   "all_selected_gates_passed": false,
   "git_context": {
     "branch": "XSY",
-    "checkout_commit": "e22754055b79f35f4eaa77270f5f3b0ff72f914c"
+    "checkout_commit": "07ef12851f282280a3a6db467d31ae203b2863ea"
   },
   "operating_point": {
     "target": "PG2L100H-6IFBG676",
@@ -122,7 +122,7 @@
     },
     {
       "path": "src\\npu\\gap_unit.v",
-      "sha256": "ec69967158709c08dede247f55f6cd17fb398d4ac01abb04828210f57e25f563"
+      "sha256": "f31e45c233af567f9ee8d8a9dfbd0e2e97c7375e58964c29a43eff2b6019c324"
     },
     {
       "path": "ipcore\\ddr3_test\\ddr3_test.idf",
@@ -143,14 +143,11 @@
   ],
   "physical": {
     "full": {
-      "run": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261114-035340-full",
+      "run": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261114-111645-full",
       "target": "PG2L100H-6IFBG676",
-      "status": "interrupted_timeout",
+      "status": "final_timing_evidence_pending",
       "qualified": false,
-      "frozen_input_count": 202,
-      "supervisor_exit_status": 1,
-      "last_route_iteration": 587,
-      "last_unrouted_subnets": 2607
+      "frozen_input_count": 202
     }
   },
   "board": null,
@@ -174,16 +171,16 @@
       "sha256": "f6015bebd9ff4929bc93a4628d24f2c9258900492a718bfb0260af00d17c2553"
     },
     {
-      "source": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\sim\\cpu_native_joint_pacerv_h3_imc_timing_digest_gap_bank\\PACERV_NATIVE_REPORT.json",
+      "source": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\sim\\cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram\\PACERV_NATIVE_REPORT.json",
       "file": "FULL_NPU_IMC_RESULTS.json",
-      "bytes": 89630,
-      "sha256": "346ed8230ae31d9d41797a92278a8083572ac42a1a4cb74b9085d29fc2b64d93"
+      "bytes": 89484,
+      "sha256": "b2a31e48bdb2af16565f06b2bac0fd396a0b697c2e5bc6b365037963cef72f29"
     },
     {
-      "source": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\sim\\cpu_native_joint_pacerv_h3_imc_timing_digest_gap_bank\\pacerv_native_npu.log",
+      "source": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\sim\\cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram\\pacerv_native_npu.log",
       "file": "FULL_NPU_IMC_OUTPUT.txt",
-      "bytes": 3802,
-      "sha256": "9cff8f8339d12b94dce0a3c0cbe5a2cc99d92cf41eccc0c2d10e1a2d6345a88c"
+      "bytes": 3800,
+      "sha256": "5e6898ba74255e0b4e673d65ab2f3038ec586f8a3831b5532121b7eec89ad635"
     },
     {
       "source": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\sim\\experiments\\pacerv_shared_ddr\\BASELINE_RESULTS.json",
@@ -252,22 +249,22 @@
       "sha256": "969b2d81132b0a5a1bb2b4a04c55bda428c2864d2df76e850ad5540de8b60907"
     },
     {
-      "source": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\chat_continuation_20261114\\BASELINE\\RESULT.json",
+      "source": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\gap_sync_bram_20261114\\BASELINE\\RESULT.json",
       "file": "LOADER_GAP_BASELINE_RESULTS.json",
-      "bytes": 5644,
-      "sha256": "d637eed7ec81b9ee4b950b6fc5718a762543a9acaa43947af66928af1df6957b"
+      "bytes": 5592,
+      "sha256": "cf0b8953dd4185a40082148ddb06a21e2d7ca31a2d62a321eeaa83e44382bd3c"
     },
     {
-      "source": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\chat_continuation_20261114\\MODIFIED\\RESULT.json",
+      "source": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\gap_sync_bram_20261114\\MODIFIED\\RESULT.json",
       "file": "LOADER_GAP_MODIFIED_RESULTS.json",
-      "bytes": 5644,
-      "sha256": "3bdae604cd915ebb41fbdc634280fe1160ddc5b77c7348a442874f4953408fdd"
+      "bytes": 5592,
+      "sha256": "27a8a4d5c514ad1b2bb549056b456e8065a8e82112b3fb1f56224eeebbfc6716"
     },
     {
-      "source": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\chat_continuation_20261114\\ROLLBACK\\RESULT.json",
+      "source": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\timing_controls\\gap_sync_bram_20261114\\ROLLBACK\\RESULT.json",
       "file": "LOADER_GAP_ROLLBACK_RESULTS.json",
-      "bytes": 5644,
-      "sha256": "b8a3243d53b1556995a8b93d8b4e1bf53bbed9b4c0ce3babedffac6ff5245f3c"
+      "bytes": 5592,
+      "sha256": "e6fd6026e7f618bbf0c5f06e09875a9ef12c5a213b76f4089a3972b03b6d0829"
     },
     {
       "source": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\audio_clock\\20261114-022103\\RESULT.json",
@@ -288,28 +285,22 @@
       "sha256": "43b3e94a7e62fc7eb09e82c76b0c875723caeb811d7b7ba3b340b2a3ac91bd5c"
     },
     {
-      "source": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261114-035340-full\\CHECKOUT_INPUT_AUDIT.json",
+      "source": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261114-111645-full\\CHECKOUT_INPUT_AUDIT.json",
       "file": "FULL_CHECKOUT_INPUT_AUDIT.json",
       "bytes": 62460,
-      "sha256": "872a47f238a49cf0d4286c76878f5b973af2590615f02de38dd15e0e0498d7cf"
+      "sha256": "77429d13a269933f7d18393d3df0f6f017d8cbb3d614169ca2fb725e32221c06"
     },
     {
-      "source": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261114-035340-full\\INTERRUPTION.json",
-      "file": "FULL_PDS_INTERRUPTION.json",
-      "bytes": 40340,
-      "sha256": "2e0005076e0049c4d887c1979226c874bafa933de810d543bfaabd2ea0757021"
-    },
-    {
-      "source": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261114-035340-full\\INPUTS.json",
+      "source": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261114-111645-full\\INPUTS.json",
       "file": "FULL_PDS_INPUTS.json",
       "bytes": 36496,
-      "sha256": "1dbd4a9c5d09ee3ad9da5ec91076fb51eb88618c2595f17979cc97d50c289ed7"
+      "sha256": "e8af126f3e1215328049d390bd728c3cea15c3f4ce4bbe04a92bb3f8b9c98ee3"
     },
     {
-      "source": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261114-035340-full\\build.tcl",
+      "source": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261114-111645-full\\build.tcl",
       "file": "FULL_BUILD_RECIPE.tcl",
       "bytes": 13488,
-      "sha256": "ae49c710afdaf3c337c7a4a7d498b4324d7049da0ed71698232e9e7628dbb8fa"
+      "sha256": "eae3741ea8f40046b892d84fee8df4e68ca124974bfa882ab5c45dca24b1966f"
     }
   ],
   "scope": "PG100 complete-system implementation and functional simulation; local PDS qualification requested; board testing not selected"

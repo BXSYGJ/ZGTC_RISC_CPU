@@ -56,7 +56,7 @@ PROGRESS 31000000 layer 6 dma 10
 RESULT: PASS four convs and DDR activation replay golden exact cycles=31142855
 LAYER 7 cycle 31142858
 LAYER 8 cycle 31142861
-LAYER 9 cycle 31143118
+LAYER 9 cycle 31143119
 FC1 group=  0 acc0=    -122616 acc1=      49645 b1=       -186 M1= 1441380553 s1= 40
 FC1 group=  1 acc0=     154345 acc1=      23857 b1=       -186 M1= 1441380553 s1= 40
 FC1 group=  2 acc0=     -72111 acc1=     -76375 b1=       -186 M1= 1441380553 s1= 40
@@ -65,16 +65,16 @@ FC1 group=  4 acc0=     164757 acc1=     -53848 b1=       -186 M1= 1441380553 s1
 FC1 group=  5 acc0=     233981 acc1=     -73785 b1=       -186 M1= 1441380553 s1= 40
 FC1 group=  6 acc0=     243697 acc1=     184307 b1=       -186 M1= 1441380553 s1= 40
 FC1 group=  7 acc0=     179418 acc1=    -136396 b1=       -186 M1= 1441380553 s1= 40
-LAYER 10 cycle 31151325
-LAYER 11 cycle 31151752
+LAYER 10 cycle 31151326
+LAYER 11 cycle 31151753
 NATIVE_FINAL first=001003a0 last=001a8900 min=00100200 max=001a8b40 Amax=004307e0 Bmax=00457fe0
-RESULT: PASS full native controller npu_top golden inference cycles=31152093
-CPU UART NPU top1=0 last_class=7 last_p=0 c=31152092
+RESULT: PASS full native controller npu_top golden inference cycles=31152094
+CPU UART NPU top1=0 last_class=7 last_p=0 c=31152093
 PACERV_NATIVE DDR requests=331 responses=331
-CPU_NATIVE expected report=NPU top1=0 last_class=7 last_p=0 c=31152092
+CPU_NATIVE expected report=NPU top1=0 last_class=7 last_p=0 c=31152093
 RESULT: PASS real CPU ROM MMIO launch, full native golden NPU, real result report and acknowledgement
-- /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_digest_gap_bank/tb_pacerv_native_npu.sv:69: Verilog $finish
+- /mnt/d/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/sim/cpu_native_joint_pacerv_h3_imc_timing_gap_sync_bram/tb_pacerv_native_npu.sv:69: Verilog $finish
 - S i m u l a t i o n   R e p o r t: Verilator 5.040 2025-08-30
-- Verilator: $finish at 314ms; walltime 46.618 s; speed 6.899 ms/s
-- Verilator: cpu 45.482 s on 1 threads; alloced 201 MB
+- Verilator: $finish at 314ms; walltime 43.569 s; speed 7.423 ms/s
+- Verilator: cpu 42.275 s on 1 threads; alloced 201 MB
 wsl: 检测到 localhost 代理配置，但未镜像到 WSL。NAT 模式下的 WSL 不支持 localhost 代理。

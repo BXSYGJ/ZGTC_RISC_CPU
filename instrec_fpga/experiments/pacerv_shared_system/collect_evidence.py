@@ -229,8 +229,11 @@ def main() -> None:
                                         last_route_iteration=interruption['last_route_iteration'],
                                         last_unrouted_subnets=interruption['last_unrouted_subnets'])
                 retain(interruption_file, 'FULL_PDS_INTERRUPTION.json')
-            for name in ('FULL_PDS_RESULT.json', 'FULL_PDS_QUALIFICATION.json', 'FULL_TIMING.rtr',
-                         'FULL_ROUTED_RESOURCES.prr', 'FULL_RAM_INFERENCE.txt'):
+            stale_names = ('FULL_PDS_RESULT.json', 'FULL_PDS_QUALIFICATION.json', 'FULL_TIMING.rtr',
+                           'FULL_ROUTED_RESOURCES.prr', 'FULL_RAM_INFERENCE.txt')
+            if not interruption_file.is_file():
+                stale_names += ('FULL_PDS_INTERRUPTION.json',)
+            for name in stale_names:
                 old = evidence / name
                 if old.is_file():
                     historical = evidence / 'history' / digest(old)[:12] / name
@@ -332,7 +335,7 @@ def main() -> None:
              "four-source UART acceptance, registered MMIO/activation/DDR commands, synchronous FC",
              "coefficient RAM, seven-clock display alignment, FETCH_ADDRESS_BITS=IAW+2 ROM qualification,",
              "register-based short weight FIFOs, digest_q/rdigest_q checksum staging,",
-             "GAP acc scalar register bank and matched actual DDR/system clock configuration.",
+             "GAP synchronous block-RAM accumulator pipeline and matched actual DDR/system clock configuration.",
              "", "Selected gates: " + json.dumps(verdict),
              "Physical status: " + json.dumps({label: item.get('status', 'complete')
                                              for label, item in physical.items()}), "",

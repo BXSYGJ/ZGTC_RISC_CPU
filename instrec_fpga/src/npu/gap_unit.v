@@ -10,9 +10,10 @@
 // Input stream (from pool4): one beat per cycle, order
 // (row, grp, col, lane 0..15); 4 rows x 16 groups x 16 cols x 16 lanes.
 //
-// Storage: 256 x s32 accumulators (8,192 FF), then a 256 x 16 result RAM
-// written one channel per cycle after the last beat. The fc stage reads
-// the RAM through the exported read port.
+// Storage: synchronous block RAM for the accumulators, followed by a
+// 256 x 16 result RAM. Every channel is revisited only after 16 input
+// beats, so the one-cycle read/update pipeline has no feedback hazard.
+// One drain cycle commits the last accumulator before result conversion.
 // ---------------------------------------------------------------------------
 
 module gap_unit #(
@@ -41,7 +42,13 @@ module gap_unit #(
 
     localparam [7:0] GRP_LAST = (CIN / 16) - 1;
 
-    wire signed [31:0] acc [0:255];
+    localparam ACC_BITS = $clog2(H_IN * W_IN * 255 + 1);
+    (* syn_ramstyle = "block_ram" *) reg [ACC_BITS-1:0] acc_mem [0:255];
+    reg [ACC_BITS-1:0] acc_rdata;
+    reg               acc_valid_q;
+    reg [7:0]         acc_addr_q;
+    reg [7:0]         acc_value_q;
+    reg               acc_first_q;
     reg [15:0]        result [0:255];
 
     reg [1:0]  row_cnt;
@@ -54,27 +61,27 @@ module gap_unit #(
     localparam [1:0] S_ACC  = 2'd0;
     localparam [1:0] S_CONV = 2'd1;
     localparam [1:0] S_DONE = 2'd2;
+    localparam [1:0] S_DRAIN = 2'd3;
     reg [1:0] state;
 
     wire [7:0] ch = {grp_cnt, lane_cnt};
     wire       last_beat = y_valid && (row_cnt == H_IN - 1) &&
                            (grp_cnt == GRP_LAST) && (col_cnt == W_IN - 1) &&
                            (lane_cnt == 4'd15);
-    wire signed [31:0] acc_next = (row_cnt == 2'd0 && col_cnt == 4'd0)
-        ? {24'd0, y_u8} : acc[ch] + {24'd0, y_u8};
+    wire [7:0] acc_raddr = (state == S_ACC) ? ch :
+        ((state == S_DRAIN) ? 8'd0 : conv_cnt[7:0] + 8'd1);
+    wire [ACC_BITS-1:0] acc_value_ext = {{(ACC_BITS-8){1'b0}}, acc_value_q};
+    wire [ACC_BITS-1:0] acc_next = acc_first_q ? acc_value_ext :
+        acc_rdata + acc_value_ext;
+    wire signed [31:0] acc_convert = {{(32-ACC_BITS){1'b0}}, acc_rdata};
 
-    // Scalar registers avoid the dual-read RAM write-address hold path.
-    genvar acc_index;
-    generate
-        for (acc_index = 0; acc_index < 256; acc_index = acc_index + 1) begin : g_acc
-            reg signed [31:0] acc_word;
-            assign acc[acc_index] = acc_word;
-            always @(posedge clk) begin
-                if (rst_n && state == S_ACC && y_valid && ch == acc_index)
-                    acc_word <= acc_next;
-            end
-        end
-    endgenerate
+    // One read port serves streaming updates and the conversion sweep.
+    // Payload has no reset, allowing native block RAM inference.
+    always @(posedge clk) begin
+        acc_rdata <= acc_mem[acc_raddr];
+        if (rst_n && acc_valid_q)
+            acc_mem[acc_addr_q] <= acc_next;
+    end
 
     // round-half-even divide by 64 for a non-negative s32 value.
     function [15:0] rhe_shift6;
@@ -104,9 +111,19 @@ module gap_unit #(
             gap_waddr<= 8'd0;
             gap_wdata<= 16'd0;
             g_rdata  <= 16'd0;
+            acc_valid_q <= 1'b0;
+            acc_addr_q  <= 8'd0;
+            acc_value_q <= 8'd0;
+            acc_first_q <= 1'b0;
         end else begin
             gap_done <= 1'b0;
             gap_we   <= 1'b0;
+            acc_valid_q <= (state == S_ACC) && y_valid;
+            if (state == S_ACC && y_valid) begin
+                acc_addr_q  <= ch;
+                acc_value_q <= y_u8;
+                acc_first_q <= (row_cnt == 2'd0 && col_cnt == 4'd0);
+            end
 
             case (state)
                 S_ACC: begin
@@ -130,17 +147,22 @@ module gap_unit #(
                         end
                         if (last_beat) begin
                             conv_cnt <= 9'd0;
-                            state    <= S_CONV;
+                            state    <= S_DRAIN;
                         end
                     end
                 end
 
+                S_DRAIN: begin
+                    // Commit the final sample and prefetch channel zero.
+                    state <= S_CONV;
+                end
+
                 S_CONV: begin
                     // 256 cycles: store one channel result per cycle.
-                    result[conv_cnt[7:0]] <= rhe_shift6(acc[conv_cnt[7:0]]);
+                    result[conv_cnt[7:0]] <= rhe_shift6(acc_convert);
                     gap_we    <= 1'b1;
                     gap_waddr <= conv_cnt[7:0];
-                    gap_wdata <= rhe_shift6(acc[conv_cnt[7:0]]);
+                    gap_wdata <= rhe_shift6(acc_convert);
                     if (conv_cnt == 9'd255) begin
                         gap_done <= 1'b1;
                         state    <= S_DONE;

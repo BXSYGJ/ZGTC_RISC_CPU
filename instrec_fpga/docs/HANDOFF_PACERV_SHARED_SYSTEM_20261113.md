@@ -131,3 +131,15 @@ collect_evidence.py新增--loader-gap-study，以及--allow-pending-timing用于
 collector会核对INTERRUPTION记录的manifest及stdout/stderr哈希，并在RESULTS/VERIFICATION中明确写入interrupted_timeout、qualified=false；该记录保存在FULL_PDS_INTERRUPTION.json。最新控制实验参数改为 `--loader-gap-study build/pacerv_shared_system/timing_controls/chat_continuation_20261114`，其余NPU/显示/UART/音频参数同上。四件artifact重新生成并打开核对，ROLLBACK.sh继续保留Git executable位并由pwsh执行。
 
 下一步从当前源建立新的独立冻结run，分析显式GAP寄存器组对应的映射占用和路由状态，继续完整物理验收。原035340没有RESULT.json，现有--restart入口要求该文件，直接使用会在启动前失败；新目录保留原始中断记录。旧93.75MHz快照缺少最新GAP和摘要修改，若启用须重新生成并重验频率相关功能。完整接续入口及可复用提示在 `docs/CHAT_CONTINUATION_20261114.md`。本次未启动新的PDS，当前无活跃构建。
+
+## 当前覆盖：2026-11-14，同步GAP块RAM完整构建111645
+
+当前目标为完成100Pro+时序验收，保持active。035340映射40900LUT/52042FF/882DistributedRAM/128.5DRM/94APM，显式寄存器GAP包含256×32位逻辑寄存器及两个大读出选择器。新GAP改用同步单读口块RAM、14位无符号累加值（255×4×16=16320上界），输入地址/数据/首访标志寄存后在下一拍写回；相同通道至少16有效拍后重访。S_DRAIN提交末样本并预读通道0，转换阶段每拍一输出，round-half-even保持。原显式寄存器版保存在build/pacerv_shared_system/gap_sync_bram/gap_unit.register_bank.v，SHA256 ec69967158709c08dede247f55f6cd17fb398d4ac01abb04828210f57e25f563。
+
+新控制实验build/pacerv_shared_system/timing_controls/gap_sync_bram_20261114的BASELINE/MODIFIED/ROLLBACK均通过；控制基线仍为021145冻结字节，权重13项及三帧768输出/读回全过。完整NPU标签timing_gap_sync_bram，58份输入，完整golden通过，控制器31,152,094周期、CPU结果窗口31,152,093周期，331次CPU DDR请求/返回。比上一版增加1周期，两个计数窗口保持原先1周期差。原31文件回退runner50614退出0，全部原始哈希与460012周期行为恢复，生产新源保留。
+
+当前唯一完整PDS flow为build/pacerv_shared_system/pds/full-20261114-111645-full，父35636、runner47328，109.375MHz系统/148.5MHz像素，normal/seed4/12轮hold，180分钟时限。audit_checkout_inputs核对202份全部匹配；尚未有最终时序结果。PDS内部综合子进程属于同一flow。当前flow运行期间冻结生产输入，仅更新文档和证据脚本。
+
+结束后先确认GAP推断原生DRM，再inspect_pds.py --require-qualified核验全部十表/时钟/位流。最终collector选择新run、新NPU目录与gap_sync_bram_20261114控制实验，显示/音频/UART目录仍沿用已匹配的109.375MHz记录。collect_evidence的GAP说明已改为同步块RAM。物理合格前allow-pending-timing仅记录进展，full_pds_qualified继续为false。
+
+综合报告已确认u_npu/u_gap/acc_mem为256×14、SIMPLE_DUAL_PORT、GTP_DRM18K_E1；GAP没有属性忽略警告。collector对新pending run会将旧FULL_PDS_INTERRUPTION.json按SHA归档，保持选中物理记录与当前run对应。
