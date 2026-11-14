@@ -1,0 +1,44 @@
+{
+  "repository": "BXSYGJ/ZGTC_RISC_CPU",
+  "branch": "rtos125-integration",
+  "selection_commit": "e2cb30fb01dcdbd826149216c58868198afc7455",
+  "original_archives_preserved": true,
+  "versions": [
+    {
+      "name": "125M_hold_clean",
+      "clock_hz": 125000000,
+      "source_run": "full-20261113-223256-full",
+      "frozen_input_count": 202,
+      "archive": "125M_hold_clean.zip",
+      "archive_bytes": 2819827,
+      "archive_sha256": "ad412610e43e1ca588b2f8b3f59ff6b1e5b7bdf14e73abb9a04225dd42ed3f37",
+      "bitstream": "instrec_top_baseline125.sbit",
+      "bitstream_bytes": 3791112,
+      "bitstream_sha256": "20bbda7e0194917111e76c7b797bc196bc8fdf6f02f00598f2eb297a6b76b157",
+      "timing_sha256": "f86ec5e56057e559f4ecbdfb56bad71f30ac645107d6f7f93c43a045728d6129",
+      "slow_setup_ns": -1.414,
+      "slow_setup_tns_ns": -346.334,
+      "slow_hold_ns": 0.052,
+      "fast_hold_ns": 0.0,
+      "timing_qualified": false
+    },
+    {
+      "name": "109M375_main",
+      "clock_hz": 109375000,
+      "source_run": "full-20261114-021145-full",
+      "frozen_input_count": 202,
+      "archive": "109M375_main.zip",
+      "archive_bytes": 2948962,
+      "archive_sha256": "ce7045c73c9ab5bbf3fd16d259073b9fcfed0bfd43e5bef368c61b23c3dc96f7",
+      "bitstream": "instrec_top_baseline109M375.sbit",
+      "bitstream_bytes": 3791112,
+      "bitstream_sha256": "bb484f2153523d8045631abe9d314e6ddffd658b01be0b35f2d76edc20d7f576",
+      "timing_sha256": "6cd1098c6f11d11d7b03e08b810870a075c05c8b551aaf1211703ada9f5124e9",
+      "slow_setup_ns": -1.633,
+      "slow_setup_tns_ns": -33.413,
+      "slow_hold_ns": -0.127,
+      "fast_hold_ns": -0.136,
+      "timing_qualified": false
+    }
+  ]
+}

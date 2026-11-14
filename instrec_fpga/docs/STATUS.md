@@ -1,5 +1,7 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+> **2026-11-14：三套版本统一归档到 `rtos125-integration`。** 按用户追加要求，同时提供原始 125 MHz（223256）、原始 109.375 MHz（021145）及 125 MHz FreeRTOS 版本。三版位流和 ZIP 入口见 `releases/RTOS_AND_BASELINES_20261114.md`；两个原始基线包分别包含 202 份冻结输入、原最终时序报告和构建配方，成品逐字节保留原 SHA256。
+
 > **2026-11-14：GitHub 发布分支 `rtos125-integration`。** 用户授权上传本轮 RTOS 成果；分支从已验收的 `12d7982` 建立，包含完整源码、冻结基线、验证记录和复现入口。位流与原始交付 ZIP 按原 SHA256 归档到 `releases/rtos125-20261114-175148/`，下载及文件清单见该目录 README/RELEASE.json。125 MHz、1 kHz、三任务配置和既有 9/9 专项证据随分支提供。
 
 > **2026-11-14：125 MHz基线FreeRTOS接入和位流交付完成，专项9/9通过。** 官方V11.3.3、1kHz机器定时器、recognition/result_uart/heartbeat三任务与静态队列已落地，H3及202原始输入保留。直接ROM加载的全容量INIT、22位实际地址、8实例控制、厂商原始模型及12项真实篡改全部通过；最终统一复验094556含13条命令exit0，原版/RTOS/回退/完整NPU均pass，文本UTF8无NUL及乱码。整机六阶段完成，续跑1789.913秒exit0，当前PDS=0。位流3791112字节，SHA525d08ea4b903de7604453b0457f131c0aa79d00e9611a4e43de6ba84a5eaf00；交付ZIP build/rtos/releases/rtos125-20261114-175148.zip，共586文件逐一重开核验。最终36749LUT/39739FF/136.5DRM/94APM；独立最终rtr系统slow setup -11.834ns、像素-1.140ns、slow hold+0.020ns、fast hold-0.035ns（5端点），按用户安排保留125MHz配置和原报告。无FTDI/CP2102，板级尚未实测。全项目pytest430通过/13跳过/10失败/47错误的旧资产与契约问题见PROJECT_REGRESSION.json。交付入口rtos/evidence/DELIVERY.json及rtos/README.md，旧时序优化paused。

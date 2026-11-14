@@ -2,6 +2,8 @@
 
 GitHub 发布分支为 [`rtos125-integration`](https://github.com/BXSYGJ/ZGTC_RISC_CPU/tree/rtos125-integration)。已验收的位流和完整交付 ZIP 位于 [`../releases/rtos125-20261114-175148/`](../releases/rtos125-20261114-175148/README.md)，该目录提供直接下载入口、原始 SHA256 和文件清单。
 
+原始 125 MHz、109.375 MHz 基线及本 RTOS 版本的下载入口汇总在[三版本索引](../releases/RTOS_AND_BASELINES_20261114.md)。
+
 本配置以原始 `full-20261113-223256-full` 整机为基线，加入真实的 FreeRTOS 抢占调度。系统时钟125 MHz，节拍1 kHz，程序ROM和数据RAM均为16 KiB。原125 MHz位流和202份输入保留，RTOS工程通过独立构建入口使用其冻结副本。
 
 FreeRTOS-Kernel固定为官方V11.3.3、提交`89592801dd8b73329a7583719b7e3567b50910e5`。`vendor/FreeRTOS-Kernel/PROVENANCE.json`记录37份原始文件哈希；内核源码按MIT许可证保留。机器态移植层位于`sw/port.c`、`sw/portASM.S`及`sw/portmacro.h`，PaceRV H3执行核心保持原值。
@@ -64,7 +66,7 @@ RTOS_NATIVE scheduling timer_irqs=250 yield_traps=259 heartbeats_while_busy=2
 RESULT: PASS production FreeRTOS tasks, full native golden NPU, immutable queue result report and acknowledgement
 ```
 
-卷积、池化、GAP、FC及概率逐项对照既有固定点golden。DDR读写走实际CPU桥和M3共享RTL；DDR存储器使用仿真模型。硬件定时器、上下文切换和FreeRTOS任务均由真实指令执行。定时器及MMIO已完成21+66项检查；补充精确中断测试覆盖DDR等待期间到期、半字PC恢复、CSR及ROM边界。
+卷积、池化、GAP、FC及概率逐项对照既有固定点golden。DDR读写走实际CPU桥和M3共享RTL；DDR存储器使用仿真模型。硬件定时器、上下文切换和FreeRTOS任务均由真实指令执行。定时器及MMIO已完成21+78项检查；补充精确中断测试覆盖DDR等待期间到期、半字PC恢复、CSR及ROM边界。
 
 最终CPU压力测试已验证真实节拍和任务抢占、队列及寄存器上下文。嵌套两层临界区跨过3个硬件截止时间时中断保持屏蔽，退出后准确补齐3次节拍；17次比较寄存器重装均按125000周期递增。原125 MHz版本及回退副本的启动、自检、NPU结果输出和ACK逐项一致。
 

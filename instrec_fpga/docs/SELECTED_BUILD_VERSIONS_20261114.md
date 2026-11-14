@@ -1,5 +1,7 @@
 # 按用户要求选用的125MHz与109.375MHz版本
 
+GitHub 已归档入口：[三版本统一下载索引](../releases/RTOS_AND_BASELINES_20261114.md)，发布分支为 `rtos125-integration`。原始 [125 MHz 完整包](../releases/selected-baselines-20261114/125M_hold_clean.zip)及[位流](../releases/selected-baselines-20261114/instrec_top_baseline125.sbit)、原始 [109.375 MHz 完整包](../releases/selected-baselines-20261114/109M375_main.zip)及[位流](../releases/selected-baselines-20261114/instrec_top_baseline109M375.sbit)均保留原 SHA256。下面的本地路径继续作为历史构建追溯入口。
+
 用户于2026-11-14要求停止继续追求时序闭合，当前一轮133421完成后收尾，回到已有125MHz与约109.5MHz版本。该档实际DDR用户时钟为109.375MHz。以下以原始最终报告比较，保留报告中的违例数值。
 
 主选为109.375MHz的`full-20261114-021145-full`：已完成版本中，setup总负裕量绝对值最小，setup失败端点最少。125MHz备选为`full-20261113-223256-full`，该版本的快慢角hold均通过。
