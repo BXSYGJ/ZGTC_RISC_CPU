@@ -29,9 +29,11 @@ try {
         [System.IO.Directory]::CreateDirectory([System.IO.Path]::GetDirectoryName($destination)) | Out-Null
         [System.IO.File]::WriteAllBytes($destination, [System.IO.File]::ReadAllBytes($source))
     }
-    $addedTimer = [System.IO.Path]::Combine($resolvedWorkspace, 'src', 'cpu', 'machine_timer.v')
-    if (Test-Path -LiteralPath $addedTimer) {
-        Remove-Item -LiteralPath $addedTimer
+    foreach ($addedName in @('machine_timer.v', 'prog_pacerv_even.hex', 'prog_pacerv_odd.hex')) {
+        $addedFile = [System.IO.Path]::Combine($resolvedWorkspace, 'src', 'cpu', $addedName)
+        if (Test-Path -LiteralPath $addedFile) {
+            Remove-Item -LiteralPath $addedFile
+        }
     }
     foreach ($entry in $manifest.files) {
         $destination = [System.IO.Path]::Combine($resolvedWorkspace, [string]$entry.path)

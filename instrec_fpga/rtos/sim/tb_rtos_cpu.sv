@@ -4,6 +4,12 @@
 `ifndef RTOS_PROG_HEX
 `define RTOS_PROG_HEX "build/rtos/firmware/test/prog.hex"
 `endif
+`ifndef RTOS_PROG_EVEN_HEX
+`define RTOS_PROG_EVEN_HEX "build/rtos/firmware/test/prog_even.hex"
+`endif
+`ifndef RTOS_PROG_ODD_HEX
+`define RTOS_PROG_ODD_HEX "build/rtos/firmware/test/prog_odd.hex"
+`endif
 module tb_rtos_cpu;
     localparam integer MAX_CYCLES = 20000000;
     reg clk = 0;
@@ -34,7 +40,8 @@ module tb_rtos_cpu;
 
     rv32_cpu_subsys #(
         .IMEM_WORDS(4096), .DMEM_WORDS(4096),
-        .PROG_HEX(`RTOS_PROG_HEX)
+        .PROG_HEX(`RTOS_PROG_HEX), .PROG_EVEN_HEX(`RTOS_PROG_EVEN_HEX),
+        .PROG_ODD_HEX(`RTOS_PROG_ODD_HEX)
     ) dut (
         .clk(clk), .rst_n(rst_n),
         .npu_busy(npu_busy), .npu_done(npu_done), .npu_timeout(npu_timeout),
@@ -86,12 +93,19 @@ module tb_rtos_cpu;
     reg stalled = 0;
     reg [68:0] held_request;
     integer lane;
+    integer rom_word;
     string uart_line = "";
     string uart_log = "";
 
     assign dd_req_ready = !ddr_pending && !dd_rsp_valid && (cycles % 11 != 1);
 
     initial begin
+        #1;
+        for (rom_word = 0; rom_word < 4096; rom_word = rom_word + 1) begin
+            if (dut.rom_d[rom_word] !== (rom_word[0] ? dut.imem_odd[rom_word/2] : dut.imem_even[rom_word/2]))
+                $fatal(1, "directly loaded instruction/data ROM banks differ at word %0d", rom_word);
+        end
+        $display("RTOS_ROM_BANKS_PASS words=4096 instruction_banks=2 data_image=1");
         for (lane = 0; lane < 256; lane = lane + 1) memory[lane] = 0;
         repeat (8) @(negedge clk);
         rst_n = 1;

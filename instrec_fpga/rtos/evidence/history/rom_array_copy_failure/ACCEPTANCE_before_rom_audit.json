@@ -1,0 +1,41 @@
+{
+  "objective": "combine XSY/XSY2 into the current project with RTOS at the 125 MHz baseline",
+  "changed_branch_fields": "XSY; timer_value/irq_timer; IMEM_WORDS=4096; DMEM_WORDS=4096; production FreeRTOS firmware",
+  "checked_at": "2026-11-14T08:00:27.069597+00:00",
+  "clock_hz": 125000000,
+  "tick_hz": 1000,
+  "baseline_files_restored": 202,
+  "firmware_rom_bytes": 7148,
+  "artifacts": {
+    "MODIFIED_FILE": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\rtos\\MODIFIED_FILE.sv",
+    "DIFF_FILE": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\rtos\\DIFF_FILE.patch",
+    "VERIFICATION": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\rtos\\VERIFICATION.txt",
+    "ROLLBACK": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\rtos\\ROLLBACK.sh"
+  },
+  "gates": {
+    "frozen_125MHz_inputs": true,
+    "official_kernel_hashes": true,
+    "real_cpu_preemption_queues_critical_sections": true,
+    "same_input_full_NPU_golden": true,
+    "complete_system_mapping": true,
+    "rollback_original_behavior": true,
+    "FPGA_bitstream_generated": false
+  },
+  "board_preflight": {
+    "checked_at": "2026-11-14T15:43:47.3621692+08:00",
+    "present_programmer_or_uart_devices": [],
+    "serial_ports": [
+      "COM4",
+      "COM5",
+      "COM8",
+      "COM3",
+      "COM9",
+      "COM6"
+    ],
+    "jtag_process_ids": [],
+    "board_test_executed": false
+  },
+  "board_test_executed": false,
+  "pds_run": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\pds\\20261114-153018-rom_loop_fix-map",
+  "timing_constraints_met": null
+}

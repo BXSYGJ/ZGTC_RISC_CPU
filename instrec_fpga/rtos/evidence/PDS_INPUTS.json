@@ -17,7 +17,26 @@
   "added_rtl": [
     "src/cpu/machine_timer.v"
   ],
+  "added_rom_images": [
+    "src/cpu/prog_pacerv_even.hex",
+    "src/cpu/prog_pacerv_odd.hex"
+  ],
   "firmware_hex_sha256": "67872c2a2b4b4b4c437c39d8e6a815cfb36ff60437c61d53d7dae777d280f49f",
+  "firmware_rom_images": [
+    {
+      "path": "src/cpu/prog_pacerv.hex",
+      "sha256": "67872c2a2b4b4b4c437c39d8e6a815cfb36ff60437c61d53d7dae777d280f49f"
+    },
+    {
+      "path": "src/cpu/prog_pacerv_even.hex",
+      "sha256": "4bfb5b38b8c319d2501b56ece4f241d26ed46a1b10d4fc7129d07404d8578184"
+    },
+    {
+      "path": "src/cpu/prog_pacerv_odd.hex",
+      "sha256": "d8657d06a1ce3a7d5ac972bd49100280627b6837f8260ddf55f62f5f51e9160c"
+    }
+  ],
+  "rom_initialization": "direct readmemh into actual parity instruction banks and data ROM",
   "files": [
     {
       "path": "constraints/clock_groups_async.fdc",
@@ -521,8 +540,8 @@
     },
     {
       "path": "src/cpu/machine_timer.v",
-      "bytes": 2621,
-      "sha256": "2c7cd24a27af87dc9214955f66ccb8ddc87919b6c9b18b5ed9a2870a107e227a"
+      "bytes": 2628,
+      "sha256": "838f72a4e5d65852355dc5ca35806d06e7cf408f67f2fd7a879f16514a5c19da"
     },
     {
       "path": "src/cpu/prog.hex",
@@ -535,9 +554,19 @@
       "sha256": "67872c2a2b4b4b4c437c39d8e6a815cfb36ff60437c61d53d7dae777d280f49f"
     },
     {
+      "path": "src/cpu/prog_pacerv_even.hex",
+      "bytes": 8940,
+      "sha256": "4bfb5b38b8c319d2501b56ece4f241d26ed46a1b10d4fc7129d07404d8578184"
+    },
+    {
+      "path": "src/cpu/prog_pacerv_odd.hex",
+      "bytes": 8930,
+      "sha256": "d8657d06a1ce3a7d5ac972bd49100280627b6837f8260ddf55f62f5f51e9160c"
+    },
+    {
       "path": "src/cpu/rv32_cpu_subsys.sv",
-      "bytes": 25704,
-      "sha256": "3e6974e357d424a686ad6b6fc33540bb6dd90b706a5afba23d420ed58b76c91f"
+      "bytes": 25375,
+      "sha256": "0e9f0c0e78bf26ad1d587ad2386c90b459c61947069fada92c963fb1a9aa565b"
     },
     {
       "path": "src/cpu/vendor/pacerv_h3/rv32_alu.sv",
@@ -586,8 +615,8 @@
     },
     {
       "path": "src/ctrl/instrec_top.v",
-      "bytes": 49588,
-      "sha256": "fe8287a327d6d0c4cfd1decfac0fd0f5e3b5dd878f950013fe33a5c76fb3aba7"
+      "bytes": 49707,
+      "sha256": "efd196824bf6115cb803a1d518b67325f4bc98fee309fb17aa19cc547e92c90c"
     },
     {
       "path": "src/ctrl/logits_snap.v",

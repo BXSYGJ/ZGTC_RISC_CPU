@@ -1,0 +1,597 @@
+{
+  "schema": "mapped-rom-negative-evidence-v1",
+  "status": "pass",
+  "original_map_inputs_unchanged": true,
+  "source_run": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\pds\\20261114-162656-direct_rom_final-map",
+  "source_auditor_sha256": "95c982e67196aebf5d8e7f8b4bab9e0b37bf8095e635b94c049dd1471547d750",
+  "control_cases": [
+    {
+      "case": "control",
+      "command": [
+        "D:\\Anaconda\\python.exe",
+        "-X",
+        "utf8",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_audit_negatives\\20261114-090949-559603\\audit_mapped_rom.py",
+        "--pds-run",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_audit_negatives\\20261114-090949-559603\\control"
+      ],
+      "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga",
+      "exit_status": 0,
+      "output": "MAPPED_ROM_PASS firmware_bytes=7148 arrays=3\nD:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_audit_negatives\\20261114-090949-559603\\control\\ROM_AUDIT.json\n"
+    },
+    {
+      "case": "control_report",
+      "command": [
+        "D:\\Anaconda\\python.exe",
+        "-X",
+        "utf8",
+        "-c",
+        "import sys;from pathlib import Path;sys.path.insert(0,sys.argv[1]);from audit_mapped_rom import verify_report;verify_report(Path(sys.argv[2]));print('MAPPED_ROM_REPORT_PASS')",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_audit_negatives\\20261114-090949-559603",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_audit_negatives\\20261114-090949-559603\\control"
+      ],
+      "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga",
+      "exit_status": 0,
+      "output": "MAPPED_ROM_REPORT_PASS\n"
+    }
+  ],
+  "negative_cases": [
+    {
+      "case": "hex",
+      "command": [
+        "D:\\Anaconda\\python.exe",
+        "-X",
+        "utf8",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_audit_negatives\\20261114-090949-559603\\audit_mapped_rom.py",
+        "--pds-run",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_audit_negatives\\20261114-090949-559603\\hex"
+      ],
+      "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga",
+      "exit_status": 1,
+      "output": "Traceback (most recent call last):\n  File \"D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_audit_negatives\\20261114-090949-559603\\audit_mapped_rom.py\", line 600, in <module>\n    raise SystemExit(main())\n                     ~~~~^^\n  File \"D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_audit_negatives\\20261114-090949-559603\\audit_mapped_rom.py\", line 590, in main\n    report = audit(args.pds_run)\n  File \"D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_audit_negatives\\20261114-090949-559603\\audit_mapped_rom.py\", line 534, in audit\n    raise ValueError(\"Synthesizer ROM file differs from frozen input: \" + relative)\nValueError: Synthesizer ROM file differs from frozen input: src/cpu/prog_pacerv_even.hex\n",
+      "expected_rejection": true,
+      "rejected": true
+    },
+    {
+      "case": "init",
+      "command": [
+        "D:\\Anaconda\\python.exe",
+        "-X",
+        "utf8",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_audit_negatives\\20261114-090949-559603\\audit_mapped_rom.py",
+        "--pds-run",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_audit_negatives\\20261114-090949-559603\\init"
+      ],
+      "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga",
+      "exit_status": 2,
+      "output": "MAPPED_ROM_FAIL firmware_bytes=7148 arrays=3\nD:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_audit_negatives\\20261114-090949-559603\\init\\ROM_AUDIT.json\n",
+      "expected_rejection": true,
+      "rejected": true
+    },
+    {
+      "case": "address_lut",
+      "command": [
+        "D:\\Anaconda\\python.exe",
+        "-X",
+        "utf8",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_audit_negatives\\20261114-090949-559603\\audit_mapped_rom.py",
+        "--pds-run",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_audit_negatives\\20261114-090949-559603\\address_lut"
+      ],
+      "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga",
+      "exit_status": 2,
+      "output": "MAPPED_ROM_FAIL firmware_bytes=7148 arrays=0\nMapped bank address equivalence failed: i_even_index[0] result=sat model=[u_core/frontend/word1_data[14] = False,\n u_core/id_instruction[29] = True,\n u_machine_timer/timer_value[40] = True,\n u_core/frontend/word1_is_c[1] = False,\n u_core/register_valid[9] = True,\n u_core/ex_decode.is_store = False,\n u_core/id_prediction[9] = True,\n u_machine_timer/mtimecmp[9] = False,\n u_core/id_prediction[3] = False,\n u_core/predictor/return_stack_target[2] = True,\n u_machine_timer/mtimecmp[60] = False,\n u_core/ex_operand_b[22] = False,\n u_core/predictor/N182[3] = True,\n u_core/frontend/word0_is_c[1] = True,\n u_core/register_valid[31] = False,\n u_core/ex_pc[1] = True,\n u_core/ex_instruction[18] = False,\n u_machine_timer/timer_value[59] = False,\n u_machine_timer/mtimecmp[58] = True,\n u_core/ex_operand_a[17] = True,\n u_core/frontend/word0_tag[17] = False,\n u_core/ex_operand_a[0] = False,\n u_core/trace_data[17] = False,\n u_core/mem_result[18] = False,\n u_machine_timer/timer_value[61] = False,\n u_core/frontend/word0_data[31] = True,\n u_core/frontend/word1_data[25] = False,\n u_machine_timer/mtimecmp[61] = False,\n u_core/frontend/out_pc[3] = False,\n u_core/frontend/request_address[19] = False,\n u_machine_timer/timer_value[45] = False,\n u_core/ex_pc[30] = False,\n u_core/register_valid[27] = False,\n u_core/predictor/_N27184 = False,\n u_core/register_valid[7] = True,\n u_core/frontend/word1_data[18] = False,\n u_core/predictor/N128[17] = True,\n u_machine_timer/timer_value[56] = True,\n u_core/register_valid[10] = False,\n u_core/ex_pc[6] = True,\n u_core/ex_instruction[25] = False,\n u_core/frontend/out_pc[16] = True,\n u_machine_timer/mtimecmp[18] = False,\n u_machine_timer/mtimecmp[12] = False,\n u_core/frontend/word1_data[19] = False,\n u_core/ex_instruction[11] = True,\n u_core/predictor/N128[14] = True,\n u_core/trace_data[18] = False,\n u_machine_timer/mtimecmp[43] = True,\n u_machine_timer/mtimecmp[22] = True,\n u_core/trace_data[16] = False,\n u_core/mem_target_prediction_miss = True,\n u_core/ex_prediction[31] = False,\n u_core/ex_pc[24] = True,\n u_core/ex_pc[3] = False,\n u_core/frontend/word1_tag[13] = False,\n u_core/early_target[27] = True,\n u_machine_timer/mtimecmp[32] = False,\n u_core/predictor/N182[15] = False,\n u_core/frontend/out_pc[17] = False,\n u_core/frontend/word1_tag[22] = False,\n u_machine_timer/mtimecmp[10] = True,\n u_machine_timer/mtimecmp[49] = True,\n u_core/predictor/N182[17] = False,\n u_core/predictor/N128[21] = False,\n u_core/ex_prediction[0] = False,\n u_core/ex_instruction[22] = False,\n u_core/frontend/request_address[6] = True,\n u_machine_timer/timer_value[16] = False,\n u_core/frontend/word0_data[9] = False,\n u_core/mem_cause[1] = False,\n u_core/id_prediction[7] = True,\n u_core/frontend/word0_data[1] = False,\n u_core/frontend/word0_data[23] = True,\n u_core/register_valid[6] = False,\n u_core/ex_prediction[18] = True,\n u_core/register_valid[26] = False,\n u_core/id_prediction[18] = True,\n u_core/trace_data[29] = False,\n u_core/predictor/N182[2] = False,\n u_core/id_pc[30] = False,\n u_core/frontend/word1_data[20] = False,\n u_machine_timer/mtimecmp[34] = True,\n u_core/trace_data[5] = False,\n u_core/id_pc[10] = False,\n u_core/ex_instruction[8] = True,\n u_core/multiply_divide.unit/state_reg[1] = True,\n u_core/id_prediction[8] = False,\n u_core/frontend/word1_tag[17] = False,\n i_odd_q[17] = True,\n u_machine_timer/timer_value[60] = True,\n u_core/ex_decode.illegal = False,\n u_machine_timer/mtimecmp[0] = True,\n u_core/mem_result[24] = False,\n u_core/trace_data[3] = False,\n u_core/mem_load_route[7] = False,\n u_core/id_prediction[21] = True,\n u_core/id_prediction[10] = False,\n u_core/ex_decode.immediate[1] = False,\n u_core/ex_operand_a[27] = True,\n u_core/frontend/out_pc[27] = False,\n u_core/frontend/word1_tag[16] = False,\n u_core/ex_operand_b[29] = False,\n u_core/ex_operand_b[2] = False,\n u_core/register_valid[16] = False,\n u_core/id_pc[24] = False,\n u_core/trace_data[30] = False,\n u_core/ex_instruction[10] = True,\n u_core/id_pc[23] = False,\n u_core/frontend/out_pc[31] = False,\n u_core/frontend/word0_data[6] = False,\n u_core/predictor/_N27278 = False,\n u_core/predictor/N146[19] = False,\n u_core/ex_prediction[17] = False,\n u_core/mem_instruction[11] = True,\n u_core/register_valid[8] = False,\n u_core/early_target[31] = True,\n u_core/frontend/request_address[29] = False,\n u_core/mem_result[8] = True,\n u_core/early_target[7] = True,\n u_core/ex_prediction[22] = True,\n u_core/frontend/word1_tag[2] = True,\n u_core/predictor/_N27215 = False,\n u_core/frontend/out_pc[29] = True,\n u_core/id_pc[0] = False,\n u_core/frontend/word0_data[28] = False,\n u_core/ex_instruction[12] = False,\n u_core/ex_prediction[14] = False,\n u_machine_timer/mtimecmp[59] = True,\n ...]\nD:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_audit_negatives\\20261114-090949-559603\\address_lut\\ROM_AUDIT.json\n",
+      "expected_rejection": true,
+      "rejected": true
+    },
+    {
+      "case": "chip_select",
+      "command": [
+        "D:\\Anaconda\\python.exe",
+        "-X",
+        "utf8",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_audit_negatives\\20261114-090949-559603\\audit_mapped_rom.py",
+        "--pds-run",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_audit_negatives\\20261114-090949-559603\\chip_select"
+      ],
+      "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga",
+      "exit_status": 2,
+      "output": "MAPPED_ROM_FAIL firmware_bytes=7148 arrays=0\nInactive ROM output affects imem_even[0]: [805568512, 805634047]\nD:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_audit_negatives\\20261114-090949-559603\\chip_select\\ROM_AUDIT.json\n",
+      "expected_rejection": true,
+      "rejected": true
+    },
+    {
+      "case": "output_route",
+      "command": [
+        "D:\\Anaconda\\python.exe",
+        "-X",
+        "utf8",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_audit_negatives\\20261114-090949-559603\\audit_mapped_rom.py",
+        "--pds-run",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_audit_negatives\\20261114-090949-559603\\output_route"
+      ],
+      "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga",
+      "exit_status": 2,
+      "output": "MAPPED_ROM_FAIL firmware_bytes=7148 arrays=3\nD:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_audit_negatives\\20261114-090949-559603\\output_route\\ROM_AUDIT.json\n",
+      "expected_rejection": true,
+      "rejected": true
+    },
+    {
+      "case": "read_enable",
+      "command": [
+        "D:\\Anaconda\\python.exe",
+        "-X",
+        "utf8",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_audit_negatives\\20261114-090949-559603\\audit_mapped_rom.py",
+        "--pds-run",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_audit_negatives\\20261114-090949-559603\\read_enable"
+      ],
+      "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga",
+      "exit_status": 2,
+      "output": "MAPPED_ROM_FAIL firmware_bytes=7148 arrays=0\nMapped ROM read clock enable is inactive for an accepted request\nD:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_audit_negatives\\20261114-090949-559603\\read_enable\\ROM_AUDIT.json\n",
+      "expected_rejection": true,
+      "rejected": true
+    },
+    {
+      "case": "address_hold",
+      "command": [
+        "D:\\Anaconda\\python.exe",
+        "-X",
+        "utf8",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_audit_negatives\\20261114-090949-559603\\audit_mapped_rom.py",
+        "--pds-run",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_audit_negatives\\20261114-090949-559603\\address_hold"
+      ],
+      "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga",
+      "exit_status": 2,
+      "output": "MAPPED_ROM_FAIL firmware_bytes=7148 arrays=0\nMapped ROM address hold is active\nD:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_audit_negatives\\20261114-090949-559603\\address_hold\\ROM_AUDIT.json\n",
+      "expected_rejection": true,
+      "rejected": true
+    },
+    {
+      "case": "reset",
+      "command": [
+        "D:\\Anaconda\\python.exe",
+        "-X",
+        "utf8",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_audit_negatives\\20261114-090949-559603\\audit_mapped_rom.py",
+        "--pds-run",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_audit_negatives\\20261114-090949-559603\\reset"
+      ],
+      "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga",
+      "exit_status": 2,
+      "output": "MAPPED_ROM_FAIL firmware_bytes=7148 arrays=0\nMapped ROM reset is active\nD:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_audit_negatives\\20261114-090949-559603\\reset\\ROM_AUDIT.json\n",
+      "expected_rejection": true,
+      "rejected": true
+    },
+    {
+      "case": "report_input_hash",
+      "command": [
+        "D:\\Anaconda\\python.exe",
+        "-X",
+        "utf8",
+        "-c",
+        "import sys;from pathlib import Path;sys.path.insert(0,sys.argv[1]);from audit_mapped_rom import verify_report;verify_report(Path(sys.argv[2]));print('MAPPED_ROM_REPORT_PASS')",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_audit_negatives\\20261114-090949-559603",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_audit_negatives\\20261114-090949-559603\\report_input_hash"
+      ],
+      "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga",
+      "exit_status": 1,
+      "output": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n    import sys;from pathlib import Path;sys.path.insert(0,sys.argv[1]);from audit_mapped_rom import verify_report;verify_report(Path(sys.argv[2]));print('MAPPED_ROM_REPORT_PASS')\n                                                                                                                  ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^\n  File \"D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_audit_negatives\\20261114-090949-559603\\audit_mapped_rom.py\", line 482, in verify_report\n    raise RuntimeError(\"Mapped ROM audit input changed: \" + str(path))\nRuntimeError: Mapped ROM audit input changed: D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_audit_negatives\\20261114-090949-559603\\report_input_hash\\synthesize\\instrec_top_syn.vm\n",
+      "expected_rejection": true,
+      "rejected": true
+    },
+    {
+      "case": "report_word_hash",
+      "command": [
+        "D:\\Anaconda\\python.exe",
+        "-X",
+        "utf8",
+        "-c",
+        "import sys;from pathlib import Path;sys.path.insert(0,sys.argv[1]);from audit_mapped_rom import verify_report;verify_report(Path(sys.argv[2]));print('MAPPED_ROM_REPORT_PASS')",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_audit_negatives\\20261114-090949-559603",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_audit_negatives\\20261114-090949-559603\\report_word_hash"
+      ],
+      "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga",
+      "exit_status": 1,
+      "output": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n    import sys;from pathlib import Path;sys.path.insert(0,sys.argv[1]);from audit_mapped_rom import verify_report;verify_report(Path(sys.argv[2]));print('MAPPED_ROM_REPORT_PASS')\n                                                                                                                  ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^\n  File \"D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_audit_negatives\\20261114-090949-559603\\audit_mapped_rom.py\", line 501, in verify_report\n    raise RuntimeError(\"Mapped ROM contents or address contract failed\")\nRuntimeError: Mapped ROM contents or address contract failed\n",
+      "expected_rejection": true,
+      "rejected": true
+    },
+    {
+      "case": "report_word_count",
+      "command": [
+        "D:\\Anaconda\\python.exe",
+        "-X",
+        "utf8",
+        "-c",
+        "import sys;from pathlib import Path;sys.path.insert(0,sys.argv[1]);from audit_mapped_rom import verify_report;verify_report(Path(sys.argv[2]));print('MAPPED_ROM_REPORT_PASS')",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_audit_negatives\\20261114-090949-559603",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_audit_negatives\\20261114-090949-559603\\report_word_count"
+      ],
+      "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga",
+      "exit_status": 1,
+      "output": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n    import sys;from pathlib import Path;sys.path.insert(0,sys.argv[1]);from audit_mapped_rom import verify_report;verify_report(Path(sys.argv[2]));print('MAPPED_ROM_REPORT_PASS')\n                                                                                                                  ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^\n  File \"D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_audit_negatives\\20261114-090949-559603\\audit_mapped_rom.py\", line 501, in verify_report\n    raise RuntimeError(\"Mapped ROM contents or address contract failed\")\nRuntimeError: Mapped ROM contents or address contract failed\n",
+      "expected_rejection": true,
+      "rejected": true
+    },
+    {
+      "case": "report_missing_inputs",
+      "command": [
+        "D:\\Anaconda\\python.exe",
+        "-X",
+        "utf8",
+        "-c",
+        "import sys;from pathlib import Path;sys.path.insert(0,sys.argv[1]);from audit_mapped_rom import verify_report;verify_report(Path(sys.argv[2]));print('MAPPED_ROM_REPORT_PASS')",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_audit_negatives\\20261114-090949-559603",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_audit_negatives\\20261114-090949-559603\\report_missing_inputs"
+      ],
+      "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga",
+      "exit_status": 1,
+      "output": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n    import sys;from pathlib import Path;sys.path.insert(0,sys.argv[1]);from audit_mapped_rom import verify_report;verify_report(Path(sys.argv[2]));print('MAPPED_ROM_REPORT_PASS')\n                                                                                                                  ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^\n  File \"D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_audit_negatives\\20261114-090949-559603\\audit_mapped_rom.py\", line 478, in verify_report\n    raise RuntimeError(\"ROM audit input roles or exact file coverage is incomplete\")\nRuntimeError: ROM audit input roles or exact file coverage is incomplete\n",
+      "expected_rejection": true,
+      "rejected": true
+    }
+  ],
+  "negative_case_count": 12,
+  "original_source_inputs": [
+    {
+      "role": "synthesized_netlist",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\pds\\20261114-162656-direct_rom_final-map\\synthesize\\instrec_top_syn.vm",
+      "bytes": 44157500,
+      "sha256": "298e7d8d09bfff2ba427cc7cce6368927062db05fc00ed88db7946c0eb3f96a6"
+    },
+    {
+      "role": "mapped_database",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\pds\\20261114-162656-direct_rom_final-map\\device_map\\instrec_top_map.adf",
+      "bytes": 8297990,
+      "sha256": "b36eab2acfa19e95b5bd2de40ea7c339d84a89864fdeb6811d1adb86b3b689f5"
+    },
+    {
+      "role": "frozen_input_manifest",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\pds\\20261114-162656-direct_rom_final-map\\INPUTS.json",
+      "bytes": 38124,
+      "sha256": "005890190a04895bd485c37dffd2554d1ab8a4a10dfd28ff3ba791fc1fc87797"
+    },
+    {
+      "role": "mapped_flow_result",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\pds\\20261114-162656-direct_rom_final-map\\RESULT.json",
+      "bytes": 645,
+      "sha256": "9c242e9ace4cea97848a3208d0756e74365bd880510643a7896b99016bf7204b"
+    },
+    {
+      "role": "frozen_firmware",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\pds\\20261114-162656-direct_rom_final-map\\inputs\\src\\cpu\\prog_pacerv.hex",
+      "bytes": 17870,
+      "sha256": "67872c2a2b4b4b4c437c39d8e6a815cfb36ff60437c61d53d7dae777d280f49f"
+    },
+    {
+      "role": "synthesizer_firmware",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\pds\\20261114-162656-direct_rom_final-map\\src\\cpu\\prog_pacerv.hex",
+      "bytes": 17870,
+      "sha256": "67872c2a2b4b4b4c437c39d8e6a815cfb36ff60437c61d53d7dae777d280f49f"
+    },
+    {
+      "role": "frozen_firmware_even",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\pds\\20261114-162656-direct_rom_final-map\\inputs\\src\\cpu\\prog_pacerv_even.hex",
+      "bytes": 8940,
+      "sha256": "4bfb5b38b8c319d2501b56ece4f241d26ed46a1b10d4fc7129d07404d8578184"
+    },
+    {
+      "role": "synthesizer_firmware_even",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\pds\\20261114-162656-direct_rom_final-map\\src\\cpu\\prog_pacerv_even.hex",
+      "bytes": 8940,
+      "sha256": "4bfb5b38b8c319d2501b56ece4f241d26ed46a1b10d4fc7129d07404d8578184"
+    },
+    {
+      "role": "frozen_firmware_odd",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\pds\\20261114-162656-direct_rom_final-map\\inputs\\src\\cpu\\prog_pacerv_odd.hex",
+      "bytes": 8930,
+      "sha256": "d8657d06a1ce3a7d5ac972bd49100280627b6837f8260ddf55f62f5f51e9160c"
+    },
+    {
+      "role": "synthesizer_firmware_odd",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\pds\\20261114-162656-direct_rom_final-map\\src\\cpu\\prog_pacerv_odd.hex",
+      "bytes": 8930,
+      "sha256": "d8657d06a1ce3a7d5ac972bd49100280627b6837f8260ddf55f62f5f51e9160c"
+    }
+  ],
+  "frozen_control_inputs": [
+    {
+      "role": "synthesized_netlist",
+      "path": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/rom_audit_negatives/20261114-090949-559603/control/synthesize/instrec_top_syn.vm",
+      "bytes": 44157500,
+      "sha256": "298e7d8d09bfff2ba427cc7cce6368927062db05fc00ed88db7946c0eb3f96a6"
+    },
+    {
+      "role": "mapped_database",
+      "path": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/rom_audit_negatives/20261114-090949-559603/control/device_map/instrec_top_map.adf",
+      "bytes": 8297990,
+      "sha256": "b36eab2acfa19e95b5bd2de40ea7c339d84a89864fdeb6811d1adb86b3b689f5"
+    },
+    {
+      "role": "frozen_input_manifest",
+      "path": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/rom_audit_negatives/20261114-090949-559603/control/INPUTS.json",
+      "bytes": 38124,
+      "sha256": "005890190a04895bd485c37dffd2554d1ab8a4a10dfd28ff3ba791fc1fc87797"
+    },
+    {
+      "role": "mapped_flow_result",
+      "path": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/rom_audit_negatives/20261114-090949-559603/control/RESULT.json",
+      "bytes": 645,
+      "sha256": "9c242e9ace4cea97848a3208d0756e74365bd880510643a7896b99016bf7204b"
+    },
+    {
+      "role": "auditor_source",
+      "path": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/rom_audit_negatives/20261114-090949-559603/audit_mapped_rom.py",
+      "bytes": 31446,
+      "sha256": "95c982e67196aebf5d8e7f8b4bab9e0b37bf8095e635b94c049dd1471547d750"
+    },
+    {
+      "role": "vendor_primitive_model",
+      "path": "D:/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/GTP_DRM18K_E1.v",
+      "bytes": 43795,
+      "sha256": "73a4dc428a369fe4ff6f6995bb9d79b58c0963e5812e6e9bfbaaf85dc237ab60"
+    },
+    {
+      "role": "vendor_primitive_model",
+      "path": "D:/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/GTP_DRM36K_E1.v",
+      "bytes": 75646,
+      "sha256": "3e372cd60025a439eb7435d770930260e22c40f148ae83c4bdf7398fb65ddb66"
+    },
+    {
+      "role": "vendor_primitive_model",
+      "path": "D:/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/GTP_LUT6CARRY.v",
+      "bytes": 2197,
+      "sha256": "2415dc72612f8ea1ca619bb23586835c143a61fe70d9477362920a41b776e4fc"
+    },
+    {
+      "role": "vendor_primitive_model",
+      "path": "D:/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/GTP_LUT6D.v",
+      "bytes": 1246,
+      "sha256": "98170b772b3a38a9b2b1ba114bdc4c179ed0f9f17ac0e9784eda8a3e69b2d646"
+    },
+    {
+      "role": "vendor_primitive_model",
+      "path": "D:/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/GTP_INV.v",
+      "bytes": 820,
+      "sha256": "04dad07f24d2fac3038afb32f899feaf3de930349b44fad5f002b8c7152745ab"
+    },
+    {
+      "role": "vendor_primitive_model",
+      "path": "D:/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/GTP_MUX2LUT7.v",
+      "bytes": 876,
+      "sha256": "abee5fc4d750a93447881a0eb2e35a52e6674f5fa92302fb2d1fce9d61340649"
+    },
+    {
+      "role": "vendor_primitive_model",
+      "path": "D:/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/GTP_MUX2LUT8.v",
+      "bytes": 876,
+      "sha256": "95ad73e6675fcbca6bbe52a261595035ba1f8c79068c4c77a0789e2263f1a27f"
+    },
+    {
+      "role": "vendor_primitive_model",
+      "path": "D:/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/GTP_LUT1.v",
+      "bytes": 934,
+      "sha256": "be4eb4f5b90af66e61745172e89615d95aec9846158e2052f1222f26ed67df9b"
+    },
+    {
+      "role": "vendor_primitive_model",
+      "path": "D:/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/GTP_LUT2.v",
+      "bytes": 949,
+      "sha256": "a5133f378fc5c3e4a3583838108babaa2d7d63e4bb6de0200afa4f3a34cefb83"
+    },
+    {
+      "role": "vendor_primitive_model",
+      "path": "D:/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/GTP_LUT3.v",
+      "bytes": 1080,
+      "sha256": "95ded581f36c0c545239e93a0de43f8ca657fda7accb6786a9a3990fbbc2a4d6"
+    },
+    {
+      "role": "vendor_primitive_model",
+      "path": "D:/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/GTP_LUT4.v",
+      "bytes": 1254,
+      "sha256": "f7ed2c8232da3fa9d11638676fc7394a98da9adcf71d69fa6e6081fca62cddb7"
+    },
+    {
+      "role": "vendor_primitive_model",
+      "path": "D:/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/GTP_LUT5.v",
+      "bytes": 1682,
+      "sha256": "7835a0cf88a3249b36615ea127eb3b32b18f4e118ce0efb70907720a140beaf9"
+    },
+    {
+      "role": "vendor_primitive_model",
+      "path": "D:/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/GTP_LUT6.v",
+      "bytes": 1187,
+      "sha256": "b228940718adc4a60e1a280ccf394a62e1f5a8900a641b9943de4a244d5a3a17"
+    },
+    {
+      "role": "solver_runtime",
+      "path": "C:/Users/dxlgy/AppData/Roaming/Python/Python313/site-packages/z3/__init__.py",
+      "bytes": 232,
+      "sha256": "54e1833c2df2ca01c33b487180f75580eab8364dc1800a259263b64310069bf3"
+    },
+    {
+      "role": "solver_runtime",
+      "path": "C:/Users/dxlgy/AppData/Roaming/Python/Python313/site-packages/z3/lib/libz3.dll",
+      "bytes": 17944064,
+      "sha256": "6b1ff40d6b87076eefc21c215e394ebe38d0af05ed0d8d42f4c606a608bafd3d"
+    },
+    {
+      "role": "solver_runtime",
+      "path": "C:/Users/dxlgy/AppData/Roaming/Python/Python313/site-packages/z3/lib/msvcp140.dll",
+      "bytes": 643512,
+      "sha256": "7c26614e1d733892c2deac7e245ce115504b1d80592dd0a01b08e3e5a55f89ca"
+    },
+    {
+      "role": "solver_runtime",
+      "path": "C:/Users/dxlgy/AppData/Roaming/Python/Python313/site-packages/z3/lib/msvcp140_1.dll",
+      "bytes": 35768,
+      "sha256": "206c931bf90fdad8816de3b5e2ef80b2bcaa9406c89ecc05fe6fddffe251e982"
+    },
+    {
+      "role": "solver_runtime",
+      "path": "C:/Users/dxlgy/AppData/Roaming/Python/Python313/site-packages/z3/lib/msvcp140_2.dll",
+      "bytes": 274872,
+      "sha256": "d50d7883f20d1dc6191768d3746f52dd9cac89c346ffaed5be1f110c2f34a838"
+    },
+    {
+      "role": "solver_runtime",
+      "path": "C:/Users/dxlgy/AppData/Roaming/Python/Python313/site-packages/z3/lib/msvcp140_atomic_wait.dll",
+      "bytes": 57792,
+      "sha256": "3d0cbfaa1bf3eecf5a3f4491d2960ee803cb994f30292c6adc4a07c498f60e2b"
+    },
+    {
+      "role": "solver_runtime",
+      "path": "C:/Users/dxlgy/AppData/Roaming/Python/Python313/site-packages/z3/lib/msvcp140_codecvt_ids.dll",
+      "bytes": 31160,
+      "sha256": "8a65c7596ef2e6938731f5a1058e7e40145b6d97967cc649231a076b9a608d78"
+    },
+    {
+      "role": "solver_runtime",
+      "path": "C:/Users/dxlgy/AppData/Roaming/Python/Python313/site-packages/z3/lib/vcomp140.dll",
+      "bytes": 212920,
+      "sha256": "95d4ce4a6802d1e18b5e0e1722cc30ea72ca7e033f83828f05c0b7b993fe7cbf"
+    },
+    {
+      "role": "solver_runtime",
+      "path": "C:/Users/dxlgy/AppData/Roaming/Python/Python313/site-packages/z3/lib/vcruntime140.dll",
+      "bytes": 178616,
+      "sha256": "d1f4225df2cd877dbf130d5668a021dce3f94118455ff5ec952061c30afc9ce7"
+    },
+    {
+      "role": "solver_runtime",
+      "path": "C:/Users/dxlgy/AppData/Roaming/Python/Python313/site-packages/z3/lib/vcruntime140_1.dll",
+      "bytes": 50112,
+      "sha256": "a7146c08f89fe5b04541ab507cdb59ff7b44534d4ba3c668a426c6450a03434e"
+    },
+    {
+      "role": "solver_runtime",
+      "path": "C:/Users/dxlgy/AppData/Roaming/Python/Python313/site-packages/z3/lib/vcruntime140_threads.dll",
+      "bytes": 38840,
+      "sha256": "40f39e8cee5f5a531b4010e18b807e8fe265b908dc58f959ecb7ebc6ea6cb11a"
+    },
+    {
+      "role": "solver_runtime",
+      "path": "C:/Users/dxlgy/AppData/Roaming/Python/Python313/site-packages/z3/z3.py",
+      "bytes": 377967,
+      "sha256": "3c660d753a41ac5dbae8f6009fdab33c0f39a50212140294ddd5a7d62fe638e8"
+    },
+    {
+      "role": "solver_runtime",
+      "path": "C:/Users/dxlgy/AppData/Roaming/Python/Python313/site-packages/z3/z3consts.py",
+      "bytes": 9147,
+      "sha256": "e83920004a1746b50b4e85e09f8510f13f739ee54035f14c15d85c685c882207"
+    },
+    {
+      "role": "solver_runtime",
+      "path": "C:/Users/dxlgy/AppData/Roaming/Python/Python313/site-packages/z3/z3core.py",
+      "bytes": 216833,
+      "sha256": "4edf7330f4e16489ff81ab12a308d24e18010e8e9340f9bbaf0a7c6d68229dcf"
+    },
+    {
+      "role": "solver_runtime",
+      "path": "C:/Users/dxlgy/AppData/Roaming/Python/Python313/site-packages/z3/z3num.py",
+      "bytes": 16384,
+      "sha256": "b099dee2352be581ef96fbedc183ac324f03002ee7cf71fbebf6aa1355cd4341"
+    },
+    {
+      "role": "solver_runtime",
+      "path": "C:/Users/dxlgy/AppData/Roaming/Python/Python313/site-packages/z3/z3poly.py",
+      "bytes": 1113,
+      "sha256": "fd06029418e5899b300fe3b3a300d110c8e174e633cba8b751314f22a583394e"
+    },
+    {
+      "role": "solver_runtime",
+      "path": "C:/Users/dxlgy/AppData/Roaming/Python/Python313/site-packages/z3/z3printer.py",
+      "bytes": 46731,
+      "sha256": "0962d30b9543e04f0bdd4636d91983973a604d6ab2b76a028300db37dfa0154e"
+    },
+    {
+      "role": "solver_runtime",
+      "path": "C:/Users/dxlgy/AppData/Roaming/Python/Python313/site-packages/z3/z3rcf.py",
+      "bytes": 5039,
+      "sha256": "504e0339b1bb06075c19ca52e51457716671218a2f2191d0c9754e0b75bede87"
+    },
+    {
+      "role": "solver_runtime",
+      "path": "C:/Users/dxlgy/AppData/Roaming/Python/Python313/site-packages/z3/z3regex.py",
+      "bytes": 5039,
+      "sha256": "4f64903cce356c6fb541041d9c50ce70c8d12a0824592611d87bd603290f83e4"
+    },
+    {
+      "role": "solver_runtime",
+      "path": "C:/Users/dxlgy/AppData/Roaming/Python/Python313/site-packages/z3/z3types.py",
+      "bytes": 4883,
+      "sha256": "ba728354b4a9ee40bcfbd899f405d904bc4bb023e41807044c06c318548c3080"
+    },
+    {
+      "role": "solver_runtime",
+      "path": "C:/Users/dxlgy/AppData/Roaming/Python/Python313/site-packages/z3/z3util.py",
+      "bytes": 11466,
+      "sha256": "bd1b436749b0d7700100a6a49fd09f09975c025f156925fc8805ac99e6db50f8"
+    },
+    {
+      "role": "frozen_firmware",
+      "path": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/rom_audit_negatives/20261114-090949-559603/control/inputs/src/cpu/prog_pacerv.hex",
+      "bytes": 17870,
+      "sha256": "67872c2a2b4b4b4c437c39d8e6a815cfb36ff60437c61d53d7dae777d280f49f"
+    },
+    {
+      "role": "synthesizer_firmware",
+      "path": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/rom_audit_negatives/20261114-090949-559603/control/src/cpu/prog_pacerv.hex",
+      "bytes": 17870,
+      "sha256": "67872c2a2b4b4b4c437c39d8e6a815cfb36ff60437c61d53d7dae777d280f49f"
+    },
+    {
+      "role": "frozen_firmware_even",
+      "path": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/rom_audit_negatives/20261114-090949-559603/control/inputs/src/cpu/prog_pacerv_even.hex",
+      "bytes": 8940,
+      "sha256": "4bfb5b38b8c319d2501b56ece4f241d26ed46a1b10d4fc7129d07404d8578184"
+    },
+    {
+      "role": "synthesizer_firmware_even",
+      "path": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/rom_audit_negatives/20261114-090949-559603/control/src/cpu/prog_pacerv_even.hex",
+      "bytes": 8940,
+      "sha256": "4bfb5b38b8c319d2501b56ece4f241d26ed46a1b10d4fc7129d07404d8578184"
+    },
+    {
+      "role": "frozen_firmware_odd",
+      "path": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/rom_audit_negatives/20261114-090949-559603/control/inputs/src/cpu/prog_pacerv_odd.hex",
+      "bytes": 8930,
+      "sha256": "d8657d06a1ce3a7d5ac972bd49100280627b6837f8260ddf55f62f5f51e9160c"
+    },
+    {
+      "role": "synthesizer_firmware_odd",
+      "path": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/rom_audit_negatives/20261114-090949-559603/control/src/cpu/prog_pacerv_odd.hex",
+      "bytes": 8930,
+      "sha256": "d8657d06a1ce3a7d5ac972bd49100280627b6837f8260ddf55f62f5f51e9160c"
+    }
+  ],
+  "complete_build_artifacts": [
+    {
+      "role": "complete_negative_report",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_audit_negatives\\20261114-090949-559603\\RESULTS.json",
+      "bytes": 19679,
+      "sha256": "d6b4c321aa5b39fb92e92be7f9c1d1f877a436ac8322f6c1435974732c82b5df"
+    },
+    {
+      "role": "passing_unchanged_copy_audit",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_audit_negatives\\20261114-090949-559603\\control\\ROM_AUDIT.json",
+      "bytes": 48225,
+      "sha256": "d8388cd0bf0fd11588eaa80f097e64d94ae02f9638f337a72ac38e974f8284f8"
+    },
+    {
+      "role": "frozen_auditor_source",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_audit_negatives\\20261114-090949-559603\\audit_mapped_rom.py",
+      "bytes": 31446,
+      "sha256": "95c982e67196aebf5d8e7f8b4bab9e0b37bf8095e635b94c049dd1471547d750"
+    },
+    {
+      "role": "negative_runner",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_audit_negatives\\run_negative_checks.py",
+      "bytes": 9486,
+      "sha256": "475f3f9b465e3b0b52341890a6ce380a9fbdbe4511a4908c0ad83755209a7572"
+    }
+  ]
+}

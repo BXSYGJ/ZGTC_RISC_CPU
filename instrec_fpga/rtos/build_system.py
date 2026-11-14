@@ -20,6 +20,9 @@ import xml.etree.ElementTree as ET
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
+ROM_IMAGES = (("prog.hex", "prog_pacerv.hex"),
+              ("prog_even.hex", "prog_pacerv_even.hex"),
+              ("prog_odd.hex", "prog_pacerv_odd.hex"))
 
 
 def sha(path: Path) -> str:
@@ -61,6 +64,11 @@ def prepare(stage: str, label: str) -> Path:
                            for n in range(0, len(padded), 4))
     if firmware.read_text(encoding="ascii") != expected_hex:
         raise RuntimeError("Firmware ROM image does not match the linked binary")
+    words = expected_hex.splitlines()
+    for filename, parity in (("prog_even.hex", 0), ("prog_odd.hex", 1)):
+        expected_bank = "".join(word + "\n" for word in words[parity::2])
+        if (firmware.parent / filename).read_text(encoding="ascii") != expected_bank:
+            raise RuntimeError("Firmware instruction bank does not match the linked binary: " + filename)
     stamp = dt.datetime.now().strftime("%Y%m%d-%H%M%S")
     out = ROOT / "build/rtos/pds" / (stamp + "-" + label + "-" + stage)
     out.mkdir(parents=True, exist_ok=False)
@@ -73,9 +81,12 @@ def prepare(stage: str, label: str) -> Path:
     marker = '.PROG_HEX         ("src/cpu/prog_pacerv.hex")'
     if text.count(marker) != 1:
         raise RuntimeError("Unexpected baseline CPU instantiation")
-    text = text.replace(marker, '.IMEM_WORDS       (4096),\n        .DMEM_WORDS       (4096),\n        ' + marker)
+    text = text.replace(marker, '.IMEM_WORDS       (4096),\n        .DMEM_WORDS       (4096),\n        '
+                        '.PROG_EVEN_HEX   ("src/cpu/prog_pacerv_even.hex"),\n        '
+                        '.PROG_ODD_HEX    ("src/cpu/prog_pacerv_odd.hex"),\n        ' + marker)
     top.write_text(text, encoding="utf-8")
-    shutil.copyfile(firmware, inputs / "src/cpu/prog_pacerv.hex")
+    for source, target in ROM_IMAGES:
+        shutil.copyfile(firmware.parent / source, inputs / "src/cpu" / target)
     recipe = (HERE / "baseline125/SOURCE_BUILD_RECIPE.tcl").read_text(encoding="utf-8")
     match = re.search(r'add_design "(.+?)/inputs/', recipe)
     if not match:
@@ -85,7 +96,8 @@ def prepare(stage: str, label: str) -> Path:
     lines = recipe.splitlines()
     if stage in ("prepare", "compile"):
         lines = lines[:next(i for i, s in enumerate(lines) if s.startswith("synthesize"))] + ["exit"]
-    elif stage == "map":
+    elif stage in ("map", "full"):
+        # Inspect actual mapped ROM initialization before implementation.
         lines = lines[:next(i for i, s in enumerate(lines) if s.startswith("pnr"))] + ["exit"]
     # Relative readmemh paths are resolved from the PDS working directory.
     for path in inputs.rglob("*.hex"):
@@ -109,7 +121,12 @@ def prepare(stage: str, label: str) -> Path:
                 "pixel_clock_hz": 148500000, "tick_hz": 1000, "rom_bytes": 16384, "ram_bytes": 16384,
                 "baseline_run": baseline["original_run"], "baseline_files": baseline["source_count"],
                 "changed_baseline_files": changed, "added_rtl": ["src/cpu/machine_timer.v"],
-                "firmware_hex_sha256": sha(firmware), "files": records}
+                "added_rom_images": ["src/cpu/" + target for _, target in ROM_IMAGES[1:]],
+                "firmware_hex_sha256": sha(firmware),
+                "firmware_rom_images": [{"path": "src/cpu/" + target, "sha256": sha(firmware.parent / source)}
+                                        for source, target in ROM_IMAGES],
+                "rom_initialization": "direct readmemh into actual parity instruction banks and data ROM",
+                "files": records}
     (out / "INPUTS.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     print("RTOS_SYSTEM_PREPARED " + str(out), flush=True)
     return out
@@ -148,10 +165,18 @@ def run(out: Path, minutes: int) -> None:
               "stages": stages, "errors": errors, "frozen_inputs_unchanged": unchanged}
     (out / "RESULT.json").write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
     needed = {"compile": ["compile"], "map": ["compile", "synthesize", "dev_map"],
-              "full": list(stages)}[manifest["stage"]]
+              "full": ["compile", "synthesize", "dev_map"]}[manifest["stage"]]
     if code or errors or not unchanged or not all(stages[s] for s in needed):
         raise RuntimeError("RTOS PDS build failed; inspect " + str(out / "RESULT.json"))
-    print("RTOS_PDS_PASS stage=" + manifest["stage"], flush=True)
+    print("RTOS_PDS_PASS stage=" + ("map" if manifest["stage"] == "full" else manifest["stage"]), flush=True)
+    if manifest["stage"] in ("map", "full"):
+        subprocess.run([sys.executable, "-X", "utf8", str(HERE / "audit_mapped_rom.py"),
+                        "--pds-run", str(out)], cwd=ROOT, check=True,
+                       creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
+    if manifest["stage"] == "full":
+        subprocess.run([sys.executable, "-X", "utf8", str(HERE / "continue_implementation.py"),
+                        "--run-dir", str(out), "--minutes", str(min(minutes, 120))],
+                       cwd=ROOT, check=True, creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
 
 
 def main() -> None:

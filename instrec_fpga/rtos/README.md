@@ -32,6 +32,12 @@ mtime每个系统时钟增加1，mtimecmp复位全1，`mtime >= mtimecmp`产生�
 
 以下命令在仓库根目录运行。固件使用已安装的Windows LLVM22.1.8；可通过`--llvm-bin`指定LLVM目录，或`--gcc-prefix`指定原生RISC-V GCC。固件构建会核验内核哈希、链接空间和镜像长度。
 
+映射ROM的地址连线核验使用`z3-solver`，固定依赖见`requirements-verification.txt`。在执行PDS映射及完整构建前，向运行这些脚本的Python环境安装该文件中的依赖：
+
+```powershell
+python -X utf8 -m pip install -r instrec_fpga/rtos/requirements-verification.txt
+```
+
 ```powershell
 python -X utf8 instrec_fpga/rtos/build_firmware.py
 python -X utf8 instrec_fpga/rtos/build_firmware.py --test
@@ -42,7 +48,7 @@ python -X utf8 instrec_fpga/rtos/sim/run_native_rtos.py --run-label review --fir
 python -X utf8 instrec_fpga/rtos/build_system.py --stage prepare
 ```
 
-`build_system.py --stage map`执行实际整机编译、综合和器件映射；`--stage full`沿用125 MHz基线的布局种子2及实现参数，生成完整位流。每轮输入、命令、结果和日志独立保存在`build/rtos/pds/`。构建入口核验生产固件与其源码/二进制一致，并拒绝将测试固件作为板端正式应用。
+`build_system.py --stage map`执行实际整机编译、综合和器件映射，并检查映射后的ROM初始化；`--stage full`在ROM内容核验通过后，沿用125 MHz基线的布局种子2及实现参数生成位流。三个ROM存储体分别直接加载线性、偶字和奇字HEX文件；构建入口先核对它们与链接后二进制的一致性。每轮输入、命令、结果和日志独立保存在`build/rtos/pds/`。
 
 ## 已核验与后续记录
 
@@ -60,7 +66,32 @@ RESULT: PASS production FreeRTOS tasks, full native golden NPU, immutable queue 
 
 最终CPU压力测试已验证真实节拍和任务抢占、队列及寄存器上下文。嵌套两层临界区跨过3个硬件截止时间时中断保持屏蔽，退出后准确补齐3次节拍；17次比较寄存器重装均按125000周期递增。原125 MHz版本及回退副本的启动、自检、NPU结果输出和ACK逐项一致。
 
-整机编译、综合和器件映射已完成，128.5/155 DRM，冻结输入核验一致；完整实现从该映射结果继续。位流及板级结果以`evidence/`和`VERIFICATION.txt`的实测更新为准。
+综合审计发现，原先经临时数组复制的ROM写法使PDS生成的正常取指内容全零；失效网表和逐位证据保存在`evidence/MAPPED_ROM_AUDIT.json`，该轮布局布线已经停止。RTOS配置已改成三个实际ROM各自直接加载HEX，新整机映射使用136.5/155 DRM、36964 LUT、94 APM。全部ROM字及补零区、22位实际地址选择、8个存储实例的控制信号均核验通过；从指令库及数据ROM重建的7148字节固件哈希一致。独立厂商模型和12项真实篡改检查也已通过。
+
+最终源码已通过`verify_system.py`统一复验，CPU抢占、完整NPU及回退证据已更新；固定seed2/hold8的完整实现正在运行。位流及板级结果以`evidence/`和`VERIFICATION.txt`的实测更新为准。
+
+## 从新检出重做功能核验
+
+`baseline125`的202份输入、DDR IP和固定版本内核已随工程纳管。新检出后可直接使用上述固件及整机构建入口；`import_sources.py`用于最初导入资产，日常构建使用已冻结的文件。
+
+整机映射或完整实现结束后，将`$pdsRun`设为`build_system.py`输出的项目绝对路径，执行以下入口：
+
+```powershell
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+$ErrorActionPreference = 'Stop'
+try {
+    $verification = [System.IO.Path]::Combine((Get-Location).Path, 'instrec_fpga', 'rtos', 'verify_system.py')
+    python -X utf8 $verification --pds-run $pdsRun --require-complete
+    if ($LASTEXITCODE -ne 0) { throw 'RTOS verification failed' }
+} catch {
+    Write-Error $_
+    exit 1
+}
+```
+
+此命令重新构建生产及测试固件，执行定时器、精确中断、原版CPU、RTOS任务、隔离副本回退，以及原版／RTOS完整原生NPU对照。验证器从本轮运行重新生成证据，比较实际输入、权重、逐层golden、串口结果及周期，随后调用`collect_evidence.py`。完整实现时保留`--require-complete`；映射阶段的功能评审可省略该参数。
+
+各轮命令、输出和旧证据副本保存在`build/rtos/verify/<时间>/`，本轮报告归档到`evidence/`。该流程使用本次检出的源码和新生成的仿真输入，历史报告中的绝对路径无需复用。
 
 ## 回退
 

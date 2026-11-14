@@ -129,6 +129,13 @@ def main():
     rom = ROOT / ('build/rtos/firmware/prog.hex' if is_rtos else 'rtos/baseline125/src/cpu/prog_pacerv.hex')
     if not rom.is_file():
         raise RuntimeError('Missing firmware: ' + str(rom))
+    rom_banks = [rom.with_name('prog_even.hex'), rom.with_name('prog_odd.hex')] if is_rtos else []
+    if is_rtos:
+        words = [int(word, 16) for word in rom.read_text(encoding='ascii').split()]
+        for parity, bank in enumerate(rom_banks):
+            bank_words = [int(word, 16) for word in bank.read_text(encoding='ascii').split()]
+            if bank_words != words[parity::2]:
+                raise RuntimeError('Instruction ROM bank differs from production firmware: ' + str(bank))
     vendor = ROOT / 'rtos/baseline125/src/cpu/vendor/pacerv_h3'
     contract = ROOT / 'scripts/outputs/medley_48k/layer_contract.json'
     weights = ROOT / 'scripts/outputs/medley_48k/weights_image.bin'
@@ -184,6 +191,18 @@ def main():
         # The base runner reads the historical image directly; replace only
         # its generated preload asset with the verified current image.
         (work / 'assets/weights.hex').write_text(''.join(f'{v:08x}\n' for v in weights.read_bytes()), encoding='ascii')
+        # Freeze the three actual readmemh inputs alongside the golden assets.
+        # PDS and RTL now initialize each real ROM directly, with no temporary
+        # memory whose initialization could be lost during synthesis.
+        actual_rom = rom
+        frozen_banks = []
+        if is_rtos:
+            actual_rom = work / 'assets/rtos_prog.hex'
+            shutil.copyfile(rom, actual_rom)
+            for source in rom_banks:
+                target_bank = work / 'assets' / ('rtos_' + source.name)
+                shutil.copyfile(source, target_bank)
+                frozen_banks.append(target_bank)
         model_source = ROOT / 'sim/experiments/npu_pingpong_native/ddr3_axi_model_full.sv'
         model_text = model_source.read_text(encoding='ascii')
         if model_text.count('[27:5]') < 2:
@@ -219,7 +238,11 @@ def main():
      end''')
             text = once(text, 'if(!cpu_alive || cpu_requests!=1 || busy || start)',
                         'if(cpu_requests!=1 || cpu_acks!=1 || busy || start)')
-        text = once(text, '.PROG_HEX("src/cpu/prog.hex")', '.PROG_HEX("' + rom.relative_to(ROOT).as_posix() + '")')
+        rom_parameters = '.PROG_HEX("' + actual_rom.relative_to(ROOT).as_posix() + '")'
+        if is_rtos:
+            rom_parameters += ',.PROG_EVEN_HEX("' + frozen_banks[0].relative_to(ROOT).as_posix() + '")'
+            rom_parameters += ',.PROG_ODD_HEX("' + frozen_banks[1].relative_to(ROOT).as_posix() + '")'
+        text = once(text, '.PROG_HEX("src/cpu/prog.hex")', rom_parameters)
         text = once(text, '.npu_soft_start(cpu_npu_start));', '''.npu_soft_start(cpu_npu_start),
  .dd_req_valid(pacerv_dd_req_valid),.dd_req_ready(pacerv_dd_req_ready),
  .dd_req_address(pacerv_dd_req_address),.dd_req_write(pacerv_dd_req_write),
@@ -292,6 +315,7 @@ end
                        ROOT / 'src/mel/exp_lut.hex']
         paths += [Path(__file__).resolve(), ROOT / 'rtos/BASELINE.json']
         if is_rtos:
+            paths += rom_banks
             paths += [ROOT / 'build/rtos/firmware/BUILD.json']
             paths += sorted(p for p in (ROOT / 'rtos/sw').rglob('*') if p.is_file())
         paths += sorted((work / 'assets').glob('*.hex'))

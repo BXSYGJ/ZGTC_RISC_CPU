@@ -73,7 +73,9 @@ module rv32_cpu_subsys #(
     parameter [31:0]  RESET_VECTOR     = 32'h0000_0000,
     parameter integer IMEM_WORDS       = 2048,   // 8 KiB
     parameter integer DMEM_WORDS       = 2048,   // 8 KiB
-    parameter PROG_HEX                 = "src/cpu/prog.hex"
+    parameter PROG_HEX                 = "src/cpu/prog.hex",
+    parameter PROG_EVEN_HEX            = "src/cpu/prog_even.hex",
+    parameter PROG_ODD_HEX             = "src/cpu/prog_odd.hex"
 ) (
     input  wire        clk,
     input  wire        rst_n,
@@ -230,7 +232,6 @@ module rv32_cpu_subsys #(
     // =====================================================================
     // Instruction ROM: parity banks supply two adjacent words per request.
     // =====================================================================
-    reg [31:0] imem [0:IMEM_WORDS-1];
     reg [31:0] imem_even [0:(IMEM_WORDS/2)-1];
     reg [31:0] imem_odd [0:(IMEM_WORDS/2)-1];
     // Second copy of the same image for the DATA port.  A load from a ROM
@@ -241,37 +242,31 @@ module rv32_cpu_subsys #(
 
     integer init_word;
     initial begin
-        // Eight words per iteration stay below PDS's 2000-iteration limit
-        // with either the 16 KiB application ROM or a 32 KiB diagnostic ROM.
+        // Initialize the actual read arrays. PDS does not propagate a
+        // readmemh of a temporary array through subsequent array copies.
+        // Eight data words and four words in each instruction bank per
+        // iteration keep 16/32 KiB ROMs below PDS's 2000-iteration limit.
         for (init_word = 0; init_word < IMEM_WORDS/8; init_word = init_word + 1) begin
-            imem[init_word*8] = 32'd0;
-            imem[init_word*8+1] = 32'd0;
-            imem[init_word*8+2] = 32'd0;
-            imem[init_word*8+3] = 32'd0;
-            imem[init_word*8+4] = 32'd0;
-            imem[init_word*8+5] = 32'd0;
-            imem[init_word*8+6] = 32'd0;
-            imem[init_word*8+7] = 32'd0;
+            rom_d[init_word*8] = 32'd0;
+            rom_d[init_word*8+1] = 32'd0;
+            rom_d[init_word*8+2] = 32'd0;
+            rom_d[init_word*8+3] = 32'd0;
+            rom_d[init_word*8+4] = 32'd0;
+            rom_d[init_word*8+5] = 32'd0;
+            rom_d[init_word*8+6] = 32'd0;
+            rom_d[init_word*8+7] = 32'd0;
+            imem_even[init_word*4] = 32'd0;
+            imem_odd[init_word*4] = 32'd0;
+            imem_even[init_word*4+1] = 32'd0;
+            imem_odd[init_word*4+1] = 32'd0;
+            imem_even[init_word*4+2] = 32'd0;
+            imem_odd[init_word*4+2] = 32'd0;
+            imem_even[init_word*4+3] = 32'd0;
+            imem_odd[init_word*4+3] = 32'd0;
         end
-        $readmemh(PROG_HEX, imem);
-        for (init_word = 0; init_word < IMEM_WORDS/8; init_word = init_word + 1) begin
-            rom_d[init_word*8] = imem[init_word*8];
-            rom_d[init_word*8+1] = imem[init_word*8+1];
-            rom_d[init_word*8+2] = imem[init_word*8+2];
-            rom_d[init_word*8+3] = imem[init_word*8+3];
-            rom_d[init_word*8+4] = imem[init_word*8+4];
-            rom_d[init_word*8+5] = imem[init_word*8+5];
-            rom_d[init_word*8+6] = imem[init_word*8+6];
-            rom_d[init_word*8+7] = imem[init_word*8+7];
-            imem_even[init_word*4] = imem[init_word*8];
-            imem_odd[init_word*4] = imem[init_word*8+1];
-            imem_even[init_word*4+1] = imem[init_word*8+2];
-            imem_odd[init_word*4+1] = imem[init_word*8+3];
-            imem_even[init_word*4+2] = imem[init_word*8+4];
-            imem_odd[init_word*4+2] = imem[init_word*8+5];
-            imem_even[init_word*4+3] = imem[init_word*8+6];
-            imem_odd[init_word*4+3] = imem[init_word*8+7];
-        end
+        $readmemh(PROG_EVEN_HEX, imem_even);
+        $readmemh(PROG_ODD_HEX, imem_odd);
+        $readmemh(PROG_HEX, rom_d);
     end
 
     // =====================================================================

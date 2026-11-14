@@ -15,6 +15,8 @@ import sys
 import time
 from pathlib import Path
 
+from rom_banks import validate_banks
+
 ROOT = Path(__file__).resolve().parents[2]
 HERE = Path(__file__).resolve().parent
 
@@ -27,12 +29,19 @@ def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--firmware", type=Path,
                     default=ROOT / "build/rtos/firmware/test/prog.hex")
+    ap.add_argument("--firmware-even", type=Path,
+                    help="Even ROM bank; defaults to <firmware stem>_even.hex")
+    ap.add_argument("--firmware-odd", type=Path,
+                    help="Odd ROM bank; defaults to <firmware stem>_odd.hex")
     ap.add_argument("--timeout", type=int, default=900)
     ap.add_argument("--label", default="cpu")
     ap.add_argument("--backend", choices=("iverilog", "verilator-wsl"), default="verilator-wsl")
     ap.add_argument("--progress", action="store_true")
     args = ap.parse_args()
     firmware = args.firmware.resolve(strict=True)
+    even = (args.firmware_even or firmware.with_name(firmware.stem + "_even" + firmware.suffix)).resolve(strict=True)
+    odd = (args.firmware_odd or firmware.with_name(firmware.stem + "_odd" + firmware.suffix)).resolve(strict=True)
+    validate_banks(firmware, even, odd, 4096)
     if not args.label.replace("_", "").replace("-", "").isalnum():
         raise ValueError("Label must be alphanumeric with optional hyphens/underscores")
     stamp = dt.datetime.now().strftime("%Y%m%d-%H%M%S-%f")
@@ -50,19 +59,21 @@ def main() -> int:
     rtl += sorted(vendor.glob("*.sv"))
     if len(rtl) != 10:
         raise RuntimeError("Expected 8 frozen PaceRV sources and 2 integration sources")
-    source_files = [HERE / "tb_rtos_cpu.sv", firmware, *rtl]
+    source_files = [HERE / "tb_rtos_cpu.sv", HERE / "rom_banks.py", firmware, even, odd, *rtl]
     frozen_files = []
     for path in source_files:
         target = out / "inputs" / path.relative_to(ROOT)
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(path, target)
         frozen_files.append(target)
-    bench, frozen_firmware, *frozen_rtl = frozen_files
+    bench, helper, frozen_firmware, frozen_even, frozen_odd, *frozen_rtl = frozen_files
+    validate_banks(frozen_firmware, frozen_even, frozen_odd, 4096)
     files = frozen_files
     report = {
         "scope": "real FreeRTOS tasks on frozen 125 MHz PaceRV RTL; modeled NPU/DDR peripherals",
         "clock_hz": 125000000,
         "backend": args.backend,
+        "rom_words": 4096, "rom_banks_verified": True,
         "source_sha256": {str(p.relative_to(ROOT)): digest(p) for p in source_files},
         "input_sha256": {str(p.relative_to(ROOT)): digest(p) for p in files},
         "commands": [], "passed": False,
@@ -99,6 +110,8 @@ def main() -> int:
         if args.backend == "iverilog":
             command = [iv, "-g2012", "-s", "tb_rtos_cpu", "-o", str(binary),
                        '-DRTOS_PROG_HEX="' + frozen_firmware.as_posix() + '"',
+                       '-DRTOS_PROG_EVEN_HEX="' + frozen_even.as_posix() + '"',
+                       '-DRTOS_PROG_ODD_HEX="' + frozen_odd.as_posix() + '"',
                        str(bench), *map(str, frozen_rtl)]
             execute = [vvp, "-i", str(binary)]
         else:
@@ -110,8 +123,12 @@ def main() -> int:
             # The firmware address in generated HDL must use the path visible
             # to the actual simulator process, which runs directly under WSL.
             text = bench.read_text(encoding="ascii")
-            text = text.replace('"build/rtos/firmware/test/prog.hex"',
-                                '"' + linux_path(frozen_firmware) + '"')
+            for name, path in (("prog.hex", frozen_firmware), ("prog_even.hex", frozen_even),
+                               ("prog_odd.hex", frozen_odd)):
+                default = '"build/rtos/firmware/test/' + name + '"'
+                if text.count(default) != 1:
+                    raise RuntimeError("Expected a unique testbench ROM default: " + default)
+                text = text.replace(default, '"' + linux_path(path) + '"')
             bench.write_text(text, encoding="ascii")
             report["input_sha256"][str(bench.relative_to(ROOT))] = digest(bench)
             prefix = ["wsl.exe", "-d", "Ubuntu-22.04", "--cd", linux_path(ROOT), "--exec"]
@@ -128,7 +145,8 @@ def main() -> int:
         result = run(execute + (["+rtos_progress"] if args.progress else []), args.timeout)
         print(result["output"], end="", flush=True)
         (out / "UART_AND_RTL.log").write_text(result["output"], encoding="utf-8")
-        required = ["RTOS_CPU_PASS", "RTOS BOOT hz=125000000 tick=1000",
+        required = ["RTOS_ROM_BANKS_PASS words=4096 instruction_banks=2 data_image=1",
+                    "RTOS_CPU_PASS", "RTOS BOOT hz=125000000 tick=1000",
                     "RTOS NPU top1=5 last_class=3 last_p=87 c=12345",
                     "RTOS NPU TIMEOUT", "RTOS NPU top1=2 last_class=6 last_p=64 c=54321",
                     "RTOS CRITICAL PASS", "RTOS TEST PASS"]

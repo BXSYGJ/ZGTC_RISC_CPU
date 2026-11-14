@@ -1,0 +1,126 @@
+{
+  "status": "pass",
+  "scope": "Independent Pango DRM36K model readout using actual synthesized imem_even_0 and rom_d_0 INIT parameters; representative 16-bit and 8-bit CPU ROM organizations.",
+  "instruction_slice_words": 2048,
+  "data_column_words": 4096,
+  "INIT_cell_bits": 9,
+  "inputs": [
+    {
+      "role": "actual_synthesized_netlist",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\pds\\20261114-162656-direct_rom_final-map\\synthesize\\instrec_top_syn.vm",
+      "bytes": 44157500,
+      "sha256": "298e7d8d09bfff2ba427cc7cce6368927062db05fc00ed88db7946c0eb3f96a6"
+    },
+    {
+      "role": "frozen_linear_firmware",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\pds\\20261114-162656-direct_rom_final-map\\inputs\\src\\cpu\\prog_pacerv.hex",
+      "bytes": 17870,
+      "sha256": "67872c2a2b4b4b4c437c39d8e6a815cfb36ff60437c61d53d7dae777d280f49f"
+    },
+    {
+      "role": "frozen_vendor_simulation_model",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_model_probe\\20261114-085340-418120\\GTP_DRM36K_E1.v",
+      "bytes": 75646,
+      "sha256": "3e372cd60025a439eb7435d770930260e22c40f148ae83c4bdf7398fb65ddb66"
+    },
+    {
+      "role": "actual_netlist_instance_literals",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_model_probe\\20261114-085340-418120\\actual_instances.txt",
+      "bytes": 87957,
+      "sha256": "9eb4df54d447f7009629376b8540aac29282046e5bf135eb0bdc47b0b801890c"
+    },
+    {
+      "role": "all_2048_expected_instruction_slice_words",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_model_probe\\20261114-085340-418120\\expected0.hex",
+      "bytes": 20480,
+      "sha256": "93751127f9705cbb178869cd44943f9ad0585c633c403b683449af3ac42e9498"
+    },
+    {
+      "role": "all_4096_expected_data_column_words",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_model_probe\\20261114-085340-418120\\expected1.hex",
+      "bytes": 40960,
+      "sha256": "f530e6b5a500f5fc62bf00f29b030bed3895bf972a692c176756f4133e122d83"
+    },
+    {
+      "role": "control_testbench",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_model_probe\\20261114-085340-418120\\tb_init_order.sv",
+      "bytes": 81172,
+      "sha256": "343f64edaeb4ee237cf0229c371670335965b8dd1fd6382a2378320b02ce2dcb"
+    },
+    {
+      "role": "INIT_bit0_mutated_testbench",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_model_probe\\20261114-085340-418120\\tb_init_order_mutated.sv",
+      "bytes": 80956,
+      "sha256": "c12ba096e6752a4e01c022196bd61d963e0487616d22fd1fd364c4b8c72fd3d8"
+    }
+  ],
+  "control": {
+    "passed": true,
+    "commands": [
+      {
+        "command": [
+          "D:\\AAAPP\\iverilog\\bin\\iverilog.EXE",
+          "-g2012",
+          "-s",
+          "tb_init_order",
+          "-o",
+          "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_model_probe\\20261114-085340-418120\\probe.vvp",
+          "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_model_probe\\20261114-085340-418120\\tb_init_order.sv",
+          "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_model_probe\\20261114-085340-418120\\GTP_DRM36K_E1.v"
+        ],
+        "exit_status": 0,
+        "output": ""
+      },
+      {
+        "command": [
+          "D:\\AAAPP\\iverilog\\bin\\vvp.EXE",
+          "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_model_probe\\20261114-085340-418120\\probe.vvp"
+        ],
+        "exit_status": 0,
+        "output": "VENDOR_INIT_ORDER_PASS width16_words=2048 width8_words=4096 cells=9bits physical_output_parity=omitted\nD:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_model_probe\\20261114-085340-418120\\tb_init_order.sv:308: $finish called at 32773000 (1ps)\n"
+      }
+    ]
+  },
+  "INIT_bit0_negative": {
+    "passed": true,
+    "original_unchanged": true,
+    "commands": [
+      {
+        "command": [
+          "D:\\AAAPP\\iverilog\\bin\\iverilog.EXE",
+          "-g2012",
+          "-s",
+          "tb_init_order",
+          "-o",
+          "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_model_probe\\20261114-085340-418120\\mutated.vvp",
+          "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_model_probe\\20261114-085340-418120\\tb_init_order_mutated.sv",
+          "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_model_probe\\20261114-085340-418120\\GTP_DRM36K_E1.v"
+        ],
+        "exit_status": 0,
+        "output": ""
+      },
+      {
+        "command": [
+          "D:\\AAAPP\\iverilog\\bin\\vvp.EXE",
+          "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_model_probe\\20261114-085340-418120\\mutated.vvp"
+        ],
+        "exit_status": 1,
+        "output": "FATAL: D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_model_probe\\20261114-085340-418120\\tb_init_order_mutated.sv:308: INIT16 word=0 got=7072 expected=00007073\n       Time: 13000  Scope: tb_init_order\n"
+      }
+    ]
+  },
+  "complete_build_reports": [
+    {
+      "role": "control_complete_report",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_model_probe\\20261114-085340-418120\\RESULTS.json",
+      "bytes": 1490,
+      "sha256": "00cf8c8069ab13b28c4f5d2b06bd2e2d003a88a8b87d393e87dd792086f1c68a"
+    },
+    {
+      "role": "negative_complete_report",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rom_model_probe\\20261114-085340-418120\\INIT_NEGATIVE_REPORT.json",
+      "bytes": 1517,
+      "sha256": "b02d15178789c6dad3471002d5c2513e6206f0530c47c66d53eded2641e8b054"
+    }
+  ]
+}

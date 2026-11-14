@@ -9,6 +9,8 @@ import struct
 import subprocess
 import sys
 
+from rom_banks import split_rom
+
 ROOT = Path(__file__).resolve().parents[2]
 HERE = Path(__file__).resolve().parent
 OUT = ROOT / "build/rtos/irq_precision"
@@ -66,8 +68,15 @@ class Image:
     def save(self, name):
         self.org(32768)
         path = OUT / (name + ".hex")
-        path.write_text("".join(f"{int.from_bytes(self.data[i:i+4], 'little'):08x}\n"
-                                for i in range(0, len(self.data), 4)), encoding="ascii")
+        # Odd-address directives exercise address-aware splitting. Metadata
+        # lines never consume a ROM word, even when they occur mid-program.
+        lines = []
+        for index in range(len(self.data) // 4):
+            if index % 257 == 0:
+                lines.append(f"@{index:08x}\n")
+            lines.append(f"{int.from_bytes(self.data[index*4:index*4+4], 'little'):08x}\n")
+        path.write_text("".join(lines), encoding="ascii")
+        split_rom(path, 8192)
         return path
 
 
@@ -143,16 +152,33 @@ def main():
     labels = images()
     rtl = [ROOT / "rtos/rtl/machine_timer.v", ROOT / "rtos/rtl/rv32_cpu_subsys.sv"]
     rtl += sorted((ROOT / "rtos/baseline125/src/cpu/vendor/pacerv_h3").glob("*.sv"))
-    report = {"passed": False, "labels": labels, "commands": [], "sources": {}}
-    for path in [HERE / "tb_irq_precision.sv", *rtl]:
-        report["sources"][path.relative_to(ROOT).as_posix()] = hashlib.sha256(path.read_bytes()).hexdigest()
+    image_paths = [OUT / (name + suffix + ".hex") for name in ("irq", "rom_edge")
+                   for suffix in ("", "_even", "_odd")]
+    sources = [HERE / "tb_irq_precision.sv", HERE / "rom_banks.py", *image_paths, *rtl]
+    frozen = []
+    for path in sources:
+        target = OUT / "inputs" / path.relative_to(ROOT)
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(path, target)
+        frozen.append(target)
+    bench, helper, irq, irq_even, irq_odd, edge, edge_even, edge_odd, *frozen_rtl = frozen
+    report = {"passed": False, "labels": labels, "commands": [], "sources": {}, "input_sha256": {}}
+    for field, paths in (("sources", sources), ("input_sha256", frozen)):
+        report[field] = {path.relative_to(ROOT).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest()
+                         for path in paths}
     try:
         for name, top, token in [("irq", "tb_irq_precision", "IRQ_PRECISION_PASS"),
                                  ("rom_edge", "tb_rom_boundary", "ROM_BOUNDARY_PASS")]:
             target = OUT / (name + ".vvp")
             commands = [[iv, "-g2012", "-s", top, "-o", str(target),
                          "-DIRQ_RESUME_PC=" + str(labels["after_load"]),
-                         str(HERE / "tb_irq_precision.sv"), *map(str, rtl)],
+                         '-DIRQ_PROG_HEX="' + irq.as_posix() + '"',
+                         '-DIRQ_PROG_EVEN_HEX="' + irq_even.as_posix() + '"',
+                         '-DIRQ_PROG_ODD_HEX="' + irq_odd.as_posix() + '"',
+                         '-DEDGE_PROG_HEX="' + edge.as_posix() + '"',
+                         '-DEDGE_PROG_EVEN_HEX="' + edge_even.as_posix() + '"',
+                         '-DEDGE_PROG_ODD_HEX="' + edge_odd.as_posix() + '"',
+                         str(bench), *map(str, frozen_rtl)],
                         [vvp, "-i", str(target)]]
             for index, command in enumerate(commands):
                 proc = subprocess.run(command, cwd=ROOT, capture_output=True,
@@ -165,6 +191,11 @@ def main():
                     raise RuntimeError(output)
                 if index == 1:
                     print(output, end="")
+        report["inputs_unchanged"] = all(
+            hashlib.sha256(path.read_bytes()).hexdigest() == report["input_sha256"][path.relative_to(ROOT).as_posix()]
+            for path in frozen)
+        if not report["inputs_unchanged"]:
+            raise RuntimeError("The frozen IRQ inputs changed during simulation")
         report["passed"] = True
     finally:
         (OUT / "RESULTS.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")

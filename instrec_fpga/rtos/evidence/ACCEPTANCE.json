@@ -1,7 +1,7 @@
 {
   "objective": "combine XSY/XSY2 into the current project with RTOS at the 125 MHz baseline",
-  "changed_branch_fields": "XSY; timer_value/irq_timer; IMEM_WORDS=4096; DMEM_WORDS=4096; production FreeRTOS firmware",
-  "checked_at": "2026-11-14T07:51:49.749544+00:00",
+  "changed_branch_fields": "XSY; timer_value/irq_timer; IMEM_WORDS=4096; DMEM_WORDS=4096; direct PROG_EVEN_HEX/PROG_ODD_HEX/PROG_HEX ROM initialization; production FreeRTOS firmware",
+  "checked_at": "2026-11-14T09:20:43.093960+00:00",
   "clock_hz": 125000000,
   "tick_hz": 1000,
   "baseline_files_restored": 202,
@@ -17,6 +17,8 @@
     "official_kernel_hashes": true,
     "real_cpu_preemption_queues_critical_sections": true,
     "same_input_full_NPU_golden": true,
+    "timer_irq_and_full_ROM_readout": true,
+    "mapped_firmware_ROM_exact": true,
     "complete_system_mapping": true,
     "rollback_original_behavior": true,
     "FPGA_bitstream_generated": false
@@ -36,6 +38,7 @@
     "board_test_executed": false
   },
   "board_test_executed": false,
-  "pds_run": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\pds\\20261114-153018-rom_loop_fix-map",
+  "pds_run": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\pds\\20261114-162656-direct_rom_final-map",
+  "mapped_rom_reset_instruction": "30047073",
   "timing_constraints_met": null
 }

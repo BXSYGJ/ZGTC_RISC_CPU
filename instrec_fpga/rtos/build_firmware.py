@@ -110,9 +110,17 @@ def main() -> int:
         raise RuntimeError("RTOS ROM exceeds 16 KiB")
     padded = data + bytes((-len(data)) % 4)
     words = [int.from_bytes(padded[i:i + 4], "little") for i in range(0, len(padded), 4)]
+    images = []
     for name, image in (("prog.hex", words), ("prog_even.hex", words[::2]),
                         ("prog_odd.hex", words[1::2])):
         (out / name).write_text("".join(f"{word:08x}\n" for word in image), encoding="ascii")
+        images.append({"name": name, "words": len(image), "file_bytes": (out / name).stat().st_size,
+                       "sha256": sha256(out / name)})
+    even_words = [int(word, 16) for word in (out / "prog_even.hex").read_text(encoding="ascii").split()]
+    odd_words = [int(word, 16) for word in (out / "prog_odd.hex").read_text(encoding="ascii").split()]
+    if any((even_words[n // 2] if n % 2 == 0 else odd_words[n // 2]) != value
+           for n, value in enumerate(words)):
+        raise RuntimeError("Instruction bank images do not reconstruct the linear firmware")
     (out / "prog.dis").write_text(run([objdump, "-d", elf]), encoding="utf-8")
     sizes = run([size, elf])
     (out / "SIZE.txt").write_text(sizes, encoding="utf-8")
@@ -125,6 +133,12 @@ def main() -> int:
               "kernel_files_verified": len(provenance["files"]),
               "rom_capacity": 16384, "ram_capacity": 16384,
               "binary_bytes": len(data), "binary_sha256": sha256(binary),
+              "rom_images": images, "rom_bank_layout": "word n: even[n/2] when n is even; odd[n/2] when n is odd",
+              "bank_reconstruction_verified": True,
+              "outputs": [{"name": name, "bytes": (out / name).stat().st_size,
+                           "sha256": sha256(out / name)} for name in
+                          ("prog.elf", "prog.bin", "prog.hex", "prog_even.hex", "prog_odd.hex",
+                           "prog.map", "prog.dis", "SIZE.txt")],
               "sizes": sizes, "inputs": [{"path": str(p.relative_to(ROOT)),
                    "sha256": sha256(p)} for p in inputs], "commands": commands}
     (out / "BUILD.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")

@@ -18,6 +18,8 @@ import subprocess
 import sys
 import time
 
+from audit_mapped_rom import verify_report
+
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 
@@ -67,6 +69,8 @@ def main() -> int:
                 raise RuntimeError("Frozen input changed: " + row["path"])
 
     verify_inputs()
+    rom_audit = verify_report(run)
+    rom_audit_path = run / "ROM_AUDIT.json"
     project = run / "instrec_rtos_125.pds"
     database = run / "device_map/instrec_top_map.adf"
     if not database.is_file() or "PG2L100H" not in project.read_text(encoding="utf-8"):
@@ -80,11 +84,11 @@ def main() -> int:
     attempt.mkdir(parents=True, exist_ok=False)
     backup = attempt / "backup"
     backup.mkdir()
-    for source in (project, database, manifest_path, run / "build.tcl", mapped_path):
+    for source in (project, database, manifest_path, run / "build.tcl", mapped_path, rom_audit_path):
         shutil.copyfile(source, backup / source.name)
     before = {p.relative_to(run).as_posix(): sha(p) for directory in ("compile", "synthesize", "device_map")
               for p in sorted((run / directory).rglob("*")) if p.is_file()}
-    controls = {p.name: sha(p) for p in (manifest_path, run / "build.tcl", mapped_path)}
+    controls = {p.name: sha(p) for p in (manifest_path, run / "build.tcl", mapped_path, rom_audit_path)}
     driver = "rtos_continue_" + stamp.replace("-", "_")
     # PDS evaluates the script twice. open_project exists only in the real
     # execution pass. The distinct -project_name is essential: -file creates
@@ -102,6 +106,8 @@ def main() -> int:
              "driver_project": driver, "script_sha256": sha(script),
              "source_control_hashes": controls, "prior_database_hashes": before,
              "input_count": len(manifest["files"]), "target": manifest["target"],
+             "rom_audit": {"path": str(rom_audit_path), "sha256": sha(rom_audit_path),
+                           "status": rom_audit["status"]},
              "system_clock_hz": manifest["system_clock_hz"], "max_minutes": args.minutes}
     save(attempt / "FULL_RESULT.json", state)
     print("RTOS_CONTINUATION_PREPARED " + str(attempt), flush=True)
@@ -142,6 +148,7 @@ def main() -> int:
     errors = [line for line in output.splitlines() if line.startswith("E:") and
               "SCBV has not been set" not in line and "Bitstream-2001" not in line]
     verify_inputs()
+    verify_report(run)
     controls_unchanged = all(sha(run / name) == digest for name, digest in controls.items())
     mapping_unchanged = sha(database) == state["database_sha256_before"]
     expected_project = "PG2L100H" in project.read_text(encoding="utf-8", errors="replace")

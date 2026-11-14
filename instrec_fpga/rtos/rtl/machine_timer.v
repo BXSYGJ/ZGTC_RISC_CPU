@@ -1,4 +1,4 @@
-// Free-running 64-bit machine timer in the 125 MHz core clock domain.
+// machine_timer: free-running 64-bit timer in the 125 MHz core clock domain.
 // Register words: 0=mtime low, 1=mtime high, 2=mtimecmp low, 3=mtimecmp high.
 // write_valid is a one-cycle pulse from an accepted CPU data transaction.
 // All registers support byte writes. mtime runs on edges without a nonzero

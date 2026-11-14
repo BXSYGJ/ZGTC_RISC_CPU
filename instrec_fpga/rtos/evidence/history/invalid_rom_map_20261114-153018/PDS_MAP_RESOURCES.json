@@ -1,0 +1,399 @@
+{
+  "schema": "rtos-pds-map-resources-v1",
+  "created_utc": "2026-11-14T08:12:45.724018+00:00",
+  "stage": "dev_map",
+  "run_directory": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/pds/20261114-153018-rom_loop_fix-map",
+  "target": "PG2L100H-6IFBG676",
+  "system_clock_hz": 125000000,
+  "source_artifacts": {
+    "mapped_resource_log": {
+      "path": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/pds/20261114-153018-rom_loop_fix-map/device_map/run.log",
+      "bytes": 128968,
+      "sha256": "01a367f6878a165f5284875eef0cdb0de4418cc6d1bd5dd9a7bc2d9e833e9671"
+    },
+    "synthesis_summary": {
+      "path": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/pds/20261114-153018-rom_loop_fix-map/synthesize/instrec_top.snr",
+      "bytes": 617485,
+      "sha256": "143aeb06208d1ea2066920320655f711fafc36b3b610e04a73284e57f9fb8b41"
+    },
+    "memory_mapping_log": {
+      "path": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/pds/20261114-153018-rom_loop_fix-map/synthesize/apm_drm_lutram_utilization.log",
+      "bytes": 182931,
+      "sha256": "f07185275188c0463cda12fa63dd195b49e2d1cf3682a159c7f3ebd28fef2504"
+    },
+    "synthesized_netlist": {
+      "path": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/pds/20261114-153018-rom_loop_fix-map/synthesize/instrec_top_syn.vm",
+      "bytes": 43489309,
+      "sha256": "706065613ccad18350f75c659410fed22f95e98eb3ecb54d6a9c426b84803325"
+    },
+    "compile_log": {
+      "path": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/pds/20261114-153018-rom_loop_fix-map/compile/run.log",
+      "bytes": 1434655,
+      "sha256": "77116ea76cacc59a038f38b69b9a81ec1ad93e0f618a0bc805fcc7f86efac7be"
+    },
+    "input_manifest": {
+      "path": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/pds/20261114-153018-rom_loop_fix-map/INPUTS.json",
+      "bytes": 37127,
+      "sha256": "74d971dbeb9f4bf61ea837c40173f7c3cc6829b770a733b09430258dd3700aa6"
+    },
+    "synthesizer_firmware": {
+      "path": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/pds/20261114-153018-rom_loop_fix-map/src/cpu/prog_pacerv.hex",
+      "bytes": 17870,
+      "sha256": "67872c2a2b4b4b4c437c39d8e6a815cfb36ff60437c61d53d7dae777d280f49f"
+    },
+    "frozen_firmware": {
+      "path": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/pds/20261114-153018-rom_loop_fix-map/inputs/src/cpu/prog_pacerv.hex",
+      "bytes": 17870,
+      "sha256": "67872c2a2b4b4b4c437c39d8e6a815cfb36ff60437c61d53d7dae777d280f49f"
+    },
+    "production_firmware": {
+      "path": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/firmware/prog.hex",
+      "bytes": 17870,
+      "sha256": "67872c2a2b4b4b4c437c39d8e6a815cfb36ff60437c61d53d7dae777d280f49f"
+    },
+    "frozen_wrapper": {
+      "path": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/pds/20261114-153018-rom_loop_fix-map/inputs/src/cpu/rv32_cpu_subsys.sv",
+      "bytes": 25704,
+      "sha256": "3e6974e357d424a686ad6b6fc33540bb6dd90b706a5afba23d420ed58b76c91f"
+    },
+    "frozen_top": {
+      "path": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/pds/20261114-153018-rom_loop_fix-map/inputs/src/ctrl/instrec_top.v",
+      "bytes": 49588,
+      "sha256": "fe8287a327d6d0c4cfd1decfac0fd0f5e3b5dd878f950013fe33a5c76fb3aba7"
+    },
+    "baseline_summary": {
+      "path": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/pacerv_shared_system/pds/full-20261113-223256-full/synthesize/instrec_top.snr",
+      "bytes": 616987,
+      "sha256": "3ad4063a34abd086587cb32c70d34037b8fe61ea7cb9460fd5dd56a501ff667d"
+    },
+    "baseline_memory_mapping_log": {
+      "path": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/pacerv_shared_system/pds/full-20261113-223256-full/synthesize/apm_drm_lutram_utilization.log",
+      "bytes": 182316,
+      "sha256": "6e4c414dd6d51899ae73026bb89c182f1a4e1ea9fc26e9247120844810044cf0"
+    },
+    "baseline_netlist": {
+      "path": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/pacerv_shared_system/pds/full-20261113-223256-full/synthesize/instrec_top_syn.vm",
+      "bytes": 43257485,
+      "sha256": "9c76c45be338d452a41a81512bf599d1e9c3beee30f26ed1cf5d1cdc3404c85c"
+    }
+  },
+  "mapped_device_utilization": {
+    "APM": {
+      "used": 94,
+      "available": 240,
+      "reported_utilization_percent": 40.0,
+      "line": 1042,
+      "literal": "| APM                   | 94        | 240           | 40                 "
+    },
+    "FF": {
+      "used": 39666,
+      "available": 133200,
+      "reported_utilization_percent": 30.0,
+      "line": 1043,
+      "literal": "| FF                    | 39666     | 133200        | 30                 "
+    },
+    "LUT": {
+      "used": 36723,
+      "available": 66600,
+      "reported_utilization_percent": 56.0,
+      "line": 1044,
+      "literal": "| LUT                   | 36723     | 66600         | 56                 "
+    },
+    "Distributed RAM": {
+      "used": 1378,
+      "available": 19900,
+      "reported_utilization_percent": 7.0,
+      "line": 1045,
+      "literal": "| Distributed RAM       | 1378      | 19900         | 7                  "
+    },
+    "DRM": {
+      "used": 128.5,
+      "available": 155,
+      "reported_utilization_percent": 83.0,
+      "line": 1046,
+      "literal": "| DRM                   | 128.5     | 155           | 83                 "
+    },
+    "IO": {
+      "used": 120,
+      "available": 300,
+      "reported_utilization_percent": 40.0,
+      "line": 1047,
+      "literal": "| IO                    | 120       | 300           | 40                 "
+    },
+    "RCKB": {
+      "used": 2,
+      "available": 24,
+      "reported_utilization_percent": 9.0,
+      "line": 1048,
+      "literal": "| RCKB                  | 2         | 24            | 9                  "
+    },
+    "SCANCHAIN": {
+      "used": 0,
+      "available": 1,
+      "reported_utilization_percent": 0.0,
+      "line": 1049,
+      "literal": "| SCANCHAIN             | 0         | 1             | 0                  "
+    },
+    "USCM": {
+      "used": 5,
+      "available": 32,
+      "reported_utilization_percent": 16.0,
+      "line": 1050,
+      "literal": "| USCM                  | 5         | 32            | 16                 "
+    },
+    "CCS": {
+      "used": 1,
+      "available": 1,
+      "reported_utilization_percent": 100.0,
+      "line": 1051,
+      "literal": "| CCS                   | 1         | 1             | 100                "
+    },
+    "ADC": {
+      "used": 0,
+      "available": 1,
+      "reported_utilization_percent": 0.0,
+      "line": 1052,
+      "literal": "| ADC                   | 0         | 1             | 0                  "
+    },
+    "DDR_PHY": {
+      "used": 7,
+      "available": 24,
+      "reported_utilization_percent": 30.0,
+      "line": 1053,
+      "literal": "| DDR_PHY               | 7         | 24            | 30                 "
+    },
+    "HSSTLP": {
+      "used": 0,
+      "available": 2,
+      "reported_utilization_percent": 0.0,
+      "line": 1054,
+      "literal": "| HSSTLP                | 0         | 2             | 0                  "
+    },
+    "GPLL": {
+      "used": 3,
+      "available": 6,
+      "reported_utilization_percent": 50.0,
+      "line": 1055,
+      "literal": "| GPLL                  | 3         | 6             | 50                 "
+    },
+    "PPLL": {
+      "used": 2,
+      "available": 6,
+      "reported_utilization_percent": 34.0,
+      "line": 1056,
+      "literal": "| PPLL                  | 2         | 6             | 34                 "
+    },
+    "DDRPHY_CPD": {
+      "used": 1,
+      "available": 12,
+      "reported_utilization_percent": 9.0,
+      "line": 1057,
+      "literal": "| DDRPHY_CPD            | 1         | 12            | 9                  "
+    },
+    "HCKB": {
+      "used": 0,
+      "available": 96,
+      "reported_utilization_percent": 0.0,
+      "line": 1058,
+      "literal": "| HCKB                  | 0         | 96            | 0                  "
+    },
+    "IOCKB": {
+      "used": 0,
+      "available": 24,
+      "reported_utilization_percent": 0.0,
+      "line": 1059,
+      "literal": "| IOCKB                 | 0         | 24            | 0                  "
+    },
+    "MRCKB": {
+      "used": 1,
+      "available": 12,
+      "reported_utilization_percent": 9.0,
+      "line": 1060,
+      "literal": "| MRCKB                 | 1         | 12            | 9                  "
+    },
+    "PCIE": {
+      "used": 0,
+      "available": 1,
+      "reported_utilization_percent": 0.0,
+      "line": 1061,
+      "literal": "| PCIE                  | 0         | 1             | 0                  "
+    },
+    "DDRPHY_IOCLK_DIV": {
+      "used": 2,
+      "available": 6,
+      "reported_utilization_percent": 34.0,
+      "line": 1062,
+      "literal": "| DDRPHY_IOCLK_DIV      | 2         | 6             | 34                 "
+    },
+    "ANALOG": {
+      "used": 0,
+      "available": 1,
+      "reported_utilization_percent": 0.0,
+      "line": 1063,
+      "literal": "| ANALOG                | 0         | 1             | 0                  "
+    },
+    "TSERDES": {
+      "used": 14,
+      "available": 48,
+      "reported_utilization_percent": 30.0,
+      "line": 1064,
+      "literal": "| TSERDES               | 14        | 48            | 30                 "
+    },
+    "KEYRAM": {
+      "used": 0,
+      "available": 1,
+      "reported_utilization_percent": 0.0,
+      "line": 1065,
+      "literal": "| KEYRAM                | 0         | 1             | 0                  "
+    }
+  },
+  "synthesis_drm_primitives": {
+    "GTP_DRM18K_E1": {
+      "count": 93,
+      "line": 22,
+      "literal": "GTP_DRM18K_E1                93 uses"
+    },
+    "GTP_DRM36K_E1": {
+      "count": 82,
+      "line": 23,
+      "literal": "GTP_DRM36K_E1                82 uses"
+    }
+  },
+  "drm_units": {
+    "GTP_DRM18K_E1": 0.5,
+    "GTP_DRM36K_E1": 1,
+    "calculation": "93 * 0.5 + 82 * 1 = 128.5",
+    "matches_map_report": true
+  },
+  "cpu_ram": {
+    "configured_bytes": 16384,
+    "mapped_bytes": 16384,
+    "drm_units": 4,
+    "instances": [
+      {
+        "hierarchy": "u_cpu/dmem0",
+        "depth": 4096,
+        "width_bits": 8,
+        "bytes": 4096,
+        "primitive": "GTP_DRM36K_E1",
+        "drm_units": 1,
+        "utilization_lines": [
+          463,
+          464
+        ],
+        "utilization_literals": [
+          "| u_cpu/dmem0                                               | 4 K x 8                |                   |                   |                   |                   |",
+          "|       dmem0                                               | 4 K x 8                | NORMAL_WRITE      | NORMAL_WRITE      | SIMPLE_DUAL_PORT  | GTP_DRM36K_E1     |"
+        ],
+        "netlist_line": 259615,
+        "netlist_literal": "(* PAP_RAM_STYLE=\"block_ram\" *)    GTP_DRM36K_E1 /* dmem0 */ #("
+      },
+      {
+        "hierarchy": "u_cpu/dmem1",
+        "depth": 4096,
+        "width_bits": 8,
+        "bytes": 4096,
+        "primitive": "GTP_DRM36K_E1",
+        "drm_units": 1,
+        "utilization_lines": [
+          466,
+          467
+        ],
+        "utilization_literals": [
+          "| u_cpu/dmem1                                               | 4 K x 8                |                   |                   |                   |                   |",
+          "|       dmem1                                               | 4 K x 8                | NORMAL_WRITE      | NORMAL_WRITE      | SIMPLE_DUAL_PORT  | GTP_DRM36K_E1     |"
+        ],
+        "netlist_line": 259803,
+        "netlist_literal": "(* PAP_RAM_STYLE=\"block_ram\" *)    GTP_DRM36K_E1 /* dmem1 */ #("
+      },
+      {
+        "hierarchy": "u_cpu/dmem2",
+        "depth": 4096,
+        "width_bits": 8,
+        "bytes": 4096,
+        "primitive": "GTP_DRM36K_E1",
+        "drm_units": 1,
+        "utilization_lines": [
+          469,
+          470
+        ],
+        "utilization_literals": [
+          "| u_cpu/dmem2                                               | 4 K x 8                |                   |                   |                   |                   |",
+          "|       dmem2                                               | 4 K x 8                | NORMAL_WRITE      | NORMAL_WRITE      | SIMPLE_DUAL_PORT  | GTP_DRM36K_E1     |"
+        ],
+        "netlist_line": 259991,
+        "netlist_literal": "(* PAP_RAM_STYLE=\"block_ram\" *)    GTP_DRM36K_E1 /* dmem2 */ #("
+      },
+      {
+        "hierarchy": "u_cpu/dmem3",
+        "depth": 4096,
+        "width_bits": 8,
+        "bytes": 4096,
+        "primitive": "GTP_DRM36K_E1",
+        "drm_units": 1,
+        "utilization_lines": [
+          472,
+          473
+        ],
+        "utilization_literals": [
+          "| u_cpu/dmem3                                               | 4 K x 8                |                   |                   |                   |                   |",
+          "|       dmem3                                               | 4 K x 8                | NORMAL_WRITE      | NORMAL_WRITE      | SIMPLE_DUAL_PORT  | GTP_DRM36K_E1     |"
+        ],
+        "netlist_line": 260179,
+        "netlist_literal": "(* PAP_RAM_STYLE=\"block_ram\" *)    GTP_DRM36K_E1 /* dmem3 */ #("
+      }
+    ]
+  },
+  "synthesis_module_resources": [
+    {
+      "module": "u_cpu",
+      "lut": 4513,
+      "ff": 1734,
+      "distributed_ram": 442,
+      "apm": 4,
+      "drm": 4.0,
+      "line": 279,
+      "literal": "| + u_cpu                                                          | 4513      | 1734      | 442                 | 4       | 4         | 0       | 0          | 0       | 0              | 0                    | 0           | 0                  | 0        | 0        | 0          | 0       | 0         | 0          | 1533          | 0            | 69           | 5            | 0         | 0            | 0        | 0        | 0          | 0             | 0        "
+    },
+    {
+      "module": "u_core",
+      "lut": 4028,
+      "ff": 1459,
+      "distributed_ram": 438,
+      "apm": 4,
+      "drm": 0.0,
+      "line": 280,
+      "literal": "|   + u_core                                                       | 4028      | 1459      | 438                 | 4       | 0         | 0       | 0          | 0       | 0              | 0                    | 0           | 0                  | 0        | 0        | 0          | 0       | 0         | 0          | 1359          | 0            | 66           | 4            | 0         | 0            | 0        | 0        | 0          | 0             | 0        "
+    }
+  ],
+  "cpu_rom": {
+    "configured_bytes": 16384,
+    "firmware_bytes": 7148,
+    "firmware_words": 1787,
+    "firmware_first_words": [
+      "30047073",
+      "30401073",
+      "20004117",
+      "ff810113",
+      "20000197",
+      "3f018193",
+      "00002297",
+      "bd428293"
+    ],
+    "compiler_load_evidence": [
+      {
+        "line": 4509,
+        "literal": "I: [D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/pds/20261114-153018-rom_loop_fix-map/inputs/src/cpu/rv32_cpu_subsys.sv(line number: 256)] Loading memory data from file D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/pds/20261114-153018-rom_loop_fix-map/src/cpu/prog_pacerv.hex"
+      }
+    ],
+    "named_rom_entries_in_memory_mapping_log": 0,
+    "named_rom_entries_in_synthesized_netlist": 0,
+    "mapping_status": "failed_firmware_data_missing",
+    "mapping_note": "Exhaustive INIT truth-table analysis of all 32 rv32_rvc_frontend out_instruction bits proves every bit is zero for a normal response (current_error=0), regardless of all other LUT inputs. Both the current RTOS run and the frozen 125 MHz baseline have this fault. Expected reset instruction is 0x30047073; mapped instruction is 0x00000000.",
+    "netlist_audit": {
+      "path": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/rtos/evidence/MAPPED_ROM_AUDIT.json",
+      "sha256": "c551d36cd16789617878a42e9b20bc9263b24fed372d8077bd38244a9b606659"
+    }
+  },
+  "valid_for_firmware_execution": false
+}

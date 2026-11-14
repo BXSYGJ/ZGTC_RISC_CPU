@@ -23,7 +23,18 @@
  // ---------------------------------------------------------------------------
  `timescale 1ns / 1ps
  
-@@ -111,8 +118,8 @@
+@@ -66,7 +73,9 @@
+     parameter [31:0]  RESET_VECTOR     = 32'h0000_0000,
+     parameter integer IMEM_WORDS       = 2048,   // 8 KiB
+     parameter integer DMEM_WORDS       = 2048,   // 8 KiB
+-    parameter PROG_HEX                 = "src/cpu/prog.hex"
++    parameter PROG_HEX                 = "src/cpu/prog.hex",
++    parameter PROG_EVEN_HEX            = "src/cpu/prog_even.hex",
++    parameter PROG_ODD_HEX             = "src/cpu/prog_odd.hex"
+ ) (
+     input  wire        clk,
+     input  wire        rst_n,
+@@ -111,8 +120,8 @@
  
      localparam integer IAW = $clog2(IMEM_WORDS);
      localparam integer DAW = $clog2(DMEM_WORDS);
@@ -34,7 +45,7 @@
  
      localparam [31:0] CPU_ID = 32'h5256_4331;   // "RVC1"
  
-@@ -137,6 +144,23 @@
+@@ -137,6 +146,23 @@
      wire        maintenance_valid;
      wire        maintenance_ready;
      wire [63:0] cycle_count, retired_count;
@@ -58,7 +69,7 @@
  
      // PDS's front end rejects an empty '.port()' connection, so every unused
      // observer output is parked on a named, deliberately unread net.
-@@ -184,10 +208,10 @@
+@@ -184,10 +210,10 @@
          .d_rsp_error      (d_rsp_error),
          .maintenance_valid(maintenance_valid),
          .maintenance_ready(maintenance_ready),
@@ -71,52 +82,58 @@
          .trace_valid      (trace_valid_u),
          .trace_pc         (trace_pc_u),
          .trace_instruction(trace_instruction_u),
-@@ -217,16 +241,36 @@
+@@ -206,7 +232,6 @@
+     // =====================================================================
+     // Instruction ROM: parity banks supply two adjacent words per request.
+     // =====================================================================
+-    reg [31:0] imem [0:IMEM_WORDS-1];
+     reg [31:0] imem_even [0:(IMEM_WORDS/2)-1];
+     reg [31:0] imem_odd [0:(IMEM_WORDS/2)-1];
+     // Second copy of the same image for the DATA port.  A load from a ROM
+@@ -217,17 +242,31 @@
  
      integer init_word;
      initial begin
 -        for (init_word = 0; init_word < IMEM_WORDS/2; init_word = init_word + 1) begin
 -            imem[init_word*2] = 32'd0;
 -            imem[init_word*2+1] = 32'd0;
-+        // Eight words per iteration stay below PDS's 2000-iteration limit
-+        // with either the 16 KiB application ROM or a 32 KiB diagnostic ROM.
-+        for (init_word = 0; init_word < IMEM_WORDS/8; init_word = init_word + 1) begin
-+            imem[init_word*8] = 32'd0;
-+            imem[init_word*8+1] = 32'd0;
-+            imem[init_word*8+2] = 32'd0;
-+            imem[init_word*8+3] = 32'd0;
-+            imem[init_word*8+4] = 32'd0;
-+            imem[init_word*8+5] = 32'd0;
-+            imem[init_word*8+6] = 32'd0;
-+            imem[init_word*8+7] = 32'd0;
-         end
-         $readmemh(PROG_HEX, imem);
+-        end
+-        $readmemh(PROG_HEX, imem);
 -        for (init_word = 0; init_word < IMEM_WORDS/2; init_word = init_word + 1) begin
 -            rom_d[init_word*2] = imem[init_word*2];
 -            rom_d[init_word*2+1] = imem[init_word*2+1];
 -            imem_even[init_word] = imem[init_word*2];
 -            imem_odd[init_word] = imem[init_word*2+1];
+-        end
++        // Initialize the actual read arrays. PDS does not propagate a
++        // readmemh of a temporary array through subsequent array copies.
++        // Eight data words and four words in each instruction bank per
++        // iteration keep 16/32 KiB ROMs below PDS's 2000-iteration limit.
 +        for (init_word = 0; init_word < IMEM_WORDS/8; init_word = init_word + 1) begin
-+            rom_d[init_word*8] = imem[init_word*8];
-+            rom_d[init_word*8+1] = imem[init_word*8+1];
-+            rom_d[init_word*8+2] = imem[init_word*8+2];
-+            rom_d[init_word*8+3] = imem[init_word*8+3];
-+            rom_d[init_word*8+4] = imem[init_word*8+4];
-+            rom_d[init_word*8+5] = imem[init_word*8+5];
-+            rom_d[init_word*8+6] = imem[init_word*8+6];
-+            rom_d[init_word*8+7] = imem[init_word*8+7];
-+            imem_even[init_word*4] = imem[init_word*8];
-+            imem_odd[init_word*4] = imem[init_word*8+1];
-+            imem_even[init_word*4+1] = imem[init_word*8+2];
-+            imem_odd[init_word*4+1] = imem[init_word*8+3];
-+            imem_even[init_word*4+2] = imem[init_word*8+4];
-+            imem_odd[init_word*4+2] = imem[init_word*8+5];
-+            imem_even[init_word*4+3] = imem[init_word*8+6];
-+            imem_odd[init_word*4+3] = imem[init_word*8+7];
-         end
++            rom_d[init_word*8] = 32'd0;
++            rom_d[init_word*8+1] = 32'd0;
++            rom_d[init_word*8+2] = 32'd0;
++            rom_d[init_word*8+3] = 32'd0;
++            rom_d[init_word*8+4] = 32'd0;
++            rom_d[init_word*8+5] = 32'd0;
++            rom_d[init_word*8+6] = 32'd0;
++            rom_d[init_word*8+7] = 32'd0;
++            imem_even[init_word*4] = 32'd0;
++            imem_odd[init_word*4] = 32'd0;
++            imem_even[init_word*4+1] = 32'd0;
++            imem_odd[init_word*4+1] = 32'd0;
++            imem_even[init_word*4+2] = 32'd0;
++            imem_odd[init_word*4+2] = 32'd0;
++            imem_even[init_word*4+3] = 32'd0;
++            imem_odd[init_word*4+3] = 32'd0;
++        end
++        $readmemh(PROG_EVEN_HEX, imem_even);
++        $readmemh(PROG_ODD_HEX, imem_odd);
++        $readmemh(PROG_HEX, rom_d);
      end
  
-@@ -343,6 +387,8 @@
+     // =====================================================================
+@@ -343,6 +382,8 @@
              32'h8000_001C: mmio_rdata = retired_count[31:0];
              32'h8000_0020: mmio_rdata = ddr_sts;
              32'h8000_0028: mmio_rdata = result_cycles_q;
@@ -125,7 +142,7 @@
              default:       mmio_rdata = 32'h0000_0000;
          endcase
      end
-@@ -424,8 +470,8 @@
+@@ -424,8 +465,8 @@
      wire d_is_ddr   = (d_req_address[31:20] == 12'h400) ||
                       ((d_req_address >= 32'h4100_0000) &&
                        (d_req_address < 32'h4160_0000));
@@ -138,19 +155,21 @@
      wire [IAW-1:0] d_rom_word = d_req_address[IAW+1:2];
 --- baseline125/src/ctrl/instrec_top.v
 +++ rtos125/src/ctrl/instrec_top.v
-@@ -1070,6 +1070,8 @@
+@@ -1070,6 +1070,10 @@
          .ENABLE_C         (1),
          .ENABLE_PREDICTOR (1),
          .RESET_VECTOR     (32'h0000_0000),
 +        .IMEM_WORDS       (4096),
 +        .DMEM_WORDS       (4096),
++        .PROG_EVEN_HEX   ("src/cpu/prog_pacerv_even.hex"),
++        .PROG_ODD_HEX    ("src/cpu/prog_pacerv_odd.hex"),
          .PROG_HEX         ("src/cpu/prog_pacerv.hex")
      ) u_cpu (
          .clk             (core_clk),
 --- /dev/null
 +++ rtos/rtl/machine_timer.v
 @@ -0,0 +1,72 @@
-+// Free-running 64-bit machine timer in the 125 MHz core clock domain.
++// machine_timer: free-running 64-bit timer in the 125 MHz core clock domain.
 +// Register words: 0=mtime low, 1=mtime high, 2=mtimecmp low, 3=mtimecmp high.
 +// write_valid is a one-cycle pulse from an accepted CPU data transaction.
 +// All registers support byte writes. mtime runs on edges without a nonzero

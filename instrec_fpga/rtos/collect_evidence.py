@@ -19,6 +19,7 @@ HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 sys.path.insert(0, str(HERE))
 from build_system import verify_sources
+from audit_mapped_rom import verify_report as verify_rom_report
 
 
 def sha(path: Path) -> str:
@@ -50,6 +51,19 @@ def main() -> int:
     pds = args.pds_run.resolve(strict=True)
     baseline = verify_sources()
     evidence = HERE / "evidence"
+    units = {}
+    for label, tokens in (("TIMER", ("MACHINE_TIMER_PASS checks=21", "TIMER_MMIO_PASS checks=78")),
+                          ("IRQ", ("IRQ_PRECISION_PASS", "ROM_BOUNDARY_PASS rom_bytes=32768")),
+                          ("ROM_READOUT", ("ROM_READOUT_PASS words=4096",))):
+        report = read(evidence / (label + "_REPORT.json"))
+        if (not report["passed"] or not report["inputs_unchanged"] or
+                any(row.get("exit_status", row.get("exit_code", 0)) != 0 for row in report["commands"])):
+            raise RuntimeError(label + " functional checks did not pass")
+        check_hashes(report.get("sources", {}))
+        check_hashes(report["input_sha256"])
+        if not all(token in command_output(report) for token in tokens):
+            raise RuntimeError(label + " expected literal results are missing")
+        units[label] = report
     records: dict[str, dict] = {}
     for label in ("BASELINE_CPU", "CPU_RTOS", "ROLLBACK_CPU"):
         report = read(evidence / (label + "_REPORT.json"))
@@ -67,8 +81,15 @@ def main() -> int:
     for row in baseline["files"]:
         if sha(restored / row["path"]) != row["sha256"]:
             raise RuntimeError("Rollback did not restore baseline bytes: " + row["path"])
-    if (restored / "src/cpu/machine_timer.v").exists():
-        raise RuntimeError("Rollback left the added timer")
+    if any((restored / "src/cpu" / name).exists() for name in
+           ("machine_timer.v", "prog_pacerv_even.hex", "prog_pacerv_odd.hex")):
+        raise RuntimeError("Rollback left added RTOS hardware or ROM bank files")
+    rollback_entry = read(evidence / "ROLLBACK_ENTRYPOINT.json")
+    if (not rollback_entry["passed"] or rollback_entry["exit_status"] != 0 or
+            rollback_entry["rollback_script_sha256"] != sha(HERE / "ROLLBACK.sh") or
+            not rollback_entry["PowerShell_entrypoints_identical"] or not rollback_entry["added_files_removed"] or
+            rollback_entry["source_wrapper_sha256_after"] != sha(HERE / "rtl/rv32_cpu_subsys.sv")):
+        raise RuntimeError("The archived PowerShell rollback entry point did not pass")
     cpu_output = command_output(records["CPU_RTOS"])
     required = ("RTOS CRITICAL PASS deferred=3 caught=3 depth=2 mie=0 pending=1",
                 "RTOS TEST PASS", "RTOS_CPU_PASS hz=125000000", "catchup=3", "compare=17")
@@ -93,6 +114,10 @@ def main() -> int:
         for row in report["inputs"]:
             if sha(ROOT / row["path"]) != row["sha256"]:
                 raise RuntimeError("Firmware source changed: " + row["path"])
+        directory = ROOT / "build/rtos/firmware" / ("test" if report["test_mode"] else "")
+        for row in report["outputs"]:
+            if sha(directory / row["name"]) != row["sha256"] or (directory / row["name"]).stat().st_size != row["bytes"]:
+                raise RuntimeError("Firmware output changed: " + row["name"])
     if build["test_mode"] or not test_build["test_mode"]:
         raise RuntimeError("Production/test firmware roles were interchanged")
     firmware = ROOT / "build/rtos/firmware/prog.hex"
@@ -110,11 +135,30 @@ def main() -> int:
             raise RuntimeError("PDS frozen input changed: " + row["path"])
     if sha(pds / "inputs/src/cpu/prog_pacerv.hex") != sha(firmware):
         raise RuntimeError("PDS does not contain the current production firmware")
+    for name in ("even", "odd"):
+        if sha(pds / f"inputs/src/cpu/prog_pacerv_{name}.hex") != sha(firmware.parent / f"prog_{name}.hex"):
+            raise RuntimeError("PDS does not contain the current instruction bank: " + name)
     if sha(pds / "inputs/src/cpu/rv32_cpu_subsys.sv") != sha(HERE / "rtl/rv32_cpu_subsys.sv"):
         raise RuntimeError("PDS does not contain the current timer-enabled wrapper")
+    if sha(pds / "inputs/src/cpu/machine_timer.v") != sha(HERE / "rtl/machine_timer.v"):
+        raise RuntimeError("PDS does not contain the current machine timer")
+    rom_audit = verify_rom_report(pds)
     full = read(pds / "FULL_RESULT.json") if (pds / "FULL_RESULT.json").exists() else None
     implemented = bool(full and full["status"] == "pass" and full["fresh_bitstream"] and
                        full["frozen_inputs_unchanged"] and all(full["stages"].values()))
+    if implemented:
+        if full["exit_code"] != 0 or full["errors"] or full["timed_out"]:
+            raise RuntimeError("The FPGA implementation contains a failed command")
+        for name, expected in full["source_control_hashes"].items():
+            if sha(pds / name) != expected:
+                raise RuntimeError("The implemented source controls changed: " + name)
+        for path, expected in ((pds / "INPUTS.json", full["manifest_sha256"]),
+                               (pds / "RESULT.json", full["source_map_result_sha256"]),
+                               (pds / "device_map/instrec_top_map.adf", full["database_sha256_before"]),
+                               (pds / "ROM_AUDIT.json", full["rom_audit"]["sha256"]),
+                               (Path(full["timing_report"]["path"]), full["timing_report"]["sha256"])):
+            if sha(path) != expected:
+                raise RuntimeError("An accepted implementation input/report changed: " + str(path))
     if implemented and sha(Path(full["bitstream"]["path"])) != full["bitstream"]["sha256"]:
         raise RuntimeError("The implementation bitstream changed")
     timing = None
@@ -127,6 +171,7 @@ def main() -> int:
         (evidence / "PDS_TIMING_AND_RESOURCES.json").write_text(json.dumps(timing, indent=2) + "\n", encoding="utf-8")
     for source, target in ((pds / "RESULT.json", "PDS_MAP_RESULT.json"),
                            (pds / "INPUTS.json", "PDS_INPUTS.json"),
+                           (pds / "ROM_AUDIT.json", "PDS_ROM_AUDIT.json"),
                            (firmware.parent / "BUILD.json", "FIRMWARE_BUILD.json"),
                            (firmware.parent / "test/BUILD.json", "TEST_FIRMWARE_BUILD.json")):
         shutil.copyfile(source, evidence / target)
@@ -150,15 +195,18 @@ def main() -> int:
     paths = {"MODIFIED_FILE": str(modified), "DIFF_FILE": str(HERE / "DIFF_FILE.patch"),
              "VERIFICATION": str(HERE / "VERIFICATION.txt"), "ROLLBACK": str(HERE / "ROLLBACK.sh")}
     result = {"objective": "combine XSY/XSY2 into the current project with RTOS at the 125 MHz baseline",
-              "changed_branch_fields": "XSY; timer_value/irq_timer; IMEM_WORDS=4096; DMEM_WORDS=4096; production FreeRTOS firmware",
+              "changed_branch_fields": "XSY; timer_value/irq_timer; IMEM_WORDS=4096; DMEM_WORDS=4096; direct PROG_EVEN_HEX/PROG_ODD_HEX/PROG_HEX ROM initialization; production FreeRTOS firmware",
               "checked_at": dt.datetime.now(dt.timezone.utc).isoformat(), "clock_hz": 125000000,
               "tick_hz": 1000, "baseline_files_restored": 202, "firmware_rom_bytes": build["binary_bytes"],
               "artifacts": paths, "gates": {"frozen_125MHz_inputs": True, "official_kernel_hashes": True,
                  "real_cpu_preemption_queues_critical_sections": True, "same_input_full_NPU_golden": True,
+                 "timer_irq_and_full_ROM_readout": True,
+                 "mapped_firmware_ROM_exact": True,
                  "complete_system_mapping": True, "rollback_original_behavior": True,
                  "FPGA_bitstream_generated": implemented},
               "board_preflight": read(evidence / "BOARD_PREFLIGHT.json"),
               "board_test_executed": False, "pds_run": str(pds),
+              "mapped_rom_reset_instruction": rom_audit["reconstruction"]["reset_instruction"],
               "timing_constraints_met": timing["qualified"] if timing else None}
     lines = ["RTOS125 VERIFICATION", "Changed branch/fields: " + result["changed_branch_fields"],
              *[k + "=" + v for k, v in paths.items()], "", "BASELINE / MODIFIED / ROLLBACK actual CPU commands:"]
@@ -171,9 +219,22 @@ def main() -> int:
                           "LITERAL_OUTPUT_BEGIN", cmd.get("output", ""), "LITERAL_OUTPUT_END"])
     for label in ("NATIVE_BASELINE125", "NATIVE_RTOS"):
         lines += ["", label, (evidence / (label + "_OUTPUT.txt")).read_text(encoding="utf-8")]
+    for label, report in units.items():
+        lines += ["", label, "INPUTS " + json.dumps(report["input_sha256"], ensure_ascii=False)]
+        for command in report["commands"]:
+            lines += ["COMMAND " + subprocess.list2cmdline(command["command"]),
+                      "CWD " + command["cwd"],
+                      "EXIT " + str(command.get("exit_status", command.get("exit_code"))),
+                      "LITERAL_OUTPUT_BEGIN", command.get("output", ""), "LITERAL_OUTPUT_END"]
+    lines += ["", "ROLLBACK_ARCHIVED_ENTRYPOINT", "INPUT_MANIFEST_SHA256 " + rollback_entry["input_manifest_sha256"],
+              "SCRIPT_SHA256 " + rollback_entry["rollback_script_sha256"],
+              "COMMAND " + subprocess.list2cmdline(rollback_entry["command"]), "CWD " + rollback_entry["cwd"],
+              "EXIT " + str(rollback_entry["exit_status"]), "LITERAL_OUTPUT_BEGIN",
+              rollback_entry["literal_output"], "LITERAL_OUTPUT_END"]
     lines += ["", "ROLLBACK_RESTORED files=202 clock_hz=125000000 timer_removed=1",
               "Restored behavior: original boot/IMC/DDR/benchmark/NPU report/ACK/relaunch PASS; live RTOS wrapper retained.",
               "Production binary SHA256 " + build["binary_sha256"],
+              "MAPPED_ROM " + rom_audit["literal_result"],
               "FPGA_IMPLEMENTED=" + str(implemented), "BOARD_TEST_EXECUTED=False",
               "Board preflight found no present FTDI/CP2102 devices; serial ports are Bluetooth devices."]
     (HERE / "VERIFICATION.txt").write_text("\n".join(lines) + "\n", encoding="utf-8")

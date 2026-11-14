@@ -1,6 +1,6 @@
 # Revise CPU paper for reviewers (2)：接续记录
 
-> 当前接续任务已推进为125MHz基线FreeRTOS接入。rtos/README.md为构建入口；官方V11.3.3、真实抢占调度和三应用任务已落地，CPU/完整NPU/回退实测通过。整机map通过，PNR20988正在生成RTOS位流；工程build/rtos/pds/20261114-153018-rom_loop_fix-map，continuations/20261114-074722-356866。恢复时先检查真实PID及FULL_RESULT，保留运行实例。目标active，原时序优化paused。板卡USB目前未枚举，尚未进行板级测试。以下保留先前接续历史。
+> 当前接续：125MHz基线FreeRTOS active。162656-direct_rom_final-map已map完成exit0、207输入一致、136.5/155DRM，ROM真实内容/22位SMT地址/控制/厂商模型/12真实篡改与统一功能复验090908全部通过，8/9门槛只待bit。唯一PNR53608，hardware代理持有session80994，continuations/20261114-091420-953401，已完成布局进入布线，固定seed2/hold8，不重启该flow。结束后strict collector/package并重开哈希，再本地commit。原失败ROM全零/旧PNR已停止证据保留，H3和202原输入不变。USB未枚举，旧时序优化paused。
 
 
 2026-11-14，已从本机只读对话历史和实际工作区恢复当前工作。

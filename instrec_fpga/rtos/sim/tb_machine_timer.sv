@@ -1,4 +1,13 @@
 `timescale 1ns/1ps
+`ifndef TIMER_PROG_HEX
+`define TIMER_PROG_HEX "build/rtos/timer/idle.hex"
+`endif
+`ifndef TIMER_PROG_EVEN_HEX
+`define TIMER_PROG_EVEN_HEX "build/rtos/timer/idle_even.hex"
+`endif
+`ifndef TIMER_PROG_ODD_HEX
+`define TIMER_PROG_ODD_HEX "build/rtos/timer/idle_odd.hex"
+`endif
 module tb_machine_timer;
     reg clk=0;
     always #4 clk=~clk;
@@ -122,7 +131,8 @@ module tb_timer_mmio;
     reg [31:0] got,held;
 
     rv32_cpu_subsys #(.IMEM_WORDS(4096),.DMEM_WORDS(8192),
-        .PROG_HEX("build/rtos/timer/idle.hex")) dut (
+        .PROG_HEX(`TIMER_PROG_HEX), .PROG_EVEN_HEX(`TIMER_PROG_EVEN_HEX),
+        .PROG_ODD_HEX(`TIMER_PROG_ODD_HEX)) dut (
         .clk(clk),.rst_n(rst_n),.npu_busy(1'b0),.npu_done(1'b0),
         .npu_timeout(1'b0),.npu_probs_valid(1'b0),.npu_probs_pct(8'd0),
         .npu_probs_idx(4'd0),.npu_top1(4'd0),.npu_cycles(32'd0),
@@ -182,6 +192,10 @@ module tb_timer_mmio;
         force dut.d_rsp_ready=bus_rsp_ready;
         repeat(3) @(posedge clk);
         @(negedge clk); rst_n=1;
+        transaction(0,32'h00000000,0,0,0);
+        check(got===32'h0000006f,"directly initialized data ROM first word");
+        transaction(0,32'h00003ffc,0,0,0);
+        check(got===32'd0,"directly initialized data ROM last word");
         transaction(0,32'h80000038,0,0,0);
         check(got===32'hffffffff,"reset compare low via MMIO");
         transaction(0,32'h8000003c,0,0,0);

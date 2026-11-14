@@ -1,0 +1,1158 @@
+{
+  "status": "invalid_firmware_rom",
+  "expected_reset_instruction": "30047073",
+  "actual_normal_fetch_instruction": "00000000",
+  "firmware_hex_sha256": "67872c2a2b4b4b4c437c39d8e6a815cfb36ff60437c61d53d7dae777d280f49f",
+  "reports": [
+    {
+      "netlist": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\pds\\20261114-153018-rom_loop_fix-map\\synthesize\\instrec_top_syn.vm",
+      "netlist_sha256": "706065613ccad18350f75c659410fed22f95e98eb3ecb54d6a9c426b84803325",
+      "module": "rv32_rvc_frontend",
+      "method": "Exhaustive LUT6D INIT truth evaluation. Z indexes all six inputs; Z5 indexes low five. current_error=0, constant input pins enforced; every other input enumerated freely.",
+      "instruction_bits_covered": 32,
+      "always_zero_instruction_bits": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31
+      ],
+      "normal_fetch_instruction": "00000000",
+      "bits": {
+        "2": {
+          "output_pin": "Z5",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[2]",
+            "I1": "N54",
+            "I2": "N55",
+            "I3": "current_error",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "d8d8d8d8aa00aa00"
+        },
+        "0": {
+          "output_pin": "Z5",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "predicted_taken",
+            "I1": "out_pc[0]",
+            "I2": "\\u_cpu/u_core/frontend_ras_target [0]",
+            "I3": "current_error",
+            "I4": "\\u_cpu/u_core/predictor/N78",
+            "I5": "1'b1"
+          },
+          "init_hex": "e4e44444cc00cc00"
+        },
+        "1": {
+          "output_pin": "Z",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[1]",
+            "I1": "out_pc[3]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        },
+        "3": {
+          "output_pin": "Z5",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[1]",
+            "I1": "out_pc[3]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        },
+        "4": {
+          "output_pin": "Z",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[4]",
+            "I1": "out_pc[5]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        },
+        "5": {
+          "output_pin": "Z5",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[4]",
+            "I1": "out_pc[5]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        },
+        "6": {
+          "output_pin": "Z",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[6]",
+            "I1": "out_pc[7]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        },
+        "7": {
+          "output_pin": "Z5",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[6]",
+            "I1": "out_pc[7]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        },
+        "8": {
+          "output_pin": "Z",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[8]",
+            "I1": "out_pc[9]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        },
+        "9": {
+          "output_pin": "Z5",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[8]",
+            "I1": "out_pc[9]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        },
+        "10": {
+          "output_pin": "Z",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[10]",
+            "I1": "out_pc[11]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        },
+        "11": {
+          "output_pin": "Z5",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[10]",
+            "I1": "out_pc[11]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        },
+        "12": {
+          "output_pin": "Z",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[12]",
+            "I1": "out_pc[13]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        },
+        "13": {
+          "output_pin": "Z5",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[12]",
+            "I1": "out_pc[13]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        },
+        "14": {
+          "output_pin": "Z",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[14]",
+            "I1": "out_pc[15]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        },
+        "15": {
+          "output_pin": "Z5",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[14]",
+            "I1": "out_pc[15]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        },
+        "16": {
+          "output_pin": "Z",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[16]",
+            "I1": "out_pc[17]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        },
+        "17": {
+          "output_pin": "Z5",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[16]",
+            "I1": "out_pc[17]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        },
+        "18": {
+          "output_pin": "Z",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[18]",
+            "I1": "out_pc[19]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        },
+        "19": {
+          "output_pin": "Z5",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[18]",
+            "I1": "out_pc[19]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        },
+        "20": {
+          "output_pin": "Z",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[20]",
+            "I1": "out_pc[21]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        },
+        "21": {
+          "output_pin": "Z5",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[20]",
+            "I1": "out_pc[21]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        },
+        "22": {
+          "output_pin": "Z",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[22]",
+            "I1": "out_pc[23]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        },
+        "23": {
+          "output_pin": "Z5",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[22]",
+            "I1": "out_pc[23]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        },
+        "24": {
+          "output_pin": "Z",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[24]",
+            "I1": "out_pc[25]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        },
+        "25": {
+          "output_pin": "Z5",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[24]",
+            "I1": "out_pc[25]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        },
+        "26": {
+          "output_pin": "Z",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[26]",
+            "I1": "out_pc[27]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        },
+        "27": {
+          "output_pin": "Z5",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[26]",
+            "I1": "out_pc[27]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        },
+        "28": {
+          "output_pin": "Z",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[28]",
+            "I1": "out_pc[29]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        },
+        "29": {
+          "output_pin": "Z5",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[28]",
+            "I1": "out_pc[29]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        },
+        "30": {
+          "output_pin": "Z",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[30]",
+            "I1": "out_pc[31]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        },
+        "31": {
+          "output_pin": "Z5",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[30]",
+            "I1": "out_pc[31]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        }
+      },
+      "relevant_actual_gate_text": [
+        "GTP_LUT6D /* N56 */ #(\n            .INIT(64'b1101100011011000110110001101100010101010000000001010101000000000))\n        N56 (\n            .Z (current_buffer_valid),\n            .Z5 (out_instruction[2]),\n            .I0 (out_pc[2]),\n            .I1 (N54),\n            .I2 (N55),\n            .I3 (current_error),\n            .I4 (),\n            .I5 (1'b1));\n",
+        "GTP_LUT6D /* \\N120[0]  */ #(\n            .INIT(64'b1110010011100100010001000100010011001100000000001100110000000000))\n        \\N120[0]  (\n            .Z (out_prediction[0]),\n            .Z5 (out_instruction[0]),\n            .I0 (predicted_taken),\n            .I1 (out_pc[0]),\n            .I2 (\\u_cpu/u_core/frontend_ras_target [0] ),\n            .I3 (current_error),\n            .I4 (\\u_cpu/u_core/predictor/N78 ),\n            .I5 (1'b1));\n",
+        "GTP_LUT6D /* \\out_instruction_2[1]_1  */ #(\n            .INIT(64'b1010000010100000101000001010000011000000110000001100000011000000))\n        \\out_instruction_2[1]_1  (\n            .Z (out_instruction[1]),\n            .Z5 (out_instruction[3]),\n            .I0 (out_pc[1]),\n            .I1 (out_pc[3]),\n            .I2 (current_error),\n            .I3 (),\n            .I4 (),\n            .I5 (1'b1));\n",
+        "GTP_LUT6D /* \\out_instruction_2[4]_1  */ #(\n            .INIT(64'b1010000010100000101000001010000011000000110000001100000011000000))\n        \\out_instruction_2[4]_1  (\n            .Z (out_instruction[4]),\n            .Z5 (out_instruction[5]),\n            .I0 (out_pc[4]),\n            .I1 (out_pc[5]),\n            .I2 (current_error),\n            .I3 (),\n            .I4 (),\n            .I5 (1'b1));\n",
+        "GTP_LUT6D /* \\out_instruction_2[6]_1  */ #(\n            .INIT(64'b1010000010100000101000001010000011000000110000001100000011000000))\n        \\out_instruction_2[6]_1  (\n            .Z (out_instruction[6]),\n            .Z5 (out_instruction[7]),\n            .I0 (out_pc[6]),\n            .I1 (out_pc[7]),\n            .I2 (current_error),\n            .I3 (),\n            .I4 (),\n            .I5 (1'b1));\n",
+        "GTP_LUT6D /* \\out_instruction_2[8]_1  */ #(\n            .INIT(64'b1010000010100000101000001010000011000000110000001100000011000000))\n        \\out_instruction_2[8]_1  (\n            .Z (out_instruction[8]),\n            .Z5 (out_instruction[9]),\n            .I0 (out_pc[8]),\n            .I1 (out_pc[9]),\n            .I2 (current_error),\n            .I3 (),\n            .I4 (),\n            .I5 (1'b1));\n",
+        "GTP_LUT6D /* \\out_instruction_2[10]_1  */ #(\n            .INIT(64'b1010000010100000101000001010000011000000110000001100000011000000))\n        \\out_instruction_2[10]_1  (\n            .Z (out_instruction[10]),\n            .Z5 (out_instruction[11]),\n            .I0 (out_pc[10]),\n            .I1 (out_pc[11]),\n            .I2 (current_error),\n            .I3 (),\n            .I4 (),\n            .I5 (1'b1));\n",
+        "GTP_LUT6D /* \\out_instruction_2[12]_1  */ #(\n            .INIT(64'b1010000010100000101000001010000011000000110000001100000011000000))\n        \\out_instruction_2[12]_1  (\n            .Z (out_instruction[12]),\n            .Z5 (out_instruction[13]),\n            .I0 (out_pc[12]),\n            .I1 (out_pc[13]),\n            .I2 (current_error),\n            .I3 (),\n            .I4 (),\n            .I5 (1'b1));\n",
+        "GTP_LUT6D /* \\out_instruction_2[14]_1  */ #(\n            .INIT(64'b1010000010100000101000001010000011000000110000001100000011000000))\n        \\out_instruction_2[14]_1  (\n            .Z (out_instruction[14]),\n            .Z5 (out_instruction[15]),\n            .I0 (out_pc[14]),\n            .I1 (out_pc[15]),\n            .I2 (current_error),\n            .I3 (),\n            .I4 (),\n            .I5 (1'b1));\n",
+        "GTP_LUT6D /* \\out_instruction_2[16]_1  */ #(\n            .INIT(64'b1010000010100000101000001010000011000000110000001100000011000000))\n        \\out_instruction_2[16]_1  (\n            .Z (out_instruction[16]),\n            .Z5 (out_instruction[17]),\n            .I0 (out_pc[16]),\n            .I1 (out_pc[17]),\n            .I2 (current_error),\n            .I3 (),\n            .I4 (),\n            .I5 (1'b1));\n",
+        "GTP_LUT6D /* \\out_instruction_2[18]_1  */ #(\n            .INIT(64'b1010000010100000101000001010000011000000110000001100000011000000))\n        \\out_instruction_2[18]_1  (\n            .Z (out_instruction[18]),\n            .Z5 (out_instruction[19]),\n            .I0 (out_pc[18]),\n            .I1 (out_pc[19]),\n            .I2 (current_error),\n            .I3 (),\n            .I4 (),\n            .I5 (1'b1));\n",
+        "GTP_LUT6D /* \\out_instruction_2[20]_1  */ #(\n            .INIT(64'b1010000010100000101000001010000011000000110000001100000011000000))\n        \\out_instruction_2[20]_1  (\n            .Z (out_instruction[20]),\n            .Z5 (out_instruction[21]),\n            .I0 (out_pc[20]),\n            .I1 (out_pc[21]),\n            .I2 (current_error),\n            .I3 (),\n            .I4 (),\n            .I5 (1'b1));\n",
+        "GTP_LUT6D /* \\out_instruction_2[22]_1  */ #(\n            .INIT(64'b1010000010100000101000001010000011000000110000001100000011000000))\n        \\out_instruction_2[22]_1  (\n            .Z (out_instruction[22]),\n            .Z5 (out_instruction[23]),\n            .I0 (out_pc[22]),\n            .I1 (out_pc[23]),\n            .I2 (current_error),\n            .I3 (),\n            .I4 (),\n            .I5 (1'b1));\n",
+        "GTP_LUT6D /* \\out_instruction_2[24]_1  */ #(\n            .INIT(64'b1010000010100000101000001010000011000000110000001100000011000000))\n        \\out_instruction_2[24]_1  (\n            .Z (out_instruction[24]),\n            .Z5 (out_instruction[25]),\n            .I0 (out_pc[24]),\n            .I1 (out_pc[25]),\n            .I2 (current_error),\n            .I3 (),\n            .I4 (),\n            .I5 (1'b1));\n",
+        "GTP_LUT6D /* \\out_instruction_2[26]_1  */ #(\n            .INIT(64'b1010000010100000101000001010000011000000110000001100000011000000))\n        \\out_instruction_2[26]_1  (\n            .Z (out_instruction[26]),\n            .Z5 (out_instruction[27]),\n            .I0 (out_pc[26]),\n            .I1 (out_pc[27]),\n            .I2 (current_error),\n            .I3 (),\n            .I4 (),\n            .I5 (1'b1));\n",
+        "GTP_LUT6D /* \\out_instruction_2[28]_1  */ #(\n            .INIT(64'b1010000010100000101000001010000011000000110000001100000011000000))\n        \\out_instruction_2[28]_1  (\n            .Z (out_instruction[28]),\n            .Z5 (out_instruction[29]),\n            .I0 (out_pc[28]),\n            .I1 (out_pc[29]),\n            .I2 (current_error),\n            .I3 (),\n            .I4 (),\n            .I5 (1'b1));\n",
+        "GTP_LUT6D /* \\out_instruction_2[30]_1  */ #(\n            .INIT(64'b1010000010100000101000001010000011000000110000001100000011000000))\n        \\out_instruction_2[30]_1  (\n            .Z (out_instruction[30]),\n            .Z5 (out_instruction[31]),\n            .I0 (out_pc[30]),\n            .I1 (out_pc[31]),\n            .I2 (current_error),\n            .I3 (),\n            .I4 (),\n            .I5 (1'b1));\n"
+      ]
+    },
+    {
+      "netlist": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\pacerv_shared_system\\pds\\full-20261113-223256-full\\synthesize\\instrec_top_syn.vm",
+      "netlist_sha256": "9c76c45be338d452a41a81512bf599d1e9c3beee30f26ed1cf5d1cdc3404c85c",
+      "module": "rv32_rvc_frontend",
+      "method": "Exhaustive LUT6D INIT truth evaluation. Z indexes all six inputs; Z5 indexes low five. current_error=0, constant input pins enforced; every other input enumerated freely.",
+      "instruction_bits_covered": 32,
+      "always_zero_instruction_bits": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31
+      ],
+      "normal_fetch_instruction": "00000000",
+      "bits": {
+        "0": {
+          "output_pin": "Z5",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "predicted_taken",
+            "I1": "out_pc[0]",
+            "I2": "\\u_cpu/u_core/frontend_ras_target [0]",
+            "I3": "current_error",
+            "I4": "\\u_cpu/u_core/predictor/N78",
+            "I5": "1'b1"
+          },
+          "init_hex": "e4e44444cc00cc00"
+        },
+        "1": {
+          "output_pin": "Z5",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_ready",
+            "I1": "predicted_taken",
+            "I2": "out_pc[1]",
+            "I3": "current_error",
+            "I4": "current_staged",
+            "I5": "1'b1"
+          },
+          "init_hex": "20200000f000f000"
+        },
+        "2": {
+          "output_pin": "Z",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[2]",
+            "I1": "out_pc[3]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        },
+        "3": {
+          "output_pin": "Z5",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[2]",
+            "I1": "out_pc[3]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        },
+        "4": {
+          "output_pin": "Z",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[4]",
+            "I1": "out_pc[5]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        },
+        "5": {
+          "output_pin": "Z5",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[4]",
+            "I1": "out_pc[5]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        },
+        "6": {
+          "output_pin": "Z",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[6]",
+            "I1": "out_pc[7]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        },
+        "7": {
+          "output_pin": "Z5",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[6]",
+            "I1": "out_pc[7]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        },
+        "8": {
+          "output_pin": "Z",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[8]",
+            "I1": "out_pc[9]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        },
+        "9": {
+          "output_pin": "Z5",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[8]",
+            "I1": "out_pc[9]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        },
+        "10": {
+          "output_pin": "Z",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[10]",
+            "I1": "out_pc[11]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        },
+        "11": {
+          "output_pin": "Z5",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[10]",
+            "I1": "out_pc[11]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        },
+        "12": {
+          "output_pin": "Z",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[12]",
+            "I1": "out_pc[13]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        },
+        "13": {
+          "output_pin": "Z5",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[12]",
+            "I1": "out_pc[13]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        },
+        "14": {
+          "output_pin": "Z",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[14]",
+            "I1": "out_pc[15]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        },
+        "15": {
+          "output_pin": "Z5",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[14]",
+            "I1": "out_pc[15]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        },
+        "16": {
+          "output_pin": "Z",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[16]",
+            "I1": "out_pc[17]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        },
+        "17": {
+          "output_pin": "Z5",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[16]",
+            "I1": "out_pc[17]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        },
+        "18": {
+          "output_pin": "Z",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[18]",
+            "I1": "out_pc[19]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        },
+        "19": {
+          "output_pin": "Z5",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[18]",
+            "I1": "out_pc[19]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        },
+        "20": {
+          "output_pin": "Z",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[20]",
+            "I1": "out_pc[21]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        },
+        "21": {
+          "output_pin": "Z5",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[20]",
+            "I1": "out_pc[21]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        },
+        "22": {
+          "output_pin": "Z",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[22]",
+            "I1": "out_pc[23]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        },
+        "23": {
+          "output_pin": "Z5",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[22]",
+            "I1": "out_pc[23]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        },
+        "24": {
+          "output_pin": "Z",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[24]",
+            "I1": "out_pc[25]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        },
+        "25": {
+          "output_pin": "Z5",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[24]",
+            "I1": "out_pc[25]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        },
+        "26": {
+          "output_pin": "Z",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[26]",
+            "I1": "out_pc[27]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        },
+        "27": {
+          "output_pin": "Z5",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[26]",
+            "I1": "out_pc[27]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        },
+        "28": {
+          "output_pin": "Z",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[28]",
+            "I1": "out_pc[29]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        },
+        "29": {
+          "output_pin": "Z5",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[28]",
+            "I1": "out_pc[29]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        },
+        "30": {
+          "output_pin": "Z",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[30]",
+            "I1": "out_pc[31]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        },
+        "31": {
+          "output_pin": "Z5",
+          "outcomes_for_valid_fetch": [
+            0
+          ],
+          "exhaustive_input_rows": 16,
+          "inputs": {
+            "I0": "out_pc[30]",
+            "I1": "out_pc[31]",
+            "I2": "current_error",
+            "I3": "",
+            "I4": "",
+            "I5": "1'b1"
+          },
+          "init_hex": "a0a0a0a0c0c0c0c0"
+        }
+      },
+      "relevant_actual_gate_text": [
+        "GTP_LUT6D /* \\N120[0]  */ #(\n            .INIT(64'b1110010011100100010001000100010011001100000000001100110000000000))\n        \\N120[0]  (\n            .Z (out_prediction[0]),\n            .Z5 (out_instruction[0]),\n            .I0 (predicted_taken),\n            .I1 (out_pc[0]),\n            .I2 (\\u_cpu/u_core/frontend_ras_target [0] ),\n            .I3 (current_error),\n            .I4 (\\u_cpu/u_core/predictor/N78 ),\n            .I5 (1'b1));\n",
+        "GTP_LUT6D /* N359_3 */ #(\n            .INIT(64'b0010000000100000000000000000000011110000000000001111000000000000))\n        N359_3 (\n            .Z (_N238878),\n            .Z5 (out_instruction[1]),\n            .I0 (out_ready),\n            .I1 (predicted_taken),\n            .I2 (out_pc[1]),\n            .I3 (current_error),\n            .I4 (current_staged),\n            .I5 (1'b1));\n",
+        "GTP_LUT6D /* \\out_instruction_2[2]_1  */ #(\n            .INIT(64'b1010000010100000101000001010000011000000110000001100000011000000))\n        \\out_instruction_2[2]_1  (\n            .Z (out_instruction[2]),\n            .Z5 (out_instruction[3]),\n            .I0 (out_pc[2]),\n            .I1 (out_pc[3]),\n            .I2 (current_error),\n            .I3 (),\n            .I4 (),\n            .I5 (1'b1));\n",
+        "GTP_LUT6D /* \\out_instruction_2[4]_1  */ #(\n            .INIT(64'b1010000010100000101000001010000011000000110000001100000011000000))\n        \\out_instruction_2[4]_1  (\n            .Z (out_instruction[4]),\n            .Z5 (out_instruction[5]),\n            .I0 (out_pc[4]),\n            .I1 (out_pc[5]),\n            .I2 (current_error),\n            .I3 (),\n            .I4 (),\n            .I5 (1'b1));\n",
+        "GTP_LUT6D /* \\out_instruction_2[6]_1  */ #(\n            .INIT(64'b1010000010100000101000001010000011000000110000001100000011000000))\n        \\out_instruction_2[6]_1  (\n            .Z (out_instruction[6]),\n            .Z5 (out_instruction[7]),\n            .I0 (out_pc[6]),\n            .I1 (out_pc[7]),\n            .I2 (current_error),\n            .I3 (),\n            .I4 (),\n            .I5 (1'b1));\n",
+        "GTP_LUT6D /* \\out_instruction_2[8]_1  */ #(\n            .INIT(64'b1010000010100000101000001010000011000000110000001100000011000000))\n        \\out_instruction_2[8]_1  (\n            .Z (out_instruction[8]),\n            .Z5 (out_instruction[9]),\n            .I0 (out_pc[8]),\n            .I1 (out_pc[9]),\n            .I2 (current_error),\n            .I3 (),\n            .I4 (),\n            .I5 (1'b1));\n",
+        "GTP_LUT6D /* \\out_instruction_2[10]_1  */ #(\n            .INIT(64'b1010000010100000101000001010000011000000110000001100000011000000))\n        \\out_instruction_2[10]_1  (\n            .Z (out_instruction[10]),\n            .Z5 (out_instruction[11]),\n            .I0 (out_pc[10]),\n            .I1 (out_pc[11]),\n            .I2 (current_error),\n            .I3 (),\n            .I4 (),\n            .I5 (1'b1));\n",
+        "GTP_LUT6D /* \\out_instruction_2[12]_1  */ #(\n            .INIT(64'b1010000010100000101000001010000011000000110000001100000011000000))\n        \\out_instruction_2[12]_1  (\n            .Z (out_instruction[12]),\n            .Z5 (out_instruction[13]),\n            .I0 (out_pc[12]),\n            .I1 (out_pc[13]),\n            .I2 (current_error),\n            .I3 (),\n            .I4 (),\n            .I5 (1'b1));\n",
+        "GTP_LUT6D /* \\out_instruction_2[14]_1  */ #(\n            .INIT(64'b1010000010100000101000001010000011000000110000001100000011000000))\n        \\out_instruction_2[14]_1  (\n            .Z (out_instruction[14]),\n            .Z5 (out_instruction[15]),\n            .I0 (out_pc[14]),\n            .I1 (out_pc[15]),\n            .I2 (current_error),\n            .I3 (),\n            .I4 (),\n            .I5 (1'b1));\n",
+        "GTP_LUT6D /* \\out_instruction_2[16]_1  */ #(\n            .INIT(64'b1010000010100000101000001010000011000000110000001100000011000000))\n        \\out_instruction_2[16]_1  (\n            .Z (out_instruction[16]),\n            .Z5 (out_instruction[17]),\n            .I0 (out_pc[16]),\n            .I1 (out_pc[17]),\n            .I2 (current_error),\n            .I3 (),\n            .I4 (),\n            .I5 (1'b1));\n",
+        "GTP_LUT6D /* \\out_instruction_2[18]_1  */ #(\n            .INIT(64'b1010000010100000101000001010000011000000110000001100000011000000))\n        \\out_instruction_2[18]_1  (\n            .Z (out_instruction[18]),\n            .Z5 (out_instruction[19]),\n            .I0 (out_pc[18]),\n            .I1 (out_pc[19]),\n            .I2 (current_error),\n            .I3 (),\n            .I4 (),\n            .I5 (1'b1));\n",
+        "GTP_LUT6D /* \\out_instruction_2[20]_1  */ #(\n            .INIT(64'b1010000010100000101000001010000011000000110000001100000011000000))\n        \\out_instruction_2[20]_1  (\n            .Z (out_instruction[20]),\n            .Z5 (out_instruction[21]),\n            .I0 (out_pc[20]),\n            .I1 (out_pc[21]),\n            .I2 (current_error),\n            .I3 (),\n            .I4 (),\n            .I5 (1'b1));\n",
+        "GTP_LUT6D /* \\out_instruction_2[22]_1  */ #(\n            .INIT(64'b1010000010100000101000001010000011000000110000001100000011000000))\n        \\out_instruction_2[22]_1  (\n            .Z (out_instruction[22]),\n            .Z5 (out_instruction[23]),\n            .I0 (out_pc[22]),\n            .I1 (out_pc[23]),\n            .I2 (current_error),\n            .I3 (),\n            .I4 (),\n            .I5 (1'b1));\n",
+        "GTP_LUT6D /* \\out_instruction_2[24]_1  */ #(\n            .INIT(64'b1010000010100000101000001010000011000000110000001100000011000000))\n        \\out_instruction_2[24]_1  (\n            .Z (out_instruction[24]),\n            .Z5 (out_instruction[25]),\n            .I0 (out_pc[24]),\n            .I1 (out_pc[25]),\n            .I2 (current_error),\n            .I3 (),\n            .I4 (),\n            .I5 (1'b1));\n",
+        "GTP_LUT6D /* \\out_instruction_2[26]_1  */ #(\n            .INIT(64'b1010000010100000101000001010000011000000110000001100000011000000))\n        \\out_instruction_2[26]_1  (\n            .Z (out_instruction[26]),\n            .Z5 (out_instruction[27]),\n            .I0 (out_pc[26]),\n            .I1 (out_pc[27]),\n            .I2 (current_error),\n            .I3 (),\n            .I4 (),\n            .I5 (1'b1));\n",
+        "GTP_LUT6D /* \\out_instruction_2[28]_1  */ #(\n            .INIT(64'b1010000010100000101000001010000011000000110000001100000011000000))\n        \\out_instruction_2[28]_1  (\n            .Z (out_instruction[28]),\n            .Z5 (out_instruction[29]),\n            .I0 (out_pc[28]),\n            .I1 (out_pc[29]),\n            .I2 (current_error),\n            .I3 (),\n            .I4 (),\n            .I5 (1'b1));\n",
+        "GTP_LUT6D /* \\out_instruction_2[30]_1  */ #(\n            .INIT(64'b1010000010100000101000001010000011000000110000001100000011000000))\n        \\out_instruction_2[30]_1  (\n            .Z (out_instruction[30]),\n            .Z5 (out_instruction[31]),\n            .I0 (out_pc[30]),\n            .I1 (out_pc[31]),\n            .I2 (current_error),\n            .I3 (),\n            .I4 (),\n            .I5 (1'b1));\n"
+      ]
+    }
+  ]
+}

@@ -1,4 +1,22 @@
 `timescale 1ns/1ps
+`ifndef IRQ_PROG_HEX
+`define IRQ_PROG_HEX "build/rtos/irq_precision/irq.hex"
+`endif
+`ifndef IRQ_PROG_EVEN_HEX
+`define IRQ_PROG_EVEN_HEX "build/rtos/irq_precision/irq_even.hex"
+`endif
+`ifndef IRQ_PROG_ODD_HEX
+`define IRQ_PROG_ODD_HEX "build/rtos/irq_precision/irq_odd.hex"
+`endif
+`ifndef EDGE_PROG_HEX
+`define EDGE_PROG_HEX "build/rtos/irq_precision/rom_edge.hex"
+`endif
+`ifndef EDGE_PROG_EVEN_HEX
+`define EDGE_PROG_EVEN_HEX "build/rtos/irq_precision/rom_edge_even.hex"
+`endif
+`ifndef EDGE_PROG_ODD_HEX
+`define EDGE_PROG_ODD_HEX "build/rtos/irq_precision/rom_edge_odd.hex"
+`endif
 module tb_irq_precision;
     reg clk=0;
     always #4 clk=~clk;
@@ -11,10 +29,12 @@ module tb_irq_precision;
     reg [31:0] dd_rsp_data=0;
     integer wait_count=0,requests=0,completed=0,traps=0;
     integer compressed_retired=0;
+    integer rom_word;
     reg saw_stalled_irq=0;
 
     rv32_cpu_subsys #(.IMEM_WORDS(8192),.DMEM_WORDS(4096),
-        .PROG_HEX("build/rtos/irq_precision/irq.hex")) dut (
+        .PROG_HEX(`IRQ_PROG_HEX), .PROG_EVEN_HEX(`IRQ_PROG_EVEN_HEX),
+        .PROG_ODD_HEX(`IRQ_PROG_ODD_HEX)) dut (
         .clk(clk),.rst_n(rst_n),.npu_busy(1'b0),.npu_done(1'b0),
         .npu_timeout(1'b0),.npu_probs_valid(1'b0),.npu_probs_pct(8'd0),
         .npu_probs_idx(4'd0),.npu_top1(4'd0),.npu_cycles(32'd0),
@@ -62,6 +82,11 @@ module tb_irq_precision;
     end
 
     initial begin
+        #1;
+        for (rom_word=0; rom_word<8192; rom_word=rom_word+1)
+            if (dut.rom_d[rom_word] !== (rom_word[0] ? dut.imem_odd[rom_word/2] : dut.imem_even[rom_word/2]))
+                $fatal(1,"addressed IRQ image bank mismatch at word %0d",rom_word);
+        $display("IRQ_ROM_BANKS_PASS words=8192 addressed_image=1");
         repeat(4) @(posedge clk);
         @(negedge clk); rst_n=1;
         wait(alive); #1;
@@ -92,9 +117,11 @@ module tb_rom_boundary;
     wire [31:0] cause,ddaddress,dddata;
     wire [3:0] ddstrobe;
     integer traps=0;
+    integer rom_word;
 
     rv32_cpu_subsys #(.IMEM_WORDS(8192),.DMEM_WORDS(4096),
-        .PROG_HEX("build/rtos/irq_precision/rom_edge.hex")) dut (
+        .PROG_HEX(`EDGE_PROG_HEX), .PROG_EVEN_HEX(`EDGE_PROG_EVEN_HEX),
+        .PROG_ODD_HEX(`EDGE_PROG_ODD_HEX)) dut (
         .clk(clk),.rst_n(rst_n),.npu_busy(1'b0),.npu_done(1'b0),
         .npu_timeout(1'b0),.npu_probs_valid(1'b0),.npu_probs_pct(8'd0),
         .npu_probs_idx(4'd0),.npu_top1(4'd0),.npu_cycles(32'd0),
@@ -113,6 +140,11 @@ module tb_rom_boundary;
         end
     end
     initial begin
+        #1;
+        for (rom_word=0; rom_word<8192; rom_word=rom_word+1)
+            if (dut.rom_d[rom_word] !== (rom_word[0] ? dut.imem_odd[rom_word/2] : dut.imem_even[rom_word/2]))
+                $fatal(1,"addressed boundary image bank mismatch at word %0d",rom_word);
+        $display("BOUNDARY_ROM_BANKS_PASS words=8192 addressed_image=1");
         repeat(4) @(posedge clk);
         @(negedge clk); rst_n=1;
         wait(alive); #1;

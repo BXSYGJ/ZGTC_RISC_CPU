@@ -1,0 +1,776 @@
+{
+  "schema": "rtos-pds-map-resources-v1",
+  "created_utc": "2026-11-14T09:11:40.115054+00:00",
+  "stage": "dev_map",
+  "run_directory": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/pds/20261114-162656-direct_rom_final-map",
+  "target": "PG2L100H-6IFBG676",
+  "system_clock_hz": 125000000,
+  "source_artifacts": {
+    "mapped_resource_log": {
+      "path": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/pds/20261114-162656-direct_rom_final-map/device_map/run.log",
+      "bytes": 128333,
+      "sha256": "3f5e1869f0876826d368612fada7cbdb4ce84dac83975e263950d2541ecf99a4"
+    },
+    "synthesis_summary": {
+      "path": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/pds/20261114-162656-direct_rom_final-map/synthesize/instrec_top.snr",
+      "bytes": 609429,
+      "sha256": "a7db7c45f332ff681a7126688847b5a67ece21fcbf108497a9a1b48cb67cbbe9"
+    },
+    "memory_mapping_log": {
+      "path": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/pds/20261114-162656-direct_rom_final-map/synthesize/apm_drm_lutram_utilization.log",
+      "bytes": 185402,
+      "sha256": "16fe8c76cad589b78ce7231b28cc7aae083f2790609493143dd2c78e586489ea"
+    },
+    "synthesized_netlist": {
+      "path": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/pds/20261114-162656-direct_rom_final-map/synthesize/instrec_top_syn.vm",
+      "bytes": 44157500,
+      "sha256": "298e7d8d09bfff2ba427cc7cce6368927062db05fc00ed88db7946c0eb3f96a6"
+    },
+    "compile_log": {
+      "path": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/pds/20261114-162656-direct_rom_final-map/compile/run.log",
+      "bytes": 1431970,
+      "sha256": "dab2331dad5672ada186f4368559676440923f893381cebe1f19a3e83162c995"
+    },
+    "input_manifest": {
+      "path": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/pds/20261114-162656-direct_rom_final-map/INPUTS.json",
+      "bytes": 38124,
+      "sha256": "005890190a04895bd485c37dffd2554d1ab8a4a10dfd28ff3ba791fc1fc87797"
+    },
+    "synthesizer_firmware": {
+      "path": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/pds/20261114-162656-direct_rom_final-map/src/cpu/prog_pacerv.hex",
+      "bytes": 17870,
+      "sha256": "67872c2a2b4b4b4c437c39d8e6a815cfb36ff60437c61d53d7dae777d280f49f"
+    },
+    "frozen_firmware": {
+      "path": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/pds/20261114-162656-direct_rom_final-map/inputs/src/cpu/prog_pacerv.hex",
+      "bytes": 17870,
+      "sha256": "67872c2a2b4b4b4c437c39d8e6a815cfb36ff60437c61d53d7dae777d280f49f"
+    },
+    "production_firmware": {
+      "path": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/firmware/prog.hex",
+      "bytes": 17870,
+      "sha256": "67872c2a2b4b4b4c437c39d8e6a815cfb36ff60437c61d53d7dae777d280f49f"
+    },
+    "frozen_wrapper": {
+      "path": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/pds/20261114-162656-direct_rom_final-map/inputs/src/cpu/rv32_cpu_subsys.sv",
+      "bytes": 25375,
+      "sha256": "0e9f0c0e78bf26ad1d587ad2386c90b459c61947069fada92c963fb1a9aa565b"
+    },
+    "frozen_top": {
+      "path": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/pds/20261114-162656-direct_rom_final-map/inputs/src/ctrl/instrec_top.v",
+      "bytes": 49707,
+      "sha256": "efd196824bf6115cb803a1d518b67325f4bc98fee309fb17aa19cc547e92c90c"
+    },
+    "baseline_summary": {
+      "path": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/pacerv_shared_system/pds/full-20261113-223256-full/synthesize/instrec_top.snr",
+      "bytes": 616987,
+      "sha256": "3ad4063a34abd086587cb32c70d34037b8fe61ea7cb9460fd5dd56a501ff667d"
+    },
+    "baseline_memory_mapping_log": {
+      "path": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/pacerv_shared_system/pds/full-20261113-223256-full/synthesize/apm_drm_lutram_utilization.log",
+      "bytes": 182316,
+      "sha256": "6e4c414dd6d51899ae73026bb89c182f1a4e1ea9fc26e9247120844810044cf0"
+    },
+    "baseline_netlist": {
+      "path": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/pacerv_shared_system/pds/full-20261113-223256-full/synthesize/instrec_top_syn.vm",
+      "bytes": 43257485,
+      "sha256": "9c76c45be338d452a41a81512bf599d1e9c3beee30f26ed1cf5d1cdc3404c85c"
+    },
+    "mapped_rom_audit": {
+      "path": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/pds/20261114-162656-direct_rom_final-map/ROM_AUDIT.json",
+      "bytes": 48056,
+      "sha256": "1e3627e53890a6513a10549999f85e58227cbc862de868db099060d93bff1645"
+    },
+    "mapped_database": {
+      "path": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/pds/20261114-162656-direct_rom_final-map/device_map/instrec_top_map.adf",
+      "bytes": 8297990,
+      "sha256": "b36eab2acfa19e95b5bd2de40ea7c339d84a89864fdeb6811d1adb86b3b689f5"
+    }
+  },
+  "mapped_device_utilization": {
+    "APM": {
+      "used": 94,
+      "available": 240,
+      "reported_utilization_percent": 40.0,
+      "line": 1036,
+      "literal": "| APM                   | 94        | 240           | 40                 "
+    },
+    "FF": {
+      "used": 39736,
+      "available": 133200,
+      "reported_utilization_percent": 30.0,
+      "line": 1037,
+      "literal": "| FF                    | 39736     | 133200        | 30                 "
+    },
+    "LUT": {
+      "used": 36964,
+      "available": 66600,
+      "reported_utilization_percent": 56.0,
+      "line": 1038,
+      "literal": "| LUT                   | 36964     | 66600         | 56                 "
+    },
+    "Distributed RAM": {
+      "used": 1378,
+      "available": 19900,
+      "reported_utilization_percent": 7.0,
+      "line": 1039,
+      "literal": "| Distributed RAM       | 1378      | 19900         | 7                  "
+    },
+    "DRM": {
+      "used": 136.5,
+      "available": 155,
+      "reported_utilization_percent": 89.0,
+      "line": 1040,
+      "literal": "| DRM                   | 136.5     | 155           | 89                 "
+    },
+    "IO": {
+      "used": 120,
+      "available": 300,
+      "reported_utilization_percent": 40.0,
+      "line": 1041,
+      "literal": "| IO                    | 120       | 300           | 40                 "
+    },
+    "RCKB": {
+      "used": 2,
+      "available": 24,
+      "reported_utilization_percent": 9.0,
+      "line": 1042,
+      "literal": "| RCKB                  | 2         | 24            | 9                  "
+    },
+    "SCANCHAIN": {
+      "used": 0,
+      "available": 1,
+      "reported_utilization_percent": 0.0,
+      "line": 1043,
+      "literal": "| SCANCHAIN             | 0         | 1             | 0                  "
+    },
+    "USCM": {
+      "used": 5,
+      "available": 32,
+      "reported_utilization_percent": 16.0,
+      "line": 1044,
+      "literal": "| USCM                  | 5         | 32            | 16                 "
+    },
+    "CCS": {
+      "used": 1,
+      "available": 1,
+      "reported_utilization_percent": 100.0,
+      "line": 1045,
+      "literal": "| CCS                   | 1         | 1             | 100                "
+    },
+    "ADC": {
+      "used": 0,
+      "available": 1,
+      "reported_utilization_percent": 0.0,
+      "line": 1046,
+      "literal": "| ADC                   | 0         | 1             | 0                  "
+    },
+    "DDR_PHY": {
+      "used": 7,
+      "available": 24,
+      "reported_utilization_percent": 30.0,
+      "line": 1047,
+      "literal": "| DDR_PHY               | 7         | 24            | 30                 "
+    },
+    "HSSTLP": {
+      "used": 0,
+      "available": 2,
+      "reported_utilization_percent": 0.0,
+      "line": 1048,
+      "literal": "| HSSTLP                | 0         | 2             | 0                  "
+    },
+    "GPLL": {
+      "used": 3,
+      "available": 6,
+      "reported_utilization_percent": 50.0,
+      "line": 1049,
+      "literal": "| GPLL                  | 3         | 6             | 50                 "
+    },
+    "PPLL": {
+      "used": 2,
+      "available": 6,
+      "reported_utilization_percent": 34.0,
+      "line": 1050,
+      "literal": "| PPLL                  | 2         | 6             | 34                 "
+    },
+    "DDRPHY_CPD": {
+      "used": 1,
+      "available": 12,
+      "reported_utilization_percent": 9.0,
+      "line": 1051,
+      "literal": "| DDRPHY_CPD            | 1         | 12            | 9                  "
+    },
+    "HCKB": {
+      "used": 0,
+      "available": 96,
+      "reported_utilization_percent": 0.0,
+      "line": 1052,
+      "literal": "| HCKB                  | 0         | 96            | 0                  "
+    },
+    "IOCKB": {
+      "used": 0,
+      "available": 24,
+      "reported_utilization_percent": 0.0,
+      "line": 1053,
+      "literal": "| IOCKB                 | 0         | 24            | 0                  "
+    },
+    "MRCKB": {
+      "used": 1,
+      "available": 12,
+      "reported_utilization_percent": 9.0,
+      "line": 1054,
+      "literal": "| MRCKB                 | 1         | 12            | 9                  "
+    },
+    "PCIE": {
+      "used": 0,
+      "available": 1,
+      "reported_utilization_percent": 0.0,
+      "line": 1055,
+      "literal": "| PCIE                  | 0         | 1             | 0                  "
+    },
+    "DDRPHY_IOCLK_DIV": {
+      "used": 2,
+      "available": 6,
+      "reported_utilization_percent": 34.0,
+      "line": 1056,
+      "literal": "| DDRPHY_IOCLK_DIV      | 2         | 6             | 34                 "
+    },
+    "ANALOG": {
+      "used": 0,
+      "available": 1,
+      "reported_utilization_percent": 0.0,
+      "line": 1057,
+      "literal": "| ANALOG                | 0         | 1             | 0                  "
+    },
+    "TSERDES": {
+      "used": 14,
+      "available": 48,
+      "reported_utilization_percent": 30.0,
+      "line": 1058,
+      "literal": "| TSERDES               | 14        | 48            | 30                 "
+    },
+    "KEYRAM": {
+      "used": 0,
+      "available": 1,
+      "reported_utilization_percent": 0.0,
+      "line": 1059,
+      "literal": "| KEYRAM                | 0         | 1             | 0                  "
+    }
+  },
+  "synthesis_drm_primitives": {
+    "GTP_DRM18K_E1": {
+      "count": 93,
+      "line": 22,
+      "literal": "GTP_DRM18K_E1                93 uses"
+    },
+    "GTP_DRM36K_E1": {
+      "count": 90,
+      "line": 23,
+      "literal": "GTP_DRM36K_E1                90 uses"
+    }
+  },
+  "drm_units": {
+    "GTP_DRM18K_E1": 0.5,
+    "GTP_DRM36K_E1": 1,
+    "calculation": "93 * 0.5 + 90 * 1 = 136.5",
+    "matches_map_report": true
+  },
+  "cpu_ram": {
+    "configured_bytes": 16384,
+    "mapped_bytes": 16384,
+    "drm_units": 4,
+    "instances": [
+      {
+        "hierarchy": "u_cpu/dmem0",
+        "depth": 4096,
+        "width_bits": 8,
+        "bytes": 4096,
+        "primitive": "GTP_DRM36K_E1",
+        "drm_units": 1,
+        "utilization_lines": [
+          465,
+          466
+        ],
+        "utilization_literals": [
+          "| u_cpu/dmem0                                               | 4 K x 8                |                   |                   |                   |                   |",
+          "|       dmem0                                               | 4 K x 8                | NORMAL_WRITE      | NORMAL_WRITE      | SIMPLE_DUAL_PORT  | GTP_DRM36K_E1     |"
+        ],
+        "netlist_line": 266592,
+        "netlist_literal": "(* PAP_RAM_STYLE=\"block_ram\" *)    GTP_DRM36K_E1 /* dmem0 */ #("
+      },
+      {
+        "hierarchy": "u_cpu/dmem1",
+        "depth": 4096,
+        "width_bits": 8,
+        "bytes": 4096,
+        "primitive": "GTP_DRM36K_E1",
+        "drm_units": 1,
+        "utilization_lines": [
+          468,
+          469
+        ],
+        "utilization_literals": [
+          "| u_cpu/dmem1                                               | 4 K x 8                |                   |                   |                   |                   |",
+          "|       dmem1                                               | 4 K x 8                | NORMAL_WRITE      | NORMAL_WRITE      | SIMPLE_DUAL_PORT  | GTP_DRM36K_E1     |"
+        ],
+        "netlist_line": 266780,
+        "netlist_literal": "(* PAP_RAM_STYLE=\"block_ram\" *)    GTP_DRM36K_E1 /* dmem1 */ #("
+      },
+      {
+        "hierarchy": "u_cpu/dmem2",
+        "depth": 4096,
+        "width_bits": 8,
+        "bytes": 4096,
+        "primitive": "GTP_DRM36K_E1",
+        "drm_units": 1,
+        "utilization_lines": [
+          471,
+          472
+        ],
+        "utilization_literals": [
+          "| u_cpu/dmem2                                               | 4 K x 8                |                   |                   |                   |                   |",
+          "|       dmem2                                               | 4 K x 8                | NORMAL_WRITE      | NORMAL_WRITE      | SIMPLE_DUAL_PORT  | GTP_DRM36K_E1     |"
+        ],
+        "netlist_line": 266968,
+        "netlist_literal": "(* PAP_RAM_STYLE=\"block_ram\" *)    GTP_DRM36K_E1 /* dmem2 */ #("
+      },
+      {
+        "hierarchy": "u_cpu/dmem3",
+        "depth": 4096,
+        "width_bits": 8,
+        "bytes": 4096,
+        "primitive": "GTP_DRM36K_E1",
+        "drm_units": 1,
+        "utilization_lines": [
+          474,
+          475
+        ],
+        "utilization_literals": [
+          "| u_cpu/dmem3                                               | 4 K x 8                |                   |                   |                   |                   |",
+          "|       dmem3                                               | 4 K x 8                | NORMAL_WRITE      | NORMAL_WRITE      | SIMPLE_DUAL_PORT  | GTP_DRM36K_E1     |"
+        ],
+        "netlist_line": 267156,
+        "netlist_literal": "(* PAP_RAM_STYLE=\"block_ram\" *)    GTP_DRM36K_E1 /* dmem3 */ #("
+      }
+    ]
+  },
+  "synthesis_module_resources": [
+    {
+      "module": "u_cpu",
+      "lut": 4825,
+      "ff": 1804,
+      "distributed_ram": 442,
+      "apm": 4,
+      "drm": 12.0,
+      "line": 279,
+      "literal": "| + u_cpu                                                          | 4825      | 1804      | 442                 | 4       | 12        | 0       | 0          | 0       | 0              | 0                    | 0           | 0                  | 0        | 0        | 0          | 0       | 0         | 0          | 1552          | 0            | 65           | 5            | 0         | 0            | 0        | 0        | 0          | 0             | 0        "
+    },
+    {
+      "module": "u_core",
+      "lut": 4328,
+      "ff": 1527,
+      "distributed_ram": 438,
+      "apm": 4,
+      "drm": 0.0,
+      "line": 280,
+      "literal": "|   + u_core                                                       | 4328      | 1527      | 438                 | 4       | 0         | 0       | 0          | 0       | 0              | 0                    | 0           | 0                  | 0        | 0        | 0          | 0       | 0         | 0          | 1395          | 0            | 52           | 4            | 0         | 0            | 0        | 0        | 0          | 0             | 0        "
+    }
+  ],
+  "cpu_rom": {
+    "configured_bytes": 16384,
+    "physical_array_bytes": 32768,
+    "firmware_bytes": 7148,
+    "firmware_words": 1787,
+    "mapping_status": "pass",
+    "drm_units": 8,
+    "instances": [
+      {
+        "array": "imem_even",
+        "instance": "u_cpu/imem_even_0",
+        "primitive": "GTP_DRM36K_E1",
+        "depth": 2048,
+        "width_bits": 16,
+        "drm_units": 1,
+        "utilization_line": 478,
+        "utilization_literal": "|       imem_even_0                                         | 2 K x 16               | NORMAL_WRITE      | /                 | SINGLE_PORT       | GTP_DRM36K_E1     |",
+        "netlist_line": 267634,
+        "netlist_literal": "    GTP_DRM36K_E1 /* imem_even_0 */ #(",
+        "ports": {
+          "DOA": "{\\imem_even_0_DOA[35]_floating , \\imem_even_0_DOA[34]_floating , \\imem_even_0_DOA[33]_floating , \\imem_even_0_DOA[32]_floating , \\imem_even_0_DOA[31]_floating , \\imem_even_0_DOA[30]_floating , \\imem_even_0_DOA[29]_floating , \\imem_even_0_DOA[28]_floating , \\imem_even_0_DOA[27]_floating , \\imem_even_0_DOA[26]_floating , \\imem_even_0_DOA[25]_floating , \\imem_even_0_DOA[24]_floating , \\imem_even_0_DOA[23]_floating , \\imem_even_0_DOA[22]_floating , \\imem_even_0_DOA[21]_floating , \\imem_even_0_DOA[20]_floating , \\imem_even_0_DOA[19]_floating , \\imem_even_0_DOA[18]_floating , \\imem_even_0_DOA[17]_floating , i_even_q[15], i_even_q[14], i_even_q[13], i_even_q[12], i_even_q[11], i_even_q[10], i_even_q[9], i_even_q[8], \\imem_even_0_DOA[8]_floating , i_even_q[7], i_even_q[6], i_even_q[5], i_even_q[4], i_even_q[3], i_even_q[2], i_even_q[1], i_even_q[0]}",
+          "DOB": "",
+          "ECC_PARITY": "",
+          "ECC_RDADDR": "",
+          "ADDRA": "{1'b1, i_even_index[10], i_even_index[9], i_even_index[8], i_even_index[7], i_even_index[6], i_even_index[5], i_even_index[4], i_even_index[3], i_even_index[2], i_even_index[1], i_even_index[0], 1'b1, 1'b1, 1'b1, 1'b1}",
+          "ADDRB": "",
+          "BWEA": "{1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1}",
+          "BWEB": "",
+          "CSA": "{1'b1, 1'b1, 1'b1}",
+          "CSB": "",
+          "DIA": "{1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0}",
+          "DIB": "",
+          "COUTA": "",
+          "COUTB": "",
+          "ECC_DBITERR": "",
+          "ECC_SBITERR": "",
+          "ADDRA_HOLD": "1'b0",
+          "ADDRB_HOLD": "",
+          "CEA": "i_req_valid",
+          "CEB": "1'b0",
+          "CINA": "",
+          "CINB": "",
+          "CLKA": "clk",
+          "CLKB": "",
+          "INJECT_DBITERR": "",
+          "INJECT_SBITERR": "",
+          "ORCEA": "",
+          "ORCEB": "",
+          "RSTA": "1'b0",
+          "RSTB": "",
+          "WEA": "1'b0",
+          "WEB": ""
+        },
+        "init_cells_sha256": "4dc454312d4ba4135d48fc9b55cf4e224a8ca007d92b86a13bc1db7e1e80d3c0"
+      },
+      {
+        "array": "imem_even",
+        "instance": "u_cpu/imem_even_1",
+        "primitive": "GTP_DRM36K_E1",
+        "depth": 2048,
+        "width_bits": 16,
+        "drm_units": 1,
+        "utilization_line": 479,
+        "utilization_literal": "|       imem_even_1                                         | 2 K x 16               | NORMAL_WRITE      | /                 | SINGLE_PORT       | GTP_DRM36K_E1     |",
+        "netlist_line": 267822,
+        "netlist_literal": "    GTP_DRM36K_E1 /* imem_even_1 */ #(",
+        "ports": {
+          "DOA": "{\\imem_even_1_DOA[35]_floating , \\imem_even_1_DOA[34]_floating , \\imem_even_1_DOA[33]_floating , \\imem_even_1_DOA[32]_floating , \\imem_even_1_DOA[31]_floating , \\imem_even_1_DOA[30]_floating , \\imem_even_1_DOA[29]_floating , \\imem_even_1_DOA[28]_floating , \\imem_even_1_DOA[27]_floating , \\imem_even_1_DOA[26]_floating , \\imem_even_1_DOA[25]_floating , \\imem_even_1_DOA[24]_floating , \\imem_even_1_DOA[23]_floating , \\imem_even_1_DOA[22]_floating , \\imem_even_1_DOA[21]_floating , \\imem_even_1_DOA[20]_floating , \\imem_even_1_DOA[19]_floating , \\imem_even_1_DOA[18]_floating , \\imem_even_1_DOA[17]_floating , i_even_q[31], i_even_q[30], i_even_q[29], i_even_q[28], i_even_q[27], i_even_q[26], i_even_q[25], i_even_q[24], \\imem_even_1_DOA[8]_floating , i_even_q[23], i_even_q[22], i_even_q[21], i_even_q[20], i_even_q[19], i_even_q[18], i_even_q[17], i_even_q[16]}",
+          "DOB": "",
+          "ECC_PARITY": "",
+          "ECC_RDADDR": "",
+          "ADDRA": "{1'b1, i_even_index[10], i_even_index[9], i_even_index[8], i_even_index[7], i_even_index[6], i_even_index[5], i_even_index[4], i_even_index[3], i_even_index[2], i_even_index[1], i_even_index[0], 1'b1, 1'b1, 1'b1, 1'b1}",
+          "ADDRB": "",
+          "BWEA": "{1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1}",
+          "BWEB": "",
+          "CSA": "{1'b1, 1'b1, 1'b1}",
+          "CSB": "",
+          "DIA": "{1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0}",
+          "DIB": "",
+          "COUTA": "",
+          "COUTB": "",
+          "ECC_DBITERR": "",
+          "ECC_SBITERR": "",
+          "ADDRA_HOLD": "1'b0",
+          "ADDRB_HOLD": "",
+          "CEA": "i_req_valid",
+          "CEB": "1'b0",
+          "CINA": "",
+          "CINB": "",
+          "CLKA": "clk",
+          "CLKB": "",
+          "INJECT_DBITERR": "",
+          "INJECT_SBITERR": "",
+          "ORCEA": "",
+          "ORCEB": "",
+          "RSTA": "1'b0",
+          "RSTB": "",
+          "WEA": "1'b0",
+          "WEB": ""
+        },
+        "init_cells_sha256": "5d9567f90d3d7d7faba0594112f34b71c338d9bcbbad687a872aefd603d8855e"
+      },
+      {
+        "array": "imem_odd",
+        "instance": "u_cpu/imem_odd_0",
+        "primitive": "GTP_DRM36K_E1",
+        "depth": 2048,
+        "width_bits": 16,
+        "drm_units": 1,
+        "utilization_line": 482,
+        "utilization_literal": "|       imem_odd_0                                          | 2 K x 16               | NORMAL_WRITE      | /                 | SINGLE_PORT       | GTP_DRM36K_E1     |",
+        "netlist_line": 268010,
+        "netlist_literal": "    GTP_DRM36K_E1 /* imem_odd_0 */ #(",
+        "ports": {
+          "DOA": "{\\imem_odd_0_DOA[35]_floating , \\imem_odd_0_DOA[34]_floating , \\imem_odd_0_DOA[33]_floating , \\imem_odd_0_DOA[32]_floating , \\imem_odd_0_DOA[31]_floating , \\imem_odd_0_DOA[30]_floating , \\imem_odd_0_DOA[29]_floating , \\imem_odd_0_DOA[28]_floating , \\imem_odd_0_DOA[27]_floating , \\imem_odd_0_DOA[26]_floating , \\imem_odd_0_DOA[25]_floating , \\imem_odd_0_DOA[24]_floating , \\imem_odd_0_DOA[23]_floating , \\imem_odd_0_DOA[22]_floating , \\imem_odd_0_DOA[21]_floating , \\imem_odd_0_DOA[20]_floating , \\imem_odd_0_DOA[19]_floating , \\imem_odd_0_DOA[18]_floating , \\imem_odd_0_DOA[17]_floating , i_odd_q[15], i_odd_q[14], i_odd_q[13], i_odd_q[12], i_odd_q[11], i_odd_q[10], i_odd_q[9], i_odd_q[8], \\imem_odd_0_DOA[8]_floating , i_odd_q[7], i_odd_q[6], i_odd_q[5], i_odd_q[4], i_odd_q[3], i_odd_q[2], i_odd_q[1], i_odd_q[0]}",
+          "DOB": "",
+          "ECC_PARITY": "",
+          "ECC_RDADDR": "",
+          "ADDRA": "{1'b1, i_odd_index[10], i_odd_index[9], i_odd_index[8], i_odd_index[7], i_odd_index[6], i_odd_index[5], i_odd_index[4], i_odd_index[3], i_odd_index[2], i_odd_index[1], i_odd_index[0], 1'b1, 1'b1, 1'b1, 1'b1}",
+          "ADDRB": "",
+          "BWEA": "{1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1}",
+          "BWEB": "",
+          "CSA": "{1'b1, 1'b1, 1'b1}",
+          "CSB": "",
+          "DIA": "{1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0}",
+          "DIB": "",
+          "COUTA": "",
+          "COUTB": "",
+          "ECC_DBITERR": "",
+          "ECC_SBITERR": "",
+          "ADDRA_HOLD": "1'b0",
+          "ADDRB_HOLD": "",
+          "CEA": "i_req_valid",
+          "CEB": "1'b0",
+          "CINA": "",
+          "CINB": "",
+          "CLKA": "clk",
+          "CLKB": "",
+          "INJECT_DBITERR": "",
+          "INJECT_SBITERR": "",
+          "ORCEA": "",
+          "ORCEB": "",
+          "RSTA": "1'b0",
+          "RSTB": "",
+          "WEA": "1'b0",
+          "WEB": ""
+        },
+        "init_cells_sha256": "3f5e7290d3804fdebfcda08a3b08c8c040423c162b0834bad5fd6e35e5917502"
+      },
+      {
+        "array": "imem_odd",
+        "instance": "u_cpu/imem_odd_1",
+        "primitive": "GTP_DRM36K_E1",
+        "depth": 2048,
+        "width_bits": 16,
+        "drm_units": 1,
+        "utilization_line": 483,
+        "utilization_literal": "|       imem_odd_1                                          | 2 K x 16               | NORMAL_WRITE      | /                 | SINGLE_PORT       | GTP_DRM36K_E1     |",
+        "netlist_line": 268198,
+        "netlist_literal": "    GTP_DRM36K_E1 /* imem_odd_1 */ #(",
+        "ports": {
+          "DOA": "{\\imem_odd_1_DOA[35]_floating , \\imem_odd_1_DOA[34]_floating , \\imem_odd_1_DOA[33]_floating , \\imem_odd_1_DOA[32]_floating , \\imem_odd_1_DOA[31]_floating , \\imem_odd_1_DOA[30]_floating , \\imem_odd_1_DOA[29]_floating , \\imem_odd_1_DOA[28]_floating , \\imem_odd_1_DOA[27]_floating , \\imem_odd_1_DOA[26]_floating , \\imem_odd_1_DOA[25]_floating , \\imem_odd_1_DOA[24]_floating , \\imem_odd_1_DOA[23]_floating , \\imem_odd_1_DOA[22]_floating , \\imem_odd_1_DOA[21]_floating , \\imem_odd_1_DOA[20]_floating , \\imem_odd_1_DOA[19]_floating , \\imem_odd_1_DOA[18]_floating , \\imem_odd_1_DOA[17]_floating , i_odd_q[31], i_odd_q[30], i_odd_q[29], i_odd_q[28], i_odd_q[27], i_odd_q[26], i_odd_q[25], i_odd_q[24], \\imem_odd_1_DOA[8]_floating , i_odd_q[23], i_odd_q[22], i_odd_q[21], i_odd_q[20], i_odd_q[19], i_odd_q[18], i_odd_q[17], i_odd_q[16]}",
+          "DOB": "",
+          "ECC_PARITY": "",
+          "ECC_RDADDR": "",
+          "ADDRA": "{1'b1, i_odd_index[10], i_odd_index[9], i_odd_index[8], i_odd_index[7], i_odd_index[6], i_odd_index[5], i_odd_index[4], i_odd_index[3], i_odd_index[2], i_odd_index[1], i_odd_index[0], 1'b1, 1'b1, 1'b1, 1'b1}",
+          "ADDRB": "",
+          "BWEA": "{1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1}",
+          "BWEB": "",
+          "CSA": "{1'b1, 1'b1, 1'b1}",
+          "CSB": "",
+          "DIA": "{1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0}",
+          "DIB": "",
+          "COUTA": "",
+          "COUTB": "",
+          "ECC_DBITERR": "",
+          "ECC_SBITERR": "",
+          "ADDRA_HOLD": "1'b0",
+          "ADDRB_HOLD": "",
+          "CEA": "i_req_valid",
+          "CEB": "1'b0",
+          "CINA": "",
+          "CINB": "",
+          "CLKA": "clk",
+          "CLKB": "",
+          "INJECT_DBITERR": "",
+          "INJECT_SBITERR": "",
+          "ORCEA": "",
+          "ORCEB": "",
+          "RSTA": "1'b0",
+          "RSTB": "",
+          "WEA": "1'b0",
+          "WEB": ""
+        },
+        "init_cells_sha256": "120ed1496c9a36560d4bbdef16eac692c65775d1a3615358edd93e38498933b5"
+      },
+      {
+        "array": "rom_d",
+        "instance": "u_cpu/rom_d_0",
+        "primitive": "GTP_DRM36K_E1",
+        "depth": 4096,
+        "width_bits": 8,
+        "drm_units": 1,
+        "utilization_line": 486,
+        "utilization_literal": "|       rom_d_0                                             | 4 K x 8                | NORMAL_WRITE      | /                 | SINGLE_PORT       | GTP_DRM36K_E1     |",
+        "netlist_line": 269946,
+        "netlist_literal": "    GTP_DRM36K_E1 /* rom_d_0 */ #(",
+        "ports": {
+          "DOA": "{\\rom_d_0_DOA[35]_floating , \\rom_d_0_DOA[34]_floating , \\rom_d_0_DOA[33]_floating , \\rom_d_0_DOA[32]_floating , \\rom_d_0_DOA[31]_floating , \\rom_d_0_DOA[30]_floating , \\rom_d_0_DOA[29]_floating , \\rom_d_0_DOA[28]_floating , \\rom_d_0_DOA[27]_floating , \\rom_d_0_DOA[26]_floating , \\rom_d_0_DOA[25]_floating , \\rom_d_0_DOA[24]_floating , \\rom_d_0_DOA[23]_floating , \\rom_d_0_DOA[22]_floating , \\rom_d_0_DOA[21]_floating , \\rom_d_0_DOA[20]_floating , \\rom_d_0_DOA[19]_floating , \\rom_d_0_DOA[18]_floating , \\rom_d_0_DOA[17]_floating , \\rom_d_0_DOA[16]_floating , \\rom_d_0_DOA[15]_floating , \\rom_d_0_DOA[14]_floating , \\rom_d_0_DOA[13]_floating , \\rom_d_0_DOA[12]_floating , \\rom_d_0_DOA[11]_floating , \\rom_d_0_DOA[10]_floating , \\rom_d_0_DOA[9]_floating , \\rom_d_0_DOA[8]_floating , d_rom_q[7], d_rom_q[6], d_rom_q[5], d_rom_q[4], d_rom_q[3], d_rom_q[2], d_rom_q[1], d_rom_q[0]}",
+          "DOB": "",
+          "ECC_PARITY": "",
+          "ECC_RDADDR": "",
+          "ADDRA": "{1'b1, dd_req_address[13], dd_req_address[12], dd_req_address[11], dd_req_address[10], dd_req_address[9], dd_req_address[8], dd_req_address[7], dd_req_address[6], dd_req_address[5], dd_req_address[4], dd_req_address[3], dd_req_address[2], 1'b1, 1'b1, 1'b1}",
+          "ADDRB": "",
+          "BWEA": "{1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0}",
+          "BWEB": "",
+          "CSA": "{1'b1, 1'b1, 1'b1}",
+          "CSB": "",
+          "DIA": "{1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0}",
+          "DIB": "",
+          "COUTA": "",
+          "COUTB": "",
+          "ECC_DBITERR": "",
+          "ECC_SBITERR": "",
+          "ADDRA_HOLD": "1'b0",
+          "ADDRB_HOLD": "",
+          "CEA": "maintenance_ready",
+          "CEB": "1'b0",
+          "CINA": "",
+          "CINB": "",
+          "CLKA": "clk",
+          "CLKB": "",
+          "INJECT_DBITERR": "",
+          "INJECT_SBITERR": "",
+          "ORCEA": "",
+          "ORCEB": "",
+          "RSTA": "1'b0",
+          "RSTB": "",
+          "WEA": "1'b0",
+          "WEB": ""
+        },
+        "init_cells_sha256": "66ef193b24d0c732eb5c30b254212b7d6df26f55f42c673d8ed4fd414ba62a4d"
+      },
+      {
+        "array": "rom_d",
+        "instance": "u_cpu/rom_d_1",
+        "primitive": "GTP_DRM36K_E1",
+        "depth": 4096,
+        "width_bits": 8,
+        "drm_units": 1,
+        "utilization_line": 487,
+        "utilization_literal": "|       rom_d_1                                             | 4 K x 8                | NORMAL_WRITE      | /                 | SINGLE_PORT       | GTP_DRM36K_E1     |",
+        "netlist_line": 270134,
+        "netlist_literal": "    GTP_DRM36K_E1 /* rom_d_1 */ #(",
+        "ports": {
+          "DOA": "{\\rom_d_1_DOA[35]_floating , \\rom_d_1_DOA[34]_floating , \\rom_d_1_DOA[33]_floating , \\rom_d_1_DOA[32]_floating , \\rom_d_1_DOA[31]_floating , \\rom_d_1_DOA[30]_floating , \\rom_d_1_DOA[29]_floating , \\rom_d_1_DOA[28]_floating , \\rom_d_1_DOA[27]_floating , \\rom_d_1_DOA[26]_floating , \\rom_d_1_DOA[25]_floating , \\rom_d_1_DOA[24]_floating , \\rom_d_1_DOA[23]_floating , \\rom_d_1_DOA[22]_floating , \\rom_d_1_DOA[21]_floating , \\rom_d_1_DOA[20]_floating , \\rom_d_1_DOA[19]_floating , \\rom_d_1_DOA[18]_floating , \\rom_d_1_DOA[17]_floating , \\rom_d_1_DOA[16]_floating , \\rom_d_1_DOA[15]_floating , \\rom_d_1_DOA[14]_floating , \\rom_d_1_DOA[13]_floating , \\rom_d_1_DOA[12]_floating , \\rom_d_1_DOA[11]_floating , \\rom_d_1_DOA[10]_floating , \\rom_d_1_DOA[9]_floating , \\rom_d_1_DOA[8]_floating , d_rom_q[15], d_rom_q[14], d_rom_q[13], d_rom_q[12], d_rom_q[11], d_rom_q[10], d_rom_q[9], d_rom_q[8]}",
+          "DOB": "",
+          "ECC_PARITY": "",
+          "ECC_RDADDR": "",
+          "ADDRA": "{1'b1, dd_req_address[13], dd_req_address[12], dd_req_address[11], dd_req_address[10], dd_req_address[9], dd_req_address[8], dd_req_address[7], dd_req_address[6], dd_req_address[5], dd_req_address[4], dd_req_address[3], dd_req_address[2], 1'b1, 1'b1, 1'b1}",
+          "ADDRB": "",
+          "BWEA": "{1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0}",
+          "BWEB": "",
+          "CSA": "{1'b1, 1'b1, 1'b1}",
+          "CSB": "",
+          "DIA": "{1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0}",
+          "DIB": "",
+          "COUTA": "",
+          "COUTB": "",
+          "ECC_DBITERR": "",
+          "ECC_SBITERR": "",
+          "ADDRA_HOLD": "1'b0",
+          "ADDRB_HOLD": "",
+          "CEA": "maintenance_ready",
+          "CEB": "1'b0",
+          "CINA": "",
+          "CINB": "",
+          "CLKA": "clk",
+          "CLKB": "",
+          "INJECT_DBITERR": "",
+          "INJECT_SBITERR": "",
+          "ORCEA": "",
+          "ORCEB": "",
+          "RSTA": "1'b0",
+          "RSTB": "",
+          "WEA": "1'b0",
+          "WEB": ""
+        },
+        "init_cells_sha256": "225de87619f9a37fb6a97037ed406bb6149c0e0bb2e8121f2a5fea3670d182b8"
+      },
+      {
+        "array": "rom_d",
+        "instance": "u_cpu/rom_d_2",
+        "primitive": "GTP_DRM36K_E1",
+        "depth": 4096,
+        "width_bits": 8,
+        "drm_units": 1,
+        "utilization_line": 488,
+        "utilization_literal": "|       rom_d_2                                             | 4 K x 8                | NORMAL_WRITE      | /                 | SINGLE_PORT       | GTP_DRM36K_E1     |",
+        "netlist_line": 270322,
+        "netlist_literal": "    GTP_DRM36K_E1 /* rom_d_2 */ #(",
+        "ports": {
+          "DOA": "{\\rom_d_2_DOA[35]_floating , \\rom_d_2_DOA[34]_floating , \\rom_d_2_DOA[33]_floating , \\rom_d_2_DOA[32]_floating , \\rom_d_2_DOA[31]_floating , \\rom_d_2_DOA[30]_floating , \\rom_d_2_DOA[29]_floating , \\rom_d_2_DOA[28]_floating , \\rom_d_2_DOA[27]_floating , \\rom_d_2_DOA[26]_floating , \\rom_d_2_DOA[25]_floating , \\rom_d_2_DOA[24]_floating , \\rom_d_2_DOA[23]_floating , \\rom_d_2_DOA[22]_floating , \\rom_d_2_DOA[21]_floating , \\rom_d_2_DOA[20]_floating , \\rom_d_2_DOA[19]_floating , \\rom_d_2_DOA[18]_floating , \\rom_d_2_DOA[17]_floating , \\rom_d_2_DOA[16]_floating , \\rom_d_2_DOA[15]_floating , \\rom_d_2_DOA[14]_floating , \\rom_d_2_DOA[13]_floating , \\rom_d_2_DOA[12]_floating , \\rom_d_2_DOA[11]_floating , \\rom_d_2_DOA[10]_floating , \\rom_d_2_DOA[9]_floating , \\rom_d_2_DOA[8]_floating , d_rom_q[23], d_rom_q[22], d_rom_q[21], d_rom_q[20], d_rom_q[19], d_rom_q[18], d_rom_q[17], d_rom_q[16]}",
+          "DOB": "",
+          "ECC_PARITY": "",
+          "ECC_RDADDR": "",
+          "ADDRA": "{1'b1, dd_req_address[13], dd_req_address[12], dd_req_address[11], dd_req_address[10], dd_req_address[9], dd_req_address[8], dd_req_address[7], dd_req_address[6], dd_req_address[5], dd_req_address[4], dd_req_address[3], dd_req_address[2], 1'b1, 1'b1, 1'b1}",
+          "ADDRB": "",
+          "BWEA": "{1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0}",
+          "BWEB": "",
+          "CSA": "{1'b1, 1'b1, 1'b1}",
+          "CSB": "",
+          "DIA": "{1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0}",
+          "DIB": "",
+          "COUTA": "",
+          "COUTB": "",
+          "ECC_DBITERR": "",
+          "ECC_SBITERR": "",
+          "ADDRA_HOLD": "1'b0",
+          "ADDRB_HOLD": "",
+          "CEA": "maintenance_ready",
+          "CEB": "1'b0",
+          "CINA": "",
+          "CINB": "",
+          "CLKA": "clk",
+          "CLKB": "",
+          "INJECT_DBITERR": "",
+          "INJECT_SBITERR": "",
+          "ORCEA": "",
+          "ORCEB": "",
+          "RSTA": "1'b0",
+          "RSTB": "",
+          "WEA": "1'b0",
+          "WEB": ""
+        },
+        "init_cells_sha256": "5f6d884b84dd487dc4392b192f6fa67cdb6dbac66bf49a5020703a2839a70ad3"
+      },
+      {
+        "array": "rom_d",
+        "instance": "u_cpu/rom_d_3",
+        "primitive": "GTP_DRM36K_E1",
+        "depth": 4096,
+        "width_bits": 8,
+        "drm_units": 1,
+        "utilization_line": 489,
+        "utilization_literal": "|       rom_d_3                                             | 4 K x 8                | NORMAL_WRITE      | /                 | SINGLE_PORT       | GTP_DRM36K_E1     |",
+        "netlist_line": 270510,
+        "netlist_literal": "    GTP_DRM36K_E1 /* rom_d_3 */ #(",
+        "ports": {
+          "DOA": "{\\rom_d_3_DOA[35]_floating , \\rom_d_3_DOA[34]_floating , \\rom_d_3_DOA[33]_floating , \\rom_d_3_DOA[32]_floating , \\rom_d_3_DOA[31]_floating , \\rom_d_3_DOA[30]_floating , \\rom_d_3_DOA[29]_floating , \\rom_d_3_DOA[28]_floating , \\rom_d_3_DOA[27]_floating , \\rom_d_3_DOA[26]_floating , \\rom_d_3_DOA[25]_floating , \\rom_d_3_DOA[24]_floating , \\rom_d_3_DOA[23]_floating , \\rom_d_3_DOA[22]_floating , \\rom_d_3_DOA[21]_floating , \\rom_d_3_DOA[20]_floating , \\rom_d_3_DOA[19]_floating , \\rom_d_3_DOA[18]_floating , \\rom_d_3_DOA[17]_floating , \\rom_d_3_DOA[16]_floating , \\rom_d_3_DOA[15]_floating , \\rom_d_3_DOA[14]_floating , \\rom_d_3_DOA[13]_floating , \\rom_d_3_DOA[12]_floating , \\rom_d_3_DOA[11]_floating , \\rom_d_3_DOA[10]_floating , \\rom_d_3_DOA[9]_floating , \\rom_d_3_DOA[8]_floating , d_rom_q[31], d_rom_q[30], d_rom_q[29], d_rom_q[28], d_rom_q[27], d_rom_q[26], d_rom_q[25], d_rom_q[24]}",
+          "DOB": "",
+          "ECC_PARITY": "",
+          "ECC_RDADDR": "",
+          "ADDRA": "{1'b1, dd_req_address[13], dd_req_address[12], dd_req_address[11], dd_req_address[10], dd_req_address[9], dd_req_address[8], dd_req_address[7], dd_req_address[6], dd_req_address[5], dd_req_address[4], dd_req_address[3], dd_req_address[2], 1'b1, 1'b1, 1'b1}",
+          "ADDRB": "",
+          "BWEA": "{1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0}",
+          "BWEB": "",
+          "CSA": "{1'b1, 1'b1, 1'b1}",
+          "CSB": "",
+          "DIA": "{1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0}",
+          "DIB": "",
+          "COUTA": "",
+          "COUTB": "",
+          "ECC_DBITERR": "",
+          "ECC_SBITERR": "",
+          "ADDRA_HOLD": "1'b0",
+          "ADDRB_HOLD": "",
+          "CEA": "maintenance_ready",
+          "CEB": "1'b0",
+          "CINA": "",
+          "CINB": "",
+          "CLKA": "clk",
+          "CLKB": "",
+          "INJECT_DBITERR": "",
+          "INJECT_SBITERR": "",
+          "ORCEA": "",
+          "ORCEB": "",
+          "RSTA": "1'b0",
+          "RSTB": "",
+          "WEA": "1'b0",
+          "WEB": ""
+        },
+        "init_cells_sha256": "dc88b00ef14fbaaed1bac7c089ae7bec4e5eff409db81092d13fa84834b52392"
+      }
+    ],
+    "mapped_rom_audit": {
+      "path": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/pds/20261114-162656-direct_rom_final-map/ROM_AUDIT.json",
+      "bytes": 48056,
+      "sha256": "1e3627e53890a6513a10549999f85e58227cbc862de868db099060d93bff1645"
+    },
+    "literal_result": "MAPPED_ROM_PASS firmware_bytes=7148 arrays=3",
+    "reset_instruction": "30047073",
+    "all_configured_words_and_zero_tail_verified": true,
+    "address_bit_equivalence_checks": 22
+  },
+  "valid_for_firmware_execution": true,
+  "prior_invalid_map_evidence": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/rtos/evidence/history/invalid_rom_map_20261114-153018/PDS_MAP_RESOURCES.json"
+}

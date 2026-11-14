@@ -1,6 +1,6 @@
 # InstRec-FPGA 当前状态（STATUS）
 
-> **2026-11-14当前目标：以125 MHz 223256为基线加入FreeRTOS，目标active。** 已结合XSY/XSY2的原生NPU所有权、安全窗口启动和结果快照接口，新增独立配置rtos/。官方FreeRTOS V11.3.3、真实1kHz定时中断、recognition/result_uart/heartbeat三应用任务、静态队列与栈已接入；H3核心原值保留。正式固件7148字节ROM/5600字节BSS，ROM/RAM配置16KiB/16KiB。CPU抢占、寄存器上下文、队列、超时、嵌套临界区屏蔽3tick后补齐、完整NPU逐层golden和原125MHz回退均已实测通过。完整NPU原版/RTOS周期均31152091，RTOS在推理期间250次tick及两次心跳。PDS编译/综合/map已通过，128.5/155 DRM；唯一后续PNR进程20988正在从20261114-153018-rom_loop_fix-map继续，沿用seed2/hold8，完整位流待生成。机器当前无FTDI/CP2102设备，板级实测尚未执行。入口：[RTOS工程](../rtos/README.md)，证据rtos/evidence/ACCEPTANCE.json；旧时序优化目标保持paused。
+> **2026-11-14 17:20：125 MHz FreeRTOS功能、真实ROM及独立负例全部通过，位流正在布线。** 最新162656-direct_rom_final-map用时680.817秒exit0，207输入一致，136.5/155 DRM、36964 LUT、94APM；全部ROM字/补零、22位SMT地址等价及8实例控制通过，7148字节从指令/数据两路重建SHA一致，厂商模型与12项真实篡改也均通过。统一verify_system于090908轮exit0，原版/RTOS/回退/完整NPU均pass，ACCEPTANCE为8/9（只待bitstream）。唯一PDS53608、continuations/20261114-091420-953401已完成布局并进入布线，固定seed2/hold8，不调参；完整bit与最终时序待生成。H3和202份原基线保持，目标active，旧时序优化paused。USB板卡未枚举，板级待测。全项目pytest旧资产/契约失败另见PROJECT_REGRESSION.json。
 
 
 > **2026-11-14 15:10远端更新复核：XSY新增3次上传，XSY2未变。** XSY从4d3d6f1更新到0b8201e，新增seed85整机位流归档、PlacementSeed参数、I2S启动等待返回值修复及烧录脚本入口修复；XSY2仍为8f902ae。归档位流3,791,112字节，SHA256 88e10b450cb8657321ad8bdb136f8e395ef48c555ba2db4c030671ed339fa7fd，已从Git对象重算一致。新归档仍为八通道NPU；五组模型、推理与RTOS在这次增量中未变。详见SYMPHONY_GROUP5_CODE_AUDIT_20261114.md末尾复核记录。仅fetch和读取远端对象，未合并、构建或烧录；所选109.375/125MHz版本及暂停时序优化安排保持。

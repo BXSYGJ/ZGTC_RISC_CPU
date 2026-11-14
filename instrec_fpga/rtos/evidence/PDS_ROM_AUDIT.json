@@ -1,0 +1,1045 @@
+{
+  "schema": "rtos-mapped-rom-v1",
+  "status": "pass",
+  "pds_run": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/pds/20261114-162656-direct_rom_final-map",
+  "created_utc": "2026-11-14T09:07:26.322725+00:00",
+  "netlist": {
+    "role": "synthesized_netlist",
+    "path": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/pds/20261114-162656-direct_rom_final-map/synthesize/instrec_top_syn.vm",
+    "bytes": 44157500,
+    "sha256": "298e7d8d09bfff2ba427cc7cce6368927062db05fc00ed88db7946c0eb3f96a6"
+  },
+  "inputs": [
+    {
+      "role": "synthesized_netlist",
+      "path": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/pds/20261114-162656-direct_rom_final-map/synthesize/instrec_top_syn.vm",
+      "bytes": 44157500,
+      "sha256": "298e7d8d09bfff2ba427cc7cce6368927062db05fc00ed88db7946c0eb3f96a6"
+    },
+    {
+      "role": "mapped_database",
+      "path": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/pds/20261114-162656-direct_rom_final-map/device_map/instrec_top_map.adf",
+      "bytes": 8297990,
+      "sha256": "b36eab2acfa19e95b5bd2de40ea7c339d84a89864fdeb6811d1adb86b3b689f5"
+    },
+    {
+      "role": "frozen_input_manifest",
+      "path": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/pds/20261114-162656-direct_rom_final-map/INPUTS.json",
+      "bytes": 38124,
+      "sha256": "005890190a04895bd485c37dffd2554d1ab8a4a10dfd28ff3ba791fc1fc87797"
+    },
+    {
+      "role": "mapped_flow_result",
+      "path": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/pds/20261114-162656-direct_rom_final-map/RESULT.json",
+      "bytes": 645,
+      "sha256": "9c242e9ace4cea97848a3208d0756e74365bd880510643a7896b99016bf7204b"
+    },
+    {
+      "role": "auditor_source",
+      "path": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/rtos/audit_mapped_rom.py",
+      "bytes": 31446,
+      "sha256": "95c982e67196aebf5d8e7f8b4bab9e0b37bf8095e635b94c049dd1471547d750"
+    },
+    {
+      "role": "vendor_primitive_model",
+      "path": "D:/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/GTP_DRM18K_E1.v",
+      "bytes": 43795,
+      "sha256": "73a4dc428a369fe4ff6f6995bb9d79b58c0963e5812e6e9bfbaaf85dc237ab60"
+    },
+    {
+      "role": "vendor_primitive_model",
+      "path": "D:/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/GTP_DRM36K_E1.v",
+      "bytes": 75646,
+      "sha256": "3e372cd60025a439eb7435d770930260e22c40f148ae83c4bdf7398fb65ddb66"
+    },
+    {
+      "role": "vendor_primitive_model",
+      "path": "D:/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/GTP_LUT6CARRY.v",
+      "bytes": 2197,
+      "sha256": "2415dc72612f8ea1ca619bb23586835c143a61fe70d9477362920a41b776e4fc"
+    },
+    {
+      "role": "vendor_primitive_model",
+      "path": "D:/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/GTP_LUT6D.v",
+      "bytes": 1246,
+      "sha256": "98170b772b3a38a9b2b1ba114bdc4c179ed0f9f17ac0e9784eda8a3e69b2d646"
+    },
+    {
+      "role": "vendor_primitive_model",
+      "path": "D:/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/GTP_INV.v",
+      "bytes": 820,
+      "sha256": "04dad07f24d2fac3038afb32f899feaf3de930349b44fad5f002b8c7152745ab"
+    },
+    {
+      "role": "vendor_primitive_model",
+      "path": "D:/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/GTP_MUX2LUT7.v",
+      "bytes": 876,
+      "sha256": "abee5fc4d750a93447881a0eb2e35a52e6674f5fa92302fb2d1fce9d61340649"
+    },
+    {
+      "role": "vendor_primitive_model",
+      "path": "D:/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/GTP_MUX2LUT8.v",
+      "bytes": 876,
+      "sha256": "95ad73e6675fcbca6bbe52a261595035ba1f8c79068c4c77a0789e2263f1a27f"
+    },
+    {
+      "role": "vendor_primitive_model",
+      "path": "D:/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/GTP_LUT1.v",
+      "bytes": 934,
+      "sha256": "be4eb4f5b90af66e61745172e89615d95aec9846158e2052f1222f26ed67df9b"
+    },
+    {
+      "role": "vendor_primitive_model",
+      "path": "D:/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/GTP_LUT2.v",
+      "bytes": 949,
+      "sha256": "a5133f378fc5c3e4a3583838108babaa2d7d63e4bb6de0200afa4f3a34cefb83"
+    },
+    {
+      "role": "vendor_primitive_model",
+      "path": "D:/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/GTP_LUT3.v",
+      "bytes": 1080,
+      "sha256": "95ded581f36c0c545239e93a0de43f8ca657fda7accb6786a9a3990fbbc2a4d6"
+    },
+    {
+      "role": "vendor_primitive_model",
+      "path": "D:/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/GTP_LUT4.v",
+      "bytes": 1254,
+      "sha256": "f7ed2c8232da3fa9d11638676fc7394a98da9adcf71d69fa6e6081fca62cddb7"
+    },
+    {
+      "role": "vendor_primitive_model",
+      "path": "D:/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/GTP_LUT5.v",
+      "bytes": 1682,
+      "sha256": "7835a0cf88a3249b36615ea127eb3b32b18f4e118ce0efb70907720a140beaf9"
+    },
+    {
+      "role": "vendor_primitive_model",
+      "path": "D:/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/GTP_LUT6.v",
+      "bytes": 1187,
+      "sha256": "b228940718adc4a60e1a280ccf394a62e1f5a8900a641b9943de4a244d5a3a17"
+    },
+    {
+      "role": "solver_runtime",
+      "path": "C:/Users/dxlgy/AppData/Roaming/Python/Python313/site-packages/z3/__init__.py",
+      "bytes": 232,
+      "sha256": "54e1833c2df2ca01c33b487180f75580eab8364dc1800a259263b64310069bf3"
+    },
+    {
+      "role": "solver_runtime",
+      "path": "C:/Users/dxlgy/AppData/Roaming/Python/Python313/site-packages/z3/lib/libz3.dll",
+      "bytes": 17944064,
+      "sha256": "6b1ff40d6b87076eefc21c215e394ebe38d0af05ed0d8d42f4c606a608bafd3d"
+    },
+    {
+      "role": "solver_runtime",
+      "path": "C:/Users/dxlgy/AppData/Roaming/Python/Python313/site-packages/z3/lib/msvcp140.dll",
+      "bytes": 643512,
+      "sha256": "7c26614e1d733892c2deac7e245ce115504b1d80592dd0a01b08e3e5a55f89ca"
+    },
+    {
+      "role": "solver_runtime",
+      "path": "C:/Users/dxlgy/AppData/Roaming/Python/Python313/site-packages/z3/lib/msvcp140_1.dll",
+      "bytes": 35768,
+      "sha256": "206c931bf90fdad8816de3b5e2ef80b2bcaa9406c89ecc05fe6fddffe251e982"
+    },
+    {
+      "role": "solver_runtime",
+      "path": "C:/Users/dxlgy/AppData/Roaming/Python/Python313/site-packages/z3/lib/msvcp140_2.dll",
+      "bytes": 274872,
+      "sha256": "d50d7883f20d1dc6191768d3746f52dd9cac89c346ffaed5be1f110c2f34a838"
+    },
+    {
+      "role": "solver_runtime",
+      "path": "C:/Users/dxlgy/AppData/Roaming/Python/Python313/site-packages/z3/lib/msvcp140_atomic_wait.dll",
+      "bytes": 57792,
+      "sha256": "3d0cbfaa1bf3eecf5a3f4491d2960ee803cb994f30292c6adc4a07c498f60e2b"
+    },
+    {
+      "role": "solver_runtime",
+      "path": "C:/Users/dxlgy/AppData/Roaming/Python/Python313/site-packages/z3/lib/msvcp140_codecvt_ids.dll",
+      "bytes": 31160,
+      "sha256": "8a65c7596ef2e6938731f5a1058e7e40145b6d97967cc649231a076b9a608d78"
+    },
+    {
+      "role": "solver_runtime",
+      "path": "C:/Users/dxlgy/AppData/Roaming/Python/Python313/site-packages/z3/lib/vcomp140.dll",
+      "bytes": 212920,
+      "sha256": "95d4ce4a6802d1e18b5e0e1722cc30ea72ca7e033f83828f05c0b7b993fe7cbf"
+    },
+    {
+      "role": "solver_runtime",
+      "path": "C:/Users/dxlgy/AppData/Roaming/Python/Python313/site-packages/z3/lib/vcruntime140.dll",
+      "bytes": 178616,
+      "sha256": "d1f4225df2cd877dbf130d5668a021dce3f94118455ff5ec952061c30afc9ce7"
+    },
+    {
+      "role": "solver_runtime",
+      "path": "C:/Users/dxlgy/AppData/Roaming/Python/Python313/site-packages/z3/lib/vcruntime140_1.dll",
+      "bytes": 50112,
+      "sha256": "a7146c08f89fe5b04541ab507cdb59ff7b44534d4ba3c668a426c6450a03434e"
+    },
+    {
+      "role": "solver_runtime",
+      "path": "C:/Users/dxlgy/AppData/Roaming/Python/Python313/site-packages/z3/lib/vcruntime140_threads.dll",
+      "bytes": 38840,
+      "sha256": "40f39e8cee5f5a531b4010e18b807e8fe265b908dc58f959ecb7ebc6ea6cb11a"
+    },
+    {
+      "role": "solver_runtime",
+      "path": "C:/Users/dxlgy/AppData/Roaming/Python/Python313/site-packages/z3/z3.py",
+      "bytes": 377967,
+      "sha256": "3c660d753a41ac5dbae8f6009fdab33c0f39a50212140294ddd5a7d62fe638e8"
+    },
+    {
+      "role": "solver_runtime",
+      "path": "C:/Users/dxlgy/AppData/Roaming/Python/Python313/site-packages/z3/z3consts.py",
+      "bytes": 9147,
+      "sha256": "e83920004a1746b50b4e85e09f8510f13f739ee54035f14c15d85c685c882207"
+    },
+    {
+      "role": "solver_runtime",
+      "path": "C:/Users/dxlgy/AppData/Roaming/Python/Python313/site-packages/z3/z3core.py",
+      "bytes": 216833,
+      "sha256": "4edf7330f4e16489ff81ab12a308d24e18010e8e9340f9bbaf0a7c6d68229dcf"
+    },
+    {
+      "role": "solver_runtime",
+      "path": "C:/Users/dxlgy/AppData/Roaming/Python/Python313/site-packages/z3/z3num.py",
+      "bytes": 16384,
+      "sha256": "b099dee2352be581ef96fbedc183ac324f03002ee7cf71fbebf6aa1355cd4341"
+    },
+    {
+      "role": "solver_runtime",
+      "path": "C:/Users/dxlgy/AppData/Roaming/Python/Python313/site-packages/z3/z3poly.py",
+      "bytes": 1113,
+      "sha256": "fd06029418e5899b300fe3b3a300d110c8e174e633cba8b751314f22a583394e"
+    },
+    {
+      "role": "solver_runtime",
+      "path": "C:/Users/dxlgy/AppData/Roaming/Python/Python313/site-packages/z3/z3printer.py",
+      "bytes": 46731,
+      "sha256": "0962d30b9543e04f0bdd4636d91983973a604d6ab2b76a028300db37dfa0154e"
+    },
+    {
+      "role": "solver_runtime",
+      "path": "C:/Users/dxlgy/AppData/Roaming/Python/Python313/site-packages/z3/z3rcf.py",
+      "bytes": 5039,
+      "sha256": "504e0339b1bb06075c19ca52e51457716671218a2f2191d0c9754e0b75bede87"
+    },
+    {
+      "role": "solver_runtime",
+      "path": "C:/Users/dxlgy/AppData/Roaming/Python/Python313/site-packages/z3/z3regex.py",
+      "bytes": 5039,
+      "sha256": "4f64903cce356c6fb541041d9c50ce70c8d12a0824592611d87bd603290f83e4"
+    },
+    {
+      "role": "solver_runtime",
+      "path": "C:/Users/dxlgy/AppData/Roaming/Python/Python313/site-packages/z3/z3types.py",
+      "bytes": 4883,
+      "sha256": "ba728354b4a9ee40bcfbd899f405d904bc4bb023e41807044c06c318548c3080"
+    },
+    {
+      "role": "solver_runtime",
+      "path": "C:/Users/dxlgy/AppData/Roaming/Python/Python313/site-packages/z3/z3util.py",
+      "bytes": 11466,
+      "sha256": "bd1b436749b0d7700100a6a49fd09f09975c025f156925fc8805ac99e6db50f8"
+    },
+    {
+      "role": "frozen_firmware",
+      "path": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/pds/20261114-162656-direct_rom_final-map/inputs/src/cpu/prog_pacerv.hex",
+      "bytes": 17870,
+      "sha256": "67872c2a2b4b4b4c437c39d8e6a815cfb36ff60437c61d53d7dae777d280f49f"
+    },
+    {
+      "role": "synthesizer_firmware",
+      "path": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/pds/20261114-162656-direct_rom_final-map/src/cpu/prog_pacerv.hex",
+      "bytes": 17870,
+      "sha256": "67872c2a2b4b4b4c437c39d8e6a815cfb36ff60437c61d53d7dae777d280f49f"
+    },
+    {
+      "role": "frozen_firmware_even",
+      "path": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/pds/20261114-162656-direct_rom_final-map/inputs/src/cpu/prog_pacerv_even.hex",
+      "bytes": 8940,
+      "sha256": "4bfb5b38b8c319d2501b56ece4f241d26ed46a1b10d4fc7129d07404d8578184"
+    },
+    {
+      "role": "synthesizer_firmware_even",
+      "path": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/pds/20261114-162656-direct_rom_final-map/src/cpu/prog_pacerv_even.hex",
+      "bytes": 8940,
+      "sha256": "4bfb5b38b8c319d2501b56ece4f241d26ed46a1b10d4fc7129d07404d8578184"
+    },
+    {
+      "role": "frozen_firmware_odd",
+      "path": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/pds/20261114-162656-direct_rom_final-map/inputs/src/cpu/prog_pacerv_odd.hex",
+      "bytes": 8930,
+      "sha256": "d8657d06a1ce3a7d5ac972bd49100280627b6837f8260ddf55f62f5f51e9160c"
+    },
+    {
+      "role": "synthesizer_firmware_odd",
+      "path": "D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/pds/20261114-162656-direct_rom_final-map/src/cpu/prog_pacerv_odd.hex",
+      "bytes": 8930,
+      "sha256": "d8657d06a1ce3a7d5ac972bd49100280627b6837f8260ddf55f62f5f51e9160c"
+    }
+  ],
+  "memories": [
+    {
+      "array": "imem_even",
+      "expected_words": 2048,
+      "reconstructed_words": 2048,
+      "expected_words_sha256": "ea70d77091aeee485880ee697b39ba6877b3308507133a78c391721fd32c24d7",
+      "reconstructed_words_sha256": "ea70d77091aeee485880ee697b39ba6877b3308507133a78c391721fd32c24d7",
+      "all_words_match": true,
+      "zero_tail_verified": true,
+      "address_and_output_connections_evaluated": true,
+      "inactive_output_poison_values": [
+        0,
+        1
+      ],
+      "accepted_request_read_controls_verified": true,
+      "mismatches": [],
+      "instances": [
+        {
+          "module": "rv32_cpu_subsys",
+          "name": "imem_even_0",
+          "source": "imem_even_0",
+          "primitive": "GTP_DRM36K_E1",
+          "init_cell_count": 4096,
+          "init_cells_sha256": "4dc454312d4ba4135d48fc9b55cf4e224a8ca007d92b86a13bc1db7e1e80d3c0",
+          "parameters": {
+            "GRS_EN": "\"TRUE\"",
+            "CSA_MASK": "3'b111",
+            "CSB_MASK": "3'b000",
+            "DATA_WIDTH_A": "16",
+            "DATA_WIDTH_B": "16",
+            "WRITE_MODE_A": "\"NORMAL_WRITE\"",
+            "WRITE_MODE_B": "\"NORMAL_WRITE\"",
+            "DOA_REG": "0",
+            "DOB_REG": "0",
+            "DOA_REG_CLKINV": "0",
+            "DOB_REG_CLKINV": "0",
+            "RSTA_VAL": "36'b000000000000000000000000000000000000",
+            "RSTB_VAL": "36'b000000000000000000000000000000000000",
+            "RST_TYPE": "\"SYNC\"",
+            "RAM_MODE": "\"SINGLE_PORT\"",
+            "RAM_CASCADE": "\"NONE\"",
+            "ECC_READ_EN": "\"FALSE\"",
+            "ECC_WRITE_EN": "\"FALSE\"",
+            "INIT_FILE": "\"NONE\"",
+            "BLOCK_X": "0",
+            "BLOCK_Y": "0",
+            "RAM_DATA_WIDTH": "9",
+            "RAM_ADDR_WIDTH": "12",
+            "INIT_FORMAT": "\"BIN\""
+          },
+          "ports": {
+            "DOA": "{\\imem_even_0_DOA[35]_floating , \\imem_even_0_DOA[34]_floating , \\imem_even_0_DOA[33]_floating , \\imem_even_0_DOA[32]_floating , \\imem_even_0_DOA[31]_floating , \\imem_even_0_DOA[30]_floating , \\imem_even_0_DOA[29]_floating , \\imem_even_0_DOA[28]_floating , \\imem_even_0_DOA[27]_floating , \\imem_even_0_DOA[26]_floating , \\imem_even_0_DOA[25]_floating , \\imem_even_0_DOA[24]_floating , \\imem_even_0_DOA[23]_floating , \\imem_even_0_DOA[22]_floating , \\imem_even_0_DOA[21]_floating , \\imem_even_0_DOA[20]_floating , \\imem_even_0_DOA[19]_floating , \\imem_even_0_DOA[18]_floating , \\imem_even_0_DOA[17]_floating , i_even_q[15], i_even_q[14], i_even_q[13], i_even_q[12], i_even_q[11], i_even_q[10], i_even_q[9], i_even_q[8], \\imem_even_0_DOA[8]_floating , i_even_q[7], i_even_q[6], i_even_q[5], i_even_q[4], i_even_q[3], i_even_q[2], i_even_q[1], i_even_q[0]}",
+            "DOB": "",
+            "ECC_PARITY": "",
+            "ECC_RDADDR": "",
+            "ADDRA": "{1'b1, i_even_index[10], i_even_index[9], i_even_index[8], i_even_index[7], i_even_index[6], i_even_index[5], i_even_index[4], i_even_index[3], i_even_index[2], i_even_index[1], i_even_index[0], 1'b1, 1'b1, 1'b1, 1'b1}",
+            "ADDRB": "",
+            "BWEA": "{1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1}",
+            "BWEB": "",
+            "CSA": "{1'b1, 1'b1, 1'b1}",
+            "CSB": "",
+            "DIA": "{1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0}",
+            "DIB": "",
+            "COUTA": "",
+            "COUTB": "",
+            "ECC_DBITERR": "",
+            "ECC_SBITERR": "",
+            "ADDRA_HOLD": "1'b0",
+            "ADDRB_HOLD": "",
+            "CEA": "i_req_valid",
+            "CEB": "1'b0",
+            "CINA": "",
+            "CINB": "",
+            "CLKA": "clk",
+            "CLKB": "",
+            "INJECT_DBITERR": "",
+            "INJECT_SBITERR": "",
+            "ORCEA": "",
+            "ORCEB": "",
+            "RSTA": "1'b0",
+            "RSTB": "",
+            "WEA": "1'b0",
+            "WEB": ""
+          },
+          "literal_sha256": "f1d9788b29d994a7e54fc3fc7eae9c00a1c380649af43d7a69fc9b6a1c4bb95f"
+        },
+        {
+          "module": "rv32_cpu_subsys",
+          "name": "imem_even_1",
+          "source": "imem_even_1",
+          "primitive": "GTP_DRM36K_E1",
+          "init_cell_count": 4096,
+          "init_cells_sha256": "5d9567f90d3d7d7faba0594112f34b71c338d9bcbbad687a872aefd603d8855e",
+          "parameters": {
+            "GRS_EN": "\"TRUE\"",
+            "CSA_MASK": "3'b111",
+            "CSB_MASK": "3'b000",
+            "DATA_WIDTH_A": "16",
+            "DATA_WIDTH_B": "16",
+            "WRITE_MODE_A": "\"NORMAL_WRITE\"",
+            "WRITE_MODE_B": "\"NORMAL_WRITE\"",
+            "DOA_REG": "0",
+            "DOB_REG": "0",
+            "DOA_REG_CLKINV": "0",
+            "DOB_REG_CLKINV": "0",
+            "RSTA_VAL": "36'b000000000000000000000000000000000000",
+            "RSTB_VAL": "36'b000000000000000000000000000000000000",
+            "RST_TYPE": "\"SYNC\"",
+            "RAM_MODE": "\"SINGLE_PORT\"",
+            "RAM_CASCADE": "\"NONE\"",
+            "ECC_READ_EN": "\"FALSE\"",
+            "ECC_WRITE_EN": "\"FALSE\"",
+            "INIT_FILE": "\"NONE\"",
+            "BLOCK_X": "0",
+            "BLOCK_Y": "0",
+            "RAM_DATA_WIDTH": "9",
+            "RAM_ADDR_WIDTH": "12",
+            "INIT_FORMAT": "\"BIN\""
+          },
+          "ports": {
+            "DOA": "{\\imem_even_1_DOA[35]_floating , \\imem_even_1_DOA[34]_floating , \\imem_even_1_DOA[33]_floating , \\imem_even_1_DOA[32]_floating , \\imem_even_1_DOA[31]_floating , \\imem_even_1_DOA[30]_floating , \\imem_even_1_DOA[29]_floating , \\imem_even_1_DOA[28]_floating , \\imem_even_1_DOA[27]_floating , \\imem_even_1_DOA[26]_floating , \\imem_even_1_DOA[25]_floating , \\imem_even_1_DOA[24]_floating , \\imem_even_1_DOA[23]_floating , \\imem_even_1_DOA[22]_floating , \\imem_even_1_DOA[21]_floating , \\imem_even_1_DOA[20]_floating , \\imem_even_1_DOA[19]_floating , \\imem_even_1_DOA[18]_floating , \\imem_even_1_DOA[17]_floating , i_even_q[31], i_even_q[30], i_even_q[29], i_even_q[28], i_even_q[27], i_even_q[26], i_even_q[25], i_even_q[24], \\imem_even_1_DOA[8]_floating , i_even_q[23], i_even_q[22], i_even_q[21], i_even_q[20], i_even_q[19], i_even_q[18], i_even_q[17], i_even_q[16]}",
+            "DOB": "",
+            "ECC_PARITY": "",
+            "ECC_RDADDR": "",
+            "ADDRA": "{1'b1, i_even_index[10], i_even_index[9], i_even_index[8], i_even_index[7], i_even_index[6], i_even_index[5], i_even_index[4], i_even_index[3], i_even_index[2], i_even_index[1], i_even_index[0], 1'b1, 1'b1, 1'b1, 1'b1}",
+            "ADDRB": "",
+            "BWEA": "{1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1}",
+            "BWEB": "",
+            "CSA": "{1'b1, 1'b1, 1'b1}",
+            "CSB": "",
+            "DIA": "{1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0}",
+            "DIB": "",
+            "COUTA": "",
+            "COUTB": "",
+            "ECC_DBITERR": "",
+            "ECC_SBITERR": "",
+            "ADDRA_HOLD": "1'b0",
+            "ADDRB_HOLD": "",
+            "CEA": "i_req_valid",
+            "CEB": "1'b0",
+            "CINA": "",
+            "CINB": "",
+            "CLKA": "clk",
+            "CLKB": "",
+            "INJECT_DBITERR": "",
+            "INJECT_SBITERR": "",
+            "ORCEA": "",
+            "ORCEB": "",
+            "RSTA": "1'b0",
+            "RSTB": "",
+            "WEA": "1'b0",
+            "WEB": ""
+          },
+          "literal_sha256": "d5561576e8a6c07d3fc4ab5192374dade0ef33e388fb43e302cb99cbef20ff01"
+        }
+      ]
+    },
+    {
+      "array": "imem_odd",
+      "expected_words": 2048,
+      "reconstructed_words": 2048,
+      "expected_words_sha256": "51b961ed0ccdfb2f4ee3563e78ef2d469cfbbb72fdfcc65a099b552adfd42205",
+      "reconstructed_words_sha256": "51b961ed0ccdfb2f4ee3563e78ef2d469cfbbb72fdfcc65a099b552adfd42205",
+      "all_words_match": true,
+      "zero_tail_verified": true,
+      "address_and_output_connections_evaluated": true,
+      "inactive_output_poison_values": [
+        0,
+        1
+      ],
+      "accepted_request_read_controls_verified": true,
+      "mismatches": [],
+      "instances": [
+        {
+          "module": "rv32_cpu_subsys",
+          "name": "imem_odd_0",
+          "source": "imem_odd_0",
+          "primitive": "GTP_DRM36K_E1",
+          "init_cell_count": 4096,
+          "init_cells_sha256": "3f5e7290d3804fdebfcda08a3b08c8c040423c162b0834bad5fd6e35e5917502",
+          "parameters": {
+            "GRS_EN": "\"TRUE\"",
+            "CSA_MASK": "3'b111",
+            "CSB_MASK": "3'b000",
+            "DATA_WIDTH_A": "16",
+            "DATA_WIDTH_B": "16",
+            "WRITE_MODE_A": "\"NORMAL_WRITE\"",
+            "WRITE_MODE_B": "\"NORMAL_WRITE\"",
+            "DOA_REG": "0",
+            "DOB_REG": "0",
+            "DOA_REG_CLKINV": "0",
+            "DOB_REG_CLKINV": "0",
+            "RSTA_VAL": "36'b000000000000000000000000000000000000",
+            "RSTB_VAL": "36'b000000000000000000000000000000000000",
+            "RST_TYPE": "\"SYNC\"",
+            "RAM_MODE": "\"SINGLE_PORT\"",
+            "RAM_CASCADE": "\"NONE\"",
+            "ECC_READ_EN": "\"FALSE\"",
+            "ECC_WRITE_EN": "\"FALSE\"",
+            "INIT_FILE": "\"NONE\"",
+            "BLOCK_X": "0",
+            "BLOCK_Y": "0",
+            "RAM_DATA_WIDTH": "9",
+            "RAM_ADDR_WIDTH": "12",
+            "INIT_FORMAT": "\"BIN\""
+          },
+          "ports": {
+            "DOA": "{\\imem_odd_0_DOA[35]_floating , \\imem_odd_0_DOA[34]_floating , \\imem_odd_0_DOA[33]_floating , \\imem_odd_0_DOA[32]_floating , \\imem_odd_0_DOA[31]_floating , \\imem_odd_0_DOA[30]_floating , \\imem_odd_0_DOA[29]_floating , \\imem_odd_0_DOA[28]_floating , \\imem_odd_0_DOA[27]_floating , \\imem_odd_0_DOA[26]_floating , \\imem_odd_0_DOA[25]_floating , \\imem_odd_0_DOA[24]_floating , \\imem_odd_0_DOA[23]_floating , \\imem_odd_0_DOA[22]_floating , \\imem_odd_0_DOA[21]_floating , \\imem_odd_0_DOA[20]_floating , \\imem_odd_0_DOA[19]_floating , \\imem_odd_0_DOA[18]_floating , \\imem_odd_0_DOA[17]_floating , i_odd_q[15], i_odd_q[14], i_odd_q[13], i_odd_q[12], i_odd_q[11], i_odd_q[10], i_odd_q[9], i_odd_q[8], \\imem_odd_0_DOA[8]_floating , i_odd_q[7], i_odd_q[6], i_odd_q[5], i_odd_q[4], i_odd_q[3], i_odd_q[2], i_odd_q[1], i_odd_q[0]}",
+            "DOB": "",
+            "ECC_PARITY": "",
+            "ECC_RDADDR": "",
+            "ADDRA": "{1'b1, i_odd_index[10], i_odd_index[9], i_odd_index[8], i_odd_index[7], i_odd_index[6], i_odd_index[5], i_odd_index[4], i_odd_index[3], i_odd_index[2], i_odd_index[1], i_odd_index[0], 1'b1, 1'b1, 1'b1, 1'b1}",
+            "ADDRB": "",
+            "BWEA": "{1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1}",
+            "BWEB": "",
+            "CSA": "{1'b1, 1'b1, 1'b1}",
+            "CSB": "",
+            "DIA": "{1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0}",
+            "DIB": "",
+            "COUTA": "",
+            "COUTB": "",
+            "ECC_DBITERR": "",
+            "ECC_SBITERR": "",
+            "ADDRA_HOLD": "1'b0",
+            "ADDRB_HOLD": "",
+            "CEA": "i_req_valid",
+            "CEB": "1'b0",
+            "CINA": "",
+            "CINB": "",
+            "CLKA": "clk",
+            "CLKB": "",
+            "INJECT_DBITERR": "",
+            "INJECT_SBITERR": "",
+            "ORCEA": "",
+            "ORCEB": "",
+            "RSTA": "1'b0",
+            "RSTB": "",
+            "WEA": "1'b0",
+            "WEB": ""
+          },
+          "literal_sha256": "a52e6134eafec6f93eaf8f1c01051403a7958f5569b9a497cb3c55c459cd9bf8"
+        },
+        {
+          "module": "rv32_cpu_subsys",
+          "name": "imem_odd_1",
+          "source": "imem_odd_1",
+          "primitive": "GTP_DRM36K_E1",
+          "init_cell_count": 4096,
+          "init_cells_sha256": "120ed1496c9a36560d4bbdef16eac692c65775d1a3615358edd93e38498933b5",
+          "parameters": {
+            "GRS_EN": "\"TRUE\"",
+            "CSA_MASK": "3'b111",
+            "CSB_MASK": "3'b000",
+            "DATA_WIDTH_A": "16",
+            "DATA_WIDTH_B": "16",
+            "WRITE_MODE_A": "\"NORMAL_WRITE\"",
+            "WRITE_MODE_B": "\"NORMAL_WRITE\"",
+            "DOA_REG": "0",
+            "DOB_REG": "0",
+            "DOA_REG_CLKINV": "0",
+            "DOB_REG_CLKINV": "0",
+            "RSTA_VAL": "36'b000000000000000000000000000000000000",
+            "RSTB_VAL": "36'b000000000000000000000000000000000000",
+            "RST_TYPE": "\"SYNC\"",
+            "RAM_MODE": "\"SINGLE_PORT\"",
+            "RAM_CASCADE": "\"NONE\"",
+            "ECC_READ_EN": "\"FALSE\"",
+            "ECC_WRITE_EN": "\"FALSE\"",
+            "INIT_FILE": "\"NONE\"",
+            "BLOCK_X": "0",
+            "BLOCK_Y": "0",
+            "RAM_DATA_WIDTH": "9",
+            "RAM_ADDR_WIDTH": "12",
+            "INIT_FORMAT": "\"BIN\""
+          },
+          "ports": {
+            "DOA": "{\\imem_odd_1_DOA[35]_floating , \\imem_odd_1_DOA[34]_floating , \\imem_odd_1_DOA[33]_floating , \\imem_odd_1_DOA[32]_floating , \\imem_odd_1_DOA[31]_floating , \\imem_odd_1_DOA[30]_floating , \\imem_odd_1_DOA[29]_floating , \\imem_odd_1_DOA[28]_floating , \\imem_odd_1_DOA[27]_floating , \\imem_odd_1_DOA[26]_floating , \\imem_odd_1_DOA[25]_floating , \\imem_odd_1_DOA[24]_floating , \\imem_odd_1_DOA[23]_floating , \\imem_odd_1_DOA[22]_floating , \\imem_odd_1_DOA[21]_floating , \\imem_odd_1_DOA[20]_floating , \\imem_odd_1_DOA[19]_floating , \\imem_odd_1_DOA[18]_floating , \\imem_odd_1_DOA[17]_floating , i_odd_q[31], i_odd_q[30], i_odd_q[29], i_odd_q[28], i_odd_q[27], i_odd_q[26], i_odd_q[25], i_odd_q[24], \\imem_odd_1_DOA[8]_floating , i_odd_q[23], i_odd_q[22], i_odd_q[21], i_odd_q[20], i_odd_q[19], i_odd_q[18], i_odd_q[17], i_odd_q[16]}",
+            "DOB": "",
+            "ECC_PARITY": "",
+            "ECC_RDADDR": "",
+            "ADDRA": "{1'b1, i_odd_index[10], i_odd_index[9], i_odd_index[8], i_odd_index[7], i_odd_index[6], i_odd_index[5], i_odd_index[4], i_odd_index[3], i_odd_index[2], i_odd_index[1], i_odd_index[0], 1'b1, 1'b1, 1'b1, 1'b1}",
+            "ADDRB": "",
+            "BWEA": "{1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1}",
+            "BWEB": "",
+            "CSA": "{1'b1, 1'b1, 1'b1}",
+            "CSB": "",
+            "DIA": "{1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0}",
+            "DIB": "",
+            "COUTA": "",
+            "COUTB": "",
+            "ECC_DBITERR": "",
+            "ECC_SBITERR": "",
+            "ADDRA_HOLD": "1'b0",
+            "ADDRB_HOLD": "",
+            "CEA": "i_req_valid",
+            "CEB": "1'b0",
+            "CINA": "",
+            "CINB": "",
+            "CLKA": "clk",
+            "CLKB": "",
+            "INJECT_DBITERR": "",
+            "INJECT_SBITERR": "",
+            "ORCEA": "",
+            "ORCEB": "",
+            "RSTA": "1'b0",
+            "RSTB": "",
+            "WEA": "1'b0",
+            "WEB": ""
+          },
+          "literal_sha256": "93638f193ac04bb2420f0fc1572167b60af2d57459ed559f6f14c04d5b9f3b95"
+        }
+      ]
+    },
+    {
+      "array": "rom_d",
+      "expected_words": 4096,
+      "reconstructed_words": 4096,
+      "expected_words_sha256": "f8a48147bd3fb185d2dac9d4b22d8ae08e192a9d4aaea8290d7be50e28195731",
+      "reconstructed_words_sha256": "f8a48147bd3fb185d2dac9d4b22d8ae08e192a9d4aaea8290d7be50e28195731",
+      "all_words_match": true,
+      "zero_tail_verified": true,
+      "address_and_output_connections_evaluated": true,
+      "inactive_output_poison_values": [
+        0,
+        1
+      ],
+      "accepted_request_read_controls_verified": true,
+      "mismatches": [],
+      "instances": [
+        {
+          "module": "rv32_cpu_subsys",
+          "name": "rom_d_0",
+          "source": "rom_d_0",
+          "primitive": "GTP_DRM36K_E1",
+          "init_cell_count": 4096,
+          "init_cells_sha256": "66ef193b24d0c732eb5c30b254212b7d6df26f55f42c673d8ed4fd414ba62a4d",
+          "parameters": {
+            "GRS_EN": "\"TRUE\"",
+            "CSA_MASK": "3'b111",
+            "CSB_MASK": "3'b000",
+            "DATA_WIDTH_A": "8",
+            "DATA_WIDTH_B": "8",
+            "WRITE_MODE_A": "\"NORMAL_WRITE\"",
+            "WRITE_MODE_B": "\"NORMAL_WRITE\"",
+            "DOA_REG": "0",
+            "DOB_REG": "0",
+            "DOA_REG_CLKINV": "0",
+            "DOB_REG_CLKINV": "0",
+            "RSTA_VAL": "36'b000000000000000000000000000000000000",
+            "RSTB_VAL": "36'b000000000000000000000000000000000000",
+            "RST_TYPE": "\"SYNC\"",
+            "RAM_MODE": "\"SINGLE_PORT\"",
+            "RAM_CASCADE": "\"NONE\"",
+            "ECC_READ_EN": "\"FALSE\"",
+            "ECC_WRITE_EN": "\"FALSE\"",
+            "INIT_FILE": "\"NONE\"",
+            "BLOCK_X": "0",
+            "BLOCK_Y": "0",
+            "RAM_DATA_WIDTH": "9",
+            "RAM_ADDR_WIDTH": "12",
+            "INIT_FORMAT": "\"BIN\""
+          },
+          "ports": {
+            "DOA": "{\\rom_d_0_DOA[35]_floating , \\rom_d_0_DOA[34]_floating , \\rom_d_0_DOA[33]_floating , \\rom_d_0_DOA[32]_floating , \\rom_d_0_DOA[31]_floating , \\rom_d_0_DOA[30]_floating , \\rom_d_0_DOA[29]_floating , \\rom_d_0_DOA[28]_floating , \\rom_d_0_DOA[27]_floating , \\rom_d_0_DOA[26]_floating , \\rom_d_0_DOA[25]_floating , \\rom_d_0_DOA[24]_floating , \\rom_d_0_DOA[23]_floating , \\rom_d_0_DOA[22]_floating , \\rom_d_0_DOA[21]_floating , \\rom_d_0_DOA[20]_floating , \\rom_d_0_DOA[19]_floating , \\rom_d_0_DOA[18]_floating , \\rom_d_0_DOA[17]_floating , \\rom_d_0_DOA[16]_floating , \\rom_d_0_DOA[15]_floating , \\rom_d_0_DOA[14]_floating , \\rom_d_0_DOA[13]_floating , \\rom_d_0_DOA[12]_floating , \\rom_d_0_DOA[11]_floating , \\rom_d_0_DOA[10]_floating , \\rom_d_0_DOA[9]_floating , \\rom_d_0_DOA[8]_floating , d_rom_q[7], d_rom_q[6], d_rom_q[5], d_rom_q[4], d_rom_q[3], d_rom_q[2], d_rom_q[1], d_rom_q[0]}",
+            "DOB": "",
+            "ECC_PARITY": "",
+            "ECC_RDADDR": "",
+            "ADDRA": "{1'b1, dd_req_address[13], dd_req_address[12], dd_req_address[11], dd_req_address[10], dd_req_address[9], dd_req_address[8], dd_req_address[7], dd_req_address[6], dd_req_address[5], dd_req_address[4], dd_req_address[3], dd_req_address[2], 1'b1, 1'b1, 1'b1}",
+            "ADDRB": "",
+            "BWEA": "{1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0}",
+            "BWEB": "",
+            "CSA": "{1'b1, 1'b1, 1'b1}",
+            "CSB": "",
+            "DIA": "{1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0}",
+            "DIB": "",
+            "COUTA": "",
+            "COUTB": "",
+            "ECC_DBITERR": "",
+            "ECC_SBITERR": "",
+            "ADDRA_HOLD": "1'b0",
+            "ADDRB_HOLD": "",
+            "CEA": "maintenance_ready",
+            "CEB": "1'b0",
+            "CINA": "",
+            "CINB": "",
+            "CLKA": "clk",
+            "CLKB": "",
+            "INJECT_DBITERR": "",
+            "INJECT_SBITERR": "",
+            "ORCEA": "",
+            "ORCEB": "",
+            "RSTA": "1'b0",
+            "RSTB": "",
+            "WEA": "1'b0",
+            "WEB": ""
+          },
+          "literal_sha256": "a7ae3eb3167d4665e74ab036447c9a65491e72974513d96b14a6a19b89a5e064"
+        },
+        {
+          "module": "rv32_cpu_subsys",
+          "name": "rom_d_1",
+          "source": "rom_d_1",
+          "primitive": "GTP_DRM36K_E1",
+          "init_cell_count": 4096,
+          "init_cells_sha256": "225de87619f9a37fb6a97037ed406bb6149c0e0bb2e8121f2a5fea3670d182b8",
+          "parameters": {
+            "GRS_EN": "\"TRUE\"",
+            "CSA_MASK": "3'b111",
+            "CSB_MASK": "3'b000",
+            "DATA_WIDTH_A": "8",
+            "DATA_WIDTH_B": "8",
+            "WRITE_MODE_A": "\"NORMAL_WRITE\"",
+            "WRITE_MODE_B": "\"NORMAL_WRITE\"",
+            "DOA_REG": "0",
+            "DOB_REG": "0",
+            "DOA_REG_CLKINV": "0",
+            "DOB_REG_CLKINV": "0",
+            "RSTA_VAL": "36'b000000000000000000000000000000000000",
+            "RSTB_VAL": "36'b000000000000000000000000000000000000",
+            "RST_TYPE": "\"SYNC\"",
+            "RAM_MODE": "\"SINGLE_PORT\"",
+            "RAM_CASCADE": "\"NONE\"",
+            "ECC_READ_EN": "\"FALSE\"",
+            "ECC_WRITE_EN": "\"FALSE\"",
+            "INIT_FILE": "\"NONE\"",
+            "BLOCK_X": "0",
+            "BLOCK_Y": "0",
+            "RAM_DATA_WIDTH": "9",
+            "RAM_ADDR_WIDTH": "12",
+            "INIT_FORMAT": "\"BIN\""
+          },
+          "ports": {
+            "DOA": "{\\rom_d_1_DOA[35]_floating , \\rom_d_1_DOA[34]_floating , \\rom_d_1_DOA[33]_floating , \\rom_d_1_DOA[32]_floating , \\rom_d_1_DOA[31]_floating , \\rom_d_1_DOA[30]_floating , \\rom_d_1_DOA[29]_floating , \\rom_d_1_DOA[28]_floating , \\rom_d_1_DOA[27]_floating , \\rom_d_1_DOA[26]_floating , \\rom_d_1_DOA[25]_floating , \\rom_d_1_DOA[24]_floating , \\rom_d_1_DOA[23]_floating , \\rom_d_1_DOA[22]_floating , \\rom_d_1_DOA[21]_floating , \\rom_d_1_DOA[20]_floating , \\rom_d_1_DOA[19]_floating , \\rom_d_1_DOA[18]_floating , \\rom_d_1_DOA[17]_floating , \\rom_d_1_DOA[16]_floating , \\rom_d_1_DOA[15]_floating , \\rom_d_1_DOA[14]_floating , \\rom_d_1_DOA[13]_floating , \\rom_d_1_DOA[12]_floating , \\rom_d_1_DOA[11]_floating , \\rom_d_1_DOA[10]_floating , \\rom_d_1_DOA[9]_floating , \\rom_d_1_DOA[8]_floating , d_rom_q[15], d_rom_q[14], d_rom_q[13], d_rom_q[12], d_rom_q[11], d_rom_q[10], d_rom_q[9], d_rom_q[8]}",
+            "DOB": "",
+            "ECC_PARITY": "",
+            "ECC_RDADDR": "",
+            "ADDRA": "{1'b1, dd_req_address[13], dd_req_address[12], dd_req_address[11], dd_req_address[10], dd_req_address[9], dd_req_address[8], dd_req_address[7], dd_req_address[6], dd_req_address[5], dd_req_address[4], dd_req_address[3], dd_req_address[2], 1'b1, 1'b1, 1'b1}",
+            "ADDRB": "",
+            "BWEA": "{1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0}",
+            "BWEB": "",
+            "CSA": "{1'b1, 1'b1, 1'b1}",
+            "CSB": "",
+            "DIA": "{1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0}",
+            "DIB": "",
+            "COUTA": "",
+            "COUTB": "",
+            "ECC_DBITERR": "",
+            "ECC_SBITERR": "",
+            "ADDRA_HOLD": "1'b0",
+            "ADDRB_HOLD": "",
+            "CEA": "maintenance_ready",
+            "CEB": "1'b0",
+            "CINA": "",
+            "CINB": "",
+            "CLKA": "clk",
+            "CLKB": "",
+            "INJECT_DBITERR": "",
+            "INJECT_SBITERR": "",
+            "ORCEA": "",
+            "ORCEB": "",
+            "RSTA": "1'b0",
+            "RSTB": "",
+            "WEA": "1'b0",
+            "WEB": ""
+          },
+          "literal_sha256": "ba3543f00dc6b2f33162b468e9f5e2a95ff9b074cb16889f9c6cbc2d1e7046b9"
+        },
+        {
+          "module": "rv32_cpu_subsys",
+          "name": "rom_d_2",
+          "source": "rom_d_2",
+          "primitive": "GTP_DRM36K_E1",
+          "init_cell_count": 4096,
+          "init_cells_sha256": "5f6d884b84dd487dc4392b192f6fa67cdb6dbac66bf49a5020703a2839a70ad3",
+          "parameters": {
+            "GRS_EN": "\"TRUE\"",
+            "CSA_MASK": "3'b111",
+            "CSB_MASK": "3'b000",
+            "DATA_WIDTH_A": "8",
+            "DATA_WIDTH_B": "8",
+            "WRITE_MODE_A": "\"NORMAL_WRITE\"",
+            "WRITE_MODE_B": "\"NORMAL_WRITE\"",
+            "DOA_REG": "0",
+            "DOB_REG": "0",
+            "DOA_REG_CLKINV": "0",
+            "DOB_REG_CLKINV": "0",
+            "RSTA_VAL": "36'b000000000000000000000000000000000000",
+            "RSTB_VAL": "36'b000000000000000000000000000000000000",
+            "RST_TYPE": "\"SYNC\"",
+            "RAM_MODE": "\"SINGLE_PORT\"",
+            "RAM_CASCADE": "\"NONE\"",
+            "ECC_READ_EN": "\"FALSE\"",
+            "ECC_WRITE_EN": "\"FALSE\"",
+            "INIT_FILE": "\"NONE\"",
+            "BLOCK_X": "0",
+            "BLOCK_Y": "0",
+            "RAM_DATA_WIDTH": "9",
+            "RAM_ADDR_WIDTH": "12",
+            "INIT_FORMAT": "\"BIN\""
+          },
+          "ports": {
+            "DOA": "{\\rom_d_2_DOA[35]_floating , \\rom_d_2_DOA[34]_floating , \\rom_d_2_DOA[33]_floating , \\rom_d_2_DOA[32]_floating , \\rom_d_2_DOA[31]_floating , \\rom_d_2_DOA[30]_floating , \\rom_d_2_DOA[29]_floating , \\rom_d_2_DOA[28]_floating , \\rom_d_2_DOA[27]_floating , \\rom_d_2_DOA[26]_floating , \\rom_d_2_DOA[25]_floating , \\rom_d_2_DOA[24]_floating , \\rom_d_2_DOA[23]_floating , \\rom_d_2_DOA[22]_floating , \\rom_d_2_DOA[21]_floating , \\rom_d_2_DOA[20]_floating , \\rom_d_2_DOA[19]_floating , \\rom_d_2_DOA[18]_floating , \\rom_d_2_DOA[17]_floating , \\rom_d_2_DOA[16]_floating , \\rom_d_2_DOA[15]_floating , \\rom_d_2_DOA[14]_floating , \\rom_d_2_DOA[13]_floating , \\rom_d_2_DOA[12]_floating , \\rom_d_2_DOA[11]_floating , \\rom_d_2_DOA[10]_floating , \\rom_d_2_DOA[9]_floating , \\rom_d_2_DOA[8]_floating , d_rom_q[23], d_rom_q[22], d_rom_q[21], d_rom_q[20], d_rom_q[19], d_rom_q[18], d_rom_q[17], d_rom_q[16]}",
+            "DOB": "",
+            "ECC_PARITY": "",
+            "ECC_RDADDR": "",
+            "ADDRA": "{1'b1, dd_req_address[13], dd_req_address[12], dd_req_address[11], dd_req_address[10], dd_req_address[9], dd_req_address[8], dd_req_address[7], dd_req_address[6], dd_req_address[5], dd_req_address[4], dd_req_address[3], dd_req_address[2], 1'b1, 1'b1, 1'b1}",
+            "ADDRB": "",
+            "BWEA": "{1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0}",
+            "BWEB": "",
+            "CSA": "{1'b1, 1'b1, 1'b1}",
+            "CSB": "",
+            "DIA": "{1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0}",
+            "DIB": "",
+            "COUTA": "",
+            "COUTB": "",
+            "ECC_DBITERR": "",
+            "ECC_SBITERR": "",
+            "ADDRA_HOLD": "1'b0",
+            "ADDRB_HOLD": "",
+            "CEA": "maintenance_ready",
+            "CEB": "1'b0",
+            "CINA": "",
+            "CINB": "",
+            "CLKA": "clk",
+            "CLKB": "",
+            "INJECT_DBITERR": "",
+            "INJECT_SBITERR": "",
+            "ORCEA": "",
+            "ORCEB": "",
+            "RSTA": "1'b0",
+            "RSTB": "",
+            "WEA": "1'b0",
+            "WEB": ""
+          },
+          "literal_sha256": "5d811c37ea0e8c0ae2503575041d8fbfdb2837630fd7a61f72670abfa7ac5ba9"
+        },
+        {
+          "module": "rv32_cpu_subsys",
+          "name": "rom_d_3",
+          "source": "rom_d_3",
+          "primitive": "GTP_DRM36K_E1",
+          "init_cell_count": 4096,
+          "init_cells_sha256": "dc88b00ef14fbaaed1bac7c089ae7bec4e5eff409db81092d13fa84834b52392",
+          "parameters": {
+            "GRS_EN": "\"TRUE\"",
+            "CSA_MASK": "3'b111",
+            "CSB_MASK": "3'b000",
+            "DATA_WIDTH_A": "8",
+            "DATA_WIDTH_B": "8",
+            "WRITE_MODE_A": "\"NORMAL_WRITE\"",
+            "WRITE_MODE_B": "\"NORMAL_WRITE\"",
+            "DOA_REG": "0",
+            "DOB_REG": "0",
+            "DOA_REG_CLKINV": "0",
+            "DOB_REG_CLKINV": "0",
+            "RSTA_VAL": "36'b000000000000000000000000000000000000",
+            "RSTB_VAL": "36'b000000000000000000000000000000000000",
+            "RST_TYPE": "\"SYNC\"",
+            "RAM_MODE": "\"SINGLE_PORT\"",
+            "RAM_CASCADE": "\"NONE\"",
+            "ECC_READ_EN": "\"FALSE\"",
+            "ECC_WRITE_EN": "\"FALSE\"",
+            "INIT_FILE": "\"NONE\"",
+            "BLOCK_X": "0",
+            "BLOCK_Y": "0",
+            "RAM_DATA_WIDTH": "9",
+            "RAM_ADDR_WIDTH": "12",
+            "INIT_FORMAT": "\"BIN\""
+          },
+          "ports": {
+            "DOA": "{\\rom_d_3_DOA[35]_floating , \\rom_d_3_DOA[34]_floating , \\rom_d_3_DOA[33]_floating , \\rom_d_3_DOA[32]_floating , \\rom_d_3_DOA[31]_floating , \\rom_d_3_DOA[30]_floating , \\rom_d_3_DOA[29]_floating , \\rom_d_3_DOA[28]_floating , \\rom_d_3_DOA[27]_floating , \\rom_d_3_DOA[26]_floating , \\rom_d_3_DOA[25]_floating , \\rom_d_3_DOA[24]_floating , \\rom_d_3_DOA[23]_floating , \\rom_d_3_DOA[22]_floating , \\rom_d_3_DOA[21]_floating , \\rom_d_3_DOA[20]_floating , \\rom_d_3_DOA[19]_floating , \\rom_d_3_DOA[18]_floating , \\rom_d_3_DOA[17]_floating , \\rom_d_3_DOA[16]_floating , \\rom_d_3_DOA[15]_floating , \\rom_d_3_DOA[14]_floating , \\rom_d_3_DOA[13]_floating , \\rom_d_3_DOA[12]_floating , \\rom_d_3_DOA[11]_floating , \\rom_d_3_DOA[10]_floating , \\rom_d_3_DOA[9]_floating , \\rom_d_3_DOA[8]_floating , d_rom_q[31], d_rom_q[30], d_rom_q[29], d_rom_q[28], d_rom_q[27], d_rom_q[26], d_rom_q[25], d_rom_q[24]}",
+            "DOB": "",
+            "ECC_PARITY": "",
+            "ECC_RDADDR": "",
+            "ADDRA": "{1'b1, dd_req_address[13], dd_req_address[12], dd_req_address[11], dd_req_address[10], dd_req_address[9], dd_req_address[8], dd_req_address[7], dd_req_address[6], dd_req_address[5], dd_req_address[4], dd_req_address[3], dd_req_address[2], 1'b1, 1'b1, 1'b1}",
+            "ADDRB": "",
+            "BWEA": "{1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0}",
+            "BWEB": "",
+            "CSA": "{1'b1, 1'b1, 1'b1}",
+            "CSB": "",
+            "DIA": "{1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0}",
+            "DIB": "",
+            "COUTA": "",
+            "COUTB": "",
+            "ECC_DBITERR": "",
+            "ECC_SBITERR": "",
+            "ADDRA_HOLD": "1'b0",
+            "ADDRB_HOLD": "",
+            "CEA": "maintenance_ready",
+            "CEB": "1'b0",
+            "CINA": "",
+            "CINB": "",
+            "CLKA": "clk",
+            "CLKB": "",
+            "INJECT_DBITERR": "",
+            "INJECT_SBITERR": "",
+            "ORCEA": "",
+            "ORCEB": "",
+            "RSTA": "1'b0",
+            "RSTB": "",
+            "WEA": "1'b0",
+            "WEB": ""
+          },
+          "literal_sha256": "cb18053d1e7d380a90b12619fb6e189a18a20f84e4454ff2e016e1de667f1718"
+        }
+      ]
+    }
+  ],
+  "address_contract": {
+    "method": "SMT equivalence of actual cross-hierarchy LUT/carry/port-alias graph; CPU state is unconstrained",
+    "solver": "z3-solver",
+    "solver_version": "5.4.1",
+    "request_bus_reference": "u_core/frontend/",
+    "all_bank_index_bits_equivalent": true,
+    "checks": [
+      {
+        "array": "imem_even",
+        "index_bit": 0,
+        "equivalent": true,
+        "solver_result": "unsat"
+      },
+      {
+        "array": "imem_odd",
+        "index_bit": 0,
+        "equivalent": true,
+        "solver_result": "unsat"
+      },
+      {
+        "array": "imem_even",
+        "index_bit": 1,
+        "equivalent": true,
+        "solver_result": "unsat"
+      },
+      {
+        "array": "imem_odd",
+        "index_bit": 1,
+        "equivalent": true,
+        "solver_result": "unsat"
+      },
+      {
+        "array": "imem_even",
+        "index_bit": 2,
+        "equivalent": true,
+        "solver_result": "unsat"
+      },
+      {
+        "array": "imem_odd",
+        "index_bit": 2,
+        "equivalent": true,
+        "solver_result": "unsat"
+      },
+      {
+        "array": "imem_even",
+        "index_bit": 3,
+        "equivalent": true,
+        "solver_result": "unsat"
+      },
+      {
+        "array": "imem_odd",
+        "index_bit": 3,
+        "equivalent": true,
+        "solver_result": "unsat"
+      },
+      {
+        "array": "imem_even",
+        "index_bit": 4,
+        "equivalent": true,
+        "solver_result": "unsat"
+      },
+      {
+        "array": "imem_odd",
+        "index_bit": 4,
+        "equivalent": true,
+        "solver_result": "unsat"
+      },
+      {
+        "array": "imem_even",
+        "index_bit": 5,
+        "equivalent": true,
+        "solver_result": "unsat"
+      },
+      {
+        "array": "imem_odd",
+        "index_bit": 5,
+        "equivalent": true,
+        "solver_result": "unsat"
+      },
+      {
+        "array": "imem_even",
+        "index_bit": 6,
+        "equivalent": true,
+        "solver_result": "unsat"
+      },
+      {
+        "array": "imem_odd",
+        "index_bit": 6,
+        "equivalent": true,
+        "solver_result": "unsat"
+      },
+      {
+        "array": "imem_even",
+        "index_bit": 7,
+        "equivalent": true,
+        "solver_result": "unsat"
+      },
+      {
+        "array": "imem_odd",
+        "index_bit": 7,
+        "equivalent": true,
+        "solver_result": "unsat"
+      },
+      {
+        "array": "imem_even",
+        "index_bit": 8,
+        "equivalent": true,
+        "solver_result": "unsat"
+      },
+      {
+        "array": "imem_odd",
+        "index_bit": 8,
+        "equivalent": true,
+        "solver_result": "unsat"
+      },
+      {
+        "array": "imem_even",
+        "index_bit": 9,
+        "equivalent": true,
+        "solver_result": "unsat"
+      },
+      {
+        "array": "imem_odd",
+        "index_bit": 9,
+        "equivalent": true,
+        "solver_result": "unsat"
+      },
+      {
+        "array": "imem_even",
+        "index_bit": 10,
+        "equivalent": true,
+        "solver_result": "unsat"
+      },
+      {
+        "array": "imem_odd",
+        "index_bit": 10,
+        "equivalent": true,
+        "solver_result": "unsat"
+      }
+    ],
+    "compositional_reconstruction": "Physical DRM ports are scanned by their logical array indices only after all 22 mapped request-to-bank index equations have been proven equivalent"
+  },
+  "reconstruction": {
+    "firmware_bytes": 7148,
+    "firmware_words": 1787,
+    "firmware_sha256": "cc57909d8e387d6a7b7a0269a28af5f042859634387570ae65a1a26c7c9c5095",
+    "from_instruction_banks_sha256": "cc57909d8e387d6a7b7a0269a28af5f042859634387570ae65a1a26c7c9c5095",
+    "from_data_rom_sha256": "cc57909d8e387d6a7b7a0269a28af5f042859634387570ae65a1a26c7c9c5095",
+    "reset_instruction": "30047073"
+  },
+  "errors": [],
+  "exit_status": 0,
+  "literal_result": "MAPPED_ROM_PASS firmware_bytes=7148 arrays=3"
+}

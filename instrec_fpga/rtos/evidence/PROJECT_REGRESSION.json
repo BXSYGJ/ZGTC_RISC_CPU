@@ -1,0 +1,206 @@
+{
+  "checked_at_utc": "2026-11-14T08:42:56.342467+00:00",
+  "purpose": "Full existing project regression with isolated audio test dependencies",
+  "passed": false,
+  "command": [
+    "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\regression\\venv\\Scripts\\python.exe",
+    "-X",
+    "utf8",
+    "-m",
+    "pytest",
+    "-q"
+  ],
+  "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga",
+  "exit_status": 1,
+  "elapsed_seconds": 61.483,
+  "summary_literal": "10 failed, 430 passed, 13 skipped, 1 warning, 47 errors in 59.44s",
+  "counts": {
+    "failed": 10,
+    "passed": 430,
+    "skipped": 13,
+    "errors": 47,
+    "total": 500
+  },
+  "versions": {
+    "python": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\regression\\venv\\Scripts\\python.exe",
+    "version": "3.13.9 | packaged by Anaconda, Inc. | (main, Oct 21 2025, 19:09:58) [MSC v.1929 64 bit (AMD64)]",
+    "packages": {
+      "numpy": "2.3.5",
+      "scipy": "1.16.3",
+      "numba": "0.62.1",
+      "librosa": "1.0.1",
+      "soundfile": "0.14.0",
+      "pytest": "8.4.2"
+    }
+  },
+  "venv": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\regression\\venv",
+  "venv_mode": "--system-site-packages",
+  "venv_local_packages": [
+    {
+      "name": "librosa",
+      "version": "1.0.1"
+    },
+    {
+      "name": "pip",
+      "version": "25.2"
+    },
+    {
+      "name": "pooch",
+      "version": "1.9.0"
+    },
+    {
+      "name": "soundfile",
+      "version": "0.14.0"
+    },
+    {
+      "name": "soxr",
+      "version": "1.1.0"
+    }
+  ],
+  "base_audio_packages_after_install": {
+    "librosa": false,
+    "soundfile": false
+  },
+  "failure_groups": {
+    "missing_external_instrec_assets": {
+      "failures": 6,
+      "errors": 8,
+      "cause": "Existing defaults use D:/AAAFPGA/InstRec; its deploy model, parameters, class names and weights are absent."
+    },
+    "archived_absolute_wav_paths": {
+      "failures": 0,
+      "errors": 39,
+      "cause": "Existing reports/golden_ref manifests retain D:/0000/111/001/Pango/ZGTC_RISC_CPU/... source_wav paths; those paths are absent."
+    },
+    "existing_constraint_list_expectation": {
+      "failures": 2,
+      "errors": 0,
+      "cause": "The full build contains a fourth constraint, pacerv_shared_system.fdc; the two tests expect exactly three entries."
+    },
+    "existing_ddr_constraint_copy_difference": {
+      "failures": 1,
+      "errors": 0,
+      "cause": "The instrec and historical pds_cpu_100h DDR constraint copies differ in generated-clock source pins and SHA256."
+    },
+    "existing_parameterized_sys_ctrl_instance": {
+      "failures": 1,
+      "errors": 0,
+      "cause": "The existing RTL sys_ctrl instance includes #(...) parameters; the test searches for the literal unparameterized string sys_ctrl u_sys_ctrl (."
+    }
+  },
+  "source_proof": {
+    "python_test_script_file_count": 96,
+    "python_test_script_hashes_unchanged_during_test": true,
+    "rtos_commit_compared_to_parent": "534f6bb192c1ffeef6273bf48c1e2de8be862be5",
+    "tracked_failure_inputs_equal_HEAD": true,
+    "failure_inputs_unchanged_by_rtos_commit": true,
+    "failure_inputs_all_tracked": true,
+    "input_sha256": {
+      "instrec_fpga/scripts/build_sets.json": "33b6c8b36750061ced7d59116562745967f9d893266dc11d160364136110ec62",
+      "instrec_fpga/scripts/gen_mel_tables.py": "1d2320d535ed929a36a1c03b22ac09beedf9c793c39c1ecf6c8a106f3b9f9b5b",
+      "instrec_fpga/scripts/gen_weight_image.py": "465f5250b2fa2bb3ff1f1071f1ff494fa9670dc0992ec7fd5afc0501fa3173b0",
+      "instrec_fpga/scripts/golden_pipeline.py": "76a1c39247504b952eb3aa3043c12b954b993793245422c6775dd424d80e6e9f",
+      "instrec_fpga/src/ctrl/instrec_top.v": "59073a5283f2600e54050e31aecbb58b77cd0f968d2ec3aaa6761b214e95c34d",
+      "instrec_fpga/constraints/ddr3_100h.fdc": "c751da0c0698b862a00701dcff864b7264357cde7fdd17dcc7ccc54469afba7b",
+      "pds_cpu_100h/constraints/ddr3_100h.fdc": "00d9761dbb4f8f3e37fb1f784aa5b6a5534dc1988c12977766262a2a6e8af495",
+      "instrec_fpga/tests/test_build_tokens.py": "93a56ca34cf1ace9fc0b33ddbb38858e11c8c5319ab9aa1d6e29f64d2cd6a6a5",
+      "instrec_fpga/tests/test_mel_tables.py": "f59e330e8e2b732e3008f57129d5b9ad08c83bf6d32541f04f640192719184e6",
+      "instrec_fpga/tests/test_weight_image.py": "1bfce7e40119240ed1d3ef5042f15f8af329d236798349f6cdfdcbdb3ee0d513",
+      "instrec_fpga/tests/test_golden_npu.py": "5bc86bb37c9a6bae262396e99a52c57b0eff6b3b72d1b23678373e316b39b4ad",
+      "instrec_fpga/tests/test_golden_refs.py": "8da2182f6c8f592252d50a5b8de7fef9227bdd1b80751e1b6d2d686cabf86f2a",
+      "instrec_fpga/tests/test_structure_single_source.py": "84e2ec0c59654783a1313c6850fc2e611d625955503136aa15d205f7c569124c",
+      "instrec_fpga/tests/test_sys_ctrl_ddr_result_latch.py": "670c7fb8f80fff2ebd3276fdaafb3ee952f42af06037da8e0e2f2b43cdd14f69",
+      "instrec_fpga/reports/golden_ref/silence_3s/manifest.json": "d8e839196c7398221214e1603da6138f1c8be5774bf5094c458a53949a51b974",
+      "instrec_fpga/reports/golden_ref/sine_440_full/manifest.json": "d12b7ab901f8eca451f659ff26186ff770e93a5fa98f1f76f9b44d75f4b54f0d",
+      "instrec_fpga/reports/golden_ref/sine_440_twolevel/manifest.json": "a1316d3a708495add82c1415e818191b6ee75fb2ace59a8c1bdd9c0ed8adae5d"
+    },
+    "verification_commands": [
+      {
+        "label": "tracked_failure_inputs_diff",
+        "command": [
+          "git",
+          "diff",
+          "--exit-code",
+          "HEAD",
+          "--",
+          "instrec_fpga\\scripts\\build_sets.json",
+          "instrec_fpga\\scripts\\gen_mel_tables.py",
+          "instrec_fpga\\scripts\\gen_weight_image.py",
+          "instrec_fpga\\scripts\\golden_pipeline.py",
+          "instrec_fpga\\src\\ctrl\\instrec_top.v",
+          "instrec_fpga\\constraints\\ddr3_100h.fdc",
+          "pds_cpu_100h\\constraints\\ddr3_100h.fdc",
+          "instrec_fpga\\tests\\test_build_tokens.py",
+          "instrec_fpga\\tests\\test_mel_tables.py",
+          "instrec_fpga\\tests\\test_weight_image.py",
+          "instrec_fpga\\tests\\test_golden_npu.py",
+          "instrec_fpga\\tests\\test_golden_refs.py",
+          "instrec_fpga\\tests\\test_structure_single_source.py",
+          "instrec_fpga\\tests\\test_sys_ctrl_ddr_result_latch.py",
+          "instrec_fpga\\reports\\golden_ref\\silence_3s\\manifest.json",
+          "instrec_fpga\\reports\\golden_ref\\sine_440_full\\manifest.json",
+          "instrec_fpga\\reports\\golden_ref\\sine_440_twolevel\\manifest.json"
+        ],
+        "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY",
+        "exit_status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "label": "failure_inputs_unchanged_by_rtos_commit",
+        "command": [
+          "git",
+          "diff",
+          "--exit-code",
+          "534f6bb192c1ffeef6273bf48c1e2de8be862be5^",
+          "534f6bb192c1ffeef6273bf48c1e2de8be862be5",
+          "--",
+          "instrec_fpga\\scripts\\build_sets.json",
+          "instrec_fpga\\scripts\\gen_mel_tables.py",
+          "instrec_fpga\\scripts\\gen_weight_image.py",
+          "instrec_fpga\\scripts\\golden_pipeline.py",
+          "instrec_fpga\\src\\ctrl\\instrec_top.v",
+          "instrec_fpga\\constraints\\ddr3_100h.fdc",
+          "pds_cpu_100h\\constraints\\ddr3_100h.fdc",
+          "instrec_fpga\\tests\\test_build_tokens.py",
+          "instrec_fpga\\tests\\test_mel_tables.py",
+          "instrec_fpga\\tests\\test_weight_image.py",
+          "instrec_fpga\\tests\\test_golden_npu.py",
+          "instrec_fpga\\tests\\test_golden_refs.py",
+          "instrec_fpga\\tests\\test_structure_single_source.py",
+          "instrec_fpga\\tests\\test_sys_ctrl_ddr_result_latch.py",
+          "instrec_fpga\\reports\\golden_ref\\silence_3s\\manifest.json",
+          "instrec_fpga\\reports\\golden_ref\\sine_440_full\\manifest.json",
+          "instrec_fpga\\reports\\golden_ref\\sine_440_twolevel\\manifest.json"
+        ],
+        "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY",
+        "exit_status": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  "reports": {
+    "detailed_commands_versions_and_hashes": {
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\regression\\PYTEST_WITH_DEPS.json",
+      "sha256": "0261c564857e75059a4ef9d59340e671339d271a4f53706c6bb079b116b0db4f"
+    },
+    "failure_attribution": {
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\regression\\PYTEST_ANALYSIS.json",
+      "sha256": "909b17f1eab8ec23a53e9ed4ca5d9f94ed20fc70de133624ea9774f0d8823ce0"
+    },
+    "full_stdout": {
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\regression\\with-deps-20261114-163654\\pytest.stdout.txt",
+      "sha256": "d343e8df1dfee2ad09c76f063050af270cf5e663fa0afef23e27df6427a227f4"
+    },
+    "full_stderr": {
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\regression\\with-deps-20261114-163654\\pytest.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "initial_missing_dependency_report": {
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\regression\\PYTEST.json",
+      "sha256": "622a392f4153db2f140c15a907a3257badd6932e30c0dbeea053c80e69636fb6"
+    }
+  },
+  "source_changes": "Only the isolated venv and generated test evidence were created for this regression task."
+}

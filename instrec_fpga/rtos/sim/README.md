@@ -33,4 +33,8 @@ try {
 
 每次运行先冻结输入，再在`build/rtos/sim/<标签>-<时间>/`写入`RESULT.json`、`VERIFICATION.txt`和逐命令日志，记录实际命令、输入SHA-256、字面输出及退出状态。源固件后续重编译会生成新内容，已冻结运行的输入保持独立。
 
+RTOS封装通过`PROG_HEX`直接初始化数据ROM，通过`PROG_EVEN_HEX`和`PROG_ODD_HEX`分别初始化两个取指bank。压力测试会核对并冻结`prog.hex`、`prog_even.hex`和`prog_odd.hex`，再检查全部4096个实际ROM字的一致性。自定义固件可用`--firmware`及可选的`--firmware-even`、`--firmware-odd`指定这三个文件。
+
+定时器和中断测试的自定义镜像由`rom_banks.py`按`$readmemh`字地址拆分；`@地址`、注释和换行均按格式解析。IRQ和ROM边界用例使用含奇数字地址`@`指令的镜像，并检查全部8192个字的bank重建结果；对应报告同时保存冻结镜像和RTL的SHA-256。
+
 回退副本可通过`run_baseline.py --source-dir <恢复后的目录> --label rollback125`验证；该目录应包含原来的`src/cpu`布局。此命令读取副本并产生新的仿真证据。

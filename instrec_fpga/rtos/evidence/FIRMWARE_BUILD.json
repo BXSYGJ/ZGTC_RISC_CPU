@@ -12,11 +12,75 @@
   "ram_capacity": 16384,
   "binary_bytes": 7148,
   "binary_sha256": "cc57909d8e387d6a7b7a0269a28af5f042859634387570ae65a1a26c7c9c5095",
+  "rom_images": [
+    {
+      "name": "prog.hex",
+      "words": 1787,
+      "file_bytes": 17870,
+      "sha256": "67872c2a2b4b4b4c437c39d8e6a815cfb36ff60437c61d53d7dae777d280f49f"
+    },
+    {
+      "name": "prog_even.hex",
+      "words": 894,
+      "file_bytes": 8940,
+      "sha256": "4bfb5b38b8c319d2501b56ece4f241d26ed46a1b10d4fc7129d07404d8578184"
+    },
+    {
+      "name": "prog_odd.hex",
+      "words": 893,
+      "file_bytes": 8930,
+      "sha256": "d8657d06a1ce3a7d5ac972bd49100280627b6837f8260ddf55f62f5f51e9160c"
+    }
+  ],
+  "rom_bank_layout": "word n: even[n/2] when n is even; odd[n/2] when n is odd",
+  "bank_reconstruction_verified": true,
+  "outputs": [
+    {
+      "name": "prog.elf",
+      "bytes": 75104,
+      "sha256": "6ea2ba76125eccdc12eadbd0c38db11561d5f939d4c325398716425857c847d9"
+    },
+    {
+      "name": "prog.bin",
+      "bytes": 7148,
+      "sha256": "cc57909d8e387d6a7b7a0269a28af5f042859634387570ae65a1a26c7c9c5095"
+    },
+    {
+      "name": "prog.hex",
+      "bytes": 17870,
+      "sha256": "67872c2a2b4b4b4c437c39d8e6a815cfb36ff60437c61d53d7dae777d280f49f"
+    },
+    {
+      "name": "prog_even.hex",
+      "bytes": 8940,
+      "sha256": "4bfb5b38b8c319d2501b56ece4f241d26ed46a1b10d4fc7129d07404d8578184"
+    },
+    {
+      "name": "prog_odd.hex",
+      "bytes": 8930,
+      "sha256": "d8657d06a1ce3a7d5ac972bd49100280627b6837f8260ddf55f62f5f51e9160c"
+    },
+    {
+      "name": "prog.map",
+      "bytes": 126695,
+      "sha256": "bb28cf06748fdfa95ae82c98f78eee7cef682b148ea7cd38502934ae0207f37b"
+    },
+    {
+      "name": "prog.dis",
+      "bytes": 103135,
+      "sha256": "7fbc82c7555ed359363c8c9f7a5266cc009c379eca4e4c5ceabe79c28d9ff10f"
+    },
+    {
+      "name": "SIZE.txt",
+      "bytes": 162,
+      "sha256": "a066ba2cf3d156bb3aa5c513a56fb2b03ba2ed2084647a1a8c5c481122a88034"
+    }
+  ],
   "sizes": "   text\t   data\t    bss\t    dec\t    hex\tfilename\n   7146\t      0\t   5600\t  12746\t   31ca\tD:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\firmware\\prog.elf\n",
   "inputs": [
     {
       "path": "rtos\\build_firmware.py",
-      "sha256": "60117bc382f749b719a972c5fbd7697bc519dbe01bb281b693cf1c3f34c39885"
+      "sha256": "cbafabfb4f9e2142ae4d91c589871dc40aa37a814a9f23e4568825b34b43f1ac"
     },
     {
       "path": "rtos\\sw\\FreeRTOSConfig.h",

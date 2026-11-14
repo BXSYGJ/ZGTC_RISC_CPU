@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "command": [
+    "pwsh",
+    "-NoProfile",
+    "-Command",
+    "[Console]::OutputEncoding = [System.Text.Encoding]::UTF8; $ErrorActionPreference = 'Stop'; try { $entry = [System.IO.Path]::Combine('D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/rtos', 'ROLLBACK.sh'); $tokens = $null; $parseErrors = $null; $ast = [System.Management.Automation.Language.Parser]::ParseFile($entry, [ref]$tokens, [ref]$parseErrors); if ($parseErrors.Count -gt 0) { throw 'Rollback parse failed' }; $script = $ast.GetScriptBlock(); & $script -Workspace 'D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga/build/rtos/rollback_sh_ast_20261114-092001-844695'; } catch { Write-Error $_; exit 1 }"
+  ],
+  "cwd": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga",
+  "exit_status": 0,
+  "literal_output": "ROLLBACK_RESTORED files=202 clock_hz=125000000 timer_removed=1\n",
+  "interpreter": "PowerShell 7 ParseFile/GetScriptBlock preserves the actual .sh file execution context",
+  "input_manifest_sha256": "005890190a04895bd485c37dffd2554d1ab8a4a10dfd28ff3ba791fc1fc87797",
+  "rollback_script_sha256": "5188363473871a858ba254c755adf57d4c4dc7ec77758e489de9d9d0cea5011c",
+  "source_wrapper_sha256_before": "0e9f0c0e78bf26ad1d587ad2386c90b459c61947069fada92c963fb1a9aa565b",
+  "source_wrapper_sha256_after": "0e9f0c0e78bf26ad1d587ad2386c90b459c61947069fada92c963fb1a9aa565b",
+  "restored_files": 202,
+  "isolated_copy": "D:\\AAAFPGA\\ZGTC_RISC_CPU_XSY\\instrec_fpga\\build\\rtos\\rollback_sh_ast_20261114-092001-844695",
+  "PowerShell_entrypoints_identical": true,
+  "added_files_removed": true
+}
