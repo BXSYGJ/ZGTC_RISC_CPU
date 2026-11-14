@@ -6,6 +6,8 @@
 
 ## 当前任务
 
+最新应用方向已明确：用户参加紫光同创赛题一，目标是交响乐中同时出现的乐器及其进入/退出；CPU相关工作按用户要求已完成。已只读核验GitHub XSY/XSY2，找到现有五组多标签双头模型，XSY还保存INT8契约、权重和完整历史离线评估。复用入口为SYMPHONY_GROUP5_CODE_AUDIT_20261114.md；RTOS仅处应用方案评估阶段。
+
 对话已经从论文修订推进到100Pro+音频整机集成。用户最新要求是：当前一轮完成后停止时序优化，选用已有125MHz和约109.5MHz中违例较小的版本。该档实际为109.375MHz。原持续时序验收目标已按用户要求设为paused。
 
 使用入口见[所选版本](SELECTED_BUILD_VERSIONS_20261114.md)：109.375MHz主选021145，125MHz备选223256。两个包各包含原位流、202份冻结输入及最终时序报告，ZIP逐文件哈希验证通过。当前83.333333MHz工作区另行保留。最后一轮133421已结束，719.426秒、exit1：500ps时钟树hold修复参数超出工具0至200ps范围，compile/synthesize/dev_map完成，pnr/report_timing/gen_bit_stream未执行，无新位流；全部202份冻结输入未变。当前PDS进程0，时序构建到此结束。
@@ -97,6 +99,9 @@ ROLLBACK.sh为UTF-8 BOM PowerShell源码，Git模式100755；常规PowerShell入
 继续 D:/AAAFPGA/ZGTC_RISC_CPU_XSY/instrec_fpga 的 PaceRV 共享音频整机任务。
 先读 AGENTS.md、docs/STATUS.md 和 docs/CHAT_CONTINUATION_20261114.md。
 用户已要求停止时序优化，原持续时序验收目标为paused。
+当前聚焦赛题一交响乐识别应用，用户确认目标为同时活跃乐器及进入/退出；CPU工作已完成。
+先读docs/SYMPHONY_GROUP5_CODE_AUDIT_20261114.md，复用已有五组双头模型、XSY量化权重及离线验证成果。
+当前核验结果为窗口级五大乐器组识别，板端迁移与进入/退出时间事件尚待实现；RTOS仍在方案评估。
 133421已在pnr入口因500ps参数超出0至200ps范围退出1，无新位流；当前PDS进程0。
 先读docs/SELECTED_BUILD_VERSIONS_20261114.md；主选109.375MHz的021145，125MHz备选223256。
 所选ZIP在build/pacerv_shared_system/selected_versions_20261114，各含原位流、202份冻结输入和原最终报告。

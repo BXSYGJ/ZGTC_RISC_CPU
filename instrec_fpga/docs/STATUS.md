@@ -1,5 +1,8 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+> **2026-11-14应用主线确认：赛题一交响乐多乐器组识别。** 用户明确CPU相关工作已完成，目标是同时出现的乐器及进入/退出。已核对GitHub XSY(4d3d6f1)与XSY2(8f902ae)：两者都有五组多标签双头模型，XSY还包含INT8权重、契约与8906样本历史离线评估。核验入口：[SYMPHONY_GROUP5_CODE_AUDIT_20261114.md](SYMPHONY_GROUP5_CODE_AUDIT_20261114.md)。后续复用五组成果接入所选整机并形成活动时间轴，RTOS仍处方案评估阶段。原时序验收目标保持paused。
+
+
 > **2026-11-14最新安排：时序优化已结束，直接使用已有109.375MHz与125MHz版本。** 用户要求当前轮完成后停止追加时序修复和PDS构建；持续时序验收目标状态为paused。主选109.375MHz的021145，125MHz备选223256；使用入口见[所选版本](SELECTED_BUILD_VERSIONS_20261114.md)。两个包各含原位流、202份对应输入和原最终报告，ZIP及逐文件哈希均已重验。
 >
 > 最后一轮133421已结束：719.426秒、退出1；500ps时钟树hold修复参数超出工具0至200ps范围，compile/synthesize/dev_map完成，pnr入口报错，无新时序报告或位流。202份冻结输入未变，当前PDS进程0。终态及日志哈希见experiments/pacerv_shared_system/evidence/BUILD_CLOSEOUT_20261114.json。当前83.333333MHz活动源码作为实验记录保留；使用时取所选包对应的RTL/IP/HEX/约束。
