@@ -79,17 +79,19 @@ def prep_clip_any(path: Path, peak_dbfs: float = -1.0) -> np.ndarray:
         return np.clip(x * (target / peak), -32768, 32767).round().astype(np.int16)
 
 
-def prepare_endpoint(hint: str, volume: int) -> None:
-    """Unmute the render endpoint and pin its volume.
+def report_endpoint(hint: str) -> None:
+    """READ-ONLY: report the render endpoint's mute/volume state.
 
-    A muted endpoint still accepts waveOut without error, so the board simply
-    records silence and every clip collapses to the same logits.
+    Never writes.  The user may be listening to this DAC, so the previous
+    behaviour (auto-unmute + force a volume) is gone; use --apply-volume to
+    opt in to a one-time write.  A muted endpoint still accepts waveOut, so
+    a silent capture is visible via the board PCM level gate instead.
     """
     try:
         from comtypes import CLSCTX_ALL
         from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
     except Exception as exc:                                  # pragma: no cover
-        print("  (pycaw unavailable, cannot check mute: %s)" % exc)
+        print("  (pycaw unavailable, cannot read mute: %s)" % exc)
         return
     for d in AudioUtilities.GetAllDevices():
         name = str(d.FriendlyName)
@@ -100,13 +102,33 @@ def prepare_endpoint(hint: str, volume: int) -> None:
                                   ).QueryInterface(IAudioEndpointVolume)
         except Exception:
             continue
-        was_muted = bool(vol.GetMute())
+        print("  endpoint '%s': mute=%s volume=%.0f%% (not modified)"
+              % (name, bool(vol.GetMute()), vol.GetMasterVolumeLevelScalar() * 100))
+        return
+    print("  (no endpoint matched %r)" % hint)
+
+
+def apply_endpoint(hint: str, volume: int) -> None:
+    """Explicit, opt-in endpoint write (only reached via --apply-volume)."""
+    try:
+        from comtypes import CLSCTX_ALL
+        from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
+    except Exception as exc:
+        print("  (pycaw unavailable: %s)" % exc)
+        return
+    for d in AudioUtilities.GetAllDevices():
+        name = str(d.FriendlyName)
+        if hint.lower() not in name.lower() or name.startswith("麦克风"):
+            continue
+        try:
+            vol = d._dev.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None
+                                  ).QueryInterface(IAudioEndpointVolume)
+        except Exception:
+            continue
         vol.SetMute(0, None)
         vol.SetMasterVolumeLevelScalar(max(0.0, min(1.0, volume / 100.0)), None)
-        print("  endpoint '%s': mute %s -> 0, volume -> %d%%"
-              % (name, was_muted, volume))
+        print("  applied: '%s' unmuted, volume -> %d%%" % (name, volume))
         return
-    print("  (no endpoint matched %r; leaving audio settings alone)" % hint)
 
 
 def window_continuity(pcm: np.ndarray, block: int = 8192, floor: float = 200.0) -> float:
@@ -154,9 +176,11 @@ def main(argv=None) -> int:
     ap.add_argument("--device-hint", default="NICEHCK",
                     help="render endpoint to play into (default NICEHCK: the 3.5 mm "
                          "cable currently hangs off that DAC)")
-    ap.add_argument("--no-unmute", action="store_true",
-                    help="do not touch the endpoint mute/volume")
-    ap.add_argument("--volume", type=int, default=50)
+    ap.add_argument("--apply-volume", action="store_true",
+                    help="OPT-IN: unmute and set the endpoint volume once. "
+                         "By default the endpoint is read-only and never modified.")
+    ap.add_argument("--volume", type=int, default=50,
+                    help="volume used only when --apply-volume is given")
     ap.add_argument("--attempts", type=int, default=4, help="captures per clip")
     ap.add_argument("--std-min", type=float, default=300.0,
                     help="minimum board PCM std for a capture to count")
@@ -191,8 +215,10 @@ def main(argv=None) -> int:
     time.sleep(0.2)
     dev = apx.resolve_device(args.device_hint)
     print("play device = %s (%d)" % (args.device_hint, dev))
-    if not args.no_unmute:
-        prepare_endpoint(args.device_hint, args.volume)
+    if args.apply_volume:
+        apply_endpoint(args.device_hint, args.volume)
+    else:
+        report_endpoint(args.device_hint)
 
     rows = []
     ok = same = clean_ok = 0

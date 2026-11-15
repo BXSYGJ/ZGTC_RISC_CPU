@@ -99,6 +99,60 @@ def wait_logits(ser, timeout=15.0) -> list[int]:
     return dd.read_logits(ser)
 
 
+def inject_window(ser, pcm: np.ndarray, progress=None, timeout: float = 15.0):
+    """Push one 132096-sample window over an EXISTING serial port and infer.
+
+    Returns ``(wok_text, logits, frames, retransmits)``.  Split out from
+    ``main()`` so the Tkinter GUI can reuse its single worker-owned serial
+    handle instead of opening a competing port.  The caller is responsible for
+    uploading the weights once before the first injection.
+    """
+    image = pcm.astype("<i2").tobytes()
+    assert len(image) == IMAGE_BYTES, len(image)
+
+    ser.write(b"U")            # drop any stale lock
+    time.sleep(0.05)
+    ser.write(b"L")            # freeze audio_sink: nothing may overwrite DDR
+    time.sleep(0.05)
+    ser.write(b"I")            # injection mode on (loader base -> 0x0)
+    drain(ser)                 # eat the three 'K' ACKs
+
+    # Software recovery for a wedged loader.  If a PREVIOUS upload aborted
+    # mid-image (a lost ACK, a CRC retry budget exhausted, a crashed script),
+    # frame_cnt is stuck at some non-zero value and img_done was never set:
+    # every new image then NAKs its first seq=0 frame until the FPGA is
+    # re-flashed.  Sending a bare END frame makes the loader finish its
+    # read-back (WOK), reach S_FIN and set img_done, so the next SOF lazily
+    # clears frame_cnt.  On a clean loader this is a harmless no-op that
+    # returns "WOK 00000000".
+    ser.write(wu.build_frame(wu.END_SEQ, b""))
+    deadline = time.time() + 8.0
+    reply = b""
+    while time.time() < deadline and b"\n" not in reply:
+        chunk = ser.read(64)
+        if chunk:
+            reply += chunk
+    drain(ser)
+
+    up = wu.Uploader(ser, image, timeout=1.0, retries=3, progress=progress)
+    text = up.run()
+    if not text.startswith("WOK"):
+        drain(ser)
+        ser.write(b"X")
+        ser.write(b"U")
+        raise RuntimeError("upload rejected: %r" % text[:60])
+
+    drain(ser)
+    ser.write(b"X")            # back to normal command routing
+    time.sleep(0.05)
+    ser.write(b"T")            # start mel on the injected window
+    drain(ser)
+    logits = wait_logits(ser, timeout)
+    # Leave the window frozen so the exported dB spectrum at 0x200000 stays
+    # valid until the GUI has read it.  main() unlocks at the very end.
+    return text.strip(), logits, up.sent_frames, up.retransmits
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -115,10 +169,8 @@ def main(argv=None) -> int:
 
     wav = Path(args.wav)
     pcm = load_window(wav)
-    image = pcm.astype("<i2").tobytes()
-    assert len(image) == IMAGE_BYTES, len(image)
     print("clip   : %s" % wav.name)
-    print("window : %d samples (%d B, %d frames of 256 B)" % (WINDOW, len(image), len(image) // 256))
+    print("window : %d samples (%d B, %d frames of 256 B)" % (WINDOW, IMAGE_BYTES, IMAGE_BYTES // 256))
     print("level  : peak %d  rms %.0f" % (int(np.abs(pcm).max()), float(pcm.std())))
 
     ser = serial.Serial(args.port, 115200, timeout=0.5)
@@ -126,34 +178,12 @@ def main(argv=None) -> int:
     ser.reset_input_buffer()
 
     for run in range(args.repeat):
-        ser.write(b"U")            # drop any stale lock
-        time.sleep(0.05)
-        ser.write(b"L")            # freeze audio_sink: nothing may overwrite DDR
-        time.sleep(0.05)
-        ser.write(b"I")            # injection mode on (loader base -> 0x0)
-        drain(ser)                 # eat the three 'K' ACKs
-
         t0 = time.time()
-        up = wu.Uploader(ser, image, timeout=1.0, retries=3,
-                         progress=lambda i, n: print("      %4d/%d" % (i, n),
-                                                     end="\r", flush=True))
-        text = up.run()
-        print("      upload %s in %.1f s (%d frames, %d retransmits)" % (
-            "OK" if text.startswith("WOK") else "FAILED", time.time() - t0,
-            up.sent_frames, up.retransmits))
-        if not text.startswith("WOK"):
-            print("upload rejected: %r" % text[:60], file=sys.stderr)
-            ser.write(b"X")
-            ser.write(b"U")
-            ser.close()
-            return 1
-
-        drain(ser)                 # trailing bytes after the WOK line
-        ser.write(b"X")            # back to normal command routing
-        time.sleep(0.05)
-        ser.write(b"T")            # start mel on the injected window
-        drain(ser)
-        logits = wait_logits(ser)
+        text, logits, frames, retrans = inject_window(
+            ser, pcm,
+            progress=lambda i, n: print("      %4d/%d" % (i, n), end="\r", flush=True))
+        print("      upload OK in %.1f s (%d frames, %d retransmits)" % (
+            time.time() - t0, frames, retrans))
         print("   run %d  board logits = %s   top1=%d"
               % (run, logits, int(np.argmax(logits))))
 

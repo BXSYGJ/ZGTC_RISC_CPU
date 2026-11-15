@@ -64,6 +64,9 @@ def main(argv=None) -> int:
     ap.add_argument("--amplitude", type=float, default=0.4)
     ap.add_argument("--play-name", default="Realtek")
     ap.add_argument("--cap-name", default="立体声混音")
+    ap.add_argument("--apply-unmute", action="store_true",
+                    help="OPT-IN: temporarily unmute the render endpoint for the "
+                         "measurement. By default the endpoint is never modified.")
     ap.add_argument("--list", action="store_true")
     args = ap.parse_args(argv)
 
@@ -99,7 +102,9 @@ def main(argv=None) -> int:
     print("capture dev  = %d %s" % (cap, sd.query_devices(cap)["name"]))
     print("sample rate  = %d Hz, tone = %.1f Hz" % (sr, args.freq))
 
-    # Unmute the render endpoint for the measurement (Stereo Mix follows it).
+    # READ-ONLY: never unmute/mute or change the endpoint volume.  The user
+    # may be listening to this DAC; the old unmute-then-restore dance could
+    # leave their playback muted.  Use --apply-unmute to opt in explicitly.
     restore = None
     try:
         from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
@@ -109,13 +114,15 @@ def main(argv=None) -> int:
             if args.play_name.lower() in str(d.FriendlyName).lower():
                 iface = d._dev.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
                 v = iface.QueryInterface(IAudioEndpointVolume)
-                restore = (v, v.GetMute())
-                if restore[1]:
+                muted = bool(v.GetMute())
+                print("render '%s': mute=%s (not modified)" % (d.FriendlyName, muted))
+                if args.apply_unmute and muted:
                     v.SetMute(0, None)
-                    print("unmuted '%s' for the measurement" % d.FriendlyName)
+                    restore = (v, True)
+                    print("  (opt-in) unmuted for the measurement")
                 break
     except Exception as exc:
-        print("volume guard unavailable: %s" % exc)
+        print("volume read unavailable: %s" % exc)
 
     try:
         n = int(sr * args.seconds)
@@ -133,9 +140,9 @@ def main(argv=None) -> int:
             sd.wait()
             time.sleep(0.3)
     finally:
-        if restore is not None and restore[1]:
+        if restore is not None:
             restore[0].SetMute(1, None)
-            print("render endpoint mute restored")
+            print("  (opt-in) mute restored")
 
     data = np.concatenate(buf) if buf else np.zeros((1, 2))
     x = data[:, 0].astype(np.float64)

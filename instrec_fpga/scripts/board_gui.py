@@ -109,6 +109,18 @@ class BoardApp(tk.Tk):
         ttk.Button(row, text="播放", command=self.play_selected).pack(side="left", expand=True, fill="x")
         ttk.Button(row, text="停止", command=self.stop_playback).pack(side="left", expand=True, fill="x")
 
+        # Serial injection: push the whole PCM window over UART and run
+        # inference on the board.  This bypasses the flaky analogue loop
+        # (DAC -> 3.5 mm -> PCM1808) entirely, so the spectrum and logits
+        # shown here are trustworthy.  Requires the inject-window bitstream
+        # and weights uploaded once (board_e2e.py --stage weights).
+        inj = ttk.LabelFrame(left, text="串口注入（推荐，无需 DAC）", padding=6)
+        inj.pack(fill="x", pady=(6, 2))
+        ttk.Button(inj, text="注入并推理", command=self.inject_selected).pack(fill="x")
+        self.inject_var = tk.BooleanVar(value=True)
+        ttk.Checkbutton(inj, text="同时刷新 Mel 频谱与 logits",
+                        variable=self.inject_var).pack(anchor="w")
+
         row2 = ttk.Frame(left)
         row2.pack(fill="x", pady=2)
         ttk.Button(row2, text="读 logits", command=lambda: self._submit("logits")).pack(side="left", expand=True, fill="x")
@@ -119,19 +131,23 @@ class BoardApp(tk.Tk):
         ttk.Button(row3, text="选择目录…", command=self._pick_dir).pack(side="left", expand=True, fill="x")
         ttk.Button(row3, text="重连串口", command=self._reconnect).pack(side="left", expand=True, fill="x")
 
-        box = ttk.LabelFrame(left, text="音量（自动管理）", padding=6)
+        # Endpoint volume is READ-ONLY by default.  The user may be listening
+        # to this DAC; automatically unmuting / forcing 50% (the old behaviour)
+        # hijacks their playback.  Nothing here writes to the endpoint unless
+        # the "手动应用" button is explicitly clicked.
+        box = ttk.LabelFrame(left, text="端点音量（只读，默认不改动）", padding=6)
         box.pack(fill="x", pady=6)
-        self.vol_var = tk.IntVar(value=50)
-        self.vol_label = ttk.Label(box, text="端点音量 50%")
-        self.vol_scale = ttk.Scale(box, from_=0, to=100, orient="horizontal",
-                                   command=self._on_volume)
-        self.vol_scale.set(50)
-        self.vol_scale.pack(fill="x")
+        self.vol_label = ttk.Label(box, text="端点音量：未读取")
         self.vol_label.pack(anchor="w")
+        manual = ttk.Frame(box)
+        manual.pack(fill="x", pady=(4, 0))
+        self.vol_scale = ttk.Scale(manual, from_=0, to=100, orient="horizontal")
+        self.vol_scale.set(50)
+        self.vol_scale.pack(side="left", fill="x", expand=True)
+        ttk.Button(manual, text="手动应用", command=self.apply_volume).pack(side="left", padx=(4, 0))
         self.norm_var = tk.BooleanVar(value=True)
-        ttk.Checkbutton(box, text="峰值归一化（统一电平）", variable=self.norm_var).pack(anchor="w")
-        self.auto_var = tk.BooleanVar(value=True)
-        ttk.Checkbutton(box, text="播放前解除静音", variable=self.auto_var).pack(anchor="w")
+        ttk.Checkbutton(box, text="峰值归一化（只改播放数据，不改端点）",
+                        variable=self.norm_var).pack(anchor="w")
 
         self.level_label = ttk.Label(left, text="板级电平：—", foreground="#666")
         self.level_label.pack(anchor="w", pady=4)
@@ -177,11 +193,10 @@ class BoardApp(tk.Tk):
     def _set_status(self, text):
         self.status.config(text=text)
 
-    def _on_volume(self, _evt=None):
+    def apply_volume(self):
+        """Explicit, user-initiated endpoint write.  Never called automatically."""
         v = int(float(self.vol_scale.get()))
-        self.vol_var.set(v)
-        if hasattr(self, "vol_label"):
-            self.vol_label.config(text="端点音量 %d%%" % v)
+        self._set_status("手动应用端点音量 %d%%…" % v)
         self._submit("volume", v)
 
     def _reconnect(self):
@@ -210,6 +225,8 @@ class BoardApp(tk.Tk):
                     self._do_spec()
                 elif kind == "level":
                     self._do_level()
+                elif kind == "inject":
+                    self._do_inject(args[0], args[1])
             except Exception:
                 msg = traceback.format_exc(limit=3)
                 self.after(0, self._set_status, "操作失败：\n" + msg[-400:])
@@ -352,8 +369,7 @@ class BoardApp(tk.Tk):
         pcm = ba.loop_to(unit, 60)
 
         self.stop_playback()
-        if self.auto_var.get():
-            self._submit("volume", int(self.vol_var.get()))
+        # Never touch the endpoint volume here -- the user may be listening.
         try:
             self.player = StreamingPlayer(pcm, sr=48000, channels=2,
                                           device_hint=self.device_hint, gain_db=0.0,
@@ -380,6 +396,58 @@ class BoardApp(tk.Tk):
                 pass
             self.player = None
         self.playing = False
+
+    # ---------------------------------------------------------- injection
+    def inject_selected(self):
+        sel = self.listbox.curselection()
+        if not sel:
+            return
+        clip = self.clips[sel[0]]
+        self.stop_playback()
+        self._submit("inject", clip, bool(self.inject_var.get()))
+
+    def _do_inject(self, clip: Path, refresh: bool):
+        import diag_dump as dd
+        import diag_spectrum as ds
+        import inject_audio as ia
+
+        ser = self._ensure_serial()
+        pcm = ia.load_window(clip)
+        self.after(0, self._set_status, "注入中：%s（%d 帧，约 26 s）…"
+                   % (clip.name, ia.IMAGE_BYTES // 256))
+
+        def progress(i, n):
+            if i % 64 == 0 or i == n:
+                self.after(0, self._set_status,
+                           "注入中：%s  %d/%d 帧" % (clip.name, i, n))
+
+        t0 = time.time()
+        text, logits, frames, retrans = ia.inject_window(ser, pcm, progress=progress)
+        elapsed = time.time() - t0
+
+        st = dd.read_status(ser)
+        self.after(0, self._on_logits, st, logits)
+
+        if refresh:
+            raw = ds.read_ddr_robust(ser, SPEC_BASE, SPEC_BYTES)
+            db = np.frombuffer(raw, dtype="<i2").astype(np.int32).reshape(258, 64).T
+            self.after(0, self._on_spec, db)
+
+        ser.write(b"U")            # release the window lock
+        top = int(np.argmax(logits))
+        truth = None
+        if clip.stem.startswith("sample_"):
+            try:
+                truth = int(clip.stem.split("_")[1])
+            except Exception:
+                truth = None
+        tag = ("  真值 %s  %s" % (ba.CLASS_NAMES[truth],
+                                 "OK" if truth == top else "MISS")
+               if truth is not None else "")
+        self.after(0, self._set_status,
+                   "注入完成 %.1f s / %d 帧 / %d 重传  %s\n%s  top1=%s%s"
+                   % (elapsed, frames, retrans, text,
+                      list(map(int, logits)), ba.CLASS_NAMES[top], tag))
 
     # -------------------------------------------------------------- tick
     def _tick(self):
