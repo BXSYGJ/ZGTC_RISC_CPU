@@ -11,8 +11,8 @@ a muted endpoint that silently records silence).  This tool removes it.
 
 How
 ---
-The bitstream grows a second framed loader aimed at DDR3 base 0x0 (the first
-ping-pong PCM half) plus three diag commands:
+The bitstream gives the single framed loader a base-address select (inject_sel)
+plus three diag commands:
 
     'I'  injection mode: route UART bytes to that loader, weight loader off
     'X'  leave injection mode

@@ -30,6 +30,12 @@ module weight_loader #(
     input  wire        clk,
     input  wire        rst_n,
 
+    // Diagnostic PCM injection: when high, frames land at DDR3 base 0x0
+    // (the first ping-pong audio window) instead of BASE_ADDR.  A single
+    // mux, not a second loader -- a duplicate loader tipped the design back
+    // into Route-0008 (20261114-200703, 2h51m unroutable).
+    input  wire        inject_sel,
+
     // UART byte channel (from uart_rx)
     input  wire        rx_valid,
     input  wire [7:0]  rx_data,
@@ -134,7 +140,8 @@ module weight_loader #(
     // Chunk geometry: beats = ceil(len/32), command length = beats-1.
     wire [8:0]  beat_num_c = {1'b0, len_rx[15:5]} + (|len_rx[4:0] ? 9'd1 : 9'd0);
     wire [7:0]  cmd_len_c  = beat_num_c[7:0] - 8'd1;
-    wire [27:0] cmd_addr_c = BASE_ADDR + {4'd0, seq_rx, 8'd0};
+    wire [27:0] base_addr_c = inject_sel ? 28'd0 : BASE_ADDR;
+    wire [27:0] cmd_addr_c = base_addr_c + {4'd0, seq_rx, 8'd0};
 
     // Folded digest reported in the WOK line.
     wire [31:0] digest_c = acc0 ^ acc1 ^ acc2 ^ acc3;
@@ -341,7 +348,7 @@ module weight_loader #(
                     if (rd_seq == frame_cnt) begin
                         state <= S_RD_CHK;
                     end else begin
-                        cmd       <= {1'b0, (BASE_ADDR + {4'd0, rd_seq, 8'd0}), rd_cmd_len_c};
+                        cmd       <= {1'b0, (base_addr_c + {4'd0, rd_seq, 8'd0}), rd_cmd_len_c};
                         cmd_valid <= 1'b1;
                         rd_ready  <= 1'b1;
                         state     <= S_RD_BEAT;
@@ -373,7 +380,7 @@ module weight_loader #(
                         tx_line[2] <= 8'h52;  // 'R'
                         tx_line[3] <= 8'h52;  // 'R'
                         weight_err <= 1'b1;
-                        err_addr   <= BASE_ADDR + {4'd0, rd_seq, 8'd0};
+                        err_addr   <= base_addr_c + {4'd0, rd_seq, 8'd0};
                     end else begin
                         weight_ok <= 1'b1;
                     end

@@ -684,6 +684,7 @@ module top_rv_core #(
     weight_loader #(.BASE_ADDR(28'h100000)) u_weight_loader (
         .clk         (core_clk),
         .rst_n       (core_clk_rst_n),
+        .inject_sel  (1'b0),
         .rx_valid    (rx_byte_valid && !npu_busy_u && !npu_start && !native_fault),
         .rx_data     (rx_byte_data),
         .tx_valid    (wl_tx_valid),

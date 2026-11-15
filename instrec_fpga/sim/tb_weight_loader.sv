@@ -74,6 +74,7 @@ module tb_weight_loader;
     weight_loader dut (
         .clk         (clk),
         .rst_n       (rst_n),
+        .inject_sel  (1'b0),
         .rx_valid    (rx_valid),
         .rx_data     (rx_data),
         .tx_valid    (tx_valid),

@@ -14,8 +14,17 @@
 > - `mel_engine` 新增 `diag_tick` / `diag_base`：可由诊断模块直接启动一次窗口，`win_base`
 >   取诊断给的基址，不再依赖 `audio_sink` 的 `win_tick`。
 > - `diag_readback` 新增三条命令：`'I'`（注入模式开）、`'X'`（关）、`'T'`（触发一次 mel）。
-> - `instrec_top` 增加第二个 `weight_loader`（`BASE_ADDR=0`，即 PCM 窗口 A），与权重加载器
->   按 `dg_inject_mode` 互斥共用 UART 与 m1 写端口（两者本来就不可能并发）。
+> - `weight_loader` 只加一个输入 `inject_sel` + 一个 28 位基址 mux：高电平时帧写到
+>   DDR 基址 `0x0`（PCM 窗口 A）而非 `BASE_ADDR=0x100000`；`instrec_top` 用 `dg_inject_mode`
+>   驱动它。**不是**复制第二个 loader。
+> - 协议安全性：上传期间 `wl_busy=1` 会把 diag 的 `dg_rx_sel` 关掉（`!wl_busy`），
+>   所以 payload 里的字节不会被误当成 diag 命令；END 帧后 `wl_busy` 落下，`'X'`/`'T'` 才生效。
+>
+> **重要翻车记录（勿重蹈）**：第一版实现是「再例化一个完整 `weight_loader`」（256-bit 打拍缓冲 +
+> CRC + 2 KiB distributed RAM），结果 `20261114-200703-02e71d62` 在 PnR 跑了 **2h51m 后
+> `Route-0008: Design cannot be routed`**。这个设计本来就贴着布线极限（方案 A 靠共享 beats-1
+> 减法器才收敛），多一整份 loader 直接把拥塞打回去。改成单 mux 后增量逻辑只有几十个 LUT。
+> 教训：在这颗器件上不要靠「复制实例」复用已有协议引擎，优先加选择信号。
 >
 > 主机侧 `scripts/inject_audio.py`：`'U'` 清锁 → `'L'` 冻结音频写入（`audio_sink` 的
 > `frame_event` 已由 `diag_lock` 门控，冻结期间不会覆盖 DDR）→ 用与权重上传相同的
