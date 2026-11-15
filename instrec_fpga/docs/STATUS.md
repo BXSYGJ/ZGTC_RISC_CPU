@@ -7,6 +7,15 @@
 
 
 
+
+> **2026-11-15（约定：不要自动改声卡端点音量）** 用户正在用同一块 NICEHCK DAC
+> （挂在拓展坞上）听东西，反复自动 unmute + 强制 50% 会打断播放。所有涉及音频的脚本
+> 默认**只读**：`board_gui.py` 删掉构造时 `vol_scale.set()` 触发的自动写入与
+> `play_selected` 里的自动 unmute，改成「只读显示 + 手动应用按钮」；`board_demo.py`
+> 拆成 `report_endpoint` / `apply_endpoint`，需 `--apply-volume` 才写；`loopback_check.py`
+> 不再 unmute/restore，需 `--apply-unmute`。「测完 restore mute」同样不行——会把用户
+> 原本在听的声卡静音回去。已实测 GUI 构造期提交的任务只有 `connect`，volume 任务数=0。
+> 串口注入通路不碰任何音频设备，是绕开这条链路的推荐测试方式（commit `25ff7171`）。
 > **2026-11-15（下午，串口注入上板成功：域内准确率 7/8，板级与 golden 逐位相同）**
 > 注入位流 `20261115-134647-30d968c5`（种子 7，SHA-256 `07DE58CD…`，`Unrouted 0`，
 > 50m29s，WNS −1.576 / WHS +0.110）已烧录并通过完整验证，归档在
