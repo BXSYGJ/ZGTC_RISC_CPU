@@ -6,6 +6,48 @@
 
 
 
+
+> **2026-11-15（下午，串口注入上板成功：域内准确率 7/8，板级与 golden 逐位相同）**
+> 注入位流 `20261115-134647-30d968c5`（种子 7，SHA-256 `07DE58CD…`，`Unrouted 0`，
+> 50m29s，WNS −1.576 / WHS +0.110）已烧录并通过完整验证，归档在
+> `releases/inject-window-20261115/`（位流 + SHA256SUMS + SOURCE_MANIFEST + README）。
+>
+> 【期间修掉两个真 bug】
+> 1. `weight_loader` 的 `frame_cnt` / 写侧 digest 累加器只在复位清零：权重上传后再注入，
+>    第一帧 `seq=0` 与残留 `frame_cnt` 不符 → NAK。改为 S_FIN 置 `img_done`、
+>    下一张 image 首个 SOF 到 S_IDLE 时懒惰清零（保留 `frame_cnt` 对外语义与 readback 范围）。
+>    `tb_weight_loader` 新增 D 场景（不复位连续上传），变异测试确认回退 RTL 后 D 会 FAIL。
+> 2. `flash_bitstream.py` 只看 TCL 的 `puts "PROGRAM FLOW DONE"` 就报成功，
+>    `done bit=0`（板子没起来）时也会误报。改为必须出现 `The done bit is 1`。
+>
+> 【决定性数据：模型自带 8 类 demo，逐条串口注入】
+> 每条都是 1032 帧 / 264192 B / 约 25.8 s / **0 重传**，连续 8 次注入全部成功，
+> 且板级 logits 与 golden **8 通道逐位相同（8/8 IDENTICAL）**：
+>
+> | 片段 | 真值 | 板级 top1 | |
+> |---|---|---|---|
+> | clarinet | 0 | 0 | OK |
+> | distorted electric guitar | 1 | 1 | OK |
+> | female singer | 2 | 2 | OK |
+> | flute | 3 | 0 | MISS（golden 也判 0，模型自身误差） |
+> | piano | 4 | 4 | OK |
+> | tenor saxophone | 5 | 5 | OK |
+> | trumpet | 6 | 6 | OK |
+> | violin | 7 | 7 | OK |
+>
+> ⇒ **板级准确率 7/8 = 87.5%**。这是第一次拿到不受模拟回环污染的数字。
+> 此前 IRMAS 5/18、demo 1/8 全部失真，根因 100% 在 `DAC → 3.5mm → PCM1808`，
+> FPGA 的 mel / standardize / 量化 / NPU 与参考实现等价。
+>
+> 【用法】烧注入位流 → 上传 48k 权重 → `python scripts/inject_audio.py --wav X.wav --golden`。
+> 命令序列：`L`（冻结 audio_sink）→ `I`（切基址到 0x0）→ 分帧上传 → `X` → `T`（触发 mel）→ `G`。
+>
+> 【合作者分支核验（另见当天微信）】远端 `rtos125-integration` / `52a58f1` 真实存在，
+> 交付位流 SHA-256 `59A0E54A…` 与声明逐字节一致；但那是从 `852f067d` 分出去的
+> 另一套架构（759 文件 / +34 万行，pacerv_h3 CPU + FreeRTOS + 原生 HDMI 双页 UI），
+> 其 RELEASE.json 自报 `timing_qualified: false` / `physical_board_test: pending`。
+> 与本主线不重叠，**暂不合并**；且它展示的「真实识别窗口」仍受坏的模拟回环影响，
+> 用串口注入才能给它可信输入。
 > **2026-11-15（注入位流布线攻坚，进行中）**
 > 第一版注入 RTL 在 PnR 上连吃两次 `Route-0008`，都是布线悬崖问题，不是功能问题：
 > - `20261114-200703-02e71d62`（复制整个 loader）PnR **2h51m** 后失败；
