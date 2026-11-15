@@ -72,6 +72,22 @@ def load_window(path: Path, peak_dbfs: float = -1.0) -> np.ndarray:
     return np.tile(pcm48, int(np.ceil(WINDOW / max(1, pcm48.size))))[:WINDOW]
 
 
+def drain(ser, settle: float = 0.12) -> None:
+    """Consume command ACKs ('K') so they cannot be mistaken for upload ACKs.
+
+    'U'/'L'/'I'/'X'/'T' each make the diag engine emit a 'K'.  If one is left
+    in the buffer when Uploader starts, frame N's ACK is consumed by frame
+    N-1 and the trailing 'K' lands in front of the WOK line -> a successful
+    upload is reported as FAILED.  Uploader._wait_ack already skips stray
+    telemetry bytes, but a *valid* 'K' from an earlier command is different:
+    it must be removed before the upload begins.
+    """
+    time.sleep(settle)
+    while ser.in_waiting:
+        ser.read(ser.in_waiting)
+        time.sleep(0.02)
+
+
 def wait_logits(ser, timeout=15.0) -> list[int]:
     """Poll 'S' until the NPU has produced logits, then read 'G'."""
     deadline = time.time() + timeout
@@ -114,8 +130,8 @@ def main(argv=None) -> int:
         time.sleep(0.05)
         ser.write(b"L")            # freeze audio_sink: nothing may overwrite DDR
         time.sleep(0.05)
-        ser.write(b"I")            # injection mode on
-        time.sleep(0.1)
+        ser.write(b"I")            # injection mode on (loader base -> 0x0)
+        drain(ser)                 # eat the three 'K' ACKs
 
         t0 = time.time()
         up = wu.Uploader(ser, image, timeout=1.0, retries=3,
@@ -132,10 +148,11 @@ def main(argv=None) -> int:
             ser.close()
             return 1
 
+        drain(ser)                 # trailing bytes after the WOK line
         ser.write(b"X")            # back to normal command routing
         time.sleep(0.05)
         ser.write(b"T")            # start mel on the injected window
-        time.sleep(0.1)
+        drain(ser)
         logits = wait_logits(ser)
         print("   run %d  board logits = %s   top1=%d"
               % (run, logits, int(np.argmax(logits))))

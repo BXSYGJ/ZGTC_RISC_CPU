@@ -226,10 +226,9 @@ module mel_engine #(
     // Diagnostic window start (serial PCM injection): when the host has
     // pushed a whole 132096-sample window into DDR over UART there is no
     // audio_sink tick to start the engine, so the diag module pulses
-    // diag_tick and hands over the DDR base of the injected half.  Only
-    // honoured from ST_IDLE, exactly like win_tick.
+    // diag_tick selects window A (DDR base 0), where the serial injection
+    // loader writes.  Only honoured from ST_IDLE, exactly like win_tick.
     input  wire        diag_tick,
-    input  wire [27:0] diag_base,
 
     // DDR3 master port 2 (per-master signals; instrec_top packs them
     // into the ddr3_ctrl_axi buses - m2_cmd level-held until done_m2).
@@ -812,8 +811,11 @@ module mel_engine #(
                         // corrupted the first frames of the window (measured
                         // 0-75 leading frames off by 2..60 dB, count varying
                         // per capture).
-                        win_base <= diag_tick ? diag_base
-                                              : (win_id[0] ? 28'd0 : PCM_WIN_STRIDE);
+                        // diag_tick always reads window A (base 0), which is
+                        // where the serial injection loader writes.  A 1-bit OR
+                        // instead of a 28-bit mux: this design sits on the
+                        // routing cliff and every extra LUT matters.
+                        win_base <= (diag_tick || win_id[0]) ? 28'd0 : PCM_WIN_STRIDE;
                         frm_out  <= 9'd0;
                         stats_seen <= 1'b0;
                         mel_cycle_cnt <= 32'd0;

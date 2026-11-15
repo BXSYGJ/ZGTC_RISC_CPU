@@ -445,7 +445,6 @@ module instrec_top #(
         .win_tick      (win_tick),
         .win_id        (win_id),
         .diag_tick     (dg_mel_trigger),
-        .diag_base     (28'd0),
         .m2_cmd_valid  (mel_m2_cmd_valid),
         .m2_cmd        (mel_m2_cmd),
         .m2_wdata      (mel_m2_wdata),
