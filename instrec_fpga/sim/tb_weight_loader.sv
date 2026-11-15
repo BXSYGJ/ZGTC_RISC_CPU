@@ -522,6 +522,46 @@ module tb_weight_loader;
               rd_beats >= 32);
 
         // -------------------------------------------------------------
+        // D: a SECOND image in the same power cycle (no reset).
+        // Regression for the serial-PCM-injection path: weights are uploaded
+        // first, then a full 132096-sample PCM window is pushed through the
+        // SAME loader.  Before the lazy-clear fix, frame_cnt stayed at 4 and
+        // the first frame of image #2 (seq=0) was NAK'd; the write-side
+        // digest accumulators also carried the first image into WOK.
+        // After the fix this must behave exactly like image #1.
+        // -------------------------------------------------------------
+        acc0 = 32'd0; acc1 = 32'd0; acc2 = 32'd0; acc3 = 32'd0;  // TB byte model
+        rx_len = 0;
+        for (i = 0; i < NCHUNK; i = i + 1) begin
+            send_frame(i[15:0], 1'b0);
+            wait_loader_idle();
+        end
+        send_end_frame();
+        wait_loader_idle();
+        // wait for the terminal WOK line (4 'K' + 13 bytes)
+        i = 0;
+        while (rx_len < 17 && i < 40000) begin
+            @(posedge clk);
+            i = i + 1;
+        end
+        repeat (16) @(posedge clk);
+        $display("OBS D: frame_cnt=%0d weight_ok=%0b weight_err=%0b rx_len=%0d",
+                 frame_cnt, weight_ok, weight_err, rx_len);
+        show_uart();
+        check("D second image: 4 chunks accepted (no stale-seq NAK)",
+              rx_len >= 5 &&
+              rx_text[0] == 8'h4B && rx_text[1] == 8'h4B &&
+              rx_text[2] == 8'h4B && rx_text[3] == 8'h4B);
+        check("D second image: WOK emitted",
+              rx_len >= 7 &&
+              rx_text[4] == 8'h57 && rx_text[5] == 8'h4F && rx_text[6] == 8'h4B);
+        check("D second image: frame_cnt reset to 4 (not 8)",
+              frame_cnt == 16'd4);
+        check("D second image: clean per-image digest",
+              digest === digest_c);
+        check("D second image: no error latched", weight_err === 1'b0);
+
+        // -------------------------------------------------------------
         // B: corrupted chunk -> 'N'
         // -------------------------------------------------------------
         reset_dut();

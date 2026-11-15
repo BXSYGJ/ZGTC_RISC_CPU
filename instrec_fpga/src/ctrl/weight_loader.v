@@ -88,6 +88,7 @@ module weight_loader #(
 
     reg [4:0]   state;
     reg [15:0]  seq_rx;
+    reg         img_done;   // end-of-image reached; clear state on next SOF
     reg [15:0]  len_rx;
     reg [15:0]  pay_idx;
     reg [15:0]  crc_rx;
@@ -184,6 +185,7 @@ module weight_loader #(
             rd_seq     <= 16'd0;
             last_len   <= 16'd0;
             rd_ready   <= 1'b0;
+            img_done   <= 1'b0;
         end else begin
             tx_valid <= 1'b0;
 
@@ -195,6 +197,23 @@ module weight_loader #(
                         state    <= S_SOF1;
                         crc_calc <= 16'hFFFF;
                         weight_err <= 1'b0;
+                        if (img_done) begin
+                            // A previous image finished (WOK already sent).
+                            // Reset everything that belongs to one image so
+                            // seq starts at 0 and the folded digest is clean.
+                            frame_cnt <= 16'd0;
+                            acc0      <= 32'd0;
+                            acc1      <= 32'd0;
+                            acc2      <= 32'd0;
+                            acc3      <= 32'd0;
+                            racc0     <= 32'd0;
+                            racc1     <= 32'd0;
+                            racc2     <= 32'd0;
+                            racc3     <= 32'd0;
+                            rd_seq    <= 16'd0;
+                            last_len  <= 16'd0;
+                            img_done  <= 1'b0;
+                        end
                     end
                 end
 
@@ -441,8 +460,17 @@ module weight_loader #(
                 end
 
                 S_FIN: begin
-                    busy  <= 1'b0;
-                    state <= S_IDLE;
+                    // End of ONE image.  Do NOT clear frame_cnt here: it is an
+                    // output observed by the CPU/testbench and it also bounds
+                    // the read-back digest loop.  Instead latch img_done and
+                    // clear the per-image state lazily when the NEXT image's
+                    // first SOF byte arrives (S_IDLE).  That keeps a single
+                    // upload behaving exactly as before while allowing a
+                    // second upload (weights, then serial PCM injection) to
+                    // start from seq=0 with a clean digest accumulator.
+                    busy     <= 1'b0;
+                    state    <= S_IDLE;
+                    img_done <= 1'b1;
                 end
 
                 default: state <= S_IDLE;

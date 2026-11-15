@@ -144,13 +144,19 @@ def main(argv=None) -> int:
                         print("  " + line.strip())
                 print("CHAIN ok (attempt %d, no reconfiguration)" % attempt)
                 return 0
-        elif rc == 0 and "PROGRAM FLOW DONE" in text and not missing:
+        elif rc == 0 and "The done bit is 1" in text and not missing:
+            # cdt_cfg prints "PROGRAM FLOW DONE" from the TCL `puts` whether or
+            # not programming worked.  The only trustworthy marker is the
+            # post-program status line: cfg_program reports "done bit is 0"
+            # when the device stayed unconfigured (seen 2026-11-15: the script
+            # claimed success while the board never came back on the UART).
             for line in text.splitlines():
                 if "Program" in line or "done bit" in line:
                     print("  " + line.strip())
             print("PROGRAMMED ok (attempt %d)" % attempt)
             return 0
-        reason = "cable missing" if missing else "tool error (rc=%d)" % rc
+        reason = "cable missing" if missing else (
+            "program did not set done bit" if rc == 0 else "tool error (rc=%d)" % rc)
         print("attempt %d/%d failed: %s" % (attempt, attempts, reason))
         if attempt == attempts:
             print(text[-800:])
