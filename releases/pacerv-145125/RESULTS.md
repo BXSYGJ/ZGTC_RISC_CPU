@@ -1,4 +1,14 @@
-﻿# PaceRV 本轮优化结果
+﻿# 2026-11-18 更新：6621 LUT 合格版本
+
+最新 MemoryRange 版本保留同样的 SelectiveLoad 功能、145.125 MHz 频率和两组正式 6000 次成绩；相对原 H4 减少 **191 LUT（2.80%）和 256 FF（9.10%）**，slow setup 余量从 +0.008 ns 提高到 **+0.043 ns**。更新包括 BTB 单写口归并、循环状态 RAM 表示、内存范围比较和 LUT packing strategy 1（seed 2）。包内附实际 17/18 份 RTL 绑定、完整长测日志、原始 PDS 报告、修改与回滚记录。
+
+新增包严格核验：`python verify_package_sg30.py --zip PaceRV_H4_Loop16_SelectiveLoad_MemoryRange_145125_LUT6621_Verified.zip`。该命令重新计算包内文件哈希、正式周期数与成绩，核对源码、固件、位流、十类原始时序数据及实际资源。
+
+V0/V1 CoreMark/MHz：3.503527129 / 3.501428774；25 DRM36K / 4 APM / 1 GPLL。十项时序全部通过，setup uncertainty 0.150 ns。下方保留早期版本结果。
+
+---
+
+# PaceRV 本轮优化结果
 
 本轮已沿用户允许的 PaceRV 路线完成源码优化、6000 次 RTL 长测、实际 PDS 布局布线、回滚验证和交付归档。最高分配置的性能组为 **3.511833433 CoreMark/MHz**，验证组为 **3.510807712 CoreMark/MHz**。新增选择性加载旁路版本为 **3.511364165 CoreMark/MHz**，145.125 MHz 配置下的 slow setup 改善至 **−0.044 ns**。通过全部时序检查的版本为 **3.484719042 CoreMark/MHz、145.125 MHz**。
 
