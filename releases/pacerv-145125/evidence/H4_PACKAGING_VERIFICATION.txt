@@ -1,0 +1,182 @@
+﻿{
+  "changed_field": "Exact21 simulator identity inputs, all bound H4/H3 donor proof subdirectories, portable Windows verifier command, import bytecode disabled in archived CLI tools",
+  "MODIFIED_FILE": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\pds_minimal_blink_200h\\pacerv_h3_optimization\\scripts\\closure-packaging-loop16-h4\\MODIFIED_FILE.py",
+  "DIFF_FILE": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\pds_minimal_blink_200h\\pacerv_h3_optimization\\scripts\\closure-packaging-loop16-h4\\SNAPSHOT_DIFF_FILE.diff",
+  "VERIFICATION": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\pds_minimal_blink_200h\\pacerv_h3_optimization\\scripts\\closure-packaging-loop16-h4\\SNAPSHOT_VERIFICATION.txt",
+  "ROLLBACK": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\pds_minimal_blink_200h\\pacerv_h3_optimization\\scripts\\closure-packaging-loop16-h4\\SNAPSHOT_ROLLBACK.sh",
+  "baseline_sha256": "65c51218490c04e0586d8d466b0957bf9400455f9b3fc44b363c2ef1b1802d53",
+  "modified_sha256": "460a879f353930d5a63040f601649aeac70b0c1e41481bea8c51db5994420c45",
+  "tests": {
+    "BASELINE": {
+      "variant": "BASELINE",
+      "command": [
+        "/usr/bin/python3",
+        "-I",
+        "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/pds_minimal_blink_200h/pacerv_h3_optimization/scripts/closure-packaging-loop16-h4/test_snapshot_full.py",
+        "--variant",
+        "BASELINE"
+      ],
+      "actual_main_argv": [
+        "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/pds_minimal_blink_200h/pacerv_h3_optimization/scripts/closure-packaging-loop16-h4/SNAPSHOT_BASELINE_FILE.py",
+        "--v0",
+        "sg21-loop16-h4-i6000-V0",
+        "--v1",
+        "sg21-loop16-h4-i6000-V1",
+        "--physical",
+        "sg21-loop16-h4-s2",
+        "--output",
+        "snapshot-baseline"
+      ],
+      "source_sha256": "65c51218490c04e0586d8d466b0957bf9400455f9b3fc44b363c2ef1b1802d53",
+      "input": "Unmodified actual H4 V0/V1 actual6000 and sg21-s2 route; output-only root redirect",
+      "full_literal_output": "Traceback (most recent call last):\n  File \"/mnt/d/AAAFPGA/ZGTC_RISC_CPU/pds_minimal_blink_200h/pacerv_h3_optimization/scripts/closure-packaging-loop16-h4/test_snapshot_full.py\", line 69, in main\n    module.main()\n  File \"/mnt/d/AAAFPGA/ZGTC_RISC_CPU/pds_minimal_blink_200h/pacerv_h3_optimization/scripts/closure-packaging-loop16-h4/SNAPSHOT_BASELINE_FILE.py\", line 192, in main\n    verifier.verify_folder(out)\n  File \"/mnt/d/AAAFPGA/ZGTC_RISC_CPU/pds_minimal_blink_200h/pacerv_h3_optimization/scripts/closure-packaging-loop16-h4/verify_package.py\", line 208, in verify_folder\n    result = verify_content(lambda name: (folder / name).read_bytes(), [p.relative_to(folder).as_posix() for p in paths])\n  File \"/mnt/d/AAAFPGA/ZGTC_RISC_CPU/pds_minimal_blink_200h/pacerv_h3_optimization/scripts/closure-packaging-loop16-h4/verify_package.py\", line 126, in verify_content\n    identity.update(read(path))\n  File \"/mnt/d/AAAFPGA/ZGTC_RISC_CPU/pds_minimal_blink_200h/pacerv_h3_optimization/scripts/closure-packaging-loop16-h4/verify_package.py\", line 208, in <lambda>\n    result = verify_content(lambda name: (folder / name).read_bytes(), [p.relative_to(folder).as_posix() for p in paths])\n  File \"/usr/lib/python3.10/pathlib.py\", line 1126, in read_bytes\n    with self.open(mode='rb') as f:\n  File \"/usr/lib/python3.10/pathlib.py\", line 1119, in open\n    return self._accessor.open(self, mode, buffering, encoding, errors,\nFileNotFoundError: [Errno 2] No such file or directory: '/mnt/d/AAAFPGA/ZGTC_RISC_CPU/pds_minimal_blink_200h/pacerv_h3_optimization/scripts/closure-packaging-loop16-h4/snapshot-fullruns/snapshot-baseline/simulation/sim/GTP_DRM36K_E1.v'\n",
+      "actual_main_exit_status": 1,
+      "independent_output": "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/pds_minimal_blink_200h/pacerv_h3_optimization/scripts/closure-packaging-loop16-h4/snapshot-fullruns/snapshot-baseline",
+      "failed_first_attempt_preserved": 312,
+      "literal_output": "BASELINE_FULL_PASS original_archive_missing_vendor_reproduced=1 actual_main_exit=1",
+      "exit_status": 0
+    },
+    "MODIFIED": {
+      "variant": "MODIFIED",
+      "command": [
+        "D:\\Anaconda\\python.exe",
+        "-I",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU\\pds_minimal_blink_200h\\pacerv_h3_optimization\\scripts\\closure-packaging-loop16-h4\\test_snapshot_full.py",
+        "--variant",
+        "MODIFIED"
+      ],
+      "actual_main_argv": [
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU\\pds_minimal_blink_200h\\pacerv_h3_optimization\\scripts\\closure-packaging-loop16-h4\\MODIFIED_FILE.py",
+        "--v0",
+        "sg21-loop16-h4-i6000-V0",
+        "--v1",
+        "sg21-loop16-h4-i6000-V1",
+        "--physical",
+        "sg21-loop16-h4-s2",
+        "--output",
+        "snapshot-modified-r4"
+      ],
+      "source_sha256": "460a879f353930d5a63040f601649aeac70b0c1e41481bea8c51db5994420c45",
+      "input": "Unmodified actual H4 V0/V1 actual6000 and sg21-s2 route; output-only root redirect",
+      "full_literal_output": "PACKAGE_PASS D:\\AAAFPGA\\ZGTC_RISC_CPU\\pds_minimal_blink_200h\\pacerv_h3_optimization\\scripts\\closure-packaging-loop16-h4\\snapshot-fullruns\\snapshot-modified-r4\nV0 CM/MHz=3.503527129 V1 CM/MHz=3.501428774 setup=+0.008ns\nCLOSURE_PACKAGE_PASS files=315 common_rtl=17 timing_pass=True\n",
+      "actual_main_exit_status": 0,
+      "independent_output": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\pds_minimal_blink_200h\\pacerv_h3_optimization\\scripts\\closure-packaging-loop16-h4\\snapshot-fullruns\\snapshot-modified-r4",
+      "failed_first_attempt_preserved": 312,
+      "package_verification": {
+        "files": 315,
+        "common_rtl": 17,
+        "timing_pass": true,
+        "v0_coremark_per_mhz": 3.503527129223651,
+        "v1_coremark_per_mhz": 3.5014287743513752,
+        "bitstream_sha256": "a6d94d56b1daa8f5ed87b15f87de3b0ded36c7c2ccf2d59e8e0f0fa9d02eeb81"
+      },
+      "exact_identity_input_count": 21,
+      "all_new_files_manifested": true,
+      "all_BTB_chain_files_archived": 45,
+      "nested_rollback_source_archived": true,
+      "negative_controls": [
+        {
+          "name": "source mutation with updated manifest: simulation/sim/GTP_DRM36K_E1.v",
+          "literal_output": "Savedactualsimulationidentity",
+          "expected_rejection": true
+        },
+        {
+          "name": "source mutation with updated manifest: simulation/sim/native_selected_observer.sv",
+          "literal_output": "Savedactualsimulationidentity",
+          "expected_rejection": true
+        },
+        {
+          "name": "source mutation with updated manifest: simulation/sim/native_driver.cpp",
+          "literal_output": "Savedactualsimulationidentity",
+          "expected_rejection": true
+        },
+        {
+          "name": "missing vendor manifest entry",
+          "literal_output": "Package inventory mismatch",
+          "expected_rejection": true
+        },
+        {
+          "name": "BTB proof mutation with updated manifest: evidence/rtl/load_simple_loop16_h4/rollback_sources/rv32_btb.sv",
+          "literal_output": "H4sourceorloghash:load_simple_loop16_h4/rollback_sources/rv32_btb.sv",
+          "expected_rejection": true
+        },
+        {
+          "name": "BTB proof mutation with updated manifest: evidence/rtl/load_simple_loop16/BASELINE_FILE.sv",
+          "literal_output": "H4sourceorloghash:load_simple_loop16/BASELINE_FILE.sv",
+          "expected_rejection": true
+        }
+      ],
+      "archived_standalone_cli": {
+        "command": [
+          "D:\\Anaconda\\python.exe",
+          "-I",
+          "D:\\AAAFPGA\\ZGTC_RISC_CPU\\pds_minimal_blink_200h\\pacerv_h3_optimization\\scripts\\closure-packaging-loop16-h4\\snapshot-fullruns\\snapshot-modified-r4\\reproduction\\closure-packaging-loop16-h4\\verify_package.py",
+          "--folder",
+          "D:\\AAAFPGA\\ZGTC_RISC_CPU\\pds_minimal_blink_200h\\pacerv_h3_optimization\\scripts\\closure-packaging-loop16-h4\\snapshot-fullruns\\snapshot-modified-r4"
+        ],
+        "literal_output": "PACKAGE_VERIFY_PASS {\"bitstream_sha256\": \"a6d94d56b1daa8f5ed87b15f87de3b0ded36c7c2ccf2d59e8e0f0fa9d02eeb81\", \"common_rtl\": 17, \"files\": 315, \"timing_pass\": true, \"v0_coremark_per_mhz\": 3.503527129223651, \"v1_coremark_per_mhz\": 3.5014287743513752}\n",
+        "exit_status": 0,
+        "package_remained_unmodified": true
+      },
+      "literal_output": "MODIFIED_FULL_PASS actual_main_exit=0 full_archive=PASS exact_identity_inputs=21 manifest_covers_all=1 BTB_chain_files=45 negative_controls=6 first_failed_preserved=312",
+      "exit_status": 0
+    },
+    "ROLLBACK": {
+      "variant": "ROLLBACK",
+      "command": [
+        "/usr/bin/python3",
+        "-I",
+        "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/pds_minimal_blink_200h/pacerv_h3_optimization/scripts/closure-packaging-loop16-h4/test_snapshot_full.py",
+        "--variant",
+        "ROLLBACK"
+      ],
+      "actual_main_argv": [
+        "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/pds_minimal_blink_200h/pacerv_h3_optimization/scripts/closure-packaging-loop16-h4/snapshot_rollback_test.py",
+        "--v0",
+        "sg21-loop16-h4-i6000-V0",
+        "--v1",
+        "sg21-loop16-h4-i6000-V1",
+        "--physical",
+        "sg21-loop16-h4-s2",
+        "--output",
+        "snapshot-rollback"
+      ],
+      "source_sha256": "65c51218490c04e0586d8d466b0957bf9400455f9b3fc44b363c2ef1b1802d53",
+      "input": "Unmodified actual H4 V0/V1 actual6000 and sg21-s2 route; output-only root redirect",
+      "full_literal_output": "Traceback (most recent call last):\n  File \"/mnt/d/AAAFPGA/ZGTC_RISC_CPU/pds_minimal_blink_200h/pacerv_h3_optimization/scripts/closure-packaging-loop16-h4/test_snapshot_full.py\", line 69, in main\n    module.main()\n  File \"/mnt/d/AAAFPGA/ZGTC_RISC_CPU/pds_minimal_blink_200h/pacerv_h3_optimization/scripts/closure-packaging-loop16-h4/snapshot_rollback_test.py\", line 192, in main\n    verifier.verify_folder(out)\n  File \"/mnt/d/AAAFPGA/ZGTC_RISC_CPU/pds_minimal_blink_200h/pacerv_h3_optimization/scripts/closure-packaging-loop16-h4/verify_package.py\", line 208, in verify_folder\n    result = verify_content(lambda name: (folder / name).read_bytes(), [p.relative_to(folder).as_posix() for p in paths])\n  File \"/mnt/d/AAAFPGA/ZGTC_RISC_CPU/pds_minimal_blink_200h/pacerv_h3_optimization/scripts/closure-packaging-loop16-h4/verify_package.py\", line 126, in verify_content\n    identity.update(read(path))\n  File \"/mnt/d/AAAFPGA/ZGTC_RISC_CPU/pds_minimal_blink_200h/pacerv_h3_optimization/scripts/closure-packaging-loop16-h4/verify_package.py\", line 208, in <lambda>\n    result = verify_content(lambda name: (folder / name).read_bytes(), [p.relative_to(folder).as_posix() for p in paths])\n  File \"/usr/lib/python3.10/pathlib.py\", line 1126, in read_bytes\n    with self.open(mode='rb') as f:\n  File \"/usr/lib/python3.10/pathlib.py\", line 1119, in open\n    return self._accessor.open(self, mode, buffering, encoding, errors,\nFileNotFoundError: [Errno 2] No such file or directory: '/mnt/d/AAAFPGA/ZGTC_RISC_CPU/pds_minimal_blink_200h/pacerv_h3_optimization/scripts/closure-packaging-loop16-h4/snapshot-fullruns/snapshot-rollback/simulation/sim/GTP_DRM36K_E1.v'\n",
+      "actual_main_exit_status": 1,
+      "independent_output": "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/pds_minimal_blink_200h/pacerv_h3_optimization/scripts/closure-packaging-loop16-h4/snapshot-fullruns/snapshot-rollback",
+      "failed_first_attempt_preserved": 312,
+      "literal_output": "ROLLBACK_FULL_PASS original_archive_missing_vendor_reproduced=1 actual_main_exit=1",
+      "exit_status": 0
+    }
+  },
+  "rollback_action": {
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-NonInteractive",
+      "-Command",
+      "[Console]::OutputEncoding=[System.Text.Encoding]::UTF8; $a=[System.IO.Path]::Combine('D:/AAAFPGA','ZGTC_RISC_CPU','pds_minimal_blink_200h','pacerv_h3_optimization','scripts','closure-packaging-loop16-h4'); & ([ScriptBlock]::Create((Get-Content -LiteralPath ([System.IO.Path]::Combine($a,'SNAPSHOT_ROLLBACK.sh')) -Raw))) -TargetPath ([System.IO.Path]::Combine($a,'snapshot_rollback_test.py')) -BaselinePath ([System.IO.Path]::Combine($a,'SNAPSHOT_BASELINE_FILE.py'))"
+    ],
+    "input": "Independent modified snapshot_rollback_test.py",
+    "input_sha256": "460a879f353930d5a63040f601649aeac70b0c1e41481bea8c51db5994420c45",
+    "literal_output": "H4_SNAPSHOT_ROLLBACK_PASS SHA256=65C51218490C04E0586D8D466B0957BF9400455F9B3FC44B363C2EF1B1802D53",
+    "exit_status": 0,
+    "restored_sha256": "65c51218490c04e0586d8d466b0957bf9400455f9b3fc44b363c2ef1b1802d53",
+    "active_modified_sha256": "460a879f353930d5a63040f601649aeac70b0c1e41481bea8c51db5994420c45"
+  },
+  "restored_behavior": "Restored independent main65C512 reproduces the actual missing vendor archive failure, exit1; active modified file remains changed and full archive passes",
+  "original_failed_release_preserved": {
+    "session": 75145,
+    "exit_status": 1,
+    "exception": "FileNotFoundError",
+    "missing_relative_path": "simulation/sim/GTP_DRM36K_E1.v",
+    "raw_output_storage": "Original parent tool execution record only; no independent disk log existed",
+    "immutable_file_inventory": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\pds_minimal_blink_200h\\pacerv_h3_optimization\\scripts\\closure-packaging-loop16-h4\\FIRST_ATTEMPT_FROZEN.json",
+    "inventory_sha256": "4ab8675e4082636a67e08f99c0691287eab4535271dc3b75cc0e4ad06a90dcd7",
+    "failed_directory_files": 312
+  },
+  "original_performance_clock_timing_source_constraints": "Unchanged: both actual6000 >3.5, >=10s, 145125000Hz/.150ns, all10rawtiming, exact17sim/physical andV0firmware,182baseline files",
+  "exit_status": 0
+}

@@ -1,0 +1,47 @@
+﻿{
+  "status": "PASS_READ_ONLY_ACTUAL_R2_FOLDER_ZIP",
+  "release": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\pds_minimal_blink_200h\\pacerv_h3_optimization\\optimized_releases\\PaceRV_H4_Loop16_SelectiveLoad_145125_Verified_r2",
+  "zip": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\pds_minimal_blink_200h\\pacerv_h3_optimization\\optimized_releases\\PaceRV_H4_Loop16_SelectiveLoad_145125_Verified_r2.zip",
+  "zip_sha256": "6fb4b17fcb101aa6071b16c199e1e041f10ebeb3eeb53db6090168e0bfa13e7e",
+  "zip_bytes": 1690318,
+  "folder_verification": {
+    "files": 315,
+    "common_rtl": 17,
+    "timing_pass": true,
+    "v0_coremark_per_mhz": 3.503527129223651,
+    "v1_coremark_per_mhz": 3.5014287743513752,
+    "bitstream_sha256": "a6d94d56b1daa8f5ed87b15f87de3b0ded36c7c2ccf2d59e8e0f0fa9d02eeb81"
+  },
+  "zip_verification": {
+    "files": 315,
+    "common_rtl": 17,
+    "timing_pass": true,
+    "v0_coremark_per_mhz": 3.503527129223651,
+    "v1_coremark_per_mhz": 3.5014287743513752,
+    "bitstream_sha256": "a6d94d56b1daa8f5ed87b15f87de3b0ded36c7c2ccf2d59e8e0f0fa9d02eeb81"
+  },
+  "full_archive_file_count": 316,
+  "manifest_entries": 315,
+  "exact_identity_inputs": 21,
+  "all_BTB_chain_files": 45,
+  "source_sha256": "460a879f353930d5a63040f601649aeac70b0c1e41481bea8c51db5994420c45",
+  "archived_standalone_cli": {
+    "command": [
+      "D:\\Anaconda\\python.exe",
+      "-I",
+      "D:\\AAAFPGA\\ZGTC_RISC_CPU\\pds_minimal_blink_200h\\pacerv_h3_optimization\\optimized_releases\\PaceRV_H4_Loop16_SelectiveLoad_145125_Verified_r2\\reproduction\\closure-packaging-loop16-h4\\verify_package.py",
+      "--folder",
+      "D:\\AAAFPGA\\ZGTC_RISC_CPU\\pds_minimal_blink_200h\\pacerv_h3_optimization\\optimized_releases\\PaceRV_H4_Loop16_SelectiveLoad_145125_Verified_r2"
+    ],
+    "literal_output": "PACKAGE_VERIFY_PASS {\"bitstream_sha256\": \"a6d94d56b1daa8f5ed87b15f87de3b0ded36c7c2ccf2d59e8e0f0fa9d02eeb81\", \"common_rtl\": 17, \"files\": 315, \"timing_pass\": true, \"v0_coremark_per_mhz\": 3.503527129223651, \"v1_coremark_per_mhz\": 3.5014287743513752}\n",
+    "exit_status": 0
+  },
+  "raw_all_timing_categories": 10,
+  "fixed_frequency_hz": 145125000,
+  "fixed_uncertainty_ns": 0.15,
+  "full_actual6000_scores_gt3p5": true,
+  "package_inventory_before_equals_after": true,
+  "package_created_or_modified_files": 0,
+  "first_failed_directory_unchanged": true,
+  "exit_status": 0
+}

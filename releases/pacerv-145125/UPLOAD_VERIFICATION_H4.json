@@ -1,0 +1,14 @@
+﻿{
+  "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\pds_minimal_blink_200h\\pacerv_h3_optimization\\optimized_releases\\PaceRV_H4_Loop16_SelectiveLoad_145125_Verified_r2.zip",
+  "bytes": 1690318,
+  "sha256": "6fb4b17fcb101aa6071b16c199e1e041f10ebeb3eeb53db6090168e0bfa13e7e",
+  "reopened_verification": {
+    "files": 315,
+    "common_rtl": 17,
+    "timing_pass": true,
+    "v0_coremark_per_mhz": 3.503527129223651,
+    "v1_coremark_per_mhz": 3.5014287743513752,
+    "bitstream_sha256": "a6d94d56b1daa8f5ed87b15f87de3b0ded36c7c2ccf2d59e8e0f0fa9d02eeb81"
+  },
+  "exit_status": 0
+}

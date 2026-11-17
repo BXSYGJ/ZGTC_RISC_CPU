@@ -1,0 +1,321 @@
+{
+  "status": "QUALIFIED_SAVED_PHYSICAL_AND_ACTUAL6000",
+  "updated_utc": "2026-11-17T18:03:20.800655+00:00",
+  "physical": {
+    "name": "sg21-loop16-h4-s2",
+    "path": "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/pds_minimal_blink_200h/pacerv_h3_optimization/work/sg21-loop16-h4-s2",
+    "status": "completed_timing_pass",
+    "frequency_mhz": 145.125,
+    "setup_uncertainty_ns": 0.15,
+    "slow_setup_ns": 0.008,
+    "resources": {
+      "LUT": 6812,
+      "FF": 2813,
+      "DRM36K": 25,
+      "APM": 4,
+      "GPLL": 1,
+      "RawRows": [
+        "| Use of APM                        | 4        | 740           | 1                  ",
+        "|   FF                              | 2270     | 240600        | 1                  ",
+        "|   LUT                             | 5014     | 120300        | 5                  ",
+        "|   FF                              | 543      | 79000         | 1                  ",
+        "|   LUT                             | 1798     | 39500         | 5                  ",
+        "| Use of DRM                        | 25       | 415           | 7                  ",
+        "| Use of GPLL                       | 1        | 10            | 10                 "
+      ]
+    },
+    "bitstream": "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/pds_minimal_blink_200h/pacerv_h3_optimization/work/sg21-loop16-h4-s2/implementation/generate_bitstream/pds_soc_top.sbit",
+    "bitstream_sha256": "a6d94d56b1daa8f5ed87b15f87de3b0ded36c7c2ccf2d59e8e0f0fa9d02eeb81",
+    "firmware_sha256": "941041b71bd0b8a3075bd3470fdd566605492f3ceb21ba8faea677dd230bc0cf",
+    "core_sha256": "5e81f9c56246e502b43c6a48c14342dbb16ac437788ac01d00a482d9a06ca84b",
+    "btb_sha256": "b362dea594ba68f5eba4274ee054a5ec4d09e57b2695c695f1b2bdf849e8eca0",
+    "all_ten_timing_checks_pass": true
+  },
+  "timing_checks": {
+    "Setup_Slow": [
+      {
+        "Clocks": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+        "WorstSlackNs": 0.008,
+        "TotalNegativeSlackNs": 0.0,
+        "FailingEndpoints": 0,
+        "TotalEndpoints": 14922
+      }
+    ],
+    "Hold_Slow": [
+      {
+        "Clocks": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+        "WorstSlackNs": 0.142,
+        "TotalNegativeSlackNs": 0.0,
+        "FailingEndpoints": 0,
+        "TotalEndpoints": 14922
+      }
+    ],
+    "Recovery_Slow": [
+      {
+        "Clocks": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+        "WorstSlackNs": 2.562,
+        "TotalNegativeSlackNs": 0.0,
+        "FailingEndpoints": 0,
+        "TotalEndpoints": 1977
+      }
+    ],
+    "Removal_Slow": [
+      {
+        "Clocks": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+        "WorstSlackNs": 0.752,
+        "TotalNegativeSlackNs": 0.0,
+        "FailingEndpoints": 0,
+        "TotalEndpoints": 1977
+      }
+    ],
+    "Minimum Pulse Width_Slow": [
+      {
+        "Clocks": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+        "WorstSlackNs": 2.1,
+        "TotalNegativeSlackNs": 0.0,
+        "FailingEndpoints": 0,
+        "TotalEndpoints": 2606
+      }
+    ],
+    "Setup_Fast": [
+      {
+        "Clocks": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+        "WorstSlackNs": 2.79,
+        "TotalNegativeSlackNs": 0.0,
+        "FailingEndpoints": 0,
+        "TotalEndpoints": 14922
+      }
+    ],
+    "Hold_Fast": [
+      {
+        "Clocks": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+        "WorstSlackNs": 0.1,
+        "TotalNegativeSlackNs": 0.0,
+        "FailingEndpoints": 0,
+        "TotalEndpoints": 14922
+      }
+    ],
+    "Recovery_Fast": [
+      {
+        "Clocks": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+        "WorstSlackNs": 4.213,
+        "TotalNegativeSlackNs": 0.0,
+        "FailingEndpoints": 0,
+        "TotalEndpoints": 1977
+      }
+    ],
+    "Removal_Fast": [
+      {
+        "Clocks": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+        "WorstSlackNs": 0.51,
+        "TotalNegativeSlackNs": 0.0,
+        "FailingEndpoints": 0,
+        "TotalEndpoints": 1977
+      }
+    ],
+    "Minimum Pulse Width_Fast": [
+      {
+        "Clocks": "clk|multiplied_clock.clock_source/pll/CLKOUT0_Inferred",
+        "WorstSlackNs": 2.647,
+        "TotalNegativeSlackNs": 0.0,
+        "FailingEndpoints": 0,
+        "TotalEndpoints": 2606
+      }
+    ]
+  },
+  "actual6000": [
+    {
+      "name": "sg21-loop16-h4-i6000-V0",
+      "path": "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/pds_minimal_blink_200h/pacerv_h3_optimization/work/sg21-loop16-h4-i6000-V0",
+      "role": "V0",
+      "profile": "selective-tune5",
+      "iterations": 6000,
+      "cycles": 1712559880,
+      "retired": 1634152429,
+      "coremark_per_mhz": 3.503527129223651,
+      "coremark_at_145125MHz": 508.44937462858235,
+      "seconds_at_145125MHz": 11.800584875107665,
+      "crc_fields": [
+        "0xe714",
+        "0x1fd7",
+        "0x8e3a",
+        "0xa14c"
+      ],
+      "formal_ten_seconds": true,
+      "firmware_sha256": "941041b71bd0b8a3075bd3470fdd566605492f3ceb21ba8faea677dd230bc0cf",
+      "historical_duration_diagnostic_reclassified": false,
+      "rtl_sha256": "c7ab29adf836d1f94a9b637d4e8489412774bef95f254fde386b63aa03e7f194",
+      "exit_status": 0,
+      "cycle_margin_to_exclusive_3p5": 1725834
+    },
+    {
+      "name": "sg21-loop16-h4-i6000-V1",
+      "path": "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/pds_minimal_blink_200h/pacerv_h3_optimization/work/sg21-loop16-h4-i6000-V1",
+      "role": "V1",
+      "profile": "selective-tune5",
+      "iterations": 6000,
+      "cycles": 1713586192,
+      "retired": 1634361529,
+      "coremark_per_mhz": 3.5014287743513752,
+      "coremark_at_145125MHz": 508.14485087774335,
+      "seconds_at_145125MHz": 11.807656792420328,
+      "crc_fields": [
+        "0xe3c1",
+        "0x0747",
+        "0x8d84",
+        "0x18e1"
+      ],
+      "formal_ten_seconds": true,
+      "firmware_sha256": "9f97816a605e829d4a9345a3c739cd25603a60c99d6555533a3876dccde655db",
+      "historical_duration_diagnostic_reclassified": false,
+      "rtl_sha256": "c7ab29adf836d1f94a9b637d4e8489412774bef95f254fde386b63aa03e7f194",
+      "exit_status": 0,
+      "cycle_margin_to_exclusive_3p5": 699522
+    }
+  ],
+  "RTL17_bindings": [
+    {
+      "name": "rv32_alu.sv",
+      "simulation_sha256": "125647d90b98f294743127637406d19479eebda82dccfaaba7acaf59d5ae38b1",
+      "physical_sha256": "125647d90b98f294743127637406d19479eebda82dccfaaba7acaf59d5ae38b1"
+    },
+    {
+      "name": "rv32_btb.sv",
+      "simulation_sha256": "b362dea594ba68f5eba4274ee054a5ec4d09e57b2695c695f1b2bdf849e8eca0",
+      "physical_sha256": "b362dea594ba68f5eba4274ee054a5ec4d09e57b2695c695f1b2bdf849e8eca0"
+    },
+    {
+      "name": "rv32_burst_arbiter.sv",
+      "simulation_sha256": "82104b39f85d2942e3d0a6780f79099062cc5a4f71fdf87491191de2f632c8af",
+      "physical_sha256": "82104b39f85d2942e3d0a6780f79099062cc5a4f71fdf87491191de2f632c8af"
+    },
+    {
+      "name": "rv32_burst_ram.sv",
+      "simulation_sha256": "089b3788fa87d3176a4e0b09e40382e1349cc33e8f9d2227d567ad0788672417",
+      "physical_sha256": "089b3788fa87d3176a4e0b09e40382e1349cc33e8f9d2227d567ad0788672417"
+    },
+    {
+      "name": "rv32_cache.sv",
+      "simulation_sha256": "c9d73d59e80a70399df214dfbbe3316083e6df0d33974e1564795a4ae875d6c1",
+      "physical_sha256": "c9d73d59e80a70399df214dfbbe3316083e6df0d33974e1564795a4ae875d6c1"
+    },
+    {
+      "name": "rv32_core.sv",
+      "simulation_sha256": "5e81f9c56246e502b43c6a48c14342dbb16ac437788ac01d00a482d9a06ca84b",
+      "physical_sha256": "5e81f9c56246e502b43c6a48c14342dbb16ac437788ac01d00a482d9a06ca84b"
+    },
+    {
+      "name": "rv32_decode.sv",
+      "simulation_sha256": "9cb2b57b46ed775d85b6e70a3eebe92c2d5e49e9a6483993109e2c096d9a3ff3",
+      "physical_sha256": "9cb2b57b46ed775d85b6e70a3eebe92c2d5e49e9a6483993109e2c096d9a3ff3"
+    },
+    {
+      "name": "rv32_fifo.sv",
+      "simulation_sha256": "20bb573cdbae386a8b44df780eefc11b85323cf2bbaa4fb2073a5e87e626b2eb",
+      "physical_sha256": "20bb573cdbae386a8b44df780eefc11b85323cf2bbaa4fb2073a5e87e626b2eb"
+    },
+    {
+      "name": "rv32_machine.sv",
+      "simulation_sha256": "56b542e419c58216a08b0a5c83322506e42e2721fa28db50a6454ebe29607abd",
+      "physical_sha256": "56b542e419c58216a08b0a5c83322506e42e2721fa28db50a6454ebe29607abd"
+    },
+    {
+      "name": "rv32_memory_system.sv",
+      "simulation_sha256": "39833ea3b440e8c4d8f2e54f3382280b32456744f394f317c2c9ca17235acd39",
+      "physical_sha256": "39833ea3b440e8c4d8f2e54f3382280b32456744f394f317c2c9ca17235acd39"
+    },
+    {
+      "name": "rv32_muldiv.sv",
+      "simulation_sha256": "5306ad46b57db551cc83df20dc4c9d2f09aa7077e6289037abfc4fcd8fa3db0e",
+      "physical_sha256": "5306ad46b57db551cc83df20dc4c9d2f09aa7077e6289037abfc4fcd8fa3db0e"
+    },
+    {
+      "name": "rv32_peripherals.sv",
+      "simulation_sha256": "d4acd7818f67cf5466e04e94307da420fa3bd004225a0633b7be35a1babeae8e",
+      "physical_sha256": "d4acd7818f67cf5466e04e94307da420fa3bd004225a0633b7be35a1babeae8e"
+    },
+    {
+      "name": "rv32_rvc_expand.sv",
+      "simulation_sha256": "308ac8a65c9e29aeec27b38417483d0f43fd7c54487c26e89a3fa54b4647951b",
+      "physical_sha256": "308ac8a65c9e29aeec27b38417483d0f43fd7c54487c26e89a3fa54b4647951b"
+    },
+    {
+      "name": "rv32_rvc_frontend.sv",
+      "simulation_sha256": "210b5ba9280c3840aafc27e7c3e35616085efde310793dc1661cc72f50984128",
+      "physical_sha256": "210b5ba9280c3840aafc27e7c3e35616085efde310793dc1661cc72f50984128"
+    },
+    {
+      "name": "rv32_soc.sv",
+      "simulation_sha256": "cf5817f06eb68f923c965f51e60f6dde76462f0a6dbf2023ecd78cabad8e2fe9",
+      "physical_sha256": "cf5817f06eb68f923c965f51e60f6dde76462f0a6dbf2023ecd78cabad8e2fe9"
+    },
+    {
+      "name": "rv32_uart.sv",
+      "simulation_sha256": "b83f5d6055bd794ca49e3781e673a00749249eaeaf1f2e908398dd5ce54ab8a2",
+      "physical_sha256": "b83f5d6055bd794ca49e3781e673a00749249eaeaf1f2e908398dd5ce54ab8a2"
+    },
+    {
+      "name": "rv32_uncached.sv",
+      "simulation_sha256": "d276e6b38ddb05117f52e054367f7f3d4503ba76f8f49025973197943ef50907",
+      "physical_sha256": "d276e6b38ddb05117f52e054367f7f3d4503ba76f8f49025973197943ef50907"
+    }
+  ],
+  "retained_source_chain": {
+    "changed_field": "Only BTB HISTORY_BITS default 3 -> 4; retain original Loop16 table and full SelectiveLoad ADD/XOR core.",
+    "baseline_btb_sha256": "222223a16f58695fa149a0b709acaebfa2bab479b0acea916dfef76c9e8581ba",
+    "modified_btb_sha256": "b362dea594ba68f5eba4274ee054a5ec4d09e57b2695c695f1b2bdf849e8eca0",
+    "retained_core_sha256": "5e81f9c56246e502b43c6a48c14342dbb16ac437788ac01d00a482d9a06ca84b",
+    "exact_inverse_parameter_text_equal": true,
+    "source_chain": {
+      "base": "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/pds_minimal_blink_200h/pacerv_h3_optimization/candidates/load_simple_loop16",
+      "original_selective_load": "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/pds_minimal_blink_200h/pacerv_h3_optimization/candidates/load_simple",
+      "original_loop16": "/mnt/d/AAAFPGA/ZGTC_RISC_CPU/pds_minimal_blink_200h/pacerv_h3_optimization/candidates/id_equal_loop16"
+    },
+    "rtl": {
+      "rv32_alu.sv": "125647d90b98f294743127637406d19479eebda82dccfaaba7acaf59d5ae38b1",
+      "rv32_btb.sv": "b362dea594ba68f5eba4274ee054a5ec4d09e57b2695c695f1b2bdf849e8eca0",
+      "rv32_burst_arbiter.sv": "82104b39f85d2942e3d0a6780f79099062cc5a4f71fdf87491191de2f632c8af",
+      "rv32_burst_ram.sv": "089b3788fa87d3176a4e0b09e40382e1349cc33e8f9d2227d567ad0788672417",
+      "rv32_cache.sv": "c9d73d59e80a70399df214dfbbe3316083e6df0d33974e1564795a4ae875d6c1",
+      "rv32_core.sv": "5e81f9c56246e502b43c6a48c14342dbb16ac437788ac01d00a482d9a06ca84b",
+      "rv32_decode.sv": "9cb2b57b46ed775d85b6e70a3eebe92c2d5e49e9a6483993109e2c096d9a3ff3",
+      "rv32_fifo.sv": "20bb573cdbae386a8b44df780eefc11b85323cf2bbaa4fb2073a5e87e626b2eb",
+      "rv32_machine.sv": "56b542e419c58216a08b0a5c83322506e42e2721fa28db50a6454ebe29607abd",
+      "rv32_memory_system.sv": "39833ea3b440e8c4d8f2e54f3382280b32456744f394f317c2c9ca17235acd39",
+      "rv32_muldiv.sv": "5306ad46b57db551cc83df20dc4c9d2f09aa7077e6289037abfc4fcd8fa3db0e",
+      "rv32_peripherals.sv": "d4acd7818f67cf5466e04e94307da420fa3bd004225a0633b7be35a1babeae8e",
+      "rv32_rvc_expand.sv": "308ac8a65c9e29aeec27b38417483d0f43fd7c54487c26e89a3fa54b4647951b",
+      "rv32_rvc_frontend.sv": "210b5ba9280c3840aafc27e7c3e35616085efde310793dc1661cc72f50984128",
+      "rv32_soc.sv": "cf5817f06eb68f923c965f51e60f6dde76462f0a6dbf2023ecd78cabad8e2fe9",
+      "rv32_uart.sv": "b83f5d6055bd794ca49e3781e673a00749249eaeaf1f2e908398dd5ce54ab8a2",
+      "rv32_uncached.sv": "d276e6b38ddb05117f52e054367f7f3d4503ba76f8f49025973197943ef50907"
+    },
+    "physical_rtl": {
+      "rv32_alu.sv": "125647d90b98f294743127637406d19479eebda82dccfaaba7acaf59d5ae38b1",
+      "rv32_board_top.sv": "183a9672618f5a82ba98fed1b77314abc21d52741c4c82442bda0a2ddcd39629",
+      "rv32_btb.sv": "b362dea594ba68f5eba4274ee054a5ec4d09e57b2695c695f1b2bdf849e8eca0",
+      "rv32_burst_arbiter.sv": "82104b39f85d2942e3d0a6780f79099062cc5a4f71fdf87491191de2f632c8af",
+      "rv32_burst_ram.sv": "089b3788fa87d3176a4e0b09e40382e1349cc33e8f9d2227d567ad0788672417",
+      "rv32_cache.sv": "c9d73d59e80a70399df214dfbbe3316083e6df0d33974e1564795a4ae875d6c1",
+      "rv32_core.sv": "5e81f9c56246e502b43c6a48c14342dbb16ac437788ac01d00a482d9a06ca84b",
+      "rv32_decode.sv": "9cb2b57b46ed775d85b6e70a3eebe92c2d5e49e9a6483993109e2c096d9a3ff3",
+      "rv32_fifo.sv": "20bb573cdbae386a8b44df780eefc11b85323cf2bbaa4fb2073a5e87e626b2eb",
+      "rv32_machine.sv": "56b542e419c58216a08b0a5c83322506e42e2721fa28db50a6454ebe29607abd",
+      "rv32_memory_system.sv": "39833ea3b440e8c4d8f2e54f3382280b32456744f394f317c2c9ca17235acd39",
+      "rv32_muldiv.sv": "5306ad46b57db551cc83df20dc4c9d2f09aa7077e6289037abfc4fcd8fa3db0e",
+      "rv32_peripherals.sv": "d4acd7818f67cf5466e04e94307da420fa3bd004225a0633b7be35a1babeae8e",
+      "rv32_rvc_expand.sv": "308ac8a65c9e29aeec27b38417483d0f43fd7c54487c26e89a3fa54b4647951b",
+      "rv32_rvc_frontend.sv": "210b5ba9280c3840aafc27e7c3e35616085efde310793dc1661cc72f50984128",
+      "rv32_soc.sv": "cf5817f06eb68f923c965f51e60f6dde76462f0a6dbf2023ecd78cabad8e2fe9",
+      "rv32_uart.sv": "b83f5d6055bd794ca49e3781e673a00749249eaeaf1f2e908398dd5ce54ab8a2",
+      "rv32_uncached.sv": "d276e6b38ddb05117f52e054367f7f3d4503ba76f8f49025973197943ef50907"
+    }
+  },
+  "raw_timing_report_sha256": "2cddc00a612a8756367684dded418aa28d57ff3bc4b989638f4b7a11411a1ee1",
+  "physical_manifest_sha256": "c9a8be23147d3b565a83e815775a7e5cbbce7e598d0497eab2882832bbc44914",
+  "long_final_audit_sha256": "589e61864fcb22f3bbe5720d773edd8bcc6572fb6e679194d32ae7705edc1c7f",
+  "score_formula": "6000 * 1000000 / raw_UART_CSR_observer_cycles",
+  "qualification_does_not_create_package": true,
+  "production_RTL_changed": false,
+  "work_launched": false
+}
