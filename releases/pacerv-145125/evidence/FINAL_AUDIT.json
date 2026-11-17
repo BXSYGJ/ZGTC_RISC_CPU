@@ -1,0 +1,586 @@
+﻿{
+  "schema": "pacerv-selective-load-final-independent-audit/v1",
+  "updated_utc": "2026-11-16T20:48:38.831527+00:00",
+  "status": "PASS",
+  "frozen_baseline_files_verified": 182,
+  "simulations": [
+    {
+      "name": "cf4-loadsimple-tune5-i6000-V0",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\pds_minimal_blink_200h\\pacerv_h3_optimization\\work\\cf4-loadsimple-tune5-i6000-V0",
+      "role": "V0",
+      "profile": "selective-tune5",
+      "iterations": 6000,
+      "cycles": 1708737607,
+      "retired": 1634152429,
+      "coremark_per_mhz": 3.5113641646443847,
+      "coremark_at_145125MHz": 509.58672439401636,
+      "seconds_at_145125MHz": 11.774247076658053,
+      "crc_fields": [
+        "0xe714",
+        "0x1fd7",
+        "0x8e3a",
+        "0xa14c"
+      ],
+      "formal_ten_seconds": true,
+      "firmware_sha256": "941041b71bd0b8a3075bd3470fdd566605492f3ceb21ba8faea677dd230bc0cf",
+      "historical_duration_diagnostic_reclassified": false,
+      "rtl_sha256": "35a9f550e8b55e746ffcd40ab78aaf6b0d6064adf5f210cdbf2c9afd0c7d85c5",
+      "exit_status": 0
+    },
+    {
+      "name": "cf4-loadsimple-tune5-i6000-V1",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\pds_minimal_blink_200h\\pacerv_h3_optimization\\work\\cf4-loadsimple-tune5-i6000-V1",
+      "role": "V1",
+      "profile": "selective-tune5",
+      "iterations": 6000,
+      "cycles": 1709422750,
+      "retired": 1634361529,
+      "coremark_per_mhz": 3.509956796819277,
+      "coremark_at_145125MHz": 509.38248013839757,
+      "seconds_at_145125MHz": 11.77896813092162,
+      "crc_fields": [
+        "0xe3c1",
+        "0x0747",
+        "0x8d84",
+        "0x18e1"
+      ],
+      "formal_ten_seconds": true,
+      "firmware_sha256": "9f97816a605e829d4a9345a3c739cd25603a60c99d6555533a3876dccde655db",
+      "historical_duration_diagnostic_reclassified": false,
+      "rtl_sha256": "35a9f550e8b55e746ffcd40ab78aaf6b0d6064adf5f210cdbf2c9afd0c7d85c5",
+      "exit_status": 0
+    }
+  ],
+  "selected_physical": {
+    "name": "cf4-physical-loadsimple-tune5-local-s3",
+    "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\pds_minimal_blink_200h\\pacerv_h3_optimization\\work\\cf4-physical-loadsimple-tune5-local-s3",
+    "status": "completed_timing_fail",
+    "frequency_mhz": 145.125,
+    "setup_uncertainty_ns": 0.15,
+    "slow_setup_ns": -0.044,
+    "resources": {
+      "LUT": 7125,
+      "FF": 2541,
+      "DRM36K": 25,
+      "APM": 4,
+      "GPLL": 1,
+      "RawRows": [
+        "| Use of APM                        | 4        | 740           | 1                  ",
+        "|   FF                              | 2043     | 240600        | 1                  ",
+        "|   LUT                             | 5229     | 120300        | 5                  ",
+        "|   FF                              | 498      | 79000         | 1                  ",
+        "|   LUT                             | 1896     | 39500         | 5                  ",
+        "| Use of DRM                        | 25       | 415           | 7                  ",
+        "| Use of GPLL                       | 1        | 10            | 10                 "
+      ]
+    },
+    "bitstream": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\pds_minimal_blink_200h\\pacerv_h3_optimization\\work\\cf4-physical-loadsimple-tune5-local-s3\\implementation\\generate_bitstream\\pds_soc_top.sbit",
+    "bitstream_sha256": "418632ab9c52a72bc42ec6ba140c78bd54efb335be9b6784f4356ed07cc172b3",
+    "firmware_sha256": "941041b71bd0b8a3075bd3470fdd566605492f3ceb21ba8faea677dd230bc0cf",
+    "core_sha256": "5e81f9c56246e502b43c6a48c14342dbb16ac437788ac01d00a482d9a06ca84b",
+    "btb_sha256": "47573ae5b351a71c6bc453901822ca8910e7696c170bca71ecd77fb8eb5b0993",
+    "all_ten_timing_checks_pass": false
+  },
+  "all_new_physical": [
+    {
+      "name": "cf2-physical-frontend-flat-local-s1",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\pds_minimal_blink_200h\\pacerv_h3_optimization\\work\\cf2-physical-frontend-flat-local-s1",
+      "status": "completed_timing_fail",
+      "frequency_mhz": 145.125,
+      "setup_uncertainty_ns": 0.15,
+      "slow_setup_ns": -0.741,
+      "resources": {
+        "LUT": 7165,
+        "FF": 2541,
+        "DRM36K": 25,
+        "APM": 4,
+        "GPLL": 1,
+        "RawRows": [
+          "| Use of APM                        | 4        | 740           | 1                  ",
+          "|   FF                              | 1968     | 240600        | 1                  ",
+          "|   LUT                             | 5254     | 120300        | 5                  ",
+          "|   FF                              | 573      | 79000         | 1                  ",
+          "|   LUT                             | 1911     | 39500         | 5                  ",
+          "| Use of DRM                        | 25       | 415           | 7                  ",
+          "| Use of GPLL                       | 1        | 10            | 10                 "
+        ]
+      },
+      "bitstream": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\pds_minimal_blink_200h\\pacerv_h3_optimization\\work\\cf2-physical-frontend-flat-local-s1\\implementation\\generate_bitstream\\pds_soc_top.sbit",
+      "bitstream_sha256": "e5a9d85277a81962890121de04b51c7da321954da57dbffb259ad0d0f64cdcc6",
+      "firmware_sha256": "a5f6b649ff0a812f9fda6fe10374daf4d0506a0697d8dad309f6389f2d85dab3",
+      "core_sha256": "fff57fd9837a133ad0d816670857252c683abbe28d748479c01042e99992aed3",
+      "btb_sha256": "47573ae5b351a71c6bc453901822ca8910e7696c170bca71ecd77fb8eb5b0993",
+      "all_ten_timing_checks_pass": false
+    },
+    {
+      "name": "cf4-physical-loadsimple-tune5-local-s1",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\pds_minimal_blink_200h\\pacerv_h3_optimization\\work\\cf4-physical-loadsimple-tune5-local-s1",
+      "status": "completed_timing_fail",
+      "frequency_mhz": 145.125,
+      "setup_uncertainty_ns": 0.15,
+      "slow_setup_ns": -0.234,
+      "resources": {
+        "LUT": 7131,
+        "FF": 2541,
+        "DRM36K": 25,
+        "APM": 4,
+        "GPLL": 1,
+        "RawRows": [
+          "| Use of APM                        | 4        | 740           | 1                  ",
+          "|   FF                              | 2113     | 240600        | 1                  ",
+          "|   LUT                             | 5200     | 120300        | 5                  ",
+          "|   FF                              | 428      | 79000         | 1                  ",
+          "|   LUT                             | 1931     | 39500         | 5                  ",
+          "| Use of DRM                        | 25       | 415           | 7                  ",
+          "| Use of GPLL                       | 1        | 10            | 10                 "
+        ]
+      },
+      "bitstream": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\pds_minimal_blink_200h\\pacerv_h3_optimization\\work\\cf4-physical-loadsimple-tune5-local-s1\\implementation\\generate_bitstream\\pds_soc_top.sbit",
+      "bitstream_sha256": "30d4086e5eba54b0e56e759b743f333b102d97d0b985d6e44ee310f72bb5e917",
+      "firmware_sha256": "941041b71bd0b8a3075bd3470fdd566605492f3ceb21ba8faea677dd230bc0cf",
+      "core_sha256": "5e81f9c56246e502b43c6a48c14342dbb16ac437788ac01d00a482d9a06ca84b",
+      "btb_sha256": "47573ae5b351a71c6bc453901822ca8910e7696c170bca71ecd77fb8eb5b0993",
+      "all_ten_timing_checks_pass": false
+    },
+    {
+      "name": "cf4-physical-loadsimple-tune5-local-s2",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\pds_minimal_blink_200h\\pacerv_h3_optimization\\work\\cf4-physical-loadsimple-tune5-local-s2",
+      "status": "completed_timing_fail",
+      "frequency_mhz": 145.125,
+      "setup_uncertainty_ns": 0.15,
+      "slow_setup_ns": -0.135,
+      "resources": {
+        "LUT": 7088,
+        "FF": 2541,
+        "DRM36K": 25,
+        "APM": 4,
+        "GPLL": 1,
+        "RawRows": [
+          "| Use of APM                        | 4        | 740           | 1                  ",
+          "|   FF                              | 2039     | 240600        | 1                  ",
+          "|   LUT                             | 5196     | 120300        | 5                  ",
+          "|   FF                              | 502      | 79000         | 1                  ",
+          "|   LUT                             | 1892     | 39500         | 5                  ",
+          "| Use of DRM                        | 25       | 415           | 7                  ",
+          "| Use of GPLL                       | 1        | 10            | 10                 "
+        ]
+      },
+      "bitstream": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\pds_minimal_blink_200h\\pacerv_h3_optimization\\work\\cf4-physical-loadsimple-tune5-local-s2\\implementation\\generate_bitstream\\pds_soc_top.sbit",
+      "bitstream_sha256": "13e4967fd125c3af65b26a1833162193dbec54bbf48ab9cf32ee0ea3f2607c77",
+      "firmware_sha256": "941041b71bd0b8a3075bd3470fdd566605492f3ceb21ba8faea677dd230bc0cf",
+      "core_sha256": "5e81f9c56246e502b43c6a48c14342dbb16ac437788ac01d00a482d9a06ca84b",
+      "btb_sha256": "47573ae5b351a71c6bc453901822ca8910e7696c170bca71ecd77fb8eb5b0993",
+      "all_ten_timing_checks_pass": false
+    },
+    {
+      "name": "cf4-physical-loadsimple-tune5-local-s3",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\pds_minimal_blink_200h\\pacerv_h3_optimization\\work\\cf4-physical-loadsimple-tune5-local-s3",
+      "status": "completed_timing_fail",
+      "frequency_mhz": 145.125,
+      "setup_uncertainty_ns": 0.15,
+      "slow_setup_ns": -0.044,
+      "resources": {
+        "LUT": 7125,
+        "FF": 2541,
+        "DRM36K": 25,
+        "APM": 4,
+        "GPLL": 1,
+        "RawRows": [
+          "| Use of APM                        | 4        | 740           | 1                  ",
+          "|   FF                              | 2043     | 240600        | 1                  ",
+          "|   LUT                             | 5229     | 120300        | 5                  ",
+          "|   FF                              | 498      | 79000         | 1                  ",
+          "|   LUT                             | 1896     | 39500         | 5                  ",
+          "| Use of DRM                        | 25       | 415           | 7                  ",
+          "| Use of GPLL                       | 1        | 10            | 10                 "
+        ]
+      },
+      "bitstream": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\pds_minimal_blink_200h\\pacerv_h3_optimization\\work\\cf4-physical-loadsimple-tune5-local-s3\\implementation\\generate_bitstream\\pds_soc_top.sbit",
+      "bitstream_sha256": "418632ab9c52a72bc42ec6ba140c78bd54efb335be9b6784f4356ed07cc172b3",
+      "firmware_sha256": "941041b71bd0b8a3075bd3470fdd566605492f3ceb21ba8faea677dd230bc0cf",
+      "core_sha256": "5e81f9c56246e502b43c6a48c14342dbb16ac437788ac01d00a482d9a06ca84b",
+      "btb_sha256": "47573ae5b351a71c6bc453901822ca8910e7696c170bca71ecd77fb8eb5b0993",
+      "all_ten_timing_checks_pass": false
+    },
+    {
+      "name": "cf4-physical-loadsimple-tune5-local-s4",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\pds_minimal_blink_200h\\pacerv_h3_optimization\\work\\cf4-physical-loadsimple-tune5-local-s4",
+      "status": "completed_timing_fail",
+      "frequency_mhz": 145.125,
+      "setup_uncertainty_ns": 0.15,
+      "slow_setup_ns": -0.056,
+      "resources": {
+        "LUT": 7084,
+        "FF": 2541,
+        "DRM36K": 25,
+        "APM": 4,
+        "GPLL": 1,
+        "RawRows": [
+          "| Use of APM                        | 4        | 740           | 1                  ",
+          "|   FF                              | 2029     | 240600        | 1                  ",
+          "|   LUT                             | 5101     | 120300        | 5                  ",
+          "|   FF                              | 512      | 79000         | 1                  ",
+          "|   LUT                             | 1983     | 39500         | 6                  ",
+          "| Use of DRM                        | 25       | 415           | 7                  ",
+          "| Use of GPLL                       | 1        | 10            | 10                 "
+        ]
+      },
+      "bitstream": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\pds_minimal_blink_200h\\pacerv_h3_optimization\\work\\cf4-physical-loadsimple-tune5-local-s4\\implementation\\generate_bitstream\\pds_soc_top.sbit",
+      "bitstream_sha256": "410f13e69157bbdb26a9eb1f6613c37960b5808c784ddee06101492bf7137705",
+      "firmware_sha256": "941041b71bd0b8a3075bd3470fdd566605492f3ceb21ba8faea677dd230bc0cf",
+      "core_sha256": "5e81f9c56246e502b43c6a48c14342dbb16ac437788ac01d00a482d9a06ca84b",
+      "btb_sha256": "47573ae5b351a71c6bc453901822ca8910e7696c170bca71ecd77fb8eb5b0993",
+      "all_ten_timing_checks_pass": false
+    },
+    {
+      "name": "cf4-physical-loadsimple-tune5-local-s5",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\pds_minimal_blink_200h\\pacerv_h3_optimization\\work\\cf4-physical-loadsimple-tune5-local-s5",
+      "status": "completed_timing_fail",
+      "frequency_mhz": 145.125,
+      "setup_uncertainty_ns": 0.15,
+      "slow_setup_ns": -0.15,
+      "resources": {
+        "LUT": 7046,
+        "FF": 2541,
+        "DRM36K": 25,
+        "APM": 4,
+        "GPLL": 1,
+        "RawRows": [
+          "| Use of APM                        | 4        | 740           | 1                  ",
+          "|   FF                              | 2078     | 240600        | 1                  ",
+          "|   LUT                             | 5096     | 120300        | 5                  ",
+          "|   FF                              | 463      | 79000         | 1                  ",
+          "|   LUT                             | 1950     | 39500         | 5                  ",
+          "| Use of DRM                        | 25       | 415           | 7                  ",
+          "| Use of GPLL                       | 1        | 10            | 10                 "
+        ]
+      },
+      "bitstream": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\pds_minimal_blink_200h\\pacerv_h3_optimization\\work\\cf4-physical-loadsimple-tune5-local-s5\\implementation\\generate_bitstream\\pds_soc_top.sbit",
+      "bitstream_sha256": "9833dafaafb0d2d898d9bedab0f84181f41db59772219d2b4739eee72eb31039",
+      "firmware_sha256": "941041b71bd0b8a3075bd3470fdd566605492f3ceb21ba8faea677dd230bc0cf",
+      "core_sha256": "5e81f9c56246e502b43c6a48c14342dbb16ac437788ac01d00a482d9a06ca84b",
+      "btb_sha256": "47573ae5b351a71c6bc453901822ca8910e7696c170bca71ecd77fb8eb5b0993",
+      "all_ten_timing_checks_pass": false
+    },
+    {
+      "name": "cf4-physical-loadsimple-tune5-local-s6",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\pds_minimal_blink_200h\\pacerv_h3_optimization\\work\\cf4-physical-loadsimple-tune5-local-s6",
+      "status": "completed_timing_fail",
+      "frequency_mhz": 145.125,
+      "setup_uncertainty_ns": 0.15,
+      "slow_setup_ns": -0.116,
+      "resources": {
+        "LUT": 7037,
+        "FF": 2541,
+        "DRM36K": 25,
+        "APM": 4,
+        "GPLL": 1,
+        "RawRows": [
+          "| Use of APM                        | 4        | 740           | 1                  ",
+          "|   FF                              | 2121     | 240600        | 1                  ",
+          "|   LUT                             | 5208     | 120300        | 5                  ",
+          "|   FF                              | 420      | 79000         | 1                  ",
+          "|   LUT                             | 1829     | 39500         | 5                  ",
+          "| Use of DRM                        | 25       | 415           | 7                  ",
+          "| Use of GPLL                       | 1        | 10            | 10                 "
+        ]
+      },
+      "bitstream": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\pds_minimal_blink_200h\\pacerv_h3_optimization\\work\\cf4-physical-loadsimple-tune5-local-s6\\implementation\\generate_bitstream\\pds_soc_top.sbit",
+      "bitstream_sha256": "f321ed89cee22c8ec16b23fccaa23c01ff8e669b86e46c1443b9c3783aaaf49a",
+      "firmware_sha256": "941041b71bd0b8a3075bd3470fdd566605492f3ceb21ba8faea677dd230bc0cf",
+      "core_sha256": "5e81f9c56246e502b43c6a48c14342dbb16ac437788ac01d00a482d9a06ca84b",
+      "btb_sha256": "47573ae5b351a71c6bc453901822ca8910e7696c170bca71ecd77fb8eb5b0993",
+      "all_ten_timing_checks_pass": false
+    },
+    {
+      "name": "cf4-physical-loadsimple-tune5-local-s7",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\pds_minimal_blink_200h\\pacerv_h3_optimization\\work\\cf4-physical-loadsimple-tune5-local-s7",
+      "status": "completed_timing_fail",
+      "frequency_mhz": 145.125,
+      "setup_uncertainty_ns": 0.15,
+      "slow_setup_ns": -0.194,
+      "resources": {
+        "LUT": 7137,
+        "FF": 2541,
+        "DRM36K": 25,
+        "APM": 4,
+        "GPLL": 1,
+        "RawRows": [
+          "| Use of APM                        | 4        | 740           | 1                  ",
+          "|   FF                              | 2001     | 240600        | 1                  ",
+          "|   LUT                             | 5107     | 120300        | 5                  ",
+          "|   FF                              | 540      | 79000         | 1                  ",
+          "|   LUT                             | 2030     | 39500         | 6                  ",
+          "| Use of DRM                        | 25       | 415           | 7                  ",
+          "| Use of GPLL                       | 1        | 10            | 10                 "
+        ]
+      },
+      "bitstream": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\pds_minimal_blink_200h\\pacerv_h3_optimization\\work\\cf4-physical-loadsimple-tune5-local-s7\\implementation\\generate_bitstream\\pds_soc_top.sbit",
+      "bitstream_sha256": "38f44c095dd53b887d1e5b37c9db3832f496b56b9c19ecaf4a27620d592a2cf9",
+      "firmware_sha256": "941041b71bd0b8a3075bd3470fdd566605492f3ceb21ba8faea677dd230bc0cf",
+      "core_sha256": "5e81f9c56246e502b43c6a48c14342dbb16ac437788ac01d00a482d9a06ca84b",
+      "btb_sha256": "47573ae5b351a71c6bc453901822ca8910e7696c170bca71ecd77fb8eb5b0993",
+      "all_ten_timing_checks_pass": false
+    },
+    {
+      "name": "cf4-physical-loadsimple-tune5-local-s8",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\pds_minimal_blink_200h\\pacerv_h3_optimization\\work\\cf4-physical-loadsimple-tune5-local-s8",
+      "status": "completed_timing_fail",
+      "frequency_mhz": 145.125,
+      "setup_uncertainty_ns": 0.15,
+      "slow_setup_ns": -0.125,
+      "resources": {
+        "LUT": 7064,
+        "FF": 2541,
+        "DRM36K": 25,
+        "APM": 4,
+        "GPLL": 1,
+        "RawRows": [
+          "| Use of APM                        | 4        | 740           | 1                  ",
+          "|   FF                              | 2033     | 240600        | 1                  ",
+          "|   LUT                             | 5212     | 120300        | 5                  ",
+          "|   FF                              | 508      | 79000         | 1                  ",
+          "|   LUT                             | 1852     | 39500         | 5                  ",
+          "| Use of DRM                        | 25       | 415           | 7                  ",
+          "| Use of GPLL                       | 1        | 10            | 10                 "
+        ]
+      },
+      "bitstream": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\pds_minimal_blink_200h\\pacerv_h3_optimization\\work\\cf4-physical-loadsimple-tune5-local-s8\\implementation\\generate_bitstream\\pds_soc_top.sbit",
+      "bitstream_sha256": "6107efe797080e2768b911369540d3f3fcfa2b9f95b616badb78231855ff4316",
+      "firmware_sha256": "941041b71bd0b8a3075bd3470fdd566605492f3ceb21ba8faea677dd230bc0cf",
+      "core_sha256": "5e81f9c56246e502b43c6a48c14342dbb16ac437788ac01d00a482d9a06ca84b",
+      "btb_sha256": "47573ae5b351a71c6bc453901822ca8910e7696c170bca71ecd77fb8eb5b0993",
+      "all_ten_timing_checks_pass": false
+    },
+    {
+      "name": "cf5-physical-cache-hit-fanout-local-s1",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\pds_minimal_blink_200h\\pacerv_h3_optimization\\work\\cf5-physical-cache-hit-fanout-local-s1",
+      "status": "completed_timing_fail",
+      "frequency_mhz": 145.125,
+      "setup_uncertainty_ns": 0.15,
+      "slow_setup_ns": -0.799,
+      "resources": {
+        "LUT": 7295,
+        "FF": 2540,
+        "DRM36K": 25,
+        "APM": 4,
+        "GPLL": 1,
+        "RawRows": [
+          "| Use of APM                        | 4        | 740           | 1                  ",
+          "|   FF                              | 2011     | 240600        | 1                  ",
+          "|   LUT                             | 5336     | 120300        | 5                  ",
+          "|   FF                              | 529      | 79000         | 1                  ",
+          "|   LUT                             | 1959     | 39500         | 5                  ",
+          "| Use of DRM                        | 25       | 415           | 7                  ",
+          "| Use of GPLL                       | 1        | 10            | 10                 "
+        ]
+      },
+      "bitstream": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\pds_minimal_blink_200h\\pacerv_h3_optimization\\work\\cf5-physical-cache-hit-fanout-local-s1\\implementation\\generate_bitstream\\pds_soc_top.sbit",
+      "bitstream_sha256": "da061625bb830ca28ee5aef6dd98320ddf931c851fa377d641a09dc904beed19",
+      "firmware_sha256": "a5f6b649ff0a812f9fda6fe10374daf4d0506a0697d8dad309f6389f2d85dab3",
+      "core_sha256": "fff57fd9837a133ad0d816670857252c683abbe28d748479c01042e99992aed3",
+      "btb_sha256": "47573ae5b351a71c6bc453901822ca8910e7696c170bca71ecd77fb8eb5b0993",
+      "all_ten_timing_checks_pass": false
+    },
+    {
+      "name": "cf6-physical-frontend-range-tune5-local-s1",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\pds_minimal_blink_200h\\pacerv_h3_optimization\\work\\cf6-physical-frontend-range-tune5-local-s1",
+      "status": "completed_timing_fail",
+      "frequency_mhz": 145.125,
+      "setup_uncertainty_ns": 0.15,
+      "slow_setup_ns": -0.102,
+      "resources": {
+        "LUT": 7046,
+        "FF": 2541,
+        "DRM36K": 25,
+        "APM": 4,
+        "GPLL": 1,
+        "RawRows": [
+          "| Use of APM                        | 4        | 740           | 1                  ",
+          "|   FF                              | 2033     | 240600        | 1                  ",
+          "|   LUT                             | 5105     | 120300        | 5                  ",
+          "|   FF                              | 508      | 79000         | 1                  ",
+          "|   LUT                             | 1941     | 39500         | 5                  ",
+          "| Use of DRM                        | 25       | 415           | 7                  ",
+          "| Use of GPLL                       | 1        | 10            | 10                 "
+        ]
+      },
+      "bitstream": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\pds_minimal_blink_200h\\pacerv_h3_optimization\\work\\cf6-physical-frontend-range-tune5-local-s1\\implementation\\generate_bitstream\\pds_soc_top.sbit",
+      "bitstream_sha256": "f02bdd8087cd075252cc11d8a3b1167e519d7b3f3fe5b6fca8298812874250d4",
+      "firmware_sha256": "941041b71bd0b8a3075bd3470fdd566605492f3ceb21ba8faea677dd230bc0cf",
+      "core_sha256": "5e81f9c56246e502b43c6a48c14342dbb16ac437788ac01d00a482d9a06ca84b",
+      "btb_sha256": "47573ae5b351a71c6bc453901822ca8910e7696c170bca71ecd77fb8eb5b0993",
+      "all_ten_timing_checks_pass": false
+    }
+  ],
+  "common_rtl": [
+    {
+      "name": "rv32_alu.sv",
+      "sha256": "125647d90b98f294743127637406d19479eebda82dccfaaba7acaf59d5ae38b1",
+      "identical": true
+    },
+    {
+      "name": "rv32_btb.sv",
+      "sha256": "47573ae5b351a71c6bc453901822ca8910e7696c170bca71ecd77fb8eb5b0993",
+      "identical": true
+    },
+    {
+      "name": "rv32_burst_arbiter.sv",
+      "sha256": "82104b39f85d2942e3d0a6780f79099062cc5a4f71fdf87491191de2f632c8af",
+      "identical": true
+    },
+    {
+      "name": "rv32_burst_ram.sv",
+      "sha256": "089b3788fa87d3176a4e0b09e40382e1349cc33e8f9d2227d567ad0788672417",
+      "identical": true
+    },
+    {
+      "name": "rv32_cache.sv",
+      "sha256": "c9d73d59e80a70399df214dfbbe3316083e6df0d33974e1564795a4ae875d6c1",
+      "identical": true
+    },
+    {
+      "name": "rv32_core.sv",
+      "sha256": "5e81f9c56246e502b43c6a48c14342dbb16ac437788ac01d00a482d9a06ca84b",
+      "identical": true
+    },
+    {
+      "name": "rv32_decode.sv",
+      "sha256": "9cb2b57b46ed775d85b6e70a3eebe92c2d5e49e9a6483993109e2c096d9a3ff3",
+      "identical": true
+    },
+    {
+      "name": "rv32_fifo.sv",
+      "sha256": "20bb573cdbae386a8b44df780eefc11b85323cf2bbaa4fb2073a5e87e626b2eb",
+      "identical": true
+    },
+    {
+      "name": "rv32_machine.sv",
+      "sha256": "56b542e419c58216a08b0a5c83322506e42e2721fa28db50a6454ebe29607abd",
+      "identical": true
+    },
+    {
+      "name": "rv32_memory_system.sv",
+      "sha256": "39833ea3b440e8c4d8f2e54f3382280b32456744f394f317c2c9ca17235acd39",
+      "identical": true
+    },
+    {
+      "name": "rv32_muldiv.sv",
+      "sha256": "5306ad46b57db551cc83df20dc4c9d2f09aa7077e6289037abfc4fcd8fa3db0e",
+      "identical": true
+    },
+    {
+      "name": "rv32_peripherals.sv",
+      "sha256": "d4acd7818f67cf5466e04e94307da420fa3bd004225a0633b7be35a1babeae8e",
+      "identical": true
+    },
+    {
+      "name": "rv32_rvc_expand.sv",
+      "sha256": "308ac8a65c9e29aeec27b38417483d0f43fd7c54487c26e89a3fa54b4647951b",
+      "identical": true
+    },
+    {
+      "name": "rv32_rvc_frontend.sv",
+      "sha256": "210b5ba9280c3840aafc27e7c3e35616085efde310793dc1661cc72f50984128",
+      "identical": true
+    },
+    {
+      "name": "rv32_soc.sv",
+      "sha256": "cf5817f06eb68f923c965f51e60f6dde76462f0a6dbf2023ecd78cabad8e2fe9",
+      "identical": true
+    },
+    {
+      "name": "rv32_uart.sv",
+      "sha256": "b83f5d6055bd794ca49e3781e673a00749249eaeaf1f2e908398dd5ce54ab8a2",
+      "identical": true
+    },
+    {
+      "name": "rv32_uncached.sv",
+      "sha256": "d276e6b38ddb05117f52e054367f7f3d4503ba76f8f49025973197943ef50907",
+      "identical": true
+    }
+  ],
+  "selected_proof_summary": [
+    {
+      "proposal": "load_simple",
+      "modified_sha256": "5e81f9c56246e502b43c6a48c14342dbb16ac437788ac01d00a482d9a06ca84b",
+      "scenarios": 23
+    }
+  ],
+  "old_archives": [
+    {
+      "name": "PaceRV_H6_LoadALU_145125_Experimental.zip",
+      "sha256": "3b86503bf0a5ebc53b4bada6d0bff3d9928792c33816102668dd014fa33bb8be",
+      "bytes": 1181456,
+      "unchanged": true
+    },
+    {
+      "name": "PaceRV_Loop16_145125_Verified.zip",
+      "sha256": "fd144bef0d634246a9824bf259bf6fa6aebbe4c272936a4157d1bb110dd03228",
+      "bytes": 1138478,
+      "unchanged": true
+    }
+  ],
+  "process_checks": {
+    "windows": {
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-NonInteractive",
+        "-Command",
+        "[Console]::OutputEncoding = [System.Text.Encoding]::UTF8; $ErrorActionPreference='Stop'; try { $found=@(Get-CimInstance Win32_Process | Where-Object { $_.Name -match '(?i)^(pds.*|synplify.*|Vrv32.*|verilator.*)(\\.exe)?$' } | Select-Object ProcessId,Name,CommandLine); ConvertTo-Json -InputObject $found -Compress -Depth 3 } catch { Write-Error $_; exit 1 }"
+      ],
+      "exit_status": 0,
+      "literal_stdout": "[]\r\n",
+      "literal_stderr": ""
+    },
+    "wsl": {
+      "command": [
+        "wsl.exe",
+        "-d",
+        "Ubuntu-22.04",
+        "--cd",
+        "/",
+        "--exec",
+        "python3",
+        "-I",
+        "-c",
+        "import json,pathlib; found=[]; names=(\"Vrv32_observed_soc\",\"verilator\",\"pds_shell\",\"pds.exe\",\"synplify\"); paths=list(pathlib.Path(\"/proc\").glob(\"[0-9]*\")); [(found.append({\"pid\":int(p.name),\"comm\":(p/\"comm\").read_text().strip(),\"cmdline\":(p/\"cmdline\").read_bytes().replace(bytes([0]),b\" \").decode(errors=\"replace\")}) if any((p/\"comm\").read_text().strip().startswith(n) for n in names) else None) for p in paths if (p/\"comm\").is_file() and (p/\"cmdline\").is_file()]; print(json.dumps({\"native_benchmark_processes\":found},sort_keys=True))"
+      ],
+      "exit_status": 0,
+      "literal_stdout": "{\"native_benchmark_processes\": []}\n",
+      "literal_stderr": "wsl: 检测到 localhost 代理配置，但未镜像到 WSL。NAT 模式下的 WSL 不支持 localhost 代理。\r\n"
+    }
+  },
+  "new_package_checks": [
+    {
+      "command": [
+        "D:\\Anaconda\\python.exe",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU\\pds_minimal_blink_200h\\pacerv_h3_optimization\\scripts\\followup-packaging\\verify_package.py",
+        "--folder",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU\\pds_minimal_blink_200h\\pacerv_h3_optimization\\optimized_releases\\PaceRV_H6_SelectiveLoad_145125_Experimental"
+      ],
+      "exit_status": 0,
+      "literal_stdout": "PACKAGE_VERIFY_PASS {\"bitstream_sha256\": \"418632ab9c52a72bc42ec6ba140c78bd54efb335be9b6784f4356ed07cc172b3\", \"common_rtl\": 17, \"files\": 297, \"timing_pass\": false, \"v0_coremark_per_mhz\": 3.5113641646443847, \"v1_coremark_per_mhz\": 3.509956796819277}\r\n",
+      "literal_stderr": "",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\pds_minimal_blink_200h\\pacerv_h3_optimization\\optimized_releases\\PaceRV_H6_SelectiveLoad_145125_Experimental"
+    },
+    {
+      "command": [
+        "D:\\Anaconda\\python.exe",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU\\pds_minimal_blink_200h\\pacerv_h3_optimization\\scripts\\followup-packaging\\verify_package.py",
+        "--zip",
+        "D:\\AAAFPGA\\ZGTC_RISC_CPU\\pds_minimal_blink_200h\\pacerv_h3_optimization\\optimized_releases\\PaceRV_H6_SelectiveLoad_145125_Experimental.zip"
+      ],
+      "exit_status": 0,
+      "literal_stdout": "PACKAGE_VERIFY_PASS {\"bitstream_sha256\": \"418632ab9c52a72bc42ec6ba140c78bd54efb335be9b6784f4356ed07cc172b3\", \"common_rtl\": 17, \"files\": 297, \"timing_pass\": false, \"v0_coremark_per_mhz\": 3.5113641646443847, \"v1_coremark_per_mhz\": 3.509956796819277}\r\n",
+      "literal_stderr": "",
+      "path": "D:\\AAAFPGA\\ZGTC_RISC_CPU\\pds_minimal_blink_200h\\pacerv_h3_optimization\\optimized_releases\\PaceRV_H6_SelectiveLoad_145125_Experimental.zip",
+      "sha256": "6b5f0a7448662b0e440fb04b65f13b33566b2798ff5278d6a389321c5b75bda2",
+      "bytes": 1692100
+    }
+  ],
+  "changed_field": "load_simple: load bypass narrowed to ADD/ADDI and XOR/XORI; cache hit response fanout representation retained",
+  "board_status": "Selected new bitstream has not been programmed or measured on a live board",
+  "exit_status": 0
+}
