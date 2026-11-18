@@ -1,24 +1,24 @@
 ﻿{
   "schema": "pacerv-publication/v2",
-  "state": "Five version archives available; SG30 LUT6621 is the recommended qualified release",
-  "recommended_archive": "PaceRV_H4_Loop16_SelectiveLoad_MemoryRange_145125_LUT6621_Verified.zip",
+  "state": "Six version archives available; SG51 LUT6571 is the recommended qualified release",
+  "recommended_archive": "PaceRV_H4_Loop16_SelectiveLoad_MuxLUT6D_145125_LUT6571_Verified.zip",
   "baseline_archive": "PaceRV_H4_Loop16_SelectiveLoad_145125_Verified_r2.zip",
-  "qualified_build": "sg30-ram-memory-range-lut1-s2",
+  "qualified_build": "sg51-regfile-compare-mux-lut6d-lut3-s1",
   "frequency_hz": 145125000,
   "setup_uncertainty_ns": 0.15,
   "resources": {
-    "LUT": 6621,
+    "LUT": 6571,
     "FF": 2557,
     "DRM36K": 25,
     "APM": 4,
     "GPLL": 1
   },
-  "slow_setup_ns": 0.043,
+  "slow_setup_ns": 0.099,
   "all_ten_timing_checks_pass": true,
   "V0_coremark_per_mhz": 3.503527129223651,
   "V1_coremark_per_mhz": 3.5014287743513752,
-  "archive_sha256": "a93a91cebe227bf793a766d941e4cee89e0d62f7f85442d63bd763de3a19deb5",
-  "bitstream_sha256": "381a005b52f37eb7411bb46e98dc06b4ea1525ab4a2a21117f3fcde35836449b",
-  "evidence": "evidence/SG30_QUALIFICATION.json",
+  "archive_sha256": "4954809393d74b5cb90957e2be40fe715add36fbd7f4ce5f2814484f55d70feb",
+  "bitstream_sha256": "deca4cb64cc00c9c16bc24f6f55ff21f19f9428c0e12ee915679208a1368e3f3",
+  "evidence": "verify_package_sg51.py",
   "board_status": "New bitstream has RTL simulation and PDS evidence; new board programming and UART capture remain pending"
 }

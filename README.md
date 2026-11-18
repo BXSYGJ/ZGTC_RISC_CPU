@@ -2,7 +2,7 @@
 
 RV32IMC soft-core releases for the Pango PG2L200H FPGA, with sources, firmware, physical implementation reports and validation evidence.
 
-最新 **145.125 MHz 五版本发布**见[下载与验证说明](releases/pacerv-145125/README.md)。推荐 **H4 Loop16 SelectiveLoad MemoryRange（6621 LUT）**：V0/V1 分别为 **3.503527129 / 3.501428774 CoreMark/MHz**，实际布局布线占用 **6621 LUT / 2557 FF**，slow setup **+0.043 ns**，全部 **10 项内部时序检查通过**。
+最新 **145.125 MHz 六版本发布**见[下载与验证说明](releases/pacerv-145125/README.md)。推荐 **SG51 H4 Loop16 SelectiveLoad MuxLUT6D（6571 LUT）**：V0/V1 RTL 仿真分别为 **3.503527129 / 3.501428774 CoreMark/MHz**，布局布线占用 **6571 LUT / 2557 FF**，慢角 setup 裕量 **+0.099 ns**，全部 **10 类内部时序检查通过**。
 
 ## PaceRV中文竞赛报告 — 2026-11-02
 

@@ -1,4 +1,8 @@
-﻿# 2026-11-18 更新：6621 LUT 合格版本
+﻿# 2026-11-18 更新：6571 LUT 推荐版本
+
+SG51 在 145.125 MHz 下通过十类时序检查，布局布线占用 6571 LUT / 2557 FF，慢角 setup 裕量 +0.099 ns。两组 6000 次 RTL 仿真得分为 3.503527129 / 3.501428774 CoreMark/MHz，CRC 均通过。相对 MemoryRange 减少 50 LUT。[下载归档](PaceRV_H4_Loop16_SelectiveLoad_MuxLUT6D_145125_LUT6571_Verified.zip)。
+
+## 6621 LUT 合格版本
 
 最新 MemoryRange 版本保留同样的 SelectiveLoad 功能、145.125 MHz 频率和两组正式 6000 次成绩；相对原 H4 减少 **191 LUT（2.80%）和 256 FF（9.10%）**，slow setup 余量从 +0.008 ns 提高到 **+0.043 ns**。更新包括 BTB 单写口归并、循环状态 RAM 表示、内存范围比较和 LUT packing strategy 1（seed 2）。包内附实际 17/18 份 RTL 绑定、完整长测日志、原始 PDS 报告、修改与回滚记录。
 
