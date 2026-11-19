@@ -1,0 +1,36 @@
+[
+  {
+    "sample": "sample_0_clarinet.wav",
+    "upload_reply": "WOK FE7D1DC5",
+    "retransmits": 0,
+    "telemetry": "KNPU top1=0 last_class=7 last_p=0 c=32364599\r\nDDR3 STS 00004080\nDDR3 STS 00004080\nDDR3 STS 00004080\nDDR3 STS 00004080\nDDR3 STS 00004080\n",
+    "logits": [
+      31,
+      -30,
+      6,
+      -1,
+      -4,
+      -26,
+      -13,
+      6
+    ],
+    "argmax": 0
+  },
+  {
+    "sample": "sample_4_piano.wav",
+    "upload_reply": "WOK 3DF10D60",
+    "retransmits": 0,
+    "telemetry": "KDDR3 STS 00004080\nNPU top1=4 last_class=7 last_p=0 c=32362438\r\nDDR3 STS 00004080\nDDR3 STS 00004080\nDDR3 STS 00004080\nDDR3 STS 00004080\n",
+    "logits": [
+      -9,
+      6,
+      -19,
+      -23,
+      23,
+      -1,
+      -7,
+      -3
+    ],
+    "argmax": 4
+  }
+]

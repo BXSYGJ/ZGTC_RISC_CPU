@@ -13,3 +13,7 @@
 - No audio volume changes. Final audio-writer lock retained for screen review. No active PDS build/configuration process; reusable JTAG server retained without termination.
 
 The sample text files retain script output except per-frame progress lines. This README records flash/upload tool observations; raw flash output was not separately captured.
+
+## Follow-up observation and hardware top1
+
+User confirmed normal display and successful KEY2 history clearing, but initially reported no visible switching. A follow-up replay injected clarinet then piano without resetting the board. Both uploads had zero retransmissions; CPU UART telemetry reported actual hardware `NPU top1=0` then `NPU top1=4`, matching the returned logits. Raw telemetry is retained in `top1_recheck.json`. This establishes hardware top1 changes across runs; HDMI switching still awaits user feedback from the replay. The final retained window is now piano, with audio writer locked.
