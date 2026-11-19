@@ -1,6 +1,6 @@
 # Combined live PCM order and UI candidate, 2026-11-19
 
-**Build verified; not yet programmed on the board.** FTDI/JTAG is offline, while COM5 remains available. The old bitstream is still running. Do not interpret prior board tests as acceptance of this new file.
+**Programmed and functionally verified on the board. Timing remains unqualified.** After the user reconnected JTAG, programming succeeded on attempt 1 (`done=1`), followed by `WOK CFE5A709` for the medley_48k weights.
 
 - Build: `20261119-203050-b39cb1ee`, source commit `0ed10615`, all six stages OK, source hashes unchanged, zero unrouted nets.
 - SHA-256: `815a65940a95fe74c730a82263f09a73c17fc70d6bbf718b123753b00ab3a81b`.
@@ -14,9 +14,9 @@ Included changes:
 3. Latest eight inference distributions shown as stacked relative columns, oldest left and newest right, with an eight-class color legend. Animation updates do not create history records.
 4. KEY2 clears history with 20 ms debounce.
 
-Validation already completed: 471 Python tests passed / 26 skipped; 80 RTL files with zero lexical violations; actual firmware, history eviction/clear, full 1080p raster, audio page chronology and audio-chain simulations passed. The page-order test fails against the former RTL and passes with this file's source. Old-board captures of flute/clarinet/trumpet/female singer classify correctly in golden after restoring only the 16-sample page order; raw capture logits match the old board exactly. Evidence: `../../reports/live_audio_20261119/`.
+Validation completed: 473 Python tests passed / 26 skipped; 80 RTL files with zero lexical violations; actual firmware, history eviction/clear, full 1080p raster, audio page chronology and audio-chain simulations passed. The page-order test fails against the former RTL and passes with this file's source. Old-board captures of flute/clarinet/trumpet/female singer classify correctly in golden after restoring only the 16-sample page order; raw capture logits match the old board exactly. Evidence: `../../reports/live_audio_20261119/`.
 
-After physically reconnecting JTAG, run from `instrec_fpga/`:
+Reproduction commands, run from `instrec_fpga/`:
 
 ```powershell
 python scripts/flash_bitstream.py --sbit releases/combined-ui-pcm-order-20261119/instrec_top.sbit
@@ -24,4 +24,14 @@ python scripts/weight_upload.py --port COM5 --image scripts/outputs/medley_48k/w
 python scripts/diagnose_live_pcm.py --classes 3,0,6,2 --label after
 ```
 
-Then verify a low-level 2000 Hz tone, the complete `demo_90s_8class.wav` real-time run, confidence transitions, eight-result eviction and KEY2 on the HDMI screen. Keep NICEHCK endpoint volume/mute unchanged. Every diagnostic capture must release `U` in `finally`; leave live input unlocked after testing. The flash helper now resolves explicit relative paths before handing them to cdt_cfg.
+Board results:
+
+- Low-level 2000 Hz NICEHCK tone captured at FFT bin 1998.05 Hz (5.86 Hz bin spacing), clean waveform; no old 1 kHz dominant artifact.
+- Flute/clarinet/trumpet/female singer correctly classify as 3/0/6/2, with all eight captured-PCM golden logits exactly matching the board, including reads from both physical halves.
+- Entire 90 second demo played continuously: 33 inference events, 16/16 nominal settled predictions correct, all eight classes covered, zero playback underruns. Settled scoring omits the first four seconds of each segment; transition windows are not counted and remain affected by the original 2.752 second model window.
+- User confirmed half-second confidence transitions, recent-eight proportional history, and KEY2 clear are normal.
+- No trap/timeout tokens in the 90 second UART trace. Final input remains unlocked (`win` 122 to 155 during the test, `locked=0`).
+
+Full evidence: `../../reports/live_audio_20261119/` and `../../reports/live_pcm_after_correct_stride_20261119-212636/`. An initial host capture used the wrong half-stride; that discarded attempt is preserved and explicitly marked in `../../reports/live_pcm_after_20261119-212305/`.
+
+Keep NICEHCK endpoint volume/mute unchanged. Every diagnostic capture must release `U` in `finally`; leave live input unlocked after testing. The flash helper resolves explicit relative paths before handing them to cdt_cfg.

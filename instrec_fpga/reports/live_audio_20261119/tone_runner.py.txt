@@ -1,0 +1,35 @@
+from pathlib import Path
+import sys,time,json
+import numpy as np
+import serial
+root=Path(__file__).resolve().parents[1]
+sys.path.insert(0,str(root/'scripts'))
+import audio_player as ap
+import diag_dump as dd
+import diag_spectrum as ds
+print('DEVICE',ap.list_render_devices('NICEHCK'),flush=True)
+pcm=np.round(32767*0.08*np.sin(2*np.pi*2000*np.arange(48000)/48000)).astype(np.int16)
+player=ap.StreamingPlayer(pcm,device_hint='NICEHCK',gain_db=0,buf_ms=80).start()
+out={}
+try:
+    with serial.Serial('COM5',115200,timeout=.3) as ser:
+        ser.write(b'X');time.sleep(.1);ser.write(b'U')
+        time.sleep(9)
+        ser.write(b'L');time.sleep(.7)
+        st=dd.read_status(ser)
+        try:
+            half=1-(st['win']&1)
+            raw=ds.read_ddr_robust(ser,half*dd.PCM_WIN_STRIDE,16384)
+            a=np.frombuffer(raw,'<i2').astype(float)
+            power=np.abs(np.fft.rfft((a-a.mean())*np.hanning(len(a))))
+            bins=np.fft.rfftfreq(len(a),1/48000)
+            indices=np.argsort(power[1:])[-8:][::-1]+1
+            out={'status':st,'half':half,'std':float(a.std()),'min':int(a.min()),'max':int(a.max()),'peak_hz':float(bins[indices[0]]),'peaks_hz':[float(bins[i]) for i in indices],'samples':len(a),'player':player.stats()}
+            (root/'reports/live_audio_20261119/after_tone_2khz_correct_stride.raw').write_bytes(raw)
+        finally:
+            ser.write(b'U');time.sleep(.1)
+            out['final_status']=dd.read_status(ser)
+finally:
+    player.stop()
+print(json.dumps(out,indent=2),flush=True)
+(root/'reports/live_audio_20261119/after_tone_2khz_correct_stride.json').write_text(json.dumps(out,indent=2),encoding='utf-8')

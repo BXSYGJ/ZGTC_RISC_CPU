@@ -1,0 +1,49 @@
+from pathlib import Path
+import sys,json,time,re
+import numpy as np
+from scipy.io import wavfile
+import serial
+root=Path(__file__).resolve().parents[1]
+sys.path.insert(0,str(root/'scripts'))
+import audio_player as ap
+import diag_dump as dd
+source_path=Path('D:/0000/111/001/Pango/InstRec/data/demo/demo_90s_8class.wav')
+sr,pcm=wavfile.read(source_path)
+timeline=json.loads(source_path.with_suffix('.timeline.json').read_text(encoding='utf-8'))
+out=root/'reports/live_audio_20261119'
+rows=[]
+raw=bytearray()
+player=None
+with serial.Serial('COM5',115200,timeout=.15) as ser:
+    try:
+        ser.write(b'X');time.sleep(.1);ser.write(b'U');time.sleep(.2)
+        initial=dd.read_status(ser)
+        player=ap.StreamingPlayer(pcm,device_hint='NICEHCK',gain_db=0).start()
+        t0=time.monotonic()
+        buf=bytearray()
+        while time.monotonic()-t0<91:
+            data=ser.read(1024)
+            raw.extend(data);buf.extend(data)
+            while b'\n' in buf:
+                line,_,rest=buf.partition(b'\n');buf=bytearray(rest)
+                text=line.decode('ascii',errors='replace').strip()
+                m=re.search(r'NPU top1=(\d+)',text)
+                if not m: continue
+                elapsed=time.monotonic()-t0
+                # Conservative nominal interior interval: skip the first four
+                # seconds of every segment (window + processing/playback delay).
+                seg=next((s for s in timeline['segments'] if s['start']+4<=elapsed<=s['end']),None)
+                row={'elapsed_seconds':round(elapsed,3),'top1':int(m[1]),'nominal_settled_label':seg['class_idx'] if seg else None,'telemetry':text}
+                rows.append(row);print(json.dumps(row),flush=True)
+        final=dd.read_status(ser)
+    finally:
+        ser.write(b'U')
+        if player is not None:player.stop()
+result={'source':str(source_path),'initial_status':initial,'final_status':final,
+        'player':player.stats(),'rows':rows,
+        'note':'Nominal settled labels exclude first four seconds per segment; not sample-exact alignment.'}
+(out/'after_demo90_live.json').write_text(json.dumps(result,indent=2),encoding='utf-8')
+(out/'after_demo90_uart.txt').write_bytes(bytes(raw))
+settled=[r for r in rows if r['nominal_settled_label'] is not None]
+print('SETTLED',sum(r['top1']==r['nominal_settled_label'] for r in settled),'/',len(settled),flush=True)
+print('CLASSES',sorted({r['nominal_settled_label'] for r in settled}),flush=True)

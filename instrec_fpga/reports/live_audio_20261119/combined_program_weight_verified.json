@@ -1,0 +1,15 @@
+{
+  "bitstream_sha256": "815a65940a95fe74c730a82263f09a73c17fc70d6bbf718b123753b00ab3a81b",
+  "flash_command": "python scripts/flash_bitstream.py --sbit releases/combined-ui-pcm-order-20261119/instrec_top.sbit --retries 1",
+  "flash_attempt": 1,
+  "flash_exit_code": 0,
+  "done_bit": 1,
+  "programming_seconds": 3.6,
+  "jtagserver": "reused PID 71284",
+  "weight_image": "scripts/outputs/medley_48k/weights_image.bin",
+  "weight_bytes": 691040,
+  "weight_sha256": "3d5d9bbccc806ecf4eabe072c255630aa70cd034ee82e0484307c6233b2ddab8",
+  "weight_frames": 2700,
+  "weight_reply": "WOK CFE5A709",
+  "source": "tool-observed stdout; raw flash/upload output retained in chat"
+}

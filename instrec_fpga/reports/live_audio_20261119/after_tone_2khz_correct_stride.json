@@ -1,0 +1,40 @@
+{
+  "status": {
+    "win": 87,
+    "locked": 1,
+    "mel_done": 0,
+    "npu_done": 0,
+    "logits_valid": 0
+  },
+  "half": 0,
+  "std": 2011.506302636513,
+  "min": -2835,
+  "max": 2837,
+  "peak_hz": 1998.046875,
+  "peaks_hz": [
+    1998.046875,
+    2003.90625,
+    1992.1875,
+    2009.765625,
+    1986.328125,
+    2015.625,
+    1980.46875,
+    2021.484375
+  ],
+  "samples": 8192,
+  "player": {
+    "underruns": 0,
+    "buffers": 150,
+    "gain_db": 0.0,
+    "device_id": 2,
+    "buf_ms": 80.0,
+    "queued": 4
+  },
+  "final_status": {
+    "win": 87,
+    "locked": 0,
+    "mel_done": 0,
+    "npu_done": 0,
+    "logits_valid": 0
+  }
+}

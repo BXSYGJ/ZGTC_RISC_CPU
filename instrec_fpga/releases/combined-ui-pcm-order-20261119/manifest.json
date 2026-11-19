@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "status": "BUILD_VERIFIED_BOARD_PENDING",
+  "status": "BOARD_FUNCTIONAL_VERIFIED_TIMING_UNQUALIFIED",
   "branch": "wrapup-working",
   "source_commit": "0ed10615",
   "build_run": "20261119-203050-b39cb1ee",
@@ -56,7 +56,7 @@
     "USCM: 5/32 (16%)"
   ],
   "verification": {
-    "pytest_passed": 471,
+    "pytest_passed": 473,
     "pytest_skipped": 26,
     "rtl_lexical_violations": 0,
     "simulations_passed": [
@@ -68,7 +68,40 @@
     ],
     "flash_safety_passed": 16,
     "old_rtl_page_order_regression": "FAIL: first lane 15 instead of 0",
-    "live_board_status": "NOT_PROGRAMMED: FTDI/JTAG cable missing; old bitstream remains on board"
+    "live_board_status": "PROGRAMMED done=1; WOK CFE5A709; physical input and UI functional checks passed",
+    "four_class_captured_logits_exact": true,
+    "four_class_labels": [
+      3,
+      0,
+      6,
+      2
+    ],
+    "tone_input_hz": 2000,
+    "tone_fft_peak_hz": 1998.046875,
+    "demo90_inference_events": 33,
+    "demo90_nominal_settled_correct": 16,
+    "demo90_nominal_settled_total": 16,
+    "demo90_classes_covered": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "demo90_playback_underruns": 0,
+    "demo90_no_trap_or_timeout_tokens": true,
+    "final_live_input_locked": false,
+    "ui_smoothing_user_confirmed": true,
+    "ui_recent_eight_user_confirmed": true,
+    "key2_clear_user_confirmed": true,
+    "evidence": [
+      "reports/live_audio_20261119/",
+      "reports/live_pcm_after_correct_stride_20261119-212636/"
+    ],
+    "qualification_note": "90s nominal settled scoring excludes first 4 seconds of each segment; not sample-exact alignment. Functional checks do not establish timing closure."
   },
   "changes": [
     "chronological little-endian live PCM pages, both stereo channels",

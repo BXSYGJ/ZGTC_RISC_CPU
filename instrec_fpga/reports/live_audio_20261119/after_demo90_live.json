@@ -1,0 +1,226 @@
+{
+  "source": "D:\\0000\\111\\001\\Pango\\InstRec\\data\\demo\\demo_90s_8class.wav",
+  "initial_status": {
+    "win": 122,
+    "locked": 0,
+    "mel_done": 0,
+    "npu_done": 0,
+    "logits_valid": 0
+  },
+  "final_status": {
+    "win": 155,
+    "locked": 0,
+    "mel_done": 0,
+    "npu_done": 0,
+    "logits_valid": 0
+  },
+  "player": {
+    "underruns": 0,
+    "buffers": 1143,
+    "gain_db": 0.0,
+    "device_id": 2,
+    "buf_ms": 80.0,
+    "queued": 4
+  },
+  "rows": [
+    {
+      "elapsed_seconds": 2.203,
+      "top1": 7,
+      "nominal_settled_label": null,
+      "telemetry": "NPU top1=7 last_class=7 last_p=100 c=32368449"
+    },
+    {
+      "elapsed_seconds": 5.0,
+      "top1": 6,
+      "nominal_settled_label": null,
+      "telemetry": "NPU top1=6 last_class=7 last_p=0 c=32368465"
+    },
+    {
+      "elapsed_seconds": 7.656,
+      "top1": 6,
+      "nominal_settled_label": 6,
+      "telemetry": "NPU top1=6 last_class=7 last_p=0 c=32368450"
+    },
+    {
+      "elapsed_seconds": 10.453,
+      "top1": 6,
+      "nominal_settled_label": 6,
+      "telemetry": "NPU top1=6 last_class=7 last_p=0 c=32368471"
+    },
+    {
+      "elapsed_seconds": 13.266,
+      "top1": 6,
+      "nominal_settled_label": null,
+      "telemetry": "NPU top1=6 last_class=7 last_p=2 c=32368463"
+    },
+    {
+      "elapsed_seconds": 15.922,
+      "top1": 7,
+      "nominal_settled_label": null,
+      "telemetry": "NPU top1=7 last_class=7 last_p=100 c=32368456"
+    },
+    {
+      "elapsed_seconds": 18.797,
+      "top1": 7,
+      "nominal_settled_label": 7,
+      "telemetry": "NPU top1=7 last_class=7 last_p=100 c=32368432"
+    },
+    {
+      "elapsed_seconds": 21.453,
+      "top1": 7,
+      "nominal_settled_label": 7,
+      "telemetry": "NPU top1=7 last_class=7 last_p=100 c=32368464"
+    },
+    {
+      "elapsed_seconds": 24.266,
+      "top1": 6,
+      "nominal_settled_label": null,
+      "telemetry": "NPU top1=6 last_class=7 last_p=11 c=32368462"
+    },
+    {
+      "elapsed_seconds": 26.938,
+      "top1": 4,
+      "nominal_settled_label": null,
+      "telemetry": "NPU top1=4 last_class=7 last_p=0 c=32368467"
+    },
+    {
+      "elapsed_seconds": 29.735,
+      "top1": 4,
+      "nominal_settled_label": 4,
+      "telemetry": "NPU top1=4 last_class=7 last_p=0 c=32368458"
+    },
+    {
+      "elapsed_seconds": 32.563,
+      "top1": 4,
+      "nominal_settled_label": 4,
+      "telemetry": "NPU top1=4 last_class=7 last_p=0 c=32364824"
+    },
+    {
+      "elapsed_seconds": 35.235,
+      "top1": 4,
+      "nominal_settled_label": null,
+      "telemetry": "NPU top1=4 last_class=7 last_p=2 c=32364709"
+    },
+    {
+      "elapsed_seconds": 38.063,
+      "top1": 3,
+      "nominal_settled_label": null,
+      "telemetry": "NPU top1=3 last_class=7 last_p=0 c=32364838"
+    },
+    {
+      "elapsed_seconds": 40.719,
+      "top1": 3,
+      "nominal_settled_label": 3,
+      "telemetry": "NPU top1=3 last_class=7 last_p=0 c=32364813"
+    },
+    {
+      "elapsed_seconds": 43.531,
+      "top1": 3,
+      "nominal_settled_label": 3,
+      "telemetry": "NPU top1=3 last_class=7 last_p=0 c=32364815"
+    },
+    {
+      "elapsed_seconds": 46.188,
+      "top1": 0,
+      "nominal_settled_label": null,
+      "telemetry": "NPU top1=0 last_class=7 last_p=7 c=32364485"
+    },
+    {
+      "elapsed_seconds": 49.0,
+      "top1": 1,
+      "nominal_settled_label": null,
+      "telemetry": "NPU top1=1 last_class=7 last_p=0 c=32364479"
+    },
+    {
+      "elapsed_seconds": 51.797,
+      "top1": 1,
+      "nominal_settled_label": 1,
+      "telemetry": "NPU top1=1 last_class=7 last_p=0 c=32364797"
+    },
+    {
+      "elapsed_seconds": 54.453,
+      "top1": 1,
+      "nominal_settled_label": 1,
+      "telemetry": "NPU top1=1 last_class=7 last_p=0 c=32364489"
+    },
+    {
+      "elapsed_seconds": 57.266,
+      "top1": 1,
+      "nominal_settled_label": null,
+      "telemetry": "NPU top1=1 last_class=7 last_p=0 c=32368738"
+    },
+    {
+      "elapsed_seconds": 60.063,
+      "top1": 5,
+      "nominal_settled_label": null,
+      "telemetry": "NPU top1=5 last_class=7 last_p=0 c=32368457"
+    },
+    {
+      "elapsed_seconds": 62.703,
+      "top1": 5,
+      "nominal_settled_label": 5,
+      "telemetry": "NPU top1=5 last_class=7 last_p=0 c=32368469"
+    },
+    {
+      "elapsed_seconds": 65.516,
+      "top1": 5,
+      "nominal_settled_label": 5,
+      "telemetry": "NPU top1=5 last_class=7 last_p=0 c=32368476"
+    },
+    {
+      "elapsed_seconds": 68.344,
+      "top1": 4,
+      "nominal_settled_label": null,
+      "telemetry": "NPU top1=4 last_class=7 last_p=3 c=32368445"
+    },
+    {
+      "elapsed_seconds": 71.0,
+      "top1": 2,
+      "nominal_settled_label": null,
+      "telemetry": "NPU top1=2 last_class=7 last_p=0 c=32368474"
+    },
+    {
+      "elapsed_seconds": 73.813,
+      "top1": 2,
+      "nominal_settled_label": 2,
+      "telemetry": "NPU top1=2 last_class=7 last_p=0 c=32368481"
+    },
+    {
+      "elapsed_seconds": 76.485,
+      "top1": 2,
+      "nominal_settled_label": 2,
+      "telemetry": "NPU top1=2 last_class=7 last_p=0 c=32368481"
+    },
+    {
+      "elapsed_seconds": 79.313,
+      "top1": 4,
+      "nominal_settled_label": null,
+      "telemetry": "NPU top1=4 last_class=7 last_p=15 c=32368463"
+    },
+    {
+      "elapsed_seconds": 81.969,
+      "top1": 0,
+      "nominal_settled_label": null,
+      "telemetry": "NPU top1=0 last_class=7 last_p=0 c=32368479"
+    },
+    {
+      "elapsed_seconds": 84.781,
+      "top1": 0,
+      "nominal_settled_label": 0,
+      "telemetry": "NPU top1=0 last_class=7 last_p=0 c=32364733"
+    },
+    {
+      "elapsed_seconds": 87.594,
+      "top1": 0,
+      "nominal_settled_label": 0,
+      "telemetry": "NPU top1=0 last_class=7 last_p=0 c=32364864"
+    },
+    {
+      "elapsed_seconds": 90.25,
+      "top1": 0,
+      "nominal_settled_label": null,
+      "telemetry": "NPU top1=0 last_class=7 last_p=42 c=32364669"
+    }
+  ],
+  "note": "Nominal settled labels exclude first four seconds per segment; not sample-exact alignment."
+}

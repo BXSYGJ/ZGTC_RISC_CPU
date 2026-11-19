@@ -1,0 +1,262 @@
+[
+  {
+    "class": 3,
+    "source_start_seconds": 37.0,
+    "status": {
+      "win": 56,
+      "locked": 1,
+      "mel_done": 0,
+      "npu_done": 0,
+      "logits_valid": 0
+    },
+    "half": 1,
+    "board_logits": [
+      -7,
+      -24,
+      1,
+      60,
+      -12,
+      -14,
+      -33,
+      1
+    ],
+    "board_top1": 3,
+    "golden_captured": {
+      "top1": 3,
+      "logits": [
+        -8,
+        -23,
+        0,
+        58,
+        -10,
+        -13,
+        -32,
+        2
+      ]
+    },
+    "golden_page_order_restored": {
+      "top1": 7,
+      "logits": [
+        -31,
+        -3,
+        -14,
+        -9,
+        0,
+        12,
+        -21,
+        25
+      ]
+    },
+    "pcm_std": 2828.7161303586763,
+    "player": {
+      "underruns": 0,
+      "buffers": 486,
+      "gain_db": 0.0,
+      "device_id": 2,
+      "buf_ms": 80.0,
+      "queued": 4
+    },
+    "final_status": {
+      "win": 56,
+      "locked": 0,
+      "mel_done": 0,
+      "npu_done": 0,
+      "logits_valid": 0
+    }
+  },
+  {
+    "class": 0,
+    "source_start_seconds": 81.0,
+    "status": {
+      "win": 60,
+      "locked": 1,
+      "mel_done": 0,
+      "npu_done": 0,
+      "logits_valid": 0
+    },
+    "half": 1,
+    "board_logits": [
+      50,
+      -49,
+      -10,
+      1,
+      0,
+      -26,
+      -6,
+      -1
+    ],
+    "board_top1": 0,
+    "golden_captured": {
+      "top1": 0,
+      "logits": [
+        50,
+        -50,
+        -10,
+        1,
+        0,
+        -25,
+        -6,
+        -1
+      ]
+    },
+    "golden_page_order_restored": {
+      "top1": 7,
+      "logits": [
+        -3,
+        -28,
+        -16,
+        -1,
+        5,
+        3,
+        -26,
+        27
+      ]
+    },
+    "pcm_std": 2979.83334309068,
+    "player": {
+      "underruns": 0,
+      "buffers": 482,
+      "gain_db": 0.0,
+      "device_id": 2,
+      "buf_ms": 80.0,
+      "queued": 4
+    },
+    "final_status": {
+      "win": 60,
+      "locked": 0,
+      "mel_done": 0,
+      "npu_done": 0,
+      "logits_valid": 0
+    }
+  },
+  {
+    "class": 6,
+    "source_start_seconds": 4.0,
+    "status": {
+      "win": 64,
+      "locked": 1,
+      "mel_done": 0,
+      "npu_done": 0,
+      "logits_valid": 0
+    },
+    "half": 1,
+    "board_logits": [
+      -4,
+      -8,
+      -23,
+      -19,
+      -23,
+      -3,
+      44,
+      -8
+    ],
+    "board_top1": 6,
+    "golden_captured": {
+      "top1": 6,
+      "logits": [
+        -5,
+        -7,
+        -23,
+        -20,
+        -23,
+        -3,
+        43,
+        -7
+      ]
+    },
+    "golden_page_order_restored": {
+      "top1": 7,
+      "logits": [
+        -22,
+        -29,
+        -32,
+        -22,
+        6,
+        30,
+        -21,
+        36
+      ]
+    },
+    "pcm_std": 2837.6475808286846,
+    "player": {
+      "underruns": 0,
+      "buffers": 464,
+      "gain_db": 0.0,
+      "device_id": 2,
+      "buf_ms": 80.0,
+      "queued": 4
+    },
+    "final_status": {
+      "win": 64,
+      "locked": 0,
+      "mel_done": 0,
+      "npu_done": 0,
+      "logits_valid": 0
+    }
+  },
+  {
+    "class": 2,
+    "source_start_seconds": 70.0,
+    "status": {
+      "win": 68,
+      "locked": 1,
+      "mel_done": 0,
+      "npu_done": 0,
+      "logits_valid": 0
+    },
+    "half": 1,
+    "board_logits": [
+      7,
+      -25,
+      47,
+      -10,
+      -19,
+      -12,
+      -30,
+      8
+    ],
+    "board_top1": 2,
+    "golden_captured": {
+      "top1": 2,
+      "logits": [
+        7,
+        -26,
+        46,
+        -11,
+        -19,
+        -11,
+        -29,
+        7
+      ]
+    },
+    "golden_page_order_restored": {
+      "top1": 7,
+      "logits": [
+        -20,
+        -25,
+        -14,
+        -14,
+        6,
+        16,
+        -36,
+        38
+      ]
+    },
+    "pcm_std": 2800.0275905248864,
+    "player": {
+      "underruns": 0,
+      "buffers": 466,
+      "gain_db": 0.0,
+      "device_id": 2,
+      "buf_ms": 80.0,
+      "queued": 4
+    },
+    "final_status": {
+      "win": 68,
+      "locked": 0,
+      "mel_done": 0,
+      "npu_done": 0,
+      "logits_valid": 0
+    }
+  }
+]

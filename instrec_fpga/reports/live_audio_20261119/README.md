@@ -1,5 +1,21 @@
 # Live audio chronology defect and combined UI fix, 2026-11-19
 
+## Final functional acceptance
+
+The entire 90 second file has now been played continuously through NICEHCK: 33 inference events, 16/16 nominal settled labels correct, all eight classes covered, zero playback underruns, no `RV32 TRAP` or `NPU TIMEOUT` tokens. Settled intervals exclude the first four seconds of each segment; timestamps are host observations and not sample-exact alignment. Transition-window behavior is intentionally reported separately from these stable labels. See `after_demo90_live.json` and `after_demo90_uart.txt`.
+
+The user confirmed half-second confidence smoothing, recent-eight-result proportional history and legend, and KEY2 clear. Final serial status is `locked=0`; `win` advanced 122 to 155 during the continuous test. All controlled playback stopped after testing and endpoint volume/mute was preserved. Full regression: 473 passed / 26 skipped. This completes functional acceptance, not timing qualification: core setup WNS remains -1.062 ns.
+
+`demo90_runner.py.txt` and `tone_runner.py.txt` retain the exact one-off runner sources used from `build/`; these are archived text, not additional executable entry points. `scripts/diagnose_live_pcm.py` is the maintained four-class capture tool.
+
+## New bitstream programmed: verified physical input
+
+After the user reconnected JTAG, the combined bitstream `815A6594…` was programmed successfully on attempt 1 (`done bit=1`, programming 3.6 seconds). The 691040-byte medley_48k weight image was uploaded over COM5, reply `WOK CFE5A709`.
+
+Correctly addressed physical captures of flute/clarinet/trumpet/female singer now classify as 3/0/6/2; every board logit vector matches golden on the same captured samples exactly. Evidence: `../live_pcm_after_correct_stride_20261119-212636/`, including both physical ping-pong halves. Source gain 0 dB, NICEHCK device 2, zero underruns; all captures finish unlocked. The user also confirmed the 500 ms confidence animation and recent-eight-result display are normal. Full 90 second playback and new KEY2 confirmation are being completed.
+
+An initial post-flash diagnostic mistakenly used 264192 bytes (valid data) instead of 270336 bytes (physical slot stride) to select half 1. That prepended 6144 bytes of padding, causing small golden differences. These discarded captures are retained in `../live_pcm_after_20261119-212305/`; corrected comparisons supersede them. The first `after_tone_2khz.*` files share that defect. Use `after_tone_2khz_correct_stride.*`, which show a clean 1998.05 Hz FFT peak, min/max -2835/+2837, with no 1 kHz subharmonic among the dominant bins. Two new padded-slot tests cover both halves; the complete regression is now 473 passed / 26 skipped.
+
 ## Reproduction on the board
 
 The user's source is `D:/0000/111/001/Pango/InstRec/data/demo/demo_90s_8class.wav`, with its adjacent timeline. This is different from the eight `sample_N` files tested earlier. The timeline uses selected training clips and reports successful FP32/INT8 checks on interior windows.
