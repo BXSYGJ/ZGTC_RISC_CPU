@@ -1,5 +1,7 @@
 # 2026-11-19 UI bitstream board regression
 
+Final live-playback confirmation: after unlocking, the user reported "已经有反应，实时更新正常" (responsive and updating normally). The live-input response issue is closed. The board remains unlocked; this does not establish analogue-input numerical accuracy or timing closure.
+
 Live-input follow-up: user reported no response to NICEHCK playback. UART confirmed the retained injection lock was still active (`locked=1`, win 35). Commands `X` then `U` restored `locked=0`; after 12 seconds win reached 40 and five NPU result messages were captured. See `live_unlock.json`. The board is now left unlocked for live playback; earlier retained-lock notes are historical. No audio volume settings were changed. User confirmation of live screen response is pending.
 
 - Branch/source at test start: `wrapup-working`, `ee17951e`, clean checkout.
