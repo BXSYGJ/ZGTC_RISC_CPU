@@ -21,7 +21,8 @@ def generate(demo=None):
     ascii_font = ImageFont.truetype(str(ascii_path), 26)
     glyphs = [[0] * 32]
     lookup = {}
-    tiles = [0] * 4096
+    tiles = [0] * 8192
+    page_offset = 0
     texts = []
 
     def chunks(char):
@@ -45,45 +46,56 @@ def generate(demo=None):
         col = x//16
         for c in text:
             for token in chunks(c):
-                addr = y//32*120+col
+                addr = page_offset+y//32*120+col
                 assert tiles[addr] == 0, (text, addr)
                 tiles[addr] = color << 12 | mode << 8 | token
                 col += 1
 
-    put(64, 64, 'INSTREC / 乐器识别', 3)
-    put(64, 112-16, '观察声音  ·  查看历史  ·  了解识别结果', 2)
-    put(1632, 64, '曲线演示' if demo else '仿真演示', 4, 0 if demo else 6)
-    put(96, 192, '01 输入波形')
-    put(96, 224, '声音振幅随时间变化', 2)
-    put(80, 288, '+1', 2)
-    put(96, 352, '0', 2)
-    put(80, 416, '-1', 2)
-    put(128, 448, '较早', 2)
-    put(576, 448, '时间 / 3 秒', 2)
-    put(1056, 448, '较近', 2)
-    put(448, 352, '等待音频窗口', 2, 4)
-    put(96, 576, '02 历史推理结果')
-    put(96, 608, '最近 8 次  /  每根柱表示一次推理的类别占比', 2)
-    put(448, 768, '尚未有推理结果', 2, 5)
-    put(128, 640, '较早', 2)
-    put(1056, 640, '最新', 2)
-    put(448, 640, '按 KEY2 清除历史', 2)
-    for i, label in enumerate(['单簧管', '失真电吉他', '女声', '长笛', '钢琴', '萨克斯', '小号', '小提琴']):
-        put(160 + (i % 4) * 256, 928 + (i // 4) * 32, label, 2)
-    put(1248, 192, '03 预设置信度回放' if demo else '03 最近识别结果')
-    put(1280, 336-16, '置信度', 2)
-    put(1280, 384, '类别置信度', 2)
-    for i, label in enumerate(CLASSES[:8]):
-        put(1280, 448+64*i, label, 1)
-    # Dynamic large class: each 16x32 source tile occupies 32x64 pixels.
-    for y in range(8, 10):
-        for x in range(80, 112):
-            tiles[y*120+x] = 0x3100 | ((x-80)//2)
-    for slot in range(9):
-        x, y = (1488, 320) if slot == 8 else (1728, 448+64*slot)
-        for digit in range(4):
-            tiles[y//32*120+x//16+digit] = 0x1200 | (slot<<4) | digit
-    for c in '0123456789-% ':
+    for page in range(2):
+        page_offset = page*4096
+        put(32, 64, '乐境', 5)
+        put(32, 192, '实时', 5 if page == 0 else 6)
+        put(32, 288, '记录', 5 if page == 1 else 6)
+        put(256, 64, '聆听' if page == 0 else '结果与收藏', 1)
+        put(1408, 64, 'INSTREC', 2)
+        put(1408, 192, '当前' if page == 0 else '回看', 2)
+        tiles[page_offset+6*120+112] = 0x1e00
+        if page == 1:
+            for digit in range(2):
+                tiles[page_offset+6*120+72+digit] = 0x2c00 | digit
+            put(1184, 192, '/64', 2)
+        put(1408, 352, '置信度', 2)
+        for i, label in enumerate(CLASSES[:8]):
+            put(1408, 448+64*i, label, 1)
+        for y in range(8, 10):
+            for x in range(88, 116):
+                tiles[page_offset+y*120+x] = 0x3100 | ((x-88)//2)
+        for slot in range(9):
+            x, y = (1616, 352) if slot == 8 else (1760, 448+64*slot)
+            for digit in range(4):
+                tiles[page_offset+y//32*120+x//16+digit] = 0x1200 | (slot<<4) | digit
+        put(256, 1024, 'K1 页面 / 长按收藏    K2 清空    K3 <    K4 >', 2)
+        if page == 0:
+            put(256, 192, '声音', 1)
+            put(256, 480, '3s', 2)
+            put(256, 576, '最近八次', 1)
+            put(1200, 640, '最新', 2)
+            put(640, 352, '等待音频', 2, 4)
+            for i, label in enumerate(['单簧管', '电吉他', '女声', '长笛', '钢琴', '萨克斯', '小号', '小提琴']):
+                put(288 + (i % 4) * 256, 928 + (i // 4) * 32, label, 2)
+        else:
+            put(256, 192, '会话记录', 1)
+            put(288, 256, '序号', 2)
+            put(448, 256, '时间', 2)
+            put(640, 256, '乐器', 2)
+            put(1088, 256, '置信度', 2)
+            for row in range(8):
+                y = 320 + row*64
+                for mode, x, width in [(7,640,12),(8,288,4),(9,432,5),(10,1088,4),(11,1248,1)]:
+                    for col in range(width):
+                        tiles[page_offset+y//32*120+x//16+col] = 0x1000 | mode<<8 | row<<4 | col
+            put(640, 896, '暂无记录', 2, 13)
+    for c in '0123456789-% :*':
         chunks(c)
     ascii_ids = [lookup.get(chr(i), [0])[0] for i in range(128)]
     class_ids = []

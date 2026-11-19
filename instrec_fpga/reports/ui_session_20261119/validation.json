@@ -1,0 +1,74 @@
+{
+  "status": "RTL_SIMULATION_PASS_NOT_BOARD_TESTED",
+  "model": "Original eight-class single-label model unchanged",
+  "input": "Deterministic synthetic waveform, Mel-feature byte fixture and probabilities; not captured audio",
+  "active_pixels_per_frame": 2073600,
+  "frames": 7,
+  "checked_active_pixels": 14515200,
+  "bar_interior_checks": 1500,
+  "video_latency_clocks": 4,
+  "checks": [
+    "RAM bounds",
+    "1920-column waveform window resampled over the 1024-pixel plot",
+    "record row class/time/sequence/confidence/bookmark rendering",
+    "DE/HS/VS four-clock alignment",
+    "card border and plot isolation",
+    "empty/ready/0/100/overrange states",
+    "100/255 byte-identical complete rasters"
+  ],
+  "pds": "NOT_RUN",
+  "bitstream": "NONE",
+  "board": "NOT_PROGRAMMED",
+  "sources": {
+    "src/ui/dashboard_renderer.v": "7ee8bb954fce21ef8ef54dd59c56254e6b05e59e5c10949be6472be4a3b71312",
+    "src/ui/dashboard_text.v": "94efa933ada2b7cd78761f88d13f52c171cd8e2d167aac6c256718fd9d9da155",
+    "src/ui/bars_data.v": "4ed5ded847405a92f39b895c1faa3278d8cf5de22a7c01d54c0fa4bbf40a852b",
+    "src/ctrl/instrec_top.v": "4f3ff5ae30c7b35cbce935fa83b7060e8525936331f848de794c7a81ad9edcda",
+    "sim/tb_dashboard_ui.sv": "f9bc4b5127d1ddeac3724a073ba32497afd7286bda19774e815ace7cbf182999",
+    "sim/tb_dynamic_ui.sv": "8548f3c084d25898773e698d2c699198b114daa12401382a7ecec8f7b49b73ff",
+    "scripts/gen_dashboard_assets.py": "3e2545e5bb10047547e346cb180d5746988eb633d237b7283b2f52f41bd4e4d0",
+    "scripts/render_dashboard.py": "78ab8dc8e5b7ddcdb651de6c41c601a8112481ab73eae0eaa681b5459404b585",
+    "src/ui/dashboard_ascii.hex": "1688bbfffb522676dcb7f28b5a2f2cdcc3cfc7494b23576570a6c2cd61c1809b",
+    "src/ui/dashboard_classes.hex": "b9fba1113030251cfca2fb7cec0eea7bd384046614f74bd597d8b4f7aaef1e05",
+    "src/ui/dashboard_font.hex": "58268d303f4d755cc5009f2b6f0a5932307e582a76610b71b33f8321a0527ba8",
+    "src/ui/dashboard_tiles.hex": "9a72437e3c088fa115e330716670b702fa843598e952809bc68d65b00e6f09f4"
+  },
+  "run_log_sha256": "e614e28d7fb7c50e15a2cd00d859d4181e186132d8a171918b5ca4112e18756d",
+  "artifacts": {
+    "waiting": {
+      "path": "reports/ui_session_20261119/waiting.png",
+      "sha256": "dab30a8880ad9cd9c19f8173534f279b95884e42d91829828870a31c359e1314",
+      "ppm_sha256": "1e2b671ae82f885458e0d03a4c363a26ad09dccc67f284e1d123245e9e5d4ff8"
+    },
+    "ready": {
+      "path": "reports/ui_session_20261119/ready.png",
+      "sha256": "26490d047d418860833982bd849585e67838caa1917b4c295e2b10c8af9add07",
+      "ppm_sha256": "d475f5c6134d6e102c2de4ffe2846b2cd4a8ae4342e5b171c16fdccd96bc2019"
+    },
+    "full_scale": {
+      "path": "reports/ui_session_20261119/full_scale.png",
+      "sha256": "1281c3ee484f7bcfe68ca182618ea0a5d35878a3facd129fdf24985f54794144",
+      "ppm_sha256": "2b70edf42c82fe3d36f0225b506c03878e7aa7a3b9bea0d9da302e487c61b6e9"
+    },
+    "zero": {
+      "path": "reports/ui_session_20261119/zero.png",
+      "sha256": "f106920d611a2b6677d96d8484adfbb11867586f4e9b857472f948b11e3bd675",
+      "ppm_sha256": "67383876e4a10e8b7c473d076bb5600a337f02c693d9209f001b66a5be41ef49"
+    },
+    "clamped": {
+      "path": "reports/ui_session_20261119/clamped.png",
+      "sha256": "1281c3ee484f7bcfe68ca182618ea0a5d35878a3facd129fdf24985f54794144",
+      "ppm_sha256": "2b70edf42c82fe3d36f0225b506c03878e7aa7a3b9bea0d9da302e487c61b6e9"
+    },
+    "records": {
+      "path": "reports/ui_session_20261119/records.png",
+      "sha256": "985bb5c81ca75baa2c475c52d0ce1c8b7414f5139bbdc6b02d3771ff58493489",
+      "ppm_sha256": "330cc0cd719fb63bfd14f75f329c549b94e6b2da6a3d0e0d6dcd68635dbb0aa3"
+    },
+    "records_empty": {
+      "path": "reports/ui_session_20261119/records_empty.png",
+      "sha256": "20c5f93b75eeda3c8f7cf92e8f8e3c8869c0d295b22653f0ca0ed57c141289ad",
+      "ppm_sha256": "944bc40ada96f927b4476d37acdf06cf5527aa06f2eefed16af16fc0c5cc9635"
+    }
+  }
+}

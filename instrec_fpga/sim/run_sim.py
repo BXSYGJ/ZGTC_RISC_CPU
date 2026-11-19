@@ -360,6 +360,7 @@ register(Case(
     tb="tb_rv_cpu.sv",
     rtl=[
         "src/cpu/rv32_cpu_subsys.sv",
+        "src/ui/ui_session_bridge.v",
         "../cpu/rtl/rv32_core.sv",
         "../cpu/rtl/rv32_decode.sv",
         "../cpu/rtl/rv32_alu.sv",
@@ -523,6 +524,12 @@ register(Case(
     rtl=["src/ui/dashboard_renderer.v", "src/ui/dashboard_text.v"],
     timeout=180,
     description="1080p actual RTL raster, controls, RAM geometry and empty/0/100 percent states",
+))
+
+register(Case(
+    name="ui_session", tb="tb_ui_session.sv",
+    rtl=["src/ui/ui_session_bridge.v"], timeout=60,
+    description="Frame-atomic session snapshots and debounced short/long UI keys",
 ))
 
 register(Case(

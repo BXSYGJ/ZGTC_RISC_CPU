@@ -42,6 +42,23 @@ module tb_rv_cpu;
     wire [31:0] cpu_trap_cause;
     wire        npu_soft_start;
     wire ui_valid, history_valid;
+    reg [31:0] keys = 0;
+    wire view_busy;
+    wire [31:0] view_meta;
+    wire [511:0] view_rows;
+    wire [63:0] view_probs;
+    reg frame_tick = 0;
+    always @(posedge clk) frame_tick <= cycles % 101 == 0;
+    wire [31:0] unused_events;
+    ui_session_bridge #(.CORE_HZ(1000)) session (
+        .core_clk(clk), .core_rst_n(rst_n), .keys_n(4'hf), .key_events(unused_events),
+        .write_en(view_write), .write_addr(view_addr), .write_data(view_data), .busy(view_busy),
+        .pix_clk(clk), .pix_rst_n(rst_n), .frame_start(frame_tick),
+        .view_meta(view_meta), .view_rows(view_rows), .view_probs(view_probs)
+    );
+    wire view_write;
+    wire [8:0] view_addr;
+    wire [31:0] view_data;
     wire [7:0] ui_pct, history_pct;
     wire [3:0] ui_idx, history_idx, ui_top1;
     integer ui_beats = 0, history_beats = 0;
@@ -95,6 +112,8 @@ module tb_rv_cpu;
         .ENABLE_PREDICTOR (0),
         .PROG_HEX         ("src/cpu/prog.hex")
     ) dut (
+        .ui_keys(keys), .ui_view_busy(view_busy), .ui_view_write(view_write),
+        .ui_view_addr(view_addr), .ui_view_data(view_data),
         .clk             (clk),
         .rst_n           (rst_n),
         .npu_busy        (npu_busy),
@@ -241,6 +260,20 @@ module tb_rv_cpu;
             $fatal(1,"50 animation ticks must span 980 ms, ending at 1000 ms");
         $display("CHECK PASS CPU two-phase animation: 500ms out, zero/class switch, 500ms in");
 
+        if (view_meta[15:8] != 2 || !view_rows[63] || view_rows[61:58] != 2 || view_rows[125:122] != 5)
+            $fatal(1,"Raw CPU records not published");
+        keys = 1; repeat(25000) @(posedge clk);
+        if (!view_meta[0] || view_meta[6:4]!=0 || view_probs[23:16]!=100)
+            $fatal(1,"Page key or selected vector mismatch");
+        keys = 'h101; repeat(25000) @(posedge clk);
+        if (view_meta[6:4]!=1 || view_probs[47:40]!=87)
+            $fatal(1,"Browse key did not select older raw result");
+        keys = 'h10101; repeat(25000) @(posedge clk);
+        if (!view_rows[126]) $fatal(1,"Bookmark did not persist in displayed row");
+        keys = 'h10111; repeat(25000) @(posedge clk);
+        if (view_meta[15:8]!=0 || view_rows!=0 || view_probs!=0)
+            $fatal(1,"Clear left stale record data");
+        $display("CHECK PASS CPU records: raw snapshots, page, browse, bookmark and clear");
         $display("---- UART log (%0d lines) ----", nline);
         $write("%s", log_s);
         $write("\n");

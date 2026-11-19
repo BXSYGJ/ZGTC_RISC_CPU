@@ -14,6 +14,7 @@
  * ------------------------------------------------------------------------- */
 #include <stdint.h>
 #include "ui_transition.h"
+#include "ui_records.h"
 
 #define MMIO(a) (*(volatile uint32_t *)(a))
 #define SYS_ID      MMIO(0x80000000u)
@@ -34,6 +35,13 @@
 #define RESULT_TOP1 MMIO(0x80000038u)
 #define UI_PUBLISH  MMIO(0x80000040u)
 #define HIST_PUBLISH MMIO(0x80000044u)
+#define UI_KEYS     MMIO(0x80000050u)
+#define VIEW_BUSY   MMIO(0x80000054u)
+#define VIEW_META   MMIO(0x80000058u)
+#define VIEW_LO     MMIO(0x8000005cu)
+#define VIEW_HI     MMIO(0x80000060u)
+#define VIEW_COMMIT MMIO(0x80000068u)
+#define VIEW_WORD(i) MMIO(0x80000100u + (i)*4u)
 #define UI_TOP1     MMIO(0x80000048u)
 
 #define ST_NPU_BUSY    (1u << 0)
@@ -124,6 +132,9 @@ int main(void) {
     uint32_t sequence = 0, start_cycle = 0, last_step = UI_STEPS;
     uint32_t target_top1 = 0, display_initialized = 0;
     static ui_transition animation;
+    static ui_records records;
+    uint32_t previous_keys = 0, seconds = 0, clock_remainder = 0, clock_previous;
+
     uint8_t target[8], display[8], history[8];
 
     LED_REG = 0x01u;                       /* proof of life for led[0] */
@@ -178,7 +189,34 @@ int main(void) {
     NPU_CTRL = 0x1u;
     puts_("NPU GO\r\n");
 
+    clock_previous = read_mcycle();
+    records.dirty = 1;
     for (;;) {
+        uint32_t now = read_mcycle(), keys = UI_KEYS;
+        clock_remainder += now - clock_previous;
+        clock_previous = now;
+        if (clock_remainder >= 125000000u) { clock_remainder -= 125000000u; ++seconds; }
+        if (keys != previous_keys) {
+            ui_record_keys(&records, keys, previous_keys);
+            previous_keys = keys;
+        }
+        if (records.dirty && !VIEW_BUSY) {
+            uint32_t base = (records.selected >> 3) << 3;
+            for (i = 0; i < 8; ++i) {
+                uint32_t row_lo, row_hi;
+                ui_record_row(&records, base+i, &row_lo, &row_hi);
+                VIEW_WORD(i*2u) = row_lo;
+                VIEW_WORD(i*2u+1u) = row_hi;
+            }
+            if (records.count) {
+                ui_record *selected = ui_record_at(&records, records.selected);
+                VIEW_LO = selected->lo; VIEW_HI = selected->hi;
+            } else { VIEW_LO = 0; VIEW_HI = 0; }
+            VIEW_META = records.page | ((records.selected & 7u) << 4) |
+                        (records.count << 8) | (ui_bcd4(records.count) << 16);
+            VIEW_COMMIT = 1;
+            records.dirty = 0;
+        }
         uint32_t observed = RESULT_SEQ;
         status = SYS_STATUS;
         if (observed != sequence) {
@@ -195,6 +233,7 @@ int main(void) {
                 target[i] = (uint8_t)(lo >> (i * 8u));
                 target[i + 4u] = (uint8_t)(hi >> (i * 8u));
             }
+            ui_record_add(&records, lo, hi, top1, seconds, sequence);
             target_top1 = top1;
             ui_proportions(target, history);
             {

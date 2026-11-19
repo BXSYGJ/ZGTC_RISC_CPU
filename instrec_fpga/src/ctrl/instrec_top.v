@@ -54,7 +54,9 @@ module instrec_top #(
     // ---- board pins ----
     input  wire        clk,          // 27 MHz crystal (D18)
     input  wire        rst_n,        // KEY0, active low (C22)
-    input  wire        key1_n,       // KEY1, export trigger (C23)
+    input  wire        key1_n,       // KEY1, page/bookmark (C23)
+    input  wire        key3_n,       // KEY3, older record (A22)
+    input  wire        key4_n,       // KEY4, newer record (B20)
     input  wire        key2_n,       // KEY2, clear inference history (B22)
     output wire [7:0]  led,          // status LEDs (A20..B17)
     input  wire        uart_rx,      // CP2102 RX (B24)
@@ -498,6 +500,19 @@ module instrec_top #(
 
     // ---- UI renderer (waveform region; instantiates waveform_disp) ----
     // Frame-coherent probability snapshot and labeled dashboard.
+    wire [31:0] ui_keys, ui_view_data, session_meta;
+    wire ui_view_busy, ui_view_write;
+    wire [8:0] ui_view_addr;
+    wire [511:0] session_rows;
+    wire [63:0] session_probs;
+    ui_session_bridge u_session (
+        .core_clk(core_clk), .core_rst_n(core_clk_rst_n),
+        .keys_n({key4_n,key3_n,key2_n,key1_n}), .key_events(ui_keys),
+        .write_en(ui_view_write), .write_addr(ui_view_addr), .write_data(ui_view_data),
+        .busy(ui_view_busy), .pix_clk(pix_clk), .pix_rst_n(rst_pix_n),
+        .frame_start(vsync_pulse), .view_rows(session_rows),
+        .view_probs(session_probs), .view_meta(session_meta)
+    );
     wire [7:0] b0, b1, b2, b3, b4, b5, b6, b7;
     wire cpu_ui_valid, cpu_history_valid;
     wire [7:0] cpu_ui_pct, cpu_history_pct;
@@ -641,6 +656,7 @@ module instrec_top #(
         .pct0(b0), .pct1(b1), .pct2(b2), .pct3(b3),
         .pct4(b4), .pct5(b5), .pct6(b6), .pct7(b7),
         .history_boundaries(history_boundaries), .history_count(history_count),
+        .view_rows(session_rows), .view_probs(session_probs), .view_meta(session_meta),
         .vsync_pulse(vsync_pulse), .rgb(ui_rgb),
         .de_out(ui_de), .hs_out(ui_hs),
         .vs_out        (ui_vs)
@@ -929,7 +945,8 @@ module instrec_top #(
         .stage_code      (stage_code),
         .heartbeat       (heartbeat),
         .overflow_warn   (overflow_warn),
-        .key1_n          (key1_n)
+        // UI keys must never restart DDR self-test during live inference.
+        .key1_n          (1'b1)
     );
 
     // ---- UART physical byte layer ----
@@ -1093,6 +1110,8 @@ module instrec_top #(
     ) u_cpu (
         .clk             (core_clk),
         .rst_n           (core_clk_rst_n),
+        .ui_keys(ui_keys), .ui_view_busy(ui_view_busy),
+        .ui_view_write(ui_view_write), .ui_view_addr(ui_view_addr), .ui_view_data(ui_view_data),
         .npu_busy        (npu_busy_u),
         .npu_done        (npu_done_u),
         .npu_timeout     (npu_timeout_u),

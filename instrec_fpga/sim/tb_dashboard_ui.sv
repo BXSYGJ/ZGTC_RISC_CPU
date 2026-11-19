@@ -10,6 +10,9 @@ module tb_dashboard_ui;
     reg [7:0] pct [0:7];
     reg [511:0] history = 0;
     reg [3:0] history_count = 0;
+    reg [511:0] rows = 0;
+    reg [31:0] meta = 0;
+    reg [63:0] record_probs = 64'h0201020201570302;
     wire [10:0] wave_addr;
     reg [15:0] wave_min = 0, wave_max = 0;
     wire [23:0] rgb;
@@ -23,6 +26,7 @@ module tb_dashboard_ui;
         .pct0(pct[0]), .pct1(pct[1]), .pct2(pct[2]), .pct3(pct[3]),
         .pct4(pct[4]), .pct5(pct[5]), .pct6(pct[6]), .pct7(pct[7]),
         .history_boundaries(history), .history_count(history_count),
+        .view_rows(rows), .view_meta(meta), .view_probs(record_probs),
         .vsync_pulse(frame_start), .rgb(rgb), .de_out(out_de), .hs_out(out_hs), .vs_out(out_vs)
     );
     integer amplitude;
@@ -46,29 +50,33 @@ module tb_dashboard_ui;
         xq[0]=x; yq[0]=y;
         if (rst) begin
             if (wave_addr > 1919) $fatal(1,"RAM address out of bounds");
-            if (x >= 128 && x < 1152 && y >= 288 && y < 448 && wave_addr !== ((x-128)*1920/1024)) $fatal(1,"Wave address mapping");
+            if (x >= 256 && x < 1280 && y >= 288 && y < 448 && wave_addr !== ((x-256)*1920/1024)) $fatal(1,"Wave address mapping");
         end
         #1;
         if (rst && {out_de,out_hs,out_vs} !== {de_expected[3],hs_expected[3],vs_expected[3]}) $fatal(1,"Four clock control alignment");
         if (out_de && fd != 0) begin
             $fwrite(fd,"%c%c%c",rgb[23:16],rgb[15:8],rgb[7:0]);
             count = count + 1;
-            if (xq[3] == 64 && yq[3] == 200 && rgb !== 24'h27364c) $fatal(1,"Card border alignment");
-            if (xq[3] == 1200 && yq[3] == 600 && rgb !== 24'h0b1020) $fatal(1,"Inter-card drawing escaped");
+            if (!meta[0] && xq[3] == 224 && yq[3] == 200 && rgb !== 24'he1e5da) $fatal(1,"Card border alignment");
+            if (xq[3] == 1328 && yq[3] == 600 && rgb !== 24'hf5f2e9) $fatal(1,"Inter-card drawing escaped");
             // Bar interiors contain no text; check exact fill/track transition.
-            if (yq[3] == 486 && xq[3] >= 1280 && xq[3] < 1680) begin
-                expected = ready && xq[3]-1280 < (pct[0]>100 ? 400 : pct[0]*4) ? (cls==0 ? 24'h36d6c5 : 24'h547d9d) : 24'h27364c;
+            if (!meta[0] && yq[3] == 486 && xq[3] >= 1408 && xq[3] < 1708) begin
+                expected = ready && xq[3]-1408 < (pct[0]>100 ? 300 : pct[0]*3) ? (cls==0 ? 24'h246b53 : 24'h9daf98) : 24'he1e5da;
                 if (rgb !== expected) $fatal(1,"Bar width/zero/full-scale wrong x=%0d got=%h expected=%h",xq[3],rgb,expected);
                 checks = checks + 1;
             end
+            if (meta[0] && rows!=0 && xq[3]==226 && yq[3]==450 && rgb!==24'h246b53)
+                $fatal(1,"Selected record marker missing");
+            if (meta[0] && rows!=0 && xq[3]==800 && yq[3]==400 && rgb!==24'hf5f5ec)
+                $fatal(1,"Record stripe alignment");
             // Column 7: 50 percent clarinet below 50 percent guitar.
-            if (xq[3] == 1080 && yq[3] == 850 && rgb !== 24'h75b79d)
+            if (!meta[0] && xq[3] == 1208 && yq[3] == 850 && rgb !== 24'h75b79d)
                 $fatal(1,"Stacked lower class missing");
-            if (xq[3] == 1080 && yq[3] == 720 && rgb !== 24'hb393c8)
+            if (!meta[0] && xq[3] == 1208 && yq[3] == 720 && rgb !== 24'hb393c8)
                 $fatal(1,"Stacked upper class missing");
-            if (xq[3] == 184 && yq[3] == 850 && rgb !== 24'h0d1726)
+            if (!meta[0] && xq[3] == 312 && yq[3] == 850 && rgb !== 24'hf1f2e9)
                 $fatal(1,"Empty history column must stay blank");
-            if (xq[3] == 136 && yq[3] == 940 && rgb !== 24'h75b79d)
+            if (!meta[0] && xq[3] == 264 && yq[3] == 940 && rgb !== 24'h75b79d)
                 $fatal(1,"Legend color missing");
         end
     end
@@ -108,7 +116,13 @@ module tb_dashboard_ui;
         render("build/sim/dashboard_ui/zero.ppm");
         pct[0]=255;
         render("build/sim/dashboard_ui/clamped.ppm");
-        if (checks != 2000) $fatal(1,"Insufficient bar checks");
+        meta = 32'h00080821;
+        for (i=0;i<8;i=i+1)
+            rows[i*64 +: 64] = {1'b1,(i==2),4'(i),12'h087,14'd0,16'h0123,16'('h0097-i)};
+        render("build/sim/dashboard_ui/records.ppm");
+        rows = 0; meta = 1;
+        render("build/sim/dashboard_ui/records_empty.ppm");
+        if (checks != 1500) $fatal(1,"Insufficient bar checks");
         $display("RESULT: PASS dashboard_ui frames=%0d active_pixels=%0d bar_checks=%0d",frames,frames*2073600,checks);
         $finish;
     end

@@ -1519,3 +1519,8 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 
 - 新增releases/pacerv-instrec8-20261103独立源码包，冻结0c138d4f/1497FAF4真实推理系统，筛除未引用资产与开发注释，CPU本地化，保留175文件hash及原始验证身份。后续应用报告切换此源码依据。
 - 56份RTL token一致、固件ROM重建一致、独立PDS compile PASS/lint43零违规、安全与权重检查通过；未新综合/PNR/烧录，原时序与准确率结论保持，不混入五类或无NPU演示。导出脚本保存于scripts/freeze_instrec8_release.py。
+
+
+## 2026-11-19 — 当前CPU上的乐境双页交互
+
+用户取消paceRV迁移；基于现有实时识别链重新实现暖白/深绿实时与记录页，CPU RAM内64条原始概率、序号/时间、回看和收藏，4个功能按键及短长按消抖，帧原子608bit视图CDC，无新增DDR访问。保留500ms退出+500ms进入动画，删除解释/平滑文案；KEY1与DDR重测脱钩。固件4564B，局部测试与整屏预览通过，正式构建/板测待进行；板上仍815A6594，未push。

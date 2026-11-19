@@ -869,6 +869,7 @@ module top_emergency_demo #(
     ) u_cpu (
         .clk             (core_clk),
         .rst_n           (core_clk_rst_n),
+        .ui_keys(32'd0), .ui_view_busy(1'b0),
         .npu_busy        (npu_busy_u),
         .npu_done        (npu_done_u),
         .npu_timeout     (npu_timeout_u),

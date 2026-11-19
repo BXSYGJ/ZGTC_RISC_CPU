@@ -84,6 +84,11 @@ module rv32_cpu_subsys #(
     input  wire        ddr_ok,
     input  wire        ddr_err,
     input  wire [31:0] ddr_sts,
+    input  wire [31:0] ui_keys,
+    input  wire ui_view_busy,
+    output wire ui_view_write,
+    output wire [8:0] ui_view_addr,
+    output wire [31:0] ui_view_data,
 
     // byte stream into the shared UART transmitter
     output wire        uart_valid,
@@ -345,6 +350,9 @@ module rv32_cpu_subsys #(
     // MMIO read mux (combinationally selected at request accept, registered
     // into the response register so the 1-cycle latency is uniform)
     // =====================================================================
+    assign ui_view_write = d_req_valid && d_req_ready && d_req_write && d_req_address[31:9] == 23'h400000;
+    assign ui_view_addr = d_req_address[8:0];
+    assign ui_view_data = d_req_data;
     reg [31:0] mmio_rdata;
 
     always @(*) begin
@@ -363,6 +371,8 @@ module rv32_cpu_subsys #(
             32'h8000_002C: mmio_rdata = result_sequence;
             32'h8000_0030: mmio_rdata = complete_probs[31:0];
             32'h8000_0034: mmio_rdata = complete_probs[63:32];
+            32'h8000_0050: mmio_rdata = ui_keys;
+            32'h8000_0054: mmio_rdata = {31'd0, ui_view_busy};
             32'h8000_0038: mmio_rdata = {28'd0, result_top1};
             default:       mmio_rdata = 32'h0000_0000;
         endcase
