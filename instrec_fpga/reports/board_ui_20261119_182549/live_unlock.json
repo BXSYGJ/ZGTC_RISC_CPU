@@ -1,0 +1,24 @@
+{
+  "before": {
+    "win": 35,
+    "locked": 1,
+    "mel_done": 0,
+    "npu_done": 0,
+    "logits_valid": 0
+  },
+  "after_unlock": {
+    "win": 35,
+    "locked": 0,
+    "mel_done": 0,
+    "npu_done": 0,
+    "logits_valid": 0
+  },
+  "telemetry": "DDR3 STS 01FE0400\nNPU top1=1 last_class=7 last_p=0 c=32364647\r\nDDR3 STS 01FE0400\nDDR3 STS 01FE0400\nNPU top1=7 last_class=7 last_p=100 c=32364662\r\nDDR3 STS 000630D8\nDDR3 STS 000630D8\nDDR3 STS 0000203F\nNPU top1=7 last_class=7 last_p=100 c=32364494\r\nDDR3 STS 0000203F\nDDR3 STS 0000203F\nNPU top1=7 last_class=7 last_p=100 c=32364632\r\nDDR3 STS 00004080\nDDR3 STS 00004080\nDDR3 STS 00004080\nNPU top1=7 last_class=7 last_p=100 c=32364628\r\n",
+  "after_12s": {
+    "win": 40,
+    "locked": 0,
+    "mel_done": 0,
+    "npu_done": 0,
+    "logits_valid": 0
+  }
+}

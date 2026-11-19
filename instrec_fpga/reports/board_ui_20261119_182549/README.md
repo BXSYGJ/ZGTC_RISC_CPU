@@ -1,5 +1,7 @@
 # 2026-11-19 UI bitstream board regression
 
+Live-input follow-up: user reported no response to NICEHCK playback. UART confirmed the retained injection lock was still active (`locked=1`, win 35). Commands `X` then `U` restored `locked=0`; after 12 seconds win reached 40 and five NPU result messages were captured. See `live_unlock.json`. The board is now left unlocked for live playback; earlier retained-lock notes are historical. No audio volume settings were changed. User confirmation of live screen response is pending.
+
 - Branch/source at test start: `wrapup-working`, `ee17951e`, clean checkout.
 - Bitstream: `build/instrec-latest.sbit`, 3791112 bytes, SHA-256 `C1269438352120FA11B83AA280E9224FD8EB8A04FB458E4476C997B1715040F1`.
 - Build: `20261119-145948-caf76016`, setup WNS -0.861 ns, hold WHS +0.056 ns. Timing is not closed.
