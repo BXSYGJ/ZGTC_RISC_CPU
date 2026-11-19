@@ -200,6 +200,10 @@ module softmax_top #(
                         lane      <= 4'd0;
                         esum      <= 32'd0;
                         mul_phase <= 1'b0;
+                        // Clear the argmax accumulators so a fresh inference
+                        // never inherits the previous window's best_p/best_i.
+                        best_p    <= 16'd0;
+                        best_i    <= 4'd0;
                         state     <= S_MUL;
                     end
                 end

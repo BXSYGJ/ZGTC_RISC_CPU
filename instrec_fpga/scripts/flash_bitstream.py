@@ -98,7 +98,8 @@ def run_cdt_cfg(sbit: Path, keep_tcl: bool = False,
                    encoding="ascii")
     try:
         out = subprocess.run([str(pds_bin("cdt_cfg.exe")), "-file", str(tcl)],
-                             capture_output=True, text=True)
+                             capture_output=True, text=True,
+                             encoding="gbk", errors="replace")
         return out.returncode, (out.stdout or "") + (out.stderr or "")
     finally:
         if not keep_tcl:

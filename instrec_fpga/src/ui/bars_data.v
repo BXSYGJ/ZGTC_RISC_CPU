@@ -8,6 +8,7 @@ module bars_data (
     input wire pix_clk, pix_rst_n, frame_start,
     output reg [7:0] pct0, pct1, pct2, pct3, pct4, pct5, pct6, pct7,
     output reg frame_ready,
+    output reg frame_update,      // 1-cycle pulse: fresh result at a frame boundary
     output reg [3:0] frame_class
 );
     reg [63:0] collect, snapshot, pending;
@@ -51,8 +52,10 @@ module bars_data (
             pct4 <= 0; pct5 <= 0; pct6 <= 0; pct7 <= 0;
             frame_class <= 0;
             frame_ready <= 0;
+            frame_update <= 0;
         end else begin
             request_sync <= {request_sync[0], request_toggle};
+            frame_update <= 1'b0;
             if (request_sync[1] != request_seen) begin
                 pending <= snapshot;
                 pending_class <= snapshot_class;
@@ -63,6 +66,7 @@ module bars_data (
                 {pct7,pct6,pct5,pct4,pct3,pct2,pct1,pct0} <= pending;
                 frame_class <= pending_class;
                 frame_ready <= 1;
+                frame_update <= 1;
                 pending_valid <= 1'b0;
             end
         end

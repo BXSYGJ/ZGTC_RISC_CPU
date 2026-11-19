@@ -55,6 +55,7 @@ module instrec_top #(
     input  wire        clk,          // 27 MHz crystal (D18)
     input  wire        rst_n,        // KEY0, active low (C22)
     input  wire        key1_n,       // KEY1, export trigger (C23)
+    input  wire        key2_n,       // KEY2, clear inference history (B22)
     output wire [7:0]  led,          // status LEDs (A20..B17)
     input  wire        uart_rx,      // CP2102 RX (B24)
     output wire        uart_tx,      // CP2102 TX (C24)
@@ -499,6 +500,7 @@ module instrec_top #(
     // Frame-coherent probability snapshot and labeled dashboard.
     wire [7:0] b0, b1, b2, b3, b4, b5, b6, b7;
     wire result_frame_ready;
+    wire result_frame_update;
     wire [3:0] frame_class;
     bars_data u_bars_data (
         .core_clk    (core_clk),
@@ -510,6 +512,7 @@ module instrec_top #(
         .frame_start (vsync_pulse),
         .frame_class (frame_class),
         .frame_ready (result_frame_ready),
+        .frame_update(result_frame_update),
         .pix_clk     (pix_clk),
         .pix_rst_n   (rst_pix_n),
         .pct0(b0), .pct1(b1), .pct2(b2), .pct3(b3),
@@ -592,7 +595,18 @@ module instrec_top #(
     );
     */
 
-    wire [14:0] spec_ram_addr;   // driven by dashboard_renderer (output)
+    // ---- Cumulative inference histogram (KEY2 clears) ----
+    wire [7:0] hist0, hist1, hist2, hist3, hist4, hist5, hist6, hist7;
+    history_tracker u_history_tracker (
+        .pix_clk     (pix_clk),
+        .pix_rst_n   (rst_pix_n),
+        .frame_update(result_frame_update),
+        .frame_class (frame_class[3:0]),
+        .clear_n     (key2_n),
+        .hist0(hist0), .hist1(hist1), .hist2(hist2), .hist3(hist3),
+        .hist4(hist4), .hist5(hist5), .hist6(hist6), .hist7(hist7),
+        .last_time_ms()
+    );
 
     dashboard_renderer u_ui_renderer (
         .pix_clk(pix_clk), .rst_pix_n(rst_pix_n),
@@ -600,11 +614,12 @@ module instrec_top #(
         .pix_hs(pix_hs), .pix_vs(pix_vs),
         .wave_rd_addr(wave_rd_addr), .wave_min(wave_min), .wave_max(wave_max),
         .wave_valid(wave_valid), .mute_flag_sync(mute_flag_sync),
-        .spec_ram_addr(spec_ram_addr), .spec_ram_data(8'd0),
         .feature_ready(1'b1), .result_ready(result_frame_ready),
         .class_idx(frame_class),
         .pct0(b0), .pct1(b1), .pct2(b2), .pct3(b3),
         .pct4(b4), .pct5(b5), .pct6(b6), .pct7(b7),
+        .hist0(hist0), .hist1(hist1), .hist2(hist2), .hist3(hist3),
+        .hist4(hist4), .hist5(hist5), .hist6(hist6), .hist7(hist7),
         .vsync_pulse(vsync_pulse), .rgb(ui_rgb),
         .de_out(ui_de), .hs_out(ui_hs),
         .vs_out        (ui_vs)
