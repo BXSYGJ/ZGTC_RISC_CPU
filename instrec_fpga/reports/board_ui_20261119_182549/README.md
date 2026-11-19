@@ -16,4 +16,6 @@ The sample text files retain script output except per-frame progress lines. This
 
 ## Follow-up observation and hardware top1
 
+Final user confirmation: "能看到从单簧管切到钢琴" (the screen visibly changed from clarinet to piano). HDMI switching is now visually confirmed, as are normal display and KEY2 history clearing. Earlier pending statements below describe the intermediate state and are superseded by this confirmation. Timing remains unclosed; this is functional board acceptance only.
+
 User confirmed normal display and successful KEY2 history clearing, but initially reported no visible switching. A follow-up replay injected clarinet then piano without resetting the board. Both uploads had zero retransmissions; CPU UART telemetry reported actual hardware `NPU top1=0` then `NPU top1=4`, matching the returned logits. Raw telemetry is retained in `top1_recheck.json`. This establishes hardware top1 changes across runs; HDMI switching still awaits user feedback from the replay. The final retained window is now piano, with audio writer locked.
