@@ -1,0 +1,28 @@
+{
+  "pytest": {
+    "passed": 474,
+    "skipped": 26
+  },
+  "rtl": {
+    "files": 81,
+    "violations": 0
+  },
+  "firmware_bytes": 4564,
+  "bss_bytes": 1428,
+  "simulation": {
+    "rv_cpu": "PASS: real firmware two-phase fades, raw records, page, browse, bookmark and clear",
+    "ui_session": "PASS: async frame snapshot, busy write protection, bounce and long/short keys",
+    "dashboard_ui": "PASS: 7 complete rasters, 14515200 pixels, 1500 bar boundary checks"
+  },
+  "sources": {
+    "src/cpu/prog.hex": "12f041718714bdffd17e057a4f3fc05a67f1dadda092557054d4b438dff08d1f",
+    "src/cpu/rv32_cpu_subsys.sv": "ea2b4f824fdd04e62ab703330ae395ee65761831ad2c9e4015b41e503cbf48a1",
+    "sw/rv32/main.c": "acc3cf0777dcf6fb2f3910ddc6462b04b095fa5aca2f71272fb6360988775573",
+    "sw/rv32/ui_records.h": "b27a2e65be929725833089130ae53c084a8dd788699dccd17357d8d2e245a994",
+    "sw/rv32/ui_transition.h": "ee90ec352a4c37ddb657ab1c6cd22a31ae760950b4bd664084b7c3e5a507f650",
+    "src/ui/ui_session_bridge.v": "ed68bef6dc9bae0a812a198daa07dd13e2460388844e4f5877f9dd21fd5c95fe",
+    "sim/tb_rv_cpu.sv": "26ed1995aeca46d538eb14c09431eebffd56c3fd62311813ca9d5eedd9927d5c",
+    "sim/tb_ui_session.sv": "9bf5e16d481ba00ff7d5c7b953018355dfe43eed85cd2f6b319b0152d6378258"
+  },
+  "note": "First rv_cpu run reached 300s wall timeout under parallel load; retry 900s budget passed in 414.4s including build. RTL watchdog and functional assertions unchanged. PDS and board acceptance still pending."
+}

@@ -368,7 +368,7 @@ register(Case(
         "../cpu/rtl/rv32_btb.sv",
         "../cpu/rtl/rv32_machine.sv",
     ],
-    timeout=300,
+    timeout=900,
     description="RV32 control core: firmware boot/ISA/bench + MMIO NPU report",
 ))
 
