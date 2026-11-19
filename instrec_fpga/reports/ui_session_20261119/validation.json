@@ -1,7 +1,7 @@
 {
   "status": "RTL_SIMULATION_PASS_NOT_BOARD_TESTED",
   "model": "Original eight-class single-label model unchanged",
-  "input": "Deterministic synthetic waveform, Mel-feature byte fixture and probabilities; not captured audio",
+  "input": "Deterministic synthetic waveform and probability/record fixtures; not captured audio",
   "active_pixels_per_frame": 2073600,
   "frames": 7,
   "checked_active_pixels": 14515200,
@@ -27,7 +27,7 @@
     "sim/tb_dashboard_ui.sv": "f9bc4b5127d1ddeac3724a073ba32497afd7286bda19774e815ace7cbf182999",
     "sim/tb_dynamic_ui.sv": "8548f3c084d25898773e698d2c699198b114daa12401382a7ecec8f7b49b73ff",
     "scripts/gen_dashboard_assets.py": "3e2545e5bb10047547e346cb180d5746988eb633d237b7283b2f52f41bd4e4d0",
-    "scripts/render_dashboard.py": "78ab8dc8e5b7ddcdb651de6c41c601a8112481ab73eae0eaa681b5459404b585",
+    "scripts/render_dashboard.py": "32523c7de171c90fa86c8868e8c72ecc5cdca03c04dcfdca82b0caaebee39faf",
     "src/ui/dashboard_ascii.hex": "1688bbfffb522676dcb7f28b5a2f2cdcc3cfc7494b23576570a6c2cd61c1809b",
     "src/ui/dashboard_classes.hex": "b9fba1113030251cfca2fb7cec0eea7bd384046614f74bd597d8b4f7aaef1e05",
     "src/ui/dashboard_font.hex": "58268d303f4d755cc5009f2b6f0a5932307e582a76610b71b33f8321a0527ba8",

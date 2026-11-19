@@ -41,7 +41,7 @@ def export():
                                   'scripts/gen_dashboard_assets.py', 'scripts/render_dashboard.py']]
     sources += sorted((ROOT / 'src/ui').glob('dashboard_*.hex'))
     report = dict(status='RTL_SIMULATION_PASS_NOT_BOARD_TESTED', model='Original eight-class single-label model unchanged',
-                  input='Deterministic synthetic waveform, Mel-feature byte fixture and probabilities; not captured audio',
+                  input='Deterministic synthetic waveform and probability/record fixtures; not captured audio',
                   active_pixels_per_frame=2073600, frames=7, checked_active_pixels=14515200,
                   bar_interior_checks=1500, video_latency_clocks=4,
                   checks=['RAM bounds', '1920-column waveform window resampled over the 1024-pixel plot',
