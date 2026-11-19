@@ -1,0 +1,81 @@
+{
+  "schema": 1,
+  "status": "BUILD_VERIFIED_BOARD_PENDING",
+  "branch": "wrapup-working",
+  "source_commit": "0ed10615",
+  "build_run": "20261119-203050-b39cb1ee",
+  "device": "PG2L100H-6IFBG676",
+  "bitstream": "instrec_top.sbit",
+  "bitstream_bytes": 3791112,
+  "sha256": "815a65940a95fe74c730a82263f09a73c17fc70d6bbf718b123753b00ab3a81b",
+  "sources_unchanged": true,
+  "stage_status": [
+    {
+      "Stage": "compile",
+      "Status": "OK"
+    },
+    {
+      "Stage": "synthesize",
+      "Status": "OK"
+    },
+    {
+      "Stage": "dev_map",
+      "Status": "OK"
+    },
+    {
+      "Stage": "pnr",
+      "Status": "OK"
+    },
+    {
+      "Stage": "report_timing",
+      "Status": "OK"
+    },
+    {
+      "Stage": "gen_bit_stream",
+      "Status": "OK"
+    }
+  ],
+  "setup_wns_ns": -1.062,
+  "hold_whs_slow_ns": 0.074,
+  "pixel_setup_wns_ns": 0.038,
+  "timing_qualified": false,
+  "unrouted_nets": 0,
+  "utilization": [
+    "LUT total: 34453/66600 (52%)",
+    "FF total: 40326/133200 (30%)",
+    "APM: 90/240 (38%)",
+    "BKCL: 6/6 (100%)",
+    "CCS: 1/1 (100%)",
+    "Distributed RAM: 940/19900 (5%)",
+    "DRM: 130/155 (84%)",
+    "GPLL: 3/6 (50%)",
+    "HCKB: 25/96 (27%)",
+    "IO: 121/300 (41%)",
+    "PPLL: 2/6 (34%)",
+    "SCANCHAIN: 0/1 (0%)",
+    "USCM: 5/32 (16%)"
+  ],
+  "verification": {
+    "pytest_passed": 471,
+    "pytest_skipped": 26,
+    "rtl_lexical_violations": 0,
+    "simulations_passed": [
+      "rv_cpu",
+      "history_tracker",
+      "dashboard_ui",
+      "audio_page_order",
+      "audio_chain"
+    ],
+    "flash_safety_passed": 16,
+    "old_rtl_page_order_regression": "FAIL: first lane 15 instead of 0",
+    "live_board_status": "NOT_PROGRAMMED: FTDI/JTAG cable missing; old bitstream remains on board"
+  },
+  "changes": [
+    "chronological little-endian live PCM pages, both stereo channels",
+    "CPU confidence interpolation: 25 ticks x 20ms = 500ms",
+    "latest eight inference distributions, stacked relative bars with class legend",
+    "KEY2 clears history, debounce 20ms",
+    "preserve playback endpoint volume/mute"
+  ],
+  "hold_whs_fast_ns": 0.046
+}

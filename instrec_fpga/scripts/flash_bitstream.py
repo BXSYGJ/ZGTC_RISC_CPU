@@ -122,7 +122,8 @@ def main(argv=None) -> int:
                     help="only connect + scan the chain; never reconfigures the FPGA")
     args = ap.parse_args(argv)
 
-    sbit = Path(args.sbit)
+    # cdt_cfg resolves TCL paths against its own directory, not the caller's.
+    sbit = Path(args.sbit).resolve()
     if not args.status_only and not sbit.is_file():
         print("bitstream not found: %s" % sbit, file=sys.stderr)
         return 1

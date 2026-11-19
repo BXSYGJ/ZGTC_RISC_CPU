@@ -1,0 +1,18 @@
+bitstream : D:\0000\111\001\Pango\ZGTC_RISC_CPU\instrec_fpga\build\pds\20261119-203050-b39cb1ee\generate_bitstream\instrec_top.sbit (3791112 B)
+jtagserver: reusing the running instance
+attempt 1/1 failed: cable missing
+/ZGTC_RISC_CPU/instrec_fpga/build/pds/20261119-203050-b39cb1ee/generate_bitstream/instrec_top.sbit -device_index 0
+E: Configuration-0010: There is no device in Jtag chain, please check.
+E: Configuration-0009: Operation error :
+ cfg_assign_file command can't be exec.
+Executing : cfg_assign_file -file D:/0000/111/001/Pango/ZGTC_RISC_CPU/instrec_fpga/build/pds/20261119-203050-b39cb1ee/generate_bitstream/instrec_top.sbit -device_index 0 successfully.
+Executing : cfg_program -device_index 0
+E: Configuration-0010: There is no device in Jtag chain, please check.
+E: Configuration-0009: Operation error :
+ cfg_program command can't be exec.
+Executing : cfg_program -device_index 0 successfully.
+Executing : cfg_disconnect
+Server is disconnect
+Executing : cfg_disconnect successfully.
+PROGRAM FLOW DONE
+
