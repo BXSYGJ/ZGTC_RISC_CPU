@@ -17,26 +17,33 @@ def test_cpu_transition_and_history_proportions(tmp_path):
 #include "ui_transition.h"
 int main(void) {
     ui_transition s = {{0}, {0}, {0}};
-    uint8_t input[8] = {100,0,0,0,0,0,0,0}, output[8], previous = 0;
+    uint8_t input[8] = {100,0,0,0,0,0,0,0}, output[8];
     unsigned i, step, sum;
+    s.current[0] = 100 << 8;
+    input[0]=0; input[4]=100;
     ui_retarget(&s, input);
     for (step=0; step<=25; ++step) {
         ui_step(&s, step, output);
-        assert(output[0] == step*4 && output[0] >= previous);
-        previous = output[0];
+        assert(output[0] == 100-step*4 && output[4] == 0);
     }
-    input[0]=0; input[4]=100;
-    ui_retarget(&s,input);
-    ui_step(&s,10,output);
-    assert(output[0]==60 && output[4]==40);
+    for (step=26; step<=50; ++step) {
+        ui_step(&s, step, output);
+        assert(output[0] == 0 && output[4] == (step-25)*4);
+    }
     input[4]=0; input[7]=100;
     ui_retarget(&s,input);
+    ui_step(&s,10,output);
+    assert(output[4]==60 && output[7]==0);
+    input[7]=0; input[2]=100;
+    ui_retarget(&s,input);
     ui_step(&s,0,output);
-    assert(output[0]==60 && output[4]==40 && output[7]==0);
+    assert(output[4]==60 && output[2]==0);
     ui_step(&s,25,output);
-    assert(output[0]==0 && output[4]==0 && output[7]==100);
+    for (i=0;i<8;++i) assert(output[i]==0);
+    ui_step(&s,50,output);
+    assert(output[4]==0 && output[2]==100);
     ui_step(&s,999,output);
-    assert(output[7]==100);
+    assert(output[2]==100);
     for (i=0;i<8;++i) input[i]=(uint8_t)(i+1);
     ui_proportions(input,output);
     for (sum=0,i=0;i<8;++i) sum+=output[i];

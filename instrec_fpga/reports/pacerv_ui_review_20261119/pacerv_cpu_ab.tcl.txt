@@ -1,0 +1,14 @@
+add_design "D:/0000/111/001/Pango/ZGTC_RISC_CPU/instrec_fpga/build/cpu_ab_20261119/pacerv/rv32_cpu_subsys.sv"
+add_design "D:/0000/111/001/Pango/ZGTC_RISC_CPU/instrec_fpga/build/cpu_ab_20261119/pacerv/rv32_core.sv"
+add_design "D:/0000/111/001/Pango/ZGTC_RISC_CPU/instrec_fpga/build/cpu_ab_20261119/pacerv/rv32_alu.sv"
+add_design "D:/0000/111/001/Pango/ZGTC_RISC_CPU/instrec_fpga/build/cpu_ab_20261119/pacerv/rv32_decode.sv"
+add_design "D:/0000/111/001/Pango/ZGTC_RISC_CPU/instrec_fpga/build/cpu_ab_20261119/pacerv/rv32_machine.sv"
+add_design "D:/0000/111/001/Pango/ZGTC_RISC_CPU/instrec_fpga/build/cpu_ab_20261119/pacerv/rv32_muldiv.sv"
+add_design "D:/0000/111/001/Pango/ZGTC_RISC_CPU/instrec_fpga/build/cpu_ab_20261119/pacerv/rv32_btb.sv"
+add_design "D:/0000/111/001/Pango/ZGTC_RISC_CPU/instrec_fpga/build/cpu_ab_20261119/pacerv/rv32_rvc_expand.sv"
+add_design "D:/0000/111/001/Pango/ZGTC_RISC_CPU/instrec_fpga/build/cpu_ab_20261119/pacerv/rv32_rvc_frontend.sv"
+set_arch -family Logos2 -device PG2L100H -speedgrade -6 -package FBG676
+compile -system_verilog -top_module rv32_cpu_subsys
+synthesize -ads -selected_syn_tool_opt 2
+dev_map
+exit

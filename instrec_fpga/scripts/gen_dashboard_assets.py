@@ -73,8 +73,6 @@ def generate(demo=None):
     put(1248, 192, '03 预设置信度回放' if demo else '03 最近识别结果')
     put(1280, 336-16, '置信度', 2)
     put(1280, 384, '类别置信度', 2)
-    if not demo:
-        put(1280, 960, '置信度平滑过渡 / 0.5 秒', 2)
     for i, label in enumerate(CLASSES[:8]):
         put(1280, 448+64*i, label, 1)
     # Dynamic large class: each 16x32 source tile occupies 32x64 pixels.

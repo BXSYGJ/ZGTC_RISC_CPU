@@ -25,7 +25,7 @@
 module tb_rv_cpu;
 
     localparam integer CLK_HALF   = 5;             // 100 MHz
-    localparam integer MAX_CYCLES = 90_000_000;
+    localparam integer MAX_CYCLES = 220_000_000;
 
     reg clk   = 1'b0;
     reg rst_n = 1'b0;
@@ -47,13 +47,28 @@ module tb_rv_cpu;
     integer ui_beats = 0, history_beats = 0;
     integer first_ui_cycle = 0, last_ui_cycle = 0;
     reg [7:0] previous_pct5 = 0;
+    reg [3:0] npu_top1 = 5;
+    integer second_first_cycle = 0;
     always @(posedge clk) begin
         if (ui_valid) begin
             ui_beats <= ui_beats + 1;
             if (ui_beats == 0) first_ui_cycle <= cycles;
             last_ui_cycle <= cycles;
+            if (ui_beats == 200) second_first_cycle <= cycles;
+            if (ui_beats >= 200) begin
+                if ((ui_beats-200)/8 < 24 && ui_top1 != 5)
+                    $fatal(1,"Class switched before fade-out completed");
+                if ((ui_beats-200)/8 >= 24 && ui_top1 != 2)
+                    $fatal(1,"Class did not switch at zero midpoint");
+                if ((ui_beats-200)/8 == 24 && ui_pct != 0)
+                    $fatal(1,"Both vectors must be zero at midpoint");
+                if ((ui_beats-200)/8 < 25 && ui_idx == 2 && ui_pct > 2)
+                    $fatal(1,"New target rose before fade-out completed");
+                if ((ui_beats-200)/8 >= 25 && ui_idx == 5 && ui_pct != 0)
+                    $fatal(1,"Outgoing class remained during fade-in");
+            end
             if (ui_idx == 5) begin
-                if (ui_pct < previous_pct5 || ui_pct > 87)
+                if (ui_beats < 200 && (ui_pct < previous_pct5 || ui_pct > 87))
                     $fatal(1,"Software animation not monotonic/bounded");
                 if (ui_beats < 8 && (ui_pct == 0 || ui_pct >= 87))
                     $fatal(1,"Software animation jumped directly to target");
@@ -61,8 +76,8 @@ module tb_rv_cpu;
             end
         end
         if (history_valid) begin
-            if (history_idx !== history_beats[3:0]) $fatal(1,"History lane order");
-            if (history_idx == 5 && history_pct != 97) $fatal(1,"History lost raw result");
+            if (history_idx !== (history_beats % 8)) $fatal(1,"History lane order");
+            if (history_beats < 8 && history_idx == 5 && history_pct != 97) $fatal(1,"History lost raw result");
             history_beats <= history_beats + 1;
         end
     end
@@ -88,7 +103,7 @@ module tb_rv_cpu;
         .npu_probs_valid (npu_probs_valid),
         .npu_probs_pct   (npu_probs_pct),
         .npu_probs_idx   (npu_probs_idx),
-        .npu_top1        (4'd5),
+        .npu_top1        (npu_top1),
         .npu_cycles      (npu_cycles),
         .ddr_ok          (1'b1),
         .ddr_err         (1'b0),
@@ -209,6 +224,22 @@ module tb_rv_cpu;
         if (last_ui_cycle-first_ui_cycle < 59900000 || last_ui_cycle-first_ui_cycle > 60100000)
             $fatal(1,"25 software ticks must span 480 ms at 125 MHz");
         $display("CHECK PASS CPU software animation: 25 ticks, 500ms endpoint, one history vector");
+
+        @(negedge clk); npu_top1=2;
+        for (integer lane2=0; lane2<8; lane2=lane2+1) begin
+            @(negedge clk);
+            npu_probs_valid=1;
+            npu_probs_idx=lane2;
+            npu_probs_pct=lane2==2 ? 100 : 0;
+        end
+        @(negedge clk); npu_probs_valid=0;
+        wait(ui_beats>=600);
+        repeat(100) @(posedge clk);
+        if (history_beats != 16 || ui_beats != 600 || ui_top1 != 2)
+            $fatal(1,"Two-phase animation must publish 50 ticks and one history vector");
+        if (last_ui_cycle-second_first_cycle < 122400000 || last_ui_cycle-second_first_cycle > 122600000)
+            $fatal(1,"50 animation ticks must span 980 ms, ending at 1000 ms");
+        $display("CHECK PASS CPU two-phase animation: 500ms out, zero/class switch, 500ms in");
 
         $display("---- UART log (%0d lines) ----", nline);
         $write("%s", log_s);

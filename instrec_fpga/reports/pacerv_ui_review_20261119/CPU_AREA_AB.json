@@ -1,0 +1,61 @@
+{
+  "scope": "isolated rv32_cpu_subsys compile/synthesize/dev_map, PG2L100H-6IFBG676; not full-system PnR",
+  "configuration": {
+    "M": false,
+    "C": false,
+    "predictor": false,
+    "imem_bytes": 8192,
+    "dmem_bytes": 8192,
+    "firmware_bytes": 3108,
+    "shared_CPU_DDR_bridge": false
+  },
+  "resource_results": {
+    "baseline": {
+      "APM": 0,
+      "FF": 2539,
+      "LUT": 2639,
+      "Distributed RAM": 4,
+      "DRM": 6
+    },
+    "pacerv": {
+      "APM": 0,
+      "FF": 1742,
+      "LUT": 2516,
+      "Distributed RAM": 6,
+      "DRM": 7
+    }
+  },
+  "source_hashes": {
+    "baseline": {
+      "cpu_ab.tcl": "cf34f306233859cddf4e46e0ac6bd7c30ad2824736da91395194bf057f9e0da5",
+      "rv32_alu.sv": "f462cb16e30e6bc2143dea6319cb768a33875fd40b1588c5fd74f8284ccd1e66",
+      "rv32_btb.sv": "188e78886bdaa8b16b1b298b511efa04985aec946214639a9e60d783d034ac77",
+      "rv32_core.sv": "55b04c7971c2cfc039b8b7c2266be720e3d553166cd5197279c858a6c22c066e",
+      "rv32_cpu_subsys.sv": "6006749be05c70f229351b66d51d2c56fdfabd4071bcd814ac1acc9faa974ac5",
+      "rv32_decode.sv": "8b28bb62fdec586ece047627cb9e0593cdf541fcf0793e166e73824d8a6fc1cc",
+      "rv32_machine.sv": "3af396762b415330f55dbd0ec747c4b55482f6ae729efb59ebf052be0c2a1900",
+      "rv32_muldiv.sv": "4f13da11d528bff2edcd561401d17b46b65bc92ccda09907294ef9317a35dea6",
+      "src/cpu/prog.hex": "e7673aea5a004d903fb93600320398b8c876d0c6f375523a0718f39841d3ffe9"
+    },
+    "pacerv": {
+      "cpu_ab.tcl": "238476fc1fee6a3b1811e2ec9607bb6b8b88050961aca7f1c86bdfb864aadf5b",
+      "rv32_alu.sv": "125647d90b98f294743127637406d19479eebda82dccfaaba7acaf59d5ae38b1",
+      "rv32_btb.sv": "b1b3481343a2e1275cfd984c4eab05c5f9d92cb72dab652010463073eb86eb4f",
+      "rv32_core.sv": "15f86ba74e955ce93c3937106c7650d367b0b6249ed8799e3b373f34f31da404",
+      "rv32_cpu_subsys.sv": "a462bc1754426c81fd656796a6aca2d35c525cc1f5ed85be7867ec6a18b45519",
+      "rv32_decode.sv": "9cb2b57b46ed775d85b6e70a3eebe92c2d5e49e9a6483993109e2c096d9a3ff3",
+      "rv32_machine.sv": "56b542e419c58216a08b0a5c83322506e42e2721fa28db50a6454ebe29607abd",
+      "rv32_muldiv.sv": "64df4940f2d309fa68e8183f5ed1825e8843046703bf5f34ec8b885b03532246",
+      "rv32_rvc_expand.sv": "308ac8a65c9e29aeec27b38417483d0f43fd7c54487c26e89a3fa54b4647951b",
+      "rv32_rvc_frontend.sv": "210b5ba9280c3840aafc27e7c3e35616085efde310793dc1661cc72f50984128",
+      "src/cpu/prog.hex": "e7673aea5a004d903fb93600320398b8c876d0c6f375523a0718f39841d3ffe9"
+    }
+  },
+  "zip_sha256": "ad412610e43e1ca588b2f8b3f59ff6b1e5b7bdf14e73abb9a04225dd42ed3f37",
+  "zip_core_path": "125M_hold_clean/inputs/src/cpu/vendor/pacerv_h3/",
+  "not_claimed": [
+    "full-system timing closure",
+    "paceRV functional equivalence with current firmware",
+    "no additional memory usage"
+  ]
+}

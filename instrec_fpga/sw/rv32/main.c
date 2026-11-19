@@ -122,6 +122,7 @@ static uint32_t isa_test(void) {
 int main(void) {
     uint32_t t0, t1, i0, i1, i, acc = 0, status;
     uint32_t sequence = 0, start_cycle = 0, last_step = UI_STEPS;
+    uint32_t target_top1 = 0, display_initialized = 0;
     static ui_transition animation;
     uint8_t target[8], display[8], history[8];
 
@@ -194,7 +195,7 @@ int main(void) {
                 target[i] = (uint8_t)(lo >> (i * 8u));
                 target[i + 4u] = (uint8_t)(hi >> (i * 8u));
             }
-            UI_TOP1 = top1;
+            target_top1 = top1;
             ui_proportions(target, history);
             {
                 uint32_t boundary = 0;
@@ -206,6 +207,13 @@ int main(void) {
             ui_retarget(&animation, target);
             start_cycle = read_mcycle();
             last_step = 0u;
+            if (!display_initialized) {
+                /* There is no old result to fade out on the first inference. */
+                start_cycle -= UI_PHASE_STEPS * UI_TICK_CYCLES;
+                last_step = UI_PHASE_STEPS;
+                UI_TOP1 = target_top1;
+                display_initialized = 1u;
+            }
             puts_("NPU top1=");
             putdec(top1);
             puts_(" last_class=7 last_p=");
@@ -225,6 +233,7 @@ int main(void) {
             if (step > UI_STEPS) step = UI_STEPS;
             if (step != last_step) {
                 ui_step(&animation, step, display);
+                if (step >= UI_PHASE_STEPS) UI_TOP1 = target_top1;
                 for (i = 0; i < 8; ++i)
                     UI_PUBLISH = ((uint32_t)display[i] << 8) | i;
                 last_step = step;
