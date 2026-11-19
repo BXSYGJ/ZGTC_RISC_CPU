@@ -1,5 +1,19 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+> **2026-11-19：UI 修复位流已烧板，8 demo 数值回归完成，HDMI/KEY2 待目视确认。**
+> 接手分支 `wrapup-working`，工作区干净；交接所述 UI 改动已由 `ee17951e` 保存，并非丢失。
+> 位流 `20261119-145948-caf76016`，SHA-256 `C1269438352120FA11B83AA280E9224FD8EB8A04FB458E4476C997B1715040F1`，
+> setup WNS −0.861 ns / hold WHS +0.056 ns，**时序未收敛**。
+> FTDI 起初离线，用户重插后恢复；`flash_bitstream.py` 首次成功，`The done bit is 1`。
+> COM5 权重上传 691040 B / 2700 帧，回复 `WOK CFE5A709`。
+> 按 sample_0..7 顺序连续注入，每条 1032 帧、0 重传，板级 logits 与 golden **8/8 逐位一致**。
+> 从串口 logits 计算的 argmax 依次 `0,1,2,0,4,5,6,7`，真值命中 **7/8**；sample_3 长笛 golden 亦判 0，属模型误判。
+> 本次串口测试不直接读取 softmax 硬件 top1 或 HDMI 像素，显示串轮修复与 KEY2 清零仍待用户目视确认。
+> 原始逐条日志与结果：`reports/board_ui_20261119_182549/`；烧录安全回归 **16 passed**。
+> 未修改 RTL/约束/正式脚本，未调整声卡音量；最终注入使用 `--keep-lock`，保留最后一窗供看屏。
+> 下一步：用户确认 8 类彩色柱状图、结果切换及 KEY2 历史清零；最近 8 次历史/CPU EMA 新需求未实现。
+> 无运行中的 `pds_shell` / `cdt_cfg`；保留可复用 `cdt_js`，按安全规则不强杀。
+
 
 
 

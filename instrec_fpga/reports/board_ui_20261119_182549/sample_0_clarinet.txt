@@ -1,0 +1,6 @@
+clip   : sample_0_clarinet.wav
+window : 132096 samples (264192 B, 1032 frames of 256 B)
+level  : peak 29204  rms 6829
+      upload OK in 26.1 s (1032 frames, 0 retransmits)
+   run 0  board logits = [31, -30, 6, -1, -4, -26, -13, 6]   top1=0
+        golden logits = [31, -30, 6, -1, -4, -26, -13, 6]   top1=0   IDENTICAL

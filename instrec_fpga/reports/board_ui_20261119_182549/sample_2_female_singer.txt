@@ -1,0 +1,6 @@
+clip   : sample_2_female_singer.wav
+window : 132096 samples (264192 B, 1032 frames of 256 B)
+level  : peak 29204  rms 4141
+      upload OK in 26.0 s (1032 frames, 0 retransmits)
+   run 0  board logits = [3, -22, 9, -16, -2, 8, -16, 8]   top1=2
+        golden logits = [3, -22, 9, -16, -2, 8, -16, 8]   top1=2   IDENTICAL

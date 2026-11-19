@@ -1,0 +1,6 @@
+clip   : sample_4_piano.wav
+window : 132096 samples (264192 B, 1032 frames of 256 B)
+level  : peak 29204  rms 4826
+      upload OK in 26.0 s (1032 frames, 0 retransmits)
+   run 0  board logits = [-9, 6, -19, -23, 23, -1, -7, -3]   top1=4
+        golden logits = [-9, 6, -19, -23, 23, -1, -7, -3]   top1=4   IDENTICAL

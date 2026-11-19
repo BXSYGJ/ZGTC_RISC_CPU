@@ -1,0 +1,61 @@
+{
+  "bitstream_sha256": "c1269438352120fa11b83aa280e9224fd8eb8a04fb458e4476c997b1715040f1",
+  "rows": [
+    {
+      "sample": "sample_0_clarinet.wav",
+      "expected": 0,
+      "exit_code": 0,
+      "board_top1": 0,
+      "golden_identical": true
+    },
+    {
+      "sample": "sample_1_distorted_electric_guitar.wav",
+      "expected": 1,
+      "exit_code": 0,
+      "board_top1": 1,
+      "golden_identical": true
+    },
+    {
+      "sample": "sample_2_female_singer.wav",
+      "expected": 2,
+      "exit_code": 0,
+      "board_top1": 2,
+      "golden_identical": true
+    },
+    {
+      "sample": "sample_3_flute.wav",
+      "expected": 3,
+      "exit_code": 0,
+      "board_top1": 0,
+      "golden_identical": true
+    },
+    {
+      "sample": "sample_4_piano.wav",
+      "expected": 4,
+      "exit_code": 0,
+      "board_top1": 4,
+      "golden_identical": true
+    },
+    {
+      "sample": "sample_5_tenor_saxophone.wav",
+      "expected": 5,
+      "exit_code": 0,
+      "board_top1": 5,
+      "golden_identical": true
+    },
+    {
+      "sample": "sample_6_trumpet.wav",
+      "expected": 6,
+      "exit_code": 0,
+      "board_top1": 6,
+      "golden_identical": true
+    },
+    {
+      "sample": "sample_7_violin.wav",
+      "expected": 7,
+      "exit_code": 0,
+      "board_top1": 7,
+      "golden_identical": true
+    }
+  ]
+}

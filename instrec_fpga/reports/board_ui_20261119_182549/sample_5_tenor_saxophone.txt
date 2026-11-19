@@ -1,0 +1,6 @@
+clip   : sample_5_tenor_saxophone.wav
+window : 132096 samples (264192 B, 1032 frames of 256 B)
+level  : peak 29205  rms 5917
+      upload OK in 25.9 s (1032 frames, 0 retransmits)
+   run 0  board logits = [-13, -7, -3, -14, -8, 13, 1, 6]   top1=5
+        golden logits = [-13, -7, -3, -14, -8, 13, 1, 6]   top1=5   IDENTICAL

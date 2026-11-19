@@ -1,0 +1,6 @@
+clip   : sample_1_distorted_electric_guitar.wav
+window : 132096 samples (264192 B, 1032 frames of 256 B)
+level  : peak 29568  rms 4425
+      upload OK in 25.9 s (1032 frames, 0 retransmits)
+   run 0  board logits = [-25, 30, -5, -22, 9, -4, 6, -17]   top1=1
+        golden logits = [-25, 30, -5, -22, 9, -4, 6, -17]   top1=1   IDENTICAL
