@@ -1,0 +1,14 @@
+{
+  "captured": {
+    "dominant_bin_hz": 1001.953125,
+    "period_24_difference_std_lsb": 3574.0443636209566,
+    "residual_to_2000hz_sinusoid_std_lsb": 2017.7320357777328,
+    "sinusoid_fit_snr_db": -13.401878331656071
+  },
+  "page_order_restored": {
+    "dominant_bin_hz": 1998.046875,
+    "period_24_difference_std_lsb": 2.2371611363526682,
+    "residual_to_2000hz_sinusoid_std_lsb": 25.795604839877324,
+    "sinusoid_fit_snr_db": 38.059702239953566
+  }
+}

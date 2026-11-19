@@ -21,6 +21,17 @@ The new RTL inserts each new sample at the most significant end, placing the old
 
 Earlier STATUS notes assigning a similar half-frequency symptom to wiring or the PCM1808 module did not test this page-order defect. They must not be used to rule out the live audio RTL path.
 
+Four actual music captures on the old board bitstream close the causal chain:
+
+| Source class | Board top1 | Golden on raw capture | Golden after restoring page order |
+|---|---:|---:|---:|
+| Flute (3) | 7 | 7, logits identical to board | 3 |
+| Clarinet (0) | 7 | 7, logits identical to board | 0 |
+| Trumpet (6) | 7 | 7, logits identical to board | 6 |
+| Female singer (2) | 7 | 7, logits identical to board | 2 |
+
+Only the order of the same captured samples was changed in the last column; no gain, model, feature contract or weight changes were applied. See `before_class_captures.json` and the four `before_classN.raw` files. Every playback used NICEHCK device 2, gain 0 dB, zero underruns, and every capture ended unlocked. The reusable `scripts/diagnose_live_pcm.py` reproduces the controlled comparison and writes a unique report directory.
+
 ## Combined UI behavior
 
 - Firmware reads an atomic complete eight-lane NPU percentage snapshot using a sequence counter.
@@ -35,3 +46,5 @@ Earlier STATUS notes assigning a similar half-frequency symptom to wiring or the
 The UI-only build `20261119-201437-1effbbdb` was deliberately interrupted during synthesis to include the newly discovered audio fix. **No bitstream was produced by that run.** Its files remain under `build/pds/`; the existing board bitstream was not replaced.
 
 Before the audio fix, final UI verification passed `rv_cpu`, `history_tracker`, `dashboard_ui`; Python regression was 470 passed / 26 skipped. The CPU simulation runs the actual firmware for the entire 500 ms animation, checks 25 publication ticks and one independent history vector. A full 1080p raster checks proportional stacking, legend colors and video alignment. Post-audio-fix verification and combined build/board results are recorded as they complete.
+
+Post-fix verification: `audio_page_order` PASS, `audio_chain` PASS, Python 471 passed / 26 skipped, 80 RTL files with zero lexical violations. Combined full build `20261119-203050-b39cb1ee` started from commit `0ed10615`; board verification remains pending. PNG previews in this directory are actual RTL simulation rasters, not board photographs.
