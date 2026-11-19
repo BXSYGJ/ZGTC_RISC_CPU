@@ -1,0 +1,122 @@
+[
+  {
+    "class": 6,
+    "start_seconds": 4.0,
+    "golden_top1": 6,
+    "logits": [
+      -5,
+      -6,
+      -23,
+      -19,
+      -23,
+      -5,
+      43,
+      -8
+    ]
+  },
+  {
+    "class": 7,
+    "start_seconds": 15.0,
+    "golden_top1": 7,
+    "logits": [
+      -1,
+      -30,
+      -12,
+      -19,
+      -4,
+      -3,
+      -20,
+      41
+    ]
+  },
+  {
+    "class": 4,
+    "start_seconds": 26.0,
+    "golden_top1": 4,
+    "logits": [
+      -8,
+      -1,
+      -18,
+      -19,
+      38,
+      -1,
+      -27,
+      -2
+    ]
+  },
+  {
+    "class": 3,
+    "start_seconds": 37.0,
+    "golden_top1": 3,
+    "logits": [
+      -7,
+      -24,
+      1,
+      61,
+      -12,
+      -15,
+      -32,
+      0
+    ]
+  },
+  {
+    "class": 1,
+    "start_seconds": 48.0,
+    "golden_top1": 1,
+    "logits": [
+      -51,
+      55,
+      5,
+      -23,
+      4,
+      -14,
+      -2,
+      -10
+    ]
+  },
+  {
+    "class": 5,
+    "start_seconds": 59.0,
+    "golden_top1": 5,
+    "logits": [
+      -27,
+      -20,
+      -7,
+      -21,
+      -3,
+      52,
+      -16,
+      5
+    ]
+  },
+  {
+    "class": 2,
+    "start_seconds": 70.0,
+    "golden_top1": 2,
+    "logits": [
+      6,
+      -24,
+      47,
+      -10,
+      -19,
+      -12,
+      -30,
+      7
+    ]
+  },
+  {
+    "class": 0,
+    "start_seconds": 81.0,
+    "golden_top1": 0,
+    "logits": [
+      50,
+      -50,
+      -10,
+      1,
+      1,
+      -25,
+      -6,
+      -1
+    ]
+  }
+]

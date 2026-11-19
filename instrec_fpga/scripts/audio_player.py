@@ -10,8 +10,7 @@ and dropouts were invisible) and there was no volume control, so the PCM1808
 either clipped or ran so quiet that its noise floor dominated the mel features.
 
 This module streams in small buffers, keeps N queued, and refills finished ones
-from a background thread.  Volume is a digital gain in dBFS plus a full-volume
-waveOut handle, and underruns are counted so a bad run is visible instead of
+from a background thread.  Endpoint volume and mute are preserved; underruns are counted so a bad run is visible instead of
 silently producing garbage.
 
 Verify the rendered signal end-to-end by reading the PCM window the FPGA
@@ -124,12 +123,7 @@ class StreamingPlayer:
         if rc != 0:
             raise RuntimeError('waveOutOpen(dev=%d) rc=%d (mono or unsupported format?)'
                                % (self.device_id, rc))
-        try:
-            self._winmm.waveOutSetVolume.argtypes = [wt.HANDLE, wt.DWORD]
-            self._winmm.waveOutSetVolume.restype = wt.UINT
-            self._winmm.waveOutSetVolume(self._handle, 0xFFFFFFFF)
-        except Exception:
-            pass
+        # Preserve the user's endpoint/session volume and mute settings.
         self._hdrs = [WAVEHDR(None, 0, 0, None, 0, 0, None, None)
                       for _ in range(self.queued)]
         self._bufs = [None] * self.queued

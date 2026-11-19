@@ -25,7 +25,7 @@
 module tb_rv_cpu;
 
     localparam integer CLK_HALF   = 5;             // 100 MHz
-    localparam integer MAX_CYCLES = 4_000_000;
+    localparam integer MAX_CYCLES = 90_000_000;
 
     reg clk   = 1'b0;
     reg rst_n = 1'b0;
@@ -41,6 +41,31 @@ module tb_rv_cpu;
     wire        cpu_alive, cpu_trap;
     wire [31:0] cpu_trap_cause;
     wire        npu_soft_start;
+    wire ui_valid, history_valid;
+    wire [7:0] ui_pct, history_pct;
+    wire [3:0] ui_idx, history_idx, ui_top1;
+    integer ui_beats = 0, history_beats = 0;
+    integer first_ui_cycle = 0, last_ui_cycle = 0;
+    reg [7:0] previous_pct5 = 0;
+    always @(posedge clk) begin
+        if (ui_valid) begin
+            ui_beats <= ui_beats + 1;
+            if (ui_beats == 0) first_ui_cycle <= cycles;
+            last_ui_cycle <= cycles;
+            if (ui_idx == 5) begin
+                if (ui_pct < previous_pct5 || ui_pct > 87)
+                    $fatal(1,"Software animation not monotonic/bounded");
+                if (ui_beats < 8 && (ui_pct == 0 || ui_pct >= 87))
+                    $fatal(1,"Software animation jumped directly to target");
+                previous_pct5 <= ui_pct;
+            end
+        end
+        if (history_valid) begin
+            if (history_idx !== history_beats[3:0]) $fatal(1,"History lane order");
+            if (history_idx == 5 && history_pct != 97) $fatal(1,"History lost raw result");
+            history_beats <= history_beats + 1;
+        end
+    end
 
     reg         npu_busy = 1'b0;
     reg         npu_done = 1'b0;
@@ -75,7 +100,10 @@ module tb_rv_cpu;
         .cpu_alive       (cpu_alive),
         .cpu_trap        (cpu_trap),
         .cpu_trap_cause  (cpu_trap_cause),
-        .npu_soft_start  (npu_soft_start)
+        .npu_soft_start  (npu_soft_start),
+        .ui_probs_valid(ui_valid), .ui_probs_pct(ui_pct), .ui_probs_idx(ui_idx),
+        .history_probs_valid(history_valid), .history_probs_pct(history_pct),
+        .history_probs_idx(history_idx), .ui_top1(ui_top1)
     );
 
     // ---- UART receiver: one byte every ~20 cycles --------------------
@@ -156,16 +184,16 @@ module tb_rv_cpu;
         npu_busy <= 1'b0;
         // Present the result payload before asserting valid; the DUT samples
         // all accelerator inputs on the active edge.
-        npu_done <= 1'b1;
-        npu_probs_pct <= 8'd87;
-        npu_probs_idx <= 4'd3;
-        npu_probs_valid <= 1'b1;
-        // Keep the completion and result valid through a full DUT sampling
-        // edge; nonblocking assignments at the same edge otherwise make the
-        // CPU-side sticky result capture the old zero value.
-        repeat (2) @(posedge clk);
-        npu_done <= 1'b0;
-        npu_probs_valid <= 1'b0;
+        for (integer lane = 0; lane < 8; lane = lane + 1) begin
+            @(negedge clk);
+            npu_done = lane == 7;
+            npu_probs_pct = lane == 5 ? 87 : (lane == 7 ? 1 : 2);
+            npu_probs_idx = lane;
+            npu_probs_valid = 1'b1;
+        end
+        @(negedge clk);
+        npu_done = 1'b0;
+        npu_probs_valid = 1'b0;
         // An accelerator counter may change after completion; software must
         // still read the cycle count belonging to the captured result.
         npu_cycles <= 32'd99999;
@@ -174,7 +202,13 @@ module tb_rv_cpu;
         wait (cpu_acknowledged);
         wait (npu_soft_start === 1'b1);
         $display("CHECK PASS C10 firmware requested next inference after acknowledgement");
-        repeat (50) @(posedge clk);
+        wait (ui_beats >= 200);
+        repeat (100) @(posedge clk);
+        if (history_beats != 8 || ui_beats != 200 || previous_pct5 != 87 || ui_top1 != 5)
+            $fatal(1,"CPU animation/history publication count or endpoint");
+        if (last_ui_cycle-first_ui_cycle < 59900000 || last_ui_cycle-first_ui_cycle > 60100000)
+            $fatal(1,"25 software ticks must span 480 ms at 125 MHz");
+        $display("CHECK PASS CPU software animation: 25 ticks, 500ms endpoint, one history vector");
 
         $display("---- UART log (%0d lines) ----", nline);
         $write("%s", log_s);
@@ -188,7 +222,7 @@ module tb_rv_cpu;
         else $display("CHECK PASS C3 ISA self-test");
         if (!has_prefix("RV32 BENCH cycles=")) begin $display("CHECK FAIL C4 no BENCH line"); nfail = nfail + 1; end
         else $display("CHECK PASS C4 mcycle/minstret measurement");
-        if (!has_prefix("NPU top1=5 last_class=3 last_p=87")) begin $display("CHECK FAIL C5 no NPU event report"); nfail = nfail + 1; end
+        if (!has_prefix("NPU top1=5 last_class=7 last_p=1")) begin $display("CHECK FAIL C5 no NPU event report"); nfail = nfail + 1; end
         else $display("CHECK PASS C5 NPU event surfaced through MMIO");
         if (!cpu_triggered) begin $display("CHECK FAIL C6 firmware never pulsed CTRL[0]"); nfail = nfail + 1; end
         else $display("CHECK PASS C6 CPU-triggered NPU start (CTRL[0])");
@@ -197,7 +231,7 @@ module tb_rv_cpu;
         if (!cpu_acknowledged || dut.npu_done_st || dut.npu_probs_st || dut.npu_timeout_st) begin
             $display("CHECK FAIL C8 NPU event acknowledgement/clear"); nfail = nfail + 1;
         end else $display("CHECK PASS C8 firmware acknowledged and cleared NPU event");
-        if (!has_prefix("NPU top1=5 last_class=3 last_p=87 c=12345")) begin $display("CHECK FAIL C9 result cycle snapshot"); nfail = nfail + 1; end
+        if (!has_prefix("NPU top1=5 last_class=7 last_p=1 c=12345")) begin $display("CHECK FAIL C9 result cycle snapshot"); nfail = nfail + 1; end
         else $display("CHECK PASS C9 result cycle snapshot survives live counter change");
 
         if (cpu_trap) begin

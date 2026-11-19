@@ -50,6 +50,13 @@
 //   0x8000_0024 W  CTRL        [0] NPU soft start (1-cycle pulse)
 //                              [1] clear the sticky status bits
 //   0x8000_0028 R  NPU_CYCLES  npu_top cycle counter
+//   0x8000_002C R  RESULT_SEQ  increments on complete eight-lane snapshot
+//   0x8000_0030 R  RESULT_LO   complete percentages, lanes 0..3
+//   0x8000_0034 R  RESULT_HI   complete percentages, lanes 4..7
+//   0x8000_0038 R  RESULT_TOP1 captured class of the complete result
+//   0x8000_0040 W  UI_LANE     {16'd0,pct[7:0],4'd0,lane[3:0]}
+//   0x8000_0044 W  HIST_LANE   cumulative normalized percent, same packing
+//   0x8000_0048 W  UI_TOP1     current result class
 // ---------------------------------------------------------------------------
 `timescale 1ns / 1ps
 
@@ -88,7 +95,14 @@ module rv32_cpu_subsys #(
     output reg         cpu_alive,
     output wire        cpu_trap,
     output wire [31:0] cpu_trap_cause,
-    output reg         npu_soft_start
+    output reg         npu_soft_start,
+    output reg         ui_probs_valid,
+    output reg  [7:0]  ui_probs_pct,
+    output reg  [3:0]  ui_probs_idx,
+    output reg         history_probs_valid,
+    output reg  [7:0]  history_probs_pct,
+    output reg  [3:0]  history_probs_idx,
+    output reg  [3:0]  ui_top1
 );
 
     localparam integer IAW = $clog2(IMEM_WORDS);
@@ -201,6 +215,9 @@ module rv32_cpu_subsys #(
     reg [7:0]  probs_pct_q;
     reg [3:0]  probs_idx_q;
     reg [31:0] result_cycles_q;
+    reg [63:0] collecting_probs, complete_probs;
+    reg [31:0] result_sequence;
+    reg [3:0] result_top1;
 
     wire ctrl_write = d_req_valid && d_req_ready && d_req_write &&
                       (d_req_address == 32'h8000_0024);
@@ -216,6 +233,10 @@ module rv32_cpu_subsys #(
             probs_idx_q    <= 4'd0;
             result_cycles_q <= 32'd0;
             npu_soft_start <= 1'b0;
+            collecting_probs <= 64'd0;
+            complete_probs <= 64'd0;
+            result_sequence <= 32'd0;
+            result_top1 <= 4'd0;
         end else begin
             npu_soft_start <= ctrl_start;
             if (ctrl_clear) begin
@@ -231,6 +252,47 @@ module rv32_cpu_subsys #(
                 probs_pct_q  <= npu_probs_pct;
                 probs_idx_q  <= npu_probs_idx;
                 result_cycles_q <= npu_cycles;
+                if (npu_probs_idx < 8) begin
+                    collecting_probs[npu_probs_idx * 8 +: 8] <= npu_probs_pct;
+                    if (npu_probs_idx == 7) begin
+                        complete_probs <= {npu_probs_pct, collecting_probs[55:0]};
+                        result_sequence <= result_sequence + 32'd1;
+                        result_top1 <= npu_top1;
+                    end
+                end
+            end
+        end
+    end
+
+    // CPU publishes display animation separately from one-per-result history.
+    // MMIO +40/+44: {16'd0, pct[7:0], 4'd0, lane[3:0]}; +48: top1.
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            ui_probs_valid <= 1'b0;
+            ui_probs_pct <= 8'd0;
+            ui_probs_idx <= 4'd0;
+            history_probs_valid <= 1'b0;
+            history_probs_pct <= 8'd0;
+            history_probs_idx <= 4'd0;
+            ui_top1 <= 4'd0;
+        end else begin
+            ui_probs_valid <= 1'b0;
+            history_probs_valid <= 1'b0;
+            if (d_req_valid && d_req_ready && d_req_write) begin
+                case (d_req_address)
+                    32'h8000_0040: begin
+                        ui_probs_valid <= 1'b1;
+                        ui_probs_pct <= d_req_data[15:8];
+                        ui_probs_idx <= d_req_data[3:0];
+                    end
+                    32'h8000_0044: begin
+                        history_probs_valid <= 1'b1;
+                        history_probs_pct <= d_req_data[15:8];
+                        history_probs_idx <= d_req_data[3:0];
+                    end
+                    32'h8000_0048: ui_top1 <= d_req_data[3:0];
+                    default: begin end
+                endcase
             end
         end
     end
@@ -298,6 +360,10 @@ module rv32_cpu_subsys #(
             32'h8000_001C: mmio_rdata = retired_count[31:0];
             32'h8000_0020: mmio_rdata = ddr_sts;
             32'h8000_0028: mmio_rdata = result_cycles_q;
+            32'h8000_002C: mmio_rdata = result_sequence;
+            32'h8000_0030: mmio_rdata = complete_probs[31:0];
+            32'h8000_0034: mmio_rdata = complete_probs[63:32];
+            32'h8000_0038: mmio_rdata = {28'd0, result_top1};
             default:       mmio_rdata = 32'h0000_0000;
         endcase
     end

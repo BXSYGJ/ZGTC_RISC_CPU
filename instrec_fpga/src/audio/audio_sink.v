@@ -377,8 +377,10 @@ module audio_sink #(
         end else begin
             page_go <= 1'b0;
             if (frame_event) begin
-                agg_l_shift <= {agg_l_shift[239:0], frame_l};
-                agg_r_shift <= {agg_r_shift[239:0], frame_r};
+                // DDR and the mel reader consume lane 0 first (little endian).
+                // Put new samples at the MSB so the oldest ends up at lane 0.
+                agg_l_shift <= {frame_l, agg_l_shift[255:16]};
+                agg_r_shift <= {frame_r, agg_r_shift[255:16]};
                 if (agg_cnt == AGG_FRAMES - 5'd1) begin
                     agg_cnt <= 5'd0;
                     page_go <= 1'b1;            // 16th frame just shifted in

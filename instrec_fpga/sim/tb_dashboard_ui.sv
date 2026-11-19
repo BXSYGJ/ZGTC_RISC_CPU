@@ -8,7 +8,8 @@ module tb_dashboard_ui;
     reg ready = 0;
     reg [3:0] cls = 4;
     reg [7:0] pct [0:7];
-    reg [7:0] hist [0:7];
+    reg [511:0] history = 0;
+    reg [3:0] history_count = 0;
     wire [10:0] wave_addr;
     reg [15:0] wave_min = 0, wave_max = 0;
     wire [23:0] rgb;
@@ -21,8 +22,7 @@ module tb_dashboard_ui;
         .feature_ready(ready), .result_ready(ready), .class_idx(cls),
         .pct0(pct[0]), .pct1(pct[1]), .pct2(pct[2]), .pct3(pct[3]),
         .pct4(pct[4]), .pct5(pct[5]), .pct6(pct[6]), .pct7(pct[7]),
-        .hist0(hist[0]), .hist1(hist[1]), .hist2(hist[2]), .hist3(hist[3]),
-        .hist4(hist[4]), .hist5(hist[5]), .hist6(hist[6]), .hist7(hist[7]),
+        .history_boundaries(history), .history_count(history_count),
         .vsync_pulse(frame_start), .rgb(rgb), .de_out(out_de), .hs_out(out_hs), .vs_out(out_vs)
     );
     integer amplitude;
@@ -61,11 +61,15 @@ module tb_dashboard_ui;
                 if (rgb !== expected) $fatal(1,"Bar width/zero/full-scale wrong x=%0d got=%h expected=%h",xq[3],rgb,expected);
                 checks = checks + 1;
             end
-            // Histogram: bar 4 (x 640..768) with hist[4]=200 -> body above y=728.
-            if (yq[3] == 800 && xq[3] >= 640 && xq[3] < 768) begin
-                expected = (800 >= 928 - hist[4]) ? 24'he0bc73 : 24'h0d1726;
-                if (rgb !== expected) $fatal(1,"Histogram bar body wrong x=%0d got=%h expected=%h",xq[3],rgb,expected);
-            end
+            // Column 7: 50 percent clarinet below 50 percent guitar.
+            if (xq[3] == 1080 && yq[3] == 850 && rgb !== 24'h75b79d)
+                $fatal(1,"Stacked lower class missing");
+            if (xq[3] == 1080 && yq[3] == 720 && rgb !== 24'hb393c8)
+                $fatal(1,"Stacked upper class missing");
+            if (xq[3] == 184 && yq[3] == 850 && rgb !== 24'h0d1726)
+                $fatal(1,"Empty history column must stay blank");
+            if (xq[3] == 136 && yq[3] == 940 && rgb !== 24'h75b79d)
+                $fatal(1,"Legend color missing");
         end
     end
     task render(input string name);
@@ -92,8 +96,8 @@ module tb_dashboard_ui;
     initial begin
         pct[0]=3; pct[1]=4; pct[2]=2; pct[3]=5;
         pct[4]=72; pct[5]=3; pct[6]=8; pct[7]=3;
-        hist[0]=0; hist[1]=0; hist[2]=0; hist[3]=0;
-        hist[4]=200; hist[5]=0; hist[6]=0; hist[7]=0;
+        history[511:448] = 64'h6464646464646432;
+        history_count = 1;
         repeat(5) @(negedge clk); rst=1;
         render("build/sim/dashboard_ui/waiting.ppm");
         ready=1;

@@ -496,6 +496,12 @@ register(Case(
 ))
 
 register(Case(
+    name="audio_page_order", tb="tb_audio_page_order.sv",
+    rtl=["src/audio/audio_sink.v"], timeout=60,
+    description="chronological little-endian PCM samples across stereo DDR pages",
+))
+
+register(Case(
     name="text_pipeline",
     tb="tb_text_pipeline.sv",
     rtl=["src/ui/text_disp.v", "src/ui/font_rom.v"],
@@ -517,6 +523,12 @@ register(Case(
     rtl=["src/ui/dashboard_renderer.v", "src/ui/dashboard_text.v"],
     timeout=180,
     description="1080p actual RTL raster, controls, RAM geometry and empty/0/100 percent states",
+))
+
+register(Case(
+    name="history_tracker", tb="tb_history_tracker.sv",
+    rtl=["src/ui/history_tracker.v"], timeout=60,
+    description="latest eight vectors, oldest eviction and KEY2 debounce/clear",
 ))
 
 register(Case(

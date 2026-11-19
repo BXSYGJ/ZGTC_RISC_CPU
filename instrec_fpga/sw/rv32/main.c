@@ -13,6 +13,7 @@
  *   "RV32 BOOT"  "RV32 ISA OK"  "RV32 MMIO OK"  "RV32 BENCH"  "NPU top1="
  * ------------------------------------------------------------------------- */
 #include <stdint.h>
+#include "ui_transition.h"
 
 #define MMIO(a) (*(volatile uint32_t *)(a))
 #define SYS_ID      MMIO(0x80000000u)
@@ -26,6 +27,14 @@
 #define DDR_STS     MMIO(0x80000020u)
 #define NPU_CTRL    MMIO(0x80000024u)
 #define NPU_CYCLES  MMIO(0x80000028u)
+
+#define RESULT_SEQ  MMIO(0x8000002cu)
+#define RESULT_LO   MMIO(0x80000030u)
+#define RESULT_HI   MMIO(0x80000034u)
+#define RESULT_TOP1 MMIO(0x80000038u)
+#define UI_PUBLISH  MMIO(0x80000040u)
+#define HIST_PUBLISH MMIO(0x80000044u)
+#define UI_TOP1     MMIO(0x80000048u)
 
 #define ST_NPU_BUSY    (1u << 0)
 #define ST_NPU_DONE    (1u << 1)
@@ -75,8 +84,9 @@ void trap_handler(void) {
 
 /* --- ISA self-test: returns 0 on pass, otherwise the failing test id ---- */
 static uint32_t isa_test(void) {
-    volatile uint32_t *ram = (volatile uint32_t *)0x20000000u;
-    volatile uint8_t  *ram8 = (volatile uint8_t *)0x20000000u;
+    static volatile uint32_t scratch[8];
+    volatile uint32_t *ram = scratch;
+    volatile uint8_t  *ram8 = (volatile uint8_t *)scratch;
     uint32_t i, sum = 0;
     int32_t s;
 
@@ -110,7 +120,10 @@ static uint32_t isa_test(void) {
 }
 
 int main(void) {
-    uint32_t t0, t1, i0, i1, i, acc = 0, status, last_probs = 0xffffffffu;
+    uint32_t t0, t1, i0, i1, i, acc = 0, status;
+    uint32_t sequence = 0, start_cycle = 0, last_step = UI_STEPS;
+    static ui_transition animation;
+    uint8_t target[8], display[8], history[8];
 
     LED_REG = 0x01u;                       /* proof of life for led[0] */
     puts_("\r\nRV32 BOOT\r\n");
@@ -165,31 +178,57 @@ int main(void) {
     puts_("NPU GO\r\n");
 
     for (;;) {
+        uint32_t observed = RESULT_SEQ;
         status = SYS_STATUS;
-
-        if (status & ST_PROBS) {
-            uint32_t pr = SYS_PROBS;
-            last_probs = pr;
+        if (observed != sequence) {
+            uint32_t lo, hi, top1;
+            /* Retry if a new complete vector arrives during the MMIO reads. */
+            do {
+                observed = RESULT_SEQ;
+                lo = RESULT_LO;
+                hi = RESULT_HI;
+                top1 = RESULT_TOP1;
+            } while (RESULT_SEQ != observed);
+            sequence = observed;
+            for (i = 0; i < 4; ++i) {
+                target[i] = (uint8_t)(lo >> (i * 8u));
+                target[i + 4u] = (uint8_t)(hi >> (i * 8u));
+            }
+            UI_TOP1 = top1;
+            ui_proportions(target, history);
+            {
+                uint32_t boundary = 0;
+                for (i = 0; i < 8; ++i) {
+                    boundary += history[i];
+                    HIST_PUBLISH = (boundary << 8) | i;
+                }
+            }
+            ui_retarget(&animation, target);
+            start_cycle = read_mcycle();
+            last_step = 0u;
             puts_("NPU top1=");
-            putdec((status >> 8) & 0x0fu);
-            puts_(" last_class=");
-            putdec(pr & 0x0fu);
-            puts_(" last_p=");
-            putdec((pr >> 8) & 0xffu);
+            putdec(top1);
+            puts_(" last_class=7 last_p=");
+            putdec(target[7]);
             puts_(" c=");
             putdec(NPU_CYCLES);
             puts_("\r\n");
-            NPU_CTRL = 0x2u;               /* clear stickies */
-            NPU_CTRL = 0x1u;               /* request the next complete Mel window */
-            LED_REG = (uint32_t)(0x80u | (pr & 0x0fu) << 4);
+            NPU_CTRL = 0x2u;
+            NPU_CTRL = 0x1u;
+            LED_REG = 0x80u | (top1 << 4);
         } else if (status & ST_NPU_TIMEOUT) {
             puts_("NPU TIMEOUT\r\n");
             NPU_CTRL = 0x2u;
-        } else {
-            /* idle heartbeat: keep led[0] blinking so a dead loop is visible */
-            for (i = 0; i < 200000u; i++) { }
-            LED_REG = (LED_REG == 0x01u) ? 0x03u : 0x01u;
         }
-        (void)last_probs;
+        if (last_step < UI_STEPS) {
+            uint32_t step = (read_mcycle() - start_cycle) / UI_TICK_CYCLES;
+            if (step > UI_STEPS) step = UI_STEPS;
+            if (step != last_step) {
+                ui_step(&animation, step, display);
+                for (i = 0; i < 8; ++i)
+                    UI_PUBLISH = ((uint32_t)display[i] << 8) | i;
+                last_step = step;
+            }
+        }
     }
 }

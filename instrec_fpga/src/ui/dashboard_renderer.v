@@ -11,21 +11,20 @@ module dashboard_renderer #(parameter SIMULATION = 0) (
     input wire feature_ready, result_ready,
     input wire [3:0] class_idx,
     input wire [7:0] pct0, pct1, pct2, pct3, pct4, pct5, pct6, pct7,
-    input wire [7:0] hist0, hist1, hist2, hist3, hist4, hist5, hist6, hist7,
+    input wire [511:0] history_boundaries,
+    input wire [3:0] history_count,
     output wire vsync_pulse,
     output reg [23:0] rgb,
     output wire de_out, hs_out, vs_out
 );
     wire in_wave = pix_x >= 128 && pix_x < 1152 && pix_y >= 288 && pix_y < 448;
-    wire in_hist = pix_x >= 128 && pix_x < 1152 && pix_y >= 672 && pix_y < 928;
+    wire in_hist = pix_x >= 128 && pix_x < 1152 && pix_y >= 688 && pix_y < 888;
     wire [10:0] dx = pix_x - 11'd128;
     wire [14:0] wave_product = ({4'd0,dx} << 4) - {4'd0,dx};
     assign wave_rd_addr = in_wave ? wave_product[13:3] : 11'd0;
     wire [63:0] percentages = {pct7,pct6,pct5,pct4,pct3,pct2,pct1,pct0};
-    // Cumulative histogram: 8 bars over the old spectrum region.
-    wire [63:0] histogram = {hist7,hist6,hist5,hist4,hist3,hist2,hist1,hist0};
-    wire [2:0]  hist_col  = (pix_x - 11'd128) >> 7;
-    wire [7:0]  hist_val  = histogram[hist_col * 8 +: 8];
+    wire [2:0] hist_col = (pix_x - 11'd128) >> 7;
+    wire [63:0] hist_vector = history_boundaries[hist_col * 64 +: 64];
     function [23:0] class_color;
         input [2:0] category;
         begin
@@ -53,7 +52,8 @@ module dashboard_renderer #(parameter SIMULATION = 0) (
     reg wave_s1, hist_s1, wave_ready_s1, result_s1, mute_s1;
     reg [3:0] class_s1;
     reg [63:0] percentages_s1;
-    reg [7:0] hist_val_s1;
+    reg [63:0] hist_vector_s1;
+    reg hist_valid_s1;
     reg [2:0] hist_col_s1;
     reg [23:0] graph_s2, graph_s3, graph_color;
     reg [3:0] de_pipe, hs_pipe, vs_pipe;
@@ -63,6 +63,10 @@ module dashboard_renderer #(parameter SIMULATION = 0) (
     reg [10:0] bar_width;
     reg [6:0] pos_amp, neg_amp;
     reg [15:0] neg_magnitude;
+    integer stack_lane;
+    reg [8:0] stack_bottom, stack_top;
+    reg [7:0] stack_position;
+    reg [2:0] legend_class;
     // Wave-band pipeline: register the amplitude extraction (which runs a
     // 16-bit complement carry chain off the wave_min DRM read) one beat,
     // and shift the wave coordinates to match, so the whole wave graphic is
@@ -91,14 +95,26 @@ module dashboard_renderer #(parameter SIMULATION = 0) (
             if (wave_ready_s2 && y_s2 >= (11'd368 - {4'd0,pos_amp_r}) && y_s2 <= (11'd368 + {4'd0,neg_amp_r}))
                 graph_color = mute_s2 ? 24'h9aabc0 : 24'h36d6c5;
         end
+        stack_bottom = 0;
+        stack_top = 0;
+        stack_position = (11'd887 - y_s1) >> 1;
         if (hist_s1) begin
             graph_color = 24'h0d1726;
-            // Grid: column separators every 128 px, horizontal line every 64 rows.
-            if (x_s1[7:0] == 0 || y_s1[5:0] == 32) graph_color = 24'h27364c;
-            // Bar body: from the bottom (y=928) up hist_val_s1 pixels.
-            if (y_s1 >= (11'd928 - {3'd0, hist_val_s1}))
-                graph_color = class_color(hist_col_s1);
+            if (y_s1 == 688 || y_s1 == 788 || y_s1 == 887)
+                graph_color = 24'h27364c;
+            // One inference per column, all eight classes share its height.
+            for (stack_lane = 0; stack_lane < 8; stack_lane = stack_lane + 1) begin
+                stack_top = {1'b0,hist_vector_s1[stack_lane*8 +: 8]};
+                if (hist_valid_s1 && x_s1[6:0] >= 16 && x_s1[6:0] < 112 &&
+                    stack_position >= stack_bottom && stack_position < stack_top)
+                    graph_color = class_color(stack_lane[2:0]);
+                stack_bottom = stack_top;
+            end
         end
+        legend_class = ((x_s1 - 11'd128) >> 8) + (y_s1 >= 960 ? 3'd4 : 3'd0);
+        if (x_s1 >= 128 && x_s1 < 912 && x_s1[7:0] >= 128 && x_s1[7:0] < 144 &&
+            ((y_s1 >= 936 && y_s1 < 952) || (y_s1 >= 968 && y_s1 < 984)))
+            graph_color = class_color(legend_class);
         bar_row = (y_s1 - 11'd448) >> 6;
         bar_pct = 0;
         if (bar_row < 8) bar_pct = percentages_s1[bar_row*8 +: 8];
@@ -109,12 +125,7 @@ module dashboard_renderer #(parameter SIMULATION = 0) (
             if (result_s1 && x_s1 - 1280 < bar_width)
                 graph_color = bar_row == class_s1 ? 24'h36d6c5 : 24'h547d9d;
         end
-        if (x_s1 >= 912 && x_s1 < 1104 && y_s1 >= 972 && y_s1 < 984) begin
-            if (x_s1 < 960) graph_color = 24'h16345f;
-            else if (x_s1 < 1008) graph_color = 24'h189e90;
-            else if (x_s1 < 1056) graph_color = 24'h60d65f;
-            else graph_color = 24'hf2c359;
-        end
+
     end
     always @(posedge pix_clk) begin
         x_s1 <= pix_x; y_s1 <= pix_y;
@@ -123,7 +134,8 @@ module dashboard_renderer #(parameter SIMULATION = 0) (
         result_s1 <= result_ready && class_idx < 8;
         mute_s1 <= mute_flag_sync;
         class_s1 <= class_idx; percentages_s1 <= percentages;
-        hist_val_s1 <= hist_val; hist_col_s1 <= hist_col;
+        hist_vector_s1 <= hist_vector; hist_col_s1 <= hist_col;
+        hist_valid_s1 <= history_count != 0 && {1'b0,hist_col} >= (4'd8 - history_count);
         pos_amp_r <= pos_amp;
         neg_amp_r <= neg_amp;
         x_s2 <= x_s1;

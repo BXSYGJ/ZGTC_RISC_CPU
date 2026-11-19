@@ -499,16 +499,22 @@ module instrec_top #(
     // ---- UI renderer (waveform region; instantiates waveform_disp) ----
     // Frame-coherent probability snapshot and labeled dashboard.
     wire [7:0] b0, b1, b2, b3, b4, b5, b6, b7;
+    wire cpu_ui_valid, cpu_history_valid;
+    wire [7:0] cpu_ui_pct, cpu_history_pct;
+    wire [3:0] cpu_ui_idx, cpu_history_idx, cpu_ui_top1;
+    wire [7:0] h0, h1, h2, h3, h4, h5, h6, h7;
+    wire history_frame_ready, history_frame_update;
+    wire [3:0] history_frame_class;
     wire result_frame_ready;
     wire result_frame_update;
     wire [3:0] frame_class;
     bars_data u_bars_data (
         .core_clk    (core_clk),
         .core_rst_n  (core_clk_rst_n),
-        .probs_valid (npu_probs_valid_u),
-        .probs_pct   (npu_probs_pct_u),
-        .probs_idx   (npu_probs_idx_u),
-        .top1        (npu_top1_u),
+        .probs_valid (cpu_ui_valid),
+        .probs_pct   (cpu_ui_pct),
+        .probs_idx   (cpu_ui_idx),
+        .top1        (cpu_ui_top1),
         .frame_start (vsync_pulse),
         .frame_class (frame_class),
         .frame_ready (result_frame_ready),
@@ -517,6 +523,23 @@ module instrec_top #(
         .pix_rst_n   (rst_pix_n),
         .pct0(b0), .pct1(b1), .pct2(b2), .pct3(b3),
         .pct4(b4), .pct5(b5), .pct6(b6), .pct7(b7)
+    );
+
+    bars_data u_history_data (
+        .core_clk    (core_clk),
+        .core_rst_n  (core_clk_rst_n),
+        .probs_valid (cpu_history_valid),
+        .probs_pct   (cpu_history_pct),
+        .probs_idx   (cpu_history_idx),
+        .top1        (cpu_ui_top1),
+        .frame_start (vsync_pulse),
+        .frame_class (history_frame_class),
+        .frame_ready (history_frame_ready),
+        .frame_update(history_frame_update),
+        .pix_clk     (pix_clk),
+        .pix_rst_n   (rst_pix_n),
+        .pct0(h0), .pct1(h1), .pct2(h2), .pct3(h3),
+        .pct4(h4), .pct5(h5), .pct6(h6), .pct7(h7)
     );
 
     wire [14:0] npu_feat_rd_addr;
@@ -595,17 +618,16 @@ module instrec_top #(
     );
     */
 
-    // ---- Cumulative inference histogram (KEY2 clears) ----
-    wire [7:0] hist0, hist1, hist2, hist3, hist4, hist5, hist6, hist7;
+    // One normalized confidence vector per inference, never per animation tick.
+    wire [511:0] history_boundaries;
+    wire [3:0] history_count;
     history_tracker u_history_tracker (
-        .pix_clk     (pix_clk),
-        .pix_rst_n   (rst_pix_n),
-        .frame_update(result_frame_update),
-        .frame_class (frame_class[3:0]),
-        .clear_n     (key2_n),
-        .hist0(hist0), .hist1(hist1), .hist2(hist2), .hist3(hist3),
-        .hist4(hist4), .hist5(hist5), .hist6(hist6), .hist7(hist7),
-        .last_time_ms()
+        .pix_clk(pix_clk), .pix_rst_n(rst_pix_n),
+        .frame_update(history_frame_update),
+        .frame_boundaries({h7,h6,h5,h4,h3,h2,h1,h0}),
+        .clear_n(key2_n),
+        .history_boundaries(history_boundaries),
+        .history_count(history_count)
     );
 
     dashboard_renderer u_ui_renderer (
@@ -614,12 +636,11 @@ module instrec_top #(
         .pix_hs(pix_hs), .pix_vs(pix_vs),
         .wave_rd_addr(wave_rd_addr), .wave_min(wave_min), .wave_max(wave_max),
         .wave_valid(wave_valid), .mute_flag_sync(mute_flag_sync),
-        .feature_ready(1'b1), .result_ready(result_frame_ready),
+        .feature_ready(history_count != 0), .result_ready(result_frame_ready),
         .class_idx(frame_class),
         .pct0(b0), .pct1(b1), .pct2(b2), .pct3(b3),
         .pct4(b4), .pct5(b5), .pct6(b6), .pct7(b7),
-        .hist0(hist0), .hist1(hist1), .hist2(hist2), .hist3(hist3),
-        .hist4(hist4), .hist5(hist5), .hist6(hist6), .hist7(hist7),
+        .history_boundaries(history_boundaries), .history_count(history_count),
         .vsync_pulse(vsync_pulse), .rgb(ui_rgb),
         .de_out(ui_de), .hs_out(ui_hs),
         .vs_out        (ui_vs)
@@ -1091,7 +1112,11 @@ module instrec_top #(
         .cpu_alive       (cpu_alive),
         .cpu_trap        (cpu_trap),
         .cpu_trap_cause  (cpu_trap_cause),
-        .npu_soft_start  (cpu_npu_start)
+        .npu_soft_start  (cpu_npu_start),
+        .ui_probs_valid(cpu_ui_valid), .ui_probs_pct(cpu_ui_pct),
+        .ui_probs_idx(cpu_ui_idx), .ui_top1(cpu_ui_top1),
+        .history_probs_valid(cpu_history_valid),
+        .history_probs_pct(cpu_history_pct), .history_probs_idx(cpu_history_idx)
     );
 
     // ==================================================================
