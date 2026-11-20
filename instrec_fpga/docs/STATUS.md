@@ -1,6 +1,14 @@
 # InstRec-FPGA 当前状态（STATUS）
 
 
+> **2026-11-20 乐境双页候选6648B700已烧板，实时识别和UI按键功能验收完成。**
+> 用户再次换口重插后FTDI正常；首次program成功，**done=1**（3.6s），COM5上传medley_48k 691040B/2700帧，**WOK CFE5A709**。旧Code45阻塞已关闭。
+> NICEHCK device2/gain0播放原90秒demo，**33次推理，稳定时段16/16正确覆盖8类，0欠载、无CPU trap/NPU timeout**；稳定区间排除每段前4秒，非逐样本对齐。测试win35→68、locked=0，结束finally U，声卡端点音量未改。
+> 用户对两组验收均回复“正确”：**暖白深绿UI、500ms旧值退出再500ms新值进入、KEY1切页、KEY3/4回看、长KEY1收藏/取消、KEY2清空记录和最近8次比例图**。KEY0保持复位未按。记录最多64条、仅本次运行，新增结果继续追加。
+> 发布`releases/session-ui-20261119/manifest.json`更新为BOARD_FUNCTIONAL_VERIFIED_TIMING_UNQUALIFIED，证据`reports/ui_session_20261119/board_acceptance.json`、flash/weight/demo90日志。**功能通过不等于时序收敛**：核心setup−1.402ns（834端点）、像素−0.132ns（1端点）、hold slow+0.017/fast+0.007ns；旧815A6594回退包保留。
+> 本次无RTL/约束/固件改动，无需重构建；无运行中PDS/cdt_cfg，cdt_js保留单例。下一步若继续优化，按timing.rtr修关键路径并重新跑完整板级回归；当前功能需求已完成，不push。
+
+
 > **2026-11-20 烧录尝试未成功：用户回复重插后，FTDI仍Code45离线。**
 > 对6648B700候选位流仅尝试一次烧录，返回cable missing/no device in Jtag chain，未获得done=1；不能标已烧录，板上仍为此前815A6594。COM5正常，FTDI所有枚举项Unknown/Problem45。复用cdt_js PID71284，未强杀/新增服务器，cdt_cfg正常退出。未上传权重、未播放、未改音量、未加诊断锁。
 > 已请求用户拔下下载器USB约5秒后换电脑USB口直插，再查PnP上线才重试。证据`reports/ui_session_20261119/flash_cable_missing_20261120.json`。后续板测与时序限制不变。

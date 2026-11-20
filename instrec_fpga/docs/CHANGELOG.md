@@ -1539,3 +1539,8 @@ idx 0,3,6,9 —— `uart_debug` 的 `tx_byte_valid` 是单拍 strobe、比 uart_
 ### 2026-11-20 烧录阻塞
 
 用户回复重插后，6648B700首次烧录仍报下载器缺失；FTDI PnP Code45，COM5正常。保留单cdt_js，不强杀；新版未烧录/WOK/板测，未改声卡音量。请求下载器拔5秒换电脑USB口，待PnP恢复再试。证据flash_cable_missing_20261120.json。
+
+
+## 2026-11-20 — 乐境双页烧板与功能验收完成
+
+FTDI再次重插后上线，6648B700 program done=1，medley_48k上传WOK CFE5A709。NICEHCK原音量90秒连续33次推理，8类稳定段16/16正确、0欠载、无trap/timeout，结束保持locked=0。用户确认暖白深绿界面、500ms退出再500ms进入、切页/浏览/收藏/清空均正确。发布manifest与证据已更新；时序仍核心−1.402ns/像素−0.132ns、hold正，功能验收不表示时序收敛。未改RTL/权重/模型或端点音量，未push。

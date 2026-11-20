@@ -1,0 +1,53 @@
+{
+  "programmed": true,
+  "done_bit": 1,
+  "weight_reply": "WOK CFE5A709",
+  "bitstream_sha256": "6648b7008db97f66358ceea2ea7a42cce412ad299ed4a645940754acae9c89b7",
+  "events": 33,
+  "settled_correct": 16,
+  "settled_total": 16,
+  "classes": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "player": {
+    "underruns": 0,
+    "buffers": 1142,
+    "gain_db": 0.0,
+    "device_id": 2,
+    "buf_ms": 80.0,
+    "queued": 4
+  },
+  "initial_status": {
+    "win": 35,
+    "locked": 0,
+    "mel_done": 0,
+    "npu_done": 0,
+    "logits_valid": 0
+  },
+  "final_status": {
+    "win": 68,
+    "locked": 0,
+    "mel_done": 0,
+    "npu_done": 0,
+    "logits_valid": 0
+  },
+  "cpu_trap_seen": false,
+  "npu_timeout_seen": false,
+  "note": "Nominal stable intervals exclude first four seconds per segment; not sample-exact. User confirmed UI/transition/key acceptance. Timing remains unqualified.",
+  "user_confirmed": {
+    "warm_white_green_ui": true,
+    "fade_out_500ms_then_fade_in_500ms": true,
+    "key1_page": true,
+    "key3_key4_browse": true,
+    "key1_long_bookmark": true,
+    "key2_clear_records_and_latest_eight": true,
+    "feedback": "User replied 正确 to both visual-transition and page/browse/bookmark/clear checks."
+  }
+}

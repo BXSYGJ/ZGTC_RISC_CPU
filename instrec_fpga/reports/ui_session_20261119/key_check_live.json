@@ -1,0 +1,20 @@
+{
+  "initial": {
+    "win": 90,
+    "locked": 0,
+    "mel_done": 0,
+    "npu_done": 0,
+    "logits_valid": 0
+  },
+  "final": {
+    "win": 100,
+    "locked": 0,
+    "mel_done": 0,
+    "npu_done": 0,
+    "logits_valid": 0
+  },
+  "inference_events": 10,
+  "trap": false,
+  "timeout": false,
+  "note": "Continued telemetry during requested manual UI key checks; does not prove which keys were pressed."
+}

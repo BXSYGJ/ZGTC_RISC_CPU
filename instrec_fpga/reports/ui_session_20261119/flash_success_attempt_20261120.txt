@@ -1,0 +1,6 @@
+bitstream : D:\0000\111\001\Pango\ZGTC_RISC_CPU\instrec_fpga\releases\session-ui-20261119\instrec_top.sbit (3791112 B)
+jtagserver: reusing the running instance
+  This device configure situation (done bit): 1
+  The done bit is 1
+  COMMAND[Program] execute successfully, takes 3.6 secs.
+PROGRAMMED ok (attempt 1)
