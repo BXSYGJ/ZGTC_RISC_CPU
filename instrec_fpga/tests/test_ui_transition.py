@@ -24,23 +24,17 @@ int main(void) {
     ui_retarget(&s, input);
     for (step=0; step<=25; ++step) {
         ui_step(&s, step, output);
-        assert(output[0] == 100-step*4 && output[4] == 0);
-    }
-    for (step=26; step<=50; ++step) {
-        ui_step(&s, step, output);
-        assert(output[0] == 0 && output[4] == (step-25)*4);
+        assert(output[0] == 0 && output[4] == step*4);
     }
     input[4]=0; input[7]=100;
     ui_retarget(&s,input);
     ui_step(&s,10,output);
-    assert(output[4]==60 && output[7]==0);
+    assert(output[4]==0 && output[7]==40);
     input[7]=0; input[2]=100;
     ui_retarget(&s,input);
     ui_step(&s,0,output);
-    assert(output[4]==60 && output[2]==0);
-    ui_step(&s,25,output);
     for (i=0;i<8;++i) assert(output[i]==0);
-    ui_step(&s,50,output);
+    ui_step(&s,25,output);
     assert(output[4]==0 && output[2]==100);
     ui_step(&s,999,output);
     assert(output[2]==100);

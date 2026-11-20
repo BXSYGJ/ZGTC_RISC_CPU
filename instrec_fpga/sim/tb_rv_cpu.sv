@@ -71,24 +71,15 @@ module tb_rv_cpu;
             ui_beats <= ui_beats + 1;
             if (ui_beats == 0) first_ui_cycle <= cycles;
             last_ui_cycle <= cycles;
-            if (ui_beats == 200) second_first_cycle <= cycles;
-            if (ui_beats >= 200) begin
-                if ((ui_beats-200)/8 < 24 && ui_top1 != 5)
-                    $fatal(1,"Class switched before fade-out completed");
-                if ((ui_beats-200)/8 >= 24 && ui_top1 != 2)
-                    $fatal(1,"Class did not switch at zero midpoint");
-                if ((ui_beats-200)/8 == 24 && ui_pct != 0)
-                    $fatal(1,"Both vectors must be zero at midpoint");
-                if ((ui_beats-200)/8 < 25 && ui_idx == 2 && ui_pct > 2)
-                    $fatal(1,"New target rose before fade-out completed");
-                if ((ui_beats-200)/8 >= 25 && ui_idx == 5 && ui_pct != 0)
-                    $fatal(1,"Outgoing class remained during fade-in");
+            if (ui_beats == 208) second_first_cycle <= cycles;
+            if (ui_beats >= 208) begin
+                if (ui_top1 != 2) $fatal(1,"New class must switch immediately");
+                if (ui_beats < 216 && ui_pct != 0) $fatal(1,"Old window must clear immediately");
+                if (ui_idx == 5 && ui_pct != 0) $fatal(1,"Outgoing window faded instead of clearing");
             end
-            if (ui_idx == 5) begin
-                if (ui_beats < 200 && (ui_pct < previous_pct5 || ui_pct > 87))
-                    $fatal(1,"Software animation not monotonic/bounded");
-                if (ui_beats < 8 && (ui_pct == 0 || ui_pct >= 87))
-                    $fatal(1,"Software animation jumped directly to target");
+            if (ui_idx == 5 && ui_beats < 208) begin
+                if (ui_pct < previous_pct5 || ui_pct > 87) $fatal(1,"Fade-in not monotonic");
+                if (ui_beats < 8 && ui_pct != 0) $fatal(1,"Initial window must start at zero");
                 previous_pct5 <= ui_pct;
             end
         end
@@ -236,13 +227,13 @@ module tb_rv_cpu;
         wait (cpu_acknowledged);
         wait (npu_soft_start === 1'b1);
         $display("CHECK PASS C10 firmware requested next inference after acknowledgement");
-        wait (ui_beats >= 200);
+        wait (ui_beats >= 208);
         repeat (100) @(posedge clk);
-        if (history_beats != 8 || ui_beats != 200 || previous_pct5 != 87 || ui_top1 != 5)
+        if (history_beats != 8 || ui_beats != 208 || previous_pct5 != 87 || ui_top1 != 5)
             $fatal(1,"CPU animation/history publication count or endpoint");
-        if (last_ui_cycle-first_ui_cycle < 59900000 || last_ui_cycle-first_ui_cycle > 60100000)
-            $fatal(1,"25 software ticks must span 480 ms at 125 MHz");
-        $display("CHECK PASS CPU software animation: 25 ticks, 500ms endpoint, one history vector");
+        if (last_ui_cycle-first_ui_cycle < 62400000 || last_ui_cycle-first_ui_cycle > 62600000)
+            $fatal(1,"Zero plus 25 software ticks must span 500 ms at 125 MHz");
+        $display("CHECK PASS CPU software animation: zero plus 25 ticks, 500ms endpoint, one history vector");
 
         @(negedge clk); npu_top1=2;
         for (integer lane2=0; lane2<8; lane2=lane2+1) begin
@@ -252,13 +243,13 @@ module tb_rv_cpu;
             npu_probs_pct=lane2==2 ? 100 : 0;
         end
         @(negedge clk); npu_probs_valid=0;
-        wait(ui_beats>=600);
+        wait(ui_beats>=416);
         repeat(100) @(posedge clk);
-        if (history_beats != 16 || ui_beats != 600 || ui_top1 != 2)
-            $fatal(1,"Two-phase animation must publish 50 ticks and one history vector");
-        if (last_ui_cycle-second_first_cycle < 122400000 || last_ui_cycle-second_first_cycle > 122600000)
-            $fatal(1,"50 animation ticks must span 980 ms, ending at 1000 ms");
-        $display("CHECK PASS CPU two-phase animation: 500ms out, zero/class switch, 500ms in");
+        if (history_beats != 16 || ui_beats != 416 || ui_top1 != 2)
+            $fatal(1,"Fade-in must publish zero plus 25 ticks and one history vector");
+        if (last_ui_cycle-second_first_cycle < 62400000 || last_ui_cycle-second_first_cycle > 62600000)
+            $fatal(1,"New window must finish 500ms after immediate clear");
+        $display("CHECK PASS CPU animation: immediate outgoing clear/class switch, 500ms fade-in");
 
         if (view_meta[15:8] != 2 || !view_rows[63] || view_rows[61:58] != 2 || view_rows[125:122] != 5)
             $fatal(1,"Raw CPU records not published");
