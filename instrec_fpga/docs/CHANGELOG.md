@@ -1569,3 +1569,9 @@ FTDI再次重插后上线，6648B700 program done=1，medley_48k上传WOK CFE5A7
 - 用户要求当前版本上传GitHub，目标origin/wrapup-working；无远端新增提交，使用普通快进push，不force。
 - 最新只读链扫描done=0，新版program未确认成功，保留下载器故障证据，不能标板测通过。
 - 完整日志重试传输至15%后JTAG写失败，cdt_cfg正常退出；无PDS/cdt_cfg残留，单个cdt_js保留。
+
+## 2026-11-20：DE44DF48重新烧录及UI确认完成
+
+- program done=1，权重WOK CFE5A709；用户确认立即退出/500ms进入正常。
+- 90秒33次推理、0欠载、稳定6/16，未通过识别验收；单簧管实采std6.976、此前3041.502，板8logits与实采golden逐位全等，输入链路过弱待查。
+- 结束播放停止、locked=0，未调端点音量，保留全部失败与成功证据；时序限制不变。

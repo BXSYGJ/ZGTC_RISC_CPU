@@ -1,0 +1,226 @@
+{
+  "source": "D:\\0000\\111\\001\\Pango\\InstRec\\data\\demo\\demo_90s_8class.wav",
+  "initial_status": {
+    "win": 35,
+    "locked": 0,
+    "mel_done": 0,
+    "npu_done": 0,
+    "logits_valid": 0
+  },
+  "final_status": {
+    "win": 68,
+    "locked": 0,
+    "mel_done": 0,
+    "npu_done": 0,
+    "logits_valid": 0
+  },
+  "player": {
+    "underruns": 0,
+    "buffers": 1144,
+    "gain_db": 0.0,
+    "device_id": 0,
+    "buf_ms": 80.0,
+    "queued": 4
+  },
+  "rows": [
+    {
+      "elapsed_seconds": 1.578,
+      "top1": 7,
+      "nominal_settled_label": null,
+      "telemetry": "NPU top1=7 last_class=7 last_p=97 c=32368436"
+    },
+    {
+      "elapsed_seconds": 4.39,
+      "top1": 7,
+      "nominal_settled_label": null,
+      "telemetry": "NPU top1=7 last_class=7 last_p=100 c=32368473"
+    },
+    {
+      "elapsed_seconds": 7.062,
+      "top1": 7,
+      "nominal_settled_label": 6,
+      "telemetry": "NPU top1=7 last_class=7 last_p=100 c=32368468"
+    },
+    {
+      "elapsed_seconds": 9.875,
+      "top1": 7,
+      "nominal_settled_label": 6,
+      "telemetry": "NPU top1=7 last_class=7 last_p=100 c=32368448"
+    },
+    {
+      "elapsed_seconds": 12.546,
+      "top1": 7,
+      "nominal_settled_label": null,
+      "telemetry": "NPU top1=7 last_class=7 last_p=100 c=32368479"
+    },
+    {
+      "elapsed_seconds": 15.359,
+      "top1": 7,
+      "nominal_settled_label": null,
+      "telemetry": "NPU top1=7 last_class=7 last_p=100 c=32368429"
+    },
+    {
+      "elapsed_seconds": 18.171,
+      "top1": 7,
+      "nominal_settled_label": 7,
+      "telemetry": "NPU top1=7 last_class=7 last_p=100 c=32368511"
+    },
+    {
+      "elapsed_seconds": 20.843,
+      "top1": 7,
+      "nominal_settled_label": 7,
+      "telemetry": "NPU top1=7 last_class=7 last_p=100 c=32368470"
+    },
+    {
+      "elapsed_seconds": 23.656,
+      "top1": 7,
+      "nominal_settled_label": null,
+      "telemetry": "NPU top1=7 last_class=7 last_p=99 c=32368463"
+    },
+    {
+      "elapsed_seconds": 26.312,
+      "top1": 4,
+      "nominal_settled_label": null,
+      "telemetry": "NPU top1=4 last_class=7 last_p=0 c=32368444"
+    },
+    {
+      "elapsed_seconds": 29.14,
+      "top1": 4,
+      "nominal_settled_label": 4,
+      "telemetry": "NPU top1=4 last_class=7 last_p=0 c=32368485"
+    },
+    {
+      "elapsed_seconds": 31.796,
+      "top1": 4,
+      "nominal_settled_label": 4,
+      "telemetry": "NPU top1=4 last_class=7 last_p=0 c=32368805"
+    },
+    {
+      "elapsed_seconds": 34.609,
+      "top1": 4,
+      "nominal_settled_label": null,
+      "telemetry": "NPU top1=4 last_class=7 last_p=8 c=32368464"
+    },
+    {
+      "elapsed_seconds": 37.421,
+      "top1": 7,
+      "nominal_settled_label": null,
+      "telemetry": "NPU top1=7 last_class=7 last_p=99 c=32364861"
+    },
+    {
+      "elapsed_seconds": 40.093,
+      "top1": 7,
+      "nominal_settled_label": 3,
+      "telemetry": "NPU top1=7 last_class=7 last_p=78 c=32364656"
+    },
+    {
+      "elapsed_seconds": 42.906,
+      "top1": 3,
+      "nominal_settled_label": 3,
+      "telemetry": "NPU top1=3 last_class=7 last_p=6 c=32364722"
+    },
+    {
+      "elapsed_seconds": 45.562,
+      "top1": 7,
+      "nominal_settled_label": null,
+      "telemetry": "NPU top1=7 last_class=7 last_p=96 c=32368434"
+    },
+    {
+      "elapsed_seconds": 48.375,
+      "top1": 1,
+      "nominal_settled_label": null,
+      "telemetry": "NPU top1=1 last_class=7 last_p=14 c=32368450"
+    },
+    {
+      "elapsed_seconds": 51.171,
+      "top1": 1,
+      "nominal_settled_label": 1,
+      "telemetry": "NPU top1=1 last_class=7 last_p=0 c=32368461"
+    },
+    {
+      "elapsed_seconds": 53.843,
+      "top1": 4,
+      "nominal_settled_label": 1,
+      "telemetry": "NPU top1=4 last_class=7 last_p=23 c=32368479"
+    },
+    {
+      "elapsed_seconds": 56.671,
+      "top1": 4,
+      "nominal_settled_label": null,
+      "telemetry": "NPU top1=4 last_class=7 last_p=11 c=32368455"
+    },
+    {
+      "elapsed_seconds": 59.343,
+      "top1": 7,
+      "nominal_settled_label": null,
+      "telemetry": "NPU top1=7 last_class=7 last_p=96 c=32368493"
+    },
+    {
+      "elapsed_seconds": 62.156,
+      "top1": 7,
+      "nominal_settled_label": 5,
+      "telemetry": "NPU top1=7 last_class=7 last_p=100 c=32368793"
+    },
+    {
+      "elapsed_seconds": 64.828,
+      "top1": 7,
+      "nominal_settled_label": 5,
+      "telemetry": "NPU top1=7 last_class=7 last_p=100 c=32368475"
+    },
+    {
+      "elapsed_seconds": 67.64,
+      "top1": 7,
+      "nominal_settled_label": null,
+      "telemetry": "NPU top1=7 last_class=7 last_p=97 c=32368473"
+    },
+    {
+      "elapsed_seconds": 70.453,
+      "top1": 7,
+      "nominal_settled_label": null,
+      "telemetry": "NPU top1=7 last_class=7 last_p=100 c=32364841"
+    },
+    {
+      "elapsed_seconds": 73.109,
+      "top1": 7,
+      "nominal_settled_label": 2,
+      "telemetry": "NPU top1=7 last_class=7 last_p=99 c=32364645"
+    },
+    {
+      "elapsed_seconds": 75.921,
+      "top1": 7,
+      "nominal_settled_label": 2,
+      "telemetry": "NPU top1=7 last_class=7 last_p=100 c=32364505"
+    },
+    {
+      "elapsed_seconds": 78.609,
+      "top1": 7,
+      "nominal_settled_label": null,
+      "telemetry": "NPU top1=7 last_class=7 last_p=99 c=32364652"
+    },
+    {
+      "elapsed_seconds": 81.421,
+      "top1": 7,
+      "nominal_settled_label": null,
+      "telemetry": "NPU top1=7 last_class=7 last_p=99 c=32364646"
+    },
+    {
+      "elapsed_seconds": 84.093,
+      "top1": 7,
+      "nominal_settled_label": 0,
+      "telemetry": "NPU top1=7 last_class=7 last_p=81 c=32364500"
+    },
+    {
+      "elapsed_seconds": 86.921,
+      "top1": 7,
+      "nominal_settled_label": 0,
+      "telemetry": "NPU top1=7 last_class=7 last_p=91 c=32364648"
+    },
+    {
+      "elapsed_seconds": 89.578,
+      "top1": 7,
+      "nominal_settled_label": null,
+      "telemetry": "NPU top1=7 last_class=7 last_p=99 c=32364601"
+    }
+  ],
+  "note": "Nominal settled labels exclude first four seconds per segment; not sample-exact alignment."
+}

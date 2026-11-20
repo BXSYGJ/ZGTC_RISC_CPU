@@ -11,3 +11,9 @@ Final report: core setup -1.402 ns (834 endpoints); pixel setup -0.132 ns (1 end
 Host animation/record tests: 2 passed. Actual CPU simulation passed, including immediate clear/class switch and the 500 ms endpoint. Evidence: `../../reports/ui_fade_in_only_20261120/`.
 
 Programming and board validation status are recorded in `manifest.json`. Previous verified release: `../session-ui-20261119/`.
+
+## Board retry result
+
+Programming succeeded (done=1); medley_48k weights returned WOK CFE5A709. User confirmed immediate exit and 500 ms entry. Live inference remained unlocked.
+
+The 90-second run produced 33 events, zero playback underruns, but only 6/16 nominal settled predictions were correct. A clarinet capture had PCM standard deviation 6.976 versus 3041.502 in the previous normal run. Hardware logits exactly matched integer golden on that captured PCM. Input level/connection requires investigation; classification acceptance has not passed. Endpoint volume was not changed.

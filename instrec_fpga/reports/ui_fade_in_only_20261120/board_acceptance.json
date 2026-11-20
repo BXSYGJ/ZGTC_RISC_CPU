@@ -1,0 +1,35 @@
+{
+  "programmed": true,
+  "done": 1,
+  "weight_reply": "WOK CFE5A709",
+  "ui_user_confirmation": "normal: immediate old exit and 500ms new entry",
+  "demo90_events": 33,
+  "demo90_settled_correct": 6,
+  "demo90_settled_total": 16,
+  "player": {
+    "underruns": 0,
+    "buffers": 1144,
+    "gain_db": 0.0,
+    "device_id": 0,
+    "buf_ms": 80.0,
+    "queued": 4
+  },
+  "final_status": {
+    "win": 68,
+    "locked": 0,
+    "mel_done": 0,
+    "npu_done": 0,
+    "logits_valid": 0
+  },
+  "classification_acceptance": "NOT_PASSED: weak captured input; board and captured-PCM golden logits exactly match",
+  "input_diagnostic": {
+    "capture_evidence": "reports\\live_pcm_fade_in_retry_20261120-111339\\class_captures.json",
+    "class": 0,
+    "board_top1": 7,
+    "captured_golden_top1": 7,
+    "logits_bit_exact": true,
+    "pcm_std": 6.97616941721226,
+    "previous_normal_class0_pcm_std": 3041.501529570972,
+    "interpretation": "Captured input is very weak; same captured PCM produces exactly identical logits in hardware and integer golden. Input level/connection remains to investigate; endpoint volume was preserved."
+  }
+}

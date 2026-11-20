@@ -1,5 +1,11 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+> **2026-11-20 新版DE44DF48重新烧录成功，WOK及进入动画已确认。**
+> 用户要求重新烧录；复用单个cdt_js，program 3.6s，**done=1**；COM5 medley_48k 691040B/2700帧上传 **WOK CFE5A709**。用户确认旧值立即退出、新值500ms进入显示正常。证据`reports/ui_fade_in_only_20261120/flash_retry_20261120.{json,txt}`、weights、board_acceptance；manifest已更新，不再是烧录失败状态。
+> 本轮NICEHCK（按名称解析device0，gain0，端点音量未改）90秒测试33次推理、0欠载，但稳定段**6/16**，不能标识别验收通过。单簧管实采PCM标准差**6.976**（此前正常3041.502），板top1=7，8路logits与实采PCM整数golden **逐位相同**，证据`reports/live_pcm_fade_in_retry_20261120-111339/`。输入信号过弱，需查声卡/模拟链路电平及连接；本证据支持该窗口计算一致，不代表全类推理已验收。
+> 播放已停止，finally U后locked=0，实时保持解锁；无PDS/cdt_cfg残留，保留单例cdt_js。最终时序限制不变：核心setup-1.402ns、像素-0.132ns，hold slow+0.017/fast+0.007ns，未收敛。下一步检查音频输入链路后重做90秒识别验收；不自动改音量。
+
+
 > **2026-11-20 11:04 用户明确授权上传当前版本到GitHub。**
 > 将当前wrapup-working快进推送origin/wrapup-working，保留全部已完成源码/板测提交和DE44DF48发布包。最新换线后只读扫描找到PG2L100H，但done=0；后续program一次空链，完整日志重试在15%处JTAG写入失败，cdt_cfg已正常退出（未强杀）。新版尚未确认done=1，不能标烧录成功；当前硬件配置状态未确认，需重新program及WOK后再判断。
 

@@ -1,0 +1,12 @@
+{
+  "command": [
+    "C:\\Users\\menss\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+    "scripts/weight_upload.py",
+    "--port",
+    "COM5",
+    "--image",
+    "scripts/outputs/medley_48k/weights_image.bin"
+  ],
+  "exit_code": 0,
+  "output": "image scripts/outputs/medley_48k/weights_image.bin: 691040 bytes, sha256 3d5d9bbccc806ecf4eabe072c255630aa70cd034ee82e0484307c6233b2ddab8\r\n  64/2700 frames\r\n  128/2700 frames\r\n  192/2700 frames\r\n  256/2700 frames\r\n  320/2700 frames\r\n  384/2700 frames\r\n  448/2700 frames\r\n  512/2700 frames\r\n  576/2700 frames\r\n  640/2700 frames\r\n  704/2700 frames\r\n  768/2700 frames\r\n  832/2700 frames\r\n  896/2700 frames\r\n  960/2700 frames\r\n  1024/2700 frames\r\n  1088/2700 frames\r\n  1152/2700 frames\r\n  1216/2700 frames\r\n  1280/2700 frames\r\n  1344/2700 frames\r\n  1408/2700 frames\r\n  1472/2700 frames\r\n  1536/2700 frames\r\n  1600/2700 frames\r\n  1664/2700 frames\r\n  1728/2700 frames\r\n  1792/2700 frames\r\n  1856/2700 frames\r\n  1920/2700 frames\r\n  1984/2700 frames\r\n  2048/2700 frames\r\n  2112/2700 frames\r\n  2176/2700 frames\r\n  2240/2700 frames\r\n  2304/2700 frames\r\n  2368/2700 frames\r\n  2432/2700 frames\r\n  2496/2700 frames\r\n  2560/2700 frames\r\n  2624/2700 frames\r\n  2688/2700 frames\r\n  2700/2700 frames\r\nboard reply: WOK CFE5A709\r\nUPLOAD OK\r\n"
+}

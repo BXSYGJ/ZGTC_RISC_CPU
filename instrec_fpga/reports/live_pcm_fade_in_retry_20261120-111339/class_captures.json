@@ -1,0 +1,67 @@
+[
+  {
+    "class": 0,
+    "source_start_seconds": 81.0,
+    "status": {
+      "win": 90,
+      "locked": 1,
+      "mel_done": 0,
+      "npu_done": 0,
+      "logits_valid": 0
+    },
+    "half": 1,
+    "board_logits": [
+      -24,
+      1,
+      -26,
+      8,
+      17,
+      -24,
+      -34,
+      31
+    ],
+    "board_top1": 7,
+    "golden_captured": {
+      "top1": 7,
+      "logits": [
+        -24,
+        1,
+        -26,
+        8,
+        17,
+        -24,
+        -34,
+        31
+      ]
+    },
+    "golden_page_order_restored": {
+      "top1": 7,
+      "logits": [
+        -13,
+        -13,
+        -30,
+        10,
+        15,
+        -20,
+        -31,
+        34
+      ]
+    },
+    "pcm_std": 6.97616941721226,
+    "player": {
+      "underruns": 0,
+      "buffers": 516,
+      "gain_db": 0.0,
+      "device_id": 0,
+      "buf_ms": 80.0,
+      "queued": 4
+    },
+    "final_status": {
+      "win": 90,
+      "locked": 0,
+      "mel_done": 0,
+      "npu_done": 0,
+      "logits_valid": 0
+    }
+  }
+]

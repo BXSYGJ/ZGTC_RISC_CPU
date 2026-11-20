@@ -1,0 +1,46 @@
+image scripts/outputs/medley_48k/weights_image.bin: 691040 bytes, sha256 3d5d9bbccc806ecf4eabe072c255630aa70cd034ee82e0484307c6233b2ddab8
+  64/2700 frames
+  128/2700 frames
+  192/2700 frames
+  256/2700 frames
+  320/2700 frames
+  384/2700 frames
+  448/2700 frames
+  512/2700 frames
+  576/2700 frames
+  640/2700 frames
+  704/2700 frames
+  768/2700 frames
+  832/2700 frames
+  896/2700 frames
+  960/2700 frames
+  1024/2700 frames
+  1088/2700 frames
+  1152/2700 frames
+  1216/2700 frames
+  1280/2700 frames
+  1344/2700 frames
+  1408/2700 frames
+  1472/2700 frames
+  1536/2700 frames
+  1600/2700 frames
+  1664/2700 frames
+  1728/2700 frames
+  1792/2700 frames
+  1856/2700 frames
+  1920/2700 frames
+  1984/2700 frames
+  2048/2700 frames
+  2112/2700 frames
+  2176/2700 frames
+  2240/2700 frames
+  2304/2700 frames
+  2368/2700 frames
+  2432/2700 frames
+  2496/2700 frames
+  2560/2700 frames
+  2624/2700 frames
+  2688/2700 frames
+  2700/2700 frames
+board reply: WOK CFE5A709
+UPLOAD OK
