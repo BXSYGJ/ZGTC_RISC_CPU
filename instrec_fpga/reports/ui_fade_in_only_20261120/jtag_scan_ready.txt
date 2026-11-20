@@ -1,0 +1,25 @@
+M_PROCESS_FINISH_STARTED
+
+Executing : cfg_set_tcl_break -flag false
+Executing : cfg_set_tcl_break -flag false successfully.
+Executing : cfg_connect -ip 127.0.0.1 -port 65420
+Connecting to server[127.0.0.1 : 65420].
+Connect to server[127.0.0.1 : 65420] successfully.
+COMMAND[check version information] execute successfully, takes 0.0 secs.
+The cable List : 
+Cable index 0:USB Cable II/fffffffffffffffe 
+
+COMMAND[get_cable_paras] execute successfully, takes 2.6 secs.
+Executing : cfg_connect -ip 127.0.0.1 -port 65420 successfully.
+Executing : cfg_set_cable_property -index 0 -freq 10Mhz
+COMMAND[set_cable_paras] execute successfully, takes 1.2 secs.
+Executing : cfg_set_cable_property -index 0 -freq 10Mhz successfully.
+Executing : cfg_scan_chain
+PANGO USB CABLE II cable driver: D2XX DLL
+PG2L100H
+This device configure situation (done bit): 0
+COMMAND[Open config cable] execute successfully, takes 0.5 secs.
+Executing : cfg_scan_chain successfully.
+Executing : cfg_disconnect
+Server is disconnect
+Executing : cfg_disconnect successfully.

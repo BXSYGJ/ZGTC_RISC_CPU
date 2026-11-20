@@ -1557,3 +1557,15 @@ FTDI再次重插后上线，6648B700 program done=1，medley_48k上传WOK CFE5A7
 ### 2026-11-20 09:52 进入平滑版本开始构建
 
 用户明确要求完成构建和烧录。run20261120-095218-68abd3cb全量PDS启动，源7f9a01ea/固件4556B，单flow，尚无新位流；待完整时序、烧录WOK和连续实时检查。
+
+## 2026-11-20：仅500ms进入位流DE44DF48构建完成，下载器离线
+
+- full `20261120-095218-68abd3cb`六阶段OK，源哈希未变；归档fade-in-only-20261120，保留旧6648B700。
+- 最终核心setup -1.402ns、像素-0.132ns，hold slow+0.017/fast+0.007ns，未收敛；资源与上一版相同。
+- 三次program未获得done=1，完整扫描CableList为空，FTDI再次Code45；未上传权重/播放。已请求重插，复用唯一cdt_js，无PDS/cdt_cfg残留。
+
+## 2026-11-20：用户授权推送当前分支
+
+- 用户要求当前版本上传GitHub，目标origin/wrapup-working；无远端新增提交，使用普通快进push，不force。
+- 最新只读链扫描done=0，新版program未确认成功，保留下载器故障证据，不能标板测通过。
+- 完整日志重试传输至15%后JTAG写失败，cdt_cfg正常退出；无PDS/cdt_cfg残留，单个cdt_js保留。

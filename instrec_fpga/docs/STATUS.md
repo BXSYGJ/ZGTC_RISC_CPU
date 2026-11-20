@@ -1,5 +1,16 @@
 # InstRec-FPGA 当前状态（STATUS）
 
+> **2026-11-20 11:04 用户明确授权上传当前版本到GitHub。**
+> 将当前wrapup-working快进推送origin/wrapup-working，保留全部已完成源码/板测提交和DE44DF48发布包。最新换线后只读扫描找到PG2L100H，但done=0；后续program一次空链，完整日志重试在15%处JTAG写入失败，cdt_cfg已正常退出（未强杀）。新版尚未确认done=1，不能标烧录成功；当前硬件配置状态未确认，需重新program及WOK后再判断。
+
+
+> **2026-11-20 10:51 仅进入500ms新版全量构建完成，烧录仍受FTDI掉线阻塞。**
+> run `20261120-095218-68abd3cb`六阶段OK，117个输入哈希未变；位流SHA **DE44DF48C127CB2C2FB4B6705CE1356901A0D15361F83D9D8B4273F38D5CFABC**，3791112B，归档`releases/fade-in-only-20261120/`（含完整时序与源manifest），build/instrec-latest已更新。源7f9a01ea，功能4b185e07；立即退出清零/切类，仅新值25x20ms进入，CPU仿真PASS。
+> 最终timing.rtr核心setup **-1.402ns/834端点**、像素 **-0.132ns/1端点**，hold slow **+0.017ns** / fast **+0.007ns**；资源35394LUT/41677FF/133DRM/90APM。中间after_hold_fix临时摘要不同，以归档最终rtr为准；**时序未收敛**。
+> 三次烧录均cable missing/空链、未获得done=1；重插后FTDI曾枚举OK，但完整扫描CableList为空，随后系统PresentOnly无VID0403，旧设备Code45。保留单个cdt_js PID71284，未强杀/新增服务，无PDS/cdt_cfg残留。失败证据`reports/ui_fade_in_only_20261120/`。板上仍上次6648B700，无新版WOK或实时板测，不调音量。
+> 已请用户再次重插/换可靠USB线或直连口；下一步确认FTDI稳定在线再烧DE44DF48→medley_48k WOK→NICEHCK90秒实时→目视立即退出/500ms进入。旧归档保留，不push。
+
+
 
 > **2026-11-20 09:52 用户授权完成构建和烧录；仅进入500ms版本全量PDS已启动。**
 > run `20261120-095218-68abd3cb`，源提交7f9a01ea（功能4b185e07），固件4556B。构建前工作区干净、无其他PDS；单flow运行中，尚无新位流/未烧录。退出立即清零/切类，进入25步20ms已由实际CPU仿真PASS；板上仍6648B700双相已验收版。

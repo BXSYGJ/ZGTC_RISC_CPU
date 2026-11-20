@@ -1,15 +1,17 @@
 {
-  "status": "SOURCE_AND_FIRMWARE_SIM_VERIFIED_NOT_BUILT_OR_PROGRAMMED",
+  "status": "BUILT_SIM_VERIFIED_FLASH_BLOCKED",
   "firmware_bytes": 4556,
   "host_tests_passed": 2,
   "rv_cpu": "PASS: immediate old-window clear/class switch, 500ms new-window fade-in; raw history and records/page/browse/bookmark/clear unchanged",
-  "board_bitstream": "6648B700 (previous two-phase version)",
-  "new_bitstream": null,
+  "board_bitstream": "UNCONFIRMED: latest scan done=0, subsequent program failed at 15 percent",
+  "new_bitstream": "DE44DF48C127CB2C2FB4B6705CE1356901A0D15361F83D9D8B4273F38D5CFABC",
   "sources": {
     "sw/rv32/main.c": "f821e39fbc11d72867a201837e99493538a86c961f8b093358247cf0f4b33f19",
     "sw/rv32/ui_transition.h": "ad123e388acebc7f384ba1fd8fd472ce3500bba9942021d2323f80b67e1b3a18",
     "src/cpu/prog.hex": "2f419ef3e667f46213f51a418540cf0ff34585630e8ca58b59d80e92c3e109f7",
     "sim/tb_rv_cpu.sv": "81bb50cf663291a65fc1e7b26a3d68bbab295abaf1456855d94421bf63eb4740",
     "tests/test_ui_transition.py": "0536073780ce9367528c65e0eb5df763f3485874630d72e2b513a06e410895c1"
-  }
+  },
+  "build_run": "20261120-095218-68abd3cb",
+  "board_validation": "NOT_VERIFIED: JTAG write failure, no done=1, no new WOK"
 }

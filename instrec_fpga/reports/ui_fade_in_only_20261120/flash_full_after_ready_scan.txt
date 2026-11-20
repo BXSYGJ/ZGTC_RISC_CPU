@@ -1,0 +1,36 @@
+M_PROCESS_FINISH_STARTED
+
+Executing : cfg_set_tcl_break -flag false
+Executing : cfg_set_tcl_break -flag false successfully.
+Executing : cfg_connect -ip 127.0.0.1 -port 65420
+Connecting to server[127.0.0.1 : 65420].
+Connect to server[127.0.0.1 : 65420] successfully.
+COMMAND[check version information] execute successfully, takes 0.0 secs.
+The cable List : 
+Cable index 0:USB Cable II/fffffffffffffffe 
+
+COMMAND[get_cable_paras] execute successfully, takes 1.4 secs.
+Executing : cfg_connect -ip 127.0.0.1 -port 65420 successfully.
+Executing : cfg_set_cable_property -index 0 -freq 10Mhz
+COMMAND[set_cable_paras] execute successfully, takes 1.2 secs.
+Executing : cfg_set_cable_property -index 0 -freq 10Mhz successfully.
+Executing : cfg_scan_chain
+PANGO USB CABLE II cable driver: D2XX DLL
+PG2L100H
+This device configure situation (done bit): 0
+COMMAND[Open config cable] execute successfully, takes 0.5 secs.
+Executing : cfg_scan_chain successfully.
+Executing : cfg_assign_file -file D:/0000/111/001/Pango/ZGTC_RISC_CPU/instrec_fpga/releases/fade-in-only-20261120/instrec_top.sbit -device_index 0
+Executing : cfg_assign_file -file D:/0000/111/001/Pango/ZGTC_RISC_CPU/instrec_fpga/releases/fade-in-only-20261120/instrec_top.sbit -device_index 0 successfully.
+Executing : cfg_program -device_index 0
+The Progress: 0%
+The Progress: ▌▌11%
+The Progress: ▌▌▌15%
+E: JtagServer-0014: Fail to write instruction or data to PANGO USB CABLE II cable using JTAG protocol.
+E: Configuration-0008: The command 'Program' execute fail.
+E: Configuration-0012: Tcl Command: cfg_program exec failed.
+Executing : cfg_program -device_index 0 successfully.
+Executing : cfg_disconnect
+Server is disconnect
+Executing : cfg_disconnect successfully.
+PROGRAM FLOW DONE

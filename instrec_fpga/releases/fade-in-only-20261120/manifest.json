@@ -1,0 +1,153 @@
+{
+  "schema": 1,
+  "status": "BUILT_PROGRAM_FAILED_JTAG_WRITE",
+  "branch": "wrapup-working",
+  "source_commit": "7f9a01ea",
+  "build_run": "20261120-095218-68abd3cb",
+  "generated_utc": "2026-11-20T02:50:57.0853014Z",
+  "device": "PG2L100H-6IFBG676",
+  "bitstream": "instrec_top.sbit",
+  "bitstream_bytes": 3791112,
+  "sha256": "de44df48c127cb2c2fb4b6705ce1356901a0d15361f83d9d8b4273f38d5cfabc",
+  "sources_unchanged": true,
+  "stage_status": [
+    {
+      "Stage": "compile",
+      "Status": "OK"
+    },
+    {
+      "Stage": "synthesize",
+      "Status": "OK"
+    },
+    {
+      "Stage": "dev_map",
+      "Status": "OK"
+    },
+    {
+      "Stage": "pnr",
+      "Status": "OK"
+    },
+    {
+      "Stage": "report_timing",
+      "Status": "OK"
+    },
+    {
+      "Stage": "gen_bit_stream",
+      "Status": "OK"
+    }
+  ],
+  "setup_slow": {
+    "clk": {
+      "slack_ns": 32.756,
+      "failing_endpoints": 0,
+      "total_endpoints": 307
+    },
+    "pix_clk": {
+      "slack_ns": -0.132,
+      "failing_endpoints": 1,
+      "total_endpoints": 4534
+    },
+    "cfg_clk": {
+      "slack_ns": 91.33,
+      "failing_endpoints": 0,
+      "total_endpoints": 651
+    },
+    "rst_clk": {
+      "slack_ns": 5.107,
+      "failing_endpoints": 0,
+      "total_endpoints": 419
+    },
+    "ddrphy_sysclk": {
+      "slack_ns": -1.402,
+      "failing_endpoints": 834,
+      "total_endpoints": 125399
+    }
+  },
+  "hold_slow": {
+    "clk": {
+      "slack_ns": 0.224,
+      "failing_endpoints": 0,
+      "total_endpoints": 307
+    },
+    "pix_clk": {
+      "slack_ns": 0.353,
+      "failing_endpoints": 0,
+      "total_endpoints": 4534
+    },
+    "cfg_clk": {
+      "slack_ns": 0.202,
+      "failing_endpoints": 0,
+      "total_endpoints": 651
+    },
+    "rst_clk": {
+      "slack_ns": 0.247,
+      "failing_endpoints": 0,
+      "total_endpoints": 419
+    },
+    "ddrphy_sysclk": {
+      "slack_ns": 0.017,
+      "failing_endpoints": 0,
+      "total_endpoints": 125399
+    }
+  },
+  "hold_fast": {
+    "clk": {
+      "slack_ns": 0.156,
+      "failing_endpoints": 0,
+      "total_endpoints": 307
+    },
+    "pix_clk": {
+      "slack_ns": 0.251,
+      "failing_endpoints": 0,
+      "total_endpoints": 4534
+    },
+    "cfg_clk": {
+      "slack_ns": 0.149,
+      "failing_endpoints": 0,
+      "total_endpoints": 651
+    },
+    "rst_clk": {
+      "slack_ns": 0.161,
+      "failing_endpoints": 0,
+      "total_endpoints": 419
+    },
+    "ddrphy_sysclk": {
+      "slack_ns": 0.007,
+      "failing_endpoints": 0,
+      "total_endpoints": 125399
+    }
+  },
+  "timing_qualified": false,
+  "utilization": [
+    "LUT total: 35394/66600 (53%)",
+    "FF total: 41677/133200 (31%)",
+    "APM: 90/240 (38%)",
+    "BKCL: 6/6 (100%)",
+    "CCS: 1/1 (100%)",
+    "Distributed RAM: 940/19900 (5%)",
+    "DRM: 133/155 (86%)",
+    "GPLL: 3/6 (50%)",
+    "HCKB: 27/96 (29%)",
+    "IO: 123/300 (41%)",
+    "PPLL: 2/6 (34%)",
+    "SCANCHAIN: 0/1 (0%)",
+    "USCM: 5/32 (16%)"
+  ],
+  "verification": {
+    "host_transition_and_record_tests_passed": 2,
+    "simulations_passed": [
+      "rv_cpu"
+    ],
+    "board": "NOT_VERIFIED: last program failed at 15 percent with JTAG write error; no done=1"
+  },
+  "features": [
+    "existing CPU retained",
+    "immediate outgoing clear and class switch; 500ms new-window fade-in",
+    "live and session pages",
+    "64 raw-probability records in existing CPU RAM",
+    "browse and bookmark",
+    "KEY1..4 UI without DDR self-test restart",
+    "no new DDR traffic"
+  ],
+  "previous_verified_bitstream": "../session-ui-20261119/instrec_top.sbit"
+}

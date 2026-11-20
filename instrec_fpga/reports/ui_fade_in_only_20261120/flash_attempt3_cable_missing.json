@@ -1,0 +1,12 @@
+{
+  "command": [
+    "C:\\Users\\menss\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+    "scripts/flash_bitstream.py",
+    "--sbit",
+    "D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\releases\\fade-in-only-20261120\\instrec_top.sbit",
+    "--retries",
+    "1"
+  ],
+  "exit_code": 1,
+  "output": "bitstream : D:\\0000\\111\\001\\Pango\\ZGTC_RISC_CPU\\instrec_fpga\\releases\\fade-in-only-20261120\\instrec_top.sbit (3791112 B)\r\njtagserver: reusing the running instance\r\nattempt 1/1 failed: cable missing\r\n : cfg_assign_file -file D:/0000/111/001/Pango/ZGTC_RISC_CPU/instrec_fpga/releases/fade-in-only-20261120/instrec_top.sbit -device_index 0\r\nE: Configuration-0010: There is no device in Jtag chain, please check.\r\nE: Configuration-0009: Operation error :\r\n cfg_assign_file command can't be exec.\r\nExecuting : cfg_assign_file -file D:/0000/111/001/Pango/ZGTC_RISC_CPU/instrec_fpga/releases/fade-in-only-20261120/instrec_top.sbit -device_index 0 successfully.\r\nExecuting : cfg_program -device_index 0\r\nE: Configuration-0010: There is no device in Jtag chain, please check.\r\nE: Configuration-0009: Operation error :\r\n cfg_program command can't be exec.\r\nExecuting : cfg_program -device_index 0 successfully.\r\nExecuting : cfg_disconnect\r\nServer is disconnect\r\nExecuting : cfg_disconnect successfully.\r\nPROGRAM FLOW DONE\r\n\r\n"
+}

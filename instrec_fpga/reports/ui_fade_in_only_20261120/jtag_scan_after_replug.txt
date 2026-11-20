@@ -1,0 +1,28 @@
+M_PROCESS_FINISH_STARTED
+
+Executing : cfg_set_tcl_break -flag false
+Executing : cfg_set_tcl_break -flag false successfully.
+Executing : cfg_connect -ip 127.0.0.1 -port 65420
+Connecting to server[127.0.0.1 : 65420].
+Connect to server[127.0.0.1 : 65420] successfully.
+COMMAND[check version information] execute successfully, takes 0.0 secs.
+The cable List : 
+
+COMMAND[get_cable_paras] execute successfully, takes 2.4 secs.
+Executing : cfg_connect -ip 127.0.0.1 -port 65420 successfully.
+Executing : cfg_set_cable_property -index 0 -freq 10Mhz
+W: Configuration-4002: Tcl parameter check failed: CableList is empty, Please Check cable is connected or nor!.
+E: Configuration-0009: Operation error :
+ cfg_set_cable_property command can't be exec.
+Executing : cfg_set_cable_property -index 0 -freq 10Mhz successfully.
+Executing : cfg_scan_chain
+E: JtagServer-0001: No PANGO USB CABLE II cable was found in system.
+E: JtagServer-0306: No devices detected while scanning the JTAG chain, failed detecting JTAG device chain.
+W: Please check the device power, cable connection situation and whether put the chip in the right way or not.
+   If these do not work, try to restart the software.
+E: Configuration-0008: The command 'Open config cable' execute fail.
+E: Configuration-0012: Tcl Command: cfg_scan_chain exec failed.
+Executing : cfg_scan_chain successfully.
+Executing : cfg_disconnect
+Server is disconnect
+Executing : cfg_disconnect successfully.
