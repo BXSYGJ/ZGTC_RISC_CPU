@@ -1,6 +1,11 @@
 # InstRec-FPGA 当前状态（STATUS）
 
 
+> **2026-11-20 烧录尝试未成功：用户回复重插后，FTDI仍Code45离线。**
+> 对6648B700候选位流仅尝试一次烧录，返回cable missing/no device in Jtag chain，未获得done=1；不能标已烧录，板上仍为此前815A6594。COM5正常，FTDI所有枚举项Unknown/Problem45。复用cdt_js PID71284，未强杀/新增服务器，cdt_cfg正常退出。未上传权重、未播放、未改音量、未加诊断锁。
+> 已请求用户拔下下载器USB约5秒后换电脑USB口直插，再查PnP上线才重试。证据`reports/ui_session_20261119/flash_cable_missing_20261120.json`。后续板测与时序限制不变。
+
+
 > **2026-11-20 00:08 乐境双页位流已生成并归档，待用户重插FTDI后烧录。**
 > run `20261119-224113-b8b95192`六阶段OK、源哈希未变、详细布线0未布网络；SHA **6648B7008DB97F66358CEEA2EA7A42CCE412AD299ED4A645940754ACAE9C89B7**，3791112B。已复制build/instrec-latest.sbit，归档`releases/session-ui-20261119/`含位流/manifest/完整时序/源哈希。
 > 最终资源35394 LUT/41677 FF/133 DRM/90 APM；比815A6594增加941 LUT、1351 FF、3 DRM。核心setup **−1.402ns（834端点）**、像素 **−0.132ns（1端点）**；hold slow **+0.017ns** / fast **+0.007ns**，**未收敛，不作为时序合格版本**。旧版setup−1.062ns、像素+0.038ns，已保留可回退。

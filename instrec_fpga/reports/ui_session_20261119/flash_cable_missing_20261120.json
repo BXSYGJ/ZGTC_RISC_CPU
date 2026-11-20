@@ -1,0 +1,12 @@
+{
+  "status": "FLASH_FAILED_CABLE_MISSING",
+  "attempts": 1,
+  "bitstream_sha256": "6648b7008db97f66358ceea2ea7a42cce412ad299ed4a645940754acae9c89b7",
+  "pnp_ftdi": "Unknown / Problem 45 (not connected)",
+  "com5": "OK",
+  "jtagserver": "reused PID 71284; not terminated",
+  "program_done": false,
+  "audio_played": false,
+  "endpoint_volume_changed": false,
+  "next": "User asked to unplug 5 seconds and reconnect directly to another USB port; check PnP before next flash."
+}
